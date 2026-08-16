@@ -339,7 +339,7 @@ document.getElementById('mReset').addEventListener('click',()=>{mapK=1;mapTx=0;m
 
 // points table
 const cols = [{k:'point_id',l:'ID'},{k:'city',l:'Cidade'},{k:'operator_name',l:'Operador'},{k:'pw_class',l:'Classe'},
-              {k:'kw',l:'kW'},{k:'connectors',l:'Connectors'},{k:'status',l:'Estado'},{k:'opc',l:'OPC'},
+              {k:'kw',l:'kW'},{k:'connectors',l:'Connectors'},{k:'status',l:'Estado'},{k:'pay',l:'Pagamento'},{k:'opc',l:'OPC'},
               {k:'ENERGY',l:'€/kWh'},{k:'TIME',l:'€/min'},{k:'FLAT',l:'€/carga'}];
 document.getElementById('tblhead').innerHTML = cols.map((c,i)=>`<th class="${i<2?'l':''}" data-k="${c.k}">${c.l}</th>`).join('');
 let rows = D.points, sortKey=null, sortAsc=true, page=1, per=200;
@@ -383,6 +383,7 @@ function render(){
     <td class="l">${x.point_id}</td><td class="l">${x.city??''}</td><td class="l">${x.operator_name??''}</td>
     <td>${x.pw_class??''}</td><td>${fmt(x.kw)}</td><td>${x.connectors??''}</td>
     <td><span class="tag status-${x.status??'unknown'}">${x.status??''}</span></td>
+    <td>${(x.pay||[]).join(', ')||'–'}</td>
     <td>${x.opc??''}</td><td>${fmt(x.ENERGY)}</td><td>${fmt(x.TIME)}</td><td>${fmt(x.FLAT)}</td></tr>`).join('');
   document.getElementById('tblmeta').textContent = `${r.length} pontos (a mostrar ${Math.min(per,r.length-(page-1)*per)} nesta página)`;
   document.getElementById('pgInfo').textContent = `página ${page}/${pages}`;
