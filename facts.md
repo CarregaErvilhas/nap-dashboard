@@ -14,3 +14,4 @@ Setor público: municípios operam como OPC (Cascais Próxima, EMEL, Loulé Conc
 Registo OPC limpo: os 87 códigos ativos resolvem para uma entidade (PartyID MOBI.E + DGEG); 84 com reconhecimento DGEG.
 CEMEs: 52 códigos de marca na rede vs 46 registados DGEG; 29 códigos são simultaneamente OPC e CEME (espaço de código partilhado).
 Validação cruzada: potência NAP vs MOBI.E concorda em 99,8% dos pontos (só 29 divergem >30%) — boa notícia para a fiabilidade geral.
+Cross-check OSM (comunidade): o dump Overpass do autor do mapa "Postos de Carregamento v2.1" cobre 7.9k sites NAP (~95%); 52 têm pagamento por cartão no OSM não refletido no `auth_methods` do NAP.

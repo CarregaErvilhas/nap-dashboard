@@ -15,6 +15,10 @@ ST = pd.read_csv('nap_dynamic_status.csv', dtype=str)
 OPC = pd.read_csv('nap_opc_points.csv', dtype=str)
 REG = pd.read_csv('nap_opc_registry.csv', dtype=str)
 
+outline = {}
+if os.path.exists('assets/pt_outline.json'):
+    outline = json.load(open('assets/pt_outline.json'))
+
 snapshot = ST.snapshot_time.dropna().iloc[0]
 
 CONN_NAMES = {'iec62196T2': 'Type2', 'iec62196T2COMBO': 'CCS Combo2',
@@ -68,6 +72,64 @@ pts['region'] = pts['site_external_id'].map(site_map['region'])
 opc_cols = OPC.set_index('point_id')[['opc_operador', 'opc_tipo_posto', 'ENERGY', 'TIME', 'FLAT']]
 pts = pts.merge(opc_cols, left_on='point_id', right_index=True, how='left')
 pts['max_power_kw'] = (pts.max_power_w / 1000).round(0)
+
+# ---- site-level map data (with OSM/umap cross-ref enrichment) ----
+site_status = pts.groupby('site_external_id')['status'].agg(
+    lambda s: s.value_counts().idxmax())
+site_npts = pts.groupby('site_external_id')['point_id'].count()
+site_maxkw = pts.groupby('site_external_id')['max_power_kw'].max()
+site_conn = P.groupby('site_external_id')['connector_type'].apply(
+    lambda s: sorted({CONN_NAMES.get(t, t) for t in s}))
+
+osm = pd.read_csv('osm_umap.csv', dtype=str) if os.path.exists('osm_umap.csv') else None
+caca = pd.read_csv('osm_caca.csv', dtype=str) if os.path.exists('osm_caca.csv') else None
+osm_by_site = {}
+if osm is not None:
+    for _, r in osm.iterrows():
+        e = osm_by_site.setdefault(r.code, {})
+        e['osm_op'] = r.osm_operator
+        e['osm_dist'] = float(r.dist_km)
+        e['osm_access'] = r.osm_access
+        e['osm_fee'] = r.osm_fee
+        e['ad_hoc'] = (r.pay_cards == 'yes') or (r.auth_none == 'yes')
+        e['pay_app'] = r.pay_app
+caca_by_site = {}
+if caca is not None:
+    for _, r in caca.iterrows():
+        if r['cat'] != 'other':
+            caca_by_site.setdefault(r['near_site'], []).append(f"{r['cat']}: {r['note'][:100]}")
+
+sites_map = []
+for _, s in S.iterrows():
+    ext = s.external_id
+    try:
+        lat, lon = float(s.latitude), float(s.longitude)
+    except (TypeError, ValueError):
+        continue
+    om = osm_by_site.get(ext, {})
+    rec = {
+        'ext': ext,
+        'name': s.name,
+        'city': s.city,
+        'op': s.operator_name,
+        'region': s.region,
+        'lat': lat,
+        'lon': lon,
+        'status': site_status.get(ext, 'unknown'),
+        'npts': int(site_npts.get(ext, 0)),
+        'kw': float(site_maxkw.get(ext, 0)),
+        'pw': pw_class(site_maxkw.get(ext, 0)),
+        'conns': site_conn.get(ext, []),
+    }
+    if om:
+        rec['osm_op'] = om.get('osm_op')
+        rec['osm_dist'] = om.get('osm_dist')
+        rec['osm_access'] = om.get('osm_access')
+        rec['osm_fee'] = om.get('osm_fee')
+        rec['ad_hoc'] = om.get('ad_hoc')
+    if ext in caca_by_site:
+        rec['doubt'] = '; '.join(caca_by_site[ext])
+    sites_map.append(rec)
 
 # ---- aggregations ----
 def kpi(title, value, sub):
@@ -131,6 +193,7 @@ FACTS_HTML = """
 <li><b>Registo OPC limpo:</b> os 87 códigos ativos resolvem para uma entidade (PartyID MOBI.E + DGEG); 84 com reconhecimento DGEG.</li>
 <li><b>CEMEs:</b> 52 códigos de marca na rede vs 46 registados DGEG; 29 códigos são simultaneamente OPC e CEME (espaço de código partilhado).</li>
 <li><b>Validação cruzada:</b> potência NAP vs MOBI.E concorda em 99,8% dos pontos (só 29 divergem &gt;30%) — boa notícia para a fiabilidade geral.</li>
+<li><b>Cross-check OSM (comunidade):</b> o dump Overpass do autor do mapa "Postos de Carregamento v2.1" cobre 7.9k sites NAP (~95%); 52 têm pagamento por cartão no OSM não refletido no `auth_methods` do NAP.</li>
 </ul>"""
 
 ERRS_HTML = """
@@ -178,6 +241,10 @@ ERRS_HTML = """
   <div class="head">11. Localização: coordenadas vs concelho</div>
   <div class="meta">Verificação contra os limites oficiais de concelho (CAOP + spot-check Nominatim): 76 sites (0,9%) têm coordenadas fora do concelho implicado pelo código do site_id (formato <code>operador-código-nº</code>, código = concelho). Nenhum caso nas ilhas. Os códigos são de concelho, não de distrito (ex. PLM = Palmela, BRR = Barreiro). As subsecções 11a/11b abaixo são geradas por <code>scripts/concelho_check.py</code>.</div>
 </li>
+<li>
+  <div class="head">12. Dúvidas da comunidade OSM/umap (cross-check externo)</div>
+  <div class="meta">O mapa "Caça aos Postos de Carregamento" (umap, OSM) lista pontos onde a comunidade não confirma a existência/localização de carregadores; vários "nada no local" ficam a ≤500 m de sites listados como ativos no NAP. Lista completa e operadores divergentes no mapa OSM v2.1 em <code>osm_umap_findings.md</code> (gerado por <code>scripts/osm_umap.py</code>).</div>
+</li>
 """
 
 with open('facts.md', 'w') as fh:
@@ -188,6 +255,9 @@ with open('errors.md', 'w') as fh:
         fh.write(f'## {re.sub(r"<[^>]+>", "", m[0])}\n{re.sub(r"<[^>]+>", "", m[1]).strip()}\n\n')
     if os.path.exists('concelho_mismatches.md'):
         with open('concelho_mismatches.md') as frag:
+            fh.write(frag.read())
+    if os.path.exists('osm_umap_findings.md'):
+        with open('osm_umap_findings.md') as frag:
             fh.write(frag.read())
 print('facts.md and errors.md written')
 
@@ -219,6 +289,8 @@ data = {
                          'opc_operador': 'opc'}).to_dict('records'),
     'facts_html': FACTS_HTML,
     'errs_html': ERRS_HTML,
+    'sites': sites_map,
+    'outline': outline,
 }
 
 def clean(o):

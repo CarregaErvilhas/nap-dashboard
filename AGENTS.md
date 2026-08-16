@@ -82,6 +82,16 @@ After editing `assets/dashboard_template.html` or `scripts/build_dashboard.py`,
 - MOBI.E PartyID is a 2022 PDF: 38 active tariff codes missing, 22 unused codes.
 - 733 MOBI.E `UID_TOMADA` values are bare numeric ids.
 - Power agreement NAP↔MOBI.E is 99.8% (only 29/18 923 diverge >30%).
+- OSM: charging sites are tagged two ways — `amenity=charging_station` (node **or**
+  way; the way form is the whole site) and `man_made=charge_point` (node only,
+  usually one per post/pole). **A site's `ref` can appear under either tag, and
+  zero elements carry both tags**, so filter by *either*. In the author's Overpass
+  dump: 6 579 `charging_station` (4 720 nodes + 1 859 ways) vs 5 102
+  `charge_point` (all nodes, ~4 135 with a MOBI.E-pattern `ref`). The
+  `charge_point` nodes usually carry explicit `payment:*`/`authentication:*` tags
+  that the `charging_station` elements lack — matching by `charging_station` alone
+  hides ~90 ad-hoc payment divergences. `scripts/osm_umap.py` dedups per NAP code
+  preferring the row with the most payment/auth tags (tie-break: nearest).
 
 ## Dashboard specifics
 - Data injected into `assets/dashboard_template.html` at the `/*__DATA__*/` marker via
