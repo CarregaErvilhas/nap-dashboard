@@ -29,6 +29,8 @@
   th,td { padding:5px 8px; text-align:right; border-bottom:1px solid #27334a; white-space:nowrap; }
   th { color:var(--mut); font-weight:600; cursor:pointer; user-select:none; position:sticky; top:0; background:var(--card); }
   td.l, th.l { text-align:left; }
+  tbody tr { cursor:pointer; } tbody tr:hover { background:#1e293b; }
+  tbody tr.sel { background:#164e63; outline:1px solid var(--acc); }
   input[type=text], select { width:100%; padding:8px 10px; border-radius:8px; border:1px solid #334155; background:#0b1220; color:var(--ink); margin-bottom:10px; font-size:13px; }
   select { cursor:pointer; }
   .filters { display:grid; grid-template-columns:2fr repeat(4,.9fr) 1.8fr; gap:8px; margin-bottom:6px; }
@@ -272,7 +274,10 @@ function renderMap(){
       const col=STATUS_COLOR[x.status]||'var(--err)';
       const sw=(0.7/mapK).toFixed(2);
       const ring = x.ad_hoc?` stroke="#fff" stroke-width="${sw}" stroke-dasharray="${(1.5/mapK).toFixed(2)}"`:'';
-      return `<circle cx="${px.toFixed(1)}" cy="${py.toFixed(1)}" r="${(2.1/mapK).toFixed(2)}" fill="${col}"${ring}
+      const sel = x.ext===mapSel;
+      const r = sel ? (4/mapK).toFixed(2) : (2.1/mapK).toFixed(2);
+      const extra = sel ? ` stroke="#fff" stroke-width="${(1.4/mapK).toFixed(2)}"` : '';
+      return `<circle cx="${px.toFixed(1)}" cy="${py.toFixed(1)}" r="${r}" fill="${col}"${ring}${extra}
         data-ext="${x.ext}" data-rk="${rk}" class="mpt">
         <title>${x.ext} — ${x.city} — ${x.status}${x.ad_hoc?' — pagamento ad-hoc (OSM)':''}</title></circle>`;
     }).join('');
@@ -283,7 +288,9 @@ function renderMap(){
     const s=D.sites.find(x=>x.ext===ext);
     if(!s) return;
     mapSel=ext;
+    document.querySelectorAll('#tbody tr.sel').forEach(x=>x.classList.remove('sel'));
     showDetail(s);
+    renderMap();
   }));
 }
 function showDetail(s){
@@ -379,12 +386,24 @@ function render(){
   const pages=Math.max(1,Math.ceil(r.length/per));
   if(page>pages) page=pages;
   const slice=r.slice((page-1)*per,page*per);
-  document.getElementById('tbody').innerHTML = slice.map(x=>`<tr>
+  document.getElementById('tbody').innerHTML = slice.map(x=>`<tr data-site="${x.site_external_id}">
     <td class="l">${x.point_id}</td><td class="l">${x.city??''}</td><td class="l">${x.operator_name??''}</td>
     <td>${x.pw_class??''}</td><td>${fmt(x.kw)}</td><td>${x.connectors??''}</td>
     <td><span class="tag status-${x.status??'unknown'}">${x.status??''}</span></td>
     <td>${(x.pay||[]).join(', ')||'–'}</td>
     <td>${x.opc??''}</td><td>${fmt(x.ENERGY)}</td><td>${fmt(x.TIME)}</td><td>${fmt(x.FLAT)}</td></tr>`).join('');
+  document.getElementById('tbody').querySelectorAll('tr').forEach(tr=>{
+    tr.addEventListener('click',()=>{
+      const site=D.sites.find(s=>s.ext===tr.dataset.site);
+      if(!site) return;
+      mapSel=site.ext;
+      document.querySelectorAll('#tbody tr.sel').forEach(x=>x.classList.remove('sel'));
+      tr.classList.add('sel');
+      showDetail(site);
+      renderMap();
+      document.getElementById('map').scrollIntoView({behavior:'smooth', block:'center'});
+    });
+  });
   document.getElementById('tblmeta').textContent = `${r.length} pontos (a mostrar ${Math.min(per,r.length-(page-1)*per)} nesta página)`;
   document.getElementById('pgInfo').textContent = `página ${page}/${pages}`;
   document.getElementById('pgPrev').disabled = page<=1;

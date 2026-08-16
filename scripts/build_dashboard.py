@@ -311,7 +311,7 @@ data = {
     'occ_op': agg_op_occ,
     'price_op': {k: round(float(v), 3) for k, v in agg_price_op.items()},
     'price_stats': price_stats,
-    'points': pts[['point_id', 'city', 'operator_name', 'region', 'pw_class', 'max_power_kw',
+    'points': pts[['point_id', 'site_external_id', 'city', 'operator_name', 'region', 'pw_class', 'max_power_kw',
                    'connector_types', 'status', 'opc_operador', 'ENERGY', 'TIME', 'FLAT', 'pay']]
         .rename(columns={'max_power_kw': 'kw', 'connector_types': 'connectors',
                          'opc_operador': 'opc'}).to_dict('records'),
