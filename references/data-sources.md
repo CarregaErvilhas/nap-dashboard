@@ -61,6 +61,56 @@ Vendored in `assets/schemas/` for enum validation. Sources:
 `/locationReferencing`, `/locationExtension`, `/commonExtension`, `/common`,
 `/d2Payload`.
 
+## OSM / umap (community) — cross-check
+
+Used by `scripts/osm_umap.py` to enrich NAP sites with community-sourced operator,
+payment/authentication and location-doubt data. These are **not official sources**
+— they are community-maintained maps/dumps; use as a lead for field verification,
+never as ground truth. Fetches are cached in `umap_cache/` (gitignored).
+
+- **Raw Overpass dump `Todos.json`** (primary source) — every OSM
+  `amenity=charging_station` and `man_made=charge_point` element in Portugal,
+  ~21.7k elements. From the author of the "Postos de Carregamento v2.1" map:
+  `https://raw.githubusercontent.com/avataranedotas/umap_postos/main/Todos.json`
+  (a `main`/`refs/heads/main` variant also works).
+  Note: charging sites are tagged two ways — `amenity=charging_station` (node **or**
+  way) and `man_made=charge_point` (node only). **Zero elements carry both tags**,
+  so match by *either*. The `charge_point` nodes carry explicit `payment:*` /
+  `authentication:*` tags that `charging_station` elements usually lack.
+
+- **umap "Postos de Carregamento v2.1"** (map id `690884`) — the community OSM
+  map the dump above was generated from. Its `Areas.geojson` export (remote
+  `https://raw.githubusercontent.com/avataranedotas/umap_postos/main/Areas.geojson`)
+  has ~1 854 polygons but only ~3.7k NAP-site matches; the raw dump (7.9k) is
+  preferred, so the Areas.geojson is now superseded.
+  URL: `https://umap.openstreetmap.fr/pt-pt/map/postos-de-carregamento-v21_690884`
+
+- **umap "Caça aos Postos de Carregamento"** (map id `1386222`) — community doubt
+  map. The relevant layer is "Possíveis novos postos" (~104 points: possible new
+  posts, "nada no local" flags, under-construction, to-verify); the "Dúvidas"
+  layer is empty in all published versions.
+  URL: `https://umap.openstreetmap.fr/en/map/caca-aos-postos-de-carregamento_1386222`
+
+- **umap API endpoints** (used to fetch the map settings + layer features):
+  - Map settings (GeoJSON): `https://umap.openstreetmap.fr/en/map/{map_id}/geojson/`
+  - Layer features: `https://umap.openstreetmap.fr/en/datalayer/{map_id}/{pk}/`
+  - Full map download: `https://umap.openstreetmap.fr/map/{map_id}/download/`
+
+## CAOP — concelho boundaries (geographic reference)
+
+Used by `scripts/concelho_check.py` (point-in-polygon → concelho) and
+`scripts/make_pt_outline.py` (PT outline + district/island labels). Downloaded on
+first run into `caop_cache/` (gitignored) from the `nmota/caop_GeoJSON` mirror of
+official CAOP data (WGS84 `geograficas` variants):
+`https://raw.githubusercontent.com/nmota/caop_GeoJSON/master/`
+
+- `geograficas/ContinenteConcelhos.geojson` — mainland concelhos
+  (props `Concelho`, `Distrito`, `Area_Ha`)
+- `geograficas/A%C3%A7ores/A%C3%A7oresConcelhos.geojson` — Açores
+  (props `MUNICIPIO`, `ILHA`, `AREA_HA`)
+- `geograficas/Madeira/MadeiraConcelhos.geojson` — Madeira
+  (props `Municipio`, `Ilha`, `Area_Ha`)
+
 ## Related / context
 
 - OCPI integration doc (party-id rules, EVSE ID format): `20230620_MOBIE_OCPI_Phase2_Internal_v1_6.pdf`
