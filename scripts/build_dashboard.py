@@ -107,11 +107,11 @@ def site_pay(r):
     if str(r.get('pay_app')) == 'yes':
         out.append('App')
     if str(r.get('pay_cards')) == 'yes':
-        out.append('Cartão')
+        out.append('Multibanco/contactless')
     if str(r.get('pay_cash')) == 'yes':
         out.append('Dinheiro')
     if str(r.get('pay_member')) == 'yes':
-        out.append('Cartão de membro')
+        out.append('Cartão RFID eMSP')
     if str(r.get('auth_none')) == 'yes':
         out.append('Sem autenticação')
     return out

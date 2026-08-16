@@ -303,7 +303,7 @@ function showDetail(s){
   if(s.osm_op!==undefined) rows.push(['Operador OSM', `${s.osm_op}${s.osm_dist!==undefined?` (${s.osm_dist} km do NAP)`:'·comunidade'}`]);
   if(s.osm_access!==undefined) rows.push(['Acesso (OSM)', s.osm_access]);
   if(s.osm_fee!==undefined) rows.push(['Tarifa (OSM)', s.osm_fee]);
-  if(s.ad_hoc) rows.push(['Pagamento ad-hoc', 'OSM indica cartão/sem auth — NAP só app/rfid ⚠']);
+  if(s.ad_hoc) rows.push(['Pagamento ad-hoc', 'OSM indica Multibanco/contactless ou acesso livre — NAP só app/RFID ⚠']);
   if(s.doubt) rows.push(['Dúvida comunidade', `<span class="warn">${s.doubt}</span>`]);
   document.getElementById('mDetailBody').innerHTML =
     `<table><tbody>${rows.map(([k,v])=>`<tr><td class="k">${k}</td><td>${v}</td></tr>`).join('')}</tbody></table>`;
