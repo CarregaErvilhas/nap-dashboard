@@ -4,10 +4,12 @@ POC (proof of concept) analysis of Portugal's EV charging network from official
 public data sources. The goal:
 
 - Extract and cross-reference data from several sources (NAP MOBI.E, OPC tariff,
-  DGEG registries)
+  DGEG registries, OSM/umap)
 - Build a **self-contained local dashboard** (`dashboard.html`) to explore the network
 - Produce a list of **interesting facts** and a list of **reportable errors** for
   the data owners
+
+![Dashboard NAP MOBI.E](dashboard.png)
 
 ## Data sources
 
@@ -18,15 +20,19 @@ public data sources. The goal:
 | MOBI.E OPC tariff | Per-point tariffs (€/kWh, €/min, flat fee) | `mobie_tarifas.csv` |
 | MOBI.E PartyID (PDF) | Official operator/CEME codes | `mobie_partyid.pdf` |
 | DGEG | Recognized OPC and CEME lists | `dgeg_opc.csv`, `dgeg_ceme.csv` |
+| OSM/umap (community) | Overpass dump of the "Postos de Carregamento v2.1" map + "Caça aos Postos" umap | `umap_cache/`, `osm_umap.csv` |
 
 ## Results
 
-- **`dashboard.html`** — standalone dashboard (5.5 MB), no external libraries,
-  opens via `file://`. KPIs, bar charts, a 20 521-point table with search,
-  dropdown filters (status/region/power class/operator), click-to-sort headers
+- **`dashboard.html`** — standalone dashboard (9.4 MB), no external libraries,
+  opens via `file://`. KPIs, bar charts, an **interactive SVG map** of 8 260 sites
+  (mainland + Madeira/Açores, zoom/pan, click a dot for detail with OSM
+  cross-reference), a 20 521-point table with search, multi-select filters
+  (status/region/power class/operator/connector/payment), click-to-sort headers
   and pagination.
 - **`facts.md`** — interesting facts about the network.
-- **`errors.md`** — errors worth reporting to the data owners.
+- **`errors.md`** — errors worth reporting to the data owners (includes community
+  OSM/umap doubts and operator/payment divergences).
 
 ## Running
 
@@ -49,11 +55,16 @@ venv/bin/python scripts/mobie_join.py      # join NAP + MOBI.E tariff -> nap_opc
 venv/bin/python scripts/dgeg_lists.py      # DGEG OPC/CEME from the web pages
 venv/bin/python scripts/dgeg_crossref.py   # resolve OPC codes -> DGEG entities
 venv/bin/python scripts/partyid_crossref.py # cross-reference with the PartyID PDF
+venv/bin/python scripts/concelho_check.py    # validate coordinates vs CAOP concelho
+venv/bin/python scripts/osm_umap.py          # cross-reference NAP with OSM/umap (community)
+venv/bin/python scripts/make_pt_outline.py   # generate assets/pt_outline.json (map)
 venv/bin/python scripts/build_dashboard.py # generate dashboard.html, facts.md, errors.md
 ```
 
 `build_dashboard.py` reads all intermediate CSVs and injects the data into the
 template `assets/dashboard_template.html`, replacing the `/*__DATA__*/` marker.
+It also regenerates `dashboard.png` (headless Chrome screenshot) for this README;
+if Chrome is missing it warns and skips.
 
 ## Main files
 
@@ -63,9 +74,13 @@ template `assets/dashboard_template.html`, replacing the `/*__DATA__*/` marker.
 | `scripts/mobie_join.py` | NAP↔MOBI.E join by `site_external_id` + plug |
 | `scripts/dgeg_crossref.py` | OPC code → entity resolution (fuzzy match) |
 | `scripts/partyid_crossref.py` | Enrichment with the official PartyID |
+| `scripts/concelho_check.py` | Coordinate validation vs CAOP concelho boundaries |
+| `scripts/osm_umap.py` | Community OSM/umap cross-check (operators, payment, doubts) |
+| `scripts/make_pt_outline.py` | Portugal outline for the SVG map (from CAOP) |
 | `scripts/check_quality.py` | Physical/schema sanity checks |
 | `scripts/build_dashboard.py` | Generates the standalone dashboard + facts/errors |
 | `assets/dashboard_template.html` | Dashboard HTML/JS template (`/*__DATA__*/` marker) |
+| `assets/pt_outline.json` | PT outline polygons for the map (142 KB) |
 | `assets/schemas/*.xsd` | DATEX II 3.3 schemas (enum source) |
 | `SKILL.md` | Reusable skill with all knowledge and the pipeline |
 
@@ -87,3 +102,8 @@ template `assets/dashboard_template.html`, replacing the `/*__DATA__*/` marker.
 - Static CSVs are read with `dtype=str` to avoid losing leading zeros.
 - Embedded dashboard JSON: use `allow_nan=False` plus NaN/Inf cleaning, otherwise
   the browser's `JSON.parse` fails (bug already fixed).
+- OSM/umap: the v2.1 map author's dump (`Todos.json`) covers ~96% of NAP sites
+  (7 934/8 260) by MOBI.E code; `man_made=charge_point` nodes carry payment tags
+  that `charging_station` elements lack — consider both. The "Caça aos Postos"
+  umap lists community doubts, including "nothing on site" points ≤500 m from
+  active NAP sites.

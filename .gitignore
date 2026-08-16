@@ -35,5 +35,17 @@ caop_cache/
 concelho_check.csv
 concelho_mismatches.md
 
+# OSM/umap cross-check (scripts/osm_umap.py) — fetched cache + intermediate outputs
+umap_cache/
+osm_umap.csv
+osm_caca.csv
+osm_umap_findings.md
+
+# Stray exploratory OSM analyses
+caca_analysis.csv
+osm_v21_matched.csv
+osm_single_matches.csv
+osm_far_from_nap.csv
+
 # OS junk
 .DS_Store

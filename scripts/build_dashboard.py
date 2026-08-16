@@ -99,6 +99,26 @@ if caca is not None:
         if r['cat'] != 'other':
             caca_by_site.setdefault(r['near_site'], []).append(f"{r['cat']}: {r['note'][:100]}")
 
+def site_pay(r):
+    out = []
+    if str(r.get('pay_app')) == 'yes':
+        out.append('App')
+    if str(r.get('pay_cards')) == 'yes':
+        out.append('Cartão')
+    if str(r.get('pay_cash')) == 'yes':
+        out.append('Dinheiro')
+    if str(r.get('pay_member')) == 'yes':
+        out.append('Cartão de membro')
+    if str(r.get('auth_none')) == 'yes':
+        out.append('Sem autenticação')
+    return out
+
+pay_by_site = {}
+if osm is not None:
+    for _, r in osm.iterrows():
+        pay_by_site[r.code] = site_pay(r)
+pts['pay'] = pts['site_external_id'].map(pay_by_site).apply(lambda v: v if isinstance(v, list) else [])
+
 sites_map = []
 for _, s in S.iterrows():
     ext = s.external_id
@@ -120,6 +140,7 @@ for _, s in S.iterrows():
         'kw': float(site_maxkw.get(ext, 0)),
         'pw': pw_class(site_maxkw.get(ext, 0)),
         'conns': site_conn.get(ext, []),
+        'pay': pay_by_site.get(ext, []),
     }
     if om:
         rec['osm_op'] = om.get('osm_op')
@@ -284,7 +305,7 @@ data = {
     'price_op': {k: round(float(v), 3) for k, v in agg_price_op.items()},
     'price_stats': price_stats,
     'points': pts[['point_id', 'city', 'operator_name', 'region', 'pw_class', 'max_power_kw',
-                   'connector_types', 'status', 'opc_operador', 'ENERGY', 'TIME', 'FLAT']]
+                   'connector_types', 'status', 'opc_operador', 'ENERGY', 'TIME', 'FLAT', 'pay']]
         .rename(columns={'max_power_kw': 'kw', 'connector_types': 'connectors',
                          'opc_operador': 'opc'}).to_dict('records'),
     'facts_html': FACTS_HTML,

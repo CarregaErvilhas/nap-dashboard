@@ -8,12 +8,16 @@ self-contained dashboard. Don't over-engineer.
 ## Layout
 - `scripts/` — pipeline (fetch_data.sh, nap_etl.py, mobie_join.py, dgeg_lists.py,
   dgeg_crossref.py, partyid_crossref.py, check_quality.py, summary.py,
-  concelho_check.py, build_dashboard.py)
-- `assets/` — `dashboard_template.html` and `schemas/*.xsd` (DATEX II 3.3)
+  concelho_check.py, osm_umap.py, make_pt_outline.py, extract_enums.py,
+  build_dashboard.py)
+- `assets/` — `dashboard_template.html`, `pt_outline.json` (PT outline for the
+  map), `schemas/*.xsd` (DATEX II 3.3)
 - `references/` — docs for the SKILL.md (data sources, gotchas)
 - Raw XMLs + intermediate CSVs live in the repo root and are gitignored
   (downloaded via `scripts/fetch_data.sh`). Run all scripts from the repo root;
   they resolve data files relative to the CWD.
+- `umap_cache/` + `caop_cache/` — gitignored caches (umap maps/OSM dump,
+  CAOP concelho polygons).
 
 ## Environment
 - Create and use a local venv — never rely on the system Python (it may be a
@@ -39,17 +43,33 @@ from the official origins (see `scripts/fetch_data.sh` for the exact URLs).
 `scripts/nap_etl.py` → (`scripts/check_quality.py`, `scripts/summary.py`) →
 `scripts/mobie_join.py` → `scripts/dgeg_lists.py` → `scripts/dgeg_crossref.py` →
 `scripts/partyid_crossref.py` → `scripts/concelho_check.py` →
+`scripts/osm_umap.py` → `scripts/make_pt_outline.py` →
 `scripts/build_dashboard.py`.
-`scripts/build_dashboard.py` reads the intermediate CSVs and
-writes `dashboard.html`, `facts.md`, `errors.md`; it appends
-`concelho_mismatches.md` (written by `concelho_check.py`) to `errors.md` when
-present. It also regenerates `dashboard.png` (README screenshot) via headless
-Chrome if available; it only warns/skips otherwise.
+`scripts/build_dashboard.py` reads the intermediate CSVs +
+`osm_umap.csv`/`osm_caca.csv`/`assets/pt_outline.json` and writes
+`dashboard.html`, `facts.md`, `errors.md`; it appends
+`concelho_mismatches.md` (written by `concelho_check.py`) and
+`osm_umap_findings.md` (written by `osm_umap.py`) to `errors.md` when present.
+It also regenerates `dashboard.png` (README screenshot) via headless Chrome if
+available; it only warns/skips otherwise.
 
 `scripts/concelho_check.py` locates every site inside official CAOP concelho
 polygons (downloaded on first run into `caop_cache/`, gitignored) and flags the
 sites whose coordinates contradict the concelho implied by the site_id code.
 Writes `concelho_check.csv` + `concelho_mismatches.md` (errors.md items 11a/11b).
+
+`scripts/osm_umap.py` cross-references NAP sites against community OSM data: the
+Overpass dump `Todos.json` from the author of the "Postos de Carregamento v2.1"
+umap map (both `amenity=charging_station` and `man_made=charge_point` elements)
+and the "Caça aos Postos" umap doubt layers. Fetches are cached in `umap_cache/`.
+Matches by MOBI.E `ref` code (strips a `MOBI-` prefix, expands multi-code refs
+"A;B;C", way polygons use the centroid). Writes `osm_umap.csv` (deduped per NAP
+code, preferring the row with the most payment/auth tags), `osm_caca.csv` and
+`osm_umap_findings.md` (errors.md item 12).
+
+`scripts/make_pt_outline.py` builds `assets/pt_outline.json` (decimated PT
+outline for the dashboard map) from the CAOP concelho polygons in `caop_cache/`.
+Run it once when the outline asset is missing; the JSON is committed.
 
 ## Housekeeping: save ad-hoc analysis scripts
 When an interactive query ends up producing new analysis code (point-in-polygon,
@@ -64,8 +84,15 @@ venv/bin/python scripts/build_dashboard.py
 ```
 After editing `assets/dashboard_template.html` or `scripts/build_dashboard.py`,
 **always rebuild `dashboard.html`** (the deliverable) and re-validate:
-- embedded JSON must parse: extract `const D = (.*?);` and `json.loads` it
+- embedded JSON must parse: the data is `const D = {…};` — use a brace-matching
+  extractor (find `const D = `, then scan for the matching closing `}`); the naive
+  regex `const D = (.*?);` truncates at the first `;` inside the JSON. Then
+  `json.loads` the extracted object.
 - inline JS must pass `node --check` (extract the `<script>` block first)
+- run the DOM-stub eval in node (stub `document.getElementById`, element
+  `innerHTML`/`addEventListener`/`insertAdjacentHTML`/`querySelectorAll`,
+  `classList`) to catch runtime errors like the map's region-key mismatch
+  (`azores` vs `acores` in `REGIONS`/outline).
 
 ## Data gotchas (verified)
 - Join NAP↔MOBI.E by `site_external_id` + last segment of `point_id` (tomada,
@@ -103,10 +130,22 @@ After editing `assets/dashboard_template.html` or `scripts/build_dashboard.py`,
   element id `status`, (2) `label()` using undefined `max` instead of the local
   `m` in `bars()`. If the dashboard shows nothing below the KPIs, suspect a JS
   runtime error — validate the script with a DOM-stub eval in node.
-- Table features: text search across all columns, dropdown filters (estado,
-  região, classe potência, operador), click-to-sort headers, pagination (200/page).
+- Interactive map: a self-contained SVG (`#map`) rendered from `D.sites` (per-site
+  lon/lat) + `D.outline` (PT polygons). Regions live in a `REGIONS` object with
+  keys `mainland`/`madeira`/`acores`; site `region` values are `azores` (with a
+  `z`), so the map re-maps `azores`→`acores`. Dots are colored by status
+  (`STATUS_COLOR`), wheel zooms, drag pans, click shows a detail panel
+  (`#mDetail`) with NAP + OSM cross-ref. Filters apply to both table and map;
+  map rows are filtered in `renderMap()`, which reads the same multiSel filter
+  sets (guarded with `typeof …!=='undefined'` because the map runs before the
+  filters are declared).
+- Table features: text search across all columns, multi-select dropdown filters
+  (estado, região, classe potência, operador, tomada, pagamento), click-to-sort
+  headers, pagination (200/page). The payment filter uses `x.pay` (list of OSM
+  payment methods: App/Cartão/Cartão de membro/Sem autenticação/Dinheiro) joined
+  per-site onto every point row.
 
 ## Deliverables
 - `dashboard.html` — the interactive dashboard (open with `open dashboard.html`)
 - `facts.md` — interesting facts
-- `errors.md` — reportable data errors (11 items, for the data owners)
+- `errors.md` — reportable data errors (12 items, for the data owners)
