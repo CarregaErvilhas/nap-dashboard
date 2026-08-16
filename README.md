@@ -78,7 +78,7 @@ encontrar Chrome, omite o screenshot com um aviso.
 | `scripts/check_quality.py` | Validações de sanidade física e de schema |
 | `scripts/build_dashboard.py` | Gera o dashboard autónomo + factos/erros |
 | `assets/dashboard_template.html` | Template HTML/JS do dashboard (marcador `/*__DATA__*/`) |
-| `assets/pt_outline.json` | Polígonos do contorno PT para o mapa (142 KB) |
+| `assets/pt_outline.json` | Polígonos do contorno PT + etiquetas de distrito/ilha para o mapa (143 KB) |
 | `assets/schemas/*.xsd` | Esquemas DATEX II 3.3 (fonte de enums) |
 | `SKILL.md` | Skill reutilizável com todo o conhecimento e o pipeline |
 
@@ -104,4 +104,3 @@ P+tarifas), `nap_opc_registry` (código OPC→entidade), `mobie_tarifas`, `dgeg_
   de pagamento que os `charging_station` não têm — considerar ambos. A umap
   "Caça aos Postos" lista dúvidas da comunidade, incluindo "nada no local" a
   ≤500 m de sites ativos.
-- `opencode /init` no TUI gera `AGENTS.md` automaticamente; este ficheiro é o equivalente.

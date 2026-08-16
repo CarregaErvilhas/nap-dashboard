@@ -16,8 +16,11 @@ OPC = pd.read_csv('nap_opc_points.csv', dtype=str)
 REG = pd.read_csv('nap_opc_registry.csv', dtype=str)
 
 outline = {}
+districts = {}
 if os.path.exists('assets/pt_outline.json'):
-    outline = json.load(open('assets/pt_outline.json'))
+    o = json.load(open('assets/pt_outline.json'))
+    outline = o.get('outline', {})
+    districts = o.get('districts', {})
 
 snapshot = ST.snapshot_time.dropna().iloc[0]
 
@@ -312,6 +315,7 @@ data = {
     'errs_html': ERRS_HTML,
     'sites': sites_map,
     'outline': outline,
+    'districts': districts,
 }
 
 def clean(o):

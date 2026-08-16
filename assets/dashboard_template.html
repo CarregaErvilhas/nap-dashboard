@@ -236,6 +236,18 @@ function drawOutline(){
   }
   return s;
 }
+function drawDistricts(){
+  let s='';
+  const fs=(9/mapK).toFixed(1);
+  for(const rk of Object.keys(REGIONS)){
+    for(const [name,[lon,lat]] of Object.entries(D.districts[rk]||{})){
+      const [px,py]=proj(rk,lon,lat);
+      s+=`<text x="${px.toFixed(1)}" y="${py.toFixed(1)}" font-size="${fs}" fill="#64748b"
+        text-anchor="middle" dominant-baseline="middle" pointer-events="none">${name}</text>`;
+    }
+  }
+  return s;
+}
 let mapK=1, mapTx=0, mapTy=0, mapDrag=null, mapSel=null;
 function renderMap(){
   const world=document.getElementById('mapWorld');
@@ -264,7 +276,7 @@ function renderMap(){
         data-ext="${x.ext}" data-rk="${rk}" class="mpt">
         <title>${x.ext} — ${x.city} — ${x.status}${x.ad_hoc?' — pagamento ad-hoc (OSM)':''}</title></circle>`;
     }).join('');
-  world.innerHTML = `<g transform="translate(${mapTx},${mapTy}) scale(${mapK})">${drawOutline()}${dots}</g>`;
+  world.innerHTML = `<g transform="translate(${mapTx},${mapTy}) scale(${mapK})">${drawOutline()}${mapK<6?drawDistricts():''}${dots}</g>`;
   world.querySelectorAll('.mpt').forEach(c=>c.addEventListener('click',e=>{
     e.stopPropagation();
     const ext=c.dataset.ext;

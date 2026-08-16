@@ -80,7 +80,7 @@ if Chrome is missing it warns and skips.
 | `scripts/check_quality.py` | Physical/schema sanity checks |
 | `scripts/build_dashboard.py` | Generates the standalone dashboard + facts/errors |
 | `assets/dashboard_template.html` | Dashboard HTML/JS template (`/*__DATA__*/` marker) |
-| `assets/pt_outline.json` | PT outline polygons for the map (142 KB) |
+| `assets/pt_outline.json` | PT outline polygons + district/island labels for the map (143 KB) |
 | `assets/schemas/*.xsd` | DATEX II 3.3 schemas (enum source) |
 | `SKILL.md` | Reusable skill with all knowledge and the pipeline |
 

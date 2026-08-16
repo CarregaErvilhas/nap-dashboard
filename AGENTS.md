@@ -68,7 +68,10 @@ code, preferring the row with the most payment/auth tags), `osm_caca.csv` and
 `osm_umap_findings.md` (errors.md item 12).
 
 `scripts/make_pt_outline.py` builds `assets/pt_outline.json` (decimated PT
-outline for the dashboard map) from the CAOP concelho polygons in `caop_cache/`.
+outline for the dashboard map **plus per-district/island labels** — `{outline:
+{region: [rings]}, districts: {region: {name: [lon, lat]}}}`) from the CAOP
+concelho polygons in `caop_cache/`. Mainland labels use the CAOP `Distrito`
+attribute (18), Madeira/Açores fall back to island name (`Ilha`/`ILHA`, 2+9).
 Run it once when the outline asset is missing; the JSON is committed.
 
 ## Housekeeping: save ad-hoc analysis scripts
