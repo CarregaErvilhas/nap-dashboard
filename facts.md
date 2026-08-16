@@ -9,8 +9,9 @@ Dispersão por operador: ocupação de 5,4% (Repsol) a 26% (Mota-Engil) — sina
 Energia verde: 75% dos pontos (15.471) marcados como energia verde.
 Tarifário: domina a estrutura em 3 componentes (taxa fixa + €/kWh + €/min). Energia média ≈ 0,13 €/kWh, variando muito por operador.
 Saúde da rede no snapshot: 15% dos pontos 'removed' (3.013), 6% 'outOfOrder' (1.167), 7% 'unknown' → ≈18% não utilizável nesse momento.
-Connectors: Type2 12.317, CCS Combo2 6.101, CHAdeMO 2.168 (em declínio, só em unidades multi-connector).
+Connectors: Type2 12,317 (59.7%), CCS Combo2 6,101 (29.6%), CHAdeMO 2,168 (10.5%), CEE 16A 38 (0.2%) (em declínio, só em unidades multi-connector).
 Setor público: municípios operam como OPC (Cascais Próxima, EMEL, Loulé Concelho Global, Superguimarães, Santa Cruz).
 Registo OPC limpo: os 87 códigos ativos resolvem para uma entidade (PartyID MOBI.E + DGEG); 84 com reconhecimento DGEG.
 CEMEs: 52 códigos de marca na rede vs 46 registados DGEG; 29 códigos são simultaneamente OPC e CEME (espaço de código partilhado).
 Validação cruzada: potência NAP vs MOBI.E concorda em 99,8% dos pontos (só 29 divergem >30%) — boa notícia para a fiabilidade geral.
+Cross-check OSM (comunidade): o dump Overpass do autor do mapa "Postos de Carregamento v2.1" cobre 7.9k sites NAP (~95%); 52 têm pagamento por cartão no OSM não refletido no `auth_methods` do NAP.
