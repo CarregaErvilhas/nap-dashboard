@@ -8,6 +8,8 @@ elétricos em Portugal, a partir de fontes públicas oficiais. O objetivo é:
 - Produzir uma **lista de factos interessantes** e uma **lista de erros reportáveis**
   aos donos dos dados
 
+![Dashboard NAP MOBI.E](dashboard.png)
+
 ## Fontes de dados
 
 | Fonte | Descrição | Ficheiro |
@@ -51,7 +53,9 @@ venv/bin/python scripts/build_dashboard.py # gera dashboard.html, facts.md, erro
 ```
 
 O `build_dashboard.py` lê todos os CSVs intermédios e injeta os dados no template
-`assets/dashboard_template.html`, substituindo o marcador `/*__DATA__*/`.
+`assets/dashboard_template.html`, substituindo o marcador `/*__DATA__*/`. Também
+regenera `dashboard.png` (screenshot headless via Chrome) para este README; se não
+encontrar Chrome, omite o screenshot com um aviso.
 
 ## Ficheiros principais
 

@@ -234,3 +234,25 @@ tmpl = open('assets/dashboard_template.html').read()
 html = tmpl.replace('/*__DATA__*/', json.dumps(clean(data), ensure_ascii=False, allow_nan=False))
 open('dashboard.html', 'w').write(html)
 print(f'dashboard.html written: {len(pts)} points, {len(data["points"])} records, {len(html)/1e6:.1f} MB')
+
+# ---- screenshot for the README (optional; skipped if no Chrome found) ----
+import shutil, subprocess
+CHROME_CANDIDATES = [
+    '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
+    '/Applications/Google Chrome Dev.app/Contents/MacOS/Google Chrome Dev',
+    '/Applications/Chromium.app/Contents/MacOS/Chromium',
+]
+chrome = next((p for p in CHROME_CANDIDATES if shutil.which(p) or os.path.exists(p)), None)
+if chrome:
+    out = 'dashboard.png'
+    subprocess.run([chrome, '--headless=new', '--disable-gpu', '--hide-scrollbars',
+                    f'--screenshot={out}', '--window-size=1440,900',
+                    '--virtual-time-budget=20000',
+                    'file://' + os.path.abspath('dashboard.html')],
+                   check=False, capture_output=True)
+    if os.path.exists(out):
+        print(f'dashboard.png written ({os.path.getsize(out) // 1024} KB)')
+    else:
+        print('dashboard.png screenshot FAILED (chrome ran but no output)')
+else:
+    print('Chrome not found, skipping dashboard.png screenshot')

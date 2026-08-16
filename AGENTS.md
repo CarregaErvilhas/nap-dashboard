@@ -43,7 +43,8 @@ from the official origins (see `scripts/fetch_data.sh` for the exact URLs).
 `scripts/build_dashboard.py` reads the intermediate CSVs and
 writes `dashboard.html`, `facts.md`, `errors.md`; it appends
 `concelho_mismatches.md` (written by `concelho_check.py`) to `errors.md` when
-present.
+present. It also regenerates `dashboard.png` (README screenshot) via headless
+Chrome if available; it only warns/skips otherwise.
 
 `scripts/concelho_check.py` locates every site inside official CAOP concelho
 polygons (downloaded on first run into `caop_cache/`, gitignored) and flags the
