@@ -31,7 +31,15 @@
   td.l, th.l { text-align:left; }
   input[type=text], select { width:100%; padding:8px 10px; border-radius:8px; border:1px solid #334155; background:#0b1220; color:var(--ink); margin-bottom:10px; font-size:13px; }
   select { cursor:pointer; }
-  .filters { display:grid; grid-template-columns:2fr repeat(4,1fr); gap:8px; margin-bottom:6px; }
+  .filters { display:grid; grid-template-columns:2fr repeat(4,.9fr) 1.8fr; gap:8px; margin-bottom:6px; }
+  .multi{position:relative;margin-bottom:10px}
+  .mbtn{width:100%;padding:8px 10px;border-radius:8px;border:1px solid #334155;background:#0b1220;color:var(--ink);cursor:pointer;font-size:13px;display:flex;justify-content:space-between;align-items:center;gap:6px}
+  .mbtn .mlab{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .mmenu{display:none;position:absolute;top:100%;left:0;min-width:100%;max-width:420px;z-index:20;background:#1e293b;border:1px solid #334155;border-radius:8px;margin-top:4px;padding:6px;max-height:260px;overflow:auto;box-shadow:0 8px 24px rgba(0,0,0,.4)}
+  .mmenu.open{display:block}
+  .mmenu label{display:block;padding:4px 6px;border-radius:6px;font-size:12px;cursor:pointer;color:var(--ink);white-space:nowrap}
+  .mmenu label:hover{background:#334155}
+  .mmenu input{margin-right:6px}
   .pager { display:flex; align-items:center; justify-content:space-between; padding:8px 2px; font-size:12px; color:var(--mut); }
   .pager button { background:#1e293b; color:var(--ink); border:1px solid #334155; border-radius:6px; padding:4px 12px; cursor:pointer; font-size:12px; }
   .pager button:disabled { opacity:.35; cursor:default; }
@@ -80,10 +88,11 @@
   <h2>Tabela de pontos (pesquisável)</h2>
   <div class="filters">
     <input type="text" id="q" placeholder="Filtrar por id, cidade, operador, OPC, status, classe...">
-    <select id="fStatus"></select>
-    <select id="fRegion"></select>
-    <select id="fPw"></select>
-    <select id="fOp"></select>
+    <div id="fConn" class="multi"></div>
+    <div id="fStatus" class="multi"></div>
+    <div id="fRegion" class="multi"></div>
+    <div id="fPw" class="multi"></div>
+    <div id="fOp" class="multi"></div>
   </div>
   <div class="wrap">
     <div class="pager"><span id="tblmeta"></span><span><button id="pgPrev">‹ anterior</button> <span id="pgInfo"></span> <button id="pgNext">seguinte ›</button></span></div>
@@ -100,7 +109,7 @@
 const D = /*__DATA__*/;
 document.getElementById('snap').textContent = D.snapshot;
 
-const fmt = n => (n==null?'–':Number(n).toLocaleString('pt-PT',{maximumFractionDigits:1}));
+const fmt = n => (n==null?'–':Number(n).toLocaleString('pt-PT',{minimumFractionDigits:2,maximumFractionDigits:2}));
 const label = (k,v,m)=>`<div class="bar"><div class="lab" title="${k}">${k}</div><div class="track"><div class="fill" style="width:${m?v/m*100:0}%"></div></div><div class="val">${fmt(v)}</div></div>`;
 function bars(el, obj, sort){ let e=obj; if(sort){e=Object.entries(e).sort((a,b)=>b[1]-a[1]).reduce((o,[k,v])=>(o[k]=v,o),{});} const m=Math.max(...Object.values(e)); document.getElementById(el).innerHTML=Object.entries(e).map(([k,v])=>label(k,v,m)).join(''); }
 
@@ -152,21 +161,33 @@ const cols = [{k:'point_id',l:'ID'},{k:'city',l:'Cidade'},{k:'operator_name',l:'
 document.getElementById('tblhead').innerHTML = cols.map((c,i)=>`<th class="${i<2?'l':''}" data-k="${c.k}">${c.l}</th>`).join('');
 let rows = D.points, sortKey=null, sortAsc=true, page=1, per=200;
 const uni = (k)=>[...new Set(rows.map(x=>x[k]).filter(Boolean))].sort();
-function fillSel(id,label,vals){ const s=document.getElementById(id);
-  s.innerHTML = `<option value="">${label}: todos</option>`+vals.map(v=>`<option>${v}</option>`).join('');
-  s.addEventListener('change',()=>{page=1;render();}); }
-fillSel('fStatus','Estado',uni('status'));
-fillSel('fRegion','Região',uni('region'));
-fillSel('fPw','Classe potência',uni('pw_class'));
-fillSel('fOp','Operador',uni('operator_name'));
+function multiSel(id,label,vals){ const el=document.getElementById(id), sel=new Set();
+  el.innerHTML = `<div class="mbtn"><span class="mlab">${label}: todos</span><span class="mcaret">▾</span></div><div class="mmenu"></div>`;
+  const btn=el.querySelector('.mbtn'), menu=el.querySelector('.mmenu');
+  const refresh=()=>{ el.querySelector('.mlab').textContent =
+    sel.size?`${label}: ${[...sel].sort().join(', ')}`:`${label}: todos`;
+    el.querySelector('.mlab').title = sel.size?[...sel].sort().join(', '):''; };
+  menu.innerHTML = vals.map(v=>`<label><input type="checkbox" value="${v}"> ${v}</label>`).join('');
+  menu.querySelectorAll('input').forEach(cb=>cb.addEventListener('change',()=>{
+    if(cb.checked) sel.add(cb.value); else sel.delete(cb.value);
+    refresh(); page=1; render();
+  }));
+  btn.addEventListener('click',e=>{ e.stopPropagation(); menu.classList.toggle('open'); });
+  document.addEventListener('click',e=>{ if(!el.contains(e.target)) menu.classList.remove('open'); });
+  return { has:()=>sel.size>0, get:()=>sel }; }
+const connFilter = multiSel('fConn','Tomada',[...new Set(rows.flatMap(x=>(x.connectors||'').split('|').filter(Boolean)))].sort());
+const statusFilter = multiSel('fStatus','Estado',uni('status'));
+const regionFilter = multiSel('fRegion','Região',uni('region'));
+const pwFilter = multiSel('fPw','Classe potência',uni('pw_class'));
+const opFilter = multiSel('fOp','Operador',uni('operator_name'));
 function render(){
   const q=(document.getElementById('q').value||'').toLowerCase();
-  const gv=id=>document.getElementById(id).value||null;
   let r = rows.filter(x=>Object.values(x).some(v=>String(v??'').toLowerCase().includes(q)));
-  if(gv('fStatus')) r=r.filter(x=>x.status===gv('fStatus'));
-  if(gv('fRegion')) r=r.filter(x=>x.region===gv('fRegion'));
-  if(gv('fPw')) r=r.filter(x=>x.pw_class===gv('fPw'));
-  if(gv('fOp')) r=r.filter(x=>x.operator_name===gv('fOp'));
+  if(connFilter.has()) r=r.filter(x=>(x.connectors||'').split('|').some(c=>connFilter.get().has(c)));
+  if(statusFilter.has()) r=r.filter(x=>statusFilter.get().has(x.status));
+  if(regionFilter.has()) r=r.filter(x=>regionFilter.get().has(x.region));
+  if(pwFilter.has()) r=r.filter(x=>pwFilter.get().has(x.pw_class));
+  if(opFilter.has()) r=r.filter(x=>opFilter.get().has(x.operator_name));
   if(sortKey) r = [...r].sort((a,b)=>{const x=a[sortKey],y=b[sortKey];
     if(x==null)return 1; if(y==null)return -1;
     const c=typeof x==='number'&&typeof y==='number'?x-y:String(x).localeCompare(String(y)); return sortAsc?c:-c;});

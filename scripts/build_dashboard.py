@@ -17,6 +17,10 @@ REG = pd.read_csv('nap_opc_registry.csv', dtype=str)
 
 snapshot = ST.snapshot_time.dropna().iloc[0]
 
+CONN_NAMES = {'iec62196T2': 'Type2', 'iec62196T2COMBO': 'CCS Combo2',
+              'chademo': 'CHAdeMO', 'iec60309x2single16': 'CEE 16A'}
+
+
 def region(lon, lat):
     try:
         lon, lat = float(lon), float(lat)
@@ -47,7 +51,8 @@ def pw_class(w):
 # ---- point-level combined table ----
 pts = P.copy()
 pts['pw_class'] = pts.max_power_w.apply(pw_class)
-conn_map = pts.groupby('point_id')['connector_type'].apply(lambda s: '|'.join(sorted(set(s))))
+conn_map = pts.groupby('point_id')['connector_type'].apply(
+    lambda s: '|'.join(sorted({CONN_NAMES.get(t, t) for t in s})))
 pow_map = pts.groupby('point_id')['max_power_w'].apply(lambda s: max(float(x) for x in s))
 pts = pts.drop_duplicates('point_id')[['point_id', 'site_external_id', 'operator_id',
                                        'is_green_energy']].copy()
@@ -77,7 +82,7 @@ agg_op_sites = S.groupby('operator_name')['external_id'].count().sort_values(asc
 op_names = S.drop_duplicates('operator_id').set_index('operator_id')['operator_name']
 agg_op_pts = pts.operator_name.value_counts().head(15)
 agg_pw = pts.pw_class.value_counts().to_dict()
-agg_conn = P.connector_type.value_counts().to_dict()
+agg_conn = P.connector_type.map(lambda t: CONN_NAMES.get(t, t)).value_counts().to_dict()
 agg_city = S.groupby('city')['external_id'].count().sort_values(ascending=False).head(15)
 agg_status_pw = pd.crosstab(pts.pw_class, pts.status)
 agg_occ_pw = []
