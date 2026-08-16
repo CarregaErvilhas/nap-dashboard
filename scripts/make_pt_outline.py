@@ -99,6 +99,22 @@ def district_centroids(raw, label_key=None, area_key='Area_Ha'):
     return out
 
 
+def archipelago_centroid(raw, area_key='Area_Ha'):
+    """Single [lon, lat] area-weighted centroid over every concelho in a file."""
+    cx = cy = total = 0.0
+    for feat in raw['features']:
+        c = polygon_centroid(feat['geometry'])
+        if c is None:
+            continue
+        a = float(feat['properties'].get(area_key, feat['properties'].get('AREA_HA', 0)))
+        cx += c[0] * a
+        cy += c[1] * a
+        total += a
+    if total <= 0:
+        return None
+    return [round(cx / total, 4), round(cy / total, 4)]
+
+
 def main():
     out = {}
     districts = {}
@@ -114,8 +130,10 @@ def main():
             polys.extend(decimate_geom(feat['geometry']))
         out[key] = polys
         if key == 'acores':
-            # Açores has no Distrito; label by island (ILHA)
-            districts[key] = district_centroids(raw, label_key='ILHA', area_key='AREA_HA')
+            # Açores has no Distrito; a single archipelago label suffices
+            districts[key] = {'Açores': archipelago_centroid(raw)}
+        elif key == 'madeira':
+            districts[key] = {'Madeira': archipelago_centroid(raw)}
         else:
             districts[key] = district_centroids(raw)
         total += sum(len(p) for p in polys)
