@@ -201,7 +201,11 @@ price_stats = {
              'max': round(OPC.FLAT.astype(float).max(), 3) if OPC.FLAT.notna().any() else None},
 }
 
-FACTS_HTML = """
+conn_total = sum(agg_conn.values())
+conn_line = ', '.join(
+    f'{k} {v:,} ({v/conn_total*100:.1f}%)' for k, v in
+    sorted(agg_conn.items(), key=lambda kv: -kv[1]))
+FACTS_HTML = f"""
 <ul>
 <li><b>Escala:</b> 8.260 locais, 20.521 pontos, 90 operadores. Continente 8.032 (97%), Madeira 128, Açores 100.</li>
 <li><b>Concentração:</b> EDP Comercial (1.638) + Galp Power (1.451) = 37% dos locais; top 5 operadores ≈ 62% da rede.</li>
@@ -212,7 +216,7 @@ FACTS_HTML = """
 <li><b>Energia verde:</b> 75% dos pontos (15.471) marcados como energia verde.</li>
 <li><b>Tarifário:</b> domina a estrutura em 3 componentes (taxa fixa + €/kWh + €/min). Energia média ≈ 0,13 €/kWh, variando muito por operador.</li>
 <li><b>Saúde da rede no snapshot:</b> 15% dos pontos 'removed' (3.013), 6% 'outOfOrder' (1.167), 7% 'unknown' → ≈18% não utilizável nesse momento.</li>
-<li><b>Connectors:</b> Type2 12.317, CCS Combo2 6.101, CHAdeMO 2.168 (em declínio, só em unidades multi-connector).</li>
+<li><b>Connectors:</b> {conn_line} (em declínio, só em unidades multi-connector).</li>
 <li><b>Setor público:</b> municípios operam como OPC (Cascais Próxima, EMEL, Loulé Concelho Global, Superguimarães, Santa Cruz).</li>
 <li><b>Registo OPC limpo:</b> os 87 códigos ativos resolvem para uma entidade (PartyID MOBI.E + DGEG); 84 com reconhecimento DGEG.</li>
 <li><b>CEMEs:</b> 52 códigos de marca na rede vs 46 registados DGEG; 29 códigos são simultaneamente OPC e CEME (espaço de código partilhado).</li>
