@@ -186,9 +186,9 @@ data = {
     'snapshot': snapshot,
     'kpis': [
         kpi('Sites', len(S), f'{S.region.value_counts().get("mainland",0)} mainland / {S.region.value_counts().get("madeira",0)} madeira / {S.region.value_counts().get("azores",0)} açores'),
-        kpi('Charging points', len(pts), f'{int((pts.is_green_energy=="True").sum())} green energy'),
+        kpi('Charging points', len(pts), f'{int(pts.is_green_energy.str.lower().eq("true").sum())} green energy'),
         kpi('Operators (OPC)', pts.operator_id.nunique(), f'{len(REG)} code/operator combos, {int(REG.dgeg_entidade.notna().sum())} DGEG-matched'),
-        kpi('Points w/ OPC price', int(OPC.opc_operador.notna().sum()), f'{len(OPC.opc_operador.notna())*100//max(len(OPC),1)}% of network'),
+        kpi('Points w/ OPC price', int(OPC.opc_operador.notna().sum()), f'{int(OPC.opc_operador.notna().sum())*100//max(len(OPC),1)}% of network'),
         kpi('Occupancy (snapshot)', f'{occupancy_overall:.1f}%', 'charging among available+charging'),
         kpi('Median power', '22 kW', f'mean {pts.max_power_w.astype(float).mean()/1000:.0f} kW, max {pts.max_power_w.astype(float).max()/1000:.0f} kW'),
     ],
