@@ -30,5 +30,10 @@ mobie_partyid.csv
 dgeg_opc.csv
 dgeg_ceme.csv
 
+# Concelho check (scripts/concelho_check.py) — CAOP cache + intermediate outputs
+caop_cache/
+concelho_check.csv
+concelho_mismatches.md
+
 # OS junk
 .DS_Store

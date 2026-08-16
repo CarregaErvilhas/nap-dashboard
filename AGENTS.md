@@ -8,7 +8,7 @@ self-contained dashboard. Don't over-engineer.
 ## Layout
 - `scripts/` — pipeline (fetch_data.sh, nap_etl.py, mobie_join.py, dgeg_lists.py,
   dgeg_crossref.py, partyid_crossref.py, check_quality.py, summary.py,
-  build_dashboard.py)
+  concelho_check.py, build_dashboard.py)
 - `assets/` — `dashboard_template.html` and `schemas/*.xsd` (DATEX II 3.3)
 - `references/` — docs for the SKILL.md (data sources, gotchas)
 - Raw XMLs + intermediate CSVs live in the repo root and are gitignored
@@ -38,9 +38,24 @@ from the official origins (see `scripts/fetch_data.sh` for the exact URLs).
 ## Pipeline order
 `scripts/nap_etl.py` → (`scripts/check_quality.py`, `scripts/summary.py`) →
 `scripts/mobie_join.py` → `scripts/dgeg_lists.py` → `scripts/dgeg_crossref.py` →
-`scripts/partyid_crossref.py` → `scripts/build_dashboard.py`.
+`scripts/partyid_crossref.py` → `scripts/concelho_check.py` →
+`scripts/build_dashboard.py`.
 `scripts/build_dashboard.py` reads the intermediate CSVs and
-writes `dashboard.html`, `facts.md`, `errors.md`.
+writes `dashboard.html`, `facts.md`, `errors.md`; it appends
+`concelho_mismatches.md` (written by `concelho_check.py`) to `errors.md` when
+present.
+
+`scripts/concelho_check.py` locates every site inside official CAOP concelho
+polygons (downloaded on first run into `caop_cache/`, gitignored) and flags the
+sites whose coordinates contradict the concelho implied by the site_id code.
+Writes `concelho_check.csv` + `concelho_mismatches.md` (errors.md items 11a/11b).
+
+## Housekeeping: save ad-hoc analysis scripts
+When an interactive query ends up producing new analysis code (point-in-polygon,
+cross-checks, one-off joins), save it as a script in `scripts/` (or append it to
+the relevant pipeline script) instead of leaving it in the terminal or /tmp —
+future re-runs should not regenerate all that code from scratch. If it's a
+throwaway one-liner, at least note it in AGENTS.md so it can be rebuilt.
 
 ## Build command
 ```bash

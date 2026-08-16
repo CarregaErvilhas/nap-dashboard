@@ -5,6 +5,7 @@ Run: python build_dashboard.py  ->  writes dashboard.html
 """
 import json
 import math
+import os
 import re
 import pandas as pd
 
@@ -170,7 +171,7 @@ ERRS_HTML = """
 </li>
 <li>
   <div class="head">11. Localização: coordenadas vs concelho</div>
-  <div class="meta">Todos os locais passam os limites de Portugal e o NUTS1 bate com as coordenadas. Mas a verificação cidade↔coordenadas (problema conhecido de concelhos trocados) exige reverse geocoding, não possível a partir deste snapshot — recomenda-se spot-check por amostragem.</div>
+  <div class="meta">Verificação contra os limites oficiais de concelho (CAOP + spot-check Nominatim): 76 sites (0,9%) têm coordenadas fora do concelho implicado pelo código do site_id (formato <code>operador-código-nº</code>, código = concelho). Nenhum caso nas ilhas. Os códigos são de concelho, não de distrito (ex. PLM = Palmela, BRR = Barreiro). As subsecções 11a/11b abaixo são geradas por <code>scripts/concelho_check.py</code>.</div>
 </li>
 """
 
@@ -180,6 +181,9 @@ with open('errors.md', 'w') as fh:
     fh.write('# Erros reportáveis (dados NAP / MOBI.E / DGEG)\n\n')
     for m in re.findall(r'<div class="head">(.*?)</div>\s*<div class="meta">(.*?)</div>', ERRS_HTML, re.S):
         fh.write(f'## {re.sub(r"<[^>]+>", "", m[0])}\n{re.sub(r"<[^>]+>", "", m[1]).strip()}\n\n')
+    if os.path.exists('concelho_mismatches.md'):
+        with open('concelho_mismatches.md') as frag:
+            fh.write(frag.read())
 print('facts.md and errors.md written')
 
 data = {
