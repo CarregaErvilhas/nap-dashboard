@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>EV NAP Portugal — Dashboard</title>
+<style>
+  :root { --bg:#0f172a; --card:#1e293b; --ink:#e2e8f0; --mut:#94a3b8; --acc:#38bdf8;
+          --ok:#34d399; --warn:#fbbf24; --err:#f87171; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { background:var(--bg); color:var(--ink); font:14px/1.45 -apple-system,Segoe UI,Roboto,sans-serif; padding:24px; }
+  h1 { font-size:22px; margin-bottom:2px; }
+  .sub { color:var(--mut); margin-bottom:20px; }
+  h2 { font-size:15px; margin:28px 0 12px; color:var(--acc); text-transform:uppercase; letter-spacing:.06em; }
+  .cards { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:12px; }
+  .card { background:var(--card); border-radius:10px; padding:14px 16px; }
+  .card .t { color:var(--mut); font-size:12px; }
+  .card .v { font-size:26px; font-weight:700; margin:4px 0 2px; }
+  .card .s { color:var(--mut); font-size:11px; }
+  .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(340px,1fr)); gap:14px; }
+  .panel { background:var(--card); border-radius:10px; padding:16px; }
+  .panel h3 { font-size:13px; color:var(--mut); font-weight:600; margin-bottom:10px; }
+  .bar { display:flex; align-items:center; gap:8px; margin:5px 0; }
+  .bar .lab { width:150px; flex:none; font-size:12px; text-align:right; color:var(--ink); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .bar .track { flex:1; height:14px; background:#0b1220; border-radius:7px; overflow:hidden; }
+  .bar .fill { height:100%; background:var(--acc); border-radius:7px; min-width:2px; }
+  .bar .val { width:56px; flex:none; font-size:11px; color:var(--mut); }
+  table { width:100%; border-collapse:collapse; font-size:12px; }
+  th,td { padding:5px 8px; text-align:right; border-bottom:1px solid #27334a; white-space:nowrap; }
+  th { color:var(--mut); font-weight:600; cursor:pointer; user-select:none; position:sticky; top:0; background:var(--card); }
+  td.l, th.l { text-align:left; }
+  input[type=text], select { width:100%; padding:8px 10px; border-radius:8px; border:1px solid #334155; background:#0b1220; color:var(--ink); margin-bottom:10px; font-size:13px; }
+  select { cursor:pointer; }
+  .filters { display:grid; grid-template-columns:2fr repeat(4,1fr); gap:8px; margin-bottom:6px; }
+  .pager { display:flex; align-items:center; justify-content:space-between; padding:8px 2px; font-size:12px; color:var(--mut); }
+  .pager button { background:#1e293b; color:var(--ink); border:1px solid #334155; border-radius:6px; padding:4px 12px; cursor:pointer; font-size:12px; }
+  .pager button:disabled { opacity:.35; cursor:default; }
+  .ok{color:var(--ok)} .warn{color:var(--warn)} .err{color:var(--err)} .mut{color:var(--mut)}
+  .wrap { max-height:560px; overflow:auto; border-radius:8px; }
+  .tag { display:inline-block; padding:1px 8px; border-radius:10px; font-size:11px; margin-right:4px; }
+  .tag.status-charging{background:#065f46;color:#a7f3d0} .tag.status-available{background:#155e75;color:#a5f3fc}
+  .tag.status-removed{background:#581c87;color:#e9d5ff} .tag.status-outOfOrder{background:#7f1d1d;color:#fecaca}
+  .tag.status-unknown{background:#52525b;color:#e4e4e7} .tag.status-inoperative{background:#78350f;color:#fde68a}
+  .tag.status-blocked{background:#701a75;color:#f0abfc} .tag.status-planned{background:#374151;color:#d1d5db}
+  ul { padding-left:20px; } li { margin:6px 0; }
+  .facts li b{color:var(--acc)} .errs li{list-style:none;padding:10px 0;border-bottom:1px solid #27334a}
+  .errs li .head{font-weight:600;color:var(--err)} .errs li .meta{color:var(--mut);font-size:12px;margin-top:2px}
+  code{background:#0b1220;padding:1px 5px;border-radius:4px;font-size:12px}
+</style>
+</head>
+<body>
+  <h1>Rede de carregamento de veículos elétricos — Portugal</h1>
+  <div class="sub">NAP MOBI.E (AFIR) + tarifas OPC + registo DGEG · snapshot <span id="snap"></span></div>
+
+  <div class="cards" id="kpis"></div>
+
+  <h2>Visão geral</h2>
+  <div class="grid">
+    <div class="panel"><h3>Pontos por estado (snapshot)</h3><div id="chStatus"></div></div>
+    <div class="panel"><h3>Locais por região</h3><div id="chRegion"></div></div>
+    <div class="panel"><h3>Pontos por classe de potência</h3><div id="chPw"></div></div>
+    <div class="panel"><h3>Tipos de connector (tomadas)</h3><div id="chConn"></div></div>
+  </div>
+
+  <h2>Operadores</h2>
+  <div class="grid">
+    <div class="panel"><h3>Top 15 operadores — locais</h3><div id="chOpSites"></div></div>
+    <div class="panel"><h3>Top 15 operadores — pontos</h3><div id="chOpPts"></div></div>
+    <div class="panel"><h3>Ocupação instantânea por operador (top 15)</h3><div id="chOpOcc"></div></div>
+    <div class="panel"><h3>Preço médio energia (€/kWh) por operador</h3><div id="chPriceOp"></div></div>
+  </div>
+
+  <h2>Ocupação e preço</h2>
+  <div class="grid">
+    <div class="panel"><h3>Ocupação instantânea por classe de potência</h3><div id="chOccPw"></div></div>
+    <div class="panel"><h3>Top 15 concelhos por locais</h3><div id="chCity"></div></div>
+    <div class="panel" id="pricePanel"><h3>Tarifas MOBI.E (€)</h3></div>
+  </div>
+
+  <h2>Tabela de pontos (pesquisável)</h2>
+  <div class="filters">
+    <input type="text" id="q" placeholder="Filtrar por id, cidade, operador, OPC, status, classe...">
+    <select id="fStatus"></select>
+    <select id="fRegion"></select>
+    <select id="fPw"></select>
+    <select id="fOp"></select>
+  </div>
+  <div class="wrap">
+    <div class="pager"><span id="tblmeta"></span><span><button id="pgPrev">‹ anterior</button> <span id="pgInfo"></span> <button id="pgNext">seguinte ›</button></span></div>
+    <table id="tbl"><thead><tr id="tblhead"></tr></thead><tbody id="tbody"></tbody></table>
+  </div>
+
+  <h2>Factos interessantes</h2>
+  <div class="panel facts" id="facts"></div>
+
+  <h2>Erros reportáveis</h2>
+  <div class="panel errs" id="errs"></div>
+
+<script>
+const D = /*__DATA__*/;
+document.getElementById('snap').textContent = D.snapshot;
+
+const fmt = n => (n==null?'–':Number(n).toLocaleString('pt-PT',{maximumFractionDigits:1}));
+const label = (k,v,m)=>`<div class="bar"><div class="lab" title="${k}">${k}</div><div class="track"><div class="fill" style="width:${m?v/m*100:0}%"></div></div><div class="val">${fmt(v)}</div></div>`;
+function bars(el, obj, sort){ let e=obj; if(sort){e=Object.entries(e).sort((a,b)=>b[1]-a[1]).reduce((o,[k,v])=>(o[k]=v,o),{});} const m=Math.max(...Object.values(e)); document.getElementById(el).innerHTML=Object.entries(e).map(([k,v])=>label(k,v,m)).join(''); }
+
+// KPIs
+document.getElementById('kpis').innerHTML = D.kpis.map(k=>
+  `<div class="card"><div class="t">${k.t}</div><div class="v">${k.v}</div><div class="s">${k.s}</div></div>`).join('');
+
+bars('chStatus', D.status, true);
+bars('chRegion', D.region);
+bars('chPw', D.pw, true);
+bars('chConn', D.conn, true);
+bars('chOpSites', D.op_sites, true);
+bars('chOpPts', D.op_pts, true);
+bars('chCity', D.city, true);
+
+// occupancy by operator (values <0 hidden)
+const occOp = Object.fromEntries(D.occ_op.filter(x=>x.occ!=null).map(x=>[x.op, x.occ]));
+bars('chOpOcc', occOp, true);
+bars('chPriceOp', D.price_op, true);
+
+// occupancy by power class
+document.getElementById('chOccPw').innerHTML = D.occ_pw.map(x=>{
+  const pct = x.occ==null?0:x.occ; const col = x.occ>22?'var(--ok)':x.occ>18?'var(--acc)':'var(--warn)';
+  return `<div class="bar"><div class="lab" title="${x.c}">${x.c}</div><div class="track"><div class="fill" style="width:${pct}%;background:${col}"></div></div><div class="val">${fmt(x.occ)}%</div></div>`
+    + `<div class="mut" style="font-size:11px;margin:-3px 0 6px 158px">${x.charging} a carregar / ${x.active} ativos</div>`;
+}).join('');
+
+// pricing stats
+const ps=D.price_stats;
+document.getElementById('pricePanel').innerHTML +=
+ `<table><tr><th>Componente</th><th>n pontos</th><th>média</th><th>máx</th></tr>
+  <tr><td class="l">Energia (€/kWh)</td><td>${fmt(ps.energy.n)}</td><td>${fmt(ps.energy.mean)}</td><td>${fmt(ps.energy.max)}</td></tr>
+  <tr><td class="l">Tempo (€/min)</td><td>${fmt(ps.time.n)}</td><td>${fmt(ps.time.mean)}</td><td>${fmt(ps.time.max)}</td></tr>
+  <tr><td class="l">Taxa fixa (€/carga)</td><td>${fmt(ps.flat.n)}</td><td>${fmt(ps.flat.mean)}</td><td>${fmt(ps.flat.max)}</td></tr></table>`;
+
+// status x power class table (transposed: statuses as rows, classes as columns)
+const sw = D.status_pw;
+const classes = Object.keys(sw);
+const statuses = [...new Set(classes.flatMap(c=>Object.keys(sw[c]||{})))];
+document.getElementById('chStatus').insertAdjacentHTML('afterend',
+ `<div class="panel" style="margin-top:14px"><h3>Estado × classe de potência</h3>
+  <div style="overflow-x:auto"><table><thead><tr><th class="l">estado</th>${classes.map(c=>`<th>${c}</th>`).join('')}</tr></thead>
+  <tbody>${statuses.map(s=>`<tr><td class="l">${s}</td>${classes.map(c=>`<td>${sw[c][s]??0}</td>`).join('')}</tr>`).join('')}</tbody></table></div></div>`);
+
+// points table
+const cols = [{k:'point_id',l:'ID'},{k:'city',l:'Cidade'},{k:'operator_name',l:'Operador'},{k:'pw_class',l:'Classe'},
+              {k:'kw',l:'kW'},{k:'connectors',l:'Connectors'},{k:'status',l:'Estado'},{k:'opc',l:'OPC'},
+              {k:'ENERGY',l:'€/kWh'},{k:'TIME',l:'€/min'},{k:'FLAT',l:'€/carga'}];
+document.getElementById('tblhead').innerHTML = cols.map((c,i)=>`<th class="${i<2?'l':''}" data-k="${c.k}">${c.l}</th>`).join('');
+let rows = D.points, sortKey=null, sortAsc=true, page=1, per=200;
+const uni = (k)=>[...new Set(rows.map(x=>x[k]).filter(Boolean))].sort();
+function fillSel(id,label,vals){ const s=document.getElementById(id);
+  s.innerHTML = `<option value="">${label}: todos</option>`+vals.map(v=>`<option>${v}</option>`).join('');
+  s.addEventListener('change',()=>{page=1;render();}); }
+fillSel('fStatus','Estado',uni('status'));
+fillSel('fRegion','Região',uni('region'));
+fillSel('fPw','Classe potência',uni('pw_class'));
+fillSel('fOp','Operador',uni('operator_name'));
+function render(){
+  const q=(document.getElementById('q').value||'').toLowerCase();
+  const gv=id=>document.getElementById(id).value||null;
+  let r = rows.filter(x=>Object.values(x).some(v=>String(v??'').toLowerCase().includes(q)));
+  if(gv('fStatus')) r=r.filter(x=>x.status===gv('fStatus'));
+  if(gv('fRegion')) r=r.filter(x=>x.region===gv('fRegion'));
+  if(gv('fPw')) r=r.filter(x=>x.pw_class===gv('fPw'));
+  if(gv('fOp')) r=r.filter(x=>x.operator_name===gv('fOp'));
+  if(sortKey) r = [...r].sort((a,b)=>{const x=a[sortKey],y=b[sortKey];
+    if(x==null)return 1; if(y==null)return -1;
+    const c=typeof x==='number'&&typeof y==='number'?x-y:String(x).localeCompare(String(y)); return sortAsc?c:-c;});
+  const pages=Math.max(1,Math.ceil(r.length/per));
+  if(page>pages) page=pages;
+  const slice=r.slice((page-1)*per,page*per);
+  document.getElementById('tbody').innerHTML = slice.map(x=>`<tr>
+    <td class="l">${x.point_id}</td><td class="l">${x.city??''}</td><td class="l">${x.operator_name??''}</td>
+    <td>${x.pw_class??''}</td><td>${fmt(x.kw)}</td><td>${x.connectors??''}</td>
+    <td><span class="tag status-${x.status??'unknown'}">${x.status??''}</span></td>
+    <td>${x.opc??''}</td><td>${fmt(x.ENERGY)}</td><td>${fmt(x.TIME)}</td><td>${fmt(x.FLAT)}</td></tr>`).join('');
+  document.getElementById('tblmeta').textContent = `${r.length} pontos (a mostrar ${Math.min(per,r.length-(page-1)*per)} nesta página)`;
+  document.getElementById('pgInfo').textContent = `página ${page}/${pages}`;
+  document.getElementById('pgPrev').disabled = page<=1;
+  document.getElementById('pgNext').disabled = page>=pages;
+}
+document.getElementById('tblhead').addEventListener('click',e=>{const k=e.target.dataset.k; if(!k)return;
+  if(sortKey===k)sortAsc=!sortAsc; else{sortKey=k;sortAsc=true;} page=1; render();});
+document.getElementById('q').addEventListener('input',()=>{page=1;render();});
+document.getElementById('pgPrev').addEventListener('click',()=>{if(page>1){page--;render();}});
+document.getElementById('pgNext').addEventListener('click',()=>{page++;render();});
+render();
+
+// facts + errors (injected from build script via HTML template literals are fine here)
+document.getElementById('facts').innerHTML = D.facts_html;
+document.getElementById('errs').innerHTML = D.errs_html;
+</script>
+</body>
+</html>
