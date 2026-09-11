@@ -1,8 +1,11 @@
-name: Agents spike (Zen smoke test)
+name: Agents spike (opencode harness smoke test)
 
-# SPIKE descartável: prova auth + modelo + custo antes do agents.yml definitivo.
-# Alvo: OpenCode Console (Zen). OPENCODE_MODEL é lista por prioridade, separada
-# por vírgulas — tenta o 1º, se falhar notifica (Issue) e passa ao seguinte.
+# SPIKE descartável: prova o caminho real do agente — `opencode2 run` no runner,
+# com a key do Console via env OPENCODE_API_KEY.
+# Porquê harness e não HTTPS direto: o free tier do Zen exige o cliente
+# OpenCode (erro `MissingSessionID`: "free tier can only be used in OpenCode").
+# OPENCODE_MODEL é lista por prioridade, separada por vírgulas (aceita com ou
+# sem prefixo `opencode/`). Tenta por ordem, notifica (Issue) cada falha.
 # Só corre manual: Actions → Agents spike → Run workflow. Não faz commit nem push.
 # Apagar quando o agents.yml real existir.
 on:
@@ -19,43 +22,58 @@ concurrency:
 jobs:
   spike:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v7
       - uses: actions/setup-python@v7
         with:
           python-version: "3.13"
-      - name: Zen smoke test (fallback chain)
+      - name: Install opencode
+        run: |
+          curl -fsSL https://opencode.ai/install | bash
+          echo "$HOME/.opencode/bin" >> "$GITHUB_PATH"
+          command -v opencode2
+          opencode2 --version
+      - name: Harness smoke test (fallback chain)
         env:
           OPENCODE_API_KEY: ${{ secrets.OPENCODE_API_KEY }}
           OPENCODE_MODEL: ${{ vars.OPENCODE_MODEL }}
           GH_TOKEN: ${{ github.token }}
         run: |
           python3 - <<'EOF'
-          import json, os, sys, urllib.request, urllib.error
+          import json, os, subprocess, sys, urllib.request
 
-          ZEN_URL = "https://opencode.ai/zen/v1/chat/completions"
+          PROMPT = ("Do not use any tools. Do not read any files. "
+                    "Reply with exactly this line and nothing else: spike ok")
+          PER_MODEL_TIMEOUT = 240
+
           GH_API = "https://api.github.com"
           REPO = os.environ.get("GITHUB_REPOSITORY", "")
           RUN_URL = (f"{os.environ.get('GITHUB_SERVER_URL', 'https://github.com')}"
                      f"/{REPO}/actions/runs/{os.environ.get('GITHUB_RUN_ID', '')}")
 
           KEY = os.environ.get("OPENCODE_API_KEY", "")
-          MODELS = [m.strip() for m in os.environ.get("OPENCODE_MODEL", "").split(",")
-                    if m.strip()]
+          raw = [m.strip() for m in os.environ.get("OPENCODE_MODEL", "").split(",")
+                 if m.strip()]
+          MODELS = [m if "/" in m else f"opencode/{m}" for m in raw]
           GH_TOKEN = os.environ.get("GH_TOKEN", "")
 
           if not KEY:
-              print("FAIL: secret OPENCODE_API_KEY vazio ou em falta "
-                    "(console.opencode.ai → API key; depois Settings → Secrets "
-                    "and variables → Actions → Secrets).",
+              print("FAIL: secret OPENCODE_API_KEY vazio ou em falta.",
                     file=sys.stderr)
               sys.exit(2)
           if not MODELS:
-              print("FAIL: variable OPENCODE_MODEL vazia ou em falta "
-                    "(mesma página, aba Variables; lista separada por vírgulas).",
+              print("FAIL: variable OPENCODE_MODEL vazia ou em falta.",
                     file=sys.stderr)
               sys.exit(2)
+
+          try:
+              cli_version = subprocess.run(
+                  ["opencode2", "--version"], capture_output=True, text=True,
+                  timeout=30).stdout.strip()
+          except Exception as e:
+              cli_version = f"(não obtida: {e})"
+          print("opencode:", cli_version)
 
           def gh_issue(title, body):
               """Abre Issue; nunca deita o loop abaixo (avisa e segue)."""
@@ -77,80 +95,53 @@ jobs:
                   print(f"WARN: falhou criar Issue ({e})")
                   return False
 
-          def try_model(model):
-              """Uma tentativa; devolve (ok, usage, reply_ou_erro)."""
-              req = urllib.request.Request(
-                  ZEN_URL,
-                  data=json.dumps({
-                      "model": model,
-                      "messages": [
-                          {"role": "system",
-                           "content": "Reply with exactly this line and nothing else: spike ok"},
-                          {"role": "user", "content": "ping"},
-                      ],
-                      "max_tokens": 20,
-                      "temperature": 0,
-                  }).encode(),
-                  headers={
-                      "Authorization": "Bearer " + KEY,  # nunca fazer print disto
-                      "Content-Type": "application/json",
-                      # Zen está atrás de Cloudflare (error 1010 bloqueia
-                      # o User-Agent default do urllib). Fingir browser.
-                      "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
-                                    "AppleWebKit/537.36 (KHTML, like Gecko) "
-                                    "Chrome/126.0.0.0 Safari/537.36",
-                      "HTTP-Referer": "https://nap.ocarroeletrico.com/",
-                      "X-Title": "nap-dashboard agents spike",
-                  },
-              )
+          def try_model(ref):
+              """Uma tentativa via CLI; devolve (ok, transcript)."""
               try:
-                  with urllib.request.urlopen(req, timeout=90) as r:
-                      payload = json.load(r)
-              except urllib.error.HTTPError as e:
-                  detail = e.read().decode("utf-8", "replace")[:500]
-                  hints = {401: "API key do Console inválida ou em falta",
-                           403: "bloqueio Cloudflare/bot (error 1010?) ou modelo sem acesso",
-                           404: "model id errado (ver https://opencode.ai/zen/v1/models)",
-                           402: "sem créditos",
-                           429: "rate limit (normal nos modelos free)"}
-                  return False, {}, f"HTTP {e.code} — {hints.get(e.code, 'ver log')} | {detail}"
-              except Exception as e:
-                  return False, {}, f"erro de rede: {e}"
-              try:
-                  msg = payload["choices"][0]["message"]["content"].strip()
-                  usage = payload.get("usage", {})
-              except (KeyError, IndexError, AttributeError):
-                  return False, {}, "resposta sem choices"
-              if msg != "spike ok":
-                  return False, usage, f"resposta inesperada: {msg[:200]}"
-              return True, usage, msg
+                  p = subprocess.run(
+                      ["opencode2", "run", "--standalone", "-m", ref,
+                       "--format", "json", PROMPT],
+                      capture_output=True, text=True, timeout=PER_MODEL_TIMEOUT)
+              except subprocess.TimeoutExpired:
+                  return False, f"timeout {PER_MODEL_TIMEOUT}s (sem resposta)"
+              texts = []
+              for line in p.stdout.splitlines():
+                  try:
+                      obj = json.loads(line)
+                  except json.JSONDecodeError:
+                      continue
+                  if obj.get("type") == "text":
+                      texts.append(str(obj.get("part", {}).get("text", "")))
+              transcript = "\n".join(texts).strip()
+              if p.returncode != 0 and not transcript:
+                  return False, f"exit {p.returncode}: {p.stderr.strip()[-500:]}"
+              if any(t.strip() == "spike ok" for t in texts):
+                  return True, transcript
+              return False, f"resposta inesperada: {transcript[:300] or '(vazia)'}"
 
-          tried, notified, served_by, last_usage = [], False, None, {}
-          for model in MODELS:
-              print(f"--- a tentar: {model}")
-              ok, usage, info = try_model(model)
-              tried.append(model)
-              last_usage = usage
-              print("usage:", {k: usage.get(k) for k in
-                               ("prompt_tokens", "completion_tokens", "total_tokens")})
+          tried, notified, served_by, last_out = [], False, None, ""
+          for ref in MODELS:
+              print(f"--- a tentar: {ref}")
+              ok, info = try_model(ref)
+              tried.append(ref)
+              last_out = info
               if ok:
-                  served_by = model
-                  print("reply:", info)
+                  served_by = ref
+                  print("reply ok")
                   break
-              print(f"FAIL [{model}]: {info}", file=sys.stderr)
+              print(f"FAIL [{ref}]: {info}", file=sys.stderr)
               notified = gh_issue(
-                  f"Agents spike: modelo {model} falhou (run {os.environ.get('GITHUB_RUN_ID')})",
-                  f"Modelo: `{model}`\nErro: `{info[:400]}`\nRun: {RUN_URL}") or notified
+                  f"Agents spike: modelo {ref} falhou (run {os.environ.get('GITHUB_RUN_ID')})",
+                  f"Modelo: `{ref}`\nErro: `{info[:400]}`\nRun: {RUN_URL}") or notified
 
           with open("agents-spike-output.md", "w") as f:
-              f.write(f"# Agents spike\n\n"
+              f.write(f"# Agents spike (harness)\n\n"
+                      f"- opencode: `{cli_version}`\n"
                       f"- tentados, por ordem: `{tried}`\n"
                       f"- servido por: `{served_by}`\n"
-                      f"- usage (última tentativa): `{last_usage}`\n"
+                      f"- último output: `{last_out[:300]}`\n"
                       f"- resultado: {'OK' if served_by else 'TODOS FALHARAM'}\n")
           if notified:
-              # Marca que a notificação já foi feita em-script; o safety net
-              # abaixo cala-se para não duplicar Issues.
               open("spike-notified.marker", "w").write("notified\n")
           if served_by:
               print(f"SPIKE OK (servido por {served_by})")
