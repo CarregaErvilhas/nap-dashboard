@@ -28,7 +28,7 @@ jobs:
         with:
           python-version: "3.13"
       - name: Install deps
-        run: pip install pandas lxml pdfplumber
+        run: pip install -r requirements.txt
       - name: Fetch fresh data
         run: bash scripts/fetch_data.sh
       - name: ETL

@@ -29,7 +29,7 @@ jobs:
         with:
           python-version: "3.13"
       - name: Install deps
-        run: pip install pandas lxml
+        run: pip install -r requirements.txt
       # Dados vêm do artifact do refresh (fonte única); só saca da origem
       # em runs manuais, onde não há workflow_run para referenciar.
       - name: Get static data (from refresh run)

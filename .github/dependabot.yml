@@ -1,0 +1,19 @@
+version: 2
+updates:
+  # CI Actions (refresh/pages/agents): one grouped PR a month, merge manual.
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "monthly"
+    groups:
+      actions:
+        patterns: ["*"]
+  # Pipeline Python deps (requirements.txt). Nota: subir major de pandas/lxml
+  # pode mudar outputs numéricos — rever o diff do dashboard antes de merge.
+  - package-ecosystem: "pip"
+    directory: "/"
+    schedule:
+      interval: "monthly"
+    groups:
+      python-deps:
+        patterns: ["*"]
