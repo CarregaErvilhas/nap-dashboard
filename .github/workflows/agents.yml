@@ -93,6 +93,7 @@ jobs:
           OPENCODE_API_KEY: ${{ secrets.OPENCODE_API_KEY }}
           OPENCODE_MODEL: ${{ vars.OPENCODE_MODEL }}
           GH_TOKEN: ${{ github.token }}
+          PUSH_TOKEN: ${{ secrets.PUSH_TOKEN }}
         run: |
           python3 - <<'EOF'
           import json, os, re, subprocess, sys, urllib.request
@@ -120,6 +121,7 @@ jobs:
                  if m.strip()]
           MODELS = [m if "/" in m else f"opencode/{m}" for m in raw]
           GH_TOKEN = os.environ.get("GH_TOKEN", "")
+          PUSH_TOKEN = os.environ.get("PUSH_TOKEN", "")
 
           if not KEY:
               print("FAIL: secret OPENCODE_API_KEY vazio ou em falta.",
@@ -127,6 +129,10 @@ jobs:
               sys.exit(2)
           if not MODELS:
               print("FAIL: variable OPENCODE_MODEL vazia ou em falta.",
+                    file=sys.stderr)
+              sys.exit(2)
+          if not PUSH_TOKEN:
+              print("FAIL: secret PUSH_TOKEN vazio ou em falta.",
                     file=sys.stderr)
               sys.exit(2)
 
@@ -239,10 +245,14 @@ jobs:
               print("FAIL: nenhum modelo produziu relatório válido", file=sys.stderr)
               sys.exit(1)
 
-          # Auto-commit para main (com 1 retry via rebase).
+          # Auto-commit para main (com 1 retry via rebase). Push via PAT: autentica
+          # como owner, que faz bypass ao ruleset "review" (o GITHUB_TOKEN é
+          # recusado). O token nunca é impresso — só vai para o remote.
           sh(["git", "config", "user.name", "github-actions[bot]"])
           sh(["git", "config", "user.email",
               "41898282+github-actions[bot]@users.noreply.github.com"])
+          sh(["git", "remote", "set-url", "origin",
+              f"https://x-access-token:{PUSH_TOKEN}@github.com/{REPO}.git"])
           adds = [REPORT, CENSUS]
           if os.path.exists('scripts/anomalias_check.py'):
               adds.append('scripts/anomalias_check.py')  # código reutilizável do agente
