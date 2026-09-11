@@ -1,0 +1,170 @@
+name: Agents spike (Zen smoke test)
+
+# SPIKE descartável: prova auth + modelo + custo antes do agents.yml definitivo.
+# Alvo: OpenCode Console (Zen). OPENCODE_MODEL é lista por prioridade, separada
+# por vírgulas — tenta o 1º, se falhar notifica (Issue) e passa ao seguinte.
+# Só corre manual: Actions → Agents spike → Run workflow. Não faz commit nem push.
+# Apagar quando o agents.yml real existir.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+concurrency:
+  group: "agents-spike"
+  cancel-in-progress: true
+
+jobs:
+  spike:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.13"
+      - name: Zen smoke test (fallback chain)
+        env:
+          OPENCODE_API_KEY: ${{ secrets.OPENCODE_API_KEY }}
+          OPENCODE_MODEL: ${{ vars.OPENCODE_MODEL }}
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          python3 - <<'EOF'
+          import json, os, sys, urllib.request, urllib.error
+
+          ZEN_URL = "https://opencode.ai/zen/v1/chat/completions"
+          GH_API = "https://api.github.com"
+          REPO = os.environ.get("GITHUB_REPOSITORY", "")
+          RUN_URL = (f"{os.environ.get('GITHUB_SERVER_URL', 'https://github.com')}"
+                     f"/{REPO}/actions/runs/{os.environ.get('GITHUB_RUN_ID', '')}")
+
+          KEY = os.environ.get("OPENCODE_API_KEY", "")
+          MODELS = [m.strip() for m in os.environ.get("OPENCODE_MODEL", "").split(",")
+                    if m.strip()]
+          GH_TOKEN = os.environ.get("GH_TOKEN", "")
+
+          if not KEY:
+              print("FAIL: secret OPENCODE_API_KEY vazio ou em falta "
+                    "(console.opencode.ai → API key; depois Settings → Secrets "
+                    "and variables → Actions → Secrets).",
+                    file=sys.stderr)
+              sys.exit(2)
+          if not MODELS:
+              print("FAIL: variable OPENCODE_MODEL vazia ou em falta "
+                    "(mesma página, aba Variables; lista separada por vírgulas).",
+                    file=sys.stderr)
+              sys.exit(2)
+
+          def gh_issue(title, body):
+              """Abre Issue; nunca deita o loop abaixo (avisa e segue)."""
+              if not GH_TOKEN or not REPO:
+                  print("WARN: sem GH_TOKEN/REPO, Issue não criada:", title)
+                  return False
+              req = urllib.request.Request(
+                  f"{GH_API}/repos/{REPO}/issues",
+                  data=json.dumps({"title": title, "body": body}).encode(),
+                  headers={"Authorization": "Bearer " + GH_TOKEN,
+                           "Accept": "application/vnd.github+json",
+                           "Content-Type": "application/json"},
+              )
+              try:
+                  with urllib.request.urlopen(req, timeout=30) as r:
+                      print("Issue aberta:", json.load(r).get("number"))
+                  return True
+              except Exception as e:
+                  print(f"WARN: falhou criar Issue ({e})")
+                  return False
+
+          def try_model(model):
+              """Uma tentativa; devolve (ok, usage, reply_ou_erro)."""
+              req = urllib.request.Request(
+                  ZEN_URL,
+                  data=json.dumps({
+                      "model": model,
+                      "messages": [
+                          {"role": "system",
+                           "content": "Reply with exactly this line and nothing else: spike ok"},
+                          {"role": "user", "content": "ping"},
+                      ],
+                      "max_tokens": 20,
+                      "temperature": 0,
+                  }).encode(),
+                  headers={
+                      "Authorization": "Bearer " + KEY,  # nunca fazer print disto
+                      "Content-Type": "application/json",
+                      "HTTP-Referer": "https://nap.ocarroeletrico.com/",
+                      "X-Title": "nap-dashboard agents spike",
+                  },
+              )
+              try:
+                  with urllib.request.urlopen(req, timeout=90) as r:
+                      payload = json.load(r)
+              except urllib.error.HTTPError as e:
+                  detail = e.read().decode("utf-8", "replace")[:500]
+                  hints = {401: "API key do Console inválida ou em falta",
+                           404: "model id errado (ver https://opencode.ai/zen/v1/models)",
+                           402: "sem créditos",
+                           429: "rate limit (normal nos modelos free)"}
+                  return False, {}, f"HTTP {e.code} — {hints.get(e.code, 'ver log')} | {detail}"
+              except Exception as e:
+                  return False, {}, f"erro de rede: {e}"
+              try:
+                  msg = payload["choices"][0]["message"]["content"].strip()
+                  usage = payload.get("usage", {})
+              except (KeyError, IndexError, AttributeError):
+                  return False, {}, "resposta sem choices"
+              if msg != "spike ok":
+                  return False, usage, f"resposta inesperada: {msg[:200]}"
+              return True, usage, msg
+
+          tried, notified, served_by, last_usage = [], False, None, {}
+          for model in MODELS:
+              print(f"--- a tentar: {model}")
+              ok, usage, info = try_model(model)
+              tried.append(model)
+              last_usage = usage
+              print("usage:", {k: usage.get(k) for k in
+                               ("prompt_tokens", "completion_tokens", "total_tokens")})
+              if ok:
+                  served_by = model
+                  print("reply:", info)
+                  break
+              print(f"FAIL [{model}]: {info}", file=sys.stderr)
+              notified = gh_issue(
+                  f"Agents spike: modelo {model} falhou (run {os.environ.get('GITHUB_RUN_ID')})",
+                  f"Modelo: `{model}`\nErro: `{info[:400]}`\nRun: {RUN_URL}") or notified
+
+          with open("agents-spike-output.md", "w") as f:
+              f.write(f"# Agents spike\n\n"
+                      f"- tentados, por ordem: `{tried}`\n"
+                      f"- servido por: `{served_by}`\n"
+                      f"- usage (última tentativa): `{last_usage}`\n"
+                      f"- resultado: {'OK' if served_by else 'TODOS FALHARAM'}\n")
+          if notified:
+              # Marca que a notificação já foi feita em-script; o safety net
+              # abaixo cala-se para não duplicar Issues.
+              open("spike-notified.marker", "w").write("notified\n")
+          if served_by:
+              print(f"SPIKE OK (servido por {served_by})")
+              sys.exit(0)
+          print("FAIL: todos os modelos falharam", file=sys.stderr)
+          sys.exit(1)
+          EOF
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: agents-spike-output
+          path: agents-spike-output.md
+          if-no-files-found: warn
+      # Safety net: só dispara se o script morreu antes de notificar ele
+      # próprio (ex. secret em falta, crash). Sem marker → sem Issue duplicada.
+      - name: Notify on infra failure
+        if: failure() && hashFiles('spike-notified.marker') == ''
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh issue create --repo "$GITHUB_REPOSITORY" \
+            --title "Agents spike: falha de infra (run $GITHUB_RUN_ID)" \
+            --body "O script falhou antes de notificar por modelo. Run: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
