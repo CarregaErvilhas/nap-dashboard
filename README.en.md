@@ -24,10 +24,10 @@ public data sources. The goal:
 
 ## Results
 
-- **`dashboard.html`** — standalone dashboard (9.4 MB), no external libraries,
-  opens via `file://`. KPIs, bar charts, an **interactive SVG map** of 8 260 sites
+- **`dashboard.html`** — standalone dashboard (10.4 MB), no external libraries,
+  opens via `file://`. KPIs, bar charts, an **interactive SVG map** of 8 357 sites
   (mainland + Madeira/Açores, zoom/pan, click a dot for detail with OSM
-  cross-reference), a 20 521-point table with search, multi-select filters
+  cross-reference), a 20 932-point table with search, multi-select filters
   (status/region/power class/operator/connector/payment), click-to-sort headers
   and pagination.
 - **`facts.md`** — interesting facts about the network.
@@ -103,7 +103,7 @@ if Chrome is missing it warns and skips.
 - Embedded dashboard JSON: use `allow_nan=False` plus NaN/Inf cleaning, otherwise
   the browser's `JSON.parse` fails (bug already fixed).
 - OSM/umap: the v2.1 map author's dump (`Todos.json`) covers ~96% of NAP sites
-  (7 934/8 260) by MOBI.E code; `man_made=charge_point` nodes carry payment tags
+  (8 011/8 357) by MOBI.E code; `man_made=charge_point` nodes carry payment tags
   that `charging_station` elements lack — consider both. The "Caça aos Postos"
   umap lists community doubts, including "nothing on site" points ≤500 m from
   active NAP sites.

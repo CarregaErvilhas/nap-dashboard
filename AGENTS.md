@@ -109,14 +109,14 @@ After editing `assets/dashboard_template.html` or `scripts/build_dashboard.py`,
 - `brands_accepted` (NAP) = global CEME list per point, NOT an operator discriminator.
 - `facilityLocation` is in the `locationReferencing` namespace, not `locationExtension`.
 - NUTS in NAP is level-1 only.
-- Dynamic & static point ids match 100%; but 46 points appear 2–3× in dynamic
-  status with conflicting states (48 extra rows).
-- 30% of connector rows (6 206/20 624) have declared power inconsistent with
-  V×I (>25% off); 2 690 declare power above physical capacity (impossible, e.g.
+- Dynamic & static point ids match bar 3 missing rows; but 44 points appear 2–3× in dynamic
+  status with conflicting states (47 extra rows).
+- 33% of connector rows (6 948/21 056) have declared power inconsistent with
+  V×I (>25% off); 2 686 declare power above physical capacity (impossible, e.g.
   1200 V × 600 A = 720 kW declared as 200 kW).
-- MOBI.E PartyID is a 2022 PDF: 38 active tariff codes missing, 22 unused codes.
-- 733 MOBI.E `UID_TOMADA` values are bare numeric ids.
-- Power agreement NAP↔MOBI.E is 99.8% (only 29/18 923 diverge >30%).
+- MOBI.E PartyID is a 2022 PDF: 37 active tariff codes missing, 22 unused codes.
+- 764 MOBI.E `UID_TOMADA` values are bare numeric ids.
+- Power agreement NAP↔MOBI.E is 99.8% (only 27/16 601 diverge >30%).
 - OSM: charging sites are tagged two ways — `amenity=charging_station` (node **or**
   way; the way form is the whole site) and `man_made=charge_point` (node only,
   usually one per post/pole). **A site's `ref` can appear under either tag, and

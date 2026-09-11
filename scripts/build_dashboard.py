@@ -67,7 +67,7 @@ pts['connector_types'] = pts['point_id'].map(conn_map)
 pts['max_power_w'] = pts['point_id'].map(pow_map)
 pts['pw_class'] = pts.max_power_w.apply(pw_class)
 st_map = ST.drop_duplicates('point_id', keep='first').set_index('point_id')['status']
-pts['status'] = pts['point_id'].map(st_map)
+pts['status'] = pts['point_id'].map(st_map).fillna('unknown')
 site_map = S.set_index('external_id')
 pts['city'] = pts['site_external_id'].map(site_map['city'])
 pts['operator_name'] = pts['operator_id'].map(S.drop_duplicates('operator_id').set_index('operator_id')['operator_name'])
@@ -78,7 +78,7 @@ pts['max_power_kw'] = (pts.max_power_w / 1000).round(0)
 
 # ---- site-level map data (with OSM/umap cross-ref enrichment) ----
 site_status = pts.groupby('site_external_id')['status'].agg(
-    lambda s: s.value_counts().idxmax())
+    lambda s: s.value_counts().idxmax() if s.notna().any() else 'unknown')
 site_npts = pts.groupby('site_external_id')['point_id'].count()
 site_maxkw = pts.groupby('site_external_id')['max_power_kw'].max()
 site_conn = P.groupby('site_external_id')['connector_type'].apply(
@@ -132,7 +132,7 @@ for _, s in S.iterrows():
     om = osm_by_site.get(ext, {})
     rec = {
         'ext': ext,
-        'name': s.name,
+        'name': s['name'],
         'city': s.city,
         'op': s.operator_name,
         'region': s.region,
@@ -141,7 +141,7 @@ for _, s in S.iterrows():
         'status': site_status.get(ext, 'unknown'),
         'npts': int(site_npts.get(ext, 0)),
         'kw': float(site_maxkw.get(ext, 0)),
-        'pw': pw_class(site_maxkw.get(ext, 0)),
+        'pw': pw_class(float(site_maxkw.get(ext, 0) or 0) * 1000),
         'conns': site_conn.get(ext, []),
         'pay': pay_by_site.get(ext, []),
     }
@@ -207,35 +207,36 @@ conn_line = ', '.join(
     sorted(agg_conn.items(), key=lambda kv: -kv[1]))
 FACTS_HTML = f"""
 <ul>
-<li><b>Escala:</b> 8.260 locais, 20.521 pontos, 90 operadores. Continente 8.032 (97%), Madeira 128, Açores 100.</li>
-<li><b>Concentração:</b> EDP Comercial (1.638) + Galp Power (1.451) = 37% dos locais; top 5 operadores ≈ 62% da rede.</li>
-<li><b>Lisboa domina:</b> 1.028 locais em Lisboa (12%); top 10 concelhos ≈ 34% dos locais. Forte enviesamento litoral.</li>
-<li><b>Potência:</b> mediana 22 kW (AC), média 57 kW. DC (mode4) = 8.272 tomadas (40%). Ultra-rápido &gt;150 kW = 2.080 pontos (10%).</li>
-<li><b>Ocupação instantânea:</b> 2.898 em carregamento de ~17.865 ativos (16%). Ultra-rápido o mais ocupado: 25,4% vs AC lento 19,5%.</li>
-<li><b>Dispersão por operador:</b> ocupação de 5,4% (Repsol) a 26% (Mota-Engil) — sinal de desfasamento oferta/procura por rede.</li>
-<li><b>Energia verde:</b> 75% dos pontos (15.471) marcados como energia verde.</li>
-<li><b>Tarifário:</b> domina a estrutura em 3 componentes (taxa fixa + €/kWh + €/min). Energia média ≈ 0,13 €/kWh, variando muito por operador.</li>
-<li><b>Saúde da rede no snapshot:</b> 15% dos pontos 'removed' (3.013), 6% 'outOfOrder' (1.167), 7% 'unknown' → ≈18% não utilizável nesse momento.</li>
+<li><b>Escala:</b> 8.357 locais, 20.932 pontos, 92 operadores. Continente 8.129 (97%), Madeira 128, Açores 100.</li>
+<li><b>Concentração:</b> EDP Comercial (1.658) + Galp Power (1.460) = 37% dos locais; top 5 operadores ≈ 62% da rede.</li>
+<li><b>Lisboa domina:</b> 1.043 locais em Lisboa (12%); top 10 concelhos ≈ 34% dos locais. Forte enviesamento litoral.</li>
+<li><b>Potência:</b> mediana 22 kW (AC), média 60 kW. DC (mode4) = 8.613 tomadas (41%). Ultra-rápido &ge;150 kW = 2.336 pontos (11%).</li>
+<li><b>Ocupação instantânea:</b> 2.831 em carregamento de 15.608 ativos (18%). AC lento o mais ocupado: 24,3% vs DC fast 50-150 kW 14,2%.</li>
+<li><b>Dispersão por operador:</b> ocupação de 5,8% (Repsol) a 30,5% (Maksu) — sinal de desfasamento oferta/procura por rede.</li>
+<li><b>Energia verde:</b> 76% dos pontos (15.930) marcados como energia verde.</li>
+<li><b>Tarifário:</b> domina a estrutura em 3 componentes (taxa fixa + €/kWh + €/min). Energia média ≈ 0,15 €/kWh, variando muito por operador.</li>
+<li><b>Saúde da rede no snapshot:</b> 14% dos pontos 'removed' (3.005), 5% 'outOfOrder' (1.014), 6% 'unknown' → ≈20% não utilizável nesse momento.</li>
 <li><b>Connectors:</b> {conn_line} (em declínio, só em unidades multi-connector).</li>
 <li><b>Setor público:</b> municípios operam como OPC (Cascais Próxima, EMEL, Loulé Concelho Global, Superguimarães, Santa Cruz).</li>
-<li><b>Registo OPC limpo:</b> os 87 códigos ativos resolvem para uma entidade (PartyID MOBI.E + DGEG); 84 com reconhecimento DGEG.</li>
+<li><b>Registo OPC limpo:</b> os 86 códigos ativos resolvem para uma entidade (PartyID MOBI.E + DGEG); 107/110 combos código/operador com reconhecimento DGEG.</li>
 <li><b>CEMEs:</b> 52 códigos de marca na rede vs 46 registados DGEG; 29 códigos são simultaneamente OPC e CEME (espaço de código partilhado).</li>
-<li><b>Validação cruzada:</b> potência NAP vs MOBI.E concorda em 99,8% dos pontos (só 29 divergem &gt;30%) — boa notícia para a fiabilidade geral.</li>
-<li><b>Cross-check OSM (comunidade):</b> o dump Overpass do autor do mapa "Postos de Carregamento v2.1" cobre 7.9k sites NAP (~95%); 52 têm pagamento por cartão no OSM não refletido no `auth_methods` do NAP.</li>
+<li><b>Validação cruzada:</b> potência NAP vs MOBI.E concorda em 99,8% dos pontos (só 27 divergem &gt;30%) — boa notícia para a fiabilidade geral.</li>
+<li><b>Tesla (novidade no NAP):</b> 9 sites / 208 pontos Supercharger (CCS Combo2, até 250 kW), com estado dinâmico mas ainda sem tarifário OPC na MOBI.E.</li>
+<li><b>Cross-check OSM (comunidade):</b> o dump Overpass do autor do mapa "Postos de Carregamento v2.1" cobre 8,0k sites NAP (~96%); 171 têm pagamento ad-hoc por cartão no OSM não refletido no `auth_methods` do NAP.</li>
 </ul>"""
 
 ERRS_HTML = """
 <li>
   <div class="head">1. Voltagem / corrente / potência inconsistentes (NAP estático)</div>
-  <div class="meta">30% das tomadas (6.206/20.624) têm potência declarada que não bate com V×I (&gt;25% de diferença). Destas, 2.690 (13%) declaram potência <b>acima</b> da capacidade elétrica (fisicamente impossível), ex. 1200 V × 600 A = 720 kW declarados como 200 kW. Valores suspeitos no dataset: tensões de 1200 V e 3600 V, correntes de 600 A.</div>
+  <div class="meta">33% das tomadas (6.948/21.056) têm potência declarada que não bate com V×I (&gt;25% de diferença). Destas, 2.686 (13%) declaram potência <b>acima</b> da capacidade elétrica (fisicamente impossível), ex. 1200 V × 600 A = 720 kW declarados como 200 kW. Valores suspeitos no dataset: tensões de 1200 V e 3600 V, correntes de 600 A.</div>
 </li>
 <li>
-  <div class="head">2. Potência NAP vs MOBI.E em contradição (29 pontos)</div>
+  <div class="head">2. Potência NAP vs MOBI.E em contradição (27 pontos)</div>
   <div class="meta">As duas fontes oficiais divergem &gt;30%. Ex.: ABF-00061-01 (NAP 120 kW, MOBI.E 60 kW); ALM-00043-02, OER-00136-02, SNT-00080-02 (60 vs 120).</div>
 </li>
 <li>
   <div class="head">3. Estado duplicado / contraditório no feed dinâmico</div>
-  <div class="meta">46 pontos aparecem 2–3× no <code>evActualStatus</code> com estados diferentes (ex. PT-EDP-EGDL-00012-1 aparece como 'removed' e como 'available'). 48 linhas a mais no ficheiro.</div>
+  <div class="meta">44 pontos aparecem 2–3× no <code>evActualStatus</code> com estados diferentes (ex. PT-EDP-EGDL-00012-1 aparece como 'removed' e como 'available'). 47 linhas a mais no ficheiro.</div>
 </li>
 <li>
   <div class="head">4. Fragmentação de nomes de operadores (NAP)</div>
@@ -247,15 +248,15 @@ ERRS_HTML = """
 </li>
 <li>
   <div class="head">6. <code>usage_type</code> em falta</div>
-  <div class="meta">227 pontos (1%) sem tipo de utilização.</div>
+  <div class="meta">568 tomadas (3%) sem tipo de utilização.</div>
 </li>
 <li>
   <div class="head">7. UID_TOMADA MOBI.E inconsistente</div>
-  <div class="meta">733 linhas com ids numéricos ('97', '98'…) fora de qualquer formato; mistura de formatos com/sem prefixo PT- e segmento de conector presente/ausente.</div>
+  <div class="meta">764 linhas com ids numéricos ('97', '98'…) fora de qualquer formato; mistura de formatos com/sem prefixo PT- e segmento de conector presente/ausente.</div>
 </li>
 <li>
   <div class="head">8. PartyID MOBI.E desatualizado (ficheiro 2022)</div>
-  <div class="meta">38 códigos ativos no tarifário não estão no ficheiro oficial de códigos (operadores pós-2022: ATL, ZUN, SLX, KLS, WEN…); 22 códigos do ficheiro não têm um único posto. Recomenda-se atualização do documento público.</div>
+  <div class="meta">37 códigos ativos no tarifário não estão no ficheiro oficial de códigos (operadores pós-2022: ATL, ZUN, SLX, KLS, WEN…); 22 códigos do ficheiro não têm um único posto. Recomenda-se atualização do documento público.</div>
 </li>
 <li>
   <div class="head">9. Preços anómalos</div>
@@ -263,11 +264,11 @@ ERRS_HTML = """
 </li>
 <li>
   <div class="head">10. Pontos 'removed' ainda no inventário estático</div>
-  <div class="meta">3.013 pontos (15%) marcados 'removed' no dinâmico continuam listados como infraestrutura ativa no estático.</div>
+  <div class="meta">3.005 pontos (14%) marcados 'removed' no dinâmico continuam listados como infraestrutura ativa no estático.</div>
 </li>
 <li>
   <div class="head">11. Localização: coordenadas vs concelho</div>
-  <div class="meta">Verificação contra os limites oficiais de concelho (CAOP + spot-check Nominatim): 76 sites (0,9%) têm coordenadas fora do concelho implicado pelo código do site_id (formato <code>operador-código-nº</code>, código = concelho). Nenhum caso nas ilhas. Os códigos são de concelho, não de distrito (ex. PLM = Palmela, BRR = Barreiro). As subsecções 11a/11b abaixo são geradas por <code>scripts/concelho_check.py</code>.</div>
+  <div class="meta">Verificação contra os limites oficiais de concelho (CAOP + spot-check Nominatim): 75 sites (0,9%) têm coordenadas fora do concelho implicado pelo código do site_id (formato <code>operador-código-nº</code>, código = concelho). Nenhum caso nas ilhas. Os códigos são de concelho, não de distrito (ex. PLM = Palmela, BRR = Barreiro). As subsecções 11a/11b abaixo são geradas por <code>scripts/concelho_check.py</code>.</div>
 </li>
 <li>
   <div class="head">12. Dúvidas da comunidade OSM/umap (cross-check externo)</div>

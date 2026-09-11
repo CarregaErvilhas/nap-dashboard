@@ -23,10 +23,10 @@ elétricos em Portugal, a partir de fontes públicas oficiais. O objetivo é:
 
 ## Resultados
 
-- **`dashboard.html`** — dashboard autónomo (9.4 MB), sem libs externas, abre por
-  `file://`. Contém KPIs, gráficos de barras, **mapa SVG interativo** de 8 260
+- **`dashboard.html`** — dashboard autónomo (10.4 MB), sem libs externas, abre por
+  `file://`. Contém KPIs, gráficos de barras, **mapa SVG interativo** de 8 357
   locais (continente + Madeira/Açores, zoom/pan, clique no ponto para detalhe com
-  cruzamento OSM), tabela de 20 521 pontos com pesquisa, filtros multi-select
+  cruzamento OSM), tabela de 20 932 pontos com pesquisa, filtros multi-select
   (estado/região/classe/operador/tomada/pagamento), ordenação e paginação.
 - **`facts.md`** — factos interessantes da rede.
 - **`errors.md`** — erros reportáveis aos donos dos dados (inclui dúvidas da
@@ -120,7 +120,7 @@ P+tarifas), `nap_opc_registry` (código OPC→entidade), `mobie_tarifas`, `dgeg_
 - JSON incorporado no dashboard: usar `allow_nan=False` + limpeza de NaN/Inf,
   senão o `JSON.parse` do browser falha (bug já resolvido).
 - OSM/umap: o dump do autor do mapa v2.1 (`Todos.json`) cobre ~96% dos sites NAP
-  (7 934/8 260) por código MOBI.E; os pontos `man_made=charge_point` trazem tags
+  (8 011/8 357) por código MOBI.E; os pontos `man_made=charge_point` trazem tags
   de pagamento que os `charging_station` não têm — considerar ambos. A umap
   "Caça aos Postos" lista dúvidas da comunidade, incluindo "nada no local" a
   ≤500 m de sites ativos.
