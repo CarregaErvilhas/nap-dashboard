@@ -208,7 +208,10 @@ jobs:
           sh(["git", "config", "user.name", "github-actions[bot]"])
           sh(["git", "config", "user.email",
               "41898282+github-actions[bot]@users.noreply.github.com"])
-          sh(["git", "add", REPORT, CENSUS])
+          adds = [REPORT, CENSUS]
+          if os.path.exists('scripts/anomalias_check.py'):
+              adds.append('scripts/anomalias_check.py')  # código reutilizável do agente
+          sh(["git", "add"] + adds)
           diff = sh(["git", "diff", "--cached", "--quiet"])
           if diff.returncode == 0:
               print("sem alterações no relatório; nada a commitar")
