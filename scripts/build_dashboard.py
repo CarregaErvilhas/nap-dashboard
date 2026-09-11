@@ -4,6 +4,7 @@ No external libs: pure CSS/JS bar charts, embedded JSON data.
 Run: python build_dashboard.py  ->  writes dashboard.html
 """
 import json
+import html
 import math
 import os
 import re
@@ -276,6 +277,91 @@ ERRS_HTML = """
 </li>
 """
 
+REPORT_URL = ('https://github.com/CarregaErvilhas/nap-dashboard/blob/main/'
+              'Agents-outputs/anomalias-results.md')
+
+# Painel "Anomalias (agente semanal)": top 5 OPCs por pontos impossíveis +
+# link explícito para o relatório completo. Fonte: o .md commitado pelo
+# agents.yml (lag de uma semana, rotulado com a data). Ausente → painel escondido.
+ANOM_HTML = ''
+try:
+    with open('Agents-outputs/anomalias-results.md', encoding='utf-8') as fh:
+        rep = fh.read()
+    m = re.search(r'# Anomalias[^\n]*\((\d{4}-\d{2}-\d{2})', rep)
+    rep_date = m.group(1) if m else '?'
+    rows = []
+    in_table = False
+    for line in rep.splitlines():
+        if line.startswith('| OPC'):
+            in_table = True
+            continue
+        if in_table:
+            if not line.startswith('|') or re.match(r'^\|[\s:|-]+\|$', line):
+                if line.startswith('|'):
+                    continue
+                break
+            cells = [c.strip() for c in line.strip().strip('|').split('|')]
+            if len(cells) < 6:
+                continue
+            try:
+                nums = [int(x.replace(' ', '')) for x in cells[-5:-1]]
+            except ValueError:
+                continue
+            rows.append((cells[0], nums[1], nums[2], nums[3]))  # opc, pontos, imp, sus
+    if rows:
+        tot_imp = sum(r[2] for r in rows)
+        tot_sus = sum(r[3] for r in rows)
+        trs = ''.join(
+            f'<tr><td class="l">{html.escape(o)}</td><td>{p}</td>'
+            f'<td>{i}</td><td>{s}</td></tr>'
+            for o, p, i, s in sorted(rows, key=lambda r: -r[2])[:5])
+        ANOM_HTML = f"""<div class="meta">Relatório do agente semanal de anomalias — <b>{rep_date}</b> (lag de uma semana face ao snapshot acima): <b>{tot_imp}</b> pontos fisicamente impossíveis e <b>{tot_sus}</b> suspeitos (somas por OPC). Top 5 OPCs por impossíveis:</div>
+<table><tr><th class="l">OPC</th><th>pontos</th><th>impossíveis</th><th>suspeitos</th></tr>
+{trs}</table>
+<div class="biglink"><a href="{REPORT_URL}">→ Ler o relatório completo no GitHub (por OPC, com evidências)</a></div>
+"""
+except FileNotFoundError:
+    ANOM_HTML = ''
+
+# Tabela "Hubs por potência total": soma por site do máximo de cada ponto.
+# Metodologia: por ponto distinto, potência = max dos seus conectores; total do
+# site = soma dos pontos. NÃO é potência simultânea real (desconhecida no NAP)
+# nem soma de conectores (inflaciona pontos multi-tomada).
+HUB_MIN_KW, HUB_TOP = 300, 50
+_Pw = P.copy()
+_Pw['max_power_w'] = pd.to_numeric(_Pw.max_power_w, errors='coerce')
+_pp = _Pw.groupby('point_id').agg(site=('site_id', 'first'),
+                                  pw=('max_power_w', 'max'))
+_st = _pp.groupby('site').agg(total_kw=('pw', lambda x: x.sum() / 1000),
+                              max_kw=('pw', lambda x: x.max() / 1000),
+                              npts=('pw', 'size')).reset_index()
+_st = _st[_st.total_kw > HUB_MIN_KW].sort_values('total_kw', ascending=False)
+_Sinfo = S.set_index('site_id')[['external_id', 'name', 'city', 'operator_name']]
+def _sval(info, col):
+    v = info.get(col) if hasattr(info, 'get') else None
+    return '' if v is None or (isinstance(v, float) and math.isnan(v)) or str(v) == 'nan' else str(v)
+_hubs = []
+for _, r in _st.head(HUB_TOP).iterrows():
+    info = _Sinfo.loc[r.site] if r.site in _Sinfo.index else {}
+    _hubs.append({'site': _sval(info, 'external_id') or str(r.site),
+                  'name': _sval(info, 'name'), 'city': _sval(info, 'city'),
+                  'opc': _sval(info, 'operator_name'), 'npts': int(r.npts),
+                  'total_kw': round(float(r.total_kw), 1),
+                  'max_kw': round(float(r.max_kw), 1)})
+def _kw(x):
+    return f'{x:,.0f}'.replace(',', ' ')
+_hrows = ''.join(
+    f'<tr><td class="l">{html.escape(h["site"])}</td>'
+    f'<td class="l">{html.escape(h["name"])}</td>'
+    f'<td class="l">{html.escape(h["city"])}</td>'
+    f'<td class="l">{html.escape(h["opc"])}</td>'
+    f'<td>{h["npts"]}</td><td>{_kw(h["total_kw"])}</td><td>{_kw(h["max_kw"])}</td></tr>'
+    for h in _hubs)
+HUBS_HTML = f"""<div class="meta">{len(_st)} hubs acima de {HUB_MIN_KW} kW (top {HUB_TOP} por potência total = soma dos máximos de cada ponto; não é potência simultânea).</div>
+<table><tr><th class="l">Site</th><th class="l">Nome</th><th class="l">Cidade</th><th class="l">Operador</th><th>pontos</th><th>kW total</th><th>kW máx/ponto</th></tr>
+{_hrows}</table>
+""" if _hubs else ''
+
 with open('facts.md', 'w') as fh:
     fh.write(re.sub(r'<[^>]+>', '', FACTS_HTML).replace('&gt;', '>').replace('&lt;', '<'))
 with open('errors.md', 'w') as fh:
@@ -318,6 +404,8 @@ data = {
                          'opc_operador': 'opc'}).to_dict('records'),
     'facts_html': FACTS_HTML,
     'errs_html': ERRS_HTML,
+    'anom_html': ANOM_HTML,
+    'hubs_html': HUBS_HTML,
     'sites': sites_map,
     'outline': outline,
     'districts': districts,

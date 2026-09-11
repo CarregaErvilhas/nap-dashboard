@@ -56,6 +56,7 @@
   ul { padding-left:20px; } li { margin:6px 0; }
   .facts li b{color:var(--acc)} .errs li{list-style:none;padding:10px 0;border-bottom:1px solid #27334a}
   .errs li .head{font-weight:600;color:var(--err)} .errs li .meta{color:var(--mut);font-size:12px;margin-top:2px}
+  .biglink{margin-top:14px} .biglink a{display:inline-block;background:var(--acc);color:#0b1220;font-weight:700;padding:9px 16px;border-radius:6px;text-decoration:none}
   code{background:#0b1220;padding:1px 5px;border-radius:4px;font-size:12px}
   .mapwrap{display:grid;grid-template-columns:3fr 1fr;gap:14px;align-items:start}
   .mapbox{background:var(--card);border-radius:10px;padding:16px;position:relative}
@@ -151,6 +152,12 @@
 
   <h2>Erros reportáveis</h2>
   <div class="panel errs" id="errs"></div>
+
+  <h2 id="anomH">Anomalias — agente semanal</h2>
+  <div class="panel" id="anom"></div>
+
+  <h2 id="hubsH">Hubs por potência total (&gt;300 kW)</h2>
+  <div class="panel" id="hubs"></div>
 
 <script>
 const D = /*__DATA__*/;
@@ -441,9 +448,13 @@ document.getElementById('pgPrev').addEventListener('click',()=>{if(page>1){page-
 document.getElementById('pgNext').addEventListener('click',()=>{page++;render();});
 render();
 
-// facts + errors (injected from build script via HTML template literals are fine here)
+// facts + errors + anomalias (HTML injected from build script)
 document.getElementById('facts').innerHTML = D.facts_html;
 document.getElementById('errs').innerHTML = D.errs_html;
+if(D.anom_html){document.getElementById('anom').innerHTML = D.anom_html;}
+else{document.getElementById('anom').style.display='none';document.getElementById('anomH').style.display='none';}
+if(D.hubs_html){document.getElementById('hubs').innerHTML = D.hubs_html;}
+else{document.getElementById('hubs').style.display='none';document.getElementById('hubsH').style.display='none';}
 </script>
 </body>
 </html>
