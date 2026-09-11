@@ -24,6 +24,10 @@ public data sources. The goal:
 
 ## Results
 
+**Live demo:** <https://nap.ocarroeletrico.com/> (custom domain via CNAME;
+auto-published by `.github/workflows/pages.yml` on every `push` that touches
+`dashboard.html`).
+
 - **`dashboard.html`** — standalone dashboard (10.4 MB), no external libraries,
   opens via `file://`. KPIs, bar charts, an **interactive SVG map** of 8 357 sites
   (mainland + Madeira/Açores, zoom/pan, click a dot for detail with OSM

@@ -23,6 +23,10 @@ elétricos em Portugal, a partir de fontes públicas oficiais. O objetivo é:
 
 ## Resultados
 
+**Demo online:** <https://nap.ocarroeletrico.com/> (domínio próprio via CNAME;
+publicado automaticamente por `.github/workflows/pages.yml` a cada `push` que
+altere o `dashboard.html`).
+
 - **`dashboard.html`** — dashboard autónomo (10.4 MB), sem libs externas, abre por
   `file://`. Contém KPIs, gráficos de barras, **mapa SVG interativo** de 8 357
   locais (continente + Madeira/Açores, zoom/pan, clique no ponto para detalhe com
