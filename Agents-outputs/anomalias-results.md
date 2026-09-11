@@ -3,6 +3,7 @@
 Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conector (21056 com conector). Ficheiros: `nap_static_sites.csv`, `nap_static_points.csv`.
 
 ## Resumo por OPC
+
 | OPC (id — nome) | sites | pontos | impossíveis | suspeitos | categorias |
 |---|---|---|---|---|---|
 | GLPP — Galp Power OPC | 1589 | 3529 | 154 | 3529 | 11 |
@@ -98,7 +99,80 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 | SDBR — SodiBraga - Supermercados Lda | 2 | 6 | 0 | 0 | 0 |
 | SILV — Silver Ridge - Asset Management | 2 | 4 | 0 | 0 | 0 |
 
-## GLPP — Galp Power OPC (1589 sites, 3529 pontos)
+<a id="indice"></a>
+## Índice
+
+- [GLPP — Galp Power OPC (1589 sites, 3529 pontos)](#opc-GLPP) · 5 BAIXO, 3 CRÍTICO, 3 MÉDIO
+- [HORZ — Powerdot, S.A (774 sites, 2096 pontos)](#opc-HORZ) · 4 BAIXO, 1 CRÍTICO, 1 MÉDIO
+- [ATLA — Atlante Infra Portugal, S.A (608 sites, 1423 pontos)](#opc-ATLA) · 3 BAIXO, 2 CRÍTICO, 1 MÉDIO
+- [EDPC — EDP Comercial (1658 sites, 5787 pontos)](#opc-EDPC) · 4 MÉDIO, 3 CRÍTICO, 2 BAIXO
+- [TRUE — WOWPLUG (744 sites, 1489 pontos)](#opc-TRUE) · 1 CRÍTICO, 1 MÉDIO, 1 BAIXO
+- [FCTO — Iberdrola | bp pulse (287 sites, 1194 pontos)](#opc-FCTO) · 4 MÉDIO, 3 CRÍTICO, 1 BAIXO
+- [REPS — REPSOL Portuguesa Lda (216 sites, 561 pontos)](#opc-REPS) · 3 MÉDIO, 2 CRÍTICO, 2 BAIXO
+- [GLPG — Galpgeste (126 sites, 328 pontos)](#opc-GLPG) · 1 CRÍTICO, 1 MÉDIO, 1 BAIXO
+- [MLTR — Mobiletric (108 sites, 257 pontos)](#opc-MLTR) · 1 CRÍTICO, 1 MÉDIO, 1 BAIXO
+- [EMEL — EMEL - Empresa Municipal de Mobilidade e Estacionamento de Lisboa, E.M., S.A. (82 sites, 182 pontos)](#opc-EMEL) · 2 BAIXO, 1 CRÍTICO, 1 MÉDIO
+- [HELX — Helexia II Energy Services, Lda. (227 sites, 436 pontos)](#opc-HELX) · 2 MÉDIO, 1 CRÍTICO, 1 BAIXO
+- [MOTA — Mota-Engil Renewing (173 sites, 309 pontos)](#opc-MOTA) · 3 MÉDIO, 1 CRÍTICO, 1 BAIXO
+- [SEGM — SEGMA - Serviços de Engenharia Gestão e Manutenção Lda (73 sites, 134 pontos)](#opc-SEGM) · 2 MÉDIO, 1 CRÍTICO, 1 BAIXO
+- [PRIO — Prio.E Mobility Solutions, Lda (161 sites, 290 pontos)](#opc-PRIO) · 1 CRÍTICO, 1 MÉDIO
+- [HEXA — HEXAGONAL OCEAN, LDA (38 sites, 76 pontos)](#opc-HEXA) · 1 CRÍTICO, 1 BAIXO
+- [LOUL — Loulé Concelho Global, EM (33 sites, 70 pontos)](#opc-LOUL) · 1 CRÍTICO, 1 MÉDIO, 1 BAIXO
+- [MAKS — Maksu (333 sites, 363 pontos)](#opc-MAKS) · 1 CRÍTICO, 1 MÉDIO, 1 BAIXO
+- [EPKS — Telpark (4 sites, 36 pontos)](#opc-EPKS) · 2 BAIXO, 1 CRÍTICO, 1 MÉDIO
+- [ACCI — ACCIONA RECARGA PORTUGAL,UNIPESSOAL LDA (12 sites, 23 pontos)](#opc-ACCI) · 2 BAIXO, 1 CRÍTICO, 1 MÉDIO
+- [REMO — MOTA-ENGIL REMO CHARGING S.A (16 sites, 38 pontos)](#opc-REMO) · 3 MÉDIO, 1 CRÍTICO
+- [MOON — Siva - Sociedade de Importação de Veículos Automóveis / (sub-CEME da Iberdola) (26 sites, 56 pontos)](#opc-MOON) · 3 MÉDIO, 1 CRÍTICO, 1 BAIXO
+- [EVCE — EVCE POWER, LDA. / MOBISMART (51 sites, 89 pontos)](#opc-EVCE) · 1 CRÍTICO, 1 MÉDIO
+- [CMEL — CME (22 sites, 23 pontos)](#opc-CMEL) · 3 MÉDIO, 1 CRÍTICO, 1 BAIXO
+- [LUSI — LUSIADAENERGIA, S.A. (14 sites, 25 pontos)](#opc-LUSI) · 2 MÉDIO, 1 CRÍTICO, 1 BAIXO
+- [VIAV — Via Verde Transição Energética, S.A. (5 sites, 13 pontos)](#opc-VIAV) · 2 MÉDIO, 1 CRÍTICO, 1 BAIXO
+- [EVIO — EVIO - Electrical Mobility (21 sites, 35 pontos)](#opc-EVIO) · 1 CRÍTICO, 1 MÉDIO, 1 BAIXO
+- [KLCS — Kilometer Low Cost II Serviços, SA (83 sites, 104 pontos)](#opc-KLCS) · 1 CRÍTICO, 1 MÉDIO, 1 BAIXO
+- [VEIM — Veimonte Lda (20 sites, 35 pontos)](#opc-VEIM) · 3 MÉDIO, 1 CRÍTICO
+- [PARI — Parinox Energia (6 sites, 7 pontos)](#opc-PARI) · 1 CRÍTICO, 1 MÉDIO
+- [NRGS — Original Sunenergy, Lda (7 sites, 16 pontos)](#opc-NRGS) · 1 CRÍTICO, 1 MÉDIO
+- [PQTJ — Parques Tejo, E.M. (2 sites, 2 pontos)](#opc-PQTJ) · 2 MÉDIO, 1 CRÍTICO, 1 BAIXO
+- [VISA — VISACASA - SERVIÇOS DE ASSISTÊNCIA E MANUTENÇÃO GLOBAL S.A. (6 sites, 14 pontos)](#opc-VISA) · 1 CRÍTICO
+- [ALFA — Alfa Energia (13 sites, 25 pontos)](#opc-ALFA) · 1 CRÍTICO, 1 MÉDIO
+- [PLUG — e-Plug, Lda (31 sites, 62 pontos)](#opc-PLUG) · 1 CRÍTICO, 1 MÉDIO
+- [EVGR — Green Evolut, LDA (6 sites, 10 pontos)](#opc-EVGR) · 1 CRÍTICO
+- [TSLA — Tesla (9 sites, 192 pontos)](#opc-TSLA) · 6 BAIXO, 2 MÉDIO
+- [ECOI — Ecoinside - Soluções em Ecoeficiência e Sustentabilidade Lda (56 sites, 142 pontos)](#opc-ECOI) · 4 MÉDIO, 2 BAIXO
+- [CAPW — Capwatt Services (14 sites, 74 pontos)](#opc-CAPW) · 2 BAIXO, 1 MÉDIO
+- [CEPS — Cepsa Portuguesa Petroleos (32 sites, 57 pontos)](#opc-CEPS) · 2 MÉDIO
+- [DTEI — DTE, Instalacoes Especiais (84 sites, 197 pontos)](#opc-DTEI) · 1 MÉDIO, 1 BAIXO
+- [ENBL — Enable Mobility Solutions, S.A. (24 sites, 52 pontos)](#opc-ENBL) · 3 MÉDIO, 1 BAIXO
+- [GENJ — Generation Journey Lda (21 sites, 41 pontos)](#opc-GENJ) · 1 MÉDIO, 1 BAIXO
+- [IBRD — Iberdrola Clientes Portugal, Unipessoal, Lda (184 sites, 361 pontos)](#opc-IBRD) · 1 MÉDIO, 1 BAIXO
+- [ZUND — Grupo Easycharger, SL (14 sites, 27 pontos)](#opc-ZUND) · 1 MÉDIO, 1 BAIXO
+- [CIRC — Circuitos Energy Solutions, Lda. (12 sites, 22 pontos)](#opc-CIRC) · 1 MÉDIO, 1 BAIXO
+- [INTV — Instavolt Portugal Lda. (21 sites, 38 pontos)](#opc-INTV) · 1 MÉDIO
+- [IMAG — Image4all - Eficiência Energética, Comunicação e Imagem (5 sites, 9 pontos)](#opc-IMAG) · 1 MÉDIO, 1 BAIXO
+- [EMAC — EMACOM - Telecomunicações da Madeira, Unipessoal, Lda (25 sites, 44 pontos)](#opc-EMAC) · 3 MÉDIO, 1 BAIXO
+- [EVPW — EVpower, Charging Solutions Lda (22 sites, 46 pontos)](#opc-EVPW) · 3 MÉDIO
+- [CONM — ConectaMais, Lda (3 sites, 6 pontos)](#opc-CONM) · 2 MÉDIO
+- [FRTR — FRONTROW, LDA (5 sites, 8 pontos)](#opc-FRTR) · 2 MÉDIO
+- [IHOM — iHome Lda (6 sites, 10 pontos)](#opc-IHOM) · 1 MÉDIO
+- [SOLX — SOLX (4 sites, 8 pontos)](#opc-SOLX) · 1 MÉDIO
+- [WENE — WENEA SERVICES SPAIN S.L. (2 sites, 4 pontos)](#opc-WENE) · 1 MÉDIO
+- [AUCH — Auchan Retail Portugal S.A (3 sites, 3 pontos)](#opc-AUCH) · 1 MÉDIO
+- [BBGE — Morenergy (2 sites, 3 pontos)](#opc-BBGE) · 2 BAIXO, 1 MÉDIO
+- [KPMS — KPM Serviços de Engenheria, Unip Lda (1 site, 3 pontos)](#opc-KPMS) · 2 MÉDIO
+- [PTER — PETROTERMICA ENERGIA, S.A. (2 sites, 4 pontos)](#opc-PTER) · 1 MÉDIO
+- [BRIG — Brightcity S.A. (2 sites, 4 pontos)](#opc-BRIG) · 1 MÉDIO
+- [LOGI — uCharge (26 sites, 35 pontos)](#opc-LOGI) · 1 MÉDIO
+- [SFAF — Superfafe- supermercados,lda (2 sites, 6 pontos)](#opc-SFAF) · 1 MÉDIO
+- [SGMR — Superguimarães - Supermercados,lda (2 sites, 6 pontos)](#opc-SGMR) · 1 MÉDIO
+- [EZC3 — EZ - CHARG3, Lda (15 sites, 15 pontos)](#opc-EZC3) · 1 MÉDIO
+- [IONY — IONITY GmbH (20 sites, 106 pontos)](#opc-IONY) · 2 BAIXO
+- [GREE — GREEN CHARGE - MOBILIDADE ELÉTRICA, LDA (16 sites, 17 pontos)](#opc-GREE) · 1 BAIXO
+- [CSCP — Cascais Proxima (8 sites, 16 pontos)](#opc-CSCP) · 1 BAIXO
+- [CEVE — CEVE - Cooperativa Eléctrica do Vale D’Este C.R.L. (4 sites, 10 pontos)](#opc-CEVE) · 1 BAIXO
+
+<a id="opc-GLPP"></a>
+<details open>
+<summary><b>GLPP — Galp Power OPC (1589 sites, 3529 pontos)</b> · 5 BAIXO, 3 CRÍTICO, 3 MÉDIO</summary>
 ### [CRÍTICO] Potência declarada acima da capacidade V×I
 - **Regra:** potência esperada = V×I (`mode3AC3p`: √3×V×I); `ratio = declarada/esperada > 1.25`.
 - **Afetados:** 148 de 3529 pontos (4.2%). Exemplos: `ALB-90002-01`, `ALB-90002-02`, `ALM-00100-01`.
@@ -254,7 +328,11 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 
 - **Veredito:** suspeito — verificar se são multi-tomadas reais ou linhas duplicadas.
 
-## HORZ — Powerdot, S.A (774 sites, 2096 pontos)
+[↑ índice](#indice)
+</details>
+<a id="opc-HORZ"></a>
+<details open>
+<summary><b>HORZ — Powerdot, S.A (774 sites, 2096 pontos)</b> · 4 BAIXO, 1 CRÍTICO, 1 MÉDIO</summary>
 ### [CRÍTICO] Potência declarada acima da capacidade V×I
 - **Regra:** potência esperada = V×I (`mode3AC3p`: √3×V×I); `ratio = declarada/esperada > 1.25`.
 - **Afetados:** 81 de 2096 pontos (3.9%). Exemplos: `ALM-00032-01`, `ALM-00032-02`, `ALM-00062-01`.
@@ -355,7 +433,11 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 
 - **Veredito:** suspeito — sem métodos de autenticação declarados.
 
-## ATLA — Atlante Infra Portugal, S.A (608 sites, 1423 pontos)
+[↑ índice](#indice)
+</details>
+<a id="opc-ATLA"></a>
+<details open>
+<summary><b>ATLA — Atlante Infra Portugal, S.A (608 sites, 1423 pontos)</b> · 3 BAIXO, 2 CRÍTICO, 1 MÉDIO</summary>
 ### [CRÍTICO] Potência declarada acima da capacidade V×I
 - **Regra:** potência esperada = V×I (`mode3AC3p`: √3×V×I); `ratio = declarada/esperada > 1.25`.
 - **Afetados:** 432 de 1423 pontos (30.4%). Exemplos: ` NZR-00035-01`, ` NZR-00035-02`, `ACB-00019-01`.
@@ -453,7 +535,11 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 
 - **Veredito:** suspeito — formato inválido para código postal PT.
 
-## EDPC — EDP Comercial (1658 sites, 5787 pontos)
+[↑ índice](#indice)
+</details>
+<a id="opc-EDPC"></a>
+<details open>
+<summary><b>EDPC — EDP Comercial (1658 sites, 5787 pontos)</b> · 4 MÉDIO, 3 CRÍTICO, 2 BAIXO</summary>
 ### [CRÍTICO] Potência declarada acima da capacidade V×I
 - **Regra:** potência esperada = V×I (`mode3AC3p`: √3×V×I); `ratio = declarada/esperada > 1.25`.
 - **Afetados:** 357 de 5787 pontos (6.2%). Exemplos: `AMT-00011-01`, `AMT-00011-02`, `CMR-00002-01`.
@@ -608,7 +694,11 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 
 - **Veredito:** suspeito — verificar se são multi-tomadas reais ou linhas duplicadas.
 
-## TRUE — WOWPLUG (744 sites, 1489 pontos)
+[↑ índice](#indice)
+</details>
+<a id="opc-TRUE"></a>
+<details open>
+<summary><b>TRUE — WOWPLUG (744 sites, 1489 pontos)</b> · 1 CRÍTICO, 1 MÉDIO, 1 BAIXO</summary>
 ### [CRÍTICO] Potência declarada acima da capacidade V×I
 - **Regra:** potência esperada = V×I (`mode3AC3p`: √3×V×I); `ratio = declarada/esperada > 1.25`.
 - **Afetados:** 1307 de 1489 pontos (87.8%). Exemplos: `AVT-00002-01`, `AVT-00002-02`, `AVT-00003-01`.
@@ -665,7 +755,11 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 
 - **Veredito:** suspeito — campo obrigatório em falta.
 
-## FCTO — Iberdrola | bp pulse (287 sites, 1194 pontos)
+[↑ índice](#indice)
+</details>
+<a id="opc-FCTO"></a>
+<details>
+<summary><b>FCTO — Iberdrola | bp pulse (287 sites, 1194 pontos)</b> · 4 MÉDIO, 3 CRÍTICO, 1 BAIXO</summary>
 ### [CRÍTICO] point_id em sites diferentes
 - **Regra:** mesmo `point_id` associado a >1 `site_id` (ids numéricos legados reutilizados ou cross-wiring entre sites vizinhos).
 - **Afetados:** 33 de 1194 pontos (2.8%). Exemplos: `16`, `17`, `18`.
@@ -794,7 +888,11 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 
 - **Veredito:** suspeito — campo obrigatório em falta.
 
-## REPS — REPSOL Portuguesa Lda (216 sites, 561 pontos)
+[↑ índice](#indice)
+</details>
+<a id="opc-REPS"></a>
+<details>
+<summary><b>REPS — REPSOL Portuguesa Lda (216 sites, 561 pontos)</b> · 3 MÉDIO, 2 CRÍTICO, 2 BAIXO</summary>
 ### [CRÍTICO] Potência declarada acima da capacidade V×I
 - **Regra:** potência esperada = V×I (`mode3AC3p`: √3×V×I); `ratio = declarada/esperada > 1.25`.
 - **Afetados:** 173 de 561 pontos (30.8%). Exemplos: `ABF-00035-03`, `ABT-00036-01`, `ABT-00037-01`.
@@ -894,7 +992,11 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 
 - **Veredito:** suspeito — campo obrigatório em falta.
 
-## GLPG — Galpgeste (126 sites, 328 pontos)
+[↑ índice](#indice)
+</details>
+<a id="opc-GLPG"></a>
+<details>
+<summary><b>GLPG — Galpgeste (126 sites, 328 pontos)</b> · 1 CRÍTICO, 1 MÉDIO, 1 BAIXO</summary>
 ### [CRÍTICO] Potência declarada acima da capacidade V×I
 - **Regra:** potência esperada = V×I (`mode3AC3p`: √3×V×I); `ratio = declarada/esperada > 1.25`.
 - **Afetados:** 3 de 328 pontos (0.9%). Exemplos: `AVR-00040-01`, `VCT-00029-01`, `VCT-00030-01`.
@@ -938,7 +1040,11 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 
 - **Veredito:** suspeito — a mesma entidade legal com várias grafias fragiliza a agregação por operador.
 
-## MLTR — Mobiletric (108 sites, 257 pontos)
+[↑ índice](#indice)
+</details>
+<a id="opc-MLTR"></a>
+<details>
+<summary><b>MLTR — Mobiletric (108 sites, 257 pontos)</b> · 1 CRÍTICO, 1 MÉDIO, 1 BAIXO</summary>
 ### [CRÍTICO] Potência declarada acima da capacidade V×I
 - **Regra:** potência esperada = V×I (`mode3AC3p`: √3×V×I); `ratio = declarada/esperada > 1.25`.
 - **Afetados:** 8 de 257 pontos (3.1%). Exemplos: `CSC-00086-01`, `CSC-00086-1`, `LSB-00296-02`.
@@ -987,7 +1093,11 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 
 - **Veredito:** suspeito — a mesma entidade legal com várias grafias fragiliza a agregação por operador.
 
-## EMEL — EMEL - Empresa Municipal de Mobilidade e Estacionamento de Lisboa, E.M., S.A. (82 sites, 182 pontos)
+[↑ índice](#indice)
+</details>
+<a id="opc-EMEL"></a>
+<details>
+<summary><b>EMEL — EMEL - Empresa Municipal de Mobilidade e Estacionamento de Lisboa, E.M., S.A. (82 sites, 182 pontos)</b> · 2 BAIXO, 1 CRÍTICO, 1 MÉDIO</summary>
 ### [CRÍTICO] Potência declarada acima da capacidade V×I
 - **Regra:** potência esperada = V×I (`mode3AC3p`: √3×V×I); `ratio = declarada/esperada > 1.25`.
 - **Afetados:** 24 de 182 pontos (13.2%). Exemplos: `LSB-00938-01`, `LSB-00938-02`, `LSB-01021-01`.
@@ -1049,7 +1159,11 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 
 - **Veredito:** suspeito — campo obrigatório em falta.
 
-## HELX — Helexia II Energy Services, Lda. (227 sites, 436 pontos)
+[↑ índice](#indice)
+</details>
+<a id="opc-HELX"></a>
+<details>
+<summary><b>HELX — Helexia II Energy Services, Lda. (227 sites, 436 pontos)</b> · 2 MÉDIO, 1 CRÍTICO, 1 BAIXO</summary>
 ### [CRÍTICO] Potência declarada acima da capacidade V×I
 - **Regra:** potência esperada = V×I (`mode3AC3p`: √3×V×I); `ratio = declarada/esperada > 1.25`.
 - **Afetados:** 1 de 436 pontos (0.2%). Exemplos: `TVD-00089-02`; contexto (mesmo site/OPC, não afetados): `TVD-00089`, `ABF-00086-01`.
@@ -1107,7 +1221,11 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 
 - **Veredito:** suspeito — campo obrigatório em falta.
 
-## MOTA — Mota-Engil Renewing (173 sites, 309 pontos)
+[↑ índice](#indice)
+</details>
+<a id="opc-MOTA"></a>
+<details>
+<summary><b>MOTA — Mota-Engil Renewing (173 sites, 309 pontos)</b> · 3 MÉDIO, 1 CRÍTICO, 1 BAIXO</summary>
 ### [CRÍTICO] Potência declarada acima da capacidade V×I
 - **Regra:** potência esperada = V×I (`mode3AC3p`: √3×V×I); `ratio = declarada/esperada > 1.25`.
 - **Afetados:** 7 de 309 pontos (2.3%). Exemplos: `CBC-00019-01`, `CBC-00019-02`, `CTB-00042-02`.
@@ -1189,7 +1307,11 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 
 - **Veredito:** suspeito — campo obrigatório em falta.
 
-## SEGM — SEGMA - Serviços de Engenharia Gestão e Manutenção Lda (73 sites, 134 pontos)
+[↑ índice](#indice)
+</details>
+<a id="opc-SEGM"></a>
+<details>
+<summary><b>SEGM — SEGMA - Serviços de Engenharia Gestão e Manutenção Lda (73 sites, 134 pontos)</b> · 2 MÉDIO, 1 CRÍTICO, 1 BAIXO</summary>
 ### [CRÍTICO] Potência declarada acima da capacidade V×I
 - **Regra:** potência esperada = V×I (`mode3AC3p`: √3×V×I); `ratio = declarada/esperada > 1.25`.
 - **Afetados:** 2 de 134 pontos (1.5%). Exemplos: `PDL-00005-01`, `PDL-00005-02`; contexto (mesmo site/OPC, não afetados): `PDL-00005`.
@@ -1252,7 +1374,11 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 
 - **Veredito:** suspeito — a mesma entidade legal com várias grafias fragiliza a agregação por operador.
 
-## PRIO — Prio.E Mobility Solutions, Lda (161 sites, 290 pontos)
+[↑ índice](#indice)
+</details>
+<a id="opc-PRIO"></a>
+<details>
+<summary><b>PRIO — Prio.E Mobility Solutions, Lda (161 sites, 290 pontos)</b> · 1 CRÍTICO, 1 MÉDIO</summary>
 ### [CRÍTICO] Potência declarada acima da capacidade V×I
 - **Regra:** potência esperada = V×I (`mode3AC3p`: √3×V×I); `ratio = declarada/esperada > 1.25`.
 - **Afetados:** 2 de 290 pontos (0.7%). Exemplos: `OBD-00003-2`, `SSB-00010-01`; contexto (mesmo site/OPC, não afetados): `OBD-00003`.
@@ -1284,7 +1410,11 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 
 - **Veredito:** suspeito — pode ser derating intencional, mas desvios >25% abaixo da capacidade são prováveis erros de introdução.
 
-## HEXA — HEXAGONAL OCEAN, LDA (38 sites, 76 pontos)
+[↑ índice](#indice)
+</details>
+<a id="opc-HEXA"></a>
+<details>
+<summary><b>HEXA — HEXAGONAL OCEAN, LDA (38 sites, 76 pontos)</b> · 1 CRÍTICO, 1 BAIXO</summary>
 ### [CRÍTICO] Potência declarada acima da capacidade V×I
 - **Regra:** potência esperada = V×I (`mode3AC3p`: √3×V×I); `ratio = declarada/esperada > 1.25`.
 - **Afetados:** 34 de 76 pontos (44.7%). Exemplos: `CSC-00074-01`, `CSC-00074-02`, `CSC-00075-01`.
@@ -1316,7 +1446,11 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 
 - **Veredito:** suspeito — a mesma entidade legal com várias grafias fragiliza a agregação por operador.
 
-## LOUL — Loulé Concelho Global, EM (33 sites, 70 pontos)
+[↑ índice](#indice)
+</details>
+<a id="opc-LOUL"></a>
+<details>
+<summary><b>LOUL — Loulé Concelho Global, EM (33 sites, 70 pontos)</b> · 1 CRÍTICO, 1 MÉDIO, 1 BAIXO</summary>
 ### [CRÍTICO] Potência declarada acima da capacidade V×I
 - **Regra:** potência esperada = V×I (`mode3AC3p`: √3×V×I); `ratio = declarada/esperada > 1.25`.
 - **Afetados:** 3 de 70 pontos (4.3%). Exemplos: `LLE-00057-02`, `LLE-00058-01`, `LLE-00058-02`.
@@ -1352,7 +1486,11 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 
 - **Veredito:** suspeito — a mesma entidade legal com várias grafias fragiliza a agregação por operador.
 
-## MAKS — Maksu (333 sites, 363 pontos)
+[↑ índice](#indice)
+</details>
+<a id="opc-MAKS"></a>
+<details>
+<summary><b>MAKS — Maksu (333 sites, 363 pontos)</b> · 1 CRÍTICO, 1 MÉDIO, 1 BAIXO</summary>
 ### [CRÍTICO] Potência declarada acima da capacidade V×I
 - **Regra:** potência esperada = V×I (`mode3AC3p`: √3×V×I); `ratio = declarada/esperada > 1.25`.
 - **Afetados:** 15 de 363 pontos (4.1%). Exemplos: `CSC-00065-1`, `CSC-00066-1`, `LSB-01183-01`.
@@ -1403,7 +1541,11 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 
 - **Veredito:** suspeito — campo obrigatório em falta.
 
-## EPKS — Telpark (4 sites, 36 pontos)
+[↑ índice](#indice)
+</details>
+<a id="opc-EPKS"></a>
+<details>
+<summary><b>EPKS — Telpark (4 sites, 36 pontos)</b> · 2 BAIXO, 1 CRÍTICO, 1 MÉDIO</summary>
 ### [CRÍTICO] Potência declarada acima da capacidade V×I
 - **Regra:** potência esperada = V×I (`mode3AC3p`: √3×V×I); `ratio = declarada/esperada > 1.25`.
 - **Afetados:** 32 de 36 pontos (88.9%). Exemplos: `044BDB0B-FFBA-4C02-8F73-2504699AC85F`, `0EAA089B-F5F7-41AF-9A55-7BD9175BB71F`, `23B0AE60-355A-4B52-A3CD-054A0E6753FD`.
@@ -1465,7 +1607,11 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 
 - **Veredito:** suspeito — valores extremos pedem verificação (hub real vs agregação errada; hubs de 8+ pontos são plausíveis em redes de carregamento rápido).
 
-## ACCI — ACCIONA RECARGA PORTUGAL,UNIPESSOAL LDA (12 sites, 23 pontos)
+[↑ índice](#indice)
+</details>
+<a id="opc-ACCI"></a>
+<details>
+<summary><b>ACCI — ACCIONA RECARGA PORTUGAL,UNIPESSOAL LDA (12 sites, 23 pontos)</b> · 2 BAIXO, 1 CRÍTICO, 1 MÉDIO</summary>
 ### [CRÍTICO] point_id em sites diferentes
 - **Regra:** mesmo `point_id` associado a >1 `site_id` (ids numéricos legados reutilizados ou cross-wiring entre sites vizinhos).
 - **Afetados:** 20 de 23 pontos (87.0%). Exemplos: `16`, `17`, `18`.
@@ -1527,7 +1673,11 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 
 - **Veredito:** suspeito — formato inválido para código postal PT.
 
-## REMO — MOTA-ENGIL REMO CHARGING S.A (16 sites, 38 pontos)
+[↑ índice](#indice)
+</details>
+<a id="opc-REMO"></a>
+<details>
+<summary><b>REMO — MOTA-ENGIL REMO CHARGING S.A (16 sites, 38 pontos)</b> · 3 MÉDIO, 1 CRÍTICO</summary>
 ### [CRÍTICO] Potência declarada acima da capacidade V×I
 - **Regra:** potência esperada = V×I (`mode3AC3p`: √3×V×I); `ratio = declarada/esperada > 1.25`.
 - **Afetados:** 2 de 38 pontos (5.3%). Exemplos: `CNF-00009-01`, `CNF-00009-02`; contexto (mesmo site/OPC, não afetados): `CNF-00009`.
@@ -1589,7 +1739,11 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 
 - **Veredito:** suspeito — a potência do ponto devia aproximar o máximo das tomadas; ratio ≈ 2 sugere que o campo carrega o total do site/estação em vez do máximo do ponto.
 
-## MOON — Siva - Sociedade de Importação de Veículos Automóveis / (sub-CEME da Iberdola) (26 sites, 56 pontos)
+[↑ índice](#indice)
+</details>
+<a id="opc-MOON"></a>
+<details>
+<summary><b>MOON — Siva - Sociedade de Importação de Veículos Automóveis / (sub-CEME da Iberdola) (26 sites, 56 pontos)</b> · 3 MÉDIO, 1 CRÍTICO, 1 BAIXO</summary>
 ### [CRÍTICO] Potência declarada acima da capacidade V×I
 - **Regra:** potência esperada = V×I (`mode3AC3p`: √3×V×I); `ratio = declarada/esperada > 1.25`.
 - **Afetados:** 15 de 56 pontos (26.8%). Exemplos: `AMT-00007-1`, `AZB-00016-12581432`, `AZB-00016-12581433`.
@@ -1663,7 +1817,11 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 
 - **Veredito:** suspeito — valores extremos pedem verificação (hub real vs agregação errada; hubs de 8+ pontos são plausíveis em redes de carregamento rápido).
 
-## EVCE — EVCE POWER, LDA. / MOBISMART (51 sites, 89 pontos)
+[↑ índice](#indice)
+</details>
+<a id="opc-EVCE"></a>
+<details>
+<summary><b>EVCE — EVCE POWER, LDA. / MOBISMART (51 sites, 89 pontos)</b> · 1 CRÍTICO, 1 MÉDIO</summary>
 ### [CRÍTICO] Potência declarada acima da capacidade V×I
 - **Regra:** potência esperada = V×I (`mode3AC3p`: √3×V×I); `ratio = declarada/esperada > 1.25`.
 - **Afetados:** 6 de 89 pontos (6.7%). Exemplos: `BCL-00033-01`, `BCL-00033-02`, `BRG-00133-01`.
@@ -1699,7 +1857,11 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 
 - **Veredito:** suspeito — pode ser derating intencional, mas desvios >25% abaixo da capacidade são prováveis erros de introdução.
 
-## CMEL — CME (22 sites, 23 pontos)
+[↑ índice](#indice)
+</details>
+<a id="opc-CMEL"></a>
+<details>
+<summary><b>CMEL — CME (22 sites, 23 pontos)</b> · 3 MÉDIO, 1 CRÍTICO, 1 BAIXO</summary>
 ### [CRÍTICO] Potência declarada acima da capacidade V×I
 - **Regra:** potência esperada = V×I (`mode3AC3p`: √3×V×I); `ratio = declarada/esperada > 1.25`.
 - **Afetados:** 2 de 23 pontos (8.7%). Exemplos: `OER-00300-01`, `OER-00301-01`; contexto (mesmo site/OPC, não afetados): `OER-00300`.
@@ -1762,7 +1924,11 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 
 - **Veredito:** suspeito — campo obrigatório em falta.
 
-## LUSI — LUSIADAENERGIA, S.A. (14 sites, 25 pontos)
+[↑ índice](#indice)
+</details>
+<a id="opc-LUSI"></a>
+<details>
+<summary><b>LUSI — LUSIADAENERGIA, S.A. (14 sites, 25 pontos)</b> · 2 MÉDIO, 1 CRÍTICO, 1 BAIXO</summary>
 ### [CRÍTICO] Potência declarada acima da capacidade V×I
 - **Regra:** potência esperada = V×I (`mode3AC3p`: √3×V×I); `ratio = declarada/esperada > 1.25`.
 - **Afetados:** 2 de 25 pontos (8.0%). Exemplos: `LGA-00047-01`, `LGA-00047-02`; contexto (mesmo site/OPC, não afetados): `LGA-00047`.
@@ -1817,7 +1983,11 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 
 - **Veredito:** suspeito — campo obrigatório em falta.
 
-## VIAV — Via Verde Transição Energética, S.A. (5 sites, 13 pontos)
+[↑ índice](#indice)
+</details>
+<a id="opc-VIAV"></a>
+<details>
+<summary><b>VIAV — Via Verde Transição Energética, S.A. (5 sites, 13 pontos)</b> · 2 MÉDIO, 1 CRÍTICO, 1 BAIXO</summary>
 ### [CRÍTICO] point_id em sites diferentes
 - **Regra:** mesmo `point_id` associado a >1 `site_id` (ids numéricos legados reutilizados ou cross-wiring entre sites vizinhos).
 - **Afetados:** 11 de 13 pontos (84.6%). Exemplos: `3`, `4`, `615`.
@@ -1878,7 +2048,11 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 
 - **Veredito:** suspeito — verificar se são multi-tomadas reais ou linhas duplicadas.
 
-## EVIO — EVIO - Electrical Mobility (21 sites, 35 pontos)
+[↑ índice](#indice)
+</details>
+<a id="opc-EVIO"></a>
+<details>
+<summary><b>EVIO — EVIO - Electrical Mobility (21 sites, 35 pontos)</b> · 1 CRÍTICO, 1 MÉDIO, 1 BAIXO</summary>
 ### [CRÍTICO] Potência declarada acima da capacidade V×I
 - **Regra:** potência esperada = V×I (`mode3AC3p`: √3×V×I); `ratio = declarada/esperada > 1.25`.
 - **Afetados:** 2 de 35 pontos (5.7%). Exemplos: `TNV-00028-01`, `TNV-00029-01`; contexto (mesmo site/OPC, não afetados): `TNV-00028`.
@@ -1923,7 +2097,11 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 
 - **Veredito:** suspeito — campo obrigatório em falta.
 
-## KLCS — Kilometer Low Cost II Serviços, SA (83 sites, 104 pontos)
+[↑ índice](#indice)
+</details>
+<a id="opc-KLCS"></a>
+<details>
+<summary><b>KLCS — Kilometer Low Cost II Serviços, SA (83 sites, 104 pontos)</b> · 1 CRÍTICO, 1 MÉDIO, 1 BAIXO</summary>
 ### [CRÍTICO] Potência declarada acima da capacidade V×I
 - **Regra:** potência esperada = V×I (`mode3AC3p`: √3×V×I); `ratio = declarada/esperada > 1.25`.
 - **Afetados:** 6 de 104 pontos (5.8%). Exemplos: `AVR-00105-01`, `AVR-00105-02`, `TBC-00004-01`.
@@ -1966,7 +2144,11 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 
 - **Veredito:** suspeito — campo obrigatório em falta.
 
-## VEIM — Veimonte Lda (20 sites, 35 pontos)
+[↑ índice](#indice)
+</details>
+<a id="opc-VEIM"></a>
+<details>
+<summary><b>VEIM — Veimonte Lda (20 sites, 35 pontos)</b> · 3 MÉDIO, 1 CRÍTICO</summary>
 ### [CRÍTICO] Potência declarada acima da capacidade V×I
 - **Regra:** potência esperada = V×I (`mode3AC3p`: √3×V×I); `ratio = declarada/esperada > 1.25`.
 - **Afetados:** 10 de 35 pontos (28.6%). Exemplos: `EPS-00005-01`, `EPS-00005-02`, `MMN-00004-01`.
@@ -2018,7 +2200,11 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 
 - **Veredito:** suspeito — unidades inconsistentes entre campos do mesmo ponto; impede comparação direta e sugere ingestão sem normalização (kW vs W).
 
-## PARI — Parinox Energia (6 sites, 7 pontos)
+[↑ índice](#indice)
+</details>
+<a id="opc-PARI"></a>
+<details>
+<summary><b>PARI — Parinox Energia (6 sites, 7 pontos)</b> · 1 CRÍTICO, 1 MÉDIO</summary>
 ### [CRÍTICO] Potência declarada acima da capacidade V×I
 - **Regra:** potência esperada = V×I (`mode3AC3p`: √3×V×I); `ratio = declarada/esperada > 1.25`.
 - **Afetados:** 1 de 7 pontos (14.3%). Exemplos: `AGD-00040-01`; contexto (mesmo site/OPC, não afetados): `AGD-00040`, `AGD-00039-01`.
@@ -2044,7 +2230,11 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 
 - **Veredito:** suspeito — unidades inconsistentes entre campos do mesmo ponto; impede comparação direta e sugere ingestão sem normalização (kW vs W).
 
-## NRGS — Original Sunenergy, Lda (7 sites, 16 pontos)
+[↑ índice](#indice)
+</details>
+<a id="opc-NRGS"></a>
+<details>
+<summary><b>NRGS — Original Sunenergy, Lda (7 sites, 16 pontos)</b> · 1 CRÍTICO, 1 MÉDIO</summary>
 ### [CRÍTICO] Potência declarada acima da capacidade V×I
 - **Regra:** potência esperada = V×I (`mode3AC3p`: √3×V×I); `ratio = declarada/esperada > 1.25`.
 - **Afetados:** 3 de 16 pontos (18.8%). Exemplos: `GRD-00021-02`, `MDB-00004-03`, `MDB-00004-04`.
@@ -2068,7 +2258,11 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 
 - **Veredito:** suspeito — pode ser derating intencional, mas desvios >25% abaixo da capacidade são prováveis erros de introdução.
 
-## PQTJ — Parques Tejo, E.M. (2 sites, 2 pontos)
+[↑ índice](#indice)
+</details>
+<a id="opc-PQTJ"></a>
+<details>
+<summary><b>PQTJ — Parques Tejo, E.M. (2 sites, 2 pontos)</b> · 2 MÉDIO, 1 CRÍTICO, 1 BAIXO</summary>
 ### [CRÍTICO] Potência declarada acima da capacidade V×I
 - **Regra:** potência esperada = V×I (`mode3AC3p`: √3×V×I); `ratio = declarada/esperada > 1.25`.
 - **Afetados:** 2 de 2 pontos (100.0%). Exemplos: `OER-00296-01`, `OER-00297-01`; contexto (mesmo site/OPC, não afetados): `OER-00296`.
@@ -2114,7 +2308,11 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 
 - **Veredito:** suspeito — campo obrigatório em falta.
 
-## VISA — VISACASA - SERVIÇOS DE ASSISTÊNCIA E MANUTENÇÃO GLOBAL S.A. (6 sites, 14 pontos)
+[↑ índice](#indice)
+</details>
+<a id="opc-VISA"></a>
+<details>
+<summary><b>VISA — VISACASA - SERVIÇOS DE ASSISTÊNCIA E MANUTENÇÃO GLOBAL S.A. (6 sites, 14 pontos)</b> · 1 CRÍTICO</summary>
 ### [CRÍTICO] Potência declarada acima da capacidade V×I
 - **Regra:** potência esperada = V×I (`mode3AC3p`: √3×V×I); `ratio = declarada/esperada > 1.25`.
 - **Afetados:** 4 de 14 pontos (28.6%). Exemplos: `VIS-00021-01`, `VIS-00021-02`, `VIS-00022-01`.
@@ -2129,7 +2327,11 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 
 - **Veredito:** impossível — a tomada declara mais potência do que os seus V/A permitem; pelo menos um dos três valores está errado.
 
-## ALFA — Alfa Energia (13 sites, 25 pontos)
+[↑ índice](#indice)
+</details>
+<a id="opc-ALFA"></a>
+<details>
+<summary><b>ALFA — Alfa Energia (13 sites, 25 pontos)</b> · 1 CRÍTICO, 1 MÉDIO</summary>
 ### [CRÍTICO] Linhas de conector exatamente duplicadas
 - **Regra:** mesmo (`point_id`, conector, modo, formato, P, V, I) em >1 linha.
 - **Afetados:** 1 de 25 pontos (4.0%). Exemplos: `FLG-00022-01`; contexto (mesmo site/OPC, não afetados): `FLG-00022`, `AND-00014-01`.
@@ -2153,7 +2355,11 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 
 - **Veredito:** suspeito — pode ser derating intencional, mas desvios >25% abaixo da capacidade são prováveis erros de introdução.
 
-## PLUG — e-Plug, Lda (31 sites, 62 pontos)
+[↑ índice](#indice)
+</details>
+<a id="opc-PLUG"></a>
+<details>
+<summary><b>PLUG — e-Plug, Lda (31 sites, 62 pontos)</b> · 1 CRÍTICO, 1 MÉDIO</summary>
 ### [CRÍTICO] Potência declarada acima da capacidade V×I
 - **Regra:** potência esperada = V×I (`mode3AC3p`: √3×V×I); `ratio = declarada/esperada > 1.25`.
 - **Afetados:** 1 de 62 pontos (1.6%). Exemplos: `TMR-00007-01`; contexto (mesmo site/OPC, não afetados): `TMR-00007`, `AMD-00030-01`.
@@ -2176,7 +2382,11 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 
 - **Veredito:** suspeito — pode ser derating intencional, mas desvios >25% abaixo da capacidade são prováveis erros de introdução.
 
-## EVGR — Green Evolut, LDA (6 sites, 10 pontos)
+[↑ índice](#indice)
+</details>
+<a id="opc-EVGR"></a>
+<details>
+<summary><b>EVGR — Green Evolut, LDA (6 sites, 10 pontos)</b> · 1 CRÍTICO</summary>
 ### [CRÍTICO] Linhas de conector exatamente duplicadas
 - **Regra:** mesmo (`point_id`, conector, modo, formato, P, V, I) em >1 linha.
 - **Afetados:** 1 de 10 pontos (10.0%). Exemplos: `TVR-00024-01`; contexto (mesmo site/OPC, não afetados): `TVR-00024`, `ALM-00087-01`.
@@ -2189,7 +2399,11 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 
 - **Veredito:** impossível — linhas gémeas indicam ingestão duplicada do mesmo conector.
 
-## TSLA — Tesla (9 sites, 192 pontos)
+[↑ índice](#indice)
+</details>
+<a id="opc-TSLA"></a>
+<details>
+<summary><b>TSLA — Tesla (9 sites, 192 pontos)</b> · 6 BAIXO, 2 MÉDIO</summary>
 ### [MÉDIO] Potência declarada muito abaixo de V×I (derating ou erro)
 - **Regra:** mesma fórmula; `ratio < 0.75`.
 - **Afetados:** 176 de 192 pontos (91.7%). Exemplos: `0030b1e0-c1c1-4578-8d30-fa44d7f4191d`, `00711859-da1d-4a63-893b-6cc8fc274e86`, `027ad7f9-f371-4437-a6da-0b6ec4da001f`.
@@ -2339,7 +2553,11 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 
 - **Veredito:** suspeito — campo obrigatório em falta.
 
-## ECOI — Ecoinside - Soluções em Ecoeficiência e Sustentabilidade Lda (56 sites, 142 pontos)
+[↑ índice](#indice)
+</details>
+<a id="opc-ECOI"></a>
+<details>
+<summary><b>ECOI — Ecoinside - Soluções em Ecoeficiência e Sustentabilidade Lda (56 sites, 142 pontos)</b> · 4 MÉDIO, 2 BAIXO</summary>
 ### [MÉDIO] Potência declarada muito abaixo de V×I (derating ou erro)
 - **Regra:** mesma fórmula; `ratio < 0.75`.
 - **Afetados:** 24 de 142 pontos (16.9%). Exemplos: `BRG-00090-01`, `BRG-00090-02`, `CLD-00025-01`.
@@ -2434,7 +2652,11 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 
 - **Veredito:** suspeito — campo obrigatório em falta.
 
-## CAPW — Capwatt Services (14 sites, 74 pontos)
+[↑ índice](#indice)
+</details>
+<a id="opc-CAPW"></a>
+<details>
+<summary><b>CAPW — Capwatt Services (14 sites, 74 pontos)</b> · 2 BAIXO, 1 MÉDIO</summary>
 ### [MÉDIO] Potência declarada muito abaixo de V×I (derating ou erro)
 - **Regra:** mesma fórmula; `ratio < 0.75`.
 - **Afetados:** 24 de 74 pontos (32.4%). Exemplos: `LSB-00379-01`, `LSB-00379-02`, `LSB-00379-03`.
@@ -2477,7 +2699,11 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 
 - **Veredito:** suspeito — valores extremos pedem verificação (hub real vs agregação errada; hubs de 8+ pontos são plausíveis em redes de carregamento rápido).
 
-## CEPS — Cepsa Portuguesa Petroleos (32 sites, 57 pontos)
+[↑ índice](#indice)
+</details>
+<a id="opc-CEPS"></a>
+<details>
+<summary><b>CEPS — Cepsa Portuguesa Petroleos (32 sites, 57 pontos)</b> · 2 MÉDIO</summary>
 ### [MÉDIO] Potência declarada muito abaixo de V×I (derating ou erro)
 - **Regra:** mesma fórmula; `ratio < 0.75`.
 - **Afetados:** 53 de 57 pontos (93.0%). Exemplos: `ABT-00017-01`, `ABT-00017-02`, `ABT-00018-01`.
@@ -2517,7 +2743,11 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 
 - **Veredito:** suspeito — unidades inconsistentes entre campos do mesmo ponto; impede comparação direta e sugere ingestão sem normalização (kW vs W).
 
-## DTEI — DTE, Instalacoes Especiais (84 sites, 197 pontos)
+[↑ índice](#indice)
+</details>
+<a id="opc-DTEI"></a>
+<details>
+<summary><b>DTEI — DTE, Instalacoes Especiais (84 sites, 197 pontos)</b> · 1 MÉDIO, 1 BAIXO</summary>
 ### [MÉDIO] Potência declarada muito abaixo de V×I (derating ou erro)
 - **Regra:** mesma fórmula; `ratio < 0.75`.
 - **Afetados:** 42 de 197 pontos (21.3%). Exemplos: `AGD-00020-01`, `AGD-00020-02`, `AGD-00021-01`.
@@ -2557,7 +2787,11 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 
 - **Veredito:** suspeito — campo obrigatório em falta.
 
-## ENBL — Enable Mobility Solutions, S.A. (24 sites, 52 pontos)
+[↑ índice](#indice)
+</details>
+<a id="opc-ENBL"></a>
+<details>
+<summary><b>ENBL — Enable Mobility Solutions, S.A. (24 sites, 52 pontos)</b> · 3 MÉDIO, 1 BAIXO</summary>
 ### [MÉDIO] available_charging_power em kW, conectores em W
 - **Regra:** `available_charging_power < 1000` com `max()` dos conectores `>= 1000` (só 349/21056 linhas têm `available`; 337 estão nesta escala).
 - **Afetados:** 48 de 52 pontos (92.3%). Exemplos: `AVR-00099-01`, `AVR-00099-02`, `AVR-00100-01`.
@@ -2627,7 +2861,11 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 
 - **Veredito:** suspeito — campo obrigatório em falta.
 
-## GENJ — Generation Journey Lda (21 sites, 41 pontos)
+[↑ índice](#indice)
+</details>
+<a id="opc-GENJ"></a>
+<details>
+<summary><b>GENJ — Generation Journey Lda (21 sites, 41 pontos)</b> · 1 MÉDIO, 1 BAIXO</summary>
 ### [MÉDIO] Potência declarada muito abaixo de V×I (derating ou erro)
 - **Regra:** mesma fórmula; `ratio < 0.75`.
 - **Afetados:** 3 de 41 pontos (7.3%). Exemplos: `GMR-00103-01`, `GMR-00103-02`, `GMR-00104-1`.
@@ -2652,7 +2890,11 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 
 - **Veredito:** suspeito — a mesma entidade legal com várias grafias fragiliza a agregação por operador.
 
-## IBRD — Iberdrola Clientes Portugal, Unipessoal, Lda (184 sites, 361 pontos)
+[↑ índice](#indice)
+</details>
+<a id="opc-IBRD"></a>
+<details>
+<summary><b>IBRD — Iberdrola Clientes Portugal, Unipessoal, Lda (184 sites, 361 pontos)</b> · 1 MÉDIO, 1 BAIXO</summary>
 ### [MÉDIO] Potência declarada muito abaixo de V×I (derating ou erro)
 - **Regra:** mesma fórmula; `ratio < 0.75`.
 - **Afetados:** 24 de 361 pontos (6.6%). Exemplos: `BGC-00013-01`, `BGC-00013-02`, `BGC-00027-01`.
@@ -2692,7 +2934,11 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 
 - **Veredito:** suspeito — campo obrigatório em falta.
 
-## ZUND — Grupo Easycharger, SL (14 sites, 27 pontos)
+[↑ índice](#indice)
+</details>
+<a id="opc-ZUND"></a>
+<details>
+<summary><b>ZUND — Grupo Easycharger, SL (14 sites, 27 pontos)</b> · 1 MÉDIO, 1 BAIXO</summary>
 ### [MÉDIO] Potência declarada muito abaixo de V×I (derating ou erro)
 - **Regra:** mesma fórmula; `ratio < 0.75`.
 - **Afetados:** 2 de 27 pontos (7.4%). Exemplos: `BRG-00085-01`, `BRG-00085-02`; contexto (mesmo site/OPC, não afetados): `BRG-00085`.
@@ -2724,7 +2970,11 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 
 - **Veredito:** suspeito — campo obrigatório em falta.
 
-## CIRC — Circuitos Energy Solutions, Lda. (12 sites, 22 pontos)
+[↑ índice](#indice)
+</details>
+<a id="opc-CIRC"></a>
+<details>
+<summary><b>CIRC — Circuitos Energy Solutions, Lda. (12 sites, 22 pontos)</b> · 1 MÉDIO, 1 BAIXO</summary>
 ### [MÉDIO] Potência declarada muito abaixo de V×I (derating ou erro)
 - **Regra:** mesma fórmula; `ratio < 0.75`.
 - **Afetados:** 4 de 22 pontos (18.2%). Exemplos: `LSB-00273-1`, `MDB-00003-1`, `PRD-00007-01`.
@@ -2750,7 +3000,11 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 
 - **Veredito:** suspeito — a mesma entidade legal com várias grafias fragiliza a agregação por operador.
 
-## INTV — Instavolt Portugal Lda. (21 sites, 38 pontos)
+[↑ índice](#indice)
+</details>
+<a id="opc-INTV"></a>
+<details>
+<summary><b>INTV — Instavolt Portugal Lda. (21 sites, 38 pontos)</b> · 1 MÉDIO</summary>
 ### [MÉDIO] Potência declarada muito abaixo de V×I (derating ou erro)
 - **Regra:** mesma fórmula; `ratio < 0.75`.
 - **Afetados:** 21 de 38 pontos (55.3%). Exemplos: `ACB-00042-01`, `ACB-00043-01`, `ACB-00044-01`.
@@ -2771,7 +3025,11 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 
 - **Veredito:** suspeito — pode ser derating intencional, mas desvios >25% abaixo da capacidade são prováveis erros de introdução.
 
-## IMAG — Image4all - Eficiência Energética, Comunicação e Imagem (5 sites, 9 pontos)
+[↑ índice](#indice)
+</details>
+<a id="opc-IMAG"></a>
+<details>
+<summary><b>IMAG — Image4all - Eficiência Energética, Comunicação e Imagem (5 sites, 9 pontos)</b> · 1 MÉDIO, 1 BAIXO</summary>
 ### [MÉDIO] Potência declarada muito abaixo de V×I (derating ou erro)
 - **Regra:** mesma fórmula; `ratio < 0.75`.
 - **Afetados:** 5 de 9 pontos (55.6%). Exemplos: `LSB-00499-01`, `LSB-00499-02`, `LSB-00502-01`.
@@ -2798,7 +3056,11 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 
 - **Veredito:** suspeito — a mesma entidade legal com várias grafias fragiliza a agregação por operador.
 
-## EMAC — EMACOM - Telecomunicações da Madeira, Unipessoal, Lda (25 sites, 44 pontos)
+[↑ índice](#indice)
+</details>
+<a id="opc-EMAC"></a>
+<details>
+<summary><b>EMAC — EMACOM - Telecomunicações da Madeira, Unipessoal, Lda (25 sites, 44 pontos)</b> · 3 MÉDIO, 1 BAIXO</summary>
 ### [MÉDIO] Potência declarada muito abaixo de V×I (derating ou erro)
 - **Regra:** mesma fórmula; `ratio < 0.75`.
 - **Afetados:** 4 de 44 pontos (9.1%). Exemplos: `MCH-00002-02`, `MCH-00002-03`, `RAM-CML-00001-03`.
@@ -2847,7 +3109,11 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 
 - **Veredito:** suspeito — código fora do padrão dificulta o join NAP↔MOBI.E e a leitura do concelho (UUIDs TSL, sufixos PUB).
 
-## EVPW — EVpower, Charging Solutions Lda (22 sites, 46 pontos)
+[↑ índice](#indice)
+</details>
+<a id="opc-EVPW"></a>
+<details>
+<summary><b>EVPW — EVpower, Charging Solutions Lda (22 sites, 46 pontos)</b> · 3 MÉDIO</summary>
 ### [MÉDIO] available_charging_power em kW, conectores em W
 - **Regra:** `available_charging_power < 1000` com `max()` dos conectores `>= 1000` (só 349/21056 linhas têm `available`; 337 estão nesta escala).
 - **Afetados:** 6 de 46 pontos (13.0%). Exemplos: `ELV-00022-01`, `ELV-00022-02`, `ELV-00022-03`.
@@ -2886,7 +3152,11 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 
 - **Veredito:** suspeito — pode ser derating intencional, mas desvios >25% abaixo da capacidade são prováveis erros de introdução.
 
-## CONM — ConectaMais, Lda (3 sites, 6 pontos)
+[↑ índice](#indice)
+</details>
+<a id="opc-CONM"></a>
+<details>
+<summary><b>CONM — ConectaMais, Lda (3 sites, 6 pontos)</b> · 2 MÉDIO</summary>
 ### [MÉDIO] available_charging_power em kW, conectores em W
 - **Regra:** `available_charging_power < 1000` com `max()` dos conectores `>= 1000` (só 349/21056 linhas têm `available`; 337 estão nesta escala).
 - **Afetados:** 6 de 6 pontos (100.0%). Exemplos: `LRA-00179-01`, `LRA-00179-02`, `MGR-00028-01`.
@@ -2916,7 +3186,11 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 
 - **Veredito:** suspeito — a potência do ponto devia aproximar o máximo das tomadas; ratio ≈ 2 sugere que o campo carrega o total do site/estação em vez do máximo do ponto.
 
-## FRTR — FRONTROW, LDA (5 sites, 8 pontos)
+[↑ índice](#indice)
+</details>
+<a id="opc-FRTR"></a>
+<details>
+<summary><b>FRTR — FRONTROW, LDA (5 sites, 8 pontos)</b> · 2 MÉDIO</summary>
 ### [MÉDIO] Potência declarada muito abaixo de V×I (derating ou erro)
 - **Regra:** mesma fórmula; `ratio < 0.75`.
 - **Afetados:** 4 de 8 pontos (50.0%). Exemplos: `BJA-00065-01`, `BJA-00065-02`, `CNT-00038-01`.
@@ -2944,7 +3218,11 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 
 - **Veredito:** suspeito — unidades inconsistentes entre campos do mesmo ponto; impede comparação direta e sugere ingestão sem normalização (kW vs W).
 
-## IHOM — iHome Lda (6 sites, 10 pontos)
+[↑ índice](#indice)
+</details>
+<a id="opc-IHOM"></a>
+<details>
+<summary><b>IHOM — iHome Lda (6 sites, 10 pontos)</b> · 1 MÉDIO</summary>
 ### [MÉDIO] Potência declarada muito abaixo de V×I (derating ou erro)
 - **Regra:** mesma fórmula; `ratio < 0.75`.
 - **Afetados:** 4 de 10 pontos (40.0%). Exemplos: `ABF-00050-01`, `ABF-00050-02`, `ABF-00051-01`.
@@ -2959,7 +3237,11 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 
 - **Veredito:** suspeito — pode ser derating intencional, mas desvios >25% abaixo da capacidade são prováveis erros de introdução.
 
-## SOLX — SOLX (4 sites, 8 pontos)
+[↑ índice](#indice)
+</details>
+<a id="opc-SOLX"></a>
+<details>
+<summary><b>SOLX — SOLX (4 sites, 8 pontos)</b> · 1 MÉDIO</summary>
 ### [MÉDIO] Potência declarada muito abaixo de V×I (derating ou erro)
 - **Regra:** mesma fórmula; `ratio < 0.75`.
 - **Afetados:** 4 de 8 pontos (50.0%). Exemplos: `RPN-00004-01`, `RPN-00004-02`, `RPN-00005-01`.
@@ -2974,7 +3256,11 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 
 - **Veredito:** suspeito — pode ser derating intencional, mas desvios >25% abaixo da capacidade são prováveis erros de introdução.
 
-## WENE — WENEA SERVICES SPAIN S.L. (2 sites, 4 pontos)
+[↑ índice](#indice)
+</details>
+<a id="opc-WENE"></a>
+<details>
+<summary><b>WENE — WENEA SERVICES SPAIN S.L. (2 sites, 4 pontos)</b> · 1 MÉDIO</summary>
 ### [MÉDIO] Potência declarada muito abaixo de V×I (derating ou erro)
 - **Regra:** mesma fórmula; `ratio < 0.75`.
 - **Afetados:** 4 de 4 pontos (100.0%). Exemplos: `LSB-00610-01`, `LSB-00610-02`, `LSB-00611-01`.
@@ -2989,7 +3275,11 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 
 - **Veredito:** suspeito — pode ser derating intencional, mas desvios >25% abaixo da capacidade são prováveis erros de introdução.
 
-## AUCH — Auchan Retail Portugal S.A (3 sites, 3 pontos)
+[↑ índice](#indice)
+</details>
+<a id="opc-AUCH"></a>
+<details>
+<summary><b>AUCH — Auchan Retail Portugal S.A (3 sites, 3 pontos)</b> · 1 MÉDIO</summary>
 ### [MÉDIO] available_charging_power em kW, conectores em W
 - **Regra:** `available_charging_power < 1000` com `max()` dos conectores `>= 1000` (só 349/21056 linhas têm `available`; 337 estão nesta escala).
 - **Afetados:** 3 de 3 pontos (100.0%). Exemplos: `CSC-00422-01`, `CSC-00423-01`, `CSC-00424-01`.
@@ -3003,7 +3293,11 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 
 - **Veredito:** suspeito — unidades inconsistentes entre campos do mesmo ponto; impede comparação direta e sugere ingestão sem normalização (kW vs W).
 
-## BBGE — Morenergy (2 sites, 3 pontos)
+[↑ índice](#indice)
+</details>
+<a id="opc-BBGE"></a>
+<details>
+<summary><b>BBGE — Morenergy (2 sites, 3 pontos)</b> · 2 BAIXO, 1 MÉDIO</summary>
 ### [MÉDIO] available_charging_power em kW, conectores em W
 - **Regra:** `available_charging_power < 1000` com `max()` dos conectores `>= 1000` (só 349/21056 linhas têm `available`; 337 estão nesta escala).
 - **Afetados:** 3 de 3 pontos (100.0%). Exemplos: `CBRPUB11`, `VVRPUB11`, `VVRPUB12`.
@@ -3040,7 +3334,11 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 
 - **Veredito:** suspeito — código fora do padrão dificulta o join NAP↔MOBI.E e a leitura do concelho (UUIDs TSL, sufixos PUB).
 
-## KPMS — KPM Serviços de Engenheria, Unip Lda (1 site, 3 pontos)
+[↑ índice](#indice)
+</details>
+<a id="opc-KPMS"></a>
+<details>
+<summary><b>KPMS — KPM Serviços de Engenheria, Unip Lda (1 site, 3 pontos)</b> · 2 MÉDIO</summary>
 ### [MÉDIO] Potência disponível incoerente (após normalizar kW→W)
 - **Regra:** por ponto: `available_charging_power` (×1000 quando em escala kW) vs `max()` dos conectores; limiar ±30%. Dominado por ratio ≈ 2 (total do site no campo do ponto).
 - **Afetados:** 3 de 3 pontos (100.0%). Exemplos: `FLG-00024-01`, `FLG-00024-02`, `FLG-00024-03`.
@@ -3066,7 +3364,11 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 
 - **Veredito:** suspeito — unidades inconsistentes entre campos do mesmo ponto; impede comparação direta e sugere ingestão sem normalização (kW vs W).
 
-## PTER — PETROTERMICA ENERGIA, S.A. (2 sites, 4 pontos)
+[↑ índice](#indice)
+</details>
+<a id="opc-PTER"></a>
+<details>
+<summary><b>PTER — PETROTERMICA ENERGIA, S.A. (2 sites, 4 pontos)</b> · 1 MÉDIO</summary>
 ### [MÉDIO] Potência declarada muito abaixo de V×I (derating ou erro)
 - **Regra:** mesma fórmula; `ratio < 0.75`.
 - **Afetados:** 3 de 4 pontos (75.0%). Exemplos: `EPS-00040-01`, `EPS-00040-02`, `VFR-00078-02`.
@@ -3080,7 +3382,11 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 
 - **Veredito:** suspeito — pode ser derating intencional, mas desvios >25% abaixo da capacidade são prováveis erros de introdução.
 
-## BRIG — Brightcity S.A. (2 sites, 4 pontos)
+[↑ índice](#indice)
+</details>
+<a id="opc-BRIG"></a>
+<details>
+<summary><b>BRIG — Brightcity S.A. (2 sites, 4 pontos)</b> · 1 MÉDIO</summary>
 ### [MÉDIO] Potência declarada muito abaixo de V×I (derating ou erro)
 - **Regra:** mesma fórmula; `ratio < 0.75`.
 - **Afetados:** 2 de 4 pontos (50.0%). Exemplos: `MTS-00192-01`, `MTS-00192-02`; contexto (mesmo site/OPC, não afetados): `MTS-00192`.
@@ -3093,7 +3399,11 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 
 - **Veredito:** suspeito — pode ser derating intencional, mas desvios >25% abaixo da capacidade são prováveis erros de introdução.
 
-## LOGI — uCharge (26 sites, 35 pontos)
+[↑ índice](#indice)
+</details>
+<a id="opc-LOGI"></a>
+<details>
+<summary><b>LOGI — uCharge (26 sites, 35 pontos)</b> · 1 MÉDIO</summary>
 ### [MÉDIO] Potência declarada muito abaixo de V×I (derating ou erro)
 - **Regra:** mesma fórmula; `ratio < 0.75`.
 - **Afetados:** 2 de 35 pontos (5.7%). Exemplos: `CSC-00126-01`, `CSC-00126-02`; contexto (mesmo site/OPC, não afetados): `CSC-00126`.
@@ -3106,7 +3416,11 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 
 - **Veredito:** suspeito — pode ser derating intencional, mas desvios >25% abaixo da capacidade são prováveis erros de introdução.
 
-## SFAF — Superfafe- supermercados,lda (2 sites, 6 pontos)
+[↑ índice](#indice)
+</details>
+<a id="opc-SFAF"></a>
+<details>
+<summary><b>SFAF — Superfafe- supermercados,lda (2 sites, 6 pontos)</b> · 1 MÉDIO</summary>
 ### [MÉDIO] Potência declarada muito abaixo de V×I (derating ou erro)
 - **Regra:** mesma fórmula; `ratio < 0.75`.
 - **Afetados:** 2 de 6 pontos (33.3%). Exemplos: `FAF-00004-01`, `FAF-00004-02`; contexto (mesmo site/OPC, não afetados): `FAF-00004`.
@@ -3119,7 +3433,11 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 
 - **Veredito:** suspeito — pode ser derating intencional, mas desvios >25% abaixo da capacidade são prováveis erros de introdução.
 
-## SGMR — Superguimarães - Supermercados,lda (2 sites, 6 pontos)
+[↑ índice](#indice)
+</details>
+<a id="opc-SGMR"></a>
+<details>
+<summary><b>SGMR — Superguimarães - Supermercados,lda (2 sites, 6 pontos)</b> · 1 MÉDIO</summary>
 ### [MÉDIO] Potência declarada muito abaixo de V×I (derating ou erro)
 - **Regra:** mesma fórmula; `ratio < 0.75`.
 - **Afetados:** 2 de 6 pontos (33.3%). Exemplos: `GMR-00022-01`, `GMR-00022-02`; contexto (mesmo site/OPC, não afetados): `GMR-00022`.
@@ -3132,7 +3450,11 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 
 - **Veredito:** suspeito — pode ser derating intencional, mas desvios >25% abaixo da capacidade são prováveis erros de introdução.
 
-## EZC3 — EZ - CHARG3, Lda (15 sites, 15 pontos)
+[↑ índice](#indice)
+</details>
+<a id="opc-EZC3"></a>
+<details>
+<summary><b>EZC3 — EZ - CHARG3, Lda (15 sites, 15 pontos)</b> · 1 MÉDIO</summary>
 ### [MÉDIO] available_charging_power em kW, conectores em W
 - **Regra:** `available_charging_power < 1000` com `max()` dos conectores `>= 1000` (só 349/21056 linhas têm `available`; 337 estão nesta escala).
 - **Afetados:** 1 de 15 pontos (6.7%). Exemplos: `CTB-00050-01`; contexto (mesmo site/OPC, não afetados): `CTB-00050`, `ALM-00121-01`.
@@ -3144,7 +3466,11 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 
 - **Veredito:** suspeito — unidades inconsistentes entre campos do mesmo ponto; impede comparação direta e sugere ingestão sem normalização (kW vs W).
 
-## IONY — IONITY GmbH (20 sites, 106 pontos)
+[↑ índice](#indice)
+</details>
+<a id="opc-IONY"></a>
+<details>
+<summary><b>IONY — IONITY GmbH (20 sites, 106 pontos)</b> · 2 BAIXO</summary>
 ### [BAIXO] Código-postal fora do formato NNNN-NNN
 - **Regra:** `postcode` ∉ `DDDD-DDD`.
 - **Afetados:** 38 de 106 pontos (35.8%). Exemplos: `ADV-00017-01`, `ADV-00017-02`, `ADV-00017-03`.
@@ -3176,7 +3502,11 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 
 - **Veredito:** suspeito — valores extremos pedem verificação (hub real vs agregação errada; hubs de 8+ pontos são plausíveis em redes de carregamento rápido).
 
-## GREE — GREEN CHARGE - MOBILIDADE ELÉTRICA, LDA (16 sites, 17 pontos)
+[↑ índice](#indice)
+</details>
+<a id="opc-GREE"></a>
+<details>
+<summary><b>GREE — GREEN CHARGE - MOBILIDADE ELÉTRICA, LDA (16 sites, 17 pontos)</b> · 1 BAIXO</summary>
 ### [BAIXO] Nome do operador fragmentado (várias grafias)
 - **Regra:** `operator_id = GREE` com 2 grafias distintas em `operator_name`.
 - **Afetados:** 17 de 17 pontos (100.0%). Exemplos: `LRS-00064-01`, `LRS-00064-02`, `OER-00146-1`.
@@ -3189,7 +3519,11 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 
 - **Veredito:** suspeito — a mesma entidade legal com várias grafias fragiliza a agregação por operador.
 
-## CSCP — Cascais Proxima (8 sites, 16 pontos)
+[↑ índice](#indice)
+</details>
+<a id="opc-CSCP"></a>
+<details>
+<summary><b>CSCP — Cascais Proxima (8 sites, 16 pontos)</b> · 1 BAIXO</summary>
 ### [BAIXO] Nome do operador fragmentado (várias grafias)
 - **Regra:** `operator_id = CSCP` com 2 grafias distintas em `operator_name`.
 - **Afetados:** 16 de 16 pontos (100.0%). Exemplos: `CSC-00104-01`, `CSC-00104-02`, `CSC-00105-01`.
@@ -3202,7 +3536,11 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 
 - **Veredito:** suspeito — a mesma entidade legal com várias grafias fragiliza a agregação por operador.
 
-## CEVE — CEVE - Cooperativa Eléctrica do Vale D’Este C.R.L. (4 sites, 10 pontos)
+[↑ índice](#indice)
+</details>
+<a id="opc-CEVE"></a>
+<details>
+<summary><b>CEVE — CEVE - Cooperativa Eléctrica do Vale D’Este C.R.L. (4 sites, 10 pontos)</b> · 1 BAIXO</summary>
 ### [BAIXO] Nome do operador fragmentado (várias grafias)
 - **Regra:** `operator_id = CEVE` com 2 grafias distintas em `operator_name`.
 - **Afetados:** 10 de 10 pontos (100.0%). Exemplos: `BRG-00062-01`, `BRG-00062-02`, `BRG-00063-01`.
@@ -3215,10 +3553,14 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 
 - **Veredito:** suspeito — a mesma entidade legal com várias grafias fragiliza a agregação por operador.
 
-
+[↑ índice](#indice)
+</details>
 ## Mudanças de OPCs (desde 2026-09-11)
+
 Sem mudanças desde 2026-09-11 (baseline): o censo atual (`2026-09-11T14:26:33+00:00`) é idêntico ao último commitado (`2026-09-11T14:22:40+00:00`); nenhum OPC novo, saído ou com grande variação (|Δpontos| ≥ 20 e ≥ 20%).
+
 ## Metodologia
+
 - Ficheiros: `nap_static_sites.csv` (8357 sites), `nap_static_points.csv` (21056 linhas, 20932 pontos distintos, 21056 com conector). Snapshot: 2026-09-11T03:00:03.833Z. Script: `scripts/anomalias_check.py` (pandas + lxml), corrido da raiz do repo com `python3` (venv do projeto, `venv/bin/python`, quando existir).
 - Enums validados contra `assets/schemas/energyInfrastructure.xsd`: `ChargingModeEnum` (11), `ConnectorTypeEnum` (38), `ConnectorFormatTypeEnum` (5), `ChargingPointUsageTypeEnum` (10).
 - Física: esperada = V×I, exceto `mode3AC3p` = √3×V×I; `ratio = declarada/esperada`; `>1.25` = impossível, `<0.75` = suspeito. Limiares de potência: `<1 kW` suspeito, `>400 kW` implausível (acima do máximo instalado em PT), `available_charging_power` vs `max()` conectores ±30%; máximo observado `max_power_w = 999990 W`.
@@ -3230,6 +3572,7 @@ Sem mudanças desde 2026-09-11 (baseline): o censo atual (`2026-09-11T14:26:33+0
 - Lacunas sistemáticas do feed (reportadas aqui globalmente, não por OPC, para evitar ruído): `applicable_vehicles` vazio em 100.0% dos sites; `available_charging_power` em falta em 98.3% das linhas ponto-conector (só as linhas com valor entram no teste de coerência ±30%).
 
 ## Não-anomalias verificadas
+
 Checks corridos que deram limpo (sem evidência nova) ou que são limitações documentadas:
 - `brands_accepted` como lista global CEME: não usado como discriminador de operador (limitação conhecida, sem teste novo).
 - NUTS apenas nível 1 (`nuts2Code`/`nuts3Code` ausentes): limitação conhecida do feed, não reportada como anomalia.

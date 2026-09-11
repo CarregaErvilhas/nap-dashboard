@@ -70,4 +70,5 @@ Regras do relatório:
 - Severidade: CRÍTICO = fisicamente impossível ou chave duplicada; ALTO = schema/enum violado ou localização fora de PT; MÉDIO = suspeito forte (derating >25%, combinação implausível); BAIXO = campo em falta ou formato duvidoso.
 - Sem limite mínimo de linhas por OPC: se um OPC só tem 2 anomalias, reporta 2. Não enchas com ruído para equilibrar secções.
 - Inclui no topo a data, o snapshot analisado e os totais (sites/pontos/linhas de conector). Inclui no fim uma secção "Metodologia" (ficheiros, script usado, limiares) e "Não-anomalias verificadas" (checks que correstes e deram limpo).
+- Não adiciones índice nem blocos <details> — a legibilidade final (índice, secções dobráveis) é aplicada mecanicamente após a tua escrita; segue apenas o esqueleto acima.
 - Se não houver CSVs nem for possível obtê-los, escreve na mesma o ficheiro a dizer o que bloqueou, sem inventar resultados.

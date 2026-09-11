@@ -144,7 +144,7 @@ jobs:
                   return ['relatório não criado']
               if len(txt) < 10000:
                   errs.append(f'muito pequeno ({len(txt)} chars)')
-              for marker in ('# Anomalias', '## Resumo por OPC', 'Metodologia'):
+              for marker in ('# Anomalias', '## Resumo por OPC', '## Índice', 'Metodologia'):
                   if marker not in txt:
                       errs.append(f'em falta: {marker}')
               if HAS_PREV and '## Mudanças de OPCs' not in txt:
@@ -152,8 +152,7 @@ jobs:
               for ph in ('TODO', 'TBD', '[...]', 'LOREM'):
                   if ph in txt:
                       errs.append(f'placeholder: {ph}')
-              sections = sum(1 for l in txt.splitlines()
-                             if l.startswith('## ') and '—' in l)
+              sections = txt.count('<details')
               if sections < 10:
                   errs.append(f'poucas secções por OPC ({sections})')
               cand = {t for t in re.findall(r'`([^`]+)`', txt)
@@ -188,7 +187,11 @@ jobs:
                       f"Anomalias: modelo {ref} falhou (run {os.environ.get('GITHUB_RUN_ID')})",
                       f"Modelo: `{ref}`\nErro: timeout\nRun: {RUN_URL}") or notified
                   continue
-              errs = validate(REPORT)
+              fmt = sh(["python3", "scripts/format_anomalias.py", REPORT])
+              if fmt.returncode != 0:
+                  errs = [f'formatador: {fmt.stderr.strip()[-300:]}']
+              else:
+                  errs = validate(REPORT)
               if not errs:
                   served_by = ref
                   print(f"relatório válido ({os.path.getsize(REPORT)} bytes)")

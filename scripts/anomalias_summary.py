@@ -285,7 +285,9 @@ def main():
                        if oid.strip().lower() not in ('nan', 'none', 'null', '')}}
     os.makedirs('Agents-outputs', exist_ok=True)
     with open('Agents-outputs/opc-census.json', 'w') as f:
-        json.dump(census, f, ensure_ascii=False)
+        # pretty-printed de propósito: diffs por OPC legíveis no git log
+        json.dump(census, f, ensure_ascii=False, indent=2)
+        f.write('\n')
 
     with open(OUT, 'w') as f:
         json.dump(out, f, ensure_ascii=False, allow_nan=False)
