@@ -34,7 +34,7 @@ jobs:
       # em runs manuais, onde não há workflow_run para referenciar.
       - name: Get static data (from refresh run)
         if: github.event_name != 'workflow_dispatch'
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v8
         with:
           name: nap-static
           path: .
