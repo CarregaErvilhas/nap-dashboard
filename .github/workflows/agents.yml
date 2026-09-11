@@ -63,14 +63,17 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           python3 - <<'EOF'
-          import json, os, random, subprocess, sys, urllib.request
+          import json, os, re, subprocess, sys, urllib.request
 
           PROMPT = ("Segue estritamente a system prompt em Agents/anomalias.md "
                     "sobre os dados atuais (CSVs já gerados; agents-summary.json "
                     "em anexo traz pré-agregação determinística). Escreve o relatório "
                     "em Agents-outputs/anomalias-results.md no formato exato da prompt. "
                     "Não uses a rede; não inventes ids — cita apenas ids presentes "
-                    "nos CSVs; verifica o teu output antes de terminar.")
+                    "nos CSVs; verifica o teu output antes de terminar. Cada categoria "
+                    "TEM de incluir pelo menos 3 point_id e/ou site_external_id reais "
+                    "dos CSVs, em backticks, na linha Exemplos — confirma cada id nos "
+                    "CSVs antes de escrever; relatório sem ids é rejeitado.")
           REPORT = 'Agents-outputs/anomalias-results.md'
           PER_MODEL_TIMEOUT = 1500  # 25 min por modelo
 
@@ -94,14 +97,22 @@ jobs:
                     file=sys.stderr)
               sys.exit(2)
 
-          # Conjuntos reais para a validação (cobertura, não pureza).
+          # Conjuntos reais para a validação: citações reais (cobertura) e
+          # deteção de ids inventados (pureza — só tokens com forma de id:
+          # com '-', com dígito, sem '.'/'/', só ASCII). Calibrado no relatório
+          # humano: 1539 reais, 0 inventados.
           import pandas as pd
-          pts = pd.read_csv('nap_static_points.csv', dtype=str, usecols=['point_id'])
-          sts = pd.read_csv('nap_static_sites.csv', dtype=str,
-                            usecols=['site_id', 'operator_id'])
-          POINT_IDS = [p for p in pts.point_id.dropna().astype(str)]
-          OPC_IDS = sorted(sts.operator_id.dropna().astype(str).unique().tolist())
-          PROBE = random.Random(42).sample(POINT_IDS, min(500, len(POINT_IDS)))
+          _pts = pd.read_csv('nap_static_points.csv', dtype=str)
+          _sts = pd.read_csv('nap_static_sites.csv', dtype=str)
+          IDS = (set(_pts.point_id.dropna().astype(str))
+                 | set(_pts.point_external_id.dropna().astype(str))
+                 | set(_pts.site_id.dropna().astype(str))
+                 | set(_pts.site_external_id.dropna().astype(str))
+                 | set(_sts.site_id.dropna().astype(str))
+                 | set(_sts.external_id.dropna().astype(str)))
+          CELLS = {str(v) for df in (_pts, _sts) for c in df.columns
+                   for v in df[c].dropna().astype(str).unique()}
+          SHAPE = re.compile(r'^[A-Za-z0-9_-]+$')
 
           def gh_issue(title, body):
               """Abre Issue; nunca deita o loop abaixo (avisa e segue)."""
@@ -142,9 +153,15 @@ jobs:
                              if l.startswith('## ') and '—' in l)
               if sections < 10:
                   errs.append(f'poucas secções por OPC ({sections})')
-              cited = sum(1 for pid in PROBE if pid in txt)
-              if cited < 20:
-                  errs.append(f'poucos point_ids reais citados ({cited}/500)')
+              cand = {t for t in re.findall(r'`([^`]+)`', txt)
+                      if len(t) >= 8 and '-' in t and '.' not in t and '/' not in t
+                      and any(c.isdigit() for c in t) and SHAPE.match(t)}
+              real = {t for t in cand if t in IDS}
+              fake = {t for t in cand if t not in CELLS}
+              if len(real) < 10:
+                  errs.append(f'poucos ids reais citados ({len(real)}, mín 10)')
+              if fake:
+                  errs.append(f'ids inventados: {sorted(fake)[:5]}')
               return errs
 
           def sh(cmd, **kw):
@@ -153,6 +170,8 @@ jobs:
           notified, served_by = False, None
           for ref in MODELS:
               print(f"--- a tentar: {ref}")
+              if os.path.exists(REPORT):  # nunca validar o ficheiro stale do anterior
+                  os.remove(REPORT)
               try:
                   p = sh(["opencode2", "run", "--standalone", "-m", ref,
                           "--format", "json", "--file", "agents-summary.json",
