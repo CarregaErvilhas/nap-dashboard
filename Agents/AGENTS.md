@@ -22,6 +22,7 @@ Esta pasta guarda as system prompts dos agentes automáticos do projeto `nap-das
 - A prompt deve declarar: âmbito estrito (que ficheiros pode tocar), ambiente (`venv/bin/python`, correr da raiz, não ler os XMLs de ~190 MB com `cat`/`Read`), regras de verificação por execução e o formato exato do output.
 - Código de análise reutilizável criado pelos agentes vai para `scripts/` (ex. `scripts/anomalias_check.py`), nunca fica só no terminal ou em `/tmp`.
 - Futuros agentes (ex. dinâmico, tarifários, geografia) seguem o mesmo padrão: `Agents/<nome>.md` + relatório `Agents-outputs/<nome>-results.md`.
+- Prosa dos relatórios em PT-PT técnico: **tensão**, nunca "voltagem" (`voltage` só para identificadores de código/colunas).
 
 ## Como executar
 

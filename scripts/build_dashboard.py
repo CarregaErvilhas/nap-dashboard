@@ -227,7 +227,7 @@ FACTS_HTML = f"""
 
 ERRS_HTML = """
 <li>
-  <div class="head">1. Voltagem / corrente / potência inconsistentes (NAP estático)</div>
+  <div class="head">1. Tensão / corrente / potência inconsistentes (NAP estático)</div>
   <div class="meta">33% das tomadas (6.948/21.056) têm potência declarada que não bate com V×I (&gt;25% de diferença). Destas, 2.686 (13%) declaram potência <b>acima</b> da capacidade elétrica (fisicamente impossível), ex. 1200 V × 600 A = 720 kW declarados como 200 kW. Valores suspeitos no dataset: tensões de 1200 V e 3600 V, correntes de 600 A.</div>
 </li>
 <li>

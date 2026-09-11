@@ -153,6 +153,11 @@ After editing `assets/dashboard_template.html` or `scripts/build_dashboard.py`,
   payment methods: App/Cartão/Cartão de membro/Sem autenticação/Dinheiro) joined
   per-site onto every point row.
 
+## Convenções de escrita (PT-PT técnico)
+- **tensão**, nunca "voltagem". Unidades abreviam-se `V`/`A`/`kW` normalmente.
+- `voltage`/`max_current` mantêm-se em inglês só quando referem identificadores
+  de código ou colunas (CSV, DATEX II, snippets) — em prosa portuguesa é tensão.
+
 ## Deliverables
 - `dashboard.html` — the interactive dashboard (open with `open dashboard.html`)
 - `facts.md` — interesting facts
