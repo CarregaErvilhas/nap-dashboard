@@ -38,6 +38,18 @@ Pré-requisito: os CSVs do ETL (`bash scripts/fetch_data.sh`, depois
 `venv/bin/python scripts/nap_etl.py evChargingInfra_latest.xml evActualStatus_latest.xml .`).
 A prompt já manda o agente tratar disso se faltarem.
 
+## Automático (CI)
+
+`.github/workflows/agents.yml` corre o agente semanalmente sem intervenção:
+dispara quando o `Weekly dashboard refresh` completa com sucesso (mais botão
+manual `workflow_dispatch`), gera CSVs frescos, corre o eval
+(`scripts/check_agents.py`), a pré-agregação (`scripts/anomalias_summary.py` →
+`agents-summary.json`, gitignored) e o `opencode2 run` com a prompt desta pasta.
+Cadeia de fallback pela variable `OPENCODE_MODEL` (lista por prioridade),
+validação do markdown (formato, secções por OPC, ids reais citados) e
+auto-commit de `Agents-outputs/anomalias-results.md` para `main`. Cada modelo
+que falha abre uma Issue; custo $0 (free tier Zen via harness).
+
 ## Eval
 
 `scripts/check_agents.py` valida que nenhum agente volta a ficar

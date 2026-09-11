@@ -33,6 +33,28 @@ jobs:
         run: bash scripts/fetch_data.sh
       - name: ETL
         run: python scripts/nap_etl.py evChargingInfra_latest.xml evActualStatus_latest.xml .
+      # Fonte única de verdade: o agents.yml consome este artifact em vez de
+      # voltar a sacar ~230 MB e re-correr o ETL (menos carga nas fontes oficiais).
+      - name: Publish static data for agent
+        run: |
+          python3 -c "
+          import datetime, hashlib, json, os
+          files = ['nap_static_sites.csv', 'nap_static_points.csv']
+          prov = {'refresh_run_id': os.environ.get('GITHUB_RUN_ID', ''),
+                  'fetched_utc': datetime.datetime.now(datetime.timezone.utc).isoformat(timespec='seconds'),
+                  'sha256': {f: hashlib.sha256(open(f, 'rb').read()).hexdigest()[:16] for f in files}}
+          json.dump(prov, open('data-provenance.json', 'w'))
+          print(prov)
+          "
+      - uses: actions/upload-artifact@v7
+        with:
+          name: nap-static
+          path: |
+            nap_static_sites.csv
+            nap_static_points.csv
+            data-provenance.json
+          retention-days: 7
+          if-no-files-found: error
       - name: Quality + summary
         run: |
           python scripts/check_quality.py
