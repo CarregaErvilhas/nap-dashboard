@@ -11,6 +11,8 @@ on:
 
 permissions:
   contents: write
+  pages: write
+  id-token: write
 
 concurrency:
   group: "refresh"
@@ -54,3 +56,26 @@ jobs:
           git add dashboard.html dashboard.png facts.md errors.md
           git diff --cached --quiet && echo "no changes to commit" || git commit -m "Weekly dashboard refresh: $(date -u +%F)"
           git push
+      - name: Stage site
+        run: |
+          mkdir -p public
+          cp dashboard.html public/index.html
+          cp dashboard.html public/dashboard.html
+          cp dashboard.png public/dashboard.png
+          echo "nap.ocarroeletrico.com" > public/CNAME
+      - uses: actions/upload-pages-artifact@v5
+        with:
+          path: public
+
+  # Deploy dedicado porque pushes feitos com GITHUB_TOKEN não disparam
+  # o pages.yml (é de propósito, anti-loop). Reaproveita o artefacto
+  # subido pelo job refresh (mesmo run).
+  deploy:
+    needs: refresh
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v5
