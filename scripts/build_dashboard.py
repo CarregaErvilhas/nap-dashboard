@@ -215,7 +215,7 @@ FACTS_HTML = f"""
 <li><b>Ocupação instantânea:</b> 2.831 em carregamento de 15.608 ativos (18%). AC lento o mais ocupado: 24,3% vs DC fast 50-150 kW 14,2%.</li>
 <li><b>Dispersão por operador:</b> ocupação de 5,8% (Repsol) a 30,5% (Maksu) — sinal de desfasamento oferta/procura por rede.</li>
 <li><b>Energia verde:</b> 76% dos pontos (15.930) marcados como energia verde.</li>
-<li><b>Tarifário:</b> domina a estrutura em 3 componentes (taxa fixa + €/kWh + €/min). Energia média ≈ 0,15 €/kWh, variando muito por operador.</li>
+<li><b>Tarifário OPC (uso do posto, não preço da energia):</b> 3 componentes (taxa fixa + €/kWh + €/min); a componente indexada a €/kWh vale em média ≈ 0,15 (31% a zero), variando muito por operador. A energia em si é faturada pelo CEME do condutor — só em ad-hoc/fora MOBI.E o OPC cobra o valor final do carregamento.</li>
 <li><b>Saúde da rede no snapshot:</b> 14% dos pontos 'removed' (3.005), 5% 'outOfOrder' (1.014), 6% 'unknown' → ≈20% não utilizável nesse momento.</li>
 <li><b>Connectors:</b> {conn_line} (em declínio, só em unidades multi-connector).</li>
 <li><b>Setor público:</b> municípios operam como OPC (Cascais Próxima, EMEL, Loulé Concelho Global, Superguimarães, Santa Cruz).</li>

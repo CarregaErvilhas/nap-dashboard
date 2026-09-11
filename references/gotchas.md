@@ -13,6 +13,10 @@
   then int-normalizes. 733 `UID_TOMADA` values are bare numeric ids (`97`, `98`).
 - The tariff has multiple rows per (site, plug): keep the `REGULAR` tariff type
   when present, else any; pivot `FLAT/ENERGY/TIME/PARKING_TIME` to wide.
+- MOBI.E OPC tariffs are the **station-usage fee, not the energy price**:
+  `ENERGY` (€/kWh) is the usage component indexed on energy — the energy itself
+  is billed by the driver's CEME. Only ad-hoc / off-MOBI.E OPCs charge the final
+  all-in price. Never label `ENERGY` means as "energy price" in UI text.
 
 ## NAP static XML quirks
 

@@ -7,7 +7,7 @@ Potência: mediana 22 kW (AC), média 60 kW. DC (mode4) = 8.613 tomadas (41%). U
 Ocupação instantânea: 2.831 em carregamento de 15.608 ativos (18%). AC lento o mais ocupado: 24,3% vs DC fast 50-150 kW 14,2%.
 Dispersão por operador: ocupação de 5,8% (Repsol) a 30,5% (Maksu) — sinal de desfasamento oferta/procura por rede.
 Energia verde: 76% dos pontos (15.930) marcados como energia verde.
-Tarifário: domina a estrutura em 3 componentes (taxa fixa + €/kWh + €/min). Energia média ≈ 0,15 €/kWh, variando muito por operador.
+Tarifário OPC (uso do posto, não preço da energia): 3 componentes (taxa fixa + €/kWh + €/min); a componente indexada a €/kWh vale em média ≈ 0,15 (31% a zero), variando muito por operador. A energia em si é faturada pelo CEME do condutor — só em ad-hoc/fora MOBI.E o OPC cobra o valor final do carregamento.
 Saúde da rede no snapshot: 14% dos pontos 'removed' (3.005), 5% 'outOfOrder' (1.014), 6% 'unknown' → ≈20% não utilizável nesse momento.
 Connectors: Type2 12,423 (59.0%), CCS Combo2 6,430 (30.5%), CHAdeMO 2,165 (10.3%), CEE 16A 38 (0.2%) (em declínio, só em unidades multi-connector).
 Setor público: municípios operam como OPC (Cascais Próxima, EMEL, Loulé Concelho Global, Superguimarães, Santa Cruz).
