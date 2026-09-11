@@ -94,6 +94,11 @@ jobs:
                   headers={
                       "Authorization": "Bearer " + KEY,  # nunca fazer print disto
                       "Content-Type": "application/json",
+                      # Zen está atrás de Cloudflare (error 1010 bloqueia
+                      # o User-Agent default do urllib). Fingir browser.
+                      "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+                                    "AppleWebKit/537.36 (KHTML, like Gecko) "
+                                    "Chrome/126.0.0.0 Safari/537.36",
                       "HTTP-Referer": "https://nap.ocarroeletrico.com/",
                       "X-Title": "nap-dashboard agents spike",
                   },
@@ -104,6 +109,7 @@ jobs:
               except urllib.error.HTTPError as e:
                   detail = e.read().decode("utf-8", "replace")[:500]
                   hints = {401: "API key do Console inválida ou em falta",
+                           403: "bloqueio Cloudflare/bot (error 1010?) ou modelo sem acesso",
                            404: "model id errado (ver https://opencode.ai/zen/v1/models)",
                            402: "sem créditos",
                            429: "rate limit (normal nos modelos free)"}
