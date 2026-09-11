@@ -52,19 +52,23 @@ def main():
         toc.append(f'- [{header}](#{anchor}) · {counts}')
         open_tag = '<details open>' if n_open < 5 else '<details>'
         n_open += 1
-        folded.append(f'<a id="{anchor}"></a>\n{open_tag}\n'
-                      f'<summary><b>{header}</b> · {counts}</summary>\n'
-                      f'{body.strip()}\n\n[↑ índice](#indice)\n</details>')
+        folded.append(f'<a id="{anchor}"></a>\n\n{open_tag}\n'
+                      f'<summary><b>{header}</b> · {counts}</summary>\n\n'
+                      f'{body.strip()}\n\n[↑ índice](#indice)\n\n</details>')
 
     out = [prelude.rstrip() + '\n']
     toc_done = False
     for text, opc in zip(folded, is_opc):
         if opc and not toc_done:
-            out.append('<a id="indice"></a>\n## Índice\n\n' + '\n'.join(toc) + '\n')
+            out.append('<a id="indice"></a>\n\n## Índice\n\n' + '\n'.join(toc) + '\n')
             toc_done = True
         out.append(text)
-    text = '\n'.join(out)
+    text = '\n\n'.join(out)
     text = re.sub(r'\n{3,}', '\n\n', text)
+    # tabelas coladas ao bullet anterior não renderizam no GitHub;
+    # garante linha em branco antes da primeira linha de cada tabela
+    # ([^|\n] exclui as linhas da própria tabela, que acabam em `|`)
+    text = re.sub(r'([^|\n])\n(\|)', r'\1\n\n\2', text)
     open(PATH, 'w', encoding='utf-8').write(text)
     print(f'formatado: {n_opc} secções OPC, índice com {len(toc)} entradas')
     return 0
