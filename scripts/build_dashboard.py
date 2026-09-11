@@ -220,7 +220,7 @@ price_stats = {
 
 conn_total = sum(agg_conn.values())
 conn_line = ', '.join(
-    f'{k} {v:,} ({v/conn_total*100:.1f}%)' for k, v in
+    f'{html_esc.escape(str(k))} {v:,} ({v/conn_total*100:.1f}%)' for k, v in
     sorted(agg_conn.items(), key=lambda kv: -kv[1]))
 # ---- estatísticas calculadas para facts/errors (nada de números hardcoded) ----
 
@@ -269,6 +269,15 @@ def pt2(x):
         return f'{float(x):.2f}'.replace('.', ',')
     except (TypeError, ValueError, ZeroDivisionError):
         return '—'
+
+
+def ratio(a, b):
+    """a/b como fração, ou None se indefinida — para os helpers pt/p0/p1
+    receberem o valor já calculado em vez de dividirem fora do try."""
+    try:
+        return float(a) / float(b)
+    except (TypeError, ValueError, ZeroDivisionError):
+        return None
 
 
 def _nm(s):
@@ -363,7 +372,7 @@ n_pow_checked = len(_o)
 _powdiv = _o[(_o['_ratio'] > 1.3) | (_o['_ratio'] < 0.7)]
 n_pow_div = len(_powdiv)
 pow_div_ex = '; '.join(
-    f'`{_r.point_id}` (NAP {_r.nap:.0f} kW, MOBI.E {_r.mob:.0f} kW)'
+    f'`{html_esc.escape(str(_r.point_id))}` (NAP {_r.nap:.0f} kW, MOBI.E {_r.mob:.0f} kW)'
     for _r in _powdiv.sort_values('_ratio').head(3)
     .rename(columns={'_nap': 'nap', '_mob': 'mob'}).itertuples())
 
@@ -396,6 +405,7 @@ else:
     n_pid_missing = n_pid_unused = None
 
 _fl = OPC.FLAT.dropna().apply(_num)
+_fl = _fl[_fl.apply(lambda x: x == x)]  # descarta NaN de parse: senão .max() = nan e o painel mostra "nan €/carga"
 flat_max_v = round(float(_fl.max()), 2) if len(_fl) else None
 _pr = _fsafe('nap_dynamic_pricing.csv')
 dyn_max = dyn_gt1 = None
@@ -428,7 +438,8 @@ n_tesla_sites = len(_tesla)
 if n_tesla_sites:
     _tp = P[P.site_id.isin(set(_tesla.site_id))]
     n_tesla_pts = int(_tp.point_id.nunique())
-    tesla_max_kw = int(_tp.max_power_w.apply(_num).max() / 1000)
+    _tesla_max = _tp.max_power_w.apply(_num).max()
+    tesla_max_kw = int(_tesla_max / 1000) if _tesla_max == _tesla_max else None
 else:
     n_tesla_pts = 0
     tesla_max_kw = None
@@ -438,28 +449,28 @@ n_frag = int((_multi_names > 1).sum())
 
 FACTS_HTML = f"""
 <ul>
-<li><b>Escala:</b> {pt(n_sites)} locais, {pt(n_points)} pontos, {n_ops} operadores. Continente {pt(n_main)} ({p0(n_main / n_sites)}%), Madeira {pt(n_mad)}, Açores {pt(n_az)}.</li>
-<li><b>Concentração:</b> {_nm(top1)} ({pt(n_top1)}) + {_nm(top2)} ({pt(n_top2)}) = {p0((n_top1 + n_top2) / n_sites)}% dos locais; top 5 operadores ≈ {p0(_top.head(5).sum() / n_sites)}% da rede.</li>
-<li><b>Lisboa domina:</b> {pt(lisboa)} locais em Lisboa ({p0(lisboa / n_sites)}%); top 10 concelhos ≈ {p0(top10_city / n_sites)}% dos locais. Forte enviesamento litoral.</li>
-<li><b>Potência:</b> mediana {median_kw} kW (AC), média {mean_kw} kW. DC (mode4) = {pt(n_mode4)} tomadas ({p0(n_mode4 / n_conn_rows)}%). Ultra-rápido &ge;150 kW = {pt(ultra)} pontos ({p0(ultra / n_points)}%).</li>
-<li><b>Ocupação instantânea:</b> {pt(n_charging)} em carregamento de {pt(n_active)} ativos ({p0(occ_overall / 100)}%). AC lento o mais ocupado: {pp1(occ_ac)}% vs DC fast 50-150 kW {pp1(occ_dc)}%.</li>
+<li><b>Escala:</b> {pt(n_sites)} locais, {pt(n_points)} pontos, {n_ops} operadores. Continente {pt(n_main)} ({p0(ratio(n_main, n_sites))}%), Madeira {pt(n_mad)}, Açores {pt(n_az)}.</li>
+<li><b>Concentração:</b> {_nm(top1)} ({pt(n_top1)}) + {_nm(top2)} ({pt(n_top2)}) = {p0(ratio(n_top1 + n_top2, n_sites))}% dos locais; top 5 operadores ≈ {p0(ratio(_top.head(5).sum(), n_sites))}% da rede.</li>
+<li><b>Lisboa domina:</b> {pt(lisboa)} locais em Lisboa ({p0(ratio(lisboa, n_sites))}%); top 10 concelhos ≈ {p0(ratio(top10_city, n_sites))}% dos locais. Forte enviesamento litoral.</li>
+<li><b>Potência:</b> mediana {median_kw} kW (AC), média {mean_kw} kW. DC (mode4) = {pt(n_mode4)} tomadas ({p0(ratio(n_mode4, n_conn_rows))}%). Ultra-rápido &ge;150 kW = {pt(ultra)} pontos ({p0(ratio(ultra, n_points))}%).</li>
+<li><b>Ocupação instantânea:</b> {pt(n_charging)} em carregamento de {pt(n_active)} ativos ({p0(ratio(occ_overall, 100))}%). AC lento o mais ocupado: {pp1(occ_ac)}% vs DC fast 50-150 kW {pp1(occ_dc)}%.</li>
 <li><b>Dispersão por operador:</b> ocupação de {pp1(occ_min_v)}% ({_nm(op_min)}) a {pp1(occ_max_v)}% ({_nm(op_max)}) — sinal de desfasamento oferta/procura por rede.</li>
-<li><b>Energia verde:</b> {pt(n_green)} pontos ({p0(n_green / n_points)}%) marcados como energia verde.</li>
+<li><b>Energia verde:</b> {pt(n_green)} pontos ({p0(ratio(n_green, n_points))}%) marcados como energia verde.</li>
 <li><b>Tarifário OPC (uso do posto, não preço da energia):</b> 3 componentes (taxa fixa + €/kWh + €/min); a componente indexada a €/kWh vale em média ≈ {pt2(en_mean)} ({p0(en_zero_frac)}% a zero), variando muito por operador. A energia em si é faturada pelo CEME do condutor — só em ad-hoc/fora MOBI.E o OPC cobra o valor final do carregamento.</li>
-<li><b>Saúde da rede no snapshot:</b> {pt(n_removed)} pontos 'removed' ({p0(n_removed / n_points)}%), {pt(n_oof)} 'outOfOrder' ({p0(n_oof / n_points)}%), {pt(n_unk)} 'unknown' ({p0(n_unk / n_points)}%) → ≈{p0((n_removed + n_oof + n_unk) / n_points)}% não utilizável nesse momento.</li>
+<li><b>Saúde da rede no snapshot:</b> {pt(n_removed)} pontos 'removed' ({p0(ratio(n_removed, n_points))}%), {pt(n_oof)} 'outOfOrder' ({p0(ratio(n_oof, n_points))}%), {pt(n_unk)} 'unknown' ({p0(ratio(n_unk, n_points))}%) → ≈{p0(ratio(n_removed + n_oof + n_unk, n_points))}% não utilizável nesse momento.</li>
 <li><b>Connectors:</b> {conn_line} (em declínio, só em unidades multi-connector).</li>
 <li><b>Setor público:</b> municípios operam como OPC (Cascais Próxima, EMEL, Loulé Concelho Global, Superguimarães, Santa Cruz).</li>
 <li><b>Registo OPC limpo:</b> os {n_codes_matched} códigos ativos resolvem para uma entidade (PartyID MOBI.E + DGEG); {n_reg_matched}/{n_reg} combos código/operador com reconhecimento DGEG.</li>
 <li><b>CEMEs:</b> {pt(n_brands)} códigos de marca na rede vs {pt(n_dgeg_ceme)} registados DGEG; {n_both} códigos são simultaneamente OPC e CEME (espaço de código partilhado).</li>
-<li><b>Validação cruzada:</b> potência NAP vs MOBI.E concorda em {p1(1 - n_pow_div / n_pow_checked)}% dos pontos (só {n_pow_div} divergem &gt;30%) — boa notícia para a fiabilidade geral.</li>
+<li><b>Validação cruzada:</b> potência NAP vs MOBI.E concorda em {p1(ratio(n_pow_checked - n_pow_div, n_pow_checked))}% dos pontos (só {n_pow_div} divergem &gt;30%) — boa notícia para a fiabilidade geral.</li>
 <li><b>Tesla (novidade no NAP):</b> {n_tesla_sites} sites / {n_tesla_pts} pontos Supercharger (CCS Combo2, até {tesla_max_kw if tesla_max_kw is not None else '?'} kW), com estado dinâmico mas ainda sem tarifário OPC na MOBI.E.</li>
-<li><b>Cross-check OSM (comunidade):</b> o dump Overpass do autor do mapa "Postos de Carregamento v2.1" cobre {pt(n_osm_cov)} sites NAP (~{p0(n_osm_cov / n_sites)}%); {n_osm_adhoc if n_osm_adhoc is not None else 0} têm pagamento ad-hoc por cartão no OSM não refletido no `auth_methods` do NAP.</li>
+<li><b>Cross-check OSM (comunidade):</b> o dump Overpass do autor do mapa "Postos de Carregamento v2.1" cobre {pt(n_osm_cov)} sites NAP (~{p0(ratio(n_osm_cov, n_sites))}%); {n_osm_adhoc if n_osm_adhoc is not None else 0} têm pagamento ad-hoc por cartão no OSM não refletido no `auth_methods` do NAP.</li>
 </ul>"""
 
 ERRS_HTML = f"""
 <li>
   <div class="head">1. Tensão / corrente / potência inconsistentes (NAP estático)</div>
-  <div class="meta">{p1(n_vi_bad / n_vi_rows)}% das tomadas ({pt(n_vi_bad)}/{pt(n_vi_rows)}) têm potência declarada que não bate com V×I (&gt;25% de diferença). Destas, {pt(n_vi_over)} ({p1(n_vi_over / n_vi_rows)}%) declaram potência <b>acima</b> da capacidade elétrica (fisicamente impossível), ex. 1200 V × 600 A = 720 kW declarados como 200 kW. Valores suspeitos no dataset: tensões de 1200 V e 3600 V, correntes de 600 A.</div>
+  <div class="meta">{p1(ratio(n_vi_bad, n_vi_rows))}% das tomadas ({pt(n_vi_bad)}/{pt(n_vi_rows)}) têm potência declarada que não bate com V×I (&gt;25% de diferença). Destas, {pt(n_vi_over)} ({p1(ratio(n_vi_over, n_vi_rows))}%) declaram potência <b>acima</b> da capacidade elétrica (fisicamente impossível), ex. 1200 V × 600 A = 720 kW declarados como 200 kW. Valores suspeitos no dataset: tensões de 1200 V e 3600 V, correntes de 600 A.</div>
 </li>
 <li>
   <div class="head">2. Potência NAP vs MOBI.E em contradição ({n_pow_div} pontos)</div>
@@ -467,7 +478,7 @@ ERRS_HTML = f"""
 </li>
 <li>
   <div class="head">3. Estado duplicado / contraditório no feed dinâmico</div>
-  <div class="meta">{n_conf} pontos aparecem 2–3× no <code>evActualStatus</code> com estados diferentes{(' (ex. `' + ex_pid + '` aparece como ' + ex_s1 + ' e como ' + ex_s2 + ')') if n_conf else ''}. {n_conf_extra} linhas a mais no ficheiro.</div>
+  <div class="meta">{n_conf} pontos aparecem 2–3× no <code>evActualStatus</code> com estados diferentes{(' (ex. `' + html_esc.escape(ex_pid) + '` aparece como ' + html_esc.escape(ex_s1) + ' e como ' + html_esc.escape(ex_s2) + ')') if n_conf else ''}. {n_conf_extra} linhas a mais no ficheiro.</div>
 </li>
 <li>
   <div class="head">4. Fragmentação de nomes de operadores (NAP)</div>
@@ -479,7 +490,7 @@ ERRS_HTML = f"""
 </li>
 <li>
   <div class="head">6. <code>usage_type</code> em falta</div>
-  <div class="meta">{pt(n_usage_missing)} tomadas ({p1(n_usage_missing / n_points)}%) sem tipo de utilização.</div>
+  <div class="meta">{pt(n_usage_missing)} tomadas ({p1(ratio(n_usage_missing, n_points))}%) sem tipo de utilização.</div>
 </li>
 <li>
   <div class="head">7. UID_TOMADA MOBI.E inconsistente</div>
@@ -495,11 +506,11 @@ ERRS_HTML = f"""
 </li>
 <li>
   <div class="head">10. Pontos 'removed' ainda no inventário estático</div>
-  <div class="meta">{pt(n_removed)} pontos ({p0(n_removed / n_points)}%) marcados 'removed' no dinâmico continuam listados como infraestrutura ativa no estático.</div>
+  <div class="meta">{pt(n_removed)} pontos ({p0(ratio(n_removed, n_points))}%) marcados 'removed' no dinâmico continuam listados como infraestrutura ativa no estático.</div>
 </li>
 <li>
   <div class="head">11. Localização: coordenadas vs concelho</div>
-  <div class="meta">Verificação contra os limites oficiais de concelho (CAOP + spot-check Nominatim): {pt(n_cc_mismatch)} sites ({p1(n_cc_mismatch / n_sites)}%) têm coordenadas fora do concelho implicado pelo código do site_id (formato <code>operador-código-nº</code>, código = concelho). Os códigos são de concelho, não de distrito (ex. PLM = Palmela, BRR = Barreiro). As subsecções 11a/11b abaixo são geradas por <code>scripts/concelho_check.py</code>.</div>
+  <div class="meta">Verificação contra os limites oficiais de concelho (CAOP + spot-check Nominatim): {pt(n_cc_mismatch)} sites ({p1(ratio(n_cc_mismatch, n_sites))}%) têm coordenadas fora do concelho implicado pelo código do site_id (formato <code>operador-código-nº</code>, código = concelho). Os códigos são de concelho, não de distrito (ex. PLM = Palmela, BRR = Barreiro). As subsecções 11a/11b abaixo são geradas por <code>scripts/concelho_check.py</code>.</div>
 </li>
 <li>
   <div class="head">12. Dúvidas da comunidade OSM/umap (cross-check externo)</div>

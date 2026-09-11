@@ -4,6 +4,7 @@ Output: nap_opc_registry.csv  (one row per MOBI.E OPC code active in the network
 """
 import difflib
 import re
+import sys
 import unicodedata
 import pandas as pd
 
@@ -81,11 +82,14 @@ def fuzzy_match(name):
         return None, None, 0
     if n in MANUAL:
         # manual mapping wins only if the DGEG entity still exists in the page;
-        # otherwise fall through to fuzzy matching instead of crashing on .index()
+        # otherwise warn loudly and fall through to fuzzy matching instead of
+        # crashing on .index() — a stale MANUAL entry must never match silently
         target = MANUAL[n]
         hit = dgeg[dgeg.entidade == target]
         if len(hit):
             return hit.entidade.iloc[0], hit.validade.iloc[0], 1.0
+        print(f'WARN: MANUAL mapping {n!r} -> {target!r} já não existe na página '
+              f'DGEG; a usar fuzzy match (atualizar MANUAL)', file=sys.stderr)
     hit = dgeg[dgeg.n == n]
     if len(hit):
         return hit.entidade.iloc[0], hit.validade.iloc[0], 1.0

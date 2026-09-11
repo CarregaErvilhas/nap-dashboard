@@ -34,6 +34,23 @@ STOP = {'A', 'DE', 'DA', 'DO', 'DAS', 'DOS', 'E', 'EM'}
 
 def fetch_caop():
     os.makedirs(CAOP_DIR, exist_ok=True)
+    # sentinel: de que origem veio esta cache. Se o BASE mudar (ex. troca de
+    # mirror), a cache antiga é descartada — senão os runners reaproveitavam
+    # para sempre os polígonos do mirror anterior sem ninguém notar.
+    sentinel = os.path.join(CAOP_DIR, '.source')
+    try:
+        cached = open(sentinel, encoding='utf-8').read().strip()
+    except OSError:
+        cached = None
+    if cached != BASE:
+        for name in os.listdir(CAOP_DIR):
+            if name == '.source':
+                continue
+            p = os.path.join(CAOP_DIR, name)
+            if os.path.isfile(p):
+                os.remove(p)
+    with open(sentinel, 'w', encoding='utf-8') as fh:
+        fh.write(BASE + '\n')
     paths = {}
     for key, rel, _nk, _dk in CAOP_FILES:
         dest = os.path.join(CAOP_DIR, os.path.basename(rel))

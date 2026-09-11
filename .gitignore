@@ -5,9 +5,11 @@ venv/
 __pycache__/
 *.pyc
 
-# Raw NAP XMLs (large) + download staging files
+# Raw NAP XMLs (large) + curl/atomic-download leftovers
 evChargingInfra*.xml
 evActualStatus*.xml
+*.xml.bak
+*.xml.download
 *.download
 
 # Downloaded source files (fetched by scripts/fetch_data.sh)
