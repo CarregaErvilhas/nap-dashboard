@@ -64,6 +64,26 @@ O `build_dashboard.py` lê todos os CSVs intermédios e injeta os dados no templ
 regenera `dashboard.png` (screenshot headless via Chrome) para este README; se não
 encontrar Chrome, omite o screenshot com um aviso.
 
+## Agentes automáticos
+
+As system prompts vivem em `Agents/` (uma por ficheiro `.md`) e os relatórios
+que produzem em `Agents-outputs/`. Detalhe em `Agents/AGENTS.md`.
+
+Para correr o agente de anomalias (dados estáticos NAP → relatório por OPC),
+colar isto numa nova sessão do OpenCode com cwd na raiz do repo:
+
+```text
+Segue estritamente a system prompt em Agents/anomalias.md e executa-a
+sobre os dados atuais. Escreve o relatório em
+Agents-outputs/anomalias-results.md no formato exato definido na prompt.
+```
+
+Após adicionar ou editar um agente, validar o eval:
+
+```bash
+python3 scripts/check_agents.py
+```
+
 ## Ficheiros principais
 
 | Ficheiro | Papel |

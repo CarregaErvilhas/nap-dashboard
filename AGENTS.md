@@ -13,6 +13,11 @@ self-contained dashboard. Don't over-engineer.
 - `assets/` — `dashboard_template.html`, `pt_outline.json` (PT outline for the
   map), `schemas/*.xsd` (DATEX II 3.3)
 - `references/` — docs for the SKILL.md (data sources, gotchas)
+- `Agents/` — system prompts dos agentes automáticos (um `.md` por agente; ver
+  `Agents/AGENTS.md`). Atual: `Agents/anomalias.md` (anomalias dos dados
+  estáticos NAP → `Agents-outputs/anomalias-results.md`, agrupado por OPC).
+- `Agents-outputs/` — relatórios gerados pelos agentes (ex.
+  `Agents-outputs/anomalias-results.md`).
 - Raw XMLs + intermediate CSVs live in the repo root and are gitignored
   (downloaded via `scripts/fetch_data.sh`). Run all scripts from the repo root;
   they resolve data files relative to the CWD.
@@ -152,3 +157,5 @@ After editing `assets/dashboard_template.html` or `scripts/build_dashboard.py`,
 - `dashboard.html` — the interactive dashboard (open with `open dashboard.html`)
 - `facts.md` — interesting facts
 - `errors.md` — reportable data errors (12 items, for the data owners)
+- `Agents-outputs/anomalias-results.md` — output do agente `Agents/anomalias.md`
+  (anomalias dos dados estáticos, agrupadas por OPC)
