@@ -30,13 +30,6 @@ def parse_mobie_tomada(x):
     return None
 
 
-def tom_key(x):
-    try:
-        return str(int(str(x)))
-    except (TypeError, ValueError):
-        return None
-
-
 # --- MOBI.E tariff parsing: '€ 0.261 /charge' -> ('FLAT', 0.261, 'charge') ---
 def parse_tarifa(s):
     s = str(s).strip()

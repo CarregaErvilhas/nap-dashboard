@@ -58,6 +58,15 @@ from the official origins (see `scripts/fetch_data.sh` for the exact URLs).
 It also regenerates `dashboard.png` (README screenshot) via headless Chrome if
 available; it only warns/skips otherwise.
 
+`scripts/validate_dashboard.py` (rode no `refresh.yml` antes do commit e em
+local depois de qualquer build) valida o `dashboard.html`: o JSON embutido
+`const D = {…}` tem de fazer `json.loads`, cada `<script>` tem de passar
+`node --check`, e a inicialização tem de correr sem exceção numa eval com DOM
+stub. `scripts/pipeline_guard.py` travará o commit se um upstream mudar o
+formato e o pipeline produzir dados absurdos sem rebentar (limiares mínimos
+para sites/pontos/join/DGEG/registo) — falha o job e o dashboard online fica
+no último bom.
+
 `scripts/concelho_check.py` locates every site inside official CAOP concelho
 polygons (downloaded on first run into `caop_cache/`, gitignored) and flags the
 sites whose coordinates contradict the concelho implied by the site_id code.
@@ -91,16 +100,14 @@ throwaway one-liner, at least note it in AGENTS.md so it can be rebuilt.
 venv/bin/python scripts/build_dashboard.py
 ```
 After editing `assets/dashboard_template.html` or `scripts/build_dashboard.py`,
-**always rebuild `dashboard.html`** (the deliverable) and re-validate:
-- embedded JSON must parse: the data is `const D = {…};` — use a brace-matching
-  extractor (find `const D = `, then scan for the matching closing `}`); the naive
-  regex `const D = (.*?);` truncates at the first `;` inside the JSON. Then
-  `json.loads` the extracted object.
-- inline JS must pass `node --check` (extract the `<script>` block first)
-- run the DOM-stub eval in node (stub `document.getElementById`, element
-  `innerHTML`/`addEventListener`/`insertAdjacentHTML`/`querySelectorAll`,
-  `classList`) to catch runtime errors like the map's region-key mismatch
-  (`azores` vs `acores` in `REGIONS`/outline).
+**always rebuild `dashboard.html`** (the deliverable) and re-validate. The
+mandated checks live in `scripts/validate_dashboard.py` (JSON embutido +
+`node --check` + eval de inicialização com DOM stub) e o `refresh.yml` corre-o
+antes do commit; em local:
+```bash
+venv/bin/python scripts/build_dashboard.py
+venv/bin/python scripts/validate_dashboard.py
+```
 
 ## Data gotchas (verified)
 - Join NAP↔MOBI.E by `site_external_id` + last segment of `point_id` (tomada,

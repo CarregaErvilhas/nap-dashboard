@@ -3,12 +3,12 @@ the concelho/distrito implied by the site_id code (errors.md item 11).
 
 Usage: python concelho_check.py
 
-Downloads CAOP concelho boundaries (nmota/caop_GeoJSON, geograficas WGS84 variants)
-into caop_cache/ on first run. Assigns each site a concelho by point-in-polygon,
-derives the concelho implied by each site_id code by majority vote over all sites
-sharing that code, then reports the sites whose real concelho differs. The
-distance shown is the great-circle km from the code concelho's centroid to the
-site's actual coordinates.
+Downloads CAOP concelho boundaries (jotanmiguel/caop_GeoJSON fork, geograficas
+WGS84 variants) into caop_cache/ on first run. Assigns each site a concelho by
+point-in-polygon, derives the concelho implied by each site_id code by majority
+vote over all sites sharing that code, then reports the sites whose real
+concelho differs. The distance shown is the great-circle km from the code
+concelho's centroid to the site's actual coordinates.
 
 Writes:
   concelho_check.csv      every site + real and code-implied concelho/distrito
@@ -28,7 +28,7 @@ CAOP_FILES = [
     ('acores', 'geograficas/A%C3%A7ores/A%C3%A7oresConcelhos.geojson', 'MUNICIPIO', 'ILHA'),
     ('madeira', 'geograficas/Madeira/MadeiraConcelhos.geojson', 'Municipio', 'Ilha'),
 ]
-BASE = 'https://raw.githubusercontent.com/nmota/caop_GeoJSON/master/'
+BASE = 'https://raw.githubusercontent.com/jotanmiguel/caop_GeoJSON/master/'
 STOP = {'A', 'DE', 'DA', 'DO', 'DAS', 'DOS', 'E', 'EM'}
 
 

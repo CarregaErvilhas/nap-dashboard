@@ -80,8 +80,12 @@ def fuzzy_match(name):
     if not n:
         return None, None, 0
     if n in MANUAL:
-        i = dgeg_names.index(MANUAL[n])
-        return dgeg_names[i], dgeg.validade.iloc[i], 1.0
+        # manual mapping wins only if the DGEG entity still exists in the page;
+        # otherwise fall through to fuzzy matching instead of crashing on .index()
+        target = MANUAL[n]
+        hit = dgeg[dgeg.entidade == target]
+        if len(hit):
+            return hit.entidade.iloc[0], hit.validade.iloc[0], 1.0
     hit = dgeg[dgeg.n == n]
     if len(hit):
         return hit.entidade.iloc[0], hit.validade.iloc[0], 1.0

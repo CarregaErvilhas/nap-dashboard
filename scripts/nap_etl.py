@@ -148,7 +148,10 @@ def parse_static(path):
                       '|'.join(sorted(set(auth_methods))),
                       '|'.join(sorted(set(applicable_vehicles))),
                       n_points, '|'.join(station_ids)))
-        elem.clear()
+        # clear() alone keeps the element attached to the document root; detach it
+        # so iterparse memory stays bounded on the 190 MB XML.
+        while elem.getprevious() is not None:
+            del elem.getparent()[0]
         if n % 2000 == 0:
             print(f'  static: {n} sites parsed', flush=True)
     print(f'  static: done, {n} sites, {len(points)} point-connector rows')
@@ -182,7 +185,8 @@ def parse_dynamic(path):
             fee = text_of(rates, 'minimumDeliveryFee', EI)
             cur = text_of(rates, 'applicableCurrency', F)
             rows_pricing.append((pid, idx, policy, fee, cur, pub_time))
-        elem.clear()
+        while elem.getprevious() is not None:
+            del elem.getparent()[0]
         if n % 5000 == 0:
             print(f'  dynamic: {n} points', flush=True)
     print(f'  dynamic: done, {n} point statuses, {len(rows_pricing)} pricing rows')

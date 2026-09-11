@@ -71,6 +71,15 @@ jobs:
           python scripts/osm_umap.py
       - name: Build dashboard
         run: python scripts/build_dashboard.py
+      # Guard: se um upstream mudou o formato e o pipeline produziu dados
+      # absurdos sem rebentar (join 0%, DGEG vazio), não commita nem publica —
+      # o dashboard online fica no último bom até o upstream ser corrigido.
+      - name: Pipeline guard (upstream sanity)
+        run: python3 scripts/pipeline_guard.py
+      # Validação pós-build exigida no AGENTS.md: JSON embutido, node --check e
+      # eval de inicialização com DOM stub (apanha templates partidos).
+      - name: Validate dashboard (JSON + JS + DOM-stub eval)
+        run: python3 scripts/validate_dashboard.py
       - name: Commit refreshed deliverables
         run: |
           git config user.name "github-actions[bot]"

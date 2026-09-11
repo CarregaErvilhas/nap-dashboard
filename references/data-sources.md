@@ -100,9 +100,10 @@ never as ground truth. Fetches are cached in `umap_cache/` (gitignored).
 
 Used by `scripts/concelho_check.py` (point-in-polygon → concelho) and
 `scripts/make_pt_outline.py` (PT outline + district/island labels). Downloaded on
-first run into `caop_cache/` (gitignored) from the `nmota/caop_GeoJSON` mirror of
+first run into `caop_cache/` (gitignored) from the `jotanmiguel/caop_GeoJSON`
+fork (kept current; the upstream `nmota/caop_GeoJSON` mirror is older) of
 official CAOP data (WGS84 `geograficas` variants):
-`https://raw.githubusercontent.com/nmota/caop_GeoJSON/master/`
+`https://raw.githubusercontent.com/jotanmiguel/caop_GeoJSON/master/`
 
 - `geograficas/ContinenteConcelhos.geojson` — mainland concelhos
   (props `Concelho`, `Distrito`, `Area_Ha`)

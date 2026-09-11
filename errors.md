@@ -1,22 +1,22 @@
 # Erros reportáveis (dados NAP / MOBI.E / DGEG)
 
 ## 1. Tensão / corrente / potência inconsistentes (NAP estático)
-33% das tomadas (6.948/21.056) têm potência declarada que não bate com V×I (&gt;25% de diferença). Destas, 2.686 (13%) declaram potência acima da capacidade elétrica (fisicamente impossível), ex. 1200 V × 600 A = 720 kW declarados como 200 kW. Valores suspeitos no dataset: tensões de 1200 V e 3600 V, correntes de 600 A.
+33,0% das tomadas (6.948/21.056) têm potência declarada que não bate com V×I (&gt;25% de diferença). Destas, 2.686 (12,8%) declaram potência acima da capacidade elétrica (fisicamente impossível), ex. 1200 V × 600 A = 720 kW declarados como 200 kW. Valores suspeitos no dataset: tensões de 1200 V e 3600 V, correntes de 600 A.
 
-## 2. Potência NAP vs MOBI.E em contradição (27 pontos)
-As duas fontes oficiais divergem &gt;30%. Ex.: ABF-00061-01 (NAP 120 kW, MOBI.E 60 kW); ALM-00043-02, OER-00136-02, SNT-00080-02 (60 vs 120).
+## 2. Potência NAP vs MOBI.E em contradição (31 pontos)
+As duas fontes oficiais divergem &gt;30%. Ex.: `SNT-00163-01` (NAP 60 kW, MOBI.E 120 kW); `SNT-00163-02` (NAP 60 kW, MOBI.E 120 kW); `CSC-00210-01` (NAP 60 kW, MOBI.E 120 kW).
 
 ## 3. Estado duplicado / contraditório no feed dinâmico
-44 pontos aparecem 2–3× no evActualStatus com estados diferentes (ex. PT-EDP-EGDL-00012-1 aparece como 'removed' e como 'available'). 47 linhas a mais no ficheiro.
+31 pontos aparecem 2–3× no evActualStatus com estados diferentes (ex. `PT-EDP-EABF-00195-1` aparece como unknown e como removed). 31 linhas a mais no ficheiro.
 
 ## 4. Fragmentação de nomes de operadores (NAP)
-A mesma entidade legal com múltiplas grafias: Galp (Galp Power / Galpgeste / Galp Gest), Atlante (6 variantes), Iberdrola (3), REPSOL (maiúsculas/minúsculas). Torna a agregação por operador frágil.
+A mesma entidade legal com múltiplas grafias (19 operadores afetados): Galp (Galp Power / Galpgeste / Galp Gest), Atlante (6 variantes), Iberdrola (3), REPSOL (maiúsculas/minúsculas). Torna a agregação por operador frágil.
 
 ## 5. NUTS apenas nível 1
 Só NUTS1 (PT1/PT2/PT3) no estático; sem NUTS2/NUTS3, que o esquema DATEX II suporta e o enquadramento AFIR/INSPIRE prevê.
 
 ## 6. usage_type em falta
-568 tomadas (3%) sem tipo de utilização.
+536 tomadas (2,6%) sem tipo de utilização.
 
 ## 7. UID_TOMADA MOBI.E inconsistente
 764 linhas com ids numéricos ('97', '98'…) fora de qualquer formato; mistura de formatos com/sem prefixo PT- e segmento de conector presente/ausente.
@@ -25,13 +25,13 @@ Só NUTS1 (PT1/PT2/PT3) no estático; sem NUTS2/NUTS3, que o esquema DATEX II su
 37 códigos ativos no tarifário não estão no ficheiro oficial de códigos (operadores pós-2022: ATL, ZUN, SLX, KLS, WEN…); 22 códigos do ficheiro não têm um único posto. Recomenda-se atualização do documento público.
 
 ## 9. Preços anómalos
-Taxa fixa até 2,5 €/carga; no NAP dinâmico pricePerChargingTime até 3,00 €/min (4 pontos &gt;1 €/min, provável erro de unidade €/min vs €/hora); energia a 0 €/kWh combinada com taxa fixa &gt;0 (suspeito de dados incompletos).
+Taxa fixa até 2,50 €/carga; no NAP dinâmico pricePerChargingTime até 3,00 €/min (4 pontos &gt;1 €/min, provável erro de unidade €/min vs €/hora); energia a 0 €/kWh combinada com taxa fixa &gt;0 em 2.028 pontos (suspeito de dados incompletos).
 
 ## 10. Pontos 'removed' ainda no inventário estático
 3.005 pontos (14%) marcados 'removed' no dinâmico continuam listados como infraestrutura ativa no estático.
 
 ## 11. Localização: coordenadas vs concelho
-Verificação contra os limites oficiais de concelho (CAOP + spot-check Nominatim): 75 sites (0,9%) têm coordenadas fora do concelho implicado pelo código do site_id (formato operador-código-nº, código = concelho). Nenhum caso nas ilhas. Os códigos são de concelho, não de distrito (ex. PLM = Palmela, BRR = Barreiro). As subsecções 11a/11b abaixo são geradas por scripts/concelho_check.py.
+Verificação contra os limites oficiais de concelho (CAOP + spot-check Nominatim): 75 sites (0,9%) têm coordenadas fora do concelho implicado pelo código do site_id (formato operador-código-nº, código = concelho). Os códigos são de concelho, não de distrito (ex. PLM = Palmela, BRR = Barreiro). As subsecções 11a/11b abaixo são geradas por scripts/concelho_check.py.
 
 ## 12. Dúvidas da comunidade OSM/umap (cross-check externo)
 O mapa "Caça aos Postos de Carregamento" (umap, OSM) lista pontos onde a comunidade não confirma a existência/localização de carregadores; vários "nada no local" ficam a ≤500 m de sites listados como ativos no NAP. Lista completa e operadores divergentes no mapa OSM v2.1 em osm_umap_findings.md (gerado por scripts/osm_umap.py).

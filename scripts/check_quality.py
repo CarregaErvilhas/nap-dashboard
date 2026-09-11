@@ -43,7 +43,13 @@ for col, enum in [('charging_mode', 'ChargingModeEnum'),
     else:
         print(f'{col} -> all OK')
 bad = pricing[~pricing.pricing_policy.isin(EI_ENUMS['PricingPolicyEnum'])]
-print(f'pricing_policy -> {len(bad)} non-schema: {bad.pricing_policy.value_counts().to_dict()}')
+if len(bad):
+    if bad.pricing_policy.isna().all():
+        print(f'pricing_policy -> {len(bad)} rows MISSING value (not enum violation)')
+    else:
+        print(f'pricing_policy -> {len(bad)} non-schema: {bad.pricing_policy.value_counts().to_dict()}')
+else:
+    print('pricing_policy -> all OK')
 
 print('\n=== 2. Declared power vs V x I consistency ===')
 def expected_power(row):

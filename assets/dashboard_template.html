@@ -164,15 +164,18 @@
 
 <script>
 const D = /*__DATA__*/;
+// HTML-escape qualquer valor de dados (incl. texto da comunidade OSM) antes de
+// o injetar em innerHTML/atributos — o dashboard não pode executar markup hostil.
+const esc = s => String(s??'').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 document.getElementById('snap').textContent = D.snapshot;
 
 const fmt = n => (n==null?'–':Number(n).toLocaleString('pt-PT',{minimumFractionDigits:2,maximumFractionDigits:2}));
-const label = (k,v,m)=>`<div class="bar"><div class="lab" title="${k}">${k}</div><div class="track"><div class="fill" style="width:${m?v/m*100:0}%"></div></div><div class="val">${fmt(v)}</div></div>`;
+const label = (k,v,m)=>`<div class="bar"><div class="lab" title="${esc(k)}">${esc(k)}</div><div class="track"><div class="fill" style="width:${m?v/m*100:0}%"></div></div><div class="val">${fmt(v)}</div></div>`;
 function bars(el, obj, sort){ let e=obj; if(sort){e=Object.entries(e).sort((a,b)=>b[1]-a[1]).reduce((o,[k,v])=>(o[k]=v,o),{});} const m=Math.max(...Object.values(e)); document.getElementById(el).innerHTML=Object.entries(e).map(([k,v])=>label(k,v,m)).join(''); }
 
 // KPIs
 document.getElementById('kpis').innerHTML = D.kpis.map(k=>
-  `<div class="card"><div class="t">${k.t}</div><div class="v">${k.v}</div><div class="s">${k.s}</div></div>`).join('');
+  `<div class="card"><div class="t">${esc(k.t)}</div><div class="v">${esc(k.v)}</div><div class="s">${esc(k.s)}</div></div>`).join('');
 
 bars('chStatus', D.status, true);
 bars('chRegion', D.region);
@@ -190,7 +193,7 @@ bars('chPriceOp', D.price_op, true);
 // occupancy by power class
 document.getElementById('chOccPw').innerHTML = D.occ_pw.map(x=>{
   const pct = x.occ==null?0:x.occ; const col = x.occ>22?'var(--ok)':x.occ>18?'var(--acc)':'var(--warn)';
-  return `<div class="bar"><div class="lab" title="${x.c}">${x.c}</div><div class="track"><div class="fill" style="width:${pct}%;background:${col}"></div></div><div class="val">${fmt(x.occ)}%</div></div>`
+  return `<div class="bar"><div class="lab" title="${esc(x.c)}">${esc(x.c)}</div><div class="track"><div class="fill" style="width:${pct}%;background:${col}"></div></div><div class="val">${fmt(x.occ)}%</div></div>`
     + `<div class="mut" style="font-size:11px;margin:-3px 0 6px 158px">${x.charging} a carregar / ${x.active} ativos</div>`;
 }).join('');
 
@@ -208,8 +211,8 @@ const classes = Object.keys(sw);
 const statuses = [...new Set(classes.flatMap(c=>Object.keys(sw[c]||{})))];
 document.getElementById('chStatus').insertAdjacentHTML('afterend',
  `<div class="panel" style="margin-top:14px"><h3>Estado × classe de potência</h3>
-  <div style="overflow-x:auto"><table><thead><tr><th class="l">estado</th>${classes.map(c=>`<th>${c}</th>`).join('')}</tr></thead>
-  <tbody>${statuses.map(s=>`<tr><td class="l">${s}</td>${classes.map(c=>`<td>${sw[c][s]??0}</td>`).join('')}</tr>`).join('')}</tbody></table></div></div>`);
+  <div style="overflow-x:auto"><table><thead><tr><th class="l">estado</th>${classes.map(c=>`<th>${esc(c)}</th>`).join('')}</tr></thead>
+  <tbody>${statuses.map(s=>`<tr><td class="l">${esc(s)}</td>${classes.map(c=>`<td>${sw[c][s]??0}</td>`).join('')}</tr>`).join('')}</tbody></table></div></div>`);
 
 // ---- interactive map (self-contained SVG) ----
 const REGIONS = {mainland: {x:230, y:10, w:480, h:880, scale:null, ox:0, oy:0, cos:0},
@@ -256,7 +259,7 @@ function drawDistricts(){
     for(const [name,[lon,lat]] of Object.entries(D.districts[rk]||{})){
       const [px,py]=proj(rk,lon,lat);
       s+=`<text x="${px.toFixed(1)}" y="${py.toFixed(1)}" font-size="${fs}" fill="#64748b"
-        text-anchor="middle" dominant-baseline="middle" pointer-events="none">${name}</text>`;
+        text-anchor="middle" dominant-baseline="middle" pointer-events="none">${esc(name)}</text>`;
     }
   }
   return s;
@@ -289,8 +292,8 @@ function renderMap(){
       const r = sel ? (4/mapK).toFixed(2) : (2.1/mapK).toFixed(2);
       const extra = sel ? ` stroke="#fff" stroke-width="${(1.4/mapK).toFixed(2)}"` : '';
       return `<circle cx="${px.toFixed(1)}" cy="${py.toFixed(1)}" r="${r}" fill="${col}"${ring}${extra}
-        data-ext="${x.ext}" data-rk="${rk}" class="mpt">
-        <title>${x.ext} — ${x.city} — ${x.status}${x.ad_hoc?' — pagamento ad-hoc (OSM)':''}</title></circle>`;
+        data-ext="${esc(x.ext)}" data-rk="${rk}" class="mpt">
+        <title>${esc(x.ext)} — ${esc(x.city)} — ${esc(x.status)}${x.ad_hoc?' — pagamento ad-hoc (OSM)':''}</title></circle>`;
     }).join('');
   // persistent pulsing marker for the selected site (visible even when filtered out)
   let marker='';
@@ -307,7 +310,7 @@ function renderMap(){
       <circle cx="${px.toFixed(1)}" cy="${py.toFixed(1)}" r="${mr}" fill="var(--err)" stroke="#fff" stroke-width="${mw}"/>
       <text x="${px.toFixed(1)}" y="${(py-12/mapK).toFixed(1)}" font-size="${(10/mapK).toFixed(1)}"
         fill="#fff" text-anchor="middle" dominant-baseline="middle" font-weight="bold"
-        paint-order="stroke" stroke="#000" stroke-width="${(2.5/mapK).toFixed(1)}">${selSite.ext}</text>
+        paint-order="stroke" stroke="#000" stroke-width="${(2.5/mapK).toFixed(1)}">${esc(selSite.ext)}</text>
     </g>`;
   }
   world.innerHTML = `<g transform="translate(${mapTx},${mapTy}) scale(${mapK})">${drawOutline()}${mapK<6?drawDistricts():''}${dots}${marker}</g>`;
@@ -331,23 +334,23 @@ function focusSite(ext){
 }
 function showDetail(s){
   const rows = [
-    ['Código', `<code>${s.ext}</code>`],
-    ['Nome', s.name||'–'],
-    ['Cidade', s.city||'–'],
-    ['Região', s.region||'–'],
-    ['Operador', s.op||'–'],
-    ['Estado', `<span class="tag status-${s.status||'unknown'}">${s.status||'unknown'}</span>`],
+    ['Código', `<code>${esc(s.ext)}</code>`],
+    ['Nome', esc(s.name)||'–'],
+    ['Cidade', esc(s.city)||'–'],
+    ['Região', esc(s.region)||'–'],
+    ['Operador', esc(s.op)||'–'],
+    ['Estado', `<span class="tag status-${esc(s.status)||'unknown'}">${esc(s.status)||'unknown'}</span>`],
     ['Pontos', s.npts],
     ['Potência máx', s.kw?`${s.kw.toLocaleString('pt-PT')} kW`:'–'],
-    ['Classe', s.pw||'–'],
-    ['Connectors', (s.conns||[]).join(', ')||'–'],
-    ['Pagamento (OSM)', (s.pay||[]).join(', ')||'–'],
+    ['Classe', esc(s.pw)||'–'],
+    ['Connectors', (s.conns||[]).map(esc).join(', ')||'–'],
+    ['Pagamento (OSM)', (s.pay||[]).map(esc).join(', ')||'–'],
   ];
-  if(s.osm_op!==undefined) rows.push(['Operador OSM', `${s.osm_op}${s.osm_dist!==undefined?` (${s.osm_dist} km do NAP)`:'·comunidade'}`]);
-  if(s.osm_access!==undefined) rows.push(['Acesso (OSM)', s.osm_access]);
-  if(s.osm_fee!==undefined) rows.push(['Tarifa (OSM)', s.osm_fee]);
+  if(s.osm_op!==undefined) rows.push(['Operador OSM', `${esc(s.osm_op)}${s.osm_dist!==undefined?` (${esc(s.osm_dist)} km do NAP)`:'·comunidade'}`]);
+  if(s.osm_access!==undefined) rows.push(['Acesso (OSM)', esc(s.osm_access)]);
+  if(s.osm_fee!==undefined) rows.push(['Tarifa (OSM)', esc(s.osm_fee)]);
   if(s.ad_hoc) rows.push(['Pagamento ad-hoc', 'OSM indica Multibanco/contactless ou acesso livre — NAP só app/RFID ⚠']);
-  if(s.doubt) rows.push(['Dúvida comunidade', `<span class="warn">${s.doubt}</span>`]);
+  if(s.doubt) rows.push(['Dúvida comunidade', `<span class="warn">${esc(s.doubt)}</span>`]);
   document.getElementById('mDetailBody').innerHTML =
     `<table><tbody>${rows.map(([k,v])=>`<tr><td class="k">${k}</td><td>${v}</td></tr>`).join('')}</tbody></table>`;
 }
@@ -384,7 +387,7 @@ document.getElementById('mReset').addEventListener('click',()=>{mapK=1;mapTx=0;m
 const cols = [{k:'point_id',l:'ID'},{k:'city',l:'Cidade'},{k:'operator_name',l:'Operador'},{k:'pw_class',l:'Classe'},
               {k:'kw',l:'kW'},{k:'connectors',l:'Connectors'},{k:'status',l:'Estado'},{k:'pay',l:'Pagamento'},{k:'opc',l:'OPC'},
               {k:'ENERGY',l:'€/kWh'},{k:'TIME',l:'€/min'},{k:'FLAT',l:'€/carga'}];
-document.getElementById('tblhead').innerHTML = cols.map((c,i)=>`<th class="${i<2?'l':''}" data-k="${c.k}">${c.l}</th>`).join('');
+document.getElementById('tblhead').innerHTML = cols.map((c,i)=>`<th class="${i<2?'l':''}" data-k="${c.k}">${esc(c.l)}</th>`).join('');
 let rows = D.points, sortKey=null, sortAsc=true, page=1, per=200;
 const uni = (k)=>[...new Set(rows.map(x=>x[k]).filter(Boolean))].sort();
 function multiSel(id,label,vals){ const el=document.getElementById(id), sel=new Set();
@@ -393,7 +396,7 @@ function multiSel(id,label,vals){ const el=document.getElementById(id), sel=new 
   const refresh=()=>{ el.querySelector('.mlab').textContent =
     sel.size?`${label}: ${[...sel].sort().join(', ')}`:`${label}: todos`;
     el.querySelector('.mlab').title = sel.size?[...sel].sort().join(', '):''; };
-  menu.innerHTML = vals.map(v=>`<label><input type="checkbox" value="${v}"> ${v}</label>`).join('');
+  menu.innerHTML = vals.map(v=>`<label><input type="checkbox" value="${esc(v)}"> ${esc(v)}</label>`).join('');
   menu.querySelectorAll('input').forEach(cb=>cb.addEventListener('change',()=>{
     if(cb.checked) sel.add(cb.value); else sel.delete(cb.value);
     refresh(); page=1; render();
@@ -422,12 +425,12 @@ function render(){
   const pages=Math.max(1,Math.ceil(r.length/per));
   if(page>pages) page=pages;
   const slice=r.slice((page-1)*per,page*per);
-  document.getElementById('tbody').innerHTML = slice.map(x=>`<tr data-site="${x.site_external_id}">
-    <td class="l">${x.point_id}</td><td class="l">${x.city??''}</td><td class="l">${x.operator_name??''}</td>
-    <td>${x.pw_class??''}</td><td>${fmt(x.kw)}</td><td>${x.connectors??''}</td>
-    <td><span class="tag status-${x.status??'unknown'}">${x.status??''}</span></td>
-    <td>${(x.pay||[]).join(', ')||'–'}</td>
-    <td>${x.opc??''}</td><td>${fmt(x.ENERGY)}</td><td>${fmt(x.TIME)}</td><td>${fmt(x.FLAT)}</td></tr>`).join('');
+  document.getElementById('tbody').innerHTML = slice.map(x=>`<tr data-site="${esc(x.site_external_id)}">
+    <td class="l">${esc(x.point_id)}</td><td class="l">${esc(x.city??'')}</td><td class="l">${esc(x.operator_name??'')}</td>
+    <td>${esc(x.pw_class??'')}</td><td>${fmt(x.kw)}</td><td>${esc(x.connectors??'')}</td>
+    <td><span class="tag status-${esc(x.status??'unknown')}">${esc(x.status??'')}</span></td>
+    <td>${(x.pay||[]).map(esc).join(', ')||'–'}</td>
+    <td>${esc(x.opc??'')}</td><td>${fmt(x.ENERGY)}</td><td>${fmt(x.TIME)}</td><td>${fmt(x.FLAT)}</td></tr>`).join('');
   document.getElementById('tbody').querySelectorAll('tr').forEach(tr=>{
     tr.addEventListener('click',()=>{
       const site=D.sites.find(s=>s.ext===tr.dataset.site);
