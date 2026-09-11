@@ -10,7 +10,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 | ATLA — Atlante Infra Portugal, S.A | 608 | 1423 | 436 | 1423 | 6 |
 | EDPC — EDP Comercial | 1658 | 5787 | 375 | 1178 | 9 |
 | TRUE — WOWPLUG | 744 | 1489 | 1307 | 76 | 3 |
-| FCTO — Iberdrola / bp pulse | 287 | 1194 | 35 | 940 | 8 |
+| FCTO — Iberdrola | bp pulse | 287 | 1194 | 35 | 940 | 8 |
 | REPS — REPSOL Portuguesa Lda | 216 | 561 | 173 | 561 | 7 |
 | GLPG — Galpgeste | 126 | 328 | 3 | 328 | 3 |
 | MLTR — Mobiletric | 108 | 257 | 8 | 257 | 3 |
@@ -101,7 +101,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 ## GLPP — Galp Power OPC (1589 sites, 3529 pontos)
 ### [CRÍTICO] Potência declarada acima da capacidade V×I
 - **Regra:** potência esperada = V×I (`mode3AC3p`: √3×V×I); `ratio = declarada/esperada > 1.25`.
-- **Afetados:** 148 de 3529 pontos (4.2%). Exemplos: `ALB-90002-01`, `ALB-90002`, `ALB-90002-02`, `ALM-00100-01`, `ALM-00100`, `ALM-00101-01`, `ALM-00101`.
+- **Afetados:** 148 de 3529 pontos (4.2%). Exemplos: `ALB-90002-01`, `ALB-90002-02`, `ALM-00100-01`.
 - **Evidência:**
 
   | point_id | site_external_id | V | I (A) | P decl. (W) | modo | ratio |
@@ -120,7 +120,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 - **Veredito:** impossível — a tomada declara mais potência do que os seus V/A permitem; pelo menos um dos três valores está errado.
 ### [CRÍTICO] Conector DC em modo AC
 - **Regra:** CHAdeMO/CCS Combo em `charging_mode` com `AC`.
-- **Afetados:** 4 de 3529 pontos (0.1%). Exemplos: `CSC-00413-01`, `CSC-00413`, `LSB-00655-01`, `LSB-00655`, `SSB-00009-01`, `SSB-00009`.
+- **Afetados:** 4 de 3529 pontos (0.1%). Exemplos: `CSC-00413-01`, `LSB-00655-01`, `SSB-00009-01`.
 - **Evidência:**
 
   | point_id | site_external_id | conector | modo |
@@ -133,7 +133,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 - **Veredito:** impossível — CHAdeMO e CCS Combo são DC; nunca operam em modo AC.
 ### [CRÍTICO] Conector DC com formato tomada (socket)
 - **Regra:** `connector_type` DC com `connector_format = socket` (DC é sempre cabo acoplado).
-- **Afetados:** 2 de 3529 pontos (0.1%). Exemplos: `VFX-00066-01`, `VFX-00066`, `VFX-00067-01`, `VFX-00067`.
+- **Afetados:** 2 de 3529 pontos (0.1%). Exemplos: `VFX-00066-01`, `VFX-00067-01`; contexto (mesmo site/OPC, não afetados): `VFX-00066`.
 - **Evidência:**
 
   | point_id | site_external_id | conector | formato |
@@ -144,7 +144,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 - **Veredito:** impossível — CHAdeMO/CCS são cabos fixos ao posto; `socket` indica tomada sem cabo.
 ### [MÉDIO] Potência declarada muito abaixo de V×I (derating ou erro)
 - **Regra:** mesma fórmula; `ratio < 0.75`.
-- **Afetados:** 445 de 3529 pontos (12.6%). Exemplos: `ABF-00061-01`, `ABF-00061`, `ABF-00164-01`, `ABF-00164`, `ABF-00164-02`, `ABT-00012-01`, `ABT-00012`.
+- **Afetados:** 445 de 3529 pontos (12.6%). Exemplos: `ABF-00061-01`, `ABF-00164-01`, `ABF-00164-02`.
 - **Evidência:**
 
   | point_id | site_external_id | V | I (A) | P decl. (W) | modo | ratio |
@@ -163,7 +163,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 - **Veredito:** suspeito — pode ser derating intencional, mas desvios >25% abaixo da capacidade são prováveis erros de introdução.
 ### [MÉDIO] Type2 em modo DC (mode4)
 - **Regra:** `connector_type = iec62196T2` com `charging_mode = mode4DC`.
-- **Afetados:** 6 de 3529 pontos (0.2%). Exemplos: `AMD-00110-01`, `AMD-00110`, `CTB-00057-01`, `CTB-00057`, `ODV-00047-01`, `ODV-00047`.
+- **Afetados:** 6 de 3529 pontos (0.2%). Exemplos: `AMD-00110-01`, `CTB-00057-01`, `ODV-00047-01`.
 - **Evidência:**
 
   | point_id | site_external_id | conector | modo |
@@ -178,7 +178,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 - **Veredito:** suspeito — Type2 é AC; DC em Type2 puro é fora do standard (o DC usa Combo2).
 ### [MÉDIO] Potência ultra-rápida implausível (> 400 kW)
 - **Regra:** assinalar `max_power_w > 400000` (limiar: acima do máximo instalado em PT).
-- **Afetados:** 4 de 3529 pontos (0.1%). Exemplos: `LSB-01320-01`, `LSB-01320`, `LSB-01320-02`, `LSB-01320-03`, `LSB-01320-04`.
+- **Afetados:** 4 de 3529 pontos (0.1%). Exemplos: `LSB-01320-01`, `LSB-01320-02`, `LSB-01320-03`.
 - **Evidência:**
 
   | point_id | site_external_id | P (W) | conector | V |
@@ -191,7 +191,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 - **Veredito:** suspeito — nenhum posto público PT entrega >400 kW por tomada; provável erro de digitação.
 ### [BAIXO] Nome do operador fragmentado (várias grafias)
 - **Regra:** `operator_id = GLPP` com 2 grafias distintas em `operator_name`.
-- **Afetados:** 3529 de 3529 pontos (100.0%). Exemplos: `ABF-00012-01`, `ABF-00012`, `ABF-00012-02`, `ABF-00013-01`, `ABF-00013`, `ABF-00013-02`.
+- **Afetados:** 3529 de 3529 pontos (100.0%). Exemplos: `ABF-00012-01`, `ABF-00012-02`, `ABF-00013-01`.
 - **Evidência:**
 
   | grafia observada |
@@ -202,7 +202,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 - **Veredito:** suspeito — a mesma entidade legal com várias grafias fragiliza a agregação por operador.
 ### [BAIXO] usage_type em falta
 - **Regra:** `usage_type` vazio (enum `ChargingPointUsageTypeEnum`).
-- **Afetados:** 48 de 3529 pontos (1.4%). Exemplos: `BBR-00012-01`, `BBR-00012`, `BBR-00012-02`, `CSC-00571-01`, `CSC-00571`, `CSC-00571-02`.
+- **Afetados:** 48 de 3529 pontos (1.4%). Exemplos: `BBR-00012-01`, `BBR-00012-02`, `CSC-00571-01`.
 - **Evidência:**
 
   | point_id | site_external_id |
@@ -221,7 +221,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 - **Veredito:** suspeito — campo obrigatório em falta.
 ### [BAIXO] Sites extremos (n_points > média+3σ = 6.6; máx 40, média 2.5)
 - **Regra:** cauda da distribuição: `max(n_points) = 40`, média 2.5, desvio 1.4, limiar 6.6.
-- **Afetados:** 28 de 3529 pontos (0.8%). Exemplos: `CSC-90009-01`, `CSC-90009`, `CSC-90009-02`, `CSC-90009-03`, `CSC-90009-04`.
+- **Afetados:** 28 de 3529 pontos (0.8%). Exemplos: `CSC-90009-01`, `CSC-90009-02`, `CSC-90009-03`.
 - **Evidência:**
 
   | site_id | site_external_id | n_points |
@@ -233,7 +233,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 - **Veredito:** suspeito — valores extremos pedem verificação (hub real vs agregação errada; hubs de 8+ pontos são plausíveis em redes de carregamento rápido).
 ### [BAIXO] Código-postal fora do formato NNNN-NNN
 - **Regra:** `postcode` ∉ `DDDD-DDD`.
-- **Afetados:** 7 de 3529 pontos (0.2%). Exemplos: `LNH-00037-01`, `LNH-00037`, `LNH-00037-02`, `OER-00064-01`, `OER-00064`, `OER-00064-02`.
+- **Afetados:** 7 de 3529 pontos (0.2%). Exemplos: `LNH-00037-01`, `LNH-00037-02`, `OER-00064-01`.
 - **Evidência:**
 
   | site_id | site_external_id | postcode |
@@ -245,7 +245,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 - **Veredito:** suspeito — formato inválido para código postal PT.
 ### [BAIXO] Pontos com nº extremo de conectores (máx 4, média 1.01)
 - **Regra:** nº de linhas de conector por `point_id`; cauda ≥ 3 (média ~1.0).
-- **Afetados:** 1 de 3529 pontos (0.0%). Exemplos: `ABF-00061-01`, `ABF-00061`, `GLP-ABF-00061`, `PT*GLP*EABF*00061*01`.
+- **Afetados:** 1 de 3529 pontos (0.0%). Exemplos: `ABF-00061-01`; contexto (mesmo site/OPC, não afetados): `ABF-00061`, `ABF-00012-01`.
 - **Evidência:**
 
   | point_id | site_external_id | n_conectores | tipos |
@@ -257,7 +257,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 ## HORZ — Powerdot, S.A (774 sites, 2096 pontos)
 ### [CRÍTICO] Potência declarada acima da capacidade V×I
 - **Regra:** potência esperada = V×I (`mode3AC3p`: √3×V×I); `ratio = declarada/esperada > 1.25`.
-- **Afetados:** 81 de 2096 pontos (3.9%). Exemplos: `ALM-00032-01`, `ALM-00032`, `ALM-00032-02`, `ALM-00062-01`, `ALM-00062`, `ALM-00062-02`.
+- **Afetados:** 81 de 2096 pontos (3.9%). Exemplos: `ALM-00032-01`, `ALM-00032-02`, `ALM-00062-01`.
 - **Evidência:**
 
   | point_id | site_external_id | V | I (A) | P decl. (W) | modo | ratio |
@@ -276,7 +276,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 - **Veredito:** impossível — a tomada declara mais potência do que os seus V/A permitem; pelo menos um dos três valores está errado.
 ### [MÉDIO] Potência declarada muito abaixo de V×I (derating ou erro)
 - **Regra:** mesma fórmula; `ratio < 0.75`.
-- **Afetados:** 390 de 2096 pontos (18.6%). Exemplos: `ABF-00055-02`, `ABF-00055`, `ACB-00041-01`, `ACB-00041`, `ACB-00041-03`, `ALD-00004-01`, `ALD-00004`.
+- **Afetados:** 390 de 2096 pontos (18.6%). Exemplos: `ABF-00055-02`, `ACB-00041-01`, `ACB-00041-03`.
 - **Evidência:**
 
   | point_id | site_external_id | V | I (A) | P decl. (W) | modo | ratio |
@@ -295,7 +295,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 - **Veredito:** suspeito — pode ser derating intencional, mas desvios >25% abaixo da capacidade são prováveis erros de introdução.
 ### [BAIXO] Nome do operador fragmentado (várias grafias)
 - **Regra:** `operator_id = HORZ` com 2 grafias distintas em `operator_name`.
-- **Afetados:** 2096 de 2096 pontos (100.0%). Exemplos: `ABF-00055-01`, `ABF-00055`, `ABF-00055-02`, `ABF-00055-03`, `ABF-00055-04`.
+- **Afetados:** 2096 de 2096 pontos (100.0%). Exemplos: `ABF-00055-01`, `ABF-00055-02`, `ABF-00055-03`.
 - **Evidência:**
 
   | grafia observada |
@@ -306,7 +306,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 - **Veredito:** suspeito — a mesma entidade legal com várias grafias fragiliza a agregação por operador.
 ### [BAIXO] Sites extremos (n_points > média+3σ = 6.6; máx 40, média 2.5)
 - **Regra:** cauda da distribuição: `max(n_points) = 40`, média 2.5, desvio 1.4, limiar 6.6.
-- **Afetados:** 80 de 2096 pontos (3.8%). Exemplos: `AMD-00054-01`, `AMD-00054`, `AMD-00054-02`, `AMD-00054-03`, `AMD-00054-04`.
+- **Afetados:** 80 de 2096 pontos (3.8%). Exemplos: `AMD-00054-01`, `AMD-00054-02`, `AMD-00054-03`.
 - **Evidência:**
 
   | site_id | site_external_id | n_points |
@@ -325,7 +325,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 - **Veredito:** suspeito — valores extremos pedem verificação (hub real vs agregação errada; hubs de 8+ pontos são plausíveis em redes de carregamento rápido).
 ### [BAIXO] usage_type em falta
 - **Regra:** `usage_type` vazio (enum `ChargingPointUsageTypeEnum`).
-- **Afetados:** 18 de 2096 pontos (0.9%). Exemplos: `BJA-00070-01`, `BJA-00070`, `BJA-00070-02`, `LSB-01455-01`, `LSB-01455`, `LSB-01455-02`.
+- **Afetados:** 18 de 2096 pontos (0.9%). Exemplos: `BJA-00070-01`, `BJA-00070-02`, `LSB-01455-01`.
 - **Evidência:**
 
   | point_id | site_external_id |
@@ -344,7 +344,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 - **Veredito:** suspeito — campo obrigatório em falta.
 ### [BAIXO] auth_methods vazio
 - **Regra:** `auth_methods` vazio no site.
-- **Afetados:** 5 de 2096 pontos (0.2%). Exemplos: `NLS-00005-01`, `NLS-00005`, `NLS-00005-02`, `NLS-00006-01`, `NLS-00006`, `NLS-00006-02`.
+- **Afetados:** 5 de 2096 pontos (0.2%). Exemplos: `NLS-00005-01`, `NLS-00005-02`, `NLS-00006-01`.
 - **Evidência:**
 
   | site_id | site_external_id |
@@ -358,7 +358,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 ## ATLA — Atlante Infra Portugal, S.A (608 sites, 1423 pontos)
 ### [CRÍTICO] Potência declarada acima da capacidade V×I
 - **Regra:** potência esperada = V×I (`mode3AC3p`: √3×V×I); `ratio = declarada/esperada > 1.25`.
-- **Afetados:** 432 de 1423 pontos (30.4%). Exemplos: `NZR-00035-01`, `NZR-00035`, `NZR-00035-02`, `ACB-00019-01`, `ACB-00019`, `ACB-00019-02`.
+- **Afetados:** 432 de 1423 pontos (30.4%). Exemplos: ` NZR-00035-01`, ` NZR-00035-02`, `ACB-00019-01`.
 - **Evidência:**
 
   | point_id | site_external_id | V | I (A) | P decl. (W) | modo | ratio |
@@ -377,7 +377,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 - **Veredito:** impossível — a tomada declara mais potência do que os seus V/A permitem; pelo menos um dos três valores está errado.
 ### [CRÍTICO] Conector DC com formato tomada (socket)
 - **Regra:** `connector_type` DC com `connector_format = socket` (DC é sempre cabo acoplado).
-- **Afetados:** 4 de 1423 pontos (0.3%). Exemplos: `MTS-00149-02`, `MTS-00149`, `MTS-00150-02`, `MTS-00150`, `PRT-00228-02`, `PRT-00228`.
+- **Afetados:** 4 de 1423 pontos (0.3%). Exemplos: `MTS-00149-02`, `MTS-00150-02`, `PRT-00228-02`.
 - **Evidência:**
 
   | point_id | site_external_id | conector | formato |
@@ -390,7 +390,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 - **Veredito:** impossível — CHAdeMO/CCS são cabos fixos ao posto; `socket` indica tomada sem cabo.
 ### [MÉDIO] Potência declarada muito abaixo de V×I (derating ou erro)
 - **Regra:** mesma fórmula; `ratio < 0.75`.
-- **Afetados:** 182 de 1423 pontos (12.8%). Exemplos: `ABF-00186-01`, `ABF-00186`, `ABF-00186-02`, `ACH-00042-01`, `ACH-00042`, `ACH-00042-02`.
+- **Afetados:** 182 de 1423 pontos (12.8%). Exemplos: `ABF-00186-01`, `ABF-00186-02`, `ACH-00042-01`.
 - **Evidência:**
 
   | point_id | site_external_id | V | I (A) | P decl. (W) | modo | ratio |
@@ -409,7 +409,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 - **Veredito:** suspeito — pode ser derating intencional, mas desvios >25% abaixo da capacidade são prováveis erros de introdução.
 ### [BAIXO] Nome do operador fragmentado (várias grafias)
 - **Regra:** `operator_id = ATLA` com 7 grafias distintas em `operator_name`.
-- **Afetados:** 1423 de 1423 pontos (100.0%). Exemplos: `NZR-00035-01`, `NZR-00035`, `NZR-00035-02`, `ABF-00109-01`, `ABF-00109`, `ABF-00109-02`.
+- **Afetados:** 1423 de 1423 pontos (100.0%). Exemplos: ` NZR-00035-01`, ` NZR-00035-02`, `ABF-00109-01`.
 - **Evidência:**
 
   | grafia observada |
@@ -425,7 +425,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 - **Veredito:** suspeito — a mesma entidade legal com várias grafias fragiliza a agregação por operador.
 ### [BAIXO] usage_type em falta
 - **Regra:** `usage_type` vazio (enum `ChargingPointUsageTypeEnum`).
-- **Afetados:** 25 de 1423 pontos (1.8%). Exemplos: `CLD-00051-01`, `CLD-00051`, `CLD-00051-02`, `LRS-00239-01`, `LRS-00239`, `LRS-00239-02`.
+- **Afetados:** 25 de 1423 pontos (1.8%). Exemplos: `CLD-00051-01`, `CLD-00051-02`, `LRS-00239-01`.
 - **Evidência:**
 
   | point_id | site_external_id |
@@ -444,7 +444,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 - **Veredito:** suspeito — campo obrigatório em falta.
 ### [BAIXO] Código-postal fora do formato NNNN-NNN
 - **Regra:** `postcode` ∉ `DDDD-DDD`.
-- **Afetados:** 2 de 1423 pontos (0.1%). Exemplos: `ALQ-00017-01`, `ALQ-00017`, `ALQ-00017-02`.
+- **Afetados:** 2 de 1423 pontos (0.1%). Exemplos: `ALQ-00017-01`, `ALQ-00017-02`; contexto (mesmo site/OPC, não afetados): `ALQ-00017`.
 - **Evidência:**
 
   | site_id | site_external_id | postcode |
@@ -456,7 +456,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 ## EDPC — EDP Comercial (1658 sites, 5787 pontos)
 ### [CRÍTICO] Potência declarada acima da capacidade V×I
 - **Regra:** potência esperada = V×I (`mode3AC3p`: √3×V×I); `ratio = declarada/esperada > 1.25`.
-- **Afetados:** 357 de 5787 pontos (6.2%). Exemplos: `AMT-00011-01`, `AMT-00011`, `AMT-00011-02`, `CMR-00002-01`, `CMR-00002`, `CMR-00002-02`.
+- **Afetados:** 357 de 5787 pontos (6.2%). Exemplos: `AMT-00011-01`, `AMT-00011-02`, `CMR-00002-01`.
 - **Evidência:**
 
   | point_id | site_external_id | V | I (A) | P decl. (W) | modo | ratio |
@@ -475,7 +475,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 - **Veredito:** impossível — a tomada declara mais potência do que os seus V/A permitem; pelo menos um dos três valores está errado.
 ### [CRÍTICO] Linhas de conector exatamente duplicadas
 - **Regra:** mesmo (`point_id`, conector, modo, formato, P, V, I) em >1 linha.
-- **Afetados:** 18 de 5787 pontos (0.3%). Exemplos: `PT-EDP-EABF-00195-1`, `ABF-00195`, `PT-EDP-EABF-00195-2`, `PT-EDP-EABF-00196-1`, `PT-EDP-EABF-00196-2`.
+- **Afetados:** 18 de 5787 pontos (0.3%). Exemplos: `PT-EDP-EABF-00195-1`, `PT-EDP-EABF-00195-2`, `PT-EDP-EABF-00196-1`.
 - **Evidência:**
 
   | point_id | site_external_id | conector | modo | P |
@@ -494,7 +494,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 - **Veredito:** impossível — linhas gémeas indicam ingestão duplicada do mesmo conector.
 ### [CRÍTICO] point_id em sites diferentes
 - **Regra:** mesmo `point_id` associado a >1 `site_id` (ids numéricos legados reutilizados ou cross-wiring entre sites vizinhos).
-- **Afetados:** 11 de 5787 pontos (0.2%). Exemplos: `PT-EDP-EABF-00195-1`, `ABF-00195`, `PT-EDP-EABF-00195-2`, `PT-EDP-EABF-00196-1`, `PT-EDP-EABF-00196-2`.
+- **Afetados:** 11 de 5787 pontos (0.2%). Exemplos: `PT-EDP-EABF-00195-1`, `PT-EDP-EABF-00195-2`, `PT-EDP-EABF-00196-1`.
 - **Evidência:**
 
   | point_id | site_id | site_external_id | point_external_id |
@@ -513,7 +513,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 - **Veredito:** impossível — `point_id` é chave primária do ponto; a reutilização entre sites parte joins e contagens (ex. EDP GDL-00010/11/12 partilham `PT-EDP-EGDL-00012-*`).
 ### [MÉDIO] Potência declarada muito abaixo de V×I (derating ou erro)
 - **Regra:** mesma fórmula; `ratio < 0.75`.
-- **Afetados:** 1154 de 5787 pontos (19.9%). Exemplos: `ABF-00071-01`, `ABF-00071`, `ABF-00071-02`, `ABT-00006-01`, `ABT-00006`, `ABT-00033-01`, `ABT-00033`.
+- **Afetados:** 1154 de 5787 pontos (19.9%). Exemplos: `ABF-00071-01`, `ABF-00071-02`, `ABT-00006-01`.
 - **Evidência:**
 
   | point_id | site_external_id | V | I (A) | P decl. (W) | modo | ratio |
@@ -532,7 +532,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 - **Veredito:** suspeito — pode ser derating intencional, mas desvios >25% abaixo da capacidade são prováveis erros de introdução.
 ### [MÉDIO] Valores crus suspeitos (1200/3600 V, 600 A)
 - **Regra:** sinalizar linhas com `voltage ∈ {1200, 3600}` ou `max_current = 600`.
-- **Afetados:** 36 de 5787 pontos (0.6%). Exemplos: `PT-EDP-EETR-00030-1`, `ETR-00030`, `PT-EDP-EETR-00030-2`, `PT-EDP-EETR-00031-1`, `ETR-00031`, `PT-EDP-EETR-00031-2`.
+- **Afetados:** 36 de 5787 pontos (0.6%). Exemplos: `PT-EDP-EETR-00030-1`, `PT-EDP-EETR-00030-2`, `PT-EDP-EETR-00031-1`.
 - **Evidência:**
 
   | point_id | site_external_id | V | I (A) | conector | modo |
@@ -551,7 +551,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 - **Veredito:** suspeito — valores já observados como erros sistemáticos; 1200 V × 600 A = 720 kW excede qualquer carregador instalado.
 ### [MÉDIO] Potência disponível incoerente (após normalizar kW→W)
 - **Regra:** por ponto: `available_charging_power` (×1000 quando em escala kW) vs `max()` dos conectores; limiar ±30%. Dominado por ratio ≈ 2 (total do site no campo do ponto).
-- **Afetados:** 2 de 5787 pontos (0.0%). Exemplos: `ALR-00010-01`, `ALR-00010`, `ALR-00010-02`.
+- **Afetados:** 2 de 5787 pontos (0.0%). Exemplos: `ALR-00010-01`, `ALR-00010-02`; contexto (mesmo site/OPC, não afetados): `ALR-00010`.
 - **Evidência:**
 
   | point_id | site_external_id | P disp. (W norm.) | max conector (W) | ratio |
@@ -562,7 +562,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 - **Veredito:** suspeito — a potência do ponto devia aproximar o máximo das tomadas; ratio ≈ 2 sugere que o campo carrega o total do site/estação em vez do máximo do ponto.
 ### [MÉDIO] available_charging_power em kW, conectores em W
 - **Regra:** `available_charging_power < 1000` com `max()` dos conectores `>= 1000` (só 349/21056 linhas têm `available`; 337 estão nesta escala).
-- **Afetados:** 2 de 5787 pontos (0.0%). Exemplos: `ALR-00010-01`, `ALR-00010`, `ALR-00010-02`.
+- **Afetados:** 2 de 5787 pontos (0.0%). Exemplos: `ALR-00010-01`, `ALR-00010-02`; contexto (mesmo site/OPC, não afetados): `ALR-00010`.
 - **Evidência:**
 
   | point_id | site_external_id | P disp. | max conector |
@@ -573,7 +573,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 - **Veredito:** suspeito — unidades inconsistentes entre campos do mesmo ponto; impede comparação direta e sugere ingestão sem normalização (kW vs W).
 ### [BAIXO] usage_type em falta
 - **Regra:** `usage_type` vazio (enum `ChargingPointUsageTypeEnum`).
-- **Afetados:** 78 de 5787 pontos (1.3%). Exemplos: `PT-EDP-EABF-00190-1`, `ABF-00190`, `PT-EDP-EABF-00190-2`, `PT-EDP-EABF-00191-1`, `ABF-00191`, `PT-EDP-EABF-00191-2`.
+- **Afetados:** 78 de 5787 pontos (1.3%). Exemplos: `PT-EDP-EABF-00190-1`, `PT-EDP-EABF-00190-2`, `PT-EDP-EABF-00191-1`.
 - **Evidência:**
 
   | point_id | site_external_id |
@@ -592,7 +592,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 - **Veredito:** suspeito — campo obrigatório em falta.
 ### [BAIXO] Pontos com nº extremo de conectores (máx 4, média 1.01)
 - **Regra:** nº de linhas de conector por `point_id`; cauda ≥ 3 (média ~1.0).
-- **Afetados:** 8 de 5787 pontos (0.1%). Exemplos: `PT-EDP-ECBR-00158-1`, `CBR-00158`, `PT-EDP-EGDL-00012-1`, `GDL-00011`, `PT-EDP-EGDL-00012-2`, `PT-EDP-EGRD-00058-1`, `GRD-00058`.
+- **Afetados:** 8 de 5787 pontos (0.1%). Exemplos: `PT-EDP-ECBR-00158-1`, `PT-EDP-EGDL-00012-1`, `PT-EDP-EGDL-00012-2`.
 - **Evidência:**
 
   | point_id | site_external_id | n_conectores | tipos |
@@ -611,7 +611,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 ## TRUE — WOWPLUG (744 sites, 1489 pontos)
 ### [CRÍTICO] Potência declarada acima da capacidade V×I
 - **Regra:** potência esperada = V×I (`mode3AC3p`: √3×V×I); `ratio = declarada/esperada > 1.25`.
-- **Afetados:** 1307 de 1489 pontos (87.8%). Exemplos: `AVT-00002-01`, `AVT-00002`, `AVT-00002-02`, `AVT-00003-01`, `AVT-00003`, `AVT-00003-02`.
+- **Afetados:** 1307 de 1489 pontos (87.8%). Exemplos: `AVT-00002-01`, `AVT-00002-02`, `AVT-00003-01`.
 - **Evidência:**
 
   | point_id | site_external_id | V | I (A) | P decl. (W) | modo | ratio |
@@ -630,7 +630,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 - **Veredito:** impossível — a tomada declara mais potência do que os seus V/A permitem; pelo menos um dos três valores está errado.
 ### [MÉDIO] Potência declarada muito abaixo de V×I (derating ou erro)
 - **Regra:** mesma fórmula; `ratio < 0.75`.
-- **Afetados:** 68 de 1489 pontos (4.6%). Exemplos: `BRR-00126-01`, `BRR-00126`, `BRR-00127-01`, `BRR-00127`, `CMN-00014-01`, `CMN-00014`.
+- **Afetados:** 68 de 1489 pontos (4.6%). Exemplos: `BRR-00126-01`, `BRR-00127-01`, `CMN-00014-01`.
 - **Evidência:**
 
   | point_id | site_external_id | V | I (A) | P decl. (W) | modo | ratio |
@@ -649,7 +649,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 - **Veredito:** suspeito — pode ser derating intencional, mas desvios >25% abaixo da capacidade são prováveis erros de introdução.
 ### [BAIXO] usage_type em falta
 - **Regra:** `usage_type` vazio (enum `ChargingPointUsageTypeEnum`).
-- **Afetados:** 8 de 1489 pontos (0.5%). Exemplos: `CSC-00573-01`, `CSC-00573`, `CSC-00573-02`, `LSB-01382-01`, `LSB-01382`, `LSB-01382-02`.
+- **Afetados:** 8 de 1489 pontos (0.5%). Exemplos: `CSC-00573-01`, `CSC-00573-02`, `LSB-01382-01`.
 - **Evidência:**
 
   | point_id | site_external_id |
@@ -668,7 +668,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 ## FCTO — Iberdrola | bp pulse (287 sites, 1194 pontos)
 ### [CRÍTICO] point_id em sites diferentes
 - **Regra:** mesmo `point_id` associado a >1 `site_id` (ids numéricos legados reutilizados ou cross-wiring entre sites vizinhos).
-- **Afetados:** 33 de 1194 pontos (2.8%). Exemplos: `16`, `CBR-00121`, `17`, `18`, `NZR-00048`, `19`.
+- **Afetados:** 33 de 1194 pontos (2.8%). Exemplos: `16`, `17`, `18`.
 - **Evidência:**
 
   | point_id | site_id | site_external_id | point_external_id |
@@ -687,7 +687,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 - **Veredito:** impossível — `point_id` é chave primária do ponto; a reutilização entre sites parte joins e contagens (ex. EDP GDL-00010/11/12 partilham `PT-EDP-EGDL-00012-*`).
 ### [CRÍTICO] point_external_id em sites diferentes
 - **Regra:** mesmo `point_external_id` associado a >1 `site_id`.
-- **Afetados:** 4 de 1194 pontos (0.3%). Exemplos: `35`, `NZR-00052`, `36`, `NZR-00053-01`, `NZR-00053`, `NZR-00053-02`.
+- **Afetados:** 4 de 1194 pontos (0.3%). Exemplos: `35`, `36`, `NZR-00053-01`.
 - **Evidência:**
 
   | point_external_id | point_id | site_id | site_external_id |
@@ -700,7 +700,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 - **Veredito:** impossível — o identificador externo da tomada não pode viver em dois locais.
 ### [CRÍTICO] Linhas de conector exatamente duplicadas
 - **Regra:** mesmo (`point_id`, conector, modo, formato, P, V, I) em >1 linha.
-- **Afetados:** 1 de 1194 pontos (0.1%). Exemplos: `618`, `OER-00286`, `VIA-OER-00286`, `PT*VIA*EOER-00286-618`.
+- **Afetados:** 1 de 1194 pontos (0.1%). Exemplos: `618`; contexto (mesmo site/OPC, não afetados): `OER-00286`, `ORQ-00010`.
 - **Evidência:**
 
   | point_id | site_external_id | conector | modo | P |
@@ -711,7 +711,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 - **Veredito:** impossível — linhas gémeas indicam ingestão duplicada do mesmo conector.
 ### [MÉDIO] Potência declarada muito abaixo de V×I (derating ou erro)
 - **Regra:** mesma fórmula; `ratio < 0.75`.
-- **Afetados:** 902 de 1194 pontos (75.5%). Exemplos: `100`, `ACB-00033`, `101`, `102`, `ACB-00034`, `103`.
+- **Afetados:** 902 de 1194 pontos (75.5%). Exemplos: `100`, `101`, `102`.
 - **Evidência:**
 
   | point_id | site_external_id | V | I (A) | P decl. (W) | modo | ratio |
@@ -730,7 +730,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 - **Veredito:** suspeito — pode ser derating intencional, mas desvios >25% abaixo da capacidade são prováveis erros de introdução.
 ### [MÉDIO] Valores crus suspeitos (1200/3600 V, 600 A)
 - **Regra:** sinalizar linhas com `voltage ∈ {1200, 3600}` ou `max_current = 600`.
-- **Afetados:** 159 de 1194 pontos (13.3%). Exemplos: `465`, `SXL-00076`, `466`, `467`, `SXL-00077`, `468`.
+- **Afetados:** 159 de 1194 pontos (13.3%). Exemplos: `465`, `466`, `467`.
 - **Evidência:**
 
   | point_id | site_external_id | V | I (A) | conector | modo |
@@ -749,7 +749,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 - **Veredito:** suspeito — valores já observados como erros sistemáticos; 1200 V × 600 A = 720 kW excede qualquer carregador instalado.
 ### [MÉDIO] Potência ultra-rápida implausível (> 400 kW)
 - **Regra:** assinalar `max_power_w > 400000` (limiar: acima do máximo instalado em PT).
-- **Afetados:** 8 de 1194 pontos (0.7%). Exemplos: `465`, `SXL-00076`, `466`, `467`, `SXL-00077`, `468`.
+- **Afetados:** 8 de 1194 pontos (0.7%). Exemplos: `465`, `466`, `467`.
 - **Evidência:**
 
   | point_id | site_external_id | P (W) | conector | V |
@@ -766,7 +766,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 - **Veredito:** suspeito — nenhum posto público PT entrega >400 kW por tomada; provável erro de digitação.
 ### [MÉDIO] n_points declarado ≠ pontos reais
 - **Regra:** `n_points` do site vs nº real de `point_id` distintos.
-- **Afetados:** 4 de 1194 pontos (0.3%). Exemplos: `617`, `OER-00286`, `618`, `654`, `ORQ-00010`, `655`.
+- **Afetados:** 4 de 1194 pontos (0.3%). Exemplos: `617`, `618`, `654`.
 - **Evidência:**
 
   | site_id | site_external_id | declarado | real |
@@ -776,7 +776,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 - **Veredito:** suspeito — contagem do site não bate com as linhas de pontos; erro de agregação no ETL ou no XML.
 ### [BAIXO] usage_type em falta
 - **Regra:** `usage_type` vazio (enum `ChargingPointUsageTypeEnum`).
-- **Afetados:** 38 de 1194 pontos (3.2%). Exemplos: `629`, `CTB-00081`, `630`, `673`, `STB-00124`, `674`.
+- **Afetados:** 38 de 1194 pontos (3.2%). Exemplos: `629`, `630`, `673`.
 - **Evidência:**
 
   | point_id | site_external_id |
@@ -797,7 +797,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 ## REPS — REPSOL Portuguesa Lda (216 sites, 561 pontos)
 ### [CRÍTICO] Potência declarada acima da capacidade V×I
 - **Regra:** potência esperada = V×I (`mode3AC3p`: √3×V×I); `ratio = declarada/esperada > 1.25`.
-- **Afetados:** 173 de 561 pontos (30.8%). Exemplos: `ABF-00035-03`, `ABF-00035`, `ABT-00036-01`, `ABT-00036`, `ABT-00037-01`, `ABT-00037`.
+- **Afetados:** 173 de 561 pontos (30.8%). Exemplos: `ABF-00035-03`, `ABT-00036-01`, `ABT-00037-01`.
 - **Evidência:**
 
   | point_id | site_external_id | V | I (A) | P decl. (W) | modo | ratio |
@@ -816,7 +816,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 - **Veredito:** impossível — a tomada declara mais potência do que os seus V/A permitem; pelo menos um dos três valores está errado.
 ### [CRÍTICO] Conector DC em modo AC
 - **Regra:** CHAdeMO/CCS Combo em `charging_mode` com `AC`.
-- **Afetados:** 1 de 561 pontos (0.2%). Exemplos: `PT*REP*E16723*3`, `MTS-00182`, `REP-MTS-00182`.
+- **Afetados:** 1 de 561 pontos (0.2%). Exemplos: `PT*REP*E16723*3`; contexto (mesmo site/OPC, não afetados): `MTS-00182`, `ABF-00035-01`.
 - **Evidência:**
 
   | point_id | site_external_id | conector | modo |
@@ -826,7 +826,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 - **Veredito:** impossível — CHAdeMO e CCS Combo são DC; nunca operam em modo AC.
 ### [MÉDIO] Potência declarada muito abaixo de V×I (derating ou erro)
 - **Regra:** mesma fórmula; `ratio < 0.75`.
-- **Afetados:** 29 de 561 pontos (5.2%). Exemplos: `ALD-00012-02`, `ALD-00012`, `AVR-00038-02`, `AVR-00038`, `AVR-00046-02`, `AVR-00046`.
+- **Afetados:** 29 de 561 pontos (5.2%). Exemplos: `ALD-00012-02`, `AVR-00038-02`, `AVR-00046-02`.
 - **Evidência:**
 
   | point_id | site_external_id | V | I (A) | P decl. (W) | modo | ratio |
@@ -845,7 +845,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 - **Veredito:** suspeito — pode ser derating intencional, mas desvios >25% abaixo da capacidade são prováveis erros de introdução.
 ### [MÉDIO] Potência ultra-rápida implausível (> 400 kW)
 - **Regra:** assinalar `max_power_w > 400000` (limiar: acima do máximo instalado em PT).
-- **Afetados:** 3 de 561 pontos (0.5%). Exemplos: `BTL-00004-01`, `BTL-00004`, `BTL-00004-02`, `BTL-00004-03`.
+- **Afetados:** 3 de 561 pontos (0.5%). Exemplos: `BTL-00004-01`, `BTL-00004-02`, `BTL-00004-03`.
 - **Evidência:**
 
   | point_id | site_external_id | P (W) | conector | V |
@@ -857,7 +857,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 - **Veredito:** suspeito — nenhum posto público PT entrega >400 kW por tomada; provável erro de digitação.
 ### [MÉDIO] Type2 em modo DC (mode4)
 - **Regra:** `connector_type = iec62196T2` com `charging_mode = mode4DC`.
-- **Afetados:** 1 de 561 pontos (0.2%). Exemplos: `PT*REP*E16723*1`, `MTS-00182`, `REP-MTS-00182`.
+- **Afetados:** 1 de 561 pontos (0.2%). Exemplos: `PT*REP*E16723*1`; contexto (mesmo site/OPC, não afetados): `MTS-00182`, `ABF-00035-01`.
 - **Evidência:**
 
   | point_id | site_external_id | conector | modo |
@@ -867,7 +867,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 - **Veredito:** suspeito — Type2 é AC; DC em Type2 puro é fora do standard (o DC usa Combo2).
 ### [BAIXO] Nome do operador fragmentado (várias grafias)
 - **Regra:** `operator_id = REPS` com 2 grafias distintas em `operator_name`.
-- **Afetados:** 561 de 561 pontos (100.0%). Exemplos: `ABF-00035-01`, `ABF-00035`, `ABF-00035-02`, `ABF-00035-03`, `ABT-00036-01`, `ABT-00036`.
+- **Afetados:** 561 de 561 pontos (100.0%). Exemplos: `ABF-00035-01`, `ABF-00035-02`, `ABF-00035-03`.
 - **Evidência:**
 
   | grafia observada |
@@ -878,7 +878,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 - **Veredito:** suspeito — a mesma entidade legal com várias grafias fragiliza a agregação por operador.
 ### [BAIXO] usage_type em falta
 - **Regra:** `usage_type` vazio (enum `ChargingPointUsageTypeEnum`).
-- **Afetados:** 8 de 561 pontos (1.4%). Exemplos: `PT-REP-E18378-1`, `VCT-00076`, `PT-REP-E18378-2`, `PT-REP-E18378-3`, `PT-REP-E18379-1`, `VCT-00077`.
+- **Afetados:** 8 de 561 pontos (1.4%). Exemplos: `PT-REP-E18378-1`, `PT-REP-E18378-2`, `PT-REP-E18378-3`.
 - **Evidência:**
 
   | point_id | site_external_id |
@@ -897,7 +897,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 ## GLPG — Galpgeste (126 sites, 328 pontos)
 ### [CRÍTICO] Potência declarada acima da capacidade V×I
 - **Regra:** potência esperada = V×I (`mode3AC3p`: √3×V×I); `ratio = declarada/esperada > 1.25`.
-- **Afetados:** 3 de 328 pontos (0.9%). Exemplos: `AVR-00040-01`, `AVR-00040`, `VCT-00029-01`, `VCT-00029`, `VCT-00030-01`, `VCT-00030`.
+- **Afetados:** 3 de 328 pontos (0.9%). Exemplos: `AVR-00040-01`, `VCT-00029-01`, `VCT-00030-01`.
 - **Evidência:**
 
   | point_id | site_external_id | V | I (A) | P decl. (W) | modo | ratio |
@@ -909,7 +909,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 - **Veredito:** impossível — a tomada declara mais potência do que os seus V/A permitem; pelo menos um dos três valores está errado.
 ### [MÉDIO] Potência declarada muito abaixo de V×I (derating ou erro)
 - **Regra:** mesma fórmula; `ratio < 0.75`.
-- **Afetados:** 68 de 328 pontos (20.7%). Exemplos: `ACH-00003-01`, `ACH-00003`, `ACH-00003-02`, `AVR-00039-02`, `AVR-00039`, `AVR-00040-02`, `AVR-00040`.
+- **Afetados:** 68 de 328 pontos (20.7%). Exemplos: `ACH-00003-01`, `ACH-00003-02`, `AVR-00039-02`.
 - **Evidência:**
 
   | point_id | site_external_id | V | I (A) | P decl. (W) | modo | ratio |
@@ -928,7 +928,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 - **Veredito:** suspeito — pode ser derating intencional, mas desvios >25% abaixo da capacidade são prováveis erros de introdução.
 ### [BAIXO] Nome do operador fragmentado (várias grafias)
 - **Regra:** `operator_id = GLPG` com 2 grafias distintas em `operator_name`.
-- **Afetados:** 328 de 328 pontos (100.0%). Exemplos: `ABF-00024-01`, `ABF-00024`, `ABF-00024-02`, `ABF-00024-03`, `ACB-00009-01`, `ACB-00009`.
+- **Afetados:** 328 de 328 pontos (100.0%). Exemplos: `ABF-00024-01`, `ABF-00024-02`, `ABF-00024-03`.
 - **Evidência:**
 
   | grafia observada |
@@ -941,7 +941,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 ## MLTR — Mobiletric (108 sites, 257 pontos)
 ### [CRÍTICO] Potência declarada acima da capacidade V×I
 - **Regra:** potência esperada = V×I (`mode3AC3p`: √3×V×I); `ratio = declarada/esperada > 1.25`.
-- **Afetados:** 8 de 257 pontos (3.1%). Exemplos: `CSC-00086-01`, `CSC-00086`, `CSC-00086-1`, `LSB-00296-02`, `LSB-00296`, `LSB-00296-2`.
+- **Afetados:** 8 de 257 pontos (3.1%). Exemplos: `CSC-00086-01`, `CSC-00086-1`, `LSB-00296-02`.
 - **Evidência:**
 
   | point_id | site_external_id | V | I (A) | P decl. (W) | modo | ratio |
@@ -958,7 +958,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 - **Veredito:** impossível — a tomada declara mais potência do que os seus V/A permitem; pelo menos um dos três valores está errado.
 ### [MÉDIO] Potência declarada muito abaixo de V×I (derating ou erro)
 - **Regra:** mesma fórmula; `ratio < 0.75`.
-- **Afetados:** 19 de 257 pontos (7.4%). Exemplos: `FUN-00004-01`, `FUN-00004`, `LSB-00351-02`, `LSB-00351`, `MTA-00004-01`, `MTA-00004`.
+- **Afetados:** 19 de 257 pontos (7.4%). Exemplos: `FUN-00004-01`, `LSB-00351-02`, `MTA-00004-01`.
 - **Evidência:**
 
   | point_id | site_external_id | V | I (A) | P decl. (W) | modo | ratio |
@@ -977,7 +977,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 - **Veredito:** suspeito — pode ser derating intencional, mas desvios >25% abaixo da capacidade são prováveis erros de introdução.
 ### [BAIXO] Nome do operador fragmentado (várias grafias)
 - **Regra:** `operator_id = MLTR` com 2 grafias distintas em `operator_name`.
-- **Afetados:** 257 de 257 pontos (100.0%). Exemplos: `ABF-00042-01`, `ABF-00042`, `ABF-00042-02`, `ACN-00002-01`, `ACN-00002`, `ACN-00002-02`.
+- **Afetados:** 257 de 257 pontos (100.0%). Exemplos: `ABF-00042-01`, `ABF-00042-02`, `ACN-00002-01`.
 - **Evidência:**
 
   | grafia observada |
@@ -990,7 +990,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 ## EMEL — EMEL - Empresa Municipal de Mobilidade e Estacionamento de Lisboa, E.M., S.A. (82 sites, 182 pontos)
 ### [CRÍTICO] Potência declarada acima da capacidade V×I
 - **Regra:** potência esperada = V×I (`mode3AC3p`: √3×V×I); `ratio = declarada/esperada > 1.25`.
-- **Afetados:** 24 de 182 pontos (13.2%). Exemplos: `LSB-00938-01`, `LSB-00938`, `LSB-00938-02`, `LSB-01021-01`, `LSB-01021`, `LSB-01021-02`.
+- **Afetados:** 24 de 182 pontos (13.2%). Exemplos: `LSB-00938-01`, `LSB-00938-02`, `LSB-01021-01`.
 - **Evidência:**
 
   | point_id | site_external_id | V | I (A) | P decl. (W) | modo | ratio |
@@ -1009,7 +1009,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 - **Veredito:** impossível — a tomada declara mais potência do que os seus V/A permitem; pelo menos um dos três valores está errado.
 ### [MÉDIO] available_charging_power em kW, conectores em W
 - **Regra:** `available_charging_power < 1000` com `max()` dos conectores `>= 1000` (só 349/21056 linhas têm `available`; 337 estão nesta escala).
-- **Afetados:** 20 de 182 pontos (11.0%). Exemplos: `LSB-01021-01`, `LSB-01021`, `LSB-01021-02`, `LSB-01022-01`, `LSB-01022`, `LSB-01022-02`.
+- **Afetados:** 20 de 182 pontos (11.0%). Exemplos: `LSB-01021-01`, `LSB-01021-02`, `LSB-01022-01`.
 - **Evidência:**
 
   | point_id | site_external_id | P disp. | max conector |
@@ -1028,7 +1028,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 - **Veredito:** suspeito — unidades inconsistentes entre campos do mesmo ponto; impede comparação direta e sugere ingestão sem normalização (kW vs W).
 ### [BAIXO] Nome do operador fragmentado (várias grafias)
 - **Regra:** `operator_id = EMEL` com 2 grafias distintas em `operator_name`.
-- **Afetados:** 182 de 182 pontos (100.0%). Exemplos: `LSB-00104-01`, `LSB-00104`, `LSB-00104-02`, `LSB-00259-01`, `LSB-00259`, `LSB-00259-02`.
+- **Afetados:** 182 de 182 pontos (100.0%). Exemplos: `LSB-00104-01`, `LSB-00104-02`, `LSB-00259-01`.
 - **Evidência:**
 
   | grafia observada |
@@ -1039,7 +1039,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 - **Veredito:** suspeito — a mesma entidade legal com várias grafias fragiliza a agregação por operador.
 ### [BAIXO] usage_type em falta
 - **Regra:** `usage_type` vazio (enum `ChargingPointUsageTypeEnum`).
-- **Afetados:** 2 de 182 pontos (1.1%). Exemplos: `LSB-01446-01`, `LSB-01446`, `LSB-01446-02`.
+- **Afetados:** 2 de 182 pontos (1.1%). Exemplos: `LSB-01446-01`, `LSB-01446-02`; contexto (mesmo site/OPC, não afetados): `LSB-01446`.
 - **Evidência:**
 
   | point_id | site_external_id |
@@ -1052,7 +1052,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 ## HELX — Helexia II Energy Services, Lda. (227 sites, 436 pontos)
 ### [CRÍTICO] Potência declarada acima da capacidade V×I
 - **Regra:** potência esperada = V×I (`mode3AC3p`: √3×V×I); `ratio = declarada/esperada > 1.25`.
-- **Afetados:** 1 de 436 pontos (0.2%). Exemplos: `TVD-00089-02`, `TVD-00089`, `HLX-TVD-00089`, `PT*HLX*E*TVD*00089*02`.
+- **Afetados:** 1 de 436 pontos (0.2%). Exemplos: `TVD-00089-02`; contexto (mesmo site/OPC, não afetados): `TVD-00089`, `ABF-00086-01`.
 - **Evidência:**
 
   | point_id | site_external_id | V | I (A) | P decl. (W) | modo | ratio |
@@ -1062,7 +1062,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 - **Veredito:** impossível — a tomada declara mais potência do que os seus V/A permitem; pelo menos um dos três valores está errado.
 ### [MÉDIO] Potência declarada muito abaixo de V×I (derating ou erro)
 - **Regra:** mesma fórmula; `ratio < 0.75`.
-- **Afetados:** 174 de 436 pontos (39.9%). Exemplos: `ACN-00011-01`, `ACN-00011`, `ACN-00011-02`, `AVR-00107-01`, `AVR-00107`, `AVR-00107-02`.
+- **Afetados:** 174 de 436 pontos (39.9%). Exemplos: `ACN-00011-01`, `ACN-00011-02`, `AVR-00107-01`.
 - **Evidência:**
 
   | point_id | site_external_id | V | I (A) | P decl. (W) | modo | ratio |
@@ -1081,7 +1081,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 - **Veredito:** suspeito — pode ser derating intencional, mas desvios >25% abaixo da capacidade são prováveis erros de introdução.
 ### [MÉDIO] available_charging_power em kW, conectores em W
 - **Regra:** `available_charging_power < 1000` com `max()` dos conectores `>= 1000` (só 349/21056 linhas têm `available`; 337 estão nesta escala).
-- **Afetados:** 2 de 436 pontos (0.5%). Exemplos: `TVD-00089-01`, `TVD-00089`, `TVD-00089-02`.
+- **Afetados:** 2 de 436 pontos (0.5%). Exemplos: `TVD-00089-01`, `TVD-00089-02`; contexto (mesmo site/OPC, não afetados): `TVD-00089`.
 - **Evidência:**
 
   | point_id | site_external_id | P disp. | max conector |
@@ -1092,7 +1092,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 - **Veredito:** suspeito — unidades inconsistentes entre campos do mesmo ponto; impede comparação direta e sugere ingestão sem normalização (kW vs W).
 ### [BAIXO] usage_type em falta
 - **Regra:** `usage_type` vazio (enum `ChargingPointUsageTypeEnum`).
-- **Afetados:** 7 de 436 pontos (1.6%). Exemplos: `BTC-00002-01`, `BTC-00002`, `BTC-00002-02`, `NLS-00012-01`, `NLS-00012`, `NLS-00012-02`.
+- **Afetados:** 7 de 436 pontos (1.6%). Exemplos: `BTC-00002-01`, `BTC-00002-02`, `NLS-00012-01`.
 - **Evidência:**
 
   | point_id | site_external_id |
@@ -1110,7 +1110,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 ## MOTA — Mota-Engil Renewing (173 sites, 309 pontos)
 ### [CRÍTICO] Potência declarada acima da capacidade V×I
 - **Regra:** potência esperada = V×I (`mode3AC3p`: √3×V×I); `ratio = declarada/esperada > 1.25`.
-- **Afetados:** 7 de 309 pontos (2.3%). Exemplos: `CBC-00019-01`, `CBC-00019`, `CBC-00019-02`, `CTB-00042-02`, `CTB-00042`, `MTJ-00037-01`, `MTJ-00037`.
+- **Afetados:** 7 de 309 pontos (2.3%). Exemplos: `CBC-00019-01`, `CBC-00019-02`, `CTB-00042-02`.
 - **Evidência:**
 
   | point_id | site_external_id | V | I (A) | P decl. (W) | modo | ratio |
@@ -1126,7 +1126,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 - **Veredito:** impossível — a tomada declara mais potência do que os seus V/A permitem; pelo menos um dos três valores está errado.
 ### [MÉDIO] Potência declarada muito abaixo de V×I (derating ou erro)
 - **Regra:** mesma fórmula; `ratio < 0.75`.
-- **Afetados:** 135 de 309 pontos (43.7%). Exemplos: `ALM-00070-01`, `ALM-00070`, `ALM-00070-02`, `ALM-00070-03`, `ALM-00070-04`.
+- **Afetados:** 135 de 309 pontos (43.7%). Exemplos: `ALM-00070-01`, `ALM-00070-02`, `ALM-00070-03`.
 - **Evidência:**
 
   | point_id | site_external_id | V | I (A) | P decl. (W) | modo | ratio |
@@ -1145,7 +1145,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 - **Veredito:** suspeito — pode ser derating intencional, mas desvios >25% abaixo da capacidade são prováveis erros de introdução.
 ### [MÉDIO] available_charging_power em kW, conectores em W
 - **Regra:** `available_charging_power < 1000` com `max()` dos conectores `>= 1000` (só 349/21056 linhas têm `available`; 337 estão nesta escala).
-- **Afetados:** 17 de 309 pontos (5.5%). Exemplos: `ALM-00147-01`, `ALM-00147`, `ALM-00147-02`, `CBC-00019-01`, `CBC-00019`, `CBC-00019-02`.
+- **Afetados:** 17 de 309 pontos (5.5%). Exemplos: `ALM-00147-01`, `ALM-00147-02`, `CBC-00019-01`.
 - **Evidência:**
 
   | point_id | site_external_id | P disp. | max conector |
@@ -1164,7 +1164,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 - **Veredito:** suspeito — unidades inconsistentes entre campos do mesmo ponto; impede comparação direta e sugere ingestão sem normalização (kW vs W).
 ### [MÉDIO] Potência disponível incoerente (após normalizar kW→W)
 - **Regra:** por ponto: `available_charging_power` (×1000 quando em escala kW) vs `max()` dos conectores; limiar ±30%. Dominado por ratio ≈ 2 (total do site no campo do ponto).
-- **Afetados:** 6 de 309 pontos (1.9%). Exemplos: `CHV-00028-02`, `CHV-00028`, `CHV-00028-03`, `CHV-00031-02`, `CHV-00031`, `CHV-00031-03`.
+- **Afetados:** 6 de 309 pontos (1.9%). Exemplos: `CHV-00028-02`, `CHV-00028-03`, `CHV-00031-02`.
 - **Evidência:**
 
   | point_id | site_external_id | P disp. (W norm.) | max conector (W) | ratio |
@@ -1179,7 +1179,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 - **Veredito:** suspeito — a potência do ponto devia aproximar o máximo das tomadas; ratio ≈ 2 sugere que o campo carrega o total do site/estação em vez do máximo do ponto.
 ### [BAIXO] usage_type em falta
 - **Regra:** `usage_type` vazio (enum `ChargingPointUsageTypeEnum`).
-- **Afetados:** 2 de 309 pontos (0.6%). Exemplos: `VNG-00258-01`, `VNG-00258`, `VNG-00258-02`.
+- **Afetados:** 2 de 309 pontos (0.6%). Exemplos: `VNG-00258-01`, `VNG-00258-02`; contexto (mesmo site/OPC, não afetados): `VNG-00258`.
 - **Evidência:**
 
   | point_id | site_external_id |
@@ -1192,7 +1192,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 ## SEGM — SEGMA - Serviços de Engenharia Gestão e Manutenção Lda (73 sites, 134 pontos)
 ### [CRÍTICO] Potência declarada acima da capacidade V×I
 - **Regra:** potência esperada = V×I (`mode3AC3p`: √3×V×I); `ratio = declarada/esperada > 1.25`.
-- **Afetados:** 2 de 134 pontos (1.5%). Exemplos: `PDL-00005-01`, `PDL-00005`, `PDL-00005-02`.
+- **Afetados:** 2 de 134 pontos (1.5%). Exemplos: `PDL-00005-01`, `PDL-00005-02`; contexto (mesmo site/OPC, não afetados): `PDL-00005`.
 - **Evidência:**
 
   | point_id | site_external_id | V | I (A) | P decl. (W) | modo | ratio |
@@ -1203,7 +1203,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 - **Veredito:** impossível — a tomada declara mais potência do que os seus V/A permitem; pelo menos um dos três valores está errado.
 ### [MÉDIO] Potência disponível incoerente (após normalizar kW→W)
 - **Regra:** por ponto: `available_charging_power` (×1000 quando em escala kW) vs `max()` dos conectores; limiar ±30%. Dominado por ratio ≈ 2 (total do site no campo do ponto).
-- **Afetados:** 54 de 134 pontos (40.3%). Exemplos: `AGH-00015-01`, `AGH-00015`, `AGH-00015-02`, `HRT-00005-01`, `HRT-00005`, `HRT-00005-02`.
+- **Afetados:** 54 de 134 pontos (40.3%). Exemplos: `AGH-00015-01`, `AGH-00015-02`, `HRT-00005-01`.
 - **Evidência:**
 
   | point_id | site_external_id | P disp. (W norm.) | max conector (W) | ratio |
@@ -1222,7 +1222,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 - **Veredito:** suspeito — a potência do ponto devia aproximar o máximo das tomadas; ratio ≈ 2 sugere que o campo carrega o total do site/estação em vez do máximo do ponto.
 ### [MÉDIO] available_charging_power em kW, conectores em W
 - **Regra:** `available_charging_power < 1000` com `max()` dos conectores `>= 1000` (só 349/21056 linhas têm `available`; 337 estão nesta escala).
-- **Afetados:** 54 de 134 pontos (40.3%). Exemplos: `AGH-00015-01`, `AGH-00015`, `AGH-00015-02`, `HRT-00005-01`, `HRT-00005`, `HRT-00005-02`.
+- **Afetados:** 54 de 134 pontos (40.3%). Exemplos: `AGH-00015-01`, `AGH-00015-02`, `HRT-00005-01`.
 - **Evidência:**
 
   | point_id | site_external_id | P disp. | max conector |
@@ -1241,7 +1241,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 - **Veredito:** suspeito — unidades inconsistentes entre campos do mesmo ponto; impede comparação direta e sugere ingestão sem normalização (kW vs W).
 ### [BAIXO] Nome do operador fragmentado (várias grafias)
 - **Regra:** `operator_id = SEGM` com 3 grafias distintas em `operator_name`.
-- **Afetados:** 134 de 134 pontos (100.0%). Exemplos: `AGH-00003-01`, `AGH-00003`, `AGH-00003-02`, `AGH-00003-03`, `AGH-00004-1`, `AGH-00004`.
+- **Afetados:** 134 de 134 pontos (100.0%). Exemplos: `AGH-00003-01`, `AGH-00003-02`, `AGH-00003-03`.
 - **Evidência:**
 
   | grafia observada |
@@ -1255,7 +1255,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 ## PRIO — Prio.E Mobility Solutions, Lda (161 sites, 290 pontos)
 ### [CRÍTICO] Potência declarada acima da capacidade V×I
 - **Regra:** potência esperada = V×I (`mode3AC3p`: √3×V×I); `ratio = declarada/esperada > 1.25`.
-- **Afetados:** 2 de 290 pontos (0.7%). Exemplos: `OBD-00003-2`, `OBD-00003`, `SSB-00010-01`, `SSB-00010`.
+- **Afetados:** 2 de 290 pontos (0.7%). Exemplos: `OBD-00003-2`, `SSB-00010-01`; contexto (mesmo site/OPC, não afetados): `OBD-00003`.
 - **Evidência:**
 
   | point_id | site_external_id | V | I (A) | P decl. (W) | modo | ratio |
@@ -1266,7 +1266,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 - **Veredito:** impossível — a tomada declara mais potência do que os seus V/A permitem; pelo menos um dos três valores está errado.
 ### [MÉDIO] Potência declarada muito abaixo de V×I (derating ou erro)
 - **Regra:** mesma fórmula; `ratio < 0.75`.
-- **Afetados:** 130 de 290 pontos (44.8%). Exemplos: `ACB-00032-01`, `ACB-00032`, `ACB-00032-02`, `ALD-00007-02`, `ALD-00007`, `AMT-00037-01`, `AMT-00037`.
+- **Afetados:** 130 de 290 pontos (44.8%). Exemplos: `ACB-00032-01`, `ACB-00032-02`, `ALD-00007-02`.
 - **Evidência:**
 
   | point_id | site_external_id | V | I (A) | P decl. (W) | modo | ratio |
@@ -1287,7 +1287,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 ## HEXA — HEXAGONAL OCEAN, LDA (38 sites, 76 pontos)
 ### [CRÍTICO] Potência declarada acima da capacidade V×I
 - **Regra:** potência esperada = V×I (`mode3AC3p`: √3×V×I); `ratio = declarada/esperada > 1.25`.
-- **Afetados:** 34 de 76 pontos (44.7%). Exemplos: `CSC-00074-01`, `CSC-00074`, `CSC-00074-02`, `CSC-00075-01`, `CSC-00075`, `CSC-00075-02`.
+- **Afetados:** 34 de 76 pontos (44.7%). Exemplos: `CSC-00074-01`, `CSC-00074-02`, `CSC-00075-01`.
 - **Evidência:**
 
   | point_id | site_external_id | V | I (A) | P decl. (W) | modo | ratio |
@@ -1306,7 +1306,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 - **Veredito:** impossível — a tomada declara mais potência do que os seus V/A permitem; pelo menos um dos três valores está errado.
 ### [BAIXO] Nome do operador fragmentado (várias grafias)
 - **Regra:** `operator_id = HEXA` com 2 grafias distintas em `operator_name`.
-- **Afetados:** 76 de 76 pontos (100.0%). Exemplos: `CSC-00074-01`, `CSC-00074`, `CSC-00074-02`, `CSC-00075-01`, `CSC-00075`, `CSC-00075-02`.
+- **Afetados:** 76 de 76 pontos (100.0%). Exemplos: `CSC-00074-01`, `CSC-00074-02`, `CSC-00075-01`.
 - **Evidência:**
 
   | grafia observada |
@@ -1319,7 +1319,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 ## LOUL — Loulé Concelho Global, EM (33 sites, 70 pontos)
 ### [CRÍTICO] Potência declarada acima da capacidade V×I
 - **Regra:** potência esperada = V×I (`mode3AC3p`: √3×V×I); `ratio = declarada/esperada > 1.25`.
-- **Afetados:** 3 de 70 pontos (4.3%). Exemplos: `LLE-00057-02`, `LLE-00057`, `LLE-00058-01`, `LLE-00058`, `LLE-00058-02`.
+- **Afetados:** 3 de 70 pontos (4.3%). Exemplos: `LLE-00057-02`, `LLE-00058-01`, `LLE-00058-02`.
 - **Evidência:**
 
   | point_id | site_external_id | V | I (A) | P decl. (W) | modo | ratio |
@@ -1331,7 +1331,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 - **Veredito:** impossível — a tomada declara mais potência do que os seus V/A permitem; pelo menos um dos três valores está errado.
 ### [MÉDIO] Potência declarada muito abaixo de V×I (derating ou erro)
 - **Regra:** mesma fórmula; `ratio < 0.75`.
-- **Afetados:** 2 de 70 pontos (2.9%). Exemplos: `LLE-00196-01`, `LLE-00196`, `LLE-00196-02`.
+- **Afetados:** 2 de 70 pontos (2.9%). Exemplos: `LLE-00196-01`, `LLE-00196-02`; contexto (mesmo site/OPC, não afetados): `LLE-00196`.
 - **Evidência:**
 
   | point_id | site_external_id | V | I (A) | P decl. (W) | modo | ratio |
@@ -1342,7 +1342,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 - **Veredito:** suspeito — pode ser derating intencional, mas desvios >25% abaixo da capacidade são prováveis erros de introdução.
 ### [BAIXO] Nome do operador fragmentado (várias grafias)
 - **Regra:** `operator_id = LOUL` com 2 grafias distintas em `operator_name`.
-- **Afetados:** 70 de 70 pontos (100.0%). Exemplos: `LLE-00021-01`, `LLE-00021`, `LLE-00021-02`, `LLE-00022-01`, `LLE-00022`, `LLE-00022-02`.
+- **Afetados:** 70 de 70 pontos (100.0%). Exemplos: `LLE-00021-01`, `LLE-00021-02`, `LLE-00022-01`.
 - **Evidência:**
 
   | grafia observada |
@@ -1355,7 +1355,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 ## MAKS — Maksu (333 sites, 363 pontos)
 ### [CRÍTICO] Potência declarada acima da capacidade V×I
 - **Regra:** potência esperada = V×I (`mode3AC3p`: √3×V×I); `ratio = declarada/esperada > 1.25`.
-- **Afetados:** 15 de 363 pontos (4.1%). Exemplos: `CSC-00065-1`, `CSC-00065`, `CSC-00066-1`, `CSC-00066`, `LSB-01183-01`, `LSB-01183`.
+- **Afetados:** 15 de 363 pontos (4.1%). Exemplos: `CSC-00065-1`, `CSC-00066-1`, `LSB-01183-01`.
 - **Evidência:**
 
   | point_id | site_external_id | V | I (A) | P decl. (W) | modo | ratio |
@@ -1374,7 +1374,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 - **Veredito:** impossível — a tomada declara mais potência do que os seus V/A permitem; pelo menos um dos três valores está errado.
 ### [MÉDIO] available_charging_power em kW, conectores em W
 - **Regra:** `available_charging_power < 1000` com `max()` dos conectores `>= 1000` (só 349/21056 linhas têm `available`; 337 estão nesta escala).
-- **Afetados:** 58 de 363 pontos (16.0%). Exemplos: `CVL-00049-01`, `CVL-00049`, `CVL-00050-01`, `CVL-00050`, `CVL-00051-01`, `CVL-00051`.
+- **Afetados:** 58 de 363 pontos (16.0%). Exemplos: `CVL-00049-01`, `CVL-00050-01`, `CVL-00051-01`.
 - **Evidência:**
 
   | point_id | site_external_id | P disp. | max conector |
@@ -1393,7 +1393,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 - **Veredito:** suspeito — unidades inconsistentes entre campos do mesmo ponto; impede comparação direta e sugere ingestão sem normalização (kW vs W).
 ### [BAIXO] usage_type em falta
 - **Regra:** `usage_type` vazio (enum `ChargingPointUsageTypeEnum`).
-- **Afetados:** 2 de 363 pontos (0.6%). Exemplos: `LSB-01338-01`, `LSB-01338`, `LSB-01339-01`, `LSB-01339`.
+- **Afetados:** 2 de 363 pontos (0.6%). Exemplos: `LSB-01338-01`, `LSB-01339-01`; contexto (mesmo site/OPC, não afetados): `LSB-01338`.
 - **Evidência:**
 
   | point_id | site_external_id |
@@ -1406,7 +1406,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 ## EPKS — Telpark (4 sites, 36 pontos)
 ### [CRÍTICO] Potência declarada acima da capacidade V×I
 - **Regra:** potência esperada = V×I (`mode3AC3p`: √3×V×I); `ratio = declarada/esperada > 1.25`.
-- **Afetados:** 32 de 36 pontos (88.9%). Exemplos: `044BDB0B-FFBA-4C02-8F73-2504699AC85F`, `PRT-00372`, `0EAA089B-F5F7-41AF-9A55-7BD9175BB71F`, `VNG-00259`, `23B0AE60-355A-4B52-A3CD-054A0E6753FD`, `29FA5C24-A4C3-47B8-853D-196766AB06BD`.
+- **Afetados:** 32 de 36 pontos (88.9%). Exemplos: `044BDB0B-FFBA-4C02-8F73-2504699AC85F`, `0EAA089B-F5F7-41AF-9A55-7BD9175BB71F`, `23B0AE60-355A-4B52-A3CD-054A0E6753FD`.
 - **Evidência:**
 
   | point_id | site_external_id | V | I (A) | P decl. (W) | modo | ratio |
@@ -1425,7 +1425,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 - **Veredito:** impossível — a tomada declara mais potência do que os seus V/A permitem; pelo menos um dos três valores está errado.
 ### [MÉDIO] Potência declarada muito abaixo de V×I (derating ou erro)
 - **Regra:** mesma fórmula; `ratio < 0.75`.
-- **Afetados:** 2 de 36 pontos (5.6%). Exemplos: `1E67BD51-9F31-4F89-A350-FD990F3E01BB`, `LSB-01456`, `A69487F9-4606-4582-8B92-004926D71AB6`.
+- **Afetados:** 2 de 36 pontos (5.6%). Exemplos: `1E67BD51-9F31-4F89-A350-FD990F3E01BB`, `A69487F9-4606-4582-8B92-004926D71AB6`; contexto (mesmo site/OPC, não afetados): `LSB-01456`.
 - **Evidência:**
 
   | point_id | site_external_id | V | I (A) | P decl. (W) | modo | ratio |
@@ -1436,7 +1436,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 - **Veredito:** suspeito — pode ser derating intencional, mas desvios >25% abaixo da capacidade são prováveis erros de introdução.
 ### [BAIXO] usage_type em falta
 - **Regra:** `usage_type` vazio (enum `ChargingPointUsageTypeEnum`).
-- **Afetados:** 36 de 36 pontos (100.0%). Exemplos: `044BDB0B-FFBA-4C02-8F73-2504699AC85F`, `PRT-00372`, `0EAA089B-F5F7-41AF-9A55-7BD9175BB71F`, `VNG-00259`, `1E67BD51-9F31-4F89-A350-FD990F3E01BB`, `LSB-01456`.
+- **Afetados:** 36 de 36 pontos (100.0%). Exemplos: `044BDB0B-FFBA-4C02-8F73-2504699AC85F`, `0EAA089B-F5F7-41AF-9A55-7BD9175BB71F`, `1E67BD51-9F31-4F89-A350-FD990F3E01BB`.
 - **Evidência:**
 
   | point_id | site_external_id |
@@ -1455,7 +1455,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 - **Veredito:** suspeito — campo obrigatório em falta.
 ### [BAIXO] Sites extremos (n_points > média+3σ = 6.6; máx 40, média 2.5)
 - **Regra:** cauda da distribuição: `max(n_points) = 40`, média 2.5, desvio 1.4, limiar 6.6.
-- **Afetados:** 31 de 36 pontos (86.1%). Exemplos: `044BDB0B-FFBA-4C02-8F73-2504699AC85F`, `PRT-00372`, `29FA5C24-A4C3-47B8-853D-196766AB06BD`, `3464669A-1C87-4466-B359-D1C4B2DF1FB3`, `3C6D90D1-801C-4160-80BB-B21BB312B560`.
+- **Afetados:** 31 de 36 pontos (86.1%). Exemplos: `044BDB0B-FFBA-4C02-8F73-2504699AC85F`, `29FA5C24-A4C3-47B8-853D-196766AB06BD`, `3464669A-1C87-4466-B359-D1C4B2DF1FB3`.
 - **Evidência:**
 
   | site_id | site_external_id | n_points |
@@ -1468,7 +1468,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 ## ACCI — ACCIONA RECARGA PORTUGAL,UNIPESSOAL LDA (12 sites, 23 pontos)
 ### [CRÍTICO] point_id em sites diferentes
 - **Regra:** mesmo `point_id` associado a >1 `site_id` (ids numéricos legados reutilizados ou cross-wiring entre sites vizinhos).
-- **Afetados:** 20 de 23 pontos (87.0%). Exemplos: `16`, `CBR-00121`, `17`, `18`, `NZR-00048`, `19`.
+- **Afetados:** 20 de 23 pontos (87.0%). Exemplos: `16`, `17`, `18`.
 - **Evidência:**
 
   | point_id | site_id | site_external_id | point_external_id |
@@ -1487,7 +1487,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 - **Veredito:** impossível — `point_id` é chave primária do ponto; a reutilização entre sites parte joins e contagens (ex. EDP GDL-00010/11/12 partilham `PT-EDP-EGDL-00012-*`).
 ### [MÉDIO] Potência declarada muito abaixo de V×I (derating ou erro)
 - **Regra:** mesma fórmula; `ratio < 0.75`.
-- **Afetados:** 13 de 23 pontos (56.5%). Exemplos: `11`, `GRD-00044`, `16`, `CBR-00121`, `17`, `19`, `NZR-00048`.
+- **Afetados:** 13 de 23 pontos (56.5%). Exemplos: `11`, `16`, `17`.
 - **Evidência:**
 
   | point_id | site_external_id | V | I (A) | P decl. (W) | modo | ratio |
@@ -1506,7 +1506,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 - **Veredito:** suspeito — pode ser derating intencional, mas desvios >25% abaixo da capacidade são prováveis erros de introdução.
 ### [BAIXO] Nome do operador fragmentado (várias grafias)
 - **Regra:** `operator_id = ACCI` com 2 grafias distintas em `operator_name`.
-- **Afetados:** 23 de 23 pontos (100.0%). Exemplos: `10`, `GRD-00044`, `11`, `12`, `16`, `CBR-00121`.
+- **Afetados:** 23 de 23 pontos (100.0%). Exemplos: `10`, `11`, `12`.
 - **Evidência:**
 
   | grafia observada |
@@ -1517,7 +1517,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 - **Veredito:** suspeito — a mesma entidade legal com várias grafias fragiliza a agregação por operador.
 ### [BAIXO] Código-postal fora do formato NNNN-NNN
 - **Regra:** `postcode` ∉ `DDDD-DDD`.
-- **Afetados:** 4 de 23 pontos (17.4%). Exemplos: `42`, `MGL-00016`, `43`, `MGL-00017`, `48`, `ALD-00008`.
+- **Afetados:** 4 de 23 pontos (17.4%). Exemplos: `42`, `43`, `48`.
 - **Evidência:**
 
   | site_id | site_external_id | postcode |
@@ -1530,7 +1530,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 ## REMO — MOTA-ENGIL REMO CHARGING S.A (16 sites, 38 pontos)
 ### [CRÍTICO] Potência declarada acima da capacidade V×I
 - **Regra:** potência esperada = V×I (`mode3AC3p`: √3×V×I); `ratio = declarada/esperada > 1.25`.
-- **Afetados:** 2 de 38 pontos (5.3%). Exemplos: `CNF-00009-01`, `CNF-00009`, `CNF-00009-02`.
+- **Afetados:** 2 de 38 pontos (5.3%). Exemplos: `CNF-00009-01`, `CNF-00009-02`; contexto (mesmo site/OPC, não afetados): `CNF-00009`.
 - **Evidência:**
 
   | point_id | site_external_id | V | I (A) | P decl. (W) | modo | ratio |
@@ -1541,7 +1541,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 - **Veredito:** impossível — a tomada declara mais potência do que os seus V/A permitem; pelo menos um dos três valores está errado.
 ### [MÉDIO] Potência declarada muito abaixo de V×I (derating ou erro)
 - **Regra:** mesma fórmula; `ratio < 0.75`.
-- **Afetados:** 36 de 38 pontos (94.7%). Exemplos: `AMT-00043-01`, `AMT-00043`, `AMT-00043-02`, `BCL-00050-01`, `BCL-00050`, `BCL-00050-02`.
+- **Afetados:** 36 de 38 pontos (94.7%). Exemplos: `AMT-00043-01`, `AMT-00043-02`, `BCL-00050-01`.
 - **Evidência:**
 
   | point_id | site_external_id | V | I (A) | P decl. (W) | modo | ratio |
@@ -1560,7 +1560,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 - **Veredito:** suspeito — pode ser derating intencional, mas desvios >25% abaixo da capacidade são prováveis erros de introdução.
 ### [MÉDIO] available_charging_power em kW, conectores em W
 - **Regra:** `available_charging_power < 1000` com `max()` dos conectores `>= 1000` (só 349/21056 linhas têm `available`; 337 estão nesta escala).
-- **Afetados:** 28 de 38 pontos (73.7%). Exemplos: `AMT-00043-01`, `AMT-00043`, `AMT-00043-02`, `BCL-00050-01`, `BCL-00050`, `BCL-00050-02`.
+- **Afetados:** 28 de 38 pontos (73.7%). Exemplos: `AMT-00043-01`, `AMT-00043-02`, `BCL-00050-01`.
 - **Evidência:**
 
   | point_id | site_external_id | P disp. | max conector |
@@ -1579,7 +1579,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 - **Veredito:** suspeito — unidades inconsistentes entre campos do mesmo ponto; impede comparação direta e sugere ingestão sem normalização (kW vs W).
 ### [MÉDIO] Potência disponível incoerente (após normalizar kW→W)
 - **Regra:** por ponto: `available_charging_power` (×1000 quando em escala kW) vs `max()` dos conectores; limiar ±30%. Dominado por ratio ≈ 2 (total do site no campo do ponto).
-- **Afetados:** 2 de 38 pontos (5.3%). Exemplos: `GMR-00167-01`, `GMR-00167`, `GMR-00167-02`.
+- **Afetados:** 2 de 38 pontos (5.3%). Exemplos: `GMR-00167-01`, `GMR-00167-02`; contexto (mesmo site/OPC, não afetados): `GMR-00167`.
 - **Evidência:**
 
   | point_id | site_external_id | P disp. (W norm.) | max conector (W) | ratio |
@@ -1592,7 +1592,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 ## MOON — Siva - Sociedade de Importação de Veículos Automóveis / (sub-CEME da Iberdola) (26 sites, 56 pontos)
 ### [CRÍTICO] Potência declarada acima da capacidade V×I
 - **Regra:** potência esperada = V×I (`mode3AC3p`: √3×V×I); `ratio = declarada/esperada > 1.25`.
-- **Afetados:** 15 de 56 pontos (26.8%). Exemplos: `AMT-00007-1`, `AMT-00007`, `AZB-00016-12581432`, `AZB-00016`, `AZB-00016-12581433`, `AZB-00016-12581434`.
+- **Afetados:** 15 de 56 pontos (26.8%). Exemplos: `AMT-00007-1`, `AZB-00016-12581432`, `AZB-00016-12581433`.
 - **Evidência:**
 
   | point_id | site_external_id | V | I (A) | P decl. (W) | modo | ratio |
@@ -1611,7 +1611,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 - **Veredito:** impossível — a tomada declara mais potência do que os seus V/A permitem; pelo menos um dos três valores está errado.
 ### [MÉDIO] Potência declarada muito abaixo de V×I (derating ou erro)
 - **Regra:** mesma fórmula; `ratio < 0.75`.
-- **Afetados:** 9 de 56 pontos (16.1%). Exemplos: `LRA-00047-01`, `LRA-00047`, `LRA-00047-02`, `LRA-00047-03`, `LRS-00152-02`, `LRS-00152`.
+- **Afetados:** 9 de 56 pontos (16.1%). Exemplos: `LRA-00047-01`, `LRA-00047-02`, `LRA-00047-03`.
 - **Evidência:**
 
   | point_id | site_external_id | V | I (A) | P decl. (W) | modo | ratio |
@@ -1630,7 +1630,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 - **Veredito:** suspeito — pode ser derating intencional, mas desvios >25% abaixo da capacidade são prováveis erros de introdução.
 ### [MÉDIO] available_charging_power em kW, conectores em W
 - **Regra:** `available_charging_power < 1000` com `max()` dos conectores `>= 1000` (só 349/21056 linhas têm `available`; 337 estão nesta escala).
-- **Afetados:** 5 de 56 pontos (8.9%). Exemplos: `CTB-00073-01`, `CTB-00073`, `CTB-00073-02`, `LRS-00060-01`, `LRS-00060`, `LRS-00060-02`.
+- **Afetados:** 5 de 56 pontos (8.9%). Exemplos: `CTB-00073-01`, `CTB-00073-02`, `LRS-00060-01`.
 - **Evidência:**
 
   | point_id | site_external_id | P disp. | max conector |
@@ -1644,7 +1644,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 - **Veredito:** suspeito — unidades inconsistentes entre campos do mesmo ponto; impede comparação direta e sugere ingestão sem normalização (kW vs W).
 ### [MÉDIO] Potência disponível incoerente (após normalizar kW→W)
 - **Regra:** por ponto: `available_charging_power` (×1000 quando em escala kW) vs `max()` dos conectores; limiar ±30%. Dominado por ratio ≈ 2 (total do site no campo do ponto).
-- **Afetados:** 1 de 56 pontos (1.8%). Exemplos: `LRS-00060-03`, `LRS-00060`, `MOO-LRS-00060`, `PT*MOO*E*LRS*00060*03`.
+- **Afetados:** 1 de 56 pontos (1.8%). Exemplos: `LRS-00060-03`; contexto (mesmo site/OPC, não afetados): `LRS-00060`, `AMT-00007-1`.
 - **Evidência:**
 
   | point_id | site_external_id | P disp. (W norm.) | max conector (W) | ratio |
@@ -1654,7 +1654,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 - **Veredito:** suspeito — a potência do ponto devia aproximar o máximo das tomadas; ratio ≈ 2 sugere que o campo carrega o total do site/estação em vez do máximo do ponto.
 ### [BAIXO] Sites extremos (n_points > média+3σ = 6.6; máx 40, média 2.5)
 - **Regra:** cauda da distribuição: `max(n_points) = 40`, média 2.5, desvio 1.4, limiar 6.6.
-- **Afetados:** 9 de 56 pontos (16.1%). Exemplos: `AZB-00016-12581432`, `AZB-00016`, `AZB-00016-12581433`, `AZB-00016-12581434`, `AZB-00016-26022602`.
+- **Afetados:** 9 de 56 pontos (16.1%). Exemplos: `AZB-00016-12581432`, `AZB-00016-12581433`, `AZB-00016-12581434`.
 - **Evidência:**
 
   | site_id | site_external_id | n_points |
@@ -1666,7 +1666,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 ## EVCE — EVCE POWER, LDA. / MOBISMART (51 sites, 89 pontos)
 ### [CRÍTICO] Potência declarada acima da capacidade V×I
 - **Regra:** potência esperada = V×I (`mode3AC3p`: √3×V×I); `ratio = declarada/esperada > 1.25`.
-- **Afetados:** 6 de 89 pontos (6.7%). Exemplos: `BCL-00033-01`, `BCL-00033`, `BCL-00033-02`, `BRG-00133-01`, `BRG-00133`, `BRG-00133-02`.
+- **Afetados:** 6 de 89 pontos (6.7%). Exemplos: `BCL-00033-01`, `BCL-00033-02`, `BRG-00133-01`.
 - **Evidência:**
 
   | point_id | site_external_id | V | I (A) | P decl. (W) | modo | ratio |
@@ -1681,7 +1681,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 - **Veredito:** impossível — a tomada declara mais potência do que os seus V/A permitem; pelo menos um dos três valores está errado.
 ### [MÉDIO] Potência declarada muito abaixo de V×I (derating ou erro)
 - **Regra:** mesma fórmula; `ratio < 0.75`.
-- **Afetados:** 17 de 89 pontos (19.1%). Exemplos: `AVV-00003-01`, `AVV-00003`, `AVV-00003-02`, `AVV-00011-02`, `AVV-00011`, `BRG-00054-01`, `BRG-00054`.
+- **Afetados:** 17 de 89 pontos (19.1%). Exemplos: `AVV-00003-01`, `AVV-00003-02`, `AVV-00011-02`.
 - **Evidência:**
 
   | point_id | site_external_id | V | I (A) | P decl. (W) | modo | ratio |
@@ -1702,7 +1702,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 ## CMEL — CME (22 sites, 23 pontos)
 ### [CRÍTICO] Potência declarada acima da capacidade V×I
 - **Regra:** potência esperada = V×I (`mode3AC3p`: √3×V×I); `ratio = declarada/esperada > 1.25`.
-- **Afetados:** 2 de 23 pontos (8.7%). Exemplos: `OER-00300-01`, `OER-00300`, `OER-00301-01`, `OER-00301`.
+- **Afetados:** 2 de 23 pontos (8.7%). Exemplos: `OER-00300-01`, `OER-00301-01`; contexto (mesmo site/OPC, não afetados): `OER-00300`.
 - **Evidência:**
 
   | point_id | site_external_id | V | I (A) | P decl. (W) | modo | ratio |
@@ -1713,7 +1713,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 - **Veredito:** impossível — a tomada declara mais potência do que os seus V/A permitem; pelo menos um dos três valores está errado.
 ### [MÉDIO] available_charging_power em kW, conectores em W
 - **Regra:** `available_charging_power < 1000` com `max()` dos conectores `>= 1000` (só 349/21056 linhas têm `available`; 337 estão nesta escala).
-- **Afetados:** 19 de 23 pontos (82.6%). Exemplos: `LRA-00160-01`, `LRA-00160`, `LRA-00161-01`, `LRA-00161`, `LRA-00162-01`, `LRA-00162`.
+- **Afetados:** 19 de 23 pontos (82.6%). Exemplos: `LRA-00160-01`, `LRA-00161-01`, `LRA-00162-01`.
 - **Evidência:**
 
   | point_id | site_external_id | P disp. | max conector |
@@ -1732,7 +1732,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 - **Veredito:** suspeito — unidades inconsistentes entre campos do mesmo ponto; impede comparação direta e sugere ingestão sem normalização (kW vs W).
 ### [MÉDIO] Potência declarada muito abaixo de V×I (derating ou erro)
 - **Regra:** mesma fórmula; `ratio < 0.75`.
-- **Afetados:** 1 de 23 pontos (4.3%). Exemplos: `TND-00017-01`, `TND-00017`, `CME-TND-00017`, `PT*CME*E*TND*00017*01`.
+- **Afetados:** 1 de 23 pontos (4.3%). Exemplos: `TND-00017-01`; contexto (mesmo site/OPC, não afetados): `TND-00017`, `LRA-00160-01`.
 - **Evidência:**
 
   | point_id | site_external_id | V | I (A) | P decl. (W) | modo | ratio |
@@ -1742,7 +1742,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 - **Veredito:** suspeito — pode ser derating intencional, mas desvios >25% abaixo da capacidade são prováveis erros de introdução.
 ### [MÉDIO] Potência disponível incoerente (após normalizar kW→W)
 - **Regra:** por ponto: `available_charging_power` (×1000 quando em escala kW) vs `max()` dos conectores; limiar ±30%. Dominado por ratio ≈ 2 (total do site no campo do ponto).
-- **Afetados:** 1 de 23 pontos (4.3%). Exemplos: `STR-00070-02`, `STR-00070`, `CME-STR-00070`, `PT*CME*E*STR*00070*02`.
+- **Afetados:** 1 de 23 pontos (4.3%). Exemplos: `STR-00070-02`; contexto (mesmo site/OPC, não afetados): `STR-00070`, `LRA-00160-01`.
 - **Evidência:**
 
   | point_id | site_external_id | P disp. (W norm.) | max conector (W) | ratio |
@@ -1752,7 +1752,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 - **Veredito:** suspeito — a potência do ponto devia aproximar o máximo das tomadas; ratio ≈ 2 sugere que o campo carrega o total do site/estação em vez do máximo do ponto.
 ### [BAIXO] usage_type em falta
 - **Regra:** `usage_type` vazio (enum `ChargingPointUsageTypeEnum`).
-- **Afetados:** 2 de 23 pontos (8.7%). Exemplos: `OER-00300-01`, `OER-00300`, `OER-00301-01`, `OER-00301`.
+- **Afetados:** 2 de 23 pontos (8.7%). Exemplos: `OER-00300-01`, `OER-00301-01`; contexto (mesmo site/OPC, não afetados): `OER-00300`.
 - **Evidência:**
 
   | point_id | site_external_id |
@@ -1765,7 +1765,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 ## LUSI — LUSIADAENERGIA, S.A. (14 sites, 25 pontos)
 ### [CRÍTICO] Potência declarada acima da capacidade V×I
 - **Regra:** potência esperada = V×I (`mode3AC3p`: √3×V×I); `ratio = declarada/esperada > 1.25`.
-- **Afetados:** 2 de 25 pontos (8.0%). Exemplos: `LGA-00047-01`, `LGA-00047`, `LGA-00047-02`.
+- **Afetados:** 2 de 25 pontos (8.0%). Exemplos: `LGA-00047-01`, `LGA-00047-02`; contexto (mesmo site/OPC, não afetados): `LGA-00047`.
 - **Evidência:**
 
   | point_id | site_external_id | V | I (A) | P decl. (W) | modo | ratio |
@@ -1776,7 +1776,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 - **Veredito:** impossível — a tomada declara mais potência do que os seus V/A permitem; pelo menos um dos três valores está errado.
 ### [MÉDIO] Potência declarada muito abaixo de V×I (derating ou erro)
 - **Regra:** mesma fórmula; `ratio < 0.75`.
-- **Afetados:** 12 de 25 pontos (48.0%). Exemplos: `AGN-00006-01`, `AGN-00006`, `AGN-00006-02`, `EVR-00036-01`, `EVR-00036`, `EVR-00036-02`.
+- **Afetados:** 12 de 25 pontos (48.0%). Exemplos: `AGN-00006-01`, `AGN-00006-02`, `EVR-00036-01`.
 - **Evidência:**
 
   | point_id | site_external_id | V | I (A) | P decl. (W) | modo | ratio |
@@ -1795,7 +1795,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 - **Veredito:** suspeito — pode ser derating intencional, mas desvios >25% abaixo da capacidade são prováveis erros de introdução.
 ### [MÉDIO] available_charging_power em kW, conectores em W
 - **Regra:** `available_charging_power < 1000` com `max()` dos conectores `>= 1000` (só 349/21056 linhas têm `available`; 337 estão nesta escala).
-- **Afetados:** 2 de 25 pontos (8.0%). Exemplos: `LGA-00047-01`, `LGA-00047`, `LGA-00047-02`.
+- **Afetados:** 2 de 25 pontos (8.0%). Exemplos: `LGA-00047-01`, `LGA-00047-02`; contexto (mesmo site/OPC, não afetados): `LGA-00047`.
 - **Evidência:**
 
   | point_id | site_external_id | P disp. | max conector |
@@ -1806,7 +1806,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 - **Veredito:** suspeito — unidades inconsistentes entre campos do mesmo ponto; impede comparação direta e sugere ingestão sem normalização (kW vs W).
 ### [BAIXO] usage_type em falta
 - **Regra:** `usage_type` vazio (enum `ChargingPointUsageTypeEnum`).
-- **Afetados:** 3 de 25 pontos (12.0%). Exemplos: `ABF-00194-01`, `ABF-00194`, `LGA-00049-01`, `LGA-00049`, `LLE-00266-01`, `LLE-00266`.
+- **Afetados:** 3 de 25 pontos (12.0%). Exemplos: `ABF-00194-01`, `LGA-00049-01`, `LLE-00266-01`.
 - **Evidência:**
 
   | point_id | site_external_id |
@@ -1820,7 +1820,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 ## VIAV — Via Verde Transição Energética, S.A. (5 sites, 13 pontos)
 ### [CRÍTICO] point_id em sites diferentes
 - **Regra:** mesmo `point_id` associado a >1 `site_id` (ids numéricos legados reutilizados ou cross-wiring entre sites vizinhos).
-- **Afetados:** 11 de 13 pontos (84.6%). Exemplos: `3`, `CDN-00008`, `4`, `615`, `MTJ-00110`, `616`.
+- **Afetados:** 11 de 13 pontos (84.6%). Exemplos: `3`, `4`, `615`.
 - **Evidência:**
 
   | point_id | site_id | site_external_id | point_external_id |
@@ -1839,7 +1839,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 - **Veredito:** impossível — `point_id` é chave primária do ponto; a reutilização entre sites parte joins e contagens (ex. EDP GDL-00010/11/12 partilham `PT-EDP-EGDL-00012-*`).
 ### [MÉDIO] Potência declarada muito abaixo de V×I (derating ou erro)
 - **Regra:** mesma fórmula; `ratio < 0.75`.
-- **Afetados:** 6 de 13 pontos (46.2%). Exemplos: `615`, `MTJ-00110`, `616`, `617`, `OER-00286`, `618`.
+- **Afetados:** 6 de 13 pontos (46.2%). Exemplos: `615`, `616`, `617`.
 - **Evidência:**
 
   | point_id | site_external_id | V | I (A) | P decl. (W) | modo | ratio |
@@ -1854,7 +1854,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 - **Veredito:** suspeito — pode ser derating intencional, mas desvios >25% abaixo da capacidade são prováveis erros de introdução.
 ### [MÉDIO] Valores crus suspeitos (1200/3600 V, 600 A)
 - **Regra:** sinalizar linhas com `voltage ∈ {1200, 3600}` ou `max_current = 600`.
-- **Afetados:** 6 de 13 pontos (46.2%). Exemplos: `615`, `MTJ-00110`, `616`, `617`, `OER-00286`, `618`.
+- **Afetados:** 6 de 13 pontos (46.2%). Exemplos: `615`, `616`, `617`.
 - **Evidência:**
 
   | point_id | site_external_id | V | I (A) | conector | modo |
@@ -1869,7 +1869,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 - **Veredito:** suspeito — valores já observados como erros sistemáticos; 1200 V × 600 A = 720 kW excede qualquer carregador instalado.
 ### [BAIXO] Pontos com nº extremo de conectores (máx 4, média 1.01)
 - **Regra:** nº de linhas de conector por `point_id`; cauda ≥ 3 (média ~1.0).
-- **Afetados:** 1 de 13 pontos (7.7%). Exemplos: `618`, `OER-00286`, `VIA-OER-00286`, `PT*VIA*EOER-00286-618`.
+- **Afetados:** 1 de 13 pontos (7.7%). Exemplos: `618`; contexto (mesmo site/OPC, não afetados): `OER-00286`, `3`.
 - **Evidência:**
 
   | point_id | site_external_id | n_conectores | tipos |
@@ -1881,7 +1881,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 ## EVIO — EVIO - Electrical Mobility (21 sites, 35 pontos)
 ### [CRÍTICO] Potência declarada acima da capacidade V×I
 - **Regra:** potência esperada = V×I (`mode3AC3p`: √3×V×I); `ratio = declarada/esperada > 1.25`.
-- **Afetados:** 2 de 35 pontos (5.7%). Exemplos: `TNV-00028-01`, `TNV-00028`, `TNV-00029-01`, `TNV-00029`.
+- **Afetados:** 2 de 35 pontos (5.7%). Exemplos: `TNV-00028-01`, `TNV-00029-01`; contexto (mesmo site/OPC, não afetados): `TNV-00028`.
 - **Evidência:**
 
   | point_id | site_external_id | V | I (A) | P decl. (W) | modo | ratio |
@@ -1892,7 +1892,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 - **Veredito:** impossível — a tomada declara mais potência do que os seus V/A permitem; pelo menos um dos três valores está errado.
 ### [MÉDIO] Potência declarada muito abaixo de V×I (derating ou erro)
 - **Regra:** mesma fórmula; `ratio < 0.75`.
-- **Afetados:** 9 de 35 pontos (25.7%). Exemplos: `ETZ-00029-01`, `ETZ-00029`, `ETZ-00029-02`, `ETZ-00030-01`, `ETZ-00030`, `ETZ-00030-02`.
+- **Afetados:** 9 de 35 pontos (25.7%). Exemplos: `ETZ-00029-01`, `ETZ-00029-02`, `ETZ-00030-01`.
 - **Evidência:**
 
   | point_id | site_external_id | V | I (A) | P decl. (W) | modo | ratio |
@@ -1910,7 +1910,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 - **Veredito:** suspeito — pode ser derating intencional, mas desvios >25% abaixo da capacidade são prováveis erros de introdução.
 ### [BAIXO] usage_type em falta
 - **Regra:** `usage_type` vazio (enum `ChargingPointUsageTypeEnum`).
-- **Afetados:** 5 de 35 pontos (14.3%). Exemplos: `MTS-00211-1`, `MTS-00211`, `MTS-00212-1`, `MTS-00212`, `MTS-00213-1`, `MTS-00213`.
+- **Afetados:** 5 de 35 pontos (14.3%). Exemplos: `MTS-00211-1`, `MTS-00212-1`, `MTS-00213-1`.
 - **Evidência:**
 
   | point_id | site_external_id |
@@ -1926,7 +1926,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 ## KLCS — Kilometer Low Cost II Serviços, SA (83 sites, 104 pontos)
 ### [CRÍTICO] Potência declarada acima da capacidade V×I
 - **Regra:** potência esperada = V×I (`mode3AC3p`: √3×V×I); `ratio = declarada/esperada > 1.25`.
-- **Afetados:** 6 de 104 pontos (5.8%). Exemplos: `AVR-00105-01`, `AVR-00105`, `AVR-00105-02`, `TBC-00004-01`, `TBC-00004`, `TBC-00004-02`.
+- **Afetados:** 6 de 104 pontos (5.8%). Exemplos: `AVR-00105-01`, `AVR-00105-02`, `TBC-00004-01`.
 - **Evidência:**
 
   | point_id | site_external_id | V | I (A) | P decl. (W) | modo | ratio |
@@ -1941,7 +1941,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 - **Veredito:** impossível — a tomada declara mais potência do que os seus V/A permitem; pelo menos um dos três valores está errado.
 ### [MÉDIO] Potência declarada muito abaixo de V×I (derating ou erro)
 - **Regra:** mesma fórmula; `ratio < 0.75`.
-- **Afetados:** 2 de 104 pontos (1.9%). Exemplos: `CLB-00010-01`, `CLB-00010`, `CLB-00011-01`, `CLB-00011`.
+- **Afetados:** 2 de 104 pontos (1.9%). Exemplos: `CLB-00010-01`, `CLB-00011-01`; contexto (mesmo site/OPC, não afetados): `CLB-00010`.
 - **Evidência:**
 
   | point_id | site_external_id | V | I (A) | P decl. (W) | modo | ratio |
@@ -1952,7 +1952,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 - **Veredito:** suspeito — pode ser derating intencional, mas desvios >25% abaixo da capacidade são prováveis erros de introdução.
 ### [BAIXO] usage_type em falta
 - **Regra:** `usage_type` vazio (enum `ChargingPointUsageTypeEnum`).
-- **Afetados:** 6 de 104 pontos (5.8%). Exemplos: `FAR-00100-01`, `FAR-00100`, `LOU-00022-01`, `LOU-00022`, `LOU-00023-01`, `LOU-00023`.
+- **Afetados:** 6 de 104 pontos (5.8%). Exemplos: `FAR-00100-01`, `LOU-00022-01`, `LOU-00023-01`.
 - **Evidência:**
 
   | point_id | site_external_id |
@@ -1969,7 +1969,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 ## VEIM — Veimonte Lda (20 sites, 35 pontos)
 ### [CRÍTICO] Potência declarada acima da capacidade V×I
 - **Regra:** potência esperada = V×I (`mode3AC3p`: √3×V×I); `ratio = declarada/esperada > 1.25`.
-- **Afetados:** 10 de 35 pontos (28.6%). Exemplos: `EPS-00005-01`, `EPS-00005`, `EPS-00005-02`, `MMN-00004-01`, `MMN-00004`, `MMN-00004-02`.
+- **Afetados:** 10 de 35 pontos (28.6%). Exemplos: `EPS-00005-01`, `EPS-00005-02`, `MMN-00004-01`.
 - **Evidência:**
 
   | point_id | site_external_id | V | I (A) | P decl. (W) | modo | ratio |
@@ -1988,7 +1988,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 - **Veredito:** impossível — a tomada declara mais potência do que os seus V/A permitem; pelo menos um dos três valores está errado.
 ### [MÉDIO] Potência declarada muito abaixo de V×I (derating ou erro)
 - **Regra:** mesma fórmula; `ratio < 0.75`.
-- **Afetados:** 2 de 35 pontos (5.7%). Exemplos: `RDD-00003-01`, `RDD-00003`, `RDD-00004-01`, `RDD-00004`.
+- **Afetados:** 2 de 35 pontos (5.7%). Exemplos: `RDD-00003-01`, `RDD-00004-01`; contexto (mesmo site/OPC, não afetados): `RDD-00003`.
 - **Evidência:**
 
   | point_id | site_external_id | V | I (A) | P decl. (W) | modo | ratio |
@@ -1999,7 +1999,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 - **Veredito:** suspeito — pode ser derating intencional, mas desvios >25% abaixo da capacidade são prováveis erros de introdução.
 ### [MÉDIO] Potência disponível incoerente (após normalizar kW→W)
 - **Regra:** por ponto: `available_charging_power` (×1000 quando em escala kW) vs `max()` dos conectores; limiar ±30%. Dominado por ratio ≈ 2 (total do site no campo do ponto).
-- **Afetados:** 1 de 35 pontos (2.9%). Exemplos: `RDD-00003-01`, `RDD-00003`, `VEI-RDD-00003`, `PT*VEI*E*RDD*00003*01`.
+- **Afetados:** 1 de 35 pontos (2.9%). Exemplos: `RDD-00003-01`; contexto (mesmo site/OPC, não afetados): `RDD-00003`, `EPS-00005-01`.
 - **Evidência:**
 
   | point_id | site_external_id | P disp. (W norm.) | max conector (W) | ratio |
@@ -2009,7 +2009,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 - **Veredito:** suspeito — a potência do ponto devia aproximar o máximo das tomadas; ratio ≈ 2 sugere que o campo carrega o total do site/estação em vez do máximo do ponto.
 ### [MÉDIO] available_charging_power em kW, conectores em W
 - **Regra:** `available_charging_power < 1000` com `max()` dos conectores `>= 1000` (só 349/21056 linhas têm `available`; 337 estão nesta escala).
-- **Afetados:** 1 de 35 pontos (2.9%). Exemplos: `RDD-00003-01`, `RDD-00003`, `VEI-RDD-00003`, `PT*VEI*E*RDD*00003*01`.
+- **Afetados:** 1 de 35 pontos (2.9%). Exemplos: `RDD-00003-01`; contexto (mesmo site/OPC, não afetados): `RDD-00003`, `EPS-00005-01`.
 - **Evidência:**
 
   | point_id | site_external_id | P disp. | max conector |
@@ -2021,7 +2021,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 ## PARI — Parinox Energia (6 sites, 7 pontos)
 ### [CRÍTICO] Potência declarada acima da capacidade V×I
 - **Regra:** potência esperada = V×I (`mode3AC3p`: √3×V×I); `ratio = declarada/esperada > 1.25`.
-- **Afetados:** 1 de 7 pontos (14.3%). Exemplos: `AGD-00040-01`, `AGD-00040`, `PAR-AGD-00040`, `PT*PAR*E*AGD*00040*01`.
+- **Afetados:** 1 de 7 pontos (14.3%). Exemplos: `AGD-00040-01`; contexto (mesmo site/OPC, não afetados): `AGD-00040`, `AGD-00039-01`.
 - **Evidência:**
 
   | point_id | site_external_id | V | I (A) | P decl. (W) | modo | ratio |
@@ -2031,7 +2031,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 - **Veredito:** impossível — a tomada declara mais potência do que os seus V/A permitem; pelo menos um dos três valores está errado.
 ### [MÉDIO] available_charging_power em kW, conectores em W
 - **Regra:** `available_charging_power < 1000` com `max()` dos conectores `>= 1000` (só 349/21056 linhas têm `available`; 337 estão nesta escala).
-- **Afetados:** 5 de 7 pontos (71.4%). Exemplos: `AGD-00043-01`, `AGD-00043`, `AGD-00044-01`, `AGD-00044`, `AGD-00044-02`, `OAZ-00027-01`, `OAZ-00027`.
+- **Afetados:** 5 de 7 pontos (71.4%). Exemplos: `AGD-00043-01`, `AGD-00044-01`, `AGD-00044-02`.
 - **Evidência:**
 
   | point_id | site_external_id | P disp. | max conector |
@@ -2047,7 +2047,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 ## NRGS — Original Sunenergy, Lda (7 sites, 16 pontos)
 ### [CRÍTICO] Potência declarada acima da capacidade V×I
 - **Regra:** potência esperada = V×I (`mode3AC3p`: √3×V×I); `ratio = declarada/esperada > 1.25`.
-- **Afetados:** 3 de 16 pontos (18.8%). Exemplos: `GRD-00021-02`, `GRD-00021`, `MDB-00004-03`, `MDB-00004`, `MDB-00004-04`.
+- **Afetados:** 3 de 16 pontos (18.8%). Exemplos: `GRD-00021-02`, `MDB-00004-03`, `MDB-00004-04`.
 - **Evidência:**
 
   | point_id | site_external_id | V | I (A) | P decl. (W) | modo | ratio |
@@ -2059,7 +2059,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 - **Veredito:** impossível — a tomada declara mais potência do que os seus V/A permitem; pelo menos um dos três valores está errado.
 ### [MÉDIO] Potência declarada muito abaixo de V×I (derating ou erro)
 - **Regra:** mesma fórmula; `ratio < 0.75`.
-- **Afetados:** 1 de 16 pontos (6.2%). Exemplos: `PLM-00025-02`, `PLM-00025`, `NRG-PLM-00025`, `PT*NRG*E*PLM*00025*02`.
+- **Afetados:** 1 de 16 pontos (6.2%). Exemplos: `PLM-00025-02`; contexto (mesmo site/OPC, não afetados): `PLM-00025`, `EVR-00031-01`.
 - **Evidência:**
 
   | point_id | site_external_id | V | I (A) | P decl. (W) | modo | ratio |
@@ -2071,7 +2071,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 ## PQTJ — Parques Tejo, E.M. (2 sites, 2 pontos)
 ### [CRÍTICO] Potência declarada acima da capacidade V×I
 - **Regra:** potência esperada = V×I (`mode3AC3p`: √3×V×I); `ratio = declarada/esperada > 1.25`.
-- **Afetados:** 2 de 2 pontos (100.0%). Exemplos: `OER-00296-01`, `OER-00296`, `OER-00297-01`, `OER-00297`.
+- **Afetados:** 2 de 2 pontos (100.0%). Exemplos: `OER-00296-01`, `OER-00297-01`; contexto (mesmo site/OPC, não afetados): `OER-00296`.
 - **Evidência:**
 
   | point_id | site_external_id | V | I (A) | P decl. (W) | modo | ratio |
@@ -2082,7 +2082,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 - **Veredito:** impossível — a tomada declara mais potência do que os seus V/A permitem; pelo menos um dos três valores está errado.
 ### [MÉDIO] Potência disponível incoerente (após normalizar kW→W)
 - **Regra:** por ponto: `available_charging_power` (×1000 quando em escala kW) vs `max()` dos conectores; limiar ±30%. Dominado por ratio ≈ 2 (total do site no campo do ponto).
-- **Afetados:** 2 de 2 pontos (100.0%). Exemplos: `OER-00296-01`, `OER-00296`, `OER-00297-01`, `OER-00297`.
+- **Afetados:** 2 de 2 pontos (100.0%). Exemplos: `OER-00296-01`, `OER-00297-01`; contexto (mesmo site/OPC, não afetados): `OER-00296`.
 - **Evidência:**
 
   | point_id | site_external_id | P disp. (W norm.) | max conector (W) | ratio |
@@ -2093,7 +2093,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 - **Veredito:** suspeito — a potência do ponto devia aproximar o máximo das tomadas; ratio ≈ 2 sugere que o campo carrega o total do site/estação em vez do máximo do ponto.
 ### [MÉDIO] available_charging_power em kW, conectores em W
 - **Regra:** `available_charging_power < 1000` com `max()` dos conectores `>= 1000` (só 349/21056 linhas têm `available`; 337 estão nesta escala).
-- **Afetados:** 2 de 2 pontos (100.0%). Exemplos: `OER-00296-01`, `OER-00296`, `OER-00297-01`, `OER-00297`.
+- **Afetados:** 2 de 2 pontos (100.0%). Exemplos: `OER-00296-01`, `OER-00297-01`; contexto (mesmo site/OPC, não afetados): `OER-00296`.
 - **Evidência:**
 
   | point_id | site_external_id | P disp. | max conector |
@@ -2104,7 +2104,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 - **Veredito:** suspeito — unidades inconsistentes entre campos do mesmo ponto; impede comparação direta e sugere ingestão sem normalização (kW vs W).
 ### [BAIXO] usage_type em falta
 - **Regra:** `usage_type` vazio (enum `ChargingPointUsageTypeEnum`).
-- **Afetados:** 2 de 2 pontos (100.0%). Exemplos: `OER-00296-01`, `OER-00296`, `OER-00297-01`, `OER-00297`.
+- **Afetados:** 2 de 2 pontos (100.0%). Exemplos: `OER-00296-01`, `OER-00297-01`; contexto (mesmo site/OPC, não afetados): `OER-00296`.
 - **Evidência:**
 
   | point_id | site_external_id |
@@ -2117,7 +2117,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 ## VISA — VISACASA - SERVIÇOS DE ASSISTÊNCIA E MANUTENÇÃO GLOBAL S.A. (6 sites, 14 pontos)
 ### [CRÍTICO] Potência declarada acima da capacidade V×I
 - **Regra:** potência esperada = V×I (`mode3AC3p`: √3×V×I); `ratio = declarada/esperada > 1.25`.
-- **Afetados:** 4 de 14 pontos (28.6%). Exemplos: `VIS-00021-01`, `VIS-00021`, `VIS-00021-02`, `VIS-00022-01`, `VIS-00022`, `VIS-00022-02`.
+- **Afetados:** 4 de 14 pontos (28.6%). Exemplos: `VIS-00021-01`, `VIS-00021-02`, `VIS-00022-01`.
 - **Evidência:**
 
   | point_id | site_external_id | V | I (A) | P decl. (W) | modo | ratio |
@@ -2132,7 +2132,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 ## ALFA — Alfa Energia (13 sites, 25 pontos)
 ### [CRÍTICO] Linhas de conector exatamente duplicadas
 - **Regra:** mesmo (`point_id`, conector, modo, formato, P, V, I) em >1 linha.
-- **Afetados:** 1 de 25 pontos (4.0%). Exemplos: `FLG-00022-01`, `FLG-00022`, `ALF-FLG-00022`, `PT*ALF*E*FLG*00022*01`.
+- **Afetados:** 1 de 25 pontos (4.0%). Exemplos: `FLG-00022-01`; contexto (mesmo site/OPC, não afetados): `FLG-00022`, `AND-00014-01`.
 - **Evidência:**
 
   | point_id | site_external_id | conector | modo | P |
@@ -2143,7 +2143,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 - **Veredito:** impossível — linhas gémeas indicam ingestão duplicada do mesmo conector.
 ### [MÉDIO] Potência declarada muito abaixo de V×I (derating ou erro)
 - **Regra:** mesma fórmula; `ratio < 0.75`.
-- **Afetados:** 2 de 25 pontos (8.0%). Exemplos: `AND-00014-01`, `AND-00014`, `AND-00014-02`.
+- **Afetados:** 2 de 25 pontos (8.0%). Exemplos: `AND-00014-01`, `AND-00014-02`; contexto (mesmo site/OPC, não afetados): `AND-00014`.
 - **Evidência:**
 
   | point_id | site_external_id | V | I (A) | P decl. (W) | modo | ratio |
@@ -2156,7 +2156,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 ## PLUG — e-Plug, Lda (31 sites, 62 pontos)
 ### [CRÍTICO] Potência declarada acima da capacidade V×I
 - **Regra:** potência esperada = V×I (`mode3AC3p`: √3×V×I); `ratio = declarada/esperada > 1.25`.
-- **Afetados:** 1 de 62 pontos (1.6%). Exemplos: `TMR-00007-01`, `TMR-00007`, `PLG-TMR-00007`, `PT*PLG*E*TMR*00007*01`.
+- **Afetados:** 1 de 62 pontos (1.6%). Exemplos: `TMR-00007-01`; contexto (mesmo site/OPC, não afetados): `TMR-00007`, `AMD-00030-01`.
 - **Evidência:**
 
   | point_id | site_external_id | V | I (A) | P decl. (W) | modo | ratio |
@@ -2166,7 +2166,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 - **Veredito:** impossível — a tomada declara mais potência do que os seus V/A permitem; pelo menos um dos três valores está errado.
 ### [MÉDIO] Potência declarada muito abaixo de V×I (derating ou erro)
 - **Regra:** mesma fórmula; `ratio < 0.75`.
-- **Afetados:** 2 de 62 pontos (3.2%). Exemplos: `TMR-00008-01`, `TMR-00008`, `TMR-00008-02`.
+- **Afetados:** 2 de 62 pontos (3.2%). Exemplos: `TMR-00008-01`, `TMR-00008-02`; contexto (mesmo site/OPC, não afetados): `TMR-00008`.
 - **Evidência:**
 
   | point_id | site_external_id | V | I (A) | P decl. (W) | modo | ratio |
@@ -2179,7 +2179,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 ## EVGR — Green Evolut, LDA (6 sites, 10 pontos)
 ### [CRÍTICO] Linhas de conector exatamente duplicadas
 - **Regra:** mesmo (`point_id`, conector, modo, formato, P, V, I) em >1 linha.
-- **Afetados:** 1 de 10 pontos (10.0%). Exemplos: `TVR-00024-01`, `TVR-00024`, `EGR-TVR-00024`, `PT*EGR*E*TVR*00024*01`.
+- **Afetados:** 1 de 10 pontos (10.0%). Exemplos: `TVR-00024-01`; contexto (mesmo site/OPC, não afetados): `TVR-00024`, `ALM-00087-01`.
 - **Evidência:**
 
   | point_id | site_external_id | conector | modo | P |
@@ -2192,7 +2192,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 ## TSLA — Tesla (9 sites, 192 pontos)
 ### [MÉDIO] Potência declarada muito abaixo de V×I (derating ou erro)
 - **Regra:** mesma fórmula; `ratio < 0.75`.
-- **Afetados:** 176 de 192 pontos (91.7%). Exemplos: `0030b1e0-c1c1-4578-8d30-fa44d7f4191d`, `d9df0db6-7829-4f68-be57-13dbb28dbae1`, `00711859-da1d-4a63-893b-6cc8fc274e86`, `b798e614-a4b7-45ba-9a5f-8b1dfbc009b4`, `027ad7f9-f371-4437-a6da-0b6ec4da001f`, `24a78962-ea22-4aa2-ad71-7413f8a68166`.
+- **Afetados:** 176 de 192 pontos (91.7%). Exemplos: `0030b1e0-c1c1-4578-8d30-fa44d7f4191d`, `00711859-da1d-4a63-893b-6cc8fc274e86`, `027ad7f9-f371-4437-a6da-0b6ec4da001f`.
 - **Evidência:**
 
   | point_id | site_external_id | V | I (A) | P decl. (W) | modo | ratio |
@@ -2211,7 +2211,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 - **Veredito:** suspeito — pode ser derating intencional, mas desvios >25% abaixo da capacidade são prováveis erros de introdução.
 ### [MÉDIO] Type2 em modo DC (mode4)
 - **Regra:** `connector_type = iec62196T2` com `charging_mode = mode4DC`.
-- **Afetados:** 16 de 192 pontos (8.3%). Exemplos: `05b8e450-9d32-45c9-9c55-3b041a96bb8e`, `0cf4786b-f469-4eab-a793-fdc5b01e45a5`, `0856060b-4ca9-4e4a-9b8a-8c034b597041`, `fff4f058-9075-4833-96f5-e021cb263344`, `10681d21-e216-45ff-a4d9-54149a618967`, `242afec9-6629-4743-b765-382073448432`.
+- **Afetados:** 16 de 192 pontos (8.3%). Exemplos: `05b8e450-9d32-45c9-9c55-3b041a96bb8e`, `0856060b-4ca9-4e4a-9b8a-8c034b597041`, `10681d21-e216-45ff-a4d9-54149a618967`.
 - **Evidência:**
 
   | point_id | site_external_id | conector | modo |
@@ -2230,7 +2230,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 - **Veredito:** suspeito — Type2 é AC; DC em Type2 puro é fora do standard (o DC usa Combo2).
 ### [BAIXO] Código-postal fora do formato NNNN-NNN
 - **Regra:** `postcode` ∉ `DDDD-DDD`.
-- **Afetados:** 192 de 192 pontos (100.0%). Exemplos: `0030b1e0-c1c1-4578-8d30-fa44d7f4191d`, `d9df0db6-7829-4f68-be57-13dbb28dbae1`, `00711859-da1d-4a63-893b-6cc8fc274e86`, `b798e614-a4b7-45ba-9a5f-8b1dfbc009b4`, `027ad7f9-f371-4437-a6da-0b6ec4da001f`, `24a78962-ea22-4aa2-ad71-7413f8a68166`.
+- **Afetados:** 192 de 192 pontos (100.0%). Exemplos: `0030b1e0-c1c1-4578-8d30-fa44d7f4191d`, `00711859-da1d-4a63-893b-6cc8fc274e86`, `027ad7f9-f371-4437-a6da-0b6ec4da001f`.
 - **Evidência:**
 
   | site_id | site_external_id | postcode |
@@ -2248,7 +2248,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 - **Veredito:** suspeito — formato inválido para código postal PT.
 ### [BAIXO] Sites extremos (n_points > média+3σ = 6.6; máx 40, média 2.5)
 - **Regra:** cauda da distribuição: `max(n_points) = 40`, média 2.5, desvio 1.4, limiar 6.6.
-- **Afetados:** 192 de 192 pontos (100.0%). Exemplos: `0030b1e0-c1c1-4578-8d30-fa44d7f4191d`, `d9df0db6-7829-4f68-be57-13dbb28dbae1`, `00711859-da1d-4a63-893b-6cc8fc274e86`, `b798e614-a4b7-45ba-9a5f-8b1dfbc009b4`, `027ad7f9-f371-4437-a6da-0b6ec4da001f`, `24a78962-ea22-4aa2-ad71-7413f8a68166`.
+- **Afetados:** 192 de 192 pontos (100.0%). Exemplos: `0030b1e0-c1c1-4578-8d30-fa44d7f4191d`, `00711859-da1d-4a63-893b-6cc8fc274e86`, `027ad7f9-f371-4437-a6da-0b6ec4da001f`.
 - **Evidência:**
 
   | site_id | site_external_id | n_points |
@@ -2266,7 +2266,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 - **Veredito:** suspeito — valores extremos pedem verificação (hub real vs agregação errada; hubs de 8+ pontos são plausíveis em redes de carregamento rápido).
 ### [BAIXO] auth_methods vazio
 - **Regra:** `auth_methods` vazio no site.
-- **Afetados:** 192 de 192 pontos (100.0%). Exemplos: `0030b1e0-c1c1-4578-8d30-fa44d7f4191d`, `d9df0db6-7829-4f68-be57-13dbb28dbae1`, `00711859-da1d-4a63-893b-6cc8fc274e86`, `b798e614-a4b7-45ba-9a5f-8b1dfbc009b4`, `027ad7f9-f371-4437-a6da-0b6ec4da001f`, `24a78962-ea22-4aa2-ad71-7413f8a68166`.
+- **Afetados:** 192 de 192 pontos (100.0%). Exemplos: `0030b1e0-c1c1-4578-8d30-fa44d7f4191d`, `00711859-da1d-4a63-893b-6cc8fc274e86`, `027ad7f9-f371-4437-a6da-0b6ec4da001f`.
 - **Evidência:**
 
   | site_id | site_external_id |
@@ -2284,7 +2284,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 - **Veredito:** suspeito — sem métodos de autenticação declarados.
 ### [BAIXO] brands_accepted vazio
 - **Regra:** `brands_accepted` vazio no ponto.
-- **Afetados:** 192 de 192 pontos (100.0%). Exemplos: `0030b1e0-c1c1-4578-8d30-fa44d7f4191d`, `d9df0db6-7829-4f68-be57-13dbb28dbae1`, `00711859-da1d-4a63-893b-6cc8fc274e86`, `b798e614-a4b7-45ba-9a5f-8b1dfbc009b4`, `027ad7f9-f371-4437-a6da-0b6ec4da001f`, `24a78962-ea22-4aa2-ad71-7413f8a68166`.
+- **Afetados:** 192 de 192 pontos (100.0%). Exemplos: `0030b1e0-c1c1-4578-8d30-fa44d7f4191d`, `00711859-da1d-4a63-893b-6cc8fc274e86`, `027ad7f9-f371-4437-a6da-0b6ec4da001f`.
 - **Evidência:**
 
   | point_id | site_external_id |
@@ -2303,7 +2303,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 - **Veredito:** suspeito — lista de CEME em falta (nota: é lista global, não discriminador de operador).
 ### [BAIXO] site_id/site_external_id fora do padrão
 - **Regra:** padrão `OP-CÓDIGO-NNNNN` (código = concelho) ou legado `OP-MOBI-CÓDIGO-NNNNN`; ex. `EDP-ALM-00072`, `GLP-MOBI-LSB-00085`.
-- **Afetados:** 192 de 192 pontos (100.0%). Exemplos: `0030b1e0-c1c1-4578-8d30-fa44d7f4191d`, `d9df0db6-7829-4f68-be57-13dbb28dbae1`, `00711859-da1d-4a63-893b-6cc8fc274e86`, `b798e614-a4b7-45ba-9a5f-8b1dfbc009b4`, `027ad7f9-f371-4437-a6da-0b6ec4da001f`, `24a78962-ea22-4aa2-ad71-7413f8a68166`.
+- **Afetados:** 192 de 192 pontos (100.0%). Exemplos: `0030b1e0-c1c1-4578-8d30-fa44d7f4191d`, `00711859-da1d-4a63-893b-6cc8fc274e86`, `027ad7f9-f371-4437-a6da-0b6ec4da001f`.
 - **Evidência:**
 
   | site_id | site_external_id |
@@ -2321,7 +2321,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 - **Veredito:** suspeito — código fora do padrão dificulta o join NAP↔MOBI.E e a leitura do concelho (UUIDs TSL, sufixos PUB).
 ### [BAIXO] usage_type em falta
 - **Regra:** `usage_type` vazio (enum `ChargingPointUsageTypeEnum`).
-- **Afetados:** 192 de 192 pontos (100.0%). Exemplos: `0030b1e0-c1c1-4578-8d30-fa44d7f4191d`, `d9df0db6-7829-4f68-be57-13dbb28dbae1`, `00711859-da1d-4a63-893b-6cc8fc274e86`, `b798e614-a4b7-45ba-9a5f-8b1dfbc009b4`, `027ad7f9-f371-4437-a6da-0b6ec4da001f`, `24a78962-ea22-4aa2-ad71-7413f8a68166`.
+- **Afetados:** 192 de 192 pontos (100.0%). Exemplos: `0030b1e0-c1c1-4578-8d30-fa44d7f4191d`, `00711859-da1d-4a63-893b-6cc8fc274e86`, `027ad7f9-f371-4437-a6da-0b6ec4da001f`.
 - **Evidência:**
 
   | point_id | site_external_id |
@@ -2342,7 +2342,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 ## ECOI — Ecoinside - Soluções em Ecoeficiência e Sustentabilidade Lda (56 sites, 142 pontos)
 ### [MÉDIO] Potência declarada muito abaixo de V×I (derating ou erro)
 - **Regra:** mesma fórmula; `ratio < 0.75`.
-- **Afetados:** 24 de 142 pontos (16.9%). Exemplos: `BRG-00090-01`, `BRG-00090`, `BRG-00090-02`, `CLD-00025-01`, `CLD-00025`, `CLD-00025-02`.
+- **Afetados:** 24 de 142 pontos (16.9%). Exemplos: `BRG-00090-01`, `BRG-00090-02`, `CLD-00025-01`.
 - **Evidência:**
 
   | point_id | site_external_id | V | I (A) | P decl. (W) | modo | ratio |
@@ -2361,7 +2361,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 - **Veredito:** suspeito — pode ser derating intencional, mas desvios >25% abaixo da capacidade são prováveis erros de introdução.
 ### [MÉDIO] available_charging_power em kW, conectores em W
 - **Regra:** `available_charging_power < 1000` com `max()` dos conectores `>= 1000` (só 349/21056 linhas têm `available`; 337 estão nesta escala).
-- **Afetados:** 20 de 142 pontos (14.1%). Exemplos: `ACN-00014-01`, `ACN-00014`, `ACN-00014-02`, `ACN-00016-01`, `ACN-00016`, `ACN-00016-02`.
+- **Afetados:** 20 de 142 pontos (14.1%). Exemplos: `ACN-00014-01`, `ACN-00014-02`, `ACN-00016-01`.
 - **Evidência:**
 
   | point_id | site_external_id | P disp. | max conector |
@@ -2380,7 +2380,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 - **Veredito:** suspeito — unidades inconsistentes entre campos do mesmo ponto; impede comparação direta e sugere ingestão sem normalização (kW vs W).
 ### [MÉDIO] Potência disponível incoerente (após normalizar kW→W)
 - **Regra:** por ponto: `available_charging_power` (×1000 quando em escala kW) vs `max()` dos conectores; limiar ±30%. Dominado por ratio ≈ 2 (total do site no campo do ponto).
-- **Afetados:** 16 de 142 pontos (11.3%). Exemplos: `ACN-00014-01`, `ACN-00014`, `ACN-00014-02`, `ACN-00016-01`, `ACN-00016`, `ACN-00016-02`.
+- **Afetados:** 16 de 142 pontos (11.3%). Exemplos: `ACN-00014-01`, `ACN-00014-02`, `ACN-00016-01`.
 - **Evidência:**
 
   | point_id | site_external_id | P disp. (W norm.) | max conector (W) | ratio |
@@ -2399,7 +2399,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 - **Veredito:** suspeito — a potência do ponto devia aproximar o máximo das tomadas; ratio ≈ 2 sugere que o campo carrega o total do site/estação em vez do máximo do ponto.
 ### [MÉDIO] Valores crus suspeitos (1200/3600 V, 600 A)
 - **Regra:** sinalizar linhas com `voltage ∈ {1200, 3600}` ou `max_current = 600`.
-- **Afetados:** 1 de 142 pontos (0.7%). Exemplos: `MLD-00029-04`, `MLD-00029`, `ECI-MLD-00029`, `PT*ECI*E*MLD*00029*04`.
+- **Afetados:** 1 de 142 pontos (0.7%). Exemplos: `MLD-00029-04`; contexto (mesmo site/OPC, não afetados): `MLD-00029`, `ACN-00014-01`.
 - **Evidência:**
 
   | point_id | site_external_id | V | I (A) | conector | modo |
@@ -2409,7 +2409,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 - **Veredito:** suspeito — valores já observados como erros sistemáticos; 1200 V × 600 A = 720 kW excede qualquer carregador instalado.
 ### [BAIXO] Nome do operador fragmentado (várias grafias)
 - **Regra:** `operator_id = ECOI` com 2 grafias distintas em `operator_name`.
-- **Afetados:** 142 de 142 pontos (100.0%). Exemplos: `ACN-00014-01`, `ACN-00014`, `ACN-00014-02`, `ACN-00016-01`, `ACN-00016`, `ACN-00016-02`.
+- **Afetados:** 142 de 142 pontos (100.0%). Exemplos: `ACN-00014-01`, `ACN-00014-02`, `ACN-00016-01`.
 - **Evidência:**
 
   | grafia observada |
@@ -2420,7 +2420,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 - **Veredito:** suspeito — a mesma entidade legal com várias grafias fragiliza a agregação por operador.
 ### [BAIXO] usage_type em falta
 - **Regra:** `usage_type` vazio (enum `ChargingPointUsageTypeEnum`).
-- **Afetados:** 6 de 142 pontos (4.2%). Exemplos: `ACN-00016-01`, `ACN-00016`, `ACN-00016-02`, `ACN-00017-01`, `ACN-00017`, `ACN-00017-02`.
+- **Afetados:** 6 de 142 pontos (4.2%). Exemplos: `ACN-00016-01`, `ACN-00016-02`, `ACN-00017-01`.
 - **Evidência:**
 
   | point_id | site_external_id |
@@ -2437,7 +2437,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 ## CAPW — Capwatt Services (14 sites, 74 pontos)
 ### [MÉDIO] Potência declarada muito abaixo de V×I (derating ou erro)
 - **Regra:** mesma fórmula; `ratio < 0.75`.
-- **Afetados:** 24 de 74 pontos (32.4%). Exemplos: `LSB-00379-01`, `LSB-00379`, `LSB-00379-02`, `LSB-00379-03`, `LSB-00379-04`.
+- **Afetados:** 24 de 74 pontos (32.4%). Exemplos: `LSB-00379-01`, `LSB-00379-02`, `LSB-00379-03`.
 - **Evidência:**
 
   | point_id | site_external_id | V | I (A) | P decl. (W) | modo | ratio |
@@ -2456,7 +2456,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 - **Veredito:** suspeito — pode ser derating intencional, mas desvios >25% abaixo da capacidade são prováveis erros de introdução.
 ### [BAIXO] Nome do operador fragmentado (várias grafias)
 - **Regra:** `operator_id = CAPW` com 2 grafias distintas em `operator_name`.
-- **Afetados:** 74 de 74 pontos (100.0%). Exemplos: `ABF-00053-01`, `ABF-00053`, `ABF-00053-02`, `ABF-00053-03`, `ABF-00053-04`.
+- **Afetados:** 74 de 74 pontos (100.0%). Exemplos: `ABF-00053-01`, `ABF-00053-02`, `ABF-00053-03`.
 - **Evidência:**
 
   | grafia observada |
@@ -2467,7 +2467,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 - **Veredito:** suspeito — a mesma entidade legal com várias grafias fragiliza a agregação por operador.
 ### [BAIXO] Sites extremos (n_points > média+3σ = 6.6; máx 40, média 2.5)
 - **Regra:** cauda da distribuição: `max(n_points) = 40`, média 2.5, desvio 1.4, limiar 6.6.
-- **Afetados:** 24 de 74 pontos (32.4%). Exemplos: `LSB-00379-01`, `LSB-00379`, `LSB-00379-02`, `LSB-00379-03`, `LSB-00379-04`.
+- **Afetados:** 24 de 74 pontos (32.4%). Exemplos: `LSB-00379-01`, `LSB-00379-02`, `LSB-00379-03`.
 - **Evidência:**
 
   | site_id | site_external_id | n_points |
@@ -2480,7 +2480,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 ## CEPS — Cepsa Portuguesa Petroleos (32 sites, 57 pontos)
 ### [MÉDIO] Potência declarada muito abaixo de V×I (derating ou erro)
 - **Regra:** mesma fórmula; `ratio < 0.75`.
-- **Afetados:** 53 de 57 pontos (93.0%). Exemplos: `ABT-00017-01`, `ABT-00017`, `ABT-00017-02`, `ABT-00018-01`, `ABT-00018`, `ABT-00018-02`.
+- **Afetados:** 53 de 57 pontos (93.0%). Exemplos: `ABT-00017-01`, `ABT-00017-02`, `ABT-00018-01`.
 - **Evidência:**
 
   | point_id | site_external_id | V | I (A) | P decl. (W) | modo | ratio |
@@ -2499,7 +2499,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 - **Veredito:** suspeito — pode ser derating intencional, mas desvios >25% abaixo da capacidade são prováveis erros de introdução.
 ### [MÉDIO] available_charging_power em kW, conectores em W
 - **Regra:** `available_charging_power < 1000` com `max()` dos conectores `>= 1000` (só 349/21056 linhas têm `available`; 337 estão nesta escala).
-- **Afetados:** 25 de 57 pontos (43.9%). Exemplos: `ABF-00120-01`, `ABF-00120`, `ABF-00120-02`, `BRG-00147-01`, `BRG-00147`, `BRG-00147-02`.
+- **Afetados:** 25 de 57 pontos (43.9%). Exemplos: `ABF-00120-01`, `ABF-00120-02`, `BRG-00147-01`.
 - **Evidência:**
 
   | point_id | site_external_id | P disp. | max conector |
@@ -2520,7 +2520,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 ## DTEI — DTE, Instalacoes Especiais (84 sites, 197 pontos)
 ### [MÉDIO] Potência declarada muito abaixo de V×I (derating ou erro)
 - **Regra:** mesma fórmula; `ratio < 0.75`.
-- **Afetados:** 42 de 197 pontos (21.3%). Exemplos: `AGD-00020-01`, `AGD-00020`, `AGD-00020-02`, `AGD-00021-01`, `AGD-00021`, `AGD-00021-02`.
+- **Afetados:** 42 de 197 pontos (21.3%). Exemplos: `AGD-00020-01`, `AGD-00020-02`, `AGD-00021-01`.
 - **Evidência:**
 
   | point_id | site_external_id | V | I (A) | P decl. (W) | modo | ratio |
@@ -2539,7 +2539,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 - **Veredito:** suspeito — pode ser derating intencional, mas desvios >25% abaixo da capacidade são prováveis erros de introdução.
 ### [BAIXO] usage_type em falta
 - **Regra:** `usage_type` vazio (enum `ChargingPointUsageTypeEnum`).
-- **Afetados:** 10 de 197 pontos (5.1%). Exemplos: `BMT-00006-01`, `BMT-00006`, `BMT-00006-02`, `BMT-00007-01`, `BMT-00007`, `BMT-00007-02`.
+- **Afetados:** 10 de 197 pontos (5.1%). Exemplos: `BMT-00006-01`, `BMT-00006-02`, `BMT-00007-01`.
 - **Evidência:**
 
   | point_id | site_external_id |
@@ -2560,7 +2560,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 ## ENBL — Enable Mobility Solutions, S.A. (24 sites, 52 pontos)
 ### [MÉDIO] available_charging_power em kW, conectores em W
 - **Regra:** `available_charging_power < 1000` com `max()` dos conectores `>= 1000` (só 349/21056 linhas têm `available`; 337 estão nesta escala).
-- **Afetados:** 48 de 52 pontos (92.3%). Exemplos: `AVR-00099-01`, `AVR-00099`, `AVR-00099-02`, `AVR-00100-01`, `AVR-00100`, `AVR-00100-02`.
+- **Afetados:** 48 de 52 pontos (92.3%). Exemplos: `AVR-00099-01`, `AVR-00099-02`, `AVR-00100-01`.
 - **Evidência:**
 
   | point_id | site_external_id | P disp. | max conector |
@@ -2579,7 +2579,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 - **Veredito:** suspeito — unidades inconsistentes entre campos do mesmo ponto; impede comparação direta e sugere ingestão sem normalização (kW vs W).
 ### [MÉDIO] Potência declarada muito abaixo de V×I (derating ou erro)
 - **Regra:** mesma fórmula; `ratio < 0.75`.
-- **Afetados:** 24 de 52 pontos (46.2%). Exemplos: `AVR-00099-01`, `AVR-00099`, `AVR-00099-02`, `AVR-00100-01`, `AVR-00100`, `AVR-00100-02`.
+- **Afetados:** 24 de 52 pontos (46.2%). Exemplos: `AVR-00099-01`, `AVR-00099-02`, `AVR-00100-01`.
 - **Evidência:**
 
   | point_id | site_external_id | V | I (A) | P decl. (W) | modo | ratio |
@@ -2598,7 +2598,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 - **Veredito:** suspeito — pode ser derating intencional, mas desvios >25% abaixo da capacidade são prováveis erros de introdução.
 ### [MÉDIO] Potência disponível incoerente (após normalizar kW→W)
 - **Regra:** por ponto: `available_charging_power` (×1000 quando em escala kW) vs `max()` dos conectores; limiar ±30%. Dominado por ratio ≈ 2 (total do site no campo do ponto).
-- **Afetados:** 11 de 52 pontos (21.2%). Exemplos: `FIG-00037-01`, `FIG-00037`, `FIG-00037-02`, `FIG-00037-03`, `SNT-00188-03`, `SNT-00188`.
+- **Afetados:** 11 de 52 pontos (21.2%). Exemplos: `FIG-00037-01`, `FIG-00037-02`, `FIG-00037-03`.
 - **Evidência:**
 
   | point_id | site_external_id | P disp. (W norm.) | max conector (W) | ratio |
@@ -2617,7 +2617,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 - **Veredito:** suspeito — a potência do ponto devia aproximar o máximo das tomadas; ratio ≈ 2 sugere que o campo carrega o total do site/estação em vez do máximo do ponto.
 ### [BAIXO] usage_type em falta
 - **Regra:** `usage_type` vazio (enum `ChargingPointUsageTypeEnum`).
-- **Afetados:** 2 de 52 pontos (3.8%). Exemplos: `SNT-00237-01`, `SNT-00237`, `SNT-00237-02`.
+- **Afetados:** 2 de 52 pontos (3.8%). Exemplos: `SNT-00237-01`, `SNT-00237-02`; contexto (mesmo site/OPC, não afetados): `SNT-00237`.
 - **Evidência:**
 
   | point_id | site_external_id |
@@ -2630,7 +2630,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 ## GENJ — Generation Journey Lda (21 sites, 41 pontos)
 ### [MÉDIO] Potência declarada muito abaixo de V×I (derating ou erro)
 - **Regra:** mesma fórmula; `ratio < 0.75`.
-- **Afetados:** 3 de 41 pontos (7.3%). Exemplos: `GMR-00103-01`, `GMR-00103`, `GMR-00103-02`, `GMR-00104-1`, `GMR-00104`.
+- **Afetados:** 3 de 41 pontos (7.3%). Exemplos: `GMR-00103-01`, `GMR-00103-02`, `GMR-00104-1`.
 - **Evidência:**
 
   | point_id | site_external_id | V | I (A) | P decl. (W) | modo | ratio |
@@ -2642,7 +2642,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 - **Veredito:** suspeito — pode ser derating intencional, mas desvios >25% abaixo da capacidade são prováveis erros de introdução.
 ### [BAIXO] Nome do operador fragmentado (várias grafias)
 - **Regra:** `operator_id = GENJ` com 2 grafias distintas em `operator_name`.
-- **Afetados:** 41 de 41 pontos (100.0%). Exemplos: `GMR-00073-01`, `GMR-00073`, `GMR-00073-02`, `GMR-00074-01`, `GMR-00074`, `GMR-00074-02`.
+- **Afetados:** 41 de 41 pontos (100.0%). Exemplos: `GMR-00073-01`, `GMR-00073-02`, `GMR-00074-01`.
 - **Evidência:**
 
   | grafia observada |
@@ -2655,7 +2655,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 ## IBRD — Iberdrola Clientes Portugal, Unipessoal, Lda (184 sites, 361 pontos)
 ### [MÉDIO] Potência declarada muito abaixo de V×I (derating ou erro)
 - **Regra:** mesma fórmula; `ratio < 0.75`.
-- **Afetados:** 24 de 361 pontos (6.6%). Exemplos: `BGC-00013-01`, `BGC-00013`, `BGC-00013-02`, `BGC-00027-01`, `BGC-00027`, `BGC-00027-02`.
+- **Afetados:** 24 de 361 pontos (6.6%). Exemplos: `BGC-00013-01`, `BGC-00013-02`, `BGC-00027-01`.
 - **Evidência:**
 
   | point_id | site_external_id | V | I (A) | P decl. (W) | modo | ratio |
@@ -2674,7 +2674,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 - **Veredito:** suspeito — pode ser derating intencional, mas desvios >25% abaixo da capacidade são prováveis erros de introdução.
 ### [BAIXO] usage_type em falta
 - **Regra:** `usage_type` vazio (enum `ChargingPointUsageTypeEnum`).
-- **Afetados:** 12 de 361 pontos (3.3%). Exemplos: `BCL-00051-01`, `BCL-00051`, `BCL-00051-02`, `BGC-00029-01`, `BGC-00029`, `BGC-00029-02`.
+- **Afetados:** 12 de 361 pontos (3.3%). Exemplos: `BCL-00051-01`, `BCL-00051-02`, `BGC-00029-01`.
 - **Evidência:**
 
   | point_id | site_external_id |
@@ -2695,7 +2695,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 ## ZUND — Grupo Easycharger, SL (14 sites, 27 pontos)
 ### [MÉDIO] Potência declarada muito abaixo de V×I (derating ou erro)
 - **Regra:** mesma fórmula; `ratio < 0.75`.
-- **Afetados:** 2 de 27 pontos (7.4%). Exemplos: `BRG-00085-01`, `BRG-00085`, `BRG-00085-02`.
+- **Afetados:** 2 de 27 pontos (7.4%). Exemplos: `BRG-00085-01`, `BRG-00085-02`; contexto (mesmo site/OPC, não afetados): `BRG-00085`.
 - **Evidência:**
 
   | point_id | site_external_id | V | I (A) | P decl. (W) | modo | ratio |
@@ -2706,7 +2706,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 - **Veredito:** suspeito — pode ser derating intencional, mas desvios >25% abaixo da capacidade são prováveis erros de introdução.
 ### [BAIXO] usage_type em falta
 - **Regra:** `usage_type` vazio (enum `ChargingPointUsageTypeEnum`).
-- **Afetados:** 24 de 27 pontos (88.9%). Exemplos: `CLD-00052-01`, `CLD-00052`, `CLD-00052-02`, `CLD-00053-01`, `CLD-00053`, `CLD-00053-02`.
+- **Afetados:** 24 de 27 pontos (88.9%). Exemplos: `CLD-00052-01`, `CLD-00052-02`, `CLD-00053-01`.
 - **Evidência:**
 
   | point_id | site_external_id |
@@ -2727,7 +2727,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 ## CIRC — Circuitos Energy Solutions, Lda. (12 sites, 22 pontos)
 ### [MÉDIO] Potência declarada muito abaixo de V×I (derating ou erro)
 - **Regra:** mesma fórmula; `ratio < 0.75`.
-- **Afetados:** 4 de 22 pontos (18.2%). Exemplos: `LSB-00273-1`, `LSB-00273`, `MDB-00003-1`, `MDB-00003`, `PRD-00007-01`, `PRD-00007`.
+- **Afetados:** 4 de 22 pontos (18.2%). Exemplos: `LSB-00273-1`, `MDB-00003-1`, `PRD-00007-01`.
 - **Evidência:**
 
   | point_id | site_external_id | V | I (A) | P decl. (W) | modo | ratio |
@@ -2740,7 +2740,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 - **Veredito:** suspeito — pode ser derating intencional, mas desvios >25% abaixo da capacidade são prováveis erros de introdução.
 ### [BAIXO] Nome do operador fragmentado (várias grafias)
 - **Regra:** `operator_id = CIRC` com 2 grafias distintas em `operator_name`.
-- **Afetados:** 22 de 22 pontos (100.0%). Exemplos: `LSB-00271-1`, `LSB-00271`, `LSB-00271-2`, `LSB-00272-01`, `LSB-00272`, `LSB-00272-02`.
+- **Afetados:** 22 de 22 pontos (100.0%). Exemplos: `LSB-00271-1`, `LSB-00271-2`, `LSB-00272-01`.
 - **Evidência:**
 
   | grafia observada |
@@ -2753,7 +2753,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 ## INTV — Instavolt Portugal Lda. (21 sites, 38 pontos)
 ### [MÉDIO] Potência declarada muito abaixo de V×I (derating ou erro)
 - **Regra:** mesma fórmula; `ratio < 0.75`.
-- **Afetados:** 21 de 38 pontos (55.3%). Exemplos: `ACB-00042-01`, `ACB-00042`, `ACB-00043-01`, `ACB-00043`, `ACB-00044-01`, `ACB-00044`.
+- **Afetados:** 21 de 38 pontos (55.3%). Exemplos: `ACB-00042-01`, `ACB-00043-01`, `ACB-00044-01`.
 - **Evidência:**
 
   | point_id | site_external_id | V | I (A) | P decl. (W) | modo | ratio |
@@ -2774,7 +2774,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 ## IMAG — Image4all - Eficiência Energética, Comunicação e Imagem (5 sites, 9 pontos)
 ### [MÉDIO] Potência declarada muito abaixo de V×I (derating ou erro)
 - **Regra:** mesma fórmula; `ratio < 0.75`.
-- **Afetados:** 5 de 9 pontos (55.6%). Exemplos: `LSB-00499-01`, `LSB-00499`, `LSB-00499-02`, `LSB-00502-01`, `LSB-00502`, `LSB-00502-02`.
+- **Afetados:** 5 de 9 pontos (55.6%). Exemplos: `LSB-00499-01`, `LSB-00499-02`, `LSB-00502-01`.
 - **Evidência:**
 
   | point_id | site_external_id | V | I (A) | P decl. (W) | modo | ratio |
@@ -2788,7 +2788,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 - **Veredito:** suspeito — pode ser derating intencional, mas desvios >25% abaixo da capacidade são prováveis erros de introdução.
 ### [BAIXO] Nome do operador fragmentado (várias grafias)
 - **Regra:** `operator_id = IMAG` com 2 grafias distintas em `operator_name`.
-- **Afetados:** 9 de 9 pontos (100.0%). Exemplos: `LSB-00387-01`, `LSB-00387`, `LSB-00387-02`, `LSB-00388-01`, `LSB-00388`, `LSB-00388-02`.
+- **Afetados:** 9 de 9 pontos (100.0%). Exemplos: `LSB-00387-01`, `LSB-00387-02`, `LSB-00388-01`.
 - **Evidência:**
 
   | grafia observada |
@@ -2801,7 +2801,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 ## EMAC — EMACOM - Telecomunicações da Madeira, Unipessoal, Lda (25 sites, 44 pontos)
 ### [MÉDIO] Potência declarada muito abaixo de V×I (derating ou erro)
 - **Regra:** mesma fórmula; `ratio < 0.75`.
-- **Afetados:** 4 de 44 pontos (9.1%). Exemplos: `MCH-00002-02`, `MCH-00002`, `MCH-00002-03`, `RAM-CML-00001-03`, `RAM-CML-00001`, `SCR-00023-03`, `SCR-00023`.
+- **Afetados:** 4 de 44 pontos (9.1%). Exemplos: `MCH-00002-02`, `MCH-00002-03`, `RAM-CML-00001-03`.
 - **Evidência:**
 
   | point_id | site_external_id | V | I (A) | P decl. (W) | modo | ratio |
@@ -2814,7 +2814,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 - **Veredito:** suspeito — pode ser derating intencional, mas desvios >25% abaixo da capacidade são prováveis erros de introdução.
 ### [MÉDIO] Potência disponível incoerente (após normalizar kW→W)
 - **Regra:** por ponto: `available_charging_power` (×1000 quando em escala kW) vs `max()` dos conectores; limiar ±30%. Dominado por ratio ≈ 2 (total do site no campo do ponto).
-- **Afetados:** 3 de 44 pontos (6.8%). Exemplos: `SCR-00023-01`, `SCR-00023`, `SCR-00023-02`, `SCR-00023-03`.
+- **Afetados:** 3 de 44 pontos (6.8%). Exemplos: `SCR-00023-01`, `SCR-00023-02`, `SCR-00023-03`.
 - **Evidência:**
 
   | point_id | site_external_id | P disp. (W norm.) | max conector (W) | ratio |
@@ -2826,7 +2826,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 - **Veredito:** suspeito — a potência do ponto devia aproximar o máximo das tomadas; ratio ≈ 2 sugere que o campo carrega o total do site/estação em vez do máximo do ponto.
 ### [MÉDIO] available_charging_power em kW, conectores em W
 - **Regra:** `available_charging_power < 1000` com `max()` dos conectores `>= 1000` (só 349/21056 linhas têm `available`; 337 estão nesta escala).
-- **Afetados:** 3 de 44 pontos (6.8%). Exemplos: `SCR-00023-01`, `SCR-00023`, `SCR-00023-02`, `SCR-00023-03`.
+- **Afetados:** 3 de 44 pontos (6.8%). Exemplos: `SCR-00023-01`, `SCR-00023-02`, `SCR-00023-03`.
 - **Evidência:**
 
   | point_id | site_external_id | P disp. | max conector |
@@ -2838,7 +2838,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 - **Veredito:** suspeito — unidades inconsistentes entre campos do mesmo ponto; impede comparação direta e sugere ingestão sem normalização (kW vs W).
 ### [BAIXO] site_id/site_external_id fora do padrão
 - **Regra:** padrão `OP-CÓDIGO-NNNNN` (código = concelho) ou legado `OP-MOBI-CÓDIGO-NNNNN`; ex. `EDP-ALM-00072`, `GLP-MOBI-LSB-00085`.
-- **Afetados:** 3 de 44 pontos (6.8%). Exemplos: `RAM-CML-00001-01`, `RAM-CML-00001`, `RAM-CML-00001-02`, `RAM-CML-00001-03`.
+- **Afetados:** 3 de 44 pontos (6.8%). Exemplos: `RAM-CML-00001-01`, `RAM-CML-00001-02`, `RAM-CML-00001-03`.
 - **Evidência:**
 
   | site_id | site_external_id |
@@ -2850,7 +2850,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 ## EVPW — EVpower, Charging Solutions Lda (22 sites, 46 pontos)
 ### [MÉDIO] available_charging_power em kW, conectores em W
 - **Regra:** `available_charging_power < 1000` com `max()` dos conectores `>= 1000` (só 349/21056 linhas têm `available`; 337 estão nesta escala).
-- **Afetados:** 6 de 46 pontos (13.0%). Exemplos: `ELV-00022-01`, `ELV-00022`, `ELV-00022-02`, `ELV-00022-03`, `PTM-00071-01`, `PTM-00071`.
+- **Afetados:** 6 de 46 pontos (13.0%). Exemplos: `ELV-00022-01`, `ELV-00022-02`, `ELV-00022-03`.
 - **Evidência:**
 
   | point_id | site_external_id | P disp. | max conector |
@@ -2865,7 +2865,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 - **Veredito:** suspeito — unidades inconsistentes entre campos do mesmo ponto; impede comparação direta e sugere ingestão sem normalização (kW vs W).
 ### [MÉDIO] Potência disponível incoerente (após normalizar kW→W)
 - **Regra:** por ponto: `available_charging_power` (×1000 quando em escala kW) vs `max()` dos conectores; limiar ±30%. Dominado por ratio ≈ 2 (total do site no campo do ponto).
-- **Afetados:** 3 de 46 pontos (6.5%). Exemplos: `ELV-00022-01`, `ELV-00022`, `ELV-00022-02`, `ELV-00022-03`.
+- **Afetados:** 3 de 46 pontos (6.5%). Exemplos: `ELV-00022-01`, `ELV-00022-02`, `ELV-00022-03`.
 - **Evidência:**
 
   | point_id | site_external_id | P disp. (W norm.) | max conector (W) | ratio |
@@ -2877,7 +2877,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 - **Veredito:** suspeito — a potência do ponto devia aproximar o máximo das tomadas; ratio ≈ 2 sugere que o campo carrega o total do site/estação em vez do máximo do ponto.
 ### [MÉDIO] Potência declarada muito abaixo de V×I (derating ou erro)
 - **Regra:** mesma fórmula; `ratio < 0.75`.
-- **Afetados:** 1 de 46 pontos (2.2%). Exemplos: `FIG-00002-03`, `FIG-00002`, `EVP-FIG-00002`, `PT*EVP*E*FIG*00002*03`.
+- **Afetados:** 1 de 46 pontos (2.2%). Exemplos: `FIG-00002-03`; contexto (mesmo site/OPC, não afetados): `FIG-00002`, `ARV-00012-01`.
 - **Evidência:**
 
   | point_id | site_external_id | V | I (A) | P decl. (W) | modo | ratio |
@@ -2889,7 +2889,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 ## CONM — ConectaMais, Lda (3 sites, 6 pontos)
 ### [MÉDIO] available_charging_power em kW, conectores em W
 - **Regra:** `available_charging_power < 1000` com `max()` dos conectores `>= 1000` (só 349/21056 linhas têm `available`; 337 estão nesta escala).
-- **Afetados:** 6 de 6 pontos (100.0%). Exemplos: `LRA-00179-01`, `LRA-00179`, `LRA-00179-02`, `MGR-00028-01`, `MGR-00028`, `MGR-00028-02`.
+- **Afetados:** 6 de 6 pontos (100.0%). Exemplos: `LRA-00179-01`, `LRA-00179-02`, `MGR-00028-01`.
 - **Evidência:**
 
   | point_id | site_external_id | P disp. | max conector |
@@ -2904,7 +2904,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 - **Veredito:** suspeito — unidades inconsistentes entre campos do mesmo ponto; impede comparação direta e sugere ingestão sem normalização (kW vs W).
 ### [MÉDIO] Potência disponível incoerente (após normalizar kW→W)
 - **Regra:** por ponto: `available_charging_power` (×1000 quando em escala kW) vs `max()` dos conectores; limiar ±30%. Dominado por ratio ≈ 2 (total do site no campo do ponto).
-- **Afetados:** 4 de 6 pontos (66.7%). Exemplos: `LRA-00179-01`, `LRA-00179`, `LRA-00179-02`, `MGR-00029-01`, `MGR-00029`, `MGR-00029-02`.
+- **Afetados:** 4 de 6 pontos (66.7%). Exemplos: `LRA-00179-01`, `LRA-00179-02`, `MGR-00029-01`.
 - **Evidência:**
 
   | point_id | site_external_id | P disp. (W norm.) | max conector (W) | ratio |
@@ -2919,7 +2919,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 ## FRTR — FRONTROW, LDA (5 sites, 8 pontos)
 ### [MÉDIO] Potência declarada muito abaixo de V×I (derating ou erro)
 - **Regra:** mesma fórmula; `ratio < 0.75`.
-- **Afetados:** 4 de 8 pontos (50.0%). Exemplos: `BJA-00065-01`, `BJA-00065`, `BJA-00065-02`, `CNT-00038-01`, `CNT-00038`, `CNT-00038-02`.
+- **Afetados:** 4 de 8 pontos (50.0%). Exemplos: `BJA-00065-01`, `BJA-00065-02`, `CNT-00038-01`.
 - **Evidência:**
 
   | point_id | site_external_id | V | I (A) | P decl. (W) | modo | ratio |
@@ -2932,7 +2932,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 - **Veredito:** suspeito — pode ser derating intencional, mas desvios >25% abaixo da capacidade são prováveis erros de introdução.
 ### [MÉDIO] available_charging_power em kW, conectores em W
 - **Regra:** `available_charging_power < 1000` com `max()` dos conectores `>= 1000` (só 349/21056 linhas têm `available`; 337 estão nesta escala).
-- **Afetados:** 4 de 8 pontos (50.0%). Exemplos: `BJA-00065-01`, `BJA-00065`, `BJA-00065-02`, `CNT-00038-01`, `CNT-00038`, `CNT-00038-02`.
+- **Afetados:** 4 de 8 pontos (50.0%). Exemplos: `BJA-00065-01`, `BJA-00065-02`, `CNT-00038-01`.
 - **Evidência:**
 
   | point_id | site_external_id | P disp. | max conector |
@@ -2947,7 +2947,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 ## IHOM — iHome Lda (6 sites, 10 pontos)
 ### [MÉDIO] Potência declarada muito abaixo de V×I (derating ou erro)
 - **Regra:** mesma fórmula; `ratio < 0.75`.
-- **Afetados:** 4 de 10 pontos (40.0%). Exemplos: `ABF-00050-01`, `ABF-00050`, `ABF-00050-02`, `ABF-00051-01`, `ABF-00051`, `ABF-00051-02`.
+- **Afetados:** 4 de 10 pontos (40.0%). Exemplos: `ABF-00050-01`, `ABF-00050-02`, `ABF-00051-01`.
 - **Evidência:**
 
   | point_id | site_external_id | V | I (A) | P decl. (W) | modo | ratio |
@@ -2962,7 +2962,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 ## SOLX — SOLX (4 sites, 8 pontos)
 ### [MÉDIO] Potência declarada muito abaixo de V×I (derating ou erro)
 - **Regra:** mesma fórmula; `ratio < 0.75`.
-- **Afetados:** 4 de 8 pontos (50.0%). Exemplos: `RPN-00004-01`, `RPN-00004`, `RPN-00004-02`, `RPN-00005-01`, `RPN-00005`, `RPN-00005-02`.
+- **Afetados:** 4 de 8 pontos (50.0%). Exemplos: `RPN-00004-01`, `RPN-00004-02`, `RPN-00005-01`.
 - **Evidência:**
 
   | point_id | site_external_id | V | I (A) | P decl. (W) | modo | ratio |
@@ -2977,7 +2977,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 ## WENE — WENEA SERVICES SPAIN S.L. (2 sites, 4 pontos)
 ### [MÉDIO] Potência declarada muito abaixo de V×I (derating ou erro)
 - **Regra:** mesma fórmula; `ratio < 0.75`.
-- **Afetados:** 4 de 4 pontos (100.0%). Exemplos: `LSB-00610-01`, `LSB-00610`, `LSB-00610-02`, `LSB-00611-01`, `LSB-00611`, `LSB-00611-02`.
+- **Afetados:** 4 de 4 pontos (100.0%). Exemplos: `LSB-00610-01`, `LSB-00610-02`, `LSB-00611-01`.
 - **Evidência:**
 
   | point_id | site_external_id | V | I (A) | P decl. (W) | modo | ratio |
@@ -2992,7 +2992,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 ## AUCH — Auchan Retail Portugal S.A (3 sites, 3 pontos)
 ### [MÉDIO] available_charging_power em kW, conectores em W
 - **Regra:** `available_charging_power < 1000` com `max()` dos conectores `>= 1000` (só 349/21056 linhas têm `available`; 337 estão nesta escala).
-- **Afetados:** 3 de 3 pontos (100.0%). Exemplos: `CSC-00422-01`, `CSC-00422`, `CSC-00423-01`, `CSC-00423`, `CSC-00424-01`, `CSC-00424`.
+- **Afetados:** 3 de 3 pontos (100.0%). Exemplos: `CSC-00422-01`, `CSC-00423-01`, `CSC-00424-01`.
 - **Evidência:**
 
   | point_id | site_external_id | P disp. | max conector |
@@ -3006,7 +3006,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 ## BBGE — Morenergy (2 sites, 3 pontos)
 ### [MÉDIO] available_charging_power em kW, conectores em W
 - **Regra:** `available_charging_power < 1000` com `max()` dos conectores `>= 1000` (só 349/21056 linhas têm `available`; 337 estão nesta escala).
-- **Afetados:** 3 de 3 pontos (100.0%). Exemplos: `CBRPUB11`, `CBRPUB1`, `VVRPUB11`, `VVRPUB1`, `VVRPUB12`.
+- **Afetados:** 3 de 3 pontos (100.0%). Exemplos: `CBRPUB11`, `VVRPUB11`, `VVRPUB12`.
 - **Evidência:**
 
   | point_id | site_external_id | P disp. | max conector |
@@ -3018,7 +3018,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 - **Veredito:** suspeito — unidades inconsistentes entre campos do mesmo ponto; impede comparação direta e sugere ingestão sem normalização (kW vs W).
 ### [BAIXO] brands_accepted vazio
 - **Regra:** `brands_accepted` vazio no ponto.
-- **Afetados:** 3 de 3 pontos (100.0%). Exemplos: `CBRPUB11`, `CBRPUB1`, `VVRPUB11`, `VVRPUB1`, `VVRPUB12`.
+- **Afetados:** 3 de 3 pontos (100.0%). Exemplos: `CBRPUB11`, `VVRPUB11`, `VVRPUB12`.
 - **Evidência:**
 
   | point_id | site_external_id |
@@ -3030,7 +3030,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 - **Veredito:** suspeito — lista de CEME em falta (nota: é lista global, não discriminador de operador).
 ### [BAIXO] site_id/site_external_id fora do padrão
 - **Regra:** padrão `OP-CÓDIGO-NNNNN` (código = concelho) ou legado `OP-MOBI-CÓDIGO-NNNNN`; ex. `EDP-ALM-00072`, `GLP-MOBI-LSB-00085`.
-- **Afetados:** 3 de 3 pontos (100.0%). Exemplos: `CBRPUB11`, `CBRPUB1`, `VVRPUB11`, `VVRPUB1`, `VVRPUB12`.
+- **Afetados:** 3 de 3 pontos (100.0%). Exemplos: `CBRPUB11`, `VVRPUB11`, `VVRPUB12`.
 - **Evidência:**
 
   | site_id | site_external_id |
@@ -3043,7 +3043,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 ## KPMS — KPM Serviços de Engenheria, Unip Lda (1 site, 3 pontos)
 ### [MÉDIO] Potência disponível incoerente (após normalizar kW→W)
 - **Regra:** por ponto: `available_charging_power` (×1000 quando em escala kW) vs `max()` dos conectores; limiar ±30%. Dominado por ratio ≈ 2 (total do site no campo do ponto).
-- **Afetados:** 3 de 3 pontos (100.0%). Exemplos: `FLG-00024-01`, `FLG-00024`, `FLG-00024-02`, `FLG-00024-03`.
+- **Afetados:** 3 de 3 pontos (100.0%). Exemplos: `FLG-00024-01`, `FLG-00024-02`, `FLG-00024-03`.
 - **Evidência:**
 
   | point_id | site_external_id | P disp. (W norm.) | max conector (W) | ratio |
@@ -3055,7 +3055,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 - **Veredito:** suspeito — a potência do ponto devia aproximar o máximo das tomadas; ratio ≈ 2 sugere que o campo carrega o total do site/estação em vez do máximo do ponto.
 ### [MÉDIO] available_charging_power em kW, conectores em W
 - **Regra:** `available_charging_power < 1000` com `max()` dos conectores `>= 1000` (só 349/21056 linhas têm `available`; 337 estão nesta escala).
-- **Afetados:** 3 de 3 pontos (100.0%). Exemplos: `FLG-00024-01`, `FLG-00024`, `FLG-00024-02`, `FLG-00024-03`.
+- **Afetados:** 3 de 3 pontos (100.0%). Exemplos: `FLG-00024-01`, `FLG-00024-02`, `FLG-00024-03`.
 - **Evidência:**
 
   | point_id | site_external_id | P disp. | max conector |
@@ -3069,7 +3069,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 ## PTER — PETROTERMICA ENERGIA, S.A. (2 sites, 4 pontos)
 ### [MÉDIO] Potência declarada muito abaixo de V×I (derating ou erro)
 - **Regra:** mesma fórmula; `ratio < 0.75`.
-- **Afetados:** 3 de 4 pontos (75.0%). Exemplos: `EPS-00040-01`, `EPS-00040`, `EPS-00040-02`, `VFR-00078-02`, `VFR-00078`.
+- **Afetados:** 3 de 4 pontos (75.0%). Exemplos: `EPS-00040-01`, `EPS-00040-02`, `VFR-00078-02`.
 - **Evidência:**
 
   | point_id | site_external_id | V | I (A) | P decl. (W) | modo | ratio |
@@ -3083,7 +3083,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 ## BRIG — Brightcity S.A. (2 sites, 4 pontos)
 ### [MÉDIO] Potência declarada muito abaixo de V×I (derating ou erro)
 - **Regra:** mesma fórmula; `ratio < 0.75`.
-- **Afetados:** 2 de 4 pontos (50.0%). Exemplos: `MTS-00192-01`, `MTS-00192`, `MTS-00192-02`.
+- **Afetados:** 2 de 4 pontos (50.0%). Exemplos: `MTS-00192-01`, `MTS-00192-02`; contexto (mesmo site/OPC, não afetados): `MTS-00192`.
 - **Evidência:**
 
   | point_id | site_external_id | V | I (A) | P decl. (W) | modo | ratio |
@@ -3096,7 +3096,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 ## LOGI — uCharge (26 sites, 35 pontos)
 ### [MÉDIO] Potência declarada muito abaixo de V×I (derating ou erro)
 - **Regra:** mesma fórmula; `ratio < 0.75`.
-- **Afetados:** 2 de 35 pontos (5.7%). Exemplos: `CSC-00126-01`, `CSC-00126`, `CSC-00126-02`.
+- **Afetados:** 2 de 35 pontos (5.7%). Exemplos: `CSC-00126-01`, `CSC-00126-02`; contexto (mesmo site/OPC, não afetados): `CSC-00126`.
 - **Evidência:**
 
   | point_id | site_external_id | V | I (A) | P decl. (W) | modo | ratio |
@@ -3109,7 +3109,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 ## SFAF — Superfafe- supermercados,lda (2 sites, 6 pontos)
 ### [MÉDIO] Potência declarada muito abaixo de V×I (derating ou erro)
 - **Regra:** mesma fórmula; `ratio < 0.75`.
-- **Afetados:** 2 de 6 pontos (33.3%). Exemplos: `FAF-00004-01`, `FAF-00004`, `FAF-00004-02`.
+- **Afetados:** 2 de 6 pontos (33.3%). Exemplos: `FAF-00004-01`, `FAF-00004-02`; contexto (mesmo site/OPC, não afetados): `FAF-00004`.
 - **Evidência:**
 
   | point_id | site_external_id | V | I (A) | P decl. (W) | modo | ratio |
@@ -3122,7 +3122,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 ## SGMR — Superguimarães - Supermercados,lda (2 sites, 6 pontos)
 ### [MÉDIO] Potência declarada muito abaixo de V×I (derating ou erro)
 - **Regra:** mesma fórmula; `ratio < 0.75`.
-- **Afetados:** 2 de 6 pontos (33.3%). Exemplos: `GMR-00022-01`, `GMR-00022`, `GMR-00022-02`.
+- **Afetados:** 2 de 6 pontos (33.3%). Exemplos: `GMR-00022-01`, `GMR-00022-02`; contexto (mesmo site/OPC, não afetados): `GMR-00022`.
 - **Evidência:**
 
   | point_id | site_external_id | V | I (A) | P decl. (W) | modo | ratio |
@@ -3135,7 +3135,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 ## EZC3 — EZ - CHARG3, Lda (15 sites, 15 pontos)
 ### [MÉDIO] available_charging_power em kW, conectores em W
 - **Regra:** `available_charging_power < 1000` com `max()` dos conectores `>= 1000` (só 349/21056 linhas têm `available`; 337 estão nesta escala).
-- **Afetados:** 1 de 15 pontos (6.7%). Exemplos: `CTB-00050-01`, `CTB-00050`, `EZC-CTB-00050`, `PT*EZC*E*CTB*00050*01`.
+- **Afetados:** 1 de 15 pontos (6.7%). Exemplos: `CTB-00050-01`; contexto (mesmo site/OPC, não afetados): `CTB-00050`, `ALM-00121-01`.
 - **Evidência:**
 
   | point_id | site_external_id | P disp. | max conector |
@@ -3147,7 +3147,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 ## IONY — IONITY GmbH (20 sites, 106 pontos)
 ### [BAIXO] Código-postal fora do formato NNNN-NNN
 - **Regra:** `postcode` ∉ `DDDD-DDD`.
-- **Afetados:** 38 de 106 pontos (35.8%). Exemplos: `ADV-00017-01`, `ADV-00017`, `ADV-00017-02`, `ADV-00017-03`, `ADV-00017-04`.
+- **Afetados:** 38 de 106 pontos (35.8%). Exemplos: `ADV-00017-01`, `ADV-00017-02`, `ADV-00017-03`.
 - **Evidência:**
 
   | site_id | site_external_id | postcode |
@@ -3165,7 +3165,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 - **Veredito:** suspeito — formato inválido para código postal PT.
 ### [BAIXO] Sites extremos (n_points > média+3σ = 6.6; máx 40, média 2.5)
 - **Regra:** cauda da distribuição: `max(n_points) = 40`, média 2.5, desvio 1.4, limiar 6.6.
-- **Afetados:** 24 de 106 pontos (22.6%). Exemplos: `ABF-00168-01`, `ABF-00168`, `ABF-00168-02`, `ABF-00168-71`, `ABF-00168-72`.
+- **Afetados:** 24 de 106 pontos (22.6%). Exemplos: `ABF-00168-01`, `ABF-00168-02`, `ABF-00168-71`.
 - **Evidência:**
 
   | site_id | site_external_id | n_points |
@@ -3179,7 +3179,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 ## GREE — GREEN CHARGE - MOBILIDADE ELÉTRICA, LDA (16 sites, 17 pontos)
 ### [BAIXO] Nome do operador fragmentado (várias grafias)
 - **Regra:** `operator_id = GREE` com 2 grafias distintas em `operator_name`.
-- **Afetados:** 17 de 17 pontos (100.0%). Exemplos: `LRS-00064-01`, `LRS-00064`, `LRS-00064-02`, `OER-00146-1`, `OER-00146`, `OER-00152-1`, `OER-00152`.
+- **Afetados:** 17 de 17 pontos (100.0%). Exemplos: `LRS-00064-01`, `LRS-00064-02`, `OER-00146-1`.
 - **Evidência:**
 
   | grafia observada |
@@ -3192,7 +3192,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 ## CSCP — Cascais Proxima (8 sites, 16 pontos)
 ### [BAIXO] Nome do operador fragmentado (várias grafias)
 - **Regra:** `operator_id = CSCP` com 2 grafias distintas em `operator_name`.
-- **Afetados:** 16 de 16 pontos (100.0%). Exemplos: `CSC-00104-01`, `CSC-00104`, `CSC-00104-02`, `CSC-00105-01`, `CSC-00105`, `CSC-00105-02`.
+- **Afetados:** 16 de 16 pontos (100.0%). Exemplos: `CSC-00104-01`, `CSC-00104-02`, `CSC-00105-01`.
 - **Evidência:**
 
   | grafia observada |
@@ -3205,7 +3205,7 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 ## CEVE — CEVE - Cooperativa Eléctrica do Vale D’Este C.R.L. (4 sites, 10 pontos)
 ### [BAIXO] Nome do operador fragmentado (várias grafias)
 - **Regra:** `operator_id = CEVE` com 2 grafias distintas em `operator_name`.
-- **Afetados:** 10 de 10 pontos (100.0%). Exemplos: `BRG-00062-01`, `BRG-00062`, `BRG-00062-02`, `BRG-00063-01`, `BRG-00063`, `BRG-00063-02`.
+- **Afetados:** 10 de 10 pontos (100.0%). Exemplos: `BRG-00062-01`, `BRG-00062-02`, `BRG-00063-01`.
 - **Evidência:**
 
   | grafia observada |
@@ -3215,14 +3215,18 @@ Totais analisados: 8357 sites, 20932 pontos distintos, 21056 linhas ponto-conect
 
 - **Veredito:** suspeito — a mesma entidade legal com várias grafias fragiliza a agregação por operador.
 
+
+## Mudanças de OPCs (desde 2026-09-11)
+Sem mudanças desde 2026-09-11 (baseline): o censo atual (`2026-09-11T14:26:33+00:00`) é idêntico ao último commitado (`2026-09-11T14:22:40+00:00`); nenhum OPC novo, saído ou com grande variação (|Δpontos| ≥ 20 e ≥ 20%).
 ## Metodologia
-- Ficheiros: `nap_static_sites.csv` (8357 sites), `nap_static_points.csv` (21056 linhas, 20932 pontos distintos, 21056 com conector). Snapshot: 2026-09-11T03:00:03.833Z. Script: `scripts/anomalias_check.py` (pandas + lxml), corrido da raiz do repo com `venv/bin/python`.
+- Ficheiros: `nap_static_sites.csv` (8357 sites), `nap_static_points.csv` (21056 linhas, 20932 pontos distintos, 21056 com conector). Snapshot: 2026-09-11T03:00:03.833Z. Script: `scripts/anomalias_check.py` (pandas + lxml), corrido da raiz do repo com `python3` (venv do projeto, `venv/bin/python`, quando existir).
 - Enums validados contra `assets/schemas/energyInfrastructure.xsd`: `ChargingModeEnum` (11), `ConnectorTypeEnum` (38), `ConnectorFormatTypeEnum` (5), `ChargingPointUsageTypeEnum` (10).
 - Física: esperada = V×I, exceto `mode3AC3p` = √3×V×I; `ratio = declarada/esperada`; `>1.25` = impossível, `<0.75` = suspeito. Limiares de potência: `<1 kW` suspeito, `>400 kW` implausível (acima do máximo instalado em PT), `available_charging_power` vs `max()` conectores ±30%; máximo observado `max_power_w = 999990 W`.
 - Localização: continente `lon∈(-9.8,-5.5) lat∈(36.5,42.5)`; Açores `lon∈(-32,-24) lat∈(36.5,40)`; Madeira `lon∈(-17.5,-16) lat∈(32,33.5)`; NUTS1 PT1↔continente, PT2↔Açores, PT3↔Madeira; postcode `NNNN-NNN`; `country = PT`.
 - Chaves: `point_id` repetido em várias linhas é normal (multi-conector); só se reporta duplicado quando o mesmo (`point_id`, conector, modo, formato, P, V, I) surge em >1 linha, o mesmo `point_id` ou `point_external_id` em >1 site, ou `site_id`/`site_external_id` repetidos. `site_id` válido = `OP-CÓDIGO-NNNNN` ou legado `OP-MOBI-CÓDIGO-NNNNN`; `site_external_id` válido = `CÓDIGO-NNNNN` ou `MOBI-CÓDIGO-NNNNN` (código = concelho).
 - Severidade: CRÍTICO = fisicamente impossível ou chave duplicada; ALTO = schema/enum violado ou localização fora de PT; MÉDIO = suspeito forte (derating >25%, combinação implausível); BAIXO = campo em falta ou formato duvidoso. `impossíveis`/`suspeitos` no resumo = nº de pontos distintos com ≥1 achado impossível/suspeito (um ponto pode contar nos dois).
 - Agrupamento por OPC: `operator_id` (nome canónico = grafia mais frequente nos sites). Categorias ao nível do site convertem-se em pontos afetados via `site_id`. Colisões de `point_id` entre OPCs (ex. `615`/`616` em FCTO e VIAV) contam nos dois OPCs, por isso a soma dos `impossíveis` por OPC excede o nº de `point_id` únicos.
+- Rotatividade: censo atual (`Agents-outputs/opc-census.json`, sites+pontos por OPC) vs último commitado (`git show HEAD:Agents-outputs/opc-census.json`); novo/saído por presença; grande variação = `|Δpontos| ≥ 20` e `≥ 20%`; nomes normalizados (minúsculas, sem pontuação) para sinalizar possível rename em vez de entrada+saída.
 - Lacunas sistemáticas do feed (reportadas aqui globalmente, não por OPC, para evitar ruído): `applicable_vehicles` vazio em 100.0% dos sites; `available_charging_power` em falta em 98.3% das linhas ponto-conector (só as linhas com valor entram no teste de coerência ±30%).
 
 ## Não-anomalias verificadas
