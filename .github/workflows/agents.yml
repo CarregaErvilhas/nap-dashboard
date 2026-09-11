@@ -49,22 +49,40 @@ jobs:
         run: python3 scripts/check_agents.py
       - name: Pre-aggregation for the agent
         run: python3 scripts/anomalias_summary.py
-      # Instalação determinística: o instalador upstream (curl|bash, sem pin)
-      # partiu-se a 2026-09-11 quando o scope npm migrou @opencode-ai -> @opencode
-      # e o tarball passou a trazer bin/opencode2 em vez de bin/opencode.
-      # Sacar o tarball imutável do npm e ligar o binário que lá estiver dentro
-      # elimina o instalador E o API de versões da cadeia. Bump manual de VER.
+      # Instalação "latest" sem o instalador upstream (curl|bash, sem pin):
+      # esse partiu-se a 2026-09-11 quando o scope npm migrou @opencode-ai ->
+      # @opencode e o tarball passou a trazer bin/opencode2 em vez de
+      # bin/opencode. Em vez disso: resolve a tag `beta` direto no registry
+      # npm (o tarball existe por construção — sem a race do API de versões),
+      # saca o tarball imutável e liga o binário que lá estiver dentro,
+      # seja qual for o nome. FALLBACK_VER só entra se latest falhar;
+      # atualiza-se quando (e só quando) arder — sem bumps de rotina.
       - name: Install opencode (v2)
         run: |
-          VER="0.0.0-beta-19425"
           SCOPE="@opencode"
           TARGET="linux-x64"
-          TARBALL="${SCOPE}/cli-${TARGET}/-/cli-${TARGET}-${VER}.tgz"
-          mkdir -p "$HOME/.opencode/bin" /tmp/ocpkg
-          curl -fsSL --retry 2 "https://registry.npmjs.org/${TARBALL}" -o /tmp/oc.tgz
-          tar xzf /tmp/oc.tgz -C /tmp/ocpkg
-          BIN="$(ls /tmp/ocpkg/package/bin/* | head -n 1)"
-          install -m 755 "$BIN" "$HOME/.opencode/bin/opencode2"
+          FALLBACK_VER="0.0.0-beta-19425"
+          mkdir -p "$HOME/.opencode/bin"
+          try_ver() {
+            rm -rf /tmp/oc.tgz /tmp/ocpkg && mkdir -p /tmp/ocpkg
+            curl -fsSL --retry 2 \
+              "https://registry.npmjs.org/${SCOPE}/cli-${TARGET}/-/cli-${TARGET}-$1.tgz" \
+              -o /tmp/oc.tgz || return 1
+            tar xzf /tmp/oc.tgz -C /tmp/ocpkg || return 1
+            BIN="$(ls /tmp/ocpkg/package/bin/* 2>/dev/null | head -n 1)"
+            [ -n "$BIN" ] || return 1
+            install -m 755 "$BIN" "$HOME/.opencode/bin/opencode2"
+          }
+          LATEST="$(curl -fsSL --retry 2 \
+            "https://registry.npmjs.org/${SCOPE}%2fcli-${TARGET}" \
+            | python3 -c 'import json,sys; print(json.load(sys.stdin)["dist-tags"]["beta"])')" || LATEST=""
+          if [ -n "$LATEST" ] && try_ver "$LATEST"; then
+            echo "opencode2 $LATEST (latest-beta)"
+          else
+            echo "WARN: latest-beta ($LATEST) falhou; fallback $FALLBACK_VER"
+            try_ver "$FALLBACK_VER" || { echo "FAIL: nem o fallback instalou"; exit 1; }
+            echo "opencode2 $FALLBACK_VER (fallback pinado — atualizar FALLBACK_VER)"
+          fi
           rm -rf /tmp/oc.tgz /tmp/ocpkg
           export PATH="$HOME/.opencode/bin:$PATH"
           echo "$HOME/.opencode/bin" >> "$GITHUB_PATH"
