@@ -10,6 +10,7 @@ Usage (from repo root): venv/bin/python scripts/anomalias_summary.py
 import datetime
 import json
 import math
+import os
 import sys
 
 import pandas as pd
@@ -272,11 +273,25 @@ def main():
                         'over': 0, 'under': 0, 'over_sample': []}
     out['per_opc'] = per_opc
 
+    # Censo rolante para a secção "Mudanças de OPCs": o agents.yml faz commit
+    # deste ficheiro; o próximo run difunde contra o último commitado.
+    census = {'snapshot_date': datetime.datetime.now(datetime.timezone.utc)
+              .strftime('%F'),
+              'generated_utc': out['generated_utc'],
+              'opcs': {oid: {'name': v.get('name'),
+                             'sites': v['sites'],
+                             'points': v['distinct_points']}
+                       for oid, v in per_opc.items()
+                       if oid.strip().lower() not in ('nan', 'none', 'null', '')}}
+    os.makedirs('Agents-outputs', exist_ok=True)
+    with open('Agents-outputs/opc-census.json', 'w') as f:
+        json.dump(census, f, ensure_ascii=False)
+
     with open(OUT, 'w') as f:
         json.dump(out, f, ensure_ascii=False, allow_nan=False)
-    import os
     print(f'wrote {OUT}: {len(per_opc)} OPCs, '
-          f'{os.path.getsize(OUT) / 1024:.0f} KB')
+          f'{os.path.getsize(OUT) / 1024:.0f} KB; '
+          f'census: {len(census["opcs"])} OPCs')
 
 
 if __name__ == '__main__':

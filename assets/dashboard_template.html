@@ -156,6 +156,9 @@
   <h2 id="anomH">Anomalias — agente semanal</h2>
   <div class="panel" id="anom"></div>
 
+  <h2 id="churnH">Mudanças de OPCs</h2>
+  <div class="panel" id="churn"></div>
+
   <h2 id="hubsH">Hubs por potência total (&gt;300 kW)</h2>
   <div class="panel" id="hubs"></div>
 
@@ -455,6 +458,8 @@ if(D.anom_html){document.getElementById('anom').innerHTML = D.anom_html;}
 else{document.getElementById('anom').style.display='none';document.getElementById('anomH').style.display='none';}
 if(D.hubs_html){document.getElementById('hubs').innerHTML = D.hubs_html;}
 else{document.getElementById('hubs').style.display='none';document.getElementById('hubsH').style.display='none';}
+if(D.churn_html){document.getElementById('churn').innerHTML = D.churn_html;}
+else{document.getElementById('churn').style.display='none';document.getElementById('churnH').style.display='none';}
 </script>
 </body>
 </html>

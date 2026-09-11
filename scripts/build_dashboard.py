@@ -362,6 +362,46 @@ HUBS_HTML = f"""<div class="meta">{len(_st)} hubs acima de {HUB_MIN_KW} kW (top 
 {_hrows}</table>
 """ if _hubs else ''
 
+# Painel "Mudanças de OPCs": tabela da secção homónima do relatório do agente
+# (desde a data indicada). Ausente (baseline ainda não correu) → escondido.
+CHURN_HTML = ''
+try:
+    with open('Agents-outputs/anomalias-results.md', encoding='utf-8') as fh:
+        rep_c = fh.read()
+except FileNotFoundError:
+    rep_c = ''
+m = re.search(r'## Mudanças de OPCs \(desde ([^)]+)\)', rep_c) if rep_c else None
+if m:
+        since = m.group(1)
+        rows = []
+        in_table = False
+        for line in rep_c[m.start():].splitlines()[1:]:
+            if line.startswith('| OPC'):
+                in_table = True
+                continue
+            if in_table:
+                if not line.startswith('|'):
+                    break
+                if re.match(r'^\|[\s:|-]+\|$', line):
+                    continue
+                cells = [c.strip() for c in line.strip().strip('|').split('|')]
+                if len(cells) < 5:
+                    continue
+                rows.append((cells[0], cells[1], cells[2], cells[3],
+                             cells[4] if len(cells) > 4 else ''))
+        if rows:
+            shown = rows[:15]
+            extra = f' (top 15 de {len(rows)})' if len(rows) > 15 else ''
+            trs = ''.join(
+                f'<tr><td class="l">{html.escape(o)}</td><td>{html.escape(e)}</td>'
+                f'<td>{html.escape(s)}</td><td>{html.escape(p)}</td>'
+                f'<td class="l">{html.escape(n)}</td></tr>'
+                for o, e, s, p, n in shown)
+            CHURN_HTML = f"""<div class="meta">Rotatividade de OPCs desde <b>{html.escape(since)}</b> ({len(rows)} OPCs{extra}).<br>Limiares: entrada/saída sempre; variação só se |Δpontos| ≥ 20 e ≥ 20%.</div>
+<table><tr><th class="l">OPC</th><th>estado</th><th>sites</th><th>pontos</th><th class="l">nota</th></tr>
+{trs}</table>
+"""
+
 with open('facts.md', 'w') as fh:
     fh.write(re.sub(r'<[^>]+>', '', FACTS_HTML).replace('&gt;', '>').replace('&lt;', '<'))
 with open('errors.md', 'w') as fh:
@@ -406,6 +446,7 @@ data = {
     'errs_html': ERRS_HTML,
     'anom_html': ANOM_HTML,
     'hubs_html': HUBS_HTML,
+    'churn_html': CHURN_HTML,
     'sites': sites_map,
     'outline': outline,
     'districts': districts,

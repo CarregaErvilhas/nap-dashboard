@@ -4,7 +4,7 @@ Esta pasta guarda as system prompts dos agentes automáticos do projeto `nap-das
 
 ## Conteúdo atual
 
-- `anomalias.md` — deteção automática de anomalias e divergências nos dados **estáticos** do NAP (lei de Ohm `P vs V×I`, nº de portas sem sentido, enums fora do schema DATEX II, duplicados, coordenadas, metadados). Lê `nap_static_sites.csv` / `nap_static_points.csv` e escreve `Agents-outputs/anomalias-results.md`, agrupado por OPC (`operator_id — operator_name`).
+- `anomalias.md` — deteção automática de anomalias e divergências nos dados **estáticos** do NAP (lei de Ohm `P vs V×I`, nº de portas sem sentido, enums fora do schema DATEX II, duplicados, coordenadas, metadados) mais rotatividade de OPCs (novos, saídos, grandes variações de pontos). Lê `nap_static_sites.csv` / `nap_static_points.csv` e escreve `Agents-outputs/anomalias-results.md`, agrupado por OPC (`operator_id — operator_name`).
 
 ## Convenções
 
@@ -47,7 +47,9 @@ manual `workflow_dispatch`), gera CSVs frescos, corre o eval
 `agents-summary.json`, gitignored) e o `opencode2 run` com a prompt desta pasta.
 Cadeia de fallback pela variable `OPENCODE_MODEL` (lista por prioridade),
 validação do markdown (formato, secções por OPC, ids reais citados) e
-auto-commit de `Agents-outputs/anomalias-results.md` para `main`. Cada modelo
+auto-commit de `Agents-outputs/anomalias-results.md` para `main` (mais
+`Agents-outputs/opc-census.json`, o censo rolante que alimenta a secção de
+rotatividade de OPCs no run seguinte). Cada modelo
 que falha abre uma Issue; custo $0 (free tier Zen via harness).
 
 ## Eval

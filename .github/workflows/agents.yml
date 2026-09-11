@@ -75,6 +75,7 @@ jobs:
                     "dos CSVs, em backticks, na linha Exemplos — confirma cada id nos "
                     "CSVs antes de escrever; relatório sem ids é rejeitado.")
           REPORT = 'Agents-outputs/anomalias-results.md'
+          CENSUS = 'Agents-outputs/opc-census.json'
           PER_MODEL_TIMEOUT = 1500  # 25 min por modelo
 
           GH_API = "https://api.github.com"
@@ -146,6 +147,8 @@ jobs:
               for marker in ('# Anomalias', '## Resumo por OPC', 'Metodologia'):
                   if marker not in txt:
                       errs.append(f'em falta: {marker}')
+              if HAS_PREV and '## Mudanças de OPCs' not in txt:
+                  errs.append('em falta: secção Mudanças de OPCs')
               for ph in ('TODO', 'TBD', '[...]', 'LOREM'):
                   if ph in txt:
                       errs.append(f'placeholder: {ph}')
@@ -168,6 +171,7 @@ jobs:
               return subprocess.run(cmd, capture_output=True, text=True, **kw)
 
           notified, served_by = False, None
+          HAS_PREV = sh(["git", "cat-file", "-e", f"HEAD:{CENSUS}"]).returncode == 0
           for ref in MODELS:
               print(f"--- a tentar: {ref}")
               if os.path.exists(REPORT):  # nunca validar o ficheiro stale do anterior
@@ -204,7 +208,7 @@ jobs:
           sh(["git", "config", "user.name", "github-actions[bot]"])
           sh(["git", "config", "user.email",
               "41898282+github-actions[bot]@users.noreply.github.com"])
-          sh(["git", "add", REPORT])
+          sh(["git", "add", REPORT, CENSUS])
           diff = sh(["git", "diff", "--cached", "--quiet"])
           if diff.returncode == 0:
               print("sem alterações no relatório; nada a commitar")

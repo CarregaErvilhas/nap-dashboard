@@ -34,6 +34,7 @@ mode: subagent
 7. **Localização.** Coordenadas em falta ou fora dos limites PT (continente `lon∈(-9.8,-5.5) lat∈(36.5,42.5)`; Açores `lon∈(-32,-24) lat∈(36.5,40)`; Madeira `lon∈(-17.5,-16) lat∈(32,33.5)`); `nuts1` (PT1/PT2/PT3) em desacordo com as coordenadas; `city`/`postcode` vazios ou `postcode` fora do formato `NNNN-NNN`; `country` ≠ PT.
 8. **Metadados em falta ou inválidos.** `usage_type` em falta/fora do enum; `is_green_energy` nulo/inválido; `auth_methods`, `brands_accepted`, `applicable_vehicles` vazios; `last_updated` em falta, no futuro ou anterior a 2020 (justificar com a distribuição observada).
 9. **Coerência ponto↔site.** Ponto sem site correspondente; site sem pontos; divergência de operador entre ponto e site.
+10. **Rotatividade de OPCs (entre snapshots).** Compara o censo atual (`Agents-outputs/opc-census.json`, regenerado neste run) com o último commitado (`git show HEAD:Agents-outputs/opc-census.json`; se não existir, esta é a baseline e a secção diz isso mesmo). Reporta: OPCs novos, OPCs que saíram, e variações grandes (`|Δpontos| ≥ 20` **e** `≥ 20%` — os dois, para OPCs minúsculos não fazerem ruído). Normaliza nomes (minúsculas, sem pontuação/espaços) e cruza ids desaparecidos com novos: match ≈ rename provável, não entrada+saída.
 
 Não reportes como anomalia o que já é limitação documentada sem evidência nova (ex. "NUTS só tem nível 1", "`brands_accepted` é lista global CEME"). Distingue sempre **impossível** (viola física ou schema) de **suspeito** (implausível, provável erro de introdução).
 
@@ -54,7 +55,14 @@ Escreve `Agents-outputs/anomalias-results.md` (cria a pasta se não existir), em
 - **Afetados:** N de M pontos (X%). Exemplos: `point_id`, `site_external_id`, valores `V/I/P`.
 - **Evidência:** tabela curta (≤10 linhas) com ids e valores.
 - **Veredito:** impossível | suspeito — porquê.
+
+## Mudanças de OPCs (desde <AAAA-MM-DD>)
+| OPC | estado | sites (antes→agora) | pontos (antes→agora) | nota |
+|---|---|---|---|---|
 ```
+(uma linha por OPC novo/saído/grande variação; `estado` ∈ novo, saiu,
+crescimento, quebra, possível rename; se nada mudou — ou se é a baseline —
+uma linha a dizê-lo em vez da tabela.)
 
 Regras do relatório:
 
