@@ -49,9 +49,23 @@ jobs:
         run: python3 scripts/check_agents.py
       - name: Pre-aggregation for the agent
         run: python3 scripts/anomalias_summary.py
+      # Instalação determinística: o instalador upstream (curl|bash, sem pin)
+      # partiu-se a 2026-09-11 quando o scope npm migrou @opencode-ai -> @opencode
+      # e o tarball passou a trazer bin/opencode2 em vez de bin/opencode.
+      # Sacar o tarball imutável do npm e ligar o binário que lá estiver dentro
+      # elimina o instalador E o API de versões da cadeia. Bump manual de VER.
       - name: Install opencode (v2)
         run: |
-          curl -fsSL https://opencode.ai/v2/install | bash
+          VER="0.0.0-beta-19425"
+          SCOPE="@opencode"
+          TARGET="linux-x64"
+          TARBALL="${SCOPE}/cli-${TARGET}/-/cli-${TARGET}-${VER}.tgz"
+          mkdir -p "$HOME/.opencode/bin" /tmp/ocpkg
+          curl -fsSL --retry 2 "https://registry.npmjs.org/${TARBALL}" -o /tmp/oc.tgz
+          tar xzf /tmp/oc.tgz -C /tmp/ocpkg
+          BIN="$(ls /tmp/ocpkg/package/bin/* | head -n 1)"
+          install -m 755 "$BIN" "$HOME/.opencode/bin/opencode2"
+          rm -rf /tmp/oc.tgz /tmp/ocpkg
           export PATH="$HOME/.opencode/bin:$PATH"
           echo "$HOME/.opencode/bin" >> "$GITHUB_PATH"
           command -v opencode2
