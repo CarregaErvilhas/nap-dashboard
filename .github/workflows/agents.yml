@@ -25,6 +25,10 @@ jobs:
     timeout-minutes: 180
     steps:
       - uses: actions/checkout@v7
+        with:
+          # ver comentário idêntico no refresh.yml: sem isto o push com PAT é
+          # ignorado e sai como github-actions[bot] (recusado pelo ruleset).
+          persist-credentials: false
       - uses: actions/setup-python@v7
         with:
           python-version: "3.13"

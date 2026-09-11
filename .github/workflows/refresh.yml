@@ -24,6 +24,12 @@ jobs:
     timeout-minutes: 180
     steps:
       - uses: actions/checkout@v7
+        with:
+          # sem credencial persistida: o checkout grava o GITHUB_TOKEN num
+          # http.extraheader, que tem precedência sobre as credenciais do URL
+          # e faria o push sair como o bot (recusado pelo ruleset) em vez de
+          # usar o remote com PAT definido no fim. Fetch é anónimo (repo público).
+          persist-credentials: false
       - uses: actions/setup-python@v7
         with:
           python-version: "3.13"
