@@ -28,9 +28,11 @@ jobs:
       - uses: actions/setup-python@v7
         with:
           python-version: "3.13"
-      - name: Install opencode
+      - name: Install opencode (v2)
         run: |
-          curl -fsSL https://opencode.ai/install | bash
+          curl -fsSL https://opencode.ai/v2/install | bash
+          # $GITHUB_PATH só vigora na step seguinte; export inline para usar já aqui.
+          export PATH="$HOME/.opencode/bin:$PATH"
           echo "$HOME/.opencode/bin" >> "$GITHUB_PATH"
           command -v opencode2
           opencode2 --version
