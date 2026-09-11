@@ -343,6 +343,9 @@ CHROME_CANDIDATES = [
     '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
     '/Applications/Google Chrome Dev.app/Contents/MacOS/Google Chrome Dev',
     '/Applications/Chromium.app/Contents/MacOS/Chromium',
+    'google-chrome',
+    'chromium',
+    'chromium-browser',
 ]
 chrome = next((p for p in CHROME_CANDIDATES if shutil.which(p) or os.path.exists(p)), None)
 if chrome:

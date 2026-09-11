@@ -1,0 +1,56 @@
+name: Weekly dashboard refresh
+
+# Todas as segundas às 06:00 UTC: saca dados frescos do NAP/MOBI.E/DGEG,
+# corre o pipeline completo e faz commit dos deliverables regenerados.
+# O push do dashboard.html dispara o deploy do Pages (pages.yml).
+# Corrida manual: Actions → Weekly dashboard refresh → Run workflow.
+on:
+  schedule:
+    - cron: "0 6 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: "refresh"
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.13"
+      - name: Install deps
+        run: pip install pandas lxml pdfplumber
+      - name: Fetch fresh data
+        run: bash scripts/fetch_data.sh
+      - name: ETL
+        run: python scripts/nap_etl.py evChargingInfra_latest.xml evActualStatus_latest.xml .
+      - name: Quality + summary
+        run: |
+          python scripts/check_quality.py
+          python scripts/summary.py
+      - name: Joins + cross-refs
+        run: |
+          python scripts/mobie_join.py
+          python scripts/dgeg_lists.py
+          python scripts/dgeg_crossref.py
+          python scripts/partyid_crossref.py
+      - name: Geo + OSM cross-checks
+        run: |
+          python scripts/concelho_check.py
+          python scripts/osm_umap.py
+      - name: Build dashboard
+        run: python scripts/build_dashboard.py
+      - name: Commit refreshed deliverables
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add dashboard.html dashboard.png facts.md errors.md
+          git diff --cached --quiet && echo "no changes to commit" || git commit -m "Weekly dashboard refresh: $(date -u +%F)"
+          git push
