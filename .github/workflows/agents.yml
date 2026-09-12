@@ -58,16 +58,18 @@ jobs:
       # Instalação "latest" sem o instalador upstream (curl|bash, sem pin):
       # esse partiu-se a 2026-09-11 quando o scope npm migrou @opencode-ai ->
       # @opencode e o tarball passou a trazer bin/opencode2 em vez de
-      # bin/opencode. Em vez disso: resolve a tag `beta` direto no registry
-      # npm (o tarball existe por construção — sem a race do API de versões),
-      # saca o tarball imutável e liga o binário que lá estiver dentro,
-      # seja qual for o nome. FALLBACK_VER só entra se latest falhar;
+      # bin/opencode (na v2 final voltou a bin/opencode — o script abaixo é
+      # agnóstico ao nome e instala sempre como opencode2). Em vez disso:
+      # resolve a tag `latest` direto no registry npm (o tarball existe por
+      # construção — sem a race do API de versões), saca o tarball imutável e
+      # liga o binário que lá estiver dentro, seja qual for o nome.
+      # FALLBACK_VER só entra se latest falhar;
       # atualiza-se quando (e só quando) arder — sem bumps de rotina.
       - name: Install opencode (v2)
         run: |
           SCOPE="@opencode"
           TARGET="linux-x64"
-          FALLBACK_VER="0.0.0-beta-19425"
+          FALLBACK_VER="0.0.0-beta-19507"
           mkdir -p "$HOME/.opencode/bin"
           try_ver() {
             rm -rf /tmp/oc.tgz /tmp/ocpkg && mkdir -p /tmp/ocpkg
@@ -81,11 +83,11 @@ jobs:
           }
           LATEST="$(curl -fsSL --retry 2 \
             "https://registry.npmjs.org/${SCOPE}%2fcli-${TARGET}" \
-            | python3 -c 'import json,sys; print(json.load(sys.stdin)["dist-tags"]["beta"])')" || LATEST=""
+            | python3 -c 'import json,sys; print(json.load(sys.stdin)["dist-tags"]["latest"])')" || LATEST=""
           if [ -n "$LATEST" ] && try_ver "$LATEST"; then
-            echo "opencode2 $LATEST (latest-beta)"
+            echo "opencode2 $LATEST (latest)"
           else
-            echo "WARN: latest-beta ($LATEST) falhou; fallback $FALLBACK_VER"
+            echo "WARN: latest ($LATEST) falhou; fallback $FALLBACK_VER"
             try_ver "$FALLBACK_VER" || { echo "FAIL: nem o fallback instalou"; exit 1; }
             echo "opencode2 $FALLBACK_VER (fallback pinado — atualizar FALLBACK_VER)"
           fi
