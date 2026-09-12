@@ -85,6 +85,9 @@
 
   <div class="cards" id="kpis"></div>
 
+  <h2 id="newsH" data-i18n="secNews">Novidades da semana</h2>
+  <div class="panel" id="news"></div>
+
   <h2 data-i18n="secOverview">Visão geral</h2>
   <div class="grid">
     <div class="panel"><h3 data-i18n="chStatus">Pontos por estado (snapshot)</h3><div id="chStatus"></div></div>
@@ -181,7 +184,7 @@ pt: {
   pageTitle:'Rede de carregamento VE — Portugal (NAP MOBI.E)',
   h1:'Rede de carregamento de veículos elétricos — Portugal',
   sub1:'NAP MOBI.E (AFIR) + tarifas OPC + registo DGEG', codeLink:'código no GitHub',
-  secOverview:'Visão geral', chStatus:'Pontos por estado (snapshot)', chRegion:'Locais por região',
+  secOverview:'Visão geral', secNews:'Novidades da semana', chStatus:'Pontos por estado (snapshot)', chRegion:'Locais por região',
   chPw:'Pontos por classe de potência', chConn:'Tipos de connector (tomadas)',
   secOperators:'Operadores', chOpSites:'Top 15 operadores — locais', chOpPts:'Top 15 operadores — pontos',
   chOpOcc:'Ocupação instantânea por operador (top 15)', chPriceOp:'Tarifa OPC média — componente €/kWh, por operador',
@@ -215,7 +218,7 @@ en: {
   pageTitle:'EV charging network — Portugal (NAP MOBI.E)',
   h1:'Electric vehicle charging network — Portugal',
   sub1:'NAP MOBI.E (AFIR) + OPC tariffs + DGEG registry', codeLink:'code on GitHub',
-  secOverview:'Overview', chStatus:'Points by status (snapshot)', chRegion:'Sites by region',
+  secOverview:'Overview', secNews:'Network news', chStatus:'Points by status (snapshot)', chRegion:'Sites by region',
   chPw:'Points by power class', chConn:'Connector types (outlets)',
   secOperators:'Operators', chOpSites:'Top 15 operators — sites', chOpPts:'Top 15 operators — points',
   chOpOcc:'Instant occupancy by operator (top 15)', chPriceOp:'Average OPC tariff — €/kWh component, by operator',
@@ -591,6 +594,9 @@ function renderTexts(){
   else{document.getElementById('hubs').style.display='none';document.getElementById('hubsH').style.display='none';}
   if(churn){document.getElementById('churn').innerHTML = churn;document.getElementById('churn').style.display='';document.getElementById('churnH').style.display='';}
   else{document.getElementById('churn').style.display='none';document.getElementById('churnH').style.display='none';}
+  const news = pickHtml('news_html');
+  if(news){document.getElementById('news').innerHTML = news;document.getElementById('news').style.display='';document.getElementById('newsH').style.display='';}
+  else{document.getElementById('news').style.display='none';document.getElementById('newsH').style.display='none';}
 }
 
 // static chrome: [data-i18n] text, placeholders, titles, <html lang>, toggle

@@ -39,6 +39,10 @@ jobs:
         run: bash scripts/fetch_data.sh
       - name: ETL
         run: python scripts/nap_etl.py evChargingInfra_latest.xml evActualStatus_latest.xml .
+      # Diff semanal da rede (novidades.md + network-census.json): compara com o
+      # censo commitado (HEAD) antes do build embutir o painel no dashboard.
+      - name: Network news (weekly diff)
+        run: python3 scripts/network_news.py
       # Fonte única de verdade: o agents.yml consome este artifact em vez de
       # voltar a sacar ~230 MB e re-correr o ETL (menos carga nas fontes oficiais).
       - name: Publish static data for agent
@@ -100,7 +104,7 @@ jobs:
           # "review" (o GITHUB_TOKEN é recusado). O valor vem de secrets e é
           # mascarado nos logs.
           git remote set-url origin "https://x-access-token:${PUSH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
-          git add dashboard.html dashboard.png facts.md errors.md
+          git add dashboard.html dashboard.png facts.md errors.md novidades.md network-census.json
           git diff --cached --quiet && echo "no changes to commit" || git commit -m "Weekly dashboard refresh: $(date -u +%F)"
           git push
       - name: Stage site

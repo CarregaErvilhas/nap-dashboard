@@ -647,6 +647,34 @@ if m:
 {trs}</table>
 """
 
+# Painel "Novidades da semana": balas de novidades.md (gerado por
+# scripts/network_news.py, diff vs semana anterior). Ausente → escondido.
+NEWS_URL = ('https://github.com/CarregaErvilhas/nap-dashboard/blob/main/'
+            'novidades.md')
+
+
+def _md_inline(s):
+    s = html_esc.escape(s)
+    s = re.sub(r'\*\*(.+?)\*\*', r'<b>\1</b>', s)
+    s = re.sub(r'`([^`]+)`', r'<code>\1</code>', s)
+    return s
+
+
+NEWS_HTML = ''
+try:
+    with open('novidades.md', encoding='utf-8') as fh:
+        news_lines = fh.read().splitlines()
+except FileNotFoundError:
+    news_lines = []
+news_title = news_lines[0].lstrip('# ').strip() if news_lines else ''
+news_bullets = [ln[2:].strip() for ln in news_lines
+                if ln.startswith('- **')]
+if news_bullets:
+    lis = ''.join(f'<li>{_md_inline(b)}</li>' for b in news_bullets)
+    NEWS_HTML = f"""<div class="meta">{html_esc.escape(news_title)} · <a href="{NEWS_URL}">ver novidades.md no GitHub</a></div>
+<ul>{lis}</ul>
+"""
+
 with open('facts.md', 'w') as fh:
     fh.write(re.sub(r'<[^>]+>', '', FACTS_HTML).replace('&gt;', '>').replace('&lt;', '<'))
 with open('errors.md', 'w') as fh:
@@ -701,12 +729,14 @@ data = {
     'anom_html': ANOM_HTML,
     'hubs_html': HUBS_HTML,
     'churn_html': CHURN_HTML,
+    'news_html': NEWS_HTML,
     # EN mirrors (dashboard_i18n.MAP); template picks per browser language.
     'facts_html_en': i18n.translate_html_blob(FACTS_HTML),
     'errs_html_en': i18n.translate_html_blob(ERRS_HTML),
     'anom_html_en': i18n.translate_html_blob(ANOM_HTML),
     'hubs_html_en': i18n.translate_html_blob(HUBS_HTML),
     'churn_html_en': i18n.translate_html_blob(CHURN_HTML),
+    'news_html_en': i18n.translate_html_blob(NEWS_HTML),
     'sites': sites_map,
     'outline': outline,
     'districts': districts,

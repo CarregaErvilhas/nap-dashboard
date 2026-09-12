@@ -1,7 +1,7 @@
 """PT->EN translation for the dashboard's pre-rendered HTML blobs.
 
 Single source of truth for the English version of facts/errors/anomalias/hubs/
-churn panels. Used by `build_dashboard.py` (fresh builds) and by the one-time
+churn/news panels. Used by `build_dashboard.py` (fresh builds) and by the one-time
 `patch_dashboard_i18n.py` (which backfilled EN into the checked-in
 dashboard.html without re-running the full pipeline).
 
@@ -11,7 +11,8 @@ fixed PT phrase to EN and converts PT number formatting (8.357 / 17,5%) to EN
 left untouched.
 
 If you add a NEW fixed PT string to FACTS_HTML/ERRS_HTML/ANOM_HTML/HUBS_HTML/
-CHURN_HTML in build_dashboard.py, add its translation to MAP below or the EN
+CHURN_HTML/NEWS_HTML in build_dashboard.py (or to novidades.md bullets, which
+feed NEWS_HTML), add its translation to MAP below or the EN
 panel will show that phrase in Portuguese.
 """
 
@@ -157,6 +158,45 @@ MAP = [
      ').<br>Thresholds: entries/exits always; change only if |Δpoints| ≥ 20 and ≥ 20%.'),
     ('<th class="l">OPC</th><th>estado</th><th>sites</th><th>pontos</th><th class="l">nota</th>',
      '<th class="l">OPC</th><th>status</th><th>sites</th><th>points</th><th class="l">note</th>'),
+    # ---- news (weekly network diff) ----
+    ('Novidades da rede (', 'Network news ('),
+    ('ver novidades.md no GitHub', 'see novidades.md on GitHub'),
+    ('<b>Estreias:</b>', '<b>Debuts:</b>'),
+    ('novos locais em funcionamento', 'new sites in operation'),
+    ('novo local em funcionamento', 'new site in operation'),
+    ('locais reativados (', 'reactivated sites ('),
+    ('local reativado (', 'reactivated site ('),
+    ('reativados (', 'reactivated ('),
+    ('reativado (', 'reactivated ('),
+    ('<b>Saídas:</b>', '<b>Departures:</b>'),
+    ('locais saíram da rede ou foram desligados', 'sites left the network or were switched off'),
+    ('local saiu da rede ou foi desligado', 'site left the network or was switched off'),
+    ('entrou na rede (', 'joined the network ('),
+    ('saiu da rede', 'left the network'),
+    ('<b>Recorde:</b> nova tomada mais potente: ', '<b>Record:</b> most powerful new outlet: '),
+    ('<b>Recorde:</b> novo hub mais potente: ', '<b>Record:</b> most powerful new hub: '),
+    ('<b>Recorde:</b> novo máximo de tomadas por local: ', '<b>Record:</b> new max outlets per site: '),
+    ('(antes ', '(previously '),
+    ('<b>Maior estreia:</b> ', '<b>Biggest debut:</b> '),
+    (' no total.', ' in total.'),
+    ('<b>Cidade em alta:</b> ', '<b>Trending city:</b> '),
+    (' estreia.', ' debut.'),
+    (' estreias.', ' debuts.'),
+    ('<b>Balanço:</b> ', '<b>Balance:</b> '),
+    (' locais (', ' sites ('),
+    (' local (', ' site ('),
+    ('% em módulo), ', '% in absolute terms), '),
+    (' pontos face à semana anterior.', ' points since last week.'),
+    (' ponto face à semana anterior.', ' point since last week.'),
+    (' locais)', ' sites)'),
+    (' local)', ' site)'),
+    (' pontos e ', ' points and '),
+    (' com ', ' with '),
+    (' restantes)', ' remaining)'),
+    ('<b>Semana calma:</b> sem estreias, saídas, movimentos de OPCs ou recordes.',
+     '<b>Quiet week:</b> no debuts, departures, OPC moves or records.'),
+    ('<b>Baseline:</b> primeiro censo da rede (', '<b>Baseline:</b> first network census ('),
+    ('A partir da próxima semana há diffs.', 'Diffs start next week.'),
     # ---- generics (last) ----
     (' pontos)', ' points)'),
     (' pontos (', ' points ('),
@@ -211,6 +251,8 @@ CORE_PT_MARKERS = [
     'PartyID MOBI.E desatualizado', 'Preços anómalos',
     "'removed' ainda no inventário", 'coordenadas vs concelho',
     'Dúvidas da comunidade OSM',
+    '<b>Estreias:</b>', '<b>Saídas:</b>', '<b>Recorde:</b>', '<b>Balanço:</b>',
+    '<b>Semana calma:</b>', '<b>Baseline:</b>',
 ]
 
 

@@ -52,6 +52,8 @@ from the official origins (see `scripts/fetch_data.sh` for the exact URLs).
 `scripts/mobie_join.py` → `scripts/dgeg_lists.py` → `scripts/dgeg_crossref.py` →
 `scripts/partyid_crossref.py` → `scripts/concelho_check.py` →
 `scripts/osm_umap.py` → `scripts/make_pt_outline.py` →
+`scripts/network_news.py` (diff semanal vs `network-census.json` do HEAD →
+`novidades.md` + novo `network-census.json`; primeira corrida = baseline) →
 `scripts/build_dashboard.py`.
 `scripts/build_dashboard.py` reads the intermediate CSVs +
 `osm_umap.csv`/`osm_caca.csv`/`assets/pt_outline.json` and writes
@@ -155,7 +157,7 @@ venv/bin/python scripts/validate_dashboard.py
   `kpis` stays EN; `facts/errs/anom/hubs/churn_html_en`) generated via
   `scripts/dashboard_i18n.py` (phrase MAP + PT→EN number conversion); template
   falls back to PT when an `_en` key is missing. New fixed PT strings in
-  FACTS/ERRS/ANOM/HUBS/CHURN_HTML **must** get a MAP entry or they render in PT
+  FACTS/ERRS/ANOM/HUBS/CHURN_HTML/NEWS_HTML **must** get a MAP entry or they render in PT
   for EN users. `scripts/patch_dashboard_i18n.py` was the one-time backfill of
   the 2026-09-11 snapshot (CSVs absent locally) — do NOT re-run it; weekly
   refreshes regenerate natively via `build_dashboard.py`.
@@ -190,6 +192,9 @@ venv/bin/python scripts/validate_dashboard.py
 ## Deliverables
 - `dashboard.html` — the interactive dashboard (open with `open dashboard.html`)
 - `facts.md` — interesting facts
+- `novidades.md` — weekly network news (new/removed sites, OPC moves, power
+  records; panel above "Visão geral", EN via `dashboard_i18n.MAP`) with
+  `network-census.json` (committed state for next week's diff)
 - `errors.md` — reportable data errors (12 items, for the data owners)
 - `Agents-outputs/anomalias-results.md` — output do agente `Agents/anomalias.md`
   (anomalias dos dados estáticos, agrupadas por OPC)
