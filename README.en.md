@@ -1,6 +1,6 @@
-# NAP MOBI.E — EV charging network (Portugal)
+# NAP EADME — EV charging network (Portugal)
 
-POC (proof of concept) analysis of Portugal's EV charging network from official
+Analysis of Portugal's EV charging network from official
 public data sources. The goal:
 
 - Extract and cross-reference data from several sources (NAP MOBI.E, OPC tariff,

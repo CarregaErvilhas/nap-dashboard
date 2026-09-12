@@ -1,9 +1,12 @@
-# AGENTS.md — NAP MOBI.E data analysis POC
+# AGENTS.md — NAP EADME data analysis
 
 ## Project type
-Single-machine POC analysis of the Portuguese EV charging network. No tests, no
-package manifests, no CI. Code is meant to be run once and produce CSVs + a
-self-contained dashboard. Don't over-engineer.
+Single-machine analysis of the Portuguese EV charging network. Pinned runtime
+deps in `requirements.txt` (Dependabot, monthly); CI in `.github/workflows/`
+(weekly `refresh.yml` pipeline + `pages.yml` deploy + `agents.yml`). Code
+produces CSVs + a self-contained dashboard (`dashboard.html`, `facts.md`,
+`errors.md`), validated by `scripts/validate_dashboard.py` +
+`scripts/pipeline_guard.py`. Don't over-engineer.
 
 ## Layout
 - `scripts/` — pipeline (fetch_data.sh, nap_etl.py, mobie_join.py, dgeg_lists.py,

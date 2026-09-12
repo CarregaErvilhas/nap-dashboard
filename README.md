@@ -1,6 +1,6 @@
-# NAP MOBI.E — Rede de carregamento VE (Portugal)
+# NAP EADME — Rede de carregamento VE (Portugal)
 
-POC (prova de conceito) de análise de dados da rede de carregamento de veículos
+Análise de dados da rede de carregamento de veículos
 elétricos em Portugal, a partir de fontes públicas oficiais. O objetivo é:
 
 - Extrair e cruzar dados de várias fontes (NAP MOBI.E, tarifário OPC, registos DGEG, OSM/umap)

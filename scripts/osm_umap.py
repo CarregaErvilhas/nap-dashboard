@@ -39,7 +39,7 @@ import pandas as pd
 CACHE = 'umap_cache'
 CACA_MAP = 1386222        # Caça aos Postos de Carregamento
 OSM_RAW = 'https://raw.githubusercontent.com/avataranedotas/umap_postos/main/Todos.json'
-USER_AGENT = 'nap-dashboard-poc/1.0 (data cross-reference)'
+USER_AGENT = 'nap-dashboard/1.0 (data cross-reference)'
 CODE_RE = re.compile(r'^(?:MOBI-)?[A-Z]{3}-\d{4,5}$')
 ADHOC_KEYS = ('creditCard', 'debitCard', 'nfc', 'pinpad')
 
