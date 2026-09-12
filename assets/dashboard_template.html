@@ -28,7 +28,7 @@
   .bar .lab { width:150px; flex:none; font-size:12px; text-align:right; color:var(--ink); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
   .bar .track { flex:1; height:14px; background:#0b1220; border-radius:7px; overflow:hidden; }
   .bar .fill { height:100%; background:var(--acc); border-radius:7px; min-width:2px; }
-  .bar .val { width:56px; flex:none; font-size:11px; color:var(--mut); }
+  .bar .val { width:56px; flex:none; font-size:11px; color:var(--mut); text-align:right; }
   table { width:100%; border-collapse:collapse; font-size:12px; }
   th,td { padding:5px 8px; text-align:right; border-bottom:1px solid #27334a; white-space:nowrap; }
   th { color:var(--mut); font-weight:600; cursor:pointer; user-select:none; position:sticky; top:0; background:var(--card); }
@@ -81,7 +81,7 @@
 <body>
   <div class="langswitch"><button id="langPt">PT</button><button id="langEn">EN</button></div>
   <h1 data-i18n="h1">Rede de carregamento de veículos elétricos — Portugal</h1>
-  <div class="sub"><span data-i18n="sub1">NAP MOBI.E (AFIR) + tarifas OPC + registo DGEG</span> · snapshot <span id="snap"></span> · <a href="https://nap.ocarroeletrico.com/">nap.ocarroeletrico.com</a> · <a href="https://github.com/CarregaErvilhas/nap-dashboard" data-i18n="codeLink">código no GitHub</a></div>
+  <div class="sub"><span data-i18n="sub1">NAP EADME (AFIR)</span> · snapshot <span id="snap"></span> · <a href="https://nap.ocarroeletrico.com/">nap.ocarroeletrico.com</a> · <a href="https://github.com/CarregaErvilhas/nap-dashboard" data-i18n="codeLink">código no GitHub</a></div>
 
   <div class="cards" id="kpis"></div>
 
@@ -108,7 +108,7 @@
   <div class="grid">
     <div class="panel"><h3 data-i18n="chOccPw">Ocupação instantânea por classe de potência</h3><div id="chOccPw"></div></div>
     <div class="panel"><h3 data-i18n="chCity">Top 15 concelhos por locais</h3><div id="chCity"></div></div>
-    <div class="panel" id="pricePanel"><h3 data-i18n="pricePanel">Tarifas MOBI.E (€)</h3></div>
+    <div class="panel" id="pricePanel"><h3 data-i18n="pricePanel">Tarifas OPC — uso do posto (€)</h3><div class="mut" style="font-size:11px;margin-bottom:8px" data-i18n="priceHint"></div></div>
   </div>
 
   <h2 data-i18n="secMap">Mapa de locais</h2>
@@ -181,15 +181,16 @@ const esc = s => String(s??'').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;'
 // a escolha (localStorage) e ?lang=pt|en sobrepõe-se a tudo (partilha de links).
 const STR = {
 pt: {
-  pageTitle:'Rede de carregamento VE — Portugal (NAP MOBI.E)',
+  pageTitle:'Rede de carregamento VE — Portugal (NAP EADME)',
   h1:'Rede de carregamento de veículos elétricos — Portugal',
-  sub1:'NAP MOBI.E (AFIR) + tarifas OPC + registo DGEG', codeLink:'código no GitHub',
+  sub1:'NAP EADME (AFIR)', codeLink:'código no GitHub',
   secOverview:'Visão geral', secNews:'Novidades da semana', chStatus:'Pontos por estado (snapshot)', chRegion:'Locais por região',
   chPw:'Pontos por classe de potência', chConn:'Tipos de connector (tomadas)',
   secOperators:'Operadores', chOpSites:'Top 15 operadores — locais', chOpPts:'Top 15 operadores — pontos',
   chOpOcc:'Ocupação instantânea por operador (top 15)', chPriceOp:'Tarifa OPC média — componente €/kWh, por operador',
   secOccPrice:'Ocupação e preço', chOccPw:'Ocupação instantânea por classe de potência',
-  chCity:'Top 15 concelhos por locais', pricePanel:'Tarifas MOBI.E (€)',
+  chCity:'Top 15 concelhos por locais', pricePanel:'Tarifas OPC — uso do posto (€)',
+  priceHint:'Tarifário do operador do posto (ficheiro MOBI.E) — sem a energia, que é faturada pelo CEME do condutor. Pontos do NAP sem match na MOBI.E mostram – e ficam fora das médias.',
   secMap:'Mapa de locais', secTable:'Tabela de pontos (pesquisável)',
   secFacts:'Factos interessantes', secErrors:'Erros reportáveis',
   secAnom:'Anomalias — agente semanal', secChurn:'Mudanças de OPCs', secHubs:'Hubs por potência total (>300 kW)',
@@ -215,15 +216,16 @@ pt: {
   footUse:'Uso não-comercial livre', footCom:'uso comercial requer licença'
 },
 en: {
-  pageTitle:'EV charging network — Portugal (NAP MOBI.E)',
+  pageTitle:'EV charging network — Portugal (NAP EADME)',
   h1:'Electric vehicle charging network — Portugal',
-  sub1:'NAP MOBI.E (AFIR) + OPC tariffs + DGEG registry', codeLink:'code on GitHub',
+  sub1:'NAP EADME (AFIR)', codeLink:'code on GitHub',
   secOverview:'Overview', secNews:'Network news', chStatus:'Points by status (snapshot)', chRegion:'Sites by region',
   chPw:'Points by power class', chConn:'Connector types (outlets)',
   secOperators:'Operators', chOpSites:'Top 15 operators — sites', chOpPts:'Top 15 operators — points',
   chOpOcc:'Instant occupancy by operator (top 15)', chPriceOp:'Average OPC tariff — €/kWh component, by operator',
   secOccPrice:'Occupancy and price', chOccPw:'Instant occupancy by power class',
-  chCity:'Top 15 municipalities by sites', pricePanel:'MOBI.E tariffs (€)',
+  chCity:'Top 15 municipalities by sites', pricePanel:'OPC tariffs — pole usage (€)',
+  priceHint:'Charge-point operator tariff (MOBI.E file) — excluding energy, which is billed by the driver\u2019s CEME. NAP points with no MOBI.E match show – and are excluded from averages.',
   secMap:'Site map', secTable:'Points table (searchable)',
   secFacts:'Interesting facts', secErrors:'Reportable errors',
   secAnom:'Anomalies — weekly agent', secChurn:'OPC changes', secHubs:'Hubs by total power (>300 kW)',
@@ -274,8 +276,11 @@ const dispPay = p => LANG==='en' ? (PAY_EN[p]||p) : p;
 const numLocale = () => LANG==='pt' ? 'pt-PT' : 'en-GB';
 
 const fmt = n => (n==null?'–':Number(n).toLocaleString(numLocale(),{minimumFractionDigits:2,maximumFractionDigits:2}));
+const fmtInt = n => (n==null?'–':Math.round(Number(n)).toLocaleString(numLocale()));
 const label = (k,v,m)=>`<div class="bar"><div class="lab" title="${esc(k)}">${esc(k)}</div><div class="track"><div class="fill" style="width:${m?v/m*100:0}%"></div></div><div class="val">${fmt(v)}</div></div>`;
+const labelInt = (k,v,m)=>`<div class="bar"><div class="lab" title="${esc(k)}">${esc(k)}</div><div class="track"><div class="fill" style="width:${m?v/m*100:0}%"></div></div><div class="val">${fmtInt(v)}</div></div>`;
 function bars(el, obj, sort, disp){ let e=obj; if(sort){e=Object.entries(e).sort((a,b)=>b[1]-a[1]).reduce((o,[k,v])=>(o[k]=v,o),{});} const m=Math.max(...Object.values(e)); const d=disp||(x=>x); document.getElementById(el).innerHTML=Object.entries(e).map(([k,v])=>label(d(k),v,m)).join(''); }
+function barsInt(el, obj, sort, disp){ let e=obj; if(sort){e=Object.entries(e).sort((a,b)=>b[1]-a[1]).reduce((o,[k,v])=>(o[k]=v,o),{});} const m=Math.max(...Object.values(e)); const d=disp||(x=>x); document.getElementById(el).innerHTML=Object.entries(e).map(([k,v])=>labelInt(d(k),v,m)).join(''); }
 
 // KPIs (D.kpis_pt added by build_dashboard.py; old builds only have EN D.kpis)
 function renderKpis(){
@@ -289,13 +294,13 @@ function renderBars(){
   bars('chRegion', D.region, false, dispRegion);
   bars('chPw', D.pw, true);
   bars('chConn', D.conn, true);
-  bars('chOpSites', D.op_sites, true);
-  bars('chOpPts', D.op_pts, true);
-  bars('chCity', D.city, true);
+  barsInt('chOpSites', D.op_sites, true);
+  barsInt('chOpPts', D.op_pts, true);
+  barsInt('chCity', D.city, true);
 
   // occupancy by operator (values <0 hidden)
   const occOp = Object.fromEntries(D.occ_op.filter(x=>x.occ!=null).map(x=>[x.op, x.occ]));
-  bars('chOpOcc', occOp, true);
+  barsInt('chOpOcc', occOp, true);
   bars('chPriceOp', D.price_op, true);
 
   // occupancy by power class
@@ -311,9 +316,9 @@ function renderBars(){
   pp.querySelectorAll('table').forEach(t=>t.remove());
   pp.insertAdjacentHTML('beforeend',
    `<table><tr><th>${esc(T('priceComp'))}</th><th>${esc(T('priceN'))}</th><th>${esc(T('priceMean'))}</th><th>${esc(T('priceMax'))}</th></tr>
-    <tr><td class="l">${esc(T('priceEnergy'))}</td><td>${fmt(ps.energy.n)}</td><td>${fmt(ps.energy.mean)}</td><td>${fmt(ps.energy.max)}</td></tr>
-    <tr><td class="l">${esc(T('priceTime'))}</td><td>${fmt(ps.time.n)}</td><td>${fmt(ps.time.mean)}</td><td>${fmt(ps.time.max)}</td></tr>
-    <tr><td class="l">${esc(T('priceFlat'))}</td><td>${fmt(ps.flat.n)}</td><td>${fmt(ps.flat.mean)}</td><td>${fmt(ps.flat.max)}</td></tr></table>`);
+    <tr><td class="l">${esc(T('priceEnergy'))}</td><td>${fmtInt(ps.energy.n)}</td><td>${fmt(ps.energy.mean)}</td><td>${fmt(ps.energy.max)}</td></tr>
+    <tr><td class="l">${esc(T('priceTime'))}</td><td>${fmtInt(ps.time.n)}</td><td>${fmt(ps.time.mean)}</td><td>${fmt(ps.time.max)}</td></tr>
+    <tr><td class="l">${esc(T('priceFlat'))}</td><td>${fmtInt(ps.flat.n)}</td><td>${fmt(ps.flat.mean)}</td><td>${fmt(ps.flat.max)}</td></tr></table>`);
 
   // status x power class table (transposed: statuses as rows, classes as columns)
   const sw = D.status_pw;
@@ -628,6 +633,6 @@ document.getElementById('langPt').addEventListener('click',()=>setLang('pt'));
 document.getElementById('langEn').addEventListener('click',()=>setLang('en'));
 setLang(detectLang());
 </script>
-<footer class="mut" style="font-size:11px;margin-top:28px;padding-top:12px;border-top:1px solid #27334a">© 2026 O Carro Elétrico / Fernando Miguel · <a href="https://nap.ocarroeletrico.com/">nap.ocarroeletrico.com</a> · <span data-i18n="footUse">Uso não-comercial livre</span> (<a href="https://github.com/CarregaErvilhas/nap-dashboard/blob/main/LICENSE">PolyForm Noncommercial 1.0.0</a>, só código próprio — ver <a href="https://github.com/CarregaErvilhas/nap-dashboard/blob/main/THIRD-PARTY-NOTICES.md">THIRD-PARTY-NOTICES.md</a>); <span data-i18n="footCom">uso comercial requer licença</span> — <a href="mailto:info@ocarroeletrico.com">info@ocarroeletrico.com</a> · <a href="https://m.me/OCarroEletricoDotCom">Messenger</a>.<br>Fontes: NAP MOBI.E (via NAP-IMT) + tarifas MOBI.E (<a href="https://www.mobie.pt/">mobie.pt</a>) · listas DGEG (<a href="https://www.dgeg.gov.pt/">dgeg.gov.pt</a>) — uso livre com menção de fonte, sem fins lucrativos · classes de potência AFIR (<a href="https://eur-lex.europa.eu/eli/reg/2023/1804/oj">Reg. (UE) 2023/1804, Anexo III</a>) · © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors (<a href="https://opendatacommons.org/licenses/odbl/">ODbL</a>) · contorno © DGT (CAOP, <a href="https://www.dgterritorio.gov.pt/dados-abertos">CC-BY 4.0</a>) · esquemas DATEX II © CEN (<a href="https://datex2.eu/">datex2.eu</a>) · mapas comunidade <a href="https://umap.openstreetmap.fr/pt-pt/map/postos-de-carregamento-v21_690884">Postos de Carregamento v2.1</a> + <a href="https://umap.openstreetmap.fr/en/map/caca-aos-postos-de-carregamento_1386222">Caça aos Postos</a> (Alexandre Moleiro).</footer>
+<footer class="mut" style="font-size:11px;margin-top:28px;padding-top:12px;border-top:1px solid #27334a">© 2026 O Carro Elétrico / Fernando Miguel · <a href="https://nap.ocarroeletrico.com/">nap.ocarroeletrico.com</a> · <span data-i18n="footUse">Uso não-comercial livre</span> (<a href="https://github.com/CarregaErvilhas/nap-dashboard/blob/main/LICENSE">PolyForm Noncommercial 1.0.0</a>, só código próprio — ver <a href="https://github.com/CarregaErvilhas/nap-dashboard/blob/main/THIRD-PARTY-NOTICES.md">THIRD-PARTY-NOTICES.md</a>); <span data-i18n="footCom">uso comercial requer licença</span> — <a href="mailto:info@ocarroeletrico.com">info@ocarroeletrico.com</a> · <a href="https://m.me/OCarroEletricoDotCom">Messenger</a>.<br>Fontes: NAP EADME (MOBI.E, via NAP-IMT) + tarifas MOBI.E (<a href="https://www.mobie.pt/">mobie.pt</a>) · listas DGEG (<a href="https://www.dgeg.gov.pt/">dgeg.gov.pt</a>) — uso livre com menção de fonte, sem fins lucrativos · classes de potência AFIR (<a href="https://eur-lex.europa.eu/eli/reg/2023/1804/oj">Reg. (UE) 2023/1804, Anexo III</a>) · © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors (<a href="https://opendatacommons.org/licenses/odbl/">ODbL</a>) · contorno © DGT (CAOP, <a href="https://www.dgterritorio.gov.pt/dados-abertos">CC-BY 4.0</a>) · esquemas DATEX II © CEN (<a href="https://datex2.eu/">datex2.eu</a>) · mapas comunidade <a href="https://umap.openstreetmap.fr/pt-pt/map/postos-de-carregamento-v21_690884">Postos de Carregamento v2.1</a> + <a href="https://umap.openstreetmap.fr/en/map/caca-aos-postos-de-carregamento_1386222">Caça aos Postos</a> (Alexandre Moleiro).</footer>
 </body>
 </html>
