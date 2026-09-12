@@ -101,14 +101,16 @@ licence found) — always credit + link them.
   so match by *either*. The `charge_point` nodes carry explicit `payment:*` /
   `authentication:*` tags that `charging_station` elements usually lack.
 
-- **umap "Postos de Carregamento v2.1"** (map id `690884`) — the community OSM
+- **umap "Postos de Carregamento v2.1"** (map id `690884`, curadoria: Alexandre
+  Moleiro) — the community OSM
   map the dump above was generated from. Its `Areas.geojson` export (remote
   `https://raw.githubusercontent.com/avataranedotas/umap_postos/main/Areas.geojson`)
   has ~1 854 polygons but only ~3.7k NAP-site matches; the raw dump (7.9k) is
   preferred, so the Areas.geojson is now superseded.
   URL: `https://umap.openstreetmap.fr/pt-pt/map/postos-de-carregamento-v21_690884`
 
-- **umap "Caça aos Postos de Carregamento"** (map id `1386222`) — community doubt
+- **umap "Caça aos Postos de Carregamento"** (map id `1386222`, curadoria:
+  Alexandre Moleiro) — community doubt
   map. The relevant layer is "Possíveis novos postos" (~104 points: possible new
   posts, "nada no local" flags, under-construction, to-verify); the "Dúvidas"
   layer is empty in all published versions.
