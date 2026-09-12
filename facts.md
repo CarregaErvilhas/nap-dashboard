@@ -3,7 +3,7 @@
 Escala: 8.359 locais, 20.936 pontos, 92 operadores. Continente 8.131 (97%), Madeira 128, Açores 100.
 Concentração: EDP Comercial (1.659) + Galp Power OPC (1.461) = 37% dos locais; top 5 operadores ≈ 62% da rede.
 Lisboa domina: 1.043 locais em Lisboa (12%); top 10 concelhos ≈ 34% dos locais. Forte enviesamento litoral.
-Potência: mediana 22 kW (AC), média 60 kW. DC (mode4) = 8.617 tomadas (41%). Ultra-rápido &ge;150 kW = 2.340 pontos (11%).
+Potência: mediana 22 kW (AC), média 60 kW. DC (mode4) = 8.617 tomadas (41%). Ultra-rápido &ge;150 kW = 2.340 pontos (11%): Nível 1 AFIR 150-350 kW = 1.768, Nível 2 &ge;350 kW = 572.
 Ocupação instantânea: 2.887 em carregamento de 15.290 ativos (19%). AC lento o mais ocupado: 21,3% vs DC fast 50-150 kW 16,2%.
 Dispersão por operador: ocupação de 7,0% (REPSOL Portuguesa Lda) a 23,2% (Mota-Engil Renewing) — sinal de desfasamento oferta/procura por rede.
 Energia verde: 15.934 pontos (76%) marcados como energia verde.

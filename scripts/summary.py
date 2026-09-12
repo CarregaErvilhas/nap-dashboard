@@ -36,7 +36,8 @@ def pw_class(w):
     if w < 22000: return 'AC slow (<22kW)'
     if w < 50000: return 'AC/DC 22-50kW'
     if w < 150000: return 'DC fast 50-150kW'
-    return 'DC ultra (>150kW)'
+    if w < 350000: return 'DC ultra 150-350kW'
+    return 'DC ultra (>=350kW)'
 
 agg = points.groupby('point_id').agg(
     max_power_w=('max_power_w', lambda s: max(float(x) for x in s)),

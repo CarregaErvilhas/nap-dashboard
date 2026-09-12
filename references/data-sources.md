@@ -64,6 +64,33 @@ transitional regime runs until 31 Dec 2027.
   Licence: DGEG site terms — free use with source mention, no commercial use
   against the public interest; IP belongs to DGEG. Keep the footer attribution.
 
+## AFIR — power classes (reporting)
+
+- **Regulation (EU) 2023/1804** (AFIR), stable link:
+  `https://eur-lex.europa.eu/eli/reg/2023/1804/oj`
+  (PT version: `https://eur-lex.europa.eu/legal-content/PT/TXT/?uri=CELEX:32023R1804`).
+- Neither NAP/DATEX II nor MOBI.E define power classes — they report
+  continuous power (`max_power_w`, `voltage`/`max_current`). The only legal
+  definitions are art. 2(37) "normal power" (≤22 kW) and art. 2(31)
+  "high power" (>22 kW).
+- The dashboard's `pw_class()` buckets follow **AFIR Annex III §2**
+  (Member-State reporting categories), which is the established split the
+  network actually needs above 150 kW:
+
+  | Category | Subcategory | Power |
+  |---|---|---|
+  | Cat. 1 (AC) | slow mono-phase | P < 7,4 kW (normal) |
+  | Cat. 1 (AC) | medium tri-phase | 7,4 ≤ P ≤ 22 kW (normal) |
+  | Cat. 1 (AC) | fast tri-phase | P > 22 kW (high) |
+  | Cat. 2 (DC) | slow | P < 50 kW |
+  | Cat. 2 (DC) | fast | 50 ≤ P < 150 kW |
+  | Cat. 2 (DC) | ultra-fast Level 1 | 150 ≤ P < 350 kW |
+  | Cat. 2 (DC) | ultra-fast Level 2 | P ≥ 350 kW |
+
+  The old top bucket `DC ultra (>150kW)` lumped both ultra-fast levels;
+  it is now split into `DC ultra 150-350kW` (L1) and `DC ultra (>=350kW)`
+  (L2, covers 350/400/600 kW HPC and future MCS).
+
 ## DATEX II XSDs
 
 Vendored in `assets/schemas/` for enum validation (see

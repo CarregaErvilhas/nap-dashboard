@@ -61,7 +61,9 @@ def pw_class(w):
         return 'AC/DC 22-50kW'
     if w < 150000:
         return 'DC fast 50-150kW'
-    return 'DC ultra (>150kW)'
+    if w < 350000:
+        return 'DC ultra 150-350kW'
+    return 'DC ultra (>=350kW)'
 
 # ---- point-level combined table ----
 pts = P.copy()
@@ -193,7 +195,7 @@ agg_conn = P.connector_type.map(lambda t: CONN_NAMES.get(t, t)).value_counts().t
 agg_city = S.groupby('city')['external_id'].count().sort_values(ascending=False).head(15)
 agg_status_pw = pd.crosstab(pts.pw_class, pts.status)
 agg_occ_pw = []
-for c in ['AC slow (<22kW)', 'AC/DC 22-50kW', 'DC fast 50-150kW', 'DC ultra (>150kW)']:
+for c in ['AC slow (<22kW)', 'AC/DC 22-50kW', 'DC fast 50-150kW', 'DC ultra 150-350kW', 'DC ultra (>=350kW)']:
     a = pts[pts.pw_class == c]
     act = a[a.status.isin(['charging', 'available'])]
     agg_occ_pw.append({'c': c, 'occ': round((act.status == 'charging').mean() * 100, 1) if len(act) else None,
@@ -305,7 +307,9 @@ median_kw = int(_pwv.median() / 1000) if len(_pwv) else 0
 mean_kw = int(round(_pwv.mean() / 1000)) if len(_pwv) else 0
 n_mode4 = int(P.charging_mode.eq('mode4DC').sum())
 n_conn_rows = len(P)
-ultra = int((pts.pw_class == 'DC ultra (>150kW)').sum())
+u1 = int((pts.pw_class == 'DC ultra 150-350kW').sum())
+u2 = int((pts.pw_class == 'DC ultra (>=350kW)').sum())
+ultra = u1 + u2
 
 _active = pts[pts.status.isin(['charging', 'available'])]
 n_charging = int(_active.status.eq('charging').sum())
@@ -456,7 +460,7 @@ FACTS_HTML = f"""
 <li><b>Escala:</b> {pt(n_sites)} locais, {pt(n_points)} pontos, {n_ops} operadores. Continente {pt(n_main)} ({p0(ratio(n_main, n_sites))}%), Madeira {pt(n_mad)}, Açores {pt(n_az)}.</li>
 <li><b>Concentração:</b> {_nm(top1)} ({pt(n_top1)}) + {_nm(top2)} ({pt(n_top2)}) = {p0(ratio(n_top1 + n_top2, n_sites))}% dos locais; top 5 operadores ≈ {p0(ratio(_top.head(5).sum(), n_sites))}% da rede.</li>
 <li><b>Lisboa domina:</b> {pt(lisboa)} locais em Lisboa ({p0(ratio(lisboa, n_sites))}%); top 10 concelhos ≈ {p0(ratio(top10_city, n_sites))}% dos locais. Forte enviesamento litoral.</li>
-<li><b>Potência:</b> mediana {median_kw} kW (AC), média {mean_kw} kW. DC (mode4) = {pt(n_mode4)} tomadas ({p0(ratio(n_mode4, n_conn_rows))}%). Ultra-rápido &ge;150 kW = {pt(ultra)} pontos ({p0(ratio(ultra, n_points))}%).</li>
+<li><b>Potência:</b> mediana {median_kw} kW (AC), média {mean_kw} kW. DC (mode4) = {pt(n_mode4)} tomadas ({p0(ratio(n_mode4, n_conn_rows))}%). Ultra-rápido &ge;150 kW = {pt(ultra)} pontos ({p0(ratio(ultra, n_points))}%): Nível 1 AFIR 150-350 kW = {pt(u1)}, Nível 2 &ge;350 kW = {pt(u2)}.</li>
 <li><b>Ocupação instantânea:</b> {pt(n_charging)} em carregamento de {pt(n_active)} ativos ({p0(ratio(occ_overall, 100))}%). AC lento o mais ocupado: {pp1(occ_ac)}% vs DC fast 50-150 kW {pp1(occ_dc)}%.</li>
 <li><b>Dispersão por operador:</b> ocupação de {pp1(occ_min_v)}% ({_nm(op_min)}) a {pp1(occ_max_v)}% ({_nm(op_max)}) — sinal de desfasamento oferta/procura por rede.</li>
 <li><b>Energia verde:</b> {pt(n_green)} pontos ({p0(ratio(n_green, n_points))}%) marcados como energia verde.</li>

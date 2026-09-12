@@ -37,6 +37,8 @@ MAP = [
     ('<b>Potência:</b> mediana ', '<b>Power:</b> median '),
     (' kW (AC), média ', ' kW (AC), mean '),
     ('Ultra-rápido &ge;150 kW = ', 'Ultra-fast &ge;150 kW = '),
+    ('Nível 1 AFIR 150-350 kW = ', 'AFIR Level 1 150-350 kW = '),
+    ('Nível 2 &ge;350 kW = ', 'Level 2 &ge;350 kW = '),
     ('<b>Ocupação instantânea:</b> ', '<b>Instant occupancy:</b> '),
     (' em carregamento de ', ' charging out of '),
     (' ativos (', ' active ('),
