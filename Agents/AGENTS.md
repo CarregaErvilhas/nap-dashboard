@@ -4,7 +4,7 @@ Esta pasta guarda as system prompts dos agentes automáticos do projeto `nap-das
 
 ## Conteúdo atual
 
-- `anomalias.md` — deteção automática de anomalias e divergências nos dados **estáticos** do NAP (lei de Ohm aproximada `P vs V×I`, teto global 1500 kW, tetos de potência por tipo de tomada, compatibilidade modo↔tomada AC/DC, enums fora do schema DATEX II, duplicados, chaves eMI3 e coerência CP7↔localidade, coordenadas, metadados) mais rotatividade de OPCs (novos, saídos, grandes variações de pontos). Lê `nap_static_sites.csv` / `nap_static_points.csv` e escreve `Agents-outputs/anomalias-results.md`, agrupado por OPC (`operator_id — operator_name`).
+- `anomalias.md` — deteção automática de anomalias e divergências nos dados **estáticos** do NAP (lei de Ohm aproximada `P vs V×I`, teto global 1500 kW, tetos de potência por tipo de tomada, compatibilidade modo↔tomada AC/DC, enums fora do schema DATEX II, duplicados, chaves eMI3 e coerência CP7↔localidade, coordenadas, metadados) mais rotatividade de OPCs (novos, saídos, grandes variações de pontos). Lê `nap_static_sites.csv` / `nap_static_points.csv` e escreve `Agents-outputs/anomalias-results.md`, agrupado por OPC (`operator_id — operator_name`). A evidência exaustiva de potência (uma linha por conector) é gerada deterministicamente por `scripts/anomalias_evidence.py` em `Agents-outputs/anomalias-evidence.csv` (máquina) + `Agents-outputs/anomalias-details.md` (leitura no GitHub); o relatório resume (≤10 linhas por tabela) e linka ambos na linha de elipse.
 
 ## Convenções
 
@@ -44,12 +44,15 @@ A prompt já manda o agente tratar disso se faltarem.
 dispara quando o `Weekly dashboard refresh` completa com sucesso (mais botão
 manual `workflow_dispatch`), gera CSVs frescos, corre o eval
 (`scripts/check_agents.py`), a pré-agregação (`scripts/anomalias_summary.py` →
-`agents-summary.json`, gitignored) e o `opencode2 run` com a prompt desta pasta.
+`agents-summary.json`, gitignored), a evidência exaustiva
+(`scripts/anomalias_evidence.py` → `Agents-outputs/anomalias-evidence.csv` +
+`Agents-outputs/anomalias-details.md`) e o `opencode2 run` com a prompt desta pasta.
 Cadeia de fallback pela variable `OPENCODE_MODEL` (lista por prioridade),
-validação do markdown (formato, secções por OPC, ids reais citados) e
+validação do markdown (formato, secções por OPC, ids reais citados, evidência
+existente e não-vazia) e
 auto-commit de `Agents-outputs/anomalias-results.md` para `main` (mais
 `Agents-outputs/opc-census.json`, o censo rolante que alimenta a secção de
-rotatividade de OPCs no run seguinte). Cada modelo
+rotatividade de OPCs no run seguinte, e os dois ficheiros de evidência). Cada modelo
 que falha abre uma Issue; custo $0 (free tier Zen via harness).
 
 ## Eval

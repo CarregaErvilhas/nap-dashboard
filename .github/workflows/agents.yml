@@ -53,6 +53,8 @@ jobs:
         run: python3 scripts/check_agents.py
       - name: Pre-aggregation for the agent
         run: python3 scripts/anomalias_summary.py
+      - name: Exhaustive power evidence (deterministic)
+        run: python3 scripts/anomalias_evidence.py
       # Instalação "latest" sem o instalador upstream (curl|bash, sem pin):
       # esse partiu-se a 2026-09-11 quando o scope npm migrou @opencode-ai ->
       # @opencode e o tarball passou a trazer bin/opencode2 em vez de
@@ -104,7 +106,15 @@ jobs:
 
           PROMPT = ("Segue estritamente a system prompt em Agents/anomalias.md "
                     "sobre os dados atuais (CSVs já gerados; agents-summary.json "
-                    "em anexo traz pré-agregação determinística). Escreve o relatório "
+                    "em anexo traz pré-agregação determinística). A evidência "
+                    "exaustiva de potência já foi gerada por "
+                    "scripts/anomalias_evidence.py "
+                    "(Agents-outputs/anomalias-evidence.csv + "
+                    "Agents-outputs/anomalias-details.md) — não a regeneres nem "
+                    "listes todas as linhas no relatório; tabelas de Evidência "
+                    "ficam ≤10 linhas e, quando truncadas, terminam com linha "
+                    "de elipse a linkar ambos. "
+                    "Escreve o relatório "
                     "em Agents-outputs/anomalias-results.md no formato exato da prompt. "
                     "Não uses a rede; não inventes ids — cita apenas ids presentes "
                     "nos CSVs; verifica o teu output antes de terminar. Cada categoria "
@@ -112,6 +122,8 @@ jobs:
                     "dos CSVs, em backticks, na linha Exemplos — confirma cada id nos "
                     "CSVs antes de escrever; relatório sem ids é rejeitado.")
           REPORT = 'Agents-outputs/anomalias-results.md'
+          EVIDENCE = ['Agents-outputs/anomalias-evidence.csv',
+                      'Agents-outputs/anomalias-details.md']
           CENSUS = 'Agents-outputs/opc-census.json'
           PER_MODEL_TIMEOUT = 1500  # 25 min por modelo
 
@@ -186,6 +198,11 @@ jobs:
                   return ['relatório não criado']
               if len(txt) < 10000:
                   errs.append(f'muito pequeno ({len(txt)} chars)')
+              for _ef in EVIDENCE:
+                  if not os.path.exists(_ef):
+                      errs.append(f'em falta: {_ef}')
+                  elif os.path.getsize(_ef) == 0:
+                      errs.append(f'vazio: {_ef}')
               for marker in ('# Anomalias', '## Resumo por OPC', '## Índice', 'Metodologia'):
                   if marker not in txt:
                       errs.append(f'em falta: {marker}')
@@ -257,7 +274,7 @@ jobs:
               "41898282+github-actions[bot]@users.noreply.github.com"])
           sh(["git", "remote", "set-url", "origin",
               f"https://x-access-token:{PUSH_TOKEN}@github.com/{REPO}.git"])
-          adds = [REPORT, CENSUS]
+          adds = [REPORT, CENSUS] + EVIDENCE
           if os.path.exists('scripts/anomalias_check.py'):
               adds.append('scripts/anomalias_check.py')  # código reutilizável do agente
           sh(["git", "add"] + adds)
@@ -296,6 +313,8 @@ jobs:
           name: agent-outputs
           path: |
             Agents-outputs/anomalias-results.md
+            Agents-outputs/anomalias-evidence.csv
+            Agents-outputs/anomalias-details.md
             agents-summary.json
           if-no-files-found: warn
       # Safety net: só dispara se morreu antes de notificar (fetch/ETL/eval/
