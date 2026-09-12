@@ -3,6 +3,17 @@ Copyright (c) 2026 O Carro Elétrico / Fernando Miguel
 Source: https://nap.ocarroeletrico.com/ — Code: https://github.com/CarregaErvilhas/nap-dashboard
 SPDX-License-Identifier: PolyForm-Noncommercial-1.0.0
 
+Scope (read this first): this PolyForm-Noncommercial licence covers ONLY the
+original code, template, documentation and analysis in this repository. It does
+NOT cover third-party data, schemas or derived datasets listed in
+THIRD-PARTY-NOTICES.md — NAP/MOBI.E feeds, DGEG lists, CAOP/DGT boundaries,
+OpenStreetMap/umap data, DATEX II XSDs (© CEN / DATEX II). Those keep their
+own licences/terms (ODbL 1.0 share-alike, CC-BY 4.0, IMT/DGEG free use with
+attribution and no commercial use, © MOBI.E all rights reserved). Where such
+data is embedded in dashboard.html, the dashboard is a collective work: our
+code is PolyForm-Noncommercial, the embedded third-party portions stay under
+their own terms.
+
 Required Notice: Copyright O Carro Elétrico / Fernando Miguel (https://nap.ocarroeletrico.com/)
 
 Licensing summary (not a substitute for the license text below):

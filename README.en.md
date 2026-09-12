@@ -30,7 +30,9 @@ auto-published by `.github/workflows/pages.yml` on every `push` that touches
 Mondays 06:00 UTC).
 
 - **`dashboard.html`** — standalone dashboard (10.4 MB), no external libraries,
-  opens via `file://`. KPIs, bar charts, an **interactive SVG map** of 8 357 sites
+  opens via `file://`. **Bilingual PT/EN**: Portuguese for Portuguese-language
+  browsers, English for everyone else (PT|EN button top-right persists the
+  choice; `?lang=pt|en` forces a language). KPIs, bar charts, an **interactive SVG map** of 8 357 sites
   (mainland + Madeira/Açores, zoom/pan, click a dot for detail with OSM
   cross-reference), a 20 932-point table with search, multi-select filters
   (status/region/power class/operator/connector/payment), click-to-sort headers
@@ -71,6 +73,26 @@ template `assets/dashboard_template.html`, replacing the `/*__DATA__*/` marker.
 It also regenerates `dashboard.png` (headless Chrome screenshot) for this README;
 if Chrome is missing it warns and skips.
 
+## Automated agents
+
+System prompts live in `Agents/` (one `.md` file each) and the reports they
+produce in `Agents-outputs/`. See `Agents/AGENTS.md` for details.
+
+To run the anomaly agent (static NAP data → per-OPC report), paste this into a
+new OpenCode session with cwd at the repo root:
+
+```text
+Follow strictly the system prompt in Agents/anomalias.md and execute it
+on the current data. Write the report to
+Agents-outputs/anomalias-results.md in the exact format defined in the prompt.
+```
+
+After adding or editing an agent, validate the eval:
+
+```bash
+python3 scripts/check_agents.py
+```
+
 ## Main files
 
 | File | Role |
@@ -86,7 +108,7 @@ if Chrome is missing it warns and skips.
 | `scripts/build_dashboard.py` | Generates the standalone dashboard + facts/errors |
 | `assets/dashboard_template.html` | Dashboard HTML/JS template (`/*__DATA__*/` marker) |
 | `assets/pt_outline.json` | PT outline polygons + district/island labels for the map (143 KB) |
-| `assets/schemas/*.xsd` | DATEX II 3.3 schemas (enum source) |
+| `assets/schemas/*.xsd` | DATEX II 3.3 schemas © CEN (enum source; see `assets/schemas/README.md`, re-fetch `scripts/fetch_schemas.sh`) |
 | `SKILL.md` | Reusable skill with all knowledge and the pipeline |
 
 ## Intermediate data (CSV)
@@ -115,7 +137,7 @@ if Chrome is missing it warns and skips.
 
 ## License
 
-`PolyForm-Noncommercial-1.0.0` — see `LICENSE`.
+Own code (`scripts/`, template, docs, analysis): `PolyForm-Noncommercial-1.0.0` — see `LICENSE`.
 
 - Noncommercial use (individuals, hobby, research, education, public/charitable
   bodies): free to use, modify and share the code and dashboard/site, with
@@ -123,3 +145,11 @@ if Chrome is missing it warns and skips.
 - Commercial use: requires a separate commercial license, agreed case by case.
   Contact: [info@ocarroeletrico.com](mailto:info@ocarroeletrico.com) ·
   [Messenger](https://m.me/OCarroEletricoDotCom).
+
+**Third-party data and schemas are NOT covered by PolyForm** — see
+`THIRD-PARTY-NOTICES.md`: NAP/MOBI.E (free use with attribution, no commercial
+use; tariff/PartyID © MOBI.E), DGEG lists (same), CAOP outline © DGT (CC-BY
+4.0), OSM data © OpenStreetMap contributors (ODbL 1.0, share-alike) +
+v2.1/Caça community maps, DATEX II schemas © CEN. `dashboard.html` is a
+collective work: our code is PolyForm, embedded data keeps its original
+licences (attribution in footer + map).

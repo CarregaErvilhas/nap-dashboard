@@ -11,7 +11,7 @@ self-contained dashboard. Don't over-engineer.
   concelho_check.py, osm_umap.py, make_pt_outline.py, extract_enums.py,
   build_dashboard.py)
 - `assets/` — `dashboard_template.html`, `pt_outline.json` (PT outline for the
-  map), `schemas/*.xsd` (DATEX II 3.3)
+  map), `schemas/*.xsd` (DATEX II 3.3 © CEN; ver `assets/schemas/README.md`)
 - `references/` — docs for the SKILL.md (data sources, gotchas)
 - `Agents/` — system prompts dos agentes automáticos (um `.md` por agente; ver
   `Agents/AGENTS.md`). Atual: `Agents/anomalias.md` (anomalias dos dados
@@ -141,6 +141,25 @@ venv/bin/python scripts/validate_dashboard.py
 - **Must** sanitize NaN/Inf floats to null before dumping — bare `NaN` breaks
   browser `JSON.parse`. The `clean()` helper in `build_dashboard.py` does this.
 - No external libs, pure CSS/JS, must open via `file://`.
+- Bilingual PT/EN (single file): `detectLang()` shows PT for `pt*` browsers,
+  EN otherwise; PT|EN toggle persists to `localStorage`, `?lang=pt|en` overrides.
+  Static chrome lives in the JS `STR` table (`data-i18n`/`data-i18n-ph`/
+  `data-i18n-title` attrs); data enums (status/region/pay) are display-mapped at
+  render time, so `D` keeps stable PT/code values for filtering. All dynamic
+  rendering goes through `setLang()`-called functions (never one-shot), and the
+  status×power panel re-renders into `#statusPwPanel` instead of repeated
+  `insertAdjacentHTML`. `D` carries EN mirrors (`kpis_pt` is the PT one —
+  `kpis` stays EN; `facts/errs/anom/hubs/churn_html_en`) generated via
+  `scripts/dashboard_i18n.py` (phrase MAP + PT→EN number conversion); template
+  falls back to PT when an `_en` key is missing. New fixed PT strings in
+  FACTS/ERRS/ANOM/HUBS/CHURN_HTML **must** get a MAP entry or they render in PT
+  for EN users. `scripts/patch_dashboard_i18n.py` was the one-time backfill of
+  the 2026-09-11 snapshot (CSVs absent locally) — do NOT re-run it; weekly
+  refreshes regenerate natively via `build_dashboard.py`.
+- The `validate_dashboard.py` DOM stub must keep `navigator`/`localStorage`/
+  `documentElement` (installed via `defineProperty` — node ≥21 has read-only
+  natives that swallow plain assignment) or lang detection renders the wrong
+  branch under eval.
 - Two runtime bugs were fixed historically: (1) a reference to non-existent
   element id `status`, (2) `label()` using undefined `max` instead of the local
   `m` in `bars()`. If the dashboard shows nothing below the KPIs, suspect a JS

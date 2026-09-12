@@ -29,7 +29,9 @@ altere o `dashboard.html`; regenerado semanalmente por
 `.github/workflows/refresh.yml`, segundas 06:00 UTC).
 
 - **`dashboard.html`** — dashboard autónomo (10.4 MB), sem libs externas, abre por
-  `file://`. Contém KPIs, gráficos de barras, **mapa SVG interativo** de 8 357
+  `file://`. **Bilingue PT/EN**: mostra português a browsers em português e inglês
+  aos restantes (botão PT|EN no canto superior direito grava a escolha; `?lang=pt|en`
+  força uma língua). Contém KPIs, gráficos de barras, **mapa SVG interativo** de 8 357
   locais (continente + Madeira/Açores, zoom/pan, clique no ponto para detalhe com
   cruzamento OSM), tabela de 20 932 pontos com pesquisa, filtros multi-select
   (estado/região/classe/operador/tomada/pagamento), ordenação e paginação.
@@ -104,7 +106,7 @@ python3 scripts/check_agents.py
 | `scripts/build_dashboard.py` | Gera o dashboard autónomo + factos/erros |
 | `assets/dashboard_template.html` | Template HTML/JS do dashboard (marcador `/*__DATA__*/`) |
 | `assets/pt_outline.json` | Polígonos do contorno PT + etiquetas de distrito/ilha para o mapa (143 KB) |
-| `assets/schemas/*.xsd` | Esquemas DATEX II 3.3 (fonte de enums) |
+| `assets/schemas/*.xsd` | Esquemas DATEX II 3.3 © CEN (fonte de enums; ver `assets/schemas/README.md`, re-fetch `scripts/fetch_schemas.sh`) |
 | `SKILL.md` | Skill reutilizável com todo o conhecimento e o pipeline |
 
 ## Dados intermédios (CSV)
@@ -132,7 +134,7 @@ P+tarifas), `nap_opc_registry` (código OPC→entidade), `mobie_tarifas`, `dgeg_
 
 ## Licença
 
-`PolyForm-Noncommercial-1.0.0` — ver `LICENSE`.
+Código próprio (`scripts/`, template, docs, análise): `PolyForm-Noncommercial-1.0.0` — ver `LICENSE`.
 
 - Uso não-comercial (particulares, hobby, investigação, ensino, entidades
   públicas/sem fins lucrativos): livre para usar, modificar e partilhar o
@@ -141,3 +143,11 @@ P+tarifas), `nap_opc_registry` (código OPC→entidade), `mobie_tarifas`, `dgeg_
 - Uso comercial: requer licença comercial separada, caso a caso.
   Contacto: [info@ocarroeletrico.com](mailto:info@ocarroeletrico.com) ·
   [Messenger](https://m.me/OCarroEletricoDotCom).
+
+**Dados e schemas de terceiros não estão cobertos pela PolyForm** — ver
+`THIRD-PARTY-NOTICES.md`: NAP/MOBI.E (uso livre com menção de fonte, sem fins
+lucrativos; tarifário/PartyID © MOBI.E), listas DGEG (idem), contorno CAOP ©
+DGT (CC-BY 4.0), dados OSM © OpenStreetMap contributors (ODbL 1.0,
+share-alike) + mapas comunidade v2.1/Caça aos Postos, esquemas DATEX II © CEN.
+O `dashboard.html` é obra coletiva: o nosso código é PolyForm, os dados
+embutidos mantêm as licenças originais (atribuição no footer + mapa).

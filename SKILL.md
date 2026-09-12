@@ -107,7 +107,7 @@ the historical bugs in `references/gotchas.md`.
 ## Layout
 
 - `scripts/` — the pipeline
-- `assets/` — `dashboard_template.html`, `schemas/*.xsd` (DATEX II 3.3)
+- `assets/` — `dashboard_template.html`, `schemas/*.xsd` (DATEX II 3.3 © CEN; ver `assets/schemas/README.md`)
 - `references/` — `data-sources.md`, `gotchas.md`
 - Raw XMLs + CSVs live in the repo root, gitignored, refreshed by `fetch_data.sh`
 

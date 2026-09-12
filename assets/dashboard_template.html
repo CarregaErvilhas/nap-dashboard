@@ -9,7 +9,10 @@
           --ok:#34d399; --warn:#fbbf24; --err:#f87171; }
   * { box-sizing:border-box; margin:0; padding:0; }
   body { background:var(--bg); color:var(--ink); font:14px/1.45 -apple-system,Segoe UI,Roboto,sans-serif; padding:24px; }
-  h1 { font-size:22px; margin-bottom:2px; }
+  h1 { font-size:22px; margin-bottom:2px; padding-right:120px; }
+  .langswitch{position:absolute;top:20px;right:24px;display:flex;gap:6px}
+  .langswitch button{background:#1e293b;color:var(--mut);border:1px solid #334155;border-radius:6px;padding:4px 12px;cursor:pointer;font-size:12px;font-weight:700}
+  .langswitch button.active{background:var(--acc);color:#0b1220;border-color:var(--acc)}
   .sub { color:var(--mut); margin-bottom:20px; }
   .sub a { color:var(--acc); }
   h2 { font-size:15px; margin:28px 0 12px; color:var(--acc); text-transform:uppercase; letter-spacing:.06em; }
@@ -76,65 +79,67 @@
 </style>
 </head>
 <body>
-  <h1>Rede de carregamento de veículos elétricos — Portugal</h1>
-  <div class="sub">NAP MOBI.E (AFIR) + tarifas OPC + registo DGEG · snapshot <span id="snap"></span> · <a href="https://nap.ocarroeletrico.com/">nap.ocarroeletrico.com</a> · <a href="https://github.com/CarregaErvilhas/nap-dashboard">código no GitHub</a></div>
+  <div class="langswitch"><button id="langPt">PT</button><button id="langEn">EN</button></div>
+  <h1 data-i18n="h1">Rede de carregamento de veículos elétricos — Portugal</h1>
+  <div class="sub"><span data-i18n="sub1">NAP MOBI.E (AFIR) + tarifas OPC + registo DGEG</span> · snapshot <span id="snap"></span> · <a href="https://nap.ocarroeletrico.com/">nap.ocarroeletrico.com</a> · <a href="https://github.com/CarregaErvilhas/nap-dashboard" data-i18n="codeLink">código no GitHub</a></div>
 
   <div class="cards" id="kpis"></div>
 
-  <h2>Visão geral</h2>
+  <h2 data-i18n="secOverview">Visão geral</h2>
   <div class="grid">
-    <div class="panel"><h3>Pontos por estado (snapshot)</h3><div id="chStatus"></div></div>
-    <div class="panel"><h3>Locais por região</h3><div id="chRegion"></div></div>
-    <div class="panel"><h3>Pontos por classe de potência</h3><div id="chPw"></div></div>
-    <div class="panel"><h3>Tipos de connector (tomadas)</h3><div id="chConn"></div></div>
+    <div class="panel"><h3 data-i18n="chStatus">Pontos por estado (snapshot)</h3><div id="chStatus"></div></div>
+    <div class="panel"><h3 data-i18n="chRegion">Locais por região</h3><div id="chRegion"></div></div>
+    <div class="panel"><h3 data-i18n="chPw">Pontos por classe de potência</h3><div id="chPw"></div></div>
+    <div class="panel"><h3 data-i18n="chConn">Tipos de connector (tomadas)</h3><div id="chConn"></div></div>
   </div>
 
-  <h2>Operadores</h2>
+  <h2 data-i18n="secOperators">Operadores</h2>
   <div class="grid">
-    <div class="panel"><h3>Top 15 operadores — locais</h3><div id="chOpSites"></div></div>
-    <div class="panel"><h3>Top 15 operadores — pontos</h3><div id="chOpPts"></div></div>
-    <div class="panel"><h3>Ocupação instantânea por operador (top 15)</h3><div id="chOpOcc"></div></div>
-    <div class="panel"><h3>Tarifa OPC média — componente €/kWh, por operador</h3><div id="chPriceOp"></div></div>
+    <div class="panel"><h3 data-i18n="chOpSites">Top 15 operadores — locais</h3><div id="chOpSites"></div></div>
+    <div class="panel"><h3 data-i18n="chOpPts">Top 15 operadores — pontos</h3><div id="chOpPts"></div></div>
+    <div class="panel"><h3 data-i18n="chOpOcc">Ocupação instantânea por operador (top 15)</h3><div id="chOpOcc"></div></div>
+    <div class="panel"><h3 data-i18n="chPriceOp">Tarifa OPC média — componente €/kWh, por operador</h3><div id="chPriceOp"></div></div>
   </div>
 
-  <h2>Ocupação e preço</h2>
+  <h2 data-i18n="secOccPrice">Ocupação e preço</h2>
   <div class="grid">
-    <div class="panel"><h3>Ocupação instantânea por classe de potência</h3><div id="chOccPw"></div></div>
-    <div class="panel"><h3>Top 15 concelhos por locais</h3><div id="chCity"></div></div>
-    <div class="panel" id="pricePanel"><h3>Tarifas MOBI.E (€)</h3></div>
+    <div class="panel"><h3 data-i18n="chOccPw">Ocupação instantânea por classe de potência</h3><div id="chOccPw"></div></div>
+    <div class="panel"><h3 data-i18n="chCity">Top 15 concelhos por locais</h3><div id="chCity"></div></div>
+    <div class="panel" id="pricePanel"><h3 data-i18n="pricePanel">Tarifas MOBI.E (€)</h3></div>
   </div>
 
-  <h2>Mapa de locais</h2>
+  <h2 data-i18n="secMap">Mapa de locais</h2>
   <div class="mapwrap">
     <div class="mapbox">
       <svg id="map" viewBox="0 0 720 920" preserveAspectRatio="xMidYMid meet">
         <g id="mapWorld"></g>
       </svg>
       <div class="mapctrl">
-        <button id="mIn" title="aproximar">+</button>
-        <button id="mOut" title="afastar">−</button>
-        <button id="mReset" title="repor vista">⌂</button>
+        <button id="mIn" data-i18n-title="mIn" title="aproximar">+</button>
+        <button id="mOut" data-i18n-title="mOut" title="afastar">−</button>
+        <button id="mReset" data-i18n-title="mReset" title="repor vista">⌂</button>
       </div>
       <div class="legend">
-        <span><i class="dot" style="background:var(--ok)"></i> carregando</span>
-        <span><i class="dot" style="background:var(--acc)"></i> disponível</span>
-        <span><i class="dot" style="background:var(--warn)"></i> fora de serviço</span>
-        <span><i class="dot" style="background:#a78bfa"></i> removido</span>
-        <span><i class="dot" style="background:var(--mut)"></i> desconhecido</span>
-        <span><i class="dot" style="background:var(--err)"></i> outro</span>
-        <span><i class="dot" style="border:1px dashed #fff;background:transparent"></i> pagamento ad-hoc (OSM)</span>
+        <span><i class="dot" style="background:var(--ok)"></i>&nbsp;<span data-i18n="lgCharging">carregando</span></span>
+        <span><i class="dot" style="background:var(--acc)"></i>&nbsp;<span data-i18n="lgAvailable">disponível</span></span>
+        <span><i class="dot" style="background:var(--warn)"></i>&nbsp;<span data-i18n="lgOutOfOrder">fora de serviço</span></span>
+        <span><i class="dot" style="background:#a78bfa"></i>&nbsp;<span data-i18n="lgRemoved">removido</span></span>
+        <span><i class="dot" style="background:var(--mut)"></i>&nbsp;<span data-i18n="lgUnknown">desconhecido</span></span>
+        <span><i class="dot" style="background:var(--err)"></i>&nbsp;<span data-i18n="lgOther">outro</span></span>
+        <span><i class="dot" style="border:1px dashed #fff;background:transparent"></i>&nbsp;<span data-i18n="lgAdhoc">pagamento ad-hoc (OSM)</span></span>
       </div>
-      <div class="mut" style="font-size:11px;margin-top:6px">Roda para ampliar, arrasta para navegar, clica num ponto para ver detalhe. Filtros da tabela aplicam-se ao mapa.</div>
+      <div class="mut" style="font-size:11px;margin-top:6px" data-i18n="mapHint">Roda para ampliar, arrasta para navegar, clica num ponto para ver detalhe. Filtros da tabela aplicam-se ao mapa.</div>
+      <div class="mut" style="font-size:11px;margin-top:4px">Mapa: © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors (<a href="https://opendatacommons.org/licenses/odbl/">ODbL</a>) · contorno © DGT (CAOP, <a href="https://www.dgterritorio.gov.pt/dados-abertos">CC-BY 4.0</a>) · mapas comunidade: <a href="https://umap.openstreetmap.fr/pt-pt/map/postos-de-carregamento-v21_690884">v2.1</a> + <a href="https://umap.openstreetmap.fr/en/map/caca-aos-postos-de-carregamento_1386222">Caça aos Postos</a>.</div>
     </div>
     <div class="mpanel" id="mDetail">
-      <h3>Detalhe do local</h3>
-      <div id="mDetailBody" class="mut">Clica num ponto no mapa.</div>
+      <h3 data-i18n="detailTitle">Detalhe do local</h3>
+      <div id="mDetailBody" class="mut" data-i18n="clickPoint">Clica num ponto no mapa.</div>
     </div>
   </div>
 
-  <h2>Tabela de pontos (pesquisável)</h2>
+  <h2 data-i18n="secTable">Tabela de pontos (pesquisável)</h2>
   <div class="filters">
-    <input type="text" id="q" placeholder="Filtrar por id, cidade, operador, OPC, status, classe...">
+    <input type="text" id="q" data-i18n-ph="searchPh" placeholder="Filtrar por id, cidade, operador, OPC, status, classe...">
     <div id="fConn" class="multi"></div>
     <div id="fStatus" class="multi"></div>
     <div id="fRegion" class="multi"></div>
@@ -143,23 +148,23 @@
     <div id="fPay" class="multi"></div>
   </div>
   <div class="wrap">
-    <div class="pager"><span id="tblmeta"></span><span><button id="pgPrev">‹ anterior</button> <span id="pgInfo"></span> <button id="pgNext">seguinte ›</button></span></div>
+    <div class="pager"><span id="tblmeta"></span><span><button id="pgPrev" data-i18n="prev">‹ anterior</button> <span id="pgInfo"></span> <button id="pgNext" data-i18n="next">seguinte ›</button></span></div>
     <table id="tbl"><thead><tr id="tblhead"></tr></thead><tbody id="tbody"></tbody></table>
   </div>
 
-  <h2>Factos interessantes</h2>
+  <h2 data-i18n="secFacts">Factos interessantes</h2>
   <div class="panel facts" id="facts"></div>
 
-  <h2>Erros reportáveis</h2>
+  <h2 data-i18n="secErrors">Erros reportáveis</h2>
   <div class="panel errs" id="errs"></div>
 
-  <h2 id="anomH">Anomalias — agente semanal</h2>
+  <h2 id="anomH" data-i18n="secAnom">Anomalias — agente semanal</h2>
   <div class="panel" id="anom"></div>
 
-  <h2 id="churnH">Mudanças de OPCs</h2>
+  <h2 id="churnH" data-i18n="secChurn">Mudanças de OPCs</h2>
   <div class="panel" id="churn"></div>
 
-  <h2 id="hubsH">Hubs por potência total (&gt;300 kW)</h2>
+  <h2 id="hubsH" data-i18n="secHubs">Hubs por potência total (&gt;300 kW)</h2>
   <div class="panel" id="hubs"></div>
 
 <script>
@@ -167,52 +172,159 @@ const D = /*__DATA__*/;
 // HTML-escape qualquer valor de dados (incl. texto da comunidade OSM) antes de
 // o injetar em innerHTML/atributos — o dashboard não pode executar markup hostil.
 const esc = s => String(s??'').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-document.getElementById('snap').textContent = D.snapshot;
 
-const fmt = n => (n==null?'–':Number(n).toLocaleString('pt-PT',{minimumFractionDigits:2,maximumFractionDigits:2}));
+// ---------- i18n ----------
+// PT para browsers em português, EN para todos os outros; o botão PT|EN grava
+// a escolha (localStorage) e ?lang=pt|en sobrepõe-se a tudo (partilha de links).
+const STR = {
+pt: {
+  pageTitle:'Rede de carregamento VE — Portugal (NAP MOBI.E)',
+  h1:'Rede de carregamento de veículos elétricos — Portugal',
+  sub1:'NAP MOBI.E (AFIR) + tarifas OPC + registo DGEG', codeLink:'código no GitHub',
+  secOverview:'Visão geral', chStatus:'Pontos por estado (snapshot)', chRegion:'Locais por região',
+  chPw:'Pontos por classe de potência', chConn:'Tipos de connector (tomadas)',
+  secOperators:'Operadores', chOpSites:'Top 15 operadores — locais', chOpPts:'Top 15 operadores — pontos',
+  chOpOcc:'Ocupação instantânea por operador (top 15)', chPriceOp:'Tarifa OPC média — componente €/kWh, por operador',
+  secOccPrice:'Ocupação e preço', chOccPw:'Ocupação instantânea por classe de potência',
+  chCity:'Top 15 concelhos por locais', pricePanel:'Tarifas MOBI.E (€)',
+  secMap:'Mapa de locais', secTable:'Tabela de pontos (pesquisável)',
+  secFacts:'Factos interessantes', secErrors:'Erros reportáveis',
+  secAnom:'Anomalias — agente semanal', secChurn:'Mudanças de OPCs', secHubs:'Hubs por potência total (>300 kW)',
+  statusPwTitle:'Estado × classe de potência', statusCol:'estado',
+  priceComp:'Componente', priceN:'n pontos', priceMean:'média', priceMax:'máx',
+  priceEnergy:'Energia (€/kWh)', priceTime:'Tempo (€/min)', priceFlat:'Taxa fixa (€/carga)',
+  lgCharging:'carregando', lgAvailable:'disponível', lgOutOfOrder:'fora de serviço',
+  lgRemoved:'removido', lgUnknown:'desconhecido', lgOther:'outro', lgAdhoc:'pagamento ad-hoc (OSM)',
+  mapHint:'Roda para ampliar, arrasta para navegar, clica num ponto para ver detalhe. Filtros da tabela aplicam-se ao mapa.',
+  detailTitle:'Detalhe do local', clickPoint:'Clica num ponto no mapa.',
+  searchPh:'Filtrar por id, cidade, operador, OPC, status, classe...',
+  prev:'‹ anterior', next:'seguinte ›',
+  colCity:'Cidade', colOp:'Operador', colClass:'Classe', colStatus:'Estado', colPay:'Pagamento', colFlat:'€/carga',
+  fConn:'Tomada', fStatus:'Estado', fRegion:'Região', fPw:'Classe potência', fOp:'Operador', fPay:'Pagamento',
+  all:'todos', page:'página', pointsWord:'pontos', showing:'a mostrar', onPage:'nesta página',
+  occCharging:'a carregar', occActive:'ativos',
+  dCode:'Código', dName:'Nome', dCity:'Cidade', dRegion:'Região', dOp:'Operador', dStatus:'Estado',
+  dPoints:'Pontos', dMaxPw:'Potência máx', dClass:'Classe', dPay:'Pagamento (OSM)',
+  dOsmOp:'Operador OSM', dOsmAccess:'Acesso (OSM)', dOsmFee:'Tarifa (OSM)', dAdhoc:'Pagamento ad-hoc',
+  dAdhocNote:'OSM indica Multibanco/contactless ou acesso livre — NAP só app/RFID ⚠',
+  dDoubt:'Dúvida comunidade', adhocSuffix:'pagamento ad-hoc (OSM)',
+  mIn:'aproximar', mOut:'afastar', mReset:'repor vista',
+  footUse:'Uso não-comercial livre', footCom:'uso comercial requer licença'
+},
+en: {
+  pageTitle:'EV charging network — Portugal (NAP MOBI.E)',
+  h1:'Electric vehicle charging network — Portugal',
+  sub1:'NAP MOBI.E (AFIR) + OPC tariffs + DGEG registry', codeLink:'code on GitHub',
+  secOverview:'Overview', chStatus:'Points by status (snapshot)', chRegion:'Sites by region',
+  chPw:'Points by power class', chConn:'Connector types (outlets)',
+  secOperators:'Operators', chOpSites:'Top 15 operators — sites', chOpPts:'Top 15 operators — points',
+  chOpOcc:'Instant occupancy by operator (top 15)', chPriceOp:'Average OPC tariff — €/kWh component, by operator',
+  secOccPrice:'Occupancy and price', chOccPw:'Instant occupancy by power class',
+  chCity:'Top 15 municipalities by sites', pricePanel:'MOBI.E tariffs (€)',
+  secMap:'Site map', secTable:'Points table (searchable)',
+  secFacts:'Interesting facts', secErrors:'Reportable errors',
+  secAnom:'Anomalies — weekly agent', secChurn:'OPC changes', secHubs:'Hubs by total power (>300 kW)',
+  statusPwTitle:'Status × power class', statusCol:'status',
+  priceComp:'Component', priceN:'n points', priceMean:'mean', priceMax:'max',
+  priceEnergy:'Energy (€/kWh)', priceTime:'Time (€/min)', priceFlat:'Flat fee (€/charge)',
+  lgCharging:'charging', lgAvailable:'available', lgOutOfOrder:'out of service',
+  lgRemoved:'removed', lgUnknown:'unknown', lgOther:'other', lgAdhoc:'ad-hoc payment (OSM)',
+  mapHint:'Scroll to zoom, drag to pan, click a point for details. Table filters apply to the map.',
+  detailTitle:'Site detail', clickPoint:'Click a point on the map.',
+  searchPh:'Filter by id, city, operator, OPC, status, class...',
+  prev:'‹ previous', next:'next ›',
+  colCity:'City', colOp:'Operator', colClass:'Class', colStatus:'Status', colPay:'Payment', colFlat:'€/charge',
+  fConn:'Connector', fStatus:'Status', fRegion:'Region', fPw:'Power class', fOp:'Operator', fPay:'Payment',
+  all:'all', page:'page', pointsWord:'points', showing:'showing', onPage:'on this page',
+  occCharging:'charging', occActive:'active',
+  dCode:'Code', dName:'Name', dCity:'City', dRegion:'Region', dOp:'Operator', dStatus:'Status',
+  dPoints:'Points', dMaxPw:'Max power', dClass:'Class', dPay:'Payment (OSM)',
+  dOsmOp:'OSM operator', dOsmAccess:'Access (OSM)', dOsmFee:'Fee (OSM)', dAdhoc:'Ad-hoc payment',
+  dAdhocNote:'OSM reports card/contactless or open access — NAP app/RFID only ⚠',
+  dDoubt:'Community doubt', adhocSuffix:'ad-hoc payment (OSM)',
+  mIn:'zoom in', mOut:'zoom out', mReset:'reset view',
+  footUse:'Free non-commercial use', footCom:'commercial use requires a licence'
+}};
+const STATUS_NAME = {
+  pt:{charging:'a carregar',available:'disponível',removed:'removido',outOfOrder:'fora de serviço',unknown:'desconhecido',inoperative:'inoperativo',blocked:'bloqueado',planned:'planeado'},
+  en:{charging:'charging',available:'available',removed:'removed',outOfOrder:'out of service',unknown:'unknown',inoperative:'inoperative',blocked:'blocked',planned:'planned'}};
+const REGION_NAME = {
+  pt:{mainland:'continente',madeira:'Madeira',azores:'Açores',no_coords:'sem coordenadas',OUTSIDE:'fora de PT'},
+  en:{mainland:'mainland',madeira:'Madeira',azores:'Azores',no_coords:'no coordinates',OUTSIDE:'outside PT'}};
+const PAY_EN = {'App':'App','Multibanco/contactless':'Card (contactless/debit)','Dinheiro':'Cash','Cartão RFID eMSP':'eMSP RFID card','Sem autenticação':'No authentication'};
+let LANG = 'pt';
+function detectLang(){
+  try{
+    const q = new URLSearchParams(location.search).get('lang');
+    if(q==='pt'||q==='en'){ try{localStorage.setItem('nap-lang',q);}catch(e){} return q; }
+    const saved = localStorage.getItem('nap-lang');
+    if(saved==='pt'||saved==='en') return saved;
+  }catch(e){}
+  let nav = '';
+  try{ nav = (typeof navigator!=='undefined') ? ((navigator.languages&&navigator.languages[0])||navigator.language||'') : ''; }catch(e){}
+  return /^pt/i.test(nav||'') ? 'pt' : 'en';
+}
+const T = k => (STR[LANG]&&STR[LANG][k]!=null) ? STR[LANG][k] : STR.pt[k];
+const dispStatus = s => (STATUS_NAME[LANG]&&STATUS_NAME[LANG][s]) || s || 'unknown';
+const dispRegion = r => (REGION_NAME[LANG]&&REGION_NAME[LANG][r]) || r;
+const dispPay = p => LANG==='en' ? (PAY_EN[p]||p) : p;
+const numLocale = () => LANG==='pt' ? 'pt-PT' : 'en-GB';
+
+const fmt = n => (n==null?'–':Number(n).toLocaleString(numLocale(),{minimumFractionDigits:2,maximumFractionDigits:2}));
 const label = (k,v,m)=>`<div class="bar"><div class="lab" title="${esc(k)}">${esc(k)}</div><div class="track"><div class="fill" style="width:${m?v/m*100:0}%"></div></div><div class="val">${fmt(v)}</div></div>`;
-function bars(el, obj, sort){ let e=obj; if(sort){e=Object.entries(e).sort((a,b)=>b[1]-a[1]).reduce((o,[k,v])=>(o[k]=v,o),{});} const m=Math.max(...Object.values(e)); document.getElementById(el).innerHTML=Object.entries(e).map(([k,v])=>label(k,v,m)).join(''); }
+function bars(el, obj, sort, disp){ let e=obj; if(sort){e=Object.entries(e).sort((a,b)=>b[1]-a[1]).reduce((o,[k,v])=>(o[k]=v,o),{});} const m=Math.max(...Object.values(e)); const d=disp||(x=>x); document.getElementById(el).innerHTML=Object.entries(e).map(([k,v])=>label(d(k),v,m)).join(''); }
 
-// KPIs
-document.getElementById('kpis').innerHTML = D.kpis.map(k=>
-  `<div class="card"><div class="t">${esc(k.t)}</div><div class="v">${esc(k.v)}</div><div class="s">${esc(k.s)}</div></div>`).join('');
+// KPIs (D.kpis_pt added by build_dashboard.py; old builds only have EN D.kpis)
+function renderKpis(){
+  const kpis = LANG==='pt' ? (D.kpis_pt||D.kpis) : D.kpis;
+  document.getElementById('kpis').innerHTML = kpis.map(k=>
+    `<div class="card"><div class="t">${esc(k.t)}</div><div class="v">${esc(k.v)}</div><div class="s">${esc(k.s)}</div></div>`).join('');
+}
 
-bars('chStatus', D.status, true);
-bars('chRegion', D.region);
-bars('chPw', D.pw, true);
-bars('chConn', D.conn, true);
-bars('chOpSites', D.op_sites, true);
-bars('chOpPts', D.op_pts, true);
-bars('chCity', D.city, true);
+function renderBars(){
+  bars('chStatus', D.status, true, dispStatus);
+  bars('chRegion', D.region, false, dispRegion);
+  bars('chPw', D.pw, true);
+  bars('chConn', D.conn, true);
+  bars('chOpSites', D.op_sites, true);
+  bars('chOpPts', D.op_pts, true);
+  bars('chCity', D.city, true);
 
-// occupancy by operator (values <0 hidden)
-const occOp = Object.fromEntries(D.occ_op.filter(x=>x.occ!=null).map(x=>[x.op, x.occ]));
-bars('chOpOcc', occOp, true);
-bars('chPriceOp', D.price_op, true);
+  // occupancy by operator (values <0 hidden)
+  const occOp = Object.fromEntries(D.occ_op.filter(x=>x.occ!=null).map(x=>[x.op, x.occ]));
+  bars('chOpOcc', occOp, true);
+  bars('chPriceOp', D.price_op, true);
 
-// occupancy by power class
-document.getElementById('chOccPw').innerHTML = D.occ_pw.map(x=>{
-  const pct = x.occ==null?0:x.occ; const col = x.occ>22?'var(--ok)':x.occ>18?'var(--acc)':'var(--warn)';
-  return `<div class="bar"><div class="lab" title="${esc(x.c)}">${esc(x.c)}</div><div class="track"><div class="fill" style="width:${pct}%;background:${col}"></div></div><div class="val">${fmt(x.occ)}%</div></div>`
-    + `<div class="mut" style="font-size:11px;margin:-3px 0 6px 158px">${x.charging} a carregar / ${x.active} ativos</div>`;
-}).join('');
+  // occupancy by power class
+  document.getElementById('chOccPw').innerHTML = D.occ_pw.map(x=>{
+    const pct = x.occ==null?0:x.occ; const col = x.occ>22?'var(--ok)':x.occ>18?'var(--acc)':'var(--warn)';
+    return `<div class="bar"><div class="lab" title="${esc(x.c)}">${esc(x.c)}</div><div class="track"><div class="fill" style="width:${pct}%;background:${col}"></div></div><div class="val">${fmt(x.occ)}%</div></div>`
+      + `<div class="mut" style="font-size:11px;margin:-3px 0 6px 158px">${x.charging} ${esc(T('occCharging'))} / ${x.active} ${esc(T('occActive'))}</div>`;
+  }).join('');
 
-// pricing stats
-const ps=D.price_stats;
-document.getElementById('pricePanel').innerHTML +=
- `<table><tr><th>Componente</th><th>n pontos</th><th>média</th><th>máx</th></tr>
-  <tr><td class="l">Energia (€/kWh)</td><td>${fmt(ps.energy.n)}</td><td>${fmt(ps.energy.mean)}</td><td>${fmt(ps.energy.max)}</td></tr>
-  <tr><td class="l">Tempo (€/min)</td><td>${fmt(ps.time.n)}</td><td>${fmt(ps.time.mean)}</td><td>${fmt(ps.time.max)}</td></tr>
-  <tr><td class="l">Taxa fixa (€/carga)</td><td>${fmt(ps.flat.n)}</td><td>${fmt(ps.flat.mean)}</td><td>${fmt(ps.flat.max)}</td></tr></table>`;
+  // pricing stats
+  const ps=D.price_stats;
+  const pp=document.getElementById('pricePanel');
+  pp.querySelectorAll('table').forEach(t=>t.remove());
+  pp.insertAdjacentHTML('beforeend',
+   `<table><tr><th>${esc(T('priceComp'))}</th><th>${esc(T('priceN'))}</th><th>${esc(T('priceMean'))}</th><th>${esc(T('priceMax'))}</th></tr>
+    <tr><td class="l">${esc(T('priceEnergy'))}</td><td>${fmt(ps.energy.n)}</td><td>${fmt(ps.energy.mean)}</td><td>${fmt(ps.energy.max)}</td></tr>
+    <tr><td class="l">${esc(T('priceTime'))}</td><td>${fmt(ps.time.n)}</td><td>${fmt(ps.time.mean)}</td><td>${fmt(ps.time.max)}</td></tr>
+    <tr><td class="l">${esc(T('priceFlat'))}</td><td>${fmt(ps.flat.n)}</td><td>${fmt(ps.flat.mean)}</td><td>${fmt(ps.flat.max)}</td></tr></table>`);
 
-// status x power class table (transposed: statuses as rows, classes as columns)
-const sw = D.status_pw;
-const classes = Object.keys(sw);
-const statuses = [...new Set(classes.flatMap(c=>Object.keys(sw[c]||{})))];
-document.getElementById('chStatus').insertAdjacentHTML('afterend',
- `<div class="panel" style="margin-top:14px"><h3>Estado × classe de potência</h3>
-  <div style="overflow-x:auto"><table><thead><tr><th class="l">estado</th>${classes.map(c=>`<th>${esc(c)}</th>`).join('')}</tr></thead>
-  <tbody>${statuses.map(s=>`<tr><td class="l">${esc(s)}</td>${classes.map(c=>`<td>${sw[c][s]??0}</td>`).join('')}</tr>`).join('')}</tbody></table></div></div>`);
+  // status x power class table (transposed: statuses as rows, classes as columns)
+  const sw = D.status_pw;
+  const classes = Object.keys(sw);
+  const statuses = [...new Set(classes.flatMap(c=>Object.keys(sw[c]||{})))];
+  let wrap = document.getElementById('statusPwPanel');
+  const inner = `<h3>${esc(T('statusPwTitle'))}</h3>
+   <div style="overflow-x:auto"><table><thead><tr><th class="l">${esc(T('statusCol'))}</th>${classes.map(c=>`<th>${esc(c)}</th>`).join('')}</tr></thead>
+   <tbody>${statuses.map(s=>`<tr><td class="l">${esc(dispStatus(s))}</td>${classes.map(c=>`<td>${sw[c][s]??0}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
+  if(!wrap){
+    document.getElementById('chStatus').insertAdjacentHTML('afterend',
+     `<div class="panel" id="statusPwPanel" style="margin-top:14px">${inner}</div>`);
+  } else { wrap.innerHTML = inner; }
+}
 
 // ---- interactive map (self-contained SVG) ----
 const REGIONS = {mainland: {x:230, y:10, w:480, h:880, scale:null, ox:0, oy:0, cos:0},
@@ -293,7 +405,7 @@ function renderMap(){
       const extra = sel ? ` stroke="#fff" stroke-width="${(1.4/mapK).toFixed(2)}"` : '';
       return `<circle cx="${px.toFixed(1)}" cy="${py.toFixed(1)}" r="${r}" fill="${col}"${ring}${extra}
         data-ext="${esc(x.ext)}" data-rk="${rk}" class="mpt">
-        <title>${esc(x.ext)} — ${esc(x.city)} — ${esc(x.status)}${x.ad_hoc?' — pagamento ad-hoc (OSM)':''}</title></circle>`;
+        <title>${esc(x.ext)} — ${esc(x.city)} — ${esc(dispStatus(x.status))}${x.ad_hoc?' — '+esc(T('adhocSuffix')):''}</title></circle>`;
     }).join('');
   // persistent pulsing marker for the selected site (visible even when filtered out)
   let marker='';
@@ -334,23 +446,23 @@ function focusSite(ext){
 }
 function showDetail(s){
   const rows = [
-    ['Código', `<code>${esc(s.ext)}</code>`],
-    ['Nome', esc(s.name)||'–'],
-    ['Cidade', esc(s.city)||'–'],
-    ['Região', esc(s.region)||'–'],
-    ['Operador', esc(s.op)||'–'],
-    ['Estado', `<span class="tag status-${esc(s.status)||'unknown'}">${esc(s.status)||'unknown'}</span>`],
-    ['Pontos', s.npts],
-    ['Potência máx', s.kw?`${s.kw.toLocaleString('pt-PT')} kW`:'–'],
-    ['Classe', esc(s.pw)||'–'],
+    [T('dCode'), `<code>${esc(s.ext)}</code>`],
+    [T('dName'), esc(s.name)||'–'],
+    [T('dCity'), esc(s.city)||'–'],
+    [T('dRegion'), esc(dispRegion(s.region))||'–'],
+    [T('dOp'), esc(s.op)||'–'],
+    [T('dStatus'), `<span class="tag status-${esc(s.status)||'unknown'}">${esc(dispStatus(s.status))||'unknown'}</span>`],
+    [T('dPoints'), s.npts],
+    [T('dMaxPw'), s.kw?`${s.kw.toLocaleString(numLocale())} kW`:'–'],
+    [T('dClass'), esc(s.pw)||'–'],
     ['Connectors', (s.conns||[]).map(esc).join(', ')||'–'],
-    ['Pagamento (OSM)', (s.pay||[]).map(esc).join(', ')||'–'],
+    [T('dPay'), (s.pay||[]).map(p=>esc(dispPay(p))).join(', ')||'–'],
   ];
-  if(s.osm_op!==undefined) rows.push(['Operador OSM', `${esc(s.osm_op)}${s.osm_dist!==undefined?` (${esc(s.osm_dist)} km do NAP)`:'·comunidade'}`]);
-  if(s.osm_access!==undefined) rows.push(['Acesso (OSM)', esc(s.osm_access)]);
-  if(s.osm_fee!==undefined) rows.push(['Tarifa (OSM)', esc(s.osm_fee)]);
-  if(s.ad_hoc) rows.push(['Pagamento ad-hoc', 'OSM indica Multibanco/contactless ou acesso livre — NAP só app/RFID ⚠']);
-  if(s.doubt) rows.push(['Dúvida comunidade', `<span class="warn">${esc(s.doubt)}</span>`]);
+  if(s.osm_op!==undefined) rows.push([T('dOsmOp'), `${esc(s.osm_op)}${s.osm_dist!==undefined?` (${esc(s.osm_dist)} km do NAP)`:'·comunidade'}`]);
+  if(s.osm_access!==undefined) rows.push([T('dOsmAccess'), esc(s.osm_access)]);
+  if(s.osm_fee!==undefined) rows.push([T('dOsmFee'), esc(s.osm_fee)]);
+  if(s.ad_hoc) rows.push([T('dAdhoc'), esc(T('dAdhocNote'))]);
+  if(s.doubt) rows.push([T('dDoubt'), `<span class="warn">${esc(s.doubt)}</span>`]);
   document.getElementById('mDetailBody').innerHTML =
     `<table><tbody>${rows.map(([k,v])=>`<tr><td class="k">${k}</td><td>${v}</td></tr>`).join('')}</tbody></table>`;
 }
@@ -384,32 +496,43 @@ document.getElementById('mOut').addEventListener('click',()=>{mapK=Math.max(0.5,
 document.getElementById('mReset').addEventListener('click',()=>{mapK=1;mapTx=0;mapTy=0;renderMap();});
 
 // points table
-const cols = [{k:'point_id',l:'ID'},{k:'city',l:'Cidade'},{k:'operator_name',l:'Operador'},{k:'pw_class',l:'Classe'},
-              {k:'kw',l:'kW'},{k:'connectors',l:'Connectors'},{k:'status',l:'Estado'},{k:'pay',l:'Pagamento'},{k:'opc',l:'OPC'},
-              {k:'ENERGY',l:'€/kWh'},{k:'TIME',l:'€/min'},{k:'FLAT',l:'€/carga'}];
-document.getElementById('tblhead').innerHTML = cols.map((c,i)=>`<th class="${i<2?'l':''}" data-k="${c.k}">${esc(c.l)}</th>`).join('');
+let cols = [];
+function buildCols(){
+  cols = [{k:'point_id',l:'ID'},{k:'city',l:T('colCity')},{k:'operator_name',l:T('colOp')},{k:'pw_class',l:T('colClass')},
+          {k:'kw',l:'kW'},{k:'connectors',l:'Connectors'},{k:'status',l:T('colStatus')},{k:'pay',l:T('colPay')},{k:'opc',l:'OPC'},
+          {k:'ENERGY',l:'€/kWh'},{k:'TIME',l:'€/min'},{k:'FLAT',l:T('colFlat')}];
+  document.getElementById('tblhead').innerHTML = cols.map((c,i)=>`<th class="${i<2?'l':''}" data-k="${c.k}">${esc(c.l)}</th>`).join('');
+}
 let rows = D.points, sortKey=null, sortAsc=true, page=1, per=200;
 const uni = (k)=>[...new Set(rows.map(x=>x[k]).filter(Boolean))].sort();
-function multiSel(id,label,vals){ const el=document.getElementById(id), sel=new Set();
-  el.innerHTML = `<div class="mbtn"><span class="mlab">${label}: todos</span><span class="mcaret">▾</span></div><div class="mmenu"></div>`;
+function multiSel(id,labelKey,vals,disp){ const el=document.getElementById(id), sel=new Set();
+  const d=disp||(x=>x);
+  el.innerHTML = `<div class="mbtn"><span class="mlab"></span><span class="mcaret">▾</span></div><div class="mmenu"></div>`;
   const btn=el.querySelector('.mbtn'), menu=el.querySelector('.mmenu');
   const refresh=()=>{ el.querySelector('.mlab').textContent =
-    sel.size?`${label}: ${[...sel].sort().join(', ')}`:`${label}: todos`;
-    el.querySelector('.mlab').title = sel.size?[...sel].sort().join(', '):''; };
-  menu.innerHTML = vals.map(v=>`<label><input type="checkbox" value="${esc(v)}"> ${esc(v)}</label>`).join('');
+    sel.size?`${T(labelKey)}: ${[...sel].sort().map(v=>d(v)).join(', ')}`:`${T(labelKey)}: ${T('all')}`;
+    el.querySelector('.mlab').title = sel.size?[...sel].sort().map(v=>d(v)).join(', '):''; };
+  menu.innerHTML = vals.map(v=>`<label><input type="checkbox" value="${esc(v)}"> ${esc(d(v))}</label>`).join('');
   menu.querySelectorAll('input').forEach(cb=>cb.addEventListener('change',()=>{
     if(cb.checked) sel.add(cb.value); else sel.delete(cb.value);
     refresh(); page=1; render();
   }));
   btn.addEventListener('click',e=>{ e.stopPropagation(); menu.classList.toggle('open'); });
   document.addEventListener('click',e=>{ if(!el.contains(e.target)) menu.classList.remove('open'); });
-  return { has:()=>sel.size>0, get:()=>sel }; }
-const connFilter = multiSel('fConn','Tomada',[...new Set(rows.flatMap(x=>(x.connectors||'').split('|').filter(Boolean)))].sort());
-const statusFilter = multiSel('fStatus','Estado',uni('status'));
-const regionFilter = multiSel('fRegion','Região',uni('region'));
-const pwFilter = multiSel('fPw','Classe potência',uni('pw_class'));
-const opFilter = multiSel('fOp','Operador',uni('operator_name'));
-const payFilter = multiSel('fPay','Pagamento',[...new Set(rows.flatMap(x=>(x.pay||[])))].sort());
+  refresh();
+  return { has:()=>sel.size>0, get:()=>sel,
+    relabel:()=>{ menu.innerHTML = vals.map(v=>`<label><input type="checkbox" value="${esc(v)}"${sel.has(v)?' checked':''}> ${esc(d(v))}</label>`).join('');
+      menu.querySelectorAll('input').forEach(cb=>cb.addEventListener('change',()=>{
+        if(cb.checked) sel.add(cb.value); else sel.delete(cb.value);
+        refresh(); page=1; render();
+      }));
+      refresh(); } }; }
+const connFilter = multiSel('fConn','fConn',[...new Set(rows.flatMap(x=>(x.connectors||'').split('|').filter(Boolean)))].sort());
+const statusFilter = multiSel('fStatus','fStatus',uni('status'),dispStatus);
+const regionFilter = multiSel('fRegion','fRegion',uni('region'),dispRegion);
+const pwFilter = multiSel('fPw','fPw',uni('pw_class'));
+const opFilter = multiSel('fOp','fOp',uni('operator_name'));
+const payFilter = multiSel('fPay','fPay',[...new Set(rows.flatMap(x=>(x.pay||[])))].sort(),dispPay);
 function render(){
   const q=(document.getElementById('q').value||'').toLowerCase();
   let r = rows.filter(x=>Object.values(x).some(v=>String(v??'').toLowerCase().includes(q)));
@@ -428,8 +551,8 @@ function render(){
   document.getElementById('tbody').innerHTML = slice.map(x=>`<tr data-site="${esc(x.site_external_id)}">
     <td class="l">${esc(x.point_id)}</td><td class="l">${esc(x.city??'')}</td><td class="l">${esc(x.operator_name??'')}</td>
     <td>${esc(x.pw_class??'')}</td><td>${fmt(x.kw)}</td><td>${esc(x.connectors??'')}</td>
-    <td><span class="tag status-${esc(x.status??'unknown')}">${esc(x.status??'')}</span></td>
-    <td>${(x.pay||[]).map(esc).join(', ')||'–'}</td>
+    <td><span class="tag status-${esc(x.status??'unknown')}">${esc(dispStatus(x.status)??'')}</span></td>
+    <td>${(x.pay||[]).map(p=>esc(dispPay(p))).join(', ')||'–'}</td>
     <td>${esc(x.opc??'')}</td><td>${fmt(x.ENERGY)}</td><td>${fmt(x.TIME)}</td><td>${fmt(x.FLAT)}</td></tr>`).join('');
   document.getElementById('tbody').querySelectorAll('tr').forEach(tr=>{
     tr.addEventListener('click',()=>{
@@ -441,8 +564,8 @@ function render(){
       document.getElementById('map').scrollIntoView({behavior:'smooth', block:'center'});
     });
   });
-  document.getElementById('tblmeta').textContent = `${r.length} pontos (a mostrar ${Math.min(per,r.length-(page-1)*per)} nesta página)`;
-  document.getElementById('pgInfo').textContent = `página ${page}/${pages}`;
+  document.getElementById('tblmeta').textContent = `${r.length} ${T('pointsWord')} (${T('showing')} ${Math.min(per,r.length-(page-1)*per)} ${T('onPage')})`;
+  document.getElementById('pgInfo').textContent = `${T('page')} ${page}/${pages}`;
   document.getElementById('pgPrev').disabled = page<=1;
   document.getElementById('pgNext').disabled = page>=pages;
   renderMap();
@@ -452,18 +575,53 @@ document.getElementById('tblhead').addEventListener('click',e=>{const k=e.target
 document.getElementById('q').addEventListener('input',()=>{page=1;render();});
 document.getElementById('pgPrev').addEventListener('click',()=>{if(page>1){page--;render();}});
 document.getElementById('pgNext').addEventListener('click',()=>{page++;render();});
-render();
 
-// facts + errors + anomalias (HTML injected from build script)
-document.getElementById('facts').innerHTML = D.facts_html;
-document.getElementById('errs').innerHTML = D.errs_html;
-if(D.anom_html){document.getElementById('anom').innerHTML = D.anom_html;}
-else{document.getElementById('anom').style.display='none';document.getElementById('anomH').style.display='none';}
-if(D.hubs_html){document.getElementById('hubs').innerHTML = D.hubs_html;}
-else{document.getElementById('hubs').style.display='none';document.getElementById('hubsH').style.display='none';}
-if(D.churn_html){document.getElementById('churn').innerHTML = D.churn_html;}
-else{document.getElementById('churn').style.display='none';document.getElementById('churnH').style.display='none';}
+// facts + errors + anomalias (HTML injected from build script, PT + EN)
+function pickHtml(ptKey){
+  if(LANG==='en'){ const en = D[ptKey+'_en']; if(en) return en; }
+  return D[ptKey];
+}
+function renderTexts(){
+  document.getElementById('facts').innerHTML = pickHtml('facts_html');
+  document.getElementById('errs').innerHTML = pickHtml('errs_html');
+  const anom = pickHtml('anom_html'), hubs = pickHtml('hubs_html'), churn = pickHtml('churn_html');
+  if(anom){document.getElementById('anom').innerHTML = anom;document.getElementById('anom').style.display='';document.getElementById('anomH').style.display='';}
+  else{document.getElementById('anom').style.display='none';document.getElementById('anomH').style.display='none';}
+  if(hubs){document.getElementById('hubs').innerHTML = hubs;document.getElementById('hubs').style.display='';document.getElementById('hubsH').style.display='';}
+  else{document.getElementById('hubs').style.display='none';document.getElementById('hubsH').style.display='none';}
+  if(churn){document.getElementById('churn').innerHTML = churn;document.getElementById('churn').style.display='';document.getElementById('churnH').style.display='';}
+  else{document.getElementById('churn').style.display='none';document.getElementById('churnH').style.display='none';}
+}
+
+// static chrome: [data-i18n] text, placeholders, titles, <html lang>, toggle
+function applyStatic(){
+  document.documentElement.lang = LANG;
+  document.title = T('pageTitle');
+  document.getElementById('snap').textContent = D.snapshot;
+  document.querySelectorAll('[data-i18n]').forEach(el=>{ el.textContent = T(el.getAttribute('data-i18n')); });
+  document.querySelectorAll('[data-i18n-ph]').forEach(el=>{ el.setAttribute('placeholder', T(el.getAttribute('data-i18n-ph'))); });
+  document.querySelectorAll('[data-i18n-title]').forEach(el=>{ el.setAttribute('title', T(el.getAttribute('data-i18n-title'))); });
+  document.getElementById('langPt').classList.toggle('active', LANG==='pt');
+  document.getElementById('langEn').classList.toggle('active', LANG==='en');
+}
+
+function setLang(l){
+  LANG = (l==='en') ? 'en' : 'pt';
+  try{ localStorage.setItem('nap-lang', LANG); }catch(e){}
+  applyStatic();
+  renderKpis();
+  renderBars();
+  buildCols();
+  [connFilter,statusFilter,regionFilter,pwFilter,opFilter,payFilter].forEach(f=>f.relabel());
+  if(mapSel){ const s=D.sites.find(x=>x.ext===mapSel); if(s) showDetail(s); }
+  else { document.getElementById('mDetailBody').textContent = T('clickPoint'); }
+  renderTexts();
+  render();
+}
+document.getElementById('langPt').addEventListener('click',()=>setLang('pt'));
+document.getElementById('langEn').addEventListener('click',()=>setLang('en'));
+setLang(detectLang());
 </script>
-<footer class="mut" style="font-size:11px;margin-top:28px;padding-top:12px;border-top:1px solid #27334a">© 2026 O Carro Elétrico / Fernando Miguel · <a href="https://nap.ocarroeletrico.com/">nap.ocarroeletrico.com</a> · Uso não-comercial livre (<a href="https://github.com/CarregaErvilhas/nap-dashboard/blob/main/LICENSE">PolyForm Noncommercial 1.0.0</a>); uso comercial requer licença — <a href="mailto:info@ocarroeletrico.com">info@ocarroeletrico.com</a> · <a href="https://m.me/OCarroEletricoDotCom">Messenger</a>.</footer>
+<footer class="mut" style="font-size:11px;margin-top:28px;padding-top:12px;border-top:1px solid #27334a">© 2026 O Carro Elétrico / Fernando Miguel · <a href="https://nap.ocarroeletrico.com/">nap.ocarroeletrico.com</a> · <span data-i18n="footUse">Uso não-comercial livre</span> (<a href="https://github.com/CarregaErvilhas/nap-dashboard/blob/main/LICENSE">PolyForm Noncommercial 1.0.0</a>, só código próprio — ver <a href="https://github.com/CarregaErvilhas/nap-dashboard/blob/main/THIRD-PARTY-NOTICES.md">THIRD-PARTY-NOTICES.md</a>); <span data-i18n="footCom">uso comercial requer licença</span> — <a href="mailto:info@ocarroeletrico.com">info@ocarroeletrico.com</a> · <a href="https://m.me/OCarroEletricoDotCom">Messenger</a>.<br>Fontes: NAP MOBI.E (via NAP-IMT) + tarifas MOBI.E (<a href="https://www.mobie.pt/">mobie.pt</a>) · listas DGEG (<a href="https://www.dgeg.gov.pt/">dgeg.gov.pt</a>) — uso livre com menção de fonte, sem fins lucrativos · © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors (<a href="https://opendatacommons.org/licenses/odbl/">ODbL</a>) · contorno © DGT (CAOP, <a href="https://www.dgterritorio.gov.pt/dados-abertos">CC-BY 4.0</a>) · esquemas DATEX II © CEN (<a href="https://datex2.eu/">datex2.eu</a>).</footer>
 </body>
 </html>

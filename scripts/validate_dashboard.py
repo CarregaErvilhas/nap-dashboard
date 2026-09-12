@@ -26,7 +26,8 @@ function mkEl(id) {
     _id: id, innerHTML: '', textContent: '', title: '', disabled: false, value: '',
     style: {}, dataset: {},
     classList: { add: nop, remove: nop, toggle: nop, contains: () => false },
-    addEventListener: nop, removeEventListener: nop, appendChild: nop, insertAdjacentHTML: nop,
+    addEventListener: nop, removeEventListener: nop, appendChild: nop,
+    insertAdjacentHTML(pos, h) { this.innerHTML += h; },
     querySelector: () => mkEl(null), querySelectorAll: () => [], contains: () => false,
     getBoundingClientRect: () => ({ left: 0, top: 0, width: 800, height: 1000 }),
     scrollIntoView: nop, focus: nop, getAttribute: () => null, setAttribute: nop,
@@ -39,9 +40,23 @@ globalThis.document = {
   // `el.querySelector('.mbtn').innerHTML = ...` — null rebentaria)
   querySelector: () => mkEl(null), querySelectorAll: () => [],
   addEventListener: nop, removeEventListener: nop, createElement: mkEl, body: mkEl('body'),
+  documentElement: { lang: '' },
 };
 globalThis.window = globalThis;
-globalThis.location = { href: 'file:///dashboard.html' };
+globalThis.location = { href: 'file:///dashboard.html', search: '' };
+// NB: node >=21 tem navigator/localStorage nativos (só-leitura); a atribuição
+// direta falha em silêncio, por isso instalam-se como propriedades próprias.
+const stubNavigator = { language: 'pt-PT', languages: ['pt-PT', 'pt'] };
+const stubStorage = {
+  _s: {},
+  getItem(k) { return Object.prototype.hasOwnProperty.call(this._s, k) ? this._s[k] : null; },
+  setItem(k, v) { this._s[k] = String(v); },
+  removeItem(k) { delete this._s[k]; },
+};
+try { Object.defineProperty(globalThis, 'navigator', { value: stubNavigator, configurable: true }); }
+catch (e) { globalThis.navigator = stubNavigator; }
+try { Object.defineProperty(globalThis, 'localStorage', { value: stubStorage, configurable: true }); }
+catch (e) { globalThis.localStorage = stubStorage; }
 """
 
 

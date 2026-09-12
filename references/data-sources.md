@@ -18,7 +18,10 @@ and were downloaded from `http://datex2.eu/schema/3/<module>` (serves the XSD).
 
 License: the NAP endpoints are published under free-access licences (see the
 IMT-IP NAP pages `nap-portugal.imt-ip.pt/nap/multimodalsupplydetail/148` and
-`/149`). Note MOBI.E now acts as EADME for the NAP under DL 93/2025; a
+`/149`). IMT site terms: free use with source attribution, no lucrative or
+illicit use — compatible with this repo's non-commercial licence, but the
+dashboard footer must keep the attribution. Note MOBI.E now acts as EADME for
+the NAP under DL 93/2025; a
 transitional regime runs until 31 Dec 2027.
 
 ## MOBI.E OPC tariff
@@ -32,6 +35,10 @@ transitional regime runs until 31 Dec 2027.
   POTENCIA_TOMADA`. `TARIFA` is a text like `€ 0.261 /charge`, `€ 0.1 /kWh`,
   `€ 0.02 /min` — parse with a regex; `TIPO_TARIFA` is one of
   `FLAT | ENERGY | TIME | PARKING_TIME`.
+
+  Licence: `© MOBI.E, all rights reserved` — no explicit reuse licence found
+  on mobie.pt. Treat as factual reference; redistribution basis is unclear
+  (see `THIRD-PARTY-NOTICES.md`). If MOBI.E objects, remove/redact on request.
 
 ## MOBI.E PartyID
 
@@ -54,12 +61,21 @@ transitional regime runs until 31 Dec 2027.
   parses the first table on each page; the CEME columns land in the same CSV
   positions, so re-check headers if DGEG changes the pages.
 
+  Licence: DGEG site terms — free use with source mention, no commercial use
+  against the public interest; IP belongs to DGEG. Keep the footer attribution.
+
 ## DATEX II XSDs
 
-Vendored in `assets/schemas/` for enum validation. Sources:
+Vendored in `assets/schemas/` for enum validation (see
+`assets/schemas/README.md`; re-fetch with `scripts/fetch_schemas.sh`).
+Sources:
 `http://datex2.eu/schema/3/energyInfrastructure`, `/facilities`,
 `/locationReferencing`, `/locationExtension`, `/commonExtension`, `/common`,
 `/d2Payload`.
+
+Licence: **© CEN / DATEX II organisation — NOT covered by this repo's
+PolyForm licence** (see `THIRD-PARTY-NOTICES.md`). Free to use for
+implementation/validation; vendored only as enum source.
 
 ## OSM / umap (community) — cross-check
 
@@ -67,6 +83,13 @@ Used by `scripts/osm_umap.py` to enrich NAP sites with community-sourced operato
 payment/authentication and location-doubt data. These are **not official sources**
 — they are community-maintained maps/dumps; use as a lead for field verification,
 never as ground truth. Fetches are cached in `umap_cache/` (gitignored).
+
+Licence: underlying OSM data is **ODbL 1.0** — public use requires `©`
+OpenStreetMap contributors + ODbL link **in the dashboard itself** (footer +
+map attribution, done) and the OSM-derived CSVs/fields stay under ODbL
+(share-alike; see `THIRD-PARTY-NOTICES.md` for how to obtain them). The two
+umap layers below additionally carry their curators' own rights (no explicit
+licence found) — always credit + link them.
 
 - **Raw Overpass dump `Todos.json`** (primary source) — every OSM
   `amenity=charging_station` and `man_made=charge_point` element in Portugal,
@@ -111,6 +134,13 @@ official CAOP data (WGS84 `geograficas` variants):
   (props `MUNICIPIO`, `ILHA`, `AREA_HA`)
 - `geograficas/Madeira/MadeiraConcelhos.geojson` — Madeira
   (props `Municipio`, `Ilha`, `Area_Ha`)
+
+Licence: official CAOP data is DGT open data under **CC-BY 4.0** — free use
+incl. commercial, **must credit Direção-Geral do Território** (footer + map
+attribution, done). The `jotanmiguel/caop_GeoJSON` fork itself has no explicit
+licence; the data is DGT's. `assets/pt_outline.json` and any CAOP-derived
+geometry are **excluded from this repo's PolyForm non-commercial restriction**
+(see `THIRD-PARTY-NOTICES.md`).
 
 ## Related / context
 

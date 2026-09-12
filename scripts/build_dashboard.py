@@ -8,7 +8,11 @@ import html as html_esc
 import math
 import os
 import re
+import sys
 import pandas as pd
+
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__))))
+import dashboard_i18n as i18n
 
 S = pd.read_csv('nap_static_sites.csv', dtype=str)
 P = pd.read_csv('nap_static_points.csv', dtype=str)
@@ -667,6 +671,15 @@ data = {
         kpi('Occupancy (snapshot)', f'{occupancy_overall:.1f}%', 'charging among available+charging'),
         kpi('Median power', f'{median_kw} kW', f'mean {_pwv.mean()/1000:.0f} kW, max {_pwv.max()/1000:.0f} kW'),
     ],
+    # PT mirror of the EN kpis above (template picks per browser language).
+    'kpis_pt': [
+        kpi('Locais', len(S), f'{S.region.value_counts().get("mainland",0)} continente / {S.region.value_counts().get("madeira",0)} Madeira / {S.region.value_counts().get("azores",0)} Açores'),
+        kpi('Pontos de carregamento', len(pts), f'{int(pts.is_green_energy.str.lower().eq("true").sum())} energia verde'),
+        kpi('Operadores (OPC)', pts.operator_id.nunique(), f'{len(REG)} combinações código/operador, {int(REG.dgeg_entidade.notna().sum())} com reconhecimento DGEG'),
+        kpi('Pontos com tarifa OPC', int(OPC.opc_operador.notna().sum()), f'{int(OPC.opc_operador.notna().sum())*100//max(len(OPC),1)}% da rede'),
+        kpi('Ocupação (snapshot)', f'{occupancy_overall:.1f}%'.replace('.', ','), 'a carregar entre disponíveis+a carregar'),
+        kpi('Potência mediana', f'{median_kw} kW', f'média {_pwv.mean()/1000:.0f} kW, máx {_pwv.max()/1000:.0f} kW'),
+    ],
     'status': agg_status,
     'status_pw': agg_status_pw.to_dict('index'),
     'region': agg_region,
@@ -688,6 +701,12 @@ data = {
     'anom_html': ANOM_HTML,
     'hubs_html': HUBS_HTML,
     'churn_html': CHURN_HTML,
+    # EN mirrors (dashboard_i18n.MAP); template picks per browser language.
+    'facts_html_en': i18n.translate_html_blob(FACTS_HTML),
+    'errs_html_en': i18n.translate_html_blob(ERRS_HTML),
+    'anom_html_en': i18n.translate_html_blob(ANOM_HTML),
+    'hubs_html_en': i18n.translate_html_blob(HUBS_HTML),
+    'churn_html_en': i18n.translate_html_blob(CHURN_HTML),
     'sites': sites_map,
     'outline': outline,
     'districts': districts,
