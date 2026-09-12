@@ -1,6 +1,6 @@
 {
-  "snapshot_date": "2026-09-11",
-  "generated_utc": "2026-09-11T21:58:41+00:00",
+  "snapshot_date": "2026-09-12",
+  "generated_utc": "2026-09-12T15:34:30+00:00",
   "opcs": {
     "ACCI": {
       "name": "ACCIONA RECARGA PORTUGAL,UNIPESSOAL LDA",
@@ -99,8 +99,8 @@
     },
     "EDPC": {
       "name": "EDP Comercial",
-      "sites": 1658,
-      "points": 5787
+      "sites": 1659,
+      "points": 5789
     },
     "EMAC": {
       "name": "EMACOM - Telecomunicações da Madeira, Unipessoal, Lda",
@@ -174,8 +174,8 @@
     },
     "FCTO": {
       "name": "Iberdrola | bp pulse",
-      "sites": 287,
-      "points": 1194
+      "sites": 288,
+      "points": 1196
     },
     "FRIO": {
       "name": "Distrifrio Supermercados, Lda",
