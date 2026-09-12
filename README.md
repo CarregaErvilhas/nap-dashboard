@@ -129,3 +129,15 @@ P+tarifas), `nap_opc_registry` (código OPC→entidade), `mobie_tarifas`, `dgeg_
   de pagamento que os `charging_station` não têm — considerar ambos. A umap
   "Caça aos Postos" lista dúvidas da comunidade, incluindo "nada no local" a
   ≤500 m de sites ativos.
+
+## Licença
+
+`PolyForm-Noncommercial-1.0.0` — ver `LICENSE`.
+
+- Uso não-comercial (particulares, hobby, investigação, ensino, entidades
+  públicas/sem fins lucrativos): livre para usar, modificar e partilhar o
+  código e o dashboard/site, com referência a
+  <https://nap.ocarroeletrico.com/>.
+- Uso comercial: requer licença comercial separada, caso a caso.
+  Contacto: [info@ocarroeletrico.com](mailto:info@ocarroeletrico.com) ·
+  [Messenger](https://m.me/OCarroEletricoDotCom).

@@ -112,3 +112,14 @@ if Chrome is missing it warns and skips.
   that `charging_station` elements lack — consider both. The "Caça aos Postos"
   umap lists community doubts, including "nothing on site" points ≤500 m from
   active NAP sites.
+
+## License
+
+`PolyForm-Noncommercial-1.0.0` — see `LICENSE`.
+
+- Noncommercial use (individuals, hobby, research, education, public/charitable
+  bodies): free to use, modify and share the code and dashboard/site, with
+  credit to <https://nap.ocarroeletrico.com/>.
+- Commercial use: requires a separate commercial license, agreed case by case.
+  Contact: [info@ocarroeletrico.com](mailto:info@ocarroeletrico.com) ·
+  [Messenger](https://m.me/OCarroEletricoDotCom).
