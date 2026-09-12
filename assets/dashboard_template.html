@@ -290,10 +290,10 @@ function renderKpis(){
 }
 
 function renderBars(){
-  bars('chStatus', D.status, true, dispStatus);
-  bars('chRegion', D.region, false, dispRegion);
-  bars('chPw', D.pw, true);
-  bars('chConn', D.conn, true);
+  barsInt('chStatus', D.status, true, dispStatus);
+  barsInt('chRegion', D.region, false, dispRegion);
+  barsInt('chPw', D.pw, true);
+  barsInt('chConn', D.conn, true);
   barsInt('chOpSites', D.op_sites, true);
   barsInt('chOpPts', D.op_pts, true);
   barsInt('chCity', D.city, true);
