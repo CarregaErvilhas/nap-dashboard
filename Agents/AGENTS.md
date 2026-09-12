@@ -4,7 +4,7 @@ Esta pasta guarda as system prompts dos agentes automáticos do projeto `nap-das
 
 ## Conteúdo atual
 
-- `anomalias.md` — deteção automática de anomalias e divergências nos dados **estáticos** do NAP (lei de Ohm `P vs V×I`, nº de portas sem sentido, enums fora do schema DATEX II, duplicados, coordenadas, metadados) mais rotatividade de OPCs (novos, saídos, grandes variações de pontos). Lê `nap_static_sites.csv` / `nap_static_points.csv` e escreve `Agents-outputs/anomalias-results.md`, agrupado por OPC (`operator_id — operator_name`).
+- `anomalias.md` — deteção automática de anomalias e divergências nos dados **estáticos** do NAP (lei de Ohm aproximada `P vs V×I`, teto global 1500 kW, tetos de potência por tipo de tomada, compatibilidade modo↔tomada AC/DC, enums fora do schema DATEX II, duplicados, chaves eMI3 e coerência CP7↔localidade, coordenadas, metadados) mais rotatividade de OPCs (novos, saídos, grandes variações de pontos). Lê `nap_static_sites.csv` / `nap_static_points.csv` e escreve `Agents-outputs/anomalias-results.md`, agrupado por OPC (`operator_id — operator_name`).
 
 ## Convenções
 
