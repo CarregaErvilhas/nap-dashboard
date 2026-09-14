@@ -7,7 +7,7 @@
 As duas fontes oficiais divergem &gt;30%. Ex.: `SNT-00163-02` (NAP 60 kW, MOBI.E 120 kW); `SNT-00163-01` (NAP 60 kW, MOBI.E 120 kW); `ALM-00043-02` (NAP 60 kW, MOBI.E 120 kW).
 
 ## 3. Estado duplicado / contraditório no feed dinâmico
-39 pontos aparecem 2–3× no evActualStatus com estados diferentes (ex. `PT-EDP-EABF-00195-1` aparece como unknown e como removed). 39 linhas a mais no ficheiro.
+32 pontos aparecem 2–3× no evActualStatus com estados diferentes (ex. `PT-EDP-EABF-00195-1` aparece como unknown e como removed). 32 linhas a mais no ficheiro.
 
 ## 4. Fragmentação de nomes de operadores (NAP)
 A mesma entidade legal com múltiplas grafias (19 operadores afetados): Galp (Galp Power / Galpgeste / Galp Gest), Atlante (6 variantes), Iberdrola (3), REPSOL (maiúsculas/minúsculas). Torna a agregação por operador frágil.
@@ -122,7 +122,7 @@ O mapa "Caça aos Postos de Carregamento" (umap, OSM) lista pontos onde a comuni
 | `GLP-VIS-00067` | VIS | Viseu | Mortágua | 45 |
 ## 12. Dúvidas da comunidade OSM/umap perto de sites ativos do NAP
 
-O mapa "Caça aos Postos de Carregamento" (umap, OSM) registou **170 pontos** de dúvida da comunidade. Destes, **16** são "nada no local" a ≤500 m de um site que o NAP lista como infraestrutura ativa — sinal de coordenadas erradas, site inexistente ou ainda não inaugurado:
+O mapa "Caça aos Postos de Carregamento" (umap, OSM) registou **181 pontos** de dúvida da comunidade. Destes, **17** são "nada no local" a ≤500 m de um site que o NAP lista como infraestrutura ativa — sinal de coordenadas erradas, site inexistente ou ainda não inaugurado:
 
 | ponto umap | dúvida | site NAP próximo | distância |
 |---|---|---|---|
@@ -135,13 +135,14 @@ O mapa "Caça aos Postos de Carregamento" (umap, OSM) registou **170 pontos** de
 | `vP0EY` | Possível novo posto lento, nada no local em 2026-08-28 | `SJM-90001` (São João da Madeira, HORZ) | 173 m |
 | `FgpQJ` | Procurar novo posto, nada no local em 2026-06-27 | `OLH-00030` (Olhão, TRUE) | 193 m |
 | `tczNY` | Possível novo posto, nada no local em 2026-08-23 | `ALM-00124` (Almada, EZC3) | 215 m |
-| `nWkHf` | Possível posto novo, nada no local em 2026-09-10 | `ALM-90004` (Almada, HORZ) | 257 m |
 | `goqF9` | Procurar novo posto, nada no local em 2026-07-05 | `OLH-00045` (Olhão, LUSI) | 257 m |
+| `nWkHf` | Possível posto novo, nada no local em 2026-09-10 | `ALM-90004` (Almada, HORZ) | 257 m |
 | `ZBJkE` | Possível posto novo, nada no local em 2026-09-10 | `ALM-90004` (Almada, HORZ) | 314 m |
 | `34Ieo` | Possível novo posto lento, nada no local em 2026-08-04 | `VNH-00002` (Vinhais, EDPC) | 323 m |
 | `mdbLU` | Possível novo posto no ALDI, nada no local em 2026-06-27 | `SXL-00030` (Seixal, GLPP) | 348 m |
 | `axhaN` | Possível novo posto, nada no local em 2026-08-03 | `CLD-00036` (Caldas da Rainha, EDPC) | 349 m |
 | `FvAls` | Possível novo posto, nada no local em 2026-08-04 | `PTG-00021` (Portalegre, ATLA) | 391 m |
+| `0rZu2` | Possível novo posto, nada no local em 2026-09-13 | `ALM-00087` (Almada, EVGR) | 420 m |
 
 > Nota: o umap é curado pela comunidade, não é fonte oficial; serve como pista para verificação no terreno.
 
@@ -154,13 +155,13 @@ Operador: **1615** sites com correspondência código-a-código têm operador OS
 | sites | operador NAP | operador OSM |
 |---|---|---|
 | 735 | WOWPLUG | True Kare |
-| 279 | Iberdrola | bp pulse | Charging Together |
-| 151 | Mota-Engil Renewing | Mota Engil II |
+| 280 | Iberdrola | bp pulse | Charging Together |
+| 148 | Mota-Engil Renewing | Mota Engil II |
 | 115 | Galpgeste | Galp Geste |
 | 72 | Kilometer Low Cost II Serviços, SA | KLC Serviços |
 | 38 | FactorENERGIA | Factor Energia |
 | 22 | Siva - Sociedade de Importação de Veículos Automóveis / (sub-CEME da Iberdola) | Moon |
-| 18 | uCharge | Logical Gravity |
+| 20 | uCharge | Logical Gravity |
 | 17 | EVpower, Charging Solutions Lda | EV Power |
 | 15 | EZ - CHARG3, Lda | EZ-Charg3 |
 | 14 | LUSIADAENERGIA, S.A. | Luzigás |
@@ -169,4 +170,4 @@ Operador: **1615** sites com correspondência código-a-código têm operador OS
 | 9 | Gold Energy | Goldenergy |
 | 9 | Galp Power OPC | Galp Geste |
 
-Cobertura OSM (dump do autor do mapa v2.1): **8021 sites NAP** (95%) com código MOBI.E; 220 divergências de localização >150 m em correspondências de código único.
+Cobertura OSM (dump do autor do mapa v2.1): **8021 sites NAP** (95%) com código MOBI.E; 219 divergências de localização >150 m em correspondências de código único.

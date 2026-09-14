@@ -1,3 +1,4 @@
-# Novidades da rede (2026-09-12)
+# Novidades da rede (2026-09-12 → 2026-09-14)
 
-- **Baseline:** primeiro censo da rede (8.359 locais, 20.934 pontos). A partir da próxima semana há diffs.
+- **Estreias:** 394 locais reativados (`ABF-00012` · Albufeira · GLPP · 22 kW; `ABF-00024` · Albufeira · GLPG · 50 kW; `ABF-00040` · Albufeira · GLPP · 11 kW; `ABF-00133` · Albufeira · EDPC · 22 kW; `ABF-00147` · Albufeira · EDPC · 22 kW; `ABF-00170` · Albufeira · EDPC · 22 kW; `ACB-00027` · Alcobaça · FCTO · 50 kW; `ACB-00033` · Alcobaça · FCTO · 150 kW; `ACB-00034` · Alcobaça · FCTO · 150 kW; `ACB-00046` · Alcobaça · FCTO · 150 kW (+384 restantes)).
+- **Saídas:** 945 locais saíram da rede ou foram desligados (`ABF-00009` · Albufeira · EDPC · 7,4 kW; `ABF-00065` · Albufeira · EDPC · 7,4 kW; `ABF-00066` · Albufeira · EDPC · 7,4 kW; `ABF-00067` · Albufeira · EDPC · 7,4 kW; `ABF-00068` · Albufeira · EDPC · 7,4 kW; `ABF-00069` · Albufeira · EDPC · 22 kW; `ABF-00070` · Albufeira · EDPC · 22 kW; `ABF-00071` · Albufeira · EDPC · 7,4 kW; `ABF-00072` · Albufeira · EDPC · 7,4 kW; `ABF-00074` · Albufeira · EDPC · 7,4 kW (+935 restantes)).
