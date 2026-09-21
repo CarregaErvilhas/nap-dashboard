@@ -3,11 +3,11 @@
 ## 1. Tensão / corrente / potência inconsistentes (NAP estático)
 33,2% das tomadas (7.016/21.139) têm potência declarada que não bate com V×I (&gt;25% de diferença). Destas, 2.726 (12,9%) declaram potência acima da capacidade elétrica (fisicamente impossível), ex. 1200 V × 600 A = 720 kW declarados como 200 kW. Valores suspeitos no dataset: tensões de 1200 V e 3600 V, correntes de 600 A.
 
-## 2. Potência NAP vs MOBI.E em contradição (26 pontos)
+## 2. Potência NAP vs MOBI.E em contradição (28 pontos)
 As duas fontes oficiais divergem &gt;30%. Ex.: `SNT-00163-02` (NAP 60 kW, MOBI.E 120 kW); `SNT-00163-01` (NAP 60 kW, MOBI.E 120 kW); `ALM-00043-02` (NAP 60 kW, MOBI.E 120 kW).
 
 ## 3. Estado duplicado / contraditório no feed dinâmico
-33 pontos aparecem 2–3× no evActualStatus com estados diferentes (ex. `PT-EDP-EABF-00195-1` aparece como unknown e como removed). 33 linhas a mais no ficheiro.
+30 pontos aparecem 2–3× no evActualStatus com estados diferentes (ex. `PT-EDP-EABF-00195-1` aparece como unknown e como removed). 30 linhas a mais no ficheiro.
 
 ## 4. Fragmentação de nomes de operadores (NAP)
 A mesma entidade legal com múltiplas grafias (20 operadores afetados): Galp (Galp Power / Galpgeste / Galp Gest), Atlante (6 variantes), Iberdrola (3), REPSOL (maiúsculas/minúsculas). Torna a agregação por operador frágil.
