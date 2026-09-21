@@ -1,211 +1,185 @@
-# Anomalias — dados estáticos NAP (2026-09-21, snapshot 2026-09-21T03:00:04.457Z)
+# Anomalias — dados estáticos NAP (2026-09-21, snapshot 2026-09-21T03:00:04Z)
 
-Totais analisados: 8375 sites, 21010 `point_id` distintos (21139 linhas de conector), 8375 `site_external_id` distintos.
+Snapshot: `evChargingInfra` com `last_updated` máximo em 2026-09-21T03:00:04Z (recolha 2026-09-21T12:33:27Z). Totais: 8375 sites, 21010 `point_id` distintos, 21139 linhas de conector com V/I/P numéricos. Potência: 2726 sobre-declarações (`ratio > 1,25`) e 4290 sub-declarações (`ratio < 0,75`), 7016 linhas anómalas em 57 OPCs (ficheiros exaustivos em baixo).
 
 ## Resumo por OPC
 
 | OPC (id — nome) | sites | pontos | impossíveis | suspeitos | categorias |
 |---|---|---|---|---|---|
-| `ACCI` — ACCIONA RECARGA PORTUGAL,UNIPESSOAL LDA | 12 | 23 | 0 | 13 | chaves, derating, metadados, operador |
-| `ALFA` — Alfa Energia | 13 | 25 | 0 | 2 | derating |
-| `ATLA` — Atlante Infra Portugal, S.A | 609 | 1425 | 432 | 182 | derating, metadados, modo↔tomada, operador, potência |
-| `AUCH` — Auchan Retail Portugal S.A | 3 | 3 | 0 | 0 |  |
-| `BBGE` — Morenergy | 2 | 3 | 0 | 0 | metadados |
-| `BELM` — Blk Mobility, LDA | 7 | 17 | 0 | 0 |  |
-| `BINT` — Bluint - Engenharia e Tecnologias Integradas, Unipessoal, Lda | 2 | 4 | 0 | 0 |  |
-| `BLUE` — Bluecharge, Lda | 5 | 10 | 0 | 0 |  |
-| `BRIG` — Brightcity S.A. | 2 | 4 | 0 | 2 | derating |
-| `CAPW` — Capwatt Services | 14 | 74 | 0 | 24 | derating, operador |
-| `CARG` — Cargga Inteligente | 6 | 12 | 0 | 0 |  |
-| `CEPS` — Cepsa Portuguesa Petroleos | 33 | 59 | 0 | 55 | derating |
-| `CEVE` — CEVE - Cooperativa Eléctrica do Vale D’Este C.R.L. | 4 | 10 | 0 | 0 | operador |
-| `CIRC` — Circuitos Energy Solutions, Lda. | 12 | 22 | 0 | 4 | derating, operador |
-| `CMEL` — CME | 22 | 23 | 2 | 1 | derating, potência |
-| `CONM` — ConectaMais, Lda | 3 | 6 | 0 | 0 |  |
-| `CSCP` — Cascais Proxima | 8 | 16 | 0 | 0 | operador |
-| `DTEI` — DTE, Instalacoes Especiais | 84 | 197 | 0 | 42 | derating, metadados |
-| `ECOI` — Ecoinside - Soluções em Ecoeficiência e Sustentabilidade Lda | 56 | 142 | 0 | 24 | derating, metadados, operador, valores crus |
-| `EDPC` — EDP Comercial | 1663 | 5802 | 358 | 1179 | chaves, derating, metadados, potência |
-| `EMAC` — EMACOM - Telecomunicações da Madeira, Unipessoal, Lda | 25 | 44 | 0 | 4 | derating |
-| `EMEL` — EMEL - Empresa Municipal de Mobilidade e Estacionamento de Lisboa, E.M., S.A. | 82 | 182 | 24 | 0 | operador, potência |
-| `EMOB` — Emobtec - Tec. Mobilidade Elétrica, unipessoal Lda | 2 | 4 | 0 | 0 |  |
-| `ENBL` — Enable Mobility Solutions, S.A. | 24 | 52 | 0 | 24 | derating |
-| `EPKS` — Telpark | 8 | 71 | 62 | 7 | contagens, derating, metadados, potência |
-| `EPOC` — EPOCH | 2 | 5 | 0 | 0 |  |
-| `EVAE` — EVAZ Energy, LDA | 4 | 9 | 0 | 0 |  |
-| `EVCE` — EVCE POWER, LDA. / MOBISMART | 51 | 89 | 6 | 17 | derating, potência |
-| `EVGR` — Green Evolut, LDA | 6 | 10 | 0 | 0 |  |
-| `EVIO` — EVIO - Electrical Mobility | 21 | 35 | 2 | 9 | derating, metadados, potência |
-| `EVPW` — EVpower, Charging Solutions Lda | 22 | 46 | 0 | 1 | derating |
-| `EZC3` — EZ - CHARG3, Lda | 15 | 15 | 0 | 0 |  |
-| `EZUR` — Ezu Energia | 2 | 4 | 0 | 0 |  |
-| `FACT` — FactorENERGIA | 38 | 76 | 0 | 0 |  |
-| `FCTO` — Iberdrola | bp pulse | 288 | 1196 | 0 | 904 | chaves, contagens, derating, metadados, operador, valores crus |
-| `FRIO` — Distrifrio Supermercados, Lda | 1 | 2 | 0 | 0 |  |
-| `FRTR` — FRONTROW, LDA | 5 | 8 | 0 | 4 | derating |
-| `GASF` — GASFOMENTO - Sistemas e Instalações de Gás, S.A. | 5 | 16 | 0 | 0 |  |
-| `GENJ` — Generation Journey Lda | 21 | 41 | 0 | 3 | derating, operador |
-| `GLPG` — Galpgeste | 126 | 328 | 3 | 68 | derating, operador, potência |
-| `GLPP` — Galp Power OPC | 1589 | 3529 | 148 | 446 | chaves, derating, metadados, modo↔tomada, operador, postcode, potência |
-| `GOLD` — Gold Energy | 9 | 16 | 0 | 0 |  |
-| `GRCA` — Grcapp, Unipessoal Lda | 1 | 2 | 0 | 0 |  |
-| `GREE` — GREEN CHARGE - MOBILIDADE ELÉTRICA, LDA | 16 | 17 | 0 | 0 | operador |
-| `HELX` — Helexia II Energy Services, Lda. | 228 | 438 | 1 | 176 | derating, metadados, potência |
-| `HEXA` — HEXAGONAL OCEAN, LDA | 38 | 76 | 34 | 0 | operador, potência |
-| `HIGH` — High Green Power, Unipessoal Lda. | 25 | 27 | 0 | 0 |  |
-| `HORZ` — Powerdot, S.A | 777 | 2108 | 81 | 395 | derating, metadados, operador, potência |
-| `IBRD` — Iberdrola Clientes Portugal, Unipessoal, Lda | 184 | 361 | 0 | 24 | derating, metadados |
-| `IHOM` — iHome Lda | 6 | 10 | 0 | 4 | derating |
-| `IMAG` — Image4all - Eficiência Energética, Comunicação e Imagem | 5 | 9 | 0 | 5 | derating, operador |
-| `INTV` — Instavolt Portugal Lda. | 13 | 24 | 0 | 13 | derating |
-| `INVP` — Intervilapraia | 1 | 3 | 0 | 0 |  |
-| `IONY` — IONITY GmbH | 20 | 106 | 0 | 0 | postcode |
-| `KLCS` — Kilometer Low Cost II Serviços, SA | 86 | 107 | 6 | 2 | derating, metadados, potência |
-| `KPMS` — KPM Serviços de Engenheria, Unip Lda | 1 | 3 | 0 | 0 |  |
-| `LOGI` — uCharge | 26 | 35 | 0 | 2 | derating |
-| `LOUL` — Loulé Concelho Global, EM | 33 | 70 | 3 | 2 | derating, operador, potência |
-| `LUSI` — LUSIADAENERGIA, S.A. | 14 | 25 | 2 | 12 | derating, metadados, potência |
-| `MAKS` — Maksu | 333 | 370 | 15 | 0 | potência |
-| `MEOE` — MEO Energia - Comercialização de Energia, SA | 1 | 2 | 0 | 0 |  |
-| `MLTR` — Mobiletric | 108 | 257 | 8 | 19 | derating, operador, potência |
-| `MOBA` — MOBI A - Mobilidade e Ambiente, Lda | 5 | 10 | 0 | 0 |  |
-| `MOBI` — MOBIE | 5 | 10 | 0 | 0 |  |
-| `MOON` — Siva - Sociedade de Importação de Veículos Automóveis / (sub-CEME da Iberdola) | 26 | 56 | 15 | 10 | derating, potência |
-| `MOTA` — Mota-Engil Renewing | 174 | 311 | 2 | 140 | derating, metadados, potência |
-| `NEUR` — Neureifen - Electric Mobility, Lda | 4 | 8 | 0 | 0 |  |
-| `NRGS` — Original Sunenergy, Lda | 7 | 16 | 3 | 1 | derating, potência |
-| `PACO` — PACORP, LDA | 1 | 1 | 0 | 0 |  |
-| `PARI` — Parinox Energia | 6 | 7 | 1 | 0 | potência |
-| `PLUG` — e-Plug, Lda | 31 | 62 | 1 | 2 | derating, potência |
-| `PQTJ` — Parques Tejo, E.M. | 2 | 2 | 2 | 0 | potência |
-| `PRIO` — Prio.E Mobility Solutions, Lda | 162 | 292 | 2 | 132 | derating, potência |
-| `PROP` — PROPEL - PRODUTOS DE PETRÓLEO, LDA | 2 | 6 | 0 | 0 |  |
-| `PTER` — PETROTERMICA ENERGIA, S.A. | 2 | 4 | 0 | 3 | derating |
-| `REMO` — MOTA-ENGIL REMO CHARGING S.A | 16 | 38 | 2 | 36 | derating, potência |
-| `REPS` — REPSOL Portuguesa Lda | 214 | 555 | 173 | 26 | derating, metadados, modo↔tomada, operador, potência, teto |
-| `SARE` — Superareosa Supermercados, Lda | 1 | 3 | 0 | 0 |  |
-| `SCRZ` — Município de Santa Cruz | 3 | 3 | 0 | 0 |  |
-| `SDBR` — SodiBraga - Supermercados Lda | 2 | 6 | 0 | 0 |  |
-| `SEGM` — SEGMA - Serviços de Engenharia Gestão e Manutenção Lda | 73 | 134 | 2 | 0 | disponibilidade, operador, potência |
-| `SFAF` — Superfafe- supermercados,lda | 2 | 6 | 0 | 2 | derating |
-| `SGMR` — Superguimarães - Supermercados,lda | 2 | 6 | 0 | 2 | derating |
-| `SILV` — Silver Ridge - Asset Management | 2 | 4 | 0 | 0 |  |
-| `SOLX` — SOLX | 4 | 8 | 0 | 4 | derating |
-| `TRUE` — WOWPLUG | 751 | 1503 | 1322 | 68 | derating, metadados, potência |
-| `TSLA` — Tesla | 9 | 192 | 0 | 181 | contagens, derating, metadados, modo↔tomada, postcode |
-| `VEIM` — Veimonte Lda | 20 | 35 | 10 | 2 | derating, potência |
-| `VIAV` — Via Verde Transição Energética, S.A. | 5 | 13 | 0 | 6 | derating |
-| `VISA` — VISACASA - SERVIÇOS DE ASSISTÊNCIA E MANUTENÇÃO GLOBAL S.A. | 6 | 14 | 4 | 0 | potência |
-| `WENE` — WENEA SERVICES SPAIN S.L. | 2 | 4 | 0 | 4 | derating |
-| `ZUND` — Grupo Easycharger, SL | 14 | 27 | 0 | 2 | derating, metadados |
+| TRUE — WOWPLUG | 751 | 1503 | 1322 | 68 | potência |
+| ATLA — Atlante Infra Portugal, S.A | 609 | 1425 | 432 | 182 | potência, operador, eMI3, formato |
+| EDPC — EDP Comercial | 1663 | 5802 | 358 | 1179 | potência, eMI3, dup |
+| REPS — REPSOL Portuguesa Lda | 214 | 555 | 173 | 26 | potência, combo, teto-tomada |
+| GLPP — Galp Power OPC | 1589 | 3529 | 148 | 446 | potência, combo |
+| HORZ — Powerdot, S.A | 777 | 2108 | 81 | 395 | potência, meta |
+| EPKS — Telpark | 8 | 71 | 62 | 7 | potência, meta, contagem |
+| HEXA — HEXAGONAL OCEAN, LDA | 38 | 76 | 34 | 0 | potência |
+| EMEL — EMEL - Empresa Municipal de Mobilidade e Estacionamento de Lisboa, E.M., S.A. | 82 | 182 | 24 | 0 | potência |
+| MOON — Siva - Sociedade de Importação de Veículos Automóveis / (sub-CEME da Iberdola) | 26 | 56 | 15 | 10 | potência |
+| MAKS — Maksu | 333 | 370 | 15 | 0 | potência |
+| VEIM — Veimonte Lda | 20 | 35 | 10 | 2 | potência |
+| MLTR — Mobiletric | 108 | 257 | 8 | 19 | potência |
+| EVCE — EVCE POWER, LDA. / MOBISMART | 51 | 89 | 6 | 17 | potência |
+| KLCS — Kilometer Low Cost II Serviços, SA | 86 | 107 | 6 | 2 | potência |
+| VISA — VISACASA - SERVIÇOS DE ASSISTÊNCIA E MANUTENÇÃO GLOBAL S.A. | 6 | 14 | 4 | 0 | potência |
+| GLPG — Galpgeste | 126 | 328 | 3 | 68 | potência |
+| LOUL — Loulé Concelho Global, EM | 33 | 70 | 3 | 2 | potência |
+| NRGS — Original Sunenergy, Lda | 7 | 16 | 3 | 1 | potência |
+| MOTA — Mota-Engil Renewing | 174 | 311 | 2 | 140 | potência |
+| PRIO — Prio.E Mobility Solutions, Lda | 162 | 292 | 2 | 132 | potência |
+| REMO — MOTA-ENGIL REMO CHARGING S.A | 16 | 38 | 2 | 36 | potência |
+| LUSI — LUSIADAENERGIA, S.A. | 14 | 25 | 2 | 12 | potência |
+| EVIO — EVIO - Electrical Mobility | 21 | 35 | 2 | 9 | potência |
+| CMEL — CME | 22 | 23 | 2 | 1 | potência |
+| PQTJ — Parques Tejo, E.M. | 2 | 2 | 2 | 0 | potência |
+| SEGM — SEGMA - Serviços de Engenharia Gestão e Manutenção Lda | 73 | 134 | 2 | 0 | potência |
+| HELX — Helexia II Energy Services, Lda. | 228 | 438 | 1 | 176 | potência |
+| PLUG — e-Plug, Lda | 31 | 62 | 1 | 2 | potência |
+| PARI — Parinox Energia | 6 | 7 | 1 | 0 | potência |
+| FCTO — Iberdrola / bp pulse | 288 | 1196 | 0 | 904 | potência, Ohm-cru, contagem, dup |
+| TSLA — Tesla | 9 | 192 | 0 | 181 | potência, contagem, dup, meta, combo |
+| CEPS — Cepsa Portuguesa Petroleos | 33 | 59 | 0 | 55 | potência, Ohm-cru |
+| DTEI — DTE, Instalacoes Especiais | 84 | 197 | 0 | 42 | potência |
+| CAPW — Capwatt Services | 14 | 74 | 0 | 24 | potência |
+| ECOI — Ecoinside - Soluções em Ecoeficiência e Sustentabilidade Lda | 56 | 142 | 0 | 24 | potência, Ohm-cru |
+| ENBL — Enable Mobility Solutions, S.A. | 24 | 52 | 0 | 24 | potência |
+| IBRD — Iberdrola Clientes Portugal, Unipessoal, Lda | 184 | 361 | 0 | 24 | potência |
+| ACCI — ACCIONA RECARGA PORTUGAL,UNIPESSOAL LDA | 12 | 23 | 0 | 13 | potência, dup |
+| INTV — Instavolt Portugal Lda. | 13 | 24 | 0 | 13 | potência |
+| VIAV — Via Verde Transição Energética, S.A. | 5 | 13 | 0 | 6 | potência |
+| IMAG — Image4all - Eficiência Energética, Comunicação e Imagem | 5 | 9 | 0 | 5 | potência |
+| CIRC — Circuitos Energy Solutions, Lda. | 12 | 22 | 0 | 4 | potência |
+| EMAC — EMACOM - Telecomunicações da Madeira, Unipessoal, Lda | 25 | 44 | 0 | 4 | potência |
+| FRTR — FRONTROW, LDA | 5 | 8 | 0 | 4 | potência |
+| IHOM — iHome Lda | 6 | 10 | 0 | 4 | potência |
+| SOLX — SOLX | 4 | 8 | 0 | 4 | potência |
+| WENE — WENEA SERVICES SPAIN S.L. | 2 | 4 | 0 | 4 | potência |
+| GENJ — Generation Journey Lda | 21 | 41 | 0 | 3 | potência |
+| PTER — PETROTERMICA ENERGIA, S.A. | 2 | 4 | 0 | 3 | potência |
+| ALFA — Alfa Energia | 13 | 25 | 0 | 2 | potência |
+| BRIG — Brightcity S.A. | 2 | 4 | 0 | 2 | potência |
+| LOGI — uCharge | 26 | 35 | 0 | 2 | potência |
+| SFAF — Superfafe- supermercados,lda | 2 | 6 | 0 | 2 | potência |
+| SGMR — Superguimarães - Supermercados,lda | 2 | 6 | 0 | 2 | potência |
+| ZUND — Grupo Easycharger, SL | 14 | 27 | 0 | 2 | potência |
+| EVPW — EVpower, Charging Solutions Lda | 22 | 46 | 0 | 1 | potência |
+| IONY — IONITY GmbH | 20 | 106 | 0 | 0 | CP |
+| BBGE — Morenergy | 2 | 3 | 0 | 0 | meta |
+| AUCH — Auchan Retail Portugal S.A | 3 | 3 | 0 | 0 | — |
+| BELM — Blk Mobility, LDA | 7 | 17 | 0 | 0 | — |
+| BINT — Bluint - Engenharia e Tecnologias Integradas, Unipessoal, Lda | 2 | 4 | 0 | 0 | — |
+| BLUE — Bluecharge, Lda | 5 | 10 | 0 | 0 | — |
+| CARG — Cargga Inteligente | 6 | 12 | 0 | 0 | — |
+| CEVE — CEVE - Cooperativa Eléctrica do Vale D’Este C.R.L. | 4 | 10 | 0 | 0 | — |
+| CONM — ConectaMais, Lda | 3 | 6 | 0 | 0 | — |
+| CSCP — Cascais Proxima | 8 | 16 | 0 | 0 | — |
+| EMOB — Emobtec - Tec. Mobilidade Elétrica, unipessoal Lda | 2 | 4 | 0 | 0 | — |
+| EPOC — EPOCH | 2 | 5 | 0 | 0 | — |
+| EVAE — EVAZ Energy, LDA | 4 | 9 | 0 | 0 | — |
+| EVGR — Green Evolut, LDA | 6 | 10 | 0 | 0 | — |
+| EZC3 — EZ - CHARG3, Lda | 15 | 15 | 0 | 0 | — |
+| EZUR — Ezu Energia | 2 | 4 | 0 | 0 | — |
+| FACT — FactorENERGIA | 38 | 76 | 0 | 0 | — |
+| FRIO — Distrifrio Supermercados, Lda | 1 | 2 | 0 | 0 | — |
+| GASF — GASFOMENTO - Sistemas e Instalações de Gás, S.A. | 5 | 16 | 0 | 0 | — |
+| GOLD — Gold Energy | 9 | 16 | 0 | 0 | — |
+| GRCA — Grcapp, Unipessoal Lda | 1 | 2 | 0 | 0 | — |
+| GREE — GREEN CHARGE - MOBILIDADE ELÉTRICA, LDA | 16 | 17 | 0 | 0 | — |
+| HIGH — High Green Power, Unipessoal Lda. | 25 | 27 | 0 | 0 | — |
+| INVP — Intervilapraia | 1 | 3 | 0 | 0 | — |
+| KPMS — KPM Serviços de Engenheria, Unip Lda | 1 | 3 | 0 | 0 | — |
+| MEOE — MEO Energia - Comercialização de Energia, SA | 1 | 2 | 0 | 0 | — |
+| MOBA — MOBI A - Mobilidade e Ambiente, Lda | 5 | 10 | 0 | 0 | — |
+| MOBI — MOBIE | 5 | 10 | 0 | 0 | — |
+| NEUR — Neureifen - Electric Mobility, Lda | 4 | 8 | 0 | 0 | — |
+| PACO — PACORP, LDA | 1 | 1 | 0 | 0 | — |
+| PROP — PROPEL - PRODUTOS DE PETRÓLEO, LDA | 2 | 6 | 0 | 0 | — |
+| SARE — Superareosa Supermercados, Lda | 1 | 3 | 0 | 0 | — |
+| SCRZ — Município de Santa Cruz | 3 | 3 | 0 | 0 | — |
+| SDBR — SodiBraga - Supermercados Lda | 2 | 6 | 0 | 0 | — |
+| SILV — Silver Ridge - Asset Management | 2 | 4 | 0 | 0 | — |
 
 <a id="indice"></a>
 
 ## Índice
 
-- [TRUE — WOWPLUG (751 sites, 1503 pontos)](#opc-TRUE) · 1 CRÍTICO, 1 MÉDIO, 1 BAIXO
-- [ATLA — Atlante Infra Portugal, S.A (609 sites, 1425 pontos)](#opc-ATLA) · 2 MÉDIO, 2 BAIXO, 1 CRÍTICO
-- [EDPC — EDP Comercial (1663 sites, 5802 pontos)](#opc-EDPC) · 2 CRÍTICO, 1 MÉDIO, 1 BAIXO
-- [REPS — REPSOL Portuguesa Lda (214 sites, 555 pontos)](#opc-REPS) · 3 CRÍTICO, 2 BAIXO, 1 MÉDIO
-- [GLPP — Galp Power OPC (1589 sites, 3529 pontos)](#opc-GLPP) · 3 BAIXO, 2 CRÍTICO, 1 MÉDIO, 1 ALTO
-- [HORZ — Powerdot, S.A (777 sites, 2108 pontos)](#opc-HORZ) · 3 BAIXO, 1 CRÍTICO, 1 MÉDIO
-- [EPKS — Telpark (8 sites, 71 pontos)](#opc-EPKS) · 2 CRÍTICO, 2 MÉDIO, 1 BAIXO
-- [HEXA — HEXAGONAL OCEAN, LDA (38 sites, 76 pontos)](#opc-HEXA) · 1 CRÍTICO, 1 BAIXO
-- [EMEL — EMEL - Empresa Municipal de Mobilidade e Estacionamento de Lisboa, E.M., S.A. (82 sites, 182 pontos)](#opc-EMEL) · 1 CRÍTICO, 1 BAIXO
+- [TRUE — WOWPLUG (751 sites, 1503 pontos)](#opc-TRUE) · 1 CRÍTICO
+- [ATLA — Atlante Infra Portugal, S.A (609 sites, 1425 pontos)](#opc-ATLA) · 2 MÉDIO, 1 CRÍTICO, 1 ALTO
+- [EDPC — EDP Comercial (1663 sites, 5802 pontos)](#opc-EDPC) · 2 CRÍTICO, 1 ALTO
+- [REPS — REPSOL Portuguesa Lda (214 sites, 555 pontos)](#opc-REPS) · 3 CRÍTICO
+- [GLPP — Galp Power OPC (1589 sites, 3529 pontos)](#opc-GLPP) · 2 CRÍTICO
+- [HORZ — Powerdot, S.A (777 sites, 2108 pontos)](#opc-HORZ) · 1 CRÍTICO, 1 BAIXO
+- [EPKS — Telpark (8 sites, 71 pontos)](#opc-EPKS) · 2 CRÍTICO, 1 BAIXO
+- [HEXA — HEXAGONAL OCEAN, LDA (38 sites, 76 pontos)](#opc-HEXA) · 1 CRÍTICO
+- [EMEL — EMEL - Empresa Municipal de Mobilidade e Estacionamento de Lisboa, E.M., S.A. (82 sites, 182 pontos)](#opc-EMEL) · 1 CRÍTICO
+- [MOON — Siva - Sociedade de Importação de Veículos Automóveis / (sub-CEME da Iberdola) (26 sites, 56 pontos)](#opc-MOON) · 1 CRÍTICO
 - [MAKS — Maksu (333 sites, 370 pontos)](#opc-MAKS) · 1 CRÍTICO
-- [MOON — Siva - Sociedade de Importação de Veículos Automóveis / (sub-CEME da Iberdola) (26 sites, 56 pontos)](#opc-MOON) · 1 CRÍTICO, 1 MÉDIO
-- [VEIM — Veimonte Lda (20 sites, 35 pontos)](#opc-VEIM) · 1 CRÍTICO, 1 MÉDIO
-- [MLTR — Mobiletric (108 sites, 257 pontos)](#opc-MLTR) · 1 CRÍTICO, 1 MÉDIO, 1 BAIXO
-- [EVCE — EVCE POWER, LDA. / MOBISMART (51 sites, 89 pontos)](#opc-EVCE) · 1 CRÍTICO, 1 MÉDIO
-- [KLCS — Kilometer Low Cost II Serviços, SA (86 sites, 107 pontos)](#opc-KLCS) · 1 CRÍTICO, 1 MÉDIO, 1 BAIXO
+- [VEIM — Veimonte Lda (20 sites, 35 pontos)](#opc-VEIM) · 1 CRÍTICO
+- [MLTR — Mobiletric (108 sites, 257 pontos)](#opc-MLTR) · 1 CRÍTICO
+- [EVCE — EVCE POWER, LDA. / MOBISMART (51 sites, 89 pontos)](#opc-EVCE) · 1 CRÍTICO
+- [KLCS — Kilometer Low Cost II Serviços, SA (86 sites, 107 pontos)](#opc-KLCS) · 1 CRÍTICO
 - [VISA — VISACASA - SERVIÇOS DE ASSISTÊNCIA E MANUTENÇÃO GLOBAL S.A. (6 sites, 14 pontos)](#opc-VISA) · 1 CRÍTICO
-- [GLPG — Galpgeste (126 sites, 328 pontos)](#opc-GLPG) · 1 CRÍTICO, 1 MÉDIO, 1 BAIXO
-- [LOUL — Loulé Concelho Global, EM (33 sites, 70 pontos)](#opc-LOUL) · 1 CRÍTICO, 1 MÉDIO, 1 BAIXO
-- [NRGS — Original Sunenergy, Lda (7 sites, 16 pontos)](#opc-NRGS) · 1 CRÍTICO, 1 MÉDIO
-- [CMEL — CME (22 sites, 23 pontos)](#opc-CMEL) · 1 CRÍTICO, 1 MÉDIO
-- [EVIO — EVIO - Electrical Mobility (21 sites, 35 pontos)](#opc-EVIO) · 1 CRÍTICO, 1 MÉDIO, 1 BAIXO
-- [LUSI — LUSIADAENERGIA, S.A. (14 sites, 25 pontos)](#opc-LUSI) · 1 CRÍTICO, 1 MÉDIO, 1 BAIXO
-- [MOTA — Mota-Engil Renewing (174 sites, 311 pontos)](#opc-MOTA) · 1 CRÍTICO, 1 MÉDIO, 1 BAIXO
+- [GLPG — Galpgeste (126 sites, 328 pontos)](#opc-GLPG) · 1 CRÍTICO
+- [LOUL — Loulé Concelho Global, EM (33 sites, 70 pontos)](#opc-LOUL) · 1 CRÍTICO
+- [NRGS — Original Sunenergy, Lda (7 sites, 16 pontos)](#opc-NRGS) · 1 CRÍTICO
+- [MOTA — Mota-Engil Renewing (174 sites, 311 pontos)](#opc-MOTA) · 1 CRÍTICO
+- [PRIO — Prio.E Mobility Solutions, Lda (162 sites, 292 pontos)](#opc-PRIO) · 1 CRÍTICO
+- [REMO — MOTA-ENGIL REMO CHARGING S.A (16 sites, 38 pontos)](#opc-REMO) · 1 CRÍTICO
+- [LUSI — LUSIADAENERGIA, S.A. (14 sites, 25 pontos)](#opc-LUSI) · 1 CRÍTICO
+- [EVIO — EVIO - Electrical Mobility (21 sites, 35 pontos)](#opc-EVIO) · 1 CRÍTICO
+- [CMEL — CME (22 sites, 23 pontos)](#opc-CMEL) · 1 CRÍTICO
 - [PQTJ — Parques Tejo, E.M. (2 sites, 2 pontos)](#opc-PQTJ) · 1 CRÍTICO
-- [PRIO — Prio.E Mobility Solutions, Lda (162 sites, 292 pontos)](#opc-PRIO) · 1 CRÍTICO, 1 MÉDIO
-- [REMO — MOTA-ENGIL REMO CHARGING S.A (16 sites, 38 pontos)](#opc-REMO) · 1 CRÍTICO, 1 MÉDIO
-- [SEGM — SEGMA - Serviços de Engenharia Gestão e Manutenção Lda (73 sites, 134 pontos)](#opc-SEGM) · 1 CRÍTICO, 1 MÉDIO, 1 BAIXO
-- [HELX — Helexia II Energy Services, Lda. (228 sites, 438 pontos)](#opc-HELX) · 1 CRÍTICO, 1 MÉDIO, 1 BAIXO
+- [SEGM — SEGMA - Serviços de Engenharia Gestão e Manutenção Lda (73 sites, 134 pontos)](#opc-SEGM) · 1 CRÍTICO
+- [HELX — Helexia II Energy Services, Lda. (228 sites, 438 pontos)](#opc-HELX) · 1 CRÍTICO
+- [PLUG — e-Plug, Lda (31 sites, 62 pontos)](#opc-PLUG) · 1 CRÍTICO
 - [PARI — Parinox Energia (6 sites, 7 pontos)](#opc-PARI) · 1 CRÍTICO
-- [PLUG — e-Plug, Lda (31 sites, 62 pontos)](#opc-PLUG) · 1 CRÍTICO, 1 MÉDIO
-- [FCTO — Iberdrola | bp pulse (288 sites, 1196 pontos)](#opc-FCTO) · 2 MÉDIO, 2 BAIXO, 1 CRÍTICO, 1 ALTO
-- [TSLA — Tesla (9 sites, 192 pontos)](#opc-TSLA) · 2 MÉDIO, 2 BAIXO, 1 CRÍTICO
-- [CEPS — Cepsa Portuguesa Petroleos (33 sites, 59 pontos)](#opc-CEPS) · 1 MÉDIO
-- [DTEI — DTE, Instalacoes Especiais (84 sites, 197 pontos)](#opc-DTEI) · 1 MÉDIO, 1 BAIXO
-- [CAPW — Capwatt Services (14 sites, 74 pontos)](#opc-CAPW) · 1 MÉDIO, 1 BAIXO
-- [ECOI — Ecoinside - Soluções em Ecoeficiência e Sustentabilidade Lda (56 sites, 142 pontos)](#opc-ECOI) · 2 BAIXO, 1 MÉDIO, 1 ALTO
+- [FCTO — Iberdrola | bp pulse (288 sites, 1196 pontos)](#opc-FCTO) · 2 ALTO, 1 MÉDIO, 1 CRÍTICO
+- [TSLA — Tesla (9 sites, 192 pontos)](#opc-TSLA) · 2 MÉDIO, 2 CRÍTICO, 1 BAIXO
+- [CEPS — Cepsa Portuguesa Petroleos (33 sites, 59 pontos)](#opc-CEPS) · 1 MÉDIO, 1 ALTO
+- [DTEI — DTE, Instalacoes Especiais (84 sites, 197 pontos)](#opc-DTEI) · 1 MÉDIO
+- [CAPW — Capwatt Services (14 sites, 74 pontos)](#opc-CAPW) · 1 MÉDIO
+- [ECOI — Ecoinside - Soluções em Ecoeficiência e Sustentabilidade Lda (56 sites, 142 pontos)](#opc-ECOI) · 1 MÉDIO, 1 ALTO
 - [ENBL — Enable Mobility Solutions, S.A. (24 sites, 52 pontos)](#opc-ENBL) · 1 MÉDIO
-- [IBRD — Iberdrola Clientes Portugal, Unipessoal, Lda (184 sites, 361 pontos)](#opc-IBRD) · 1 MÉDIO, 1 BAIXO
-- [ACCI — ACCIONA RECARGA PORTUGAL,UNIPESSOAL LDA (12 sites, 23 pontos)](#opc-ACCI) · 2 BAIXO, 1 MÉDIO
+- [IBRD — Iberdrola Clientes Portugal, Unipessoal, Lda (184 sites, 361 pontos)](#opc-IBRD) · 1 MÉDIO
+- [ACCI — ACCIONA RECARGA PORTUGAL,UNIPESSOAL LDA (12 sites, 23 pontos)](#opc-ACCI) · 1 MÉDIO
 - [INTV — Instavolt Portugal Lda. (13 sites, 24 pontos)](#opc-INTV) · 1 MÉDIO
 - [VIAV — Via Verde Transição Energética, S.A. (5 sites, 13 pontos)](#opc-VIAV) · 1 MÉDIO
-- [IMAG — Image4all - Eficiência Energética, Comunicação e Imagem (5 sites, 9 pontos)](#opc-IMAG) · 1 MÉDIO, 1 BAIXO
-- [CIRC — Circuitos Energy Solutions, Lda. (12 sites, 22 pontos)](#opc-CIRC) · 1 MÉDIO, 1 BAIXO
+- [IMAG — Image4all - Eficiência Energética, Comunicação e Imagem (5 sites, 9 pontos)](#opc-IMAG) · 1 MÉDIO
+- [CIRC — Circuitos Energy Solutions, Lda. (12 sites, 22 pontos)](#opc-CIRC) · 1 MÉDIO
 - [EMAC — EMACOM - Telecomunicações da Madeira, Unipessoal, Lda (25 sites, 44 pontos)](#opc-EMAC) · 1 MÉDIO
 - [FRTR — FRONTROW, LDA (5 sites, 8 pontos)](#opc-FRTR) · 1 MÉDIO
 - [IHOM — iHome Lda (6 sites, 10 pontos)](#opc-IHOM) · 1 MÉDIO
 - [SOLX — SOLX (4 sites, 8 pontos)](#opc-SOLX) · 1 MÉDIO
 - [WENE — WENEA SERVICES SPAIN S.L. (2 sites, 4 pontos)](#opc-WENE) · 1 MÉDIO
-- [GENJ — Generation Journey Lda (21 sites, 41 pontos)](#opc-GENJ) · 1 MÉDIO, 1 BAIXO
+- [GENJ — Generation Journey Lda (21 sites, 41 pontos)](#opc-GENJ) · 1 MÉDIO
 - [PTER — PETROTERMICA ENERGIA, S.A. (2 sites, 4 pontos)](#opc-PTER) · 1 MÉDIO
 - [ALFA — Alfa Energia (13 sites, 25 pontos)](#opc-ALFA) · 1 MÉDIO
 - [BRIG — Brightcity S.A. (2 sites, 4 pontos)](#opc-BRIG) · 1 MÉDIO
 - [LOGI — uCharge (26 sites, 35 pontos)](#opc-LOGI) · 1 MÉDIO
 - [SFAF — Superfafe- supermercados,lda (2 sites, 6 pontos)](#opc-SFAF) · 1 MÉDIO
 - [SGMR — Superguimarães - Supermercados,lda (2 sites, 6 pontos)](#opc-SGMR) · 1 MÉDIO
-- [ZUND — Grupo Easycharger, SL (14 sites, 27 pontos)](#opc-ZUND) · 1 MÉDIO, 1 BAIXO
+- [ZUND — Grupo Easycharger, SL (14 sites, 27 pontos)](#opc-ZUND) · 1 MÉDIO
 - [EVPW — EVpower, Charging Solutions Lda (22 sites, 46 pontos)](#opc-EVPW) · 1 MÉDIO
+- [IONY — IONITY GmbH (20 sites, 106 pontos)](#opc-IONY) · 1 MÉDIO
 - [BBGE — Morenergy (2 sites, 3 pontos)](#opc-BBGE) · 1 BAIXO
-- [CEVE — CEVE - Cooperativa Eléctrica do Vale D’Este C.R.L. (4 sites, 10 pontos)](#opc-CEVE) · 1 BAIXO
-- [CSCP — Cascais Proxima (8 sites, 16 pontos)](#opc-CSCP) · 1 BAIXO
-- [GREE — GREEN CHARGE - MOBILIDADE ELÉTRICA, LDA (16 sites, 17 pontos)](#opc-GREE) · 1 BAIXO
-- [IONY — IONITY GmbH (20 sites, 106 pontos)](#opc-IONY) · 1 BAIXO
 
 <a id="opc-TRUE"></a>
 
 <details open>
-<summary><b>TRUE — WOWPLUG (751 sites, 1503 pontos)</b> · 1 CRÍTICO, 1 MÉDIO, 1 BAIXO</summary>
+<summary><b>TRUE — WOWPLUG (751 sites, 1503 pontos)</b> · 1 CRÍTICO</summary>
 
-### [CRÍTICO] Potência sobre-declarada
-- **Regra:** `ratio = declarada / esperada > 1.25`; esperada = `V × I` (`√3 × V × I` em `mode3AC3p`; tolerância 25%).
-- **Afetados:** 1322 linhas de conector em 1321 pontos de 1503 (87.9%). Exemplos: `AVT-00002-01`, `AVT-00002-02`, `AVT-00003-01`, `AVT-00002`, `AVT-00003`.
-- **Evidência:** tabela curta (≤10 linhas) com ids e valores. Os ficheiros exaustivos `Agents-outputs/anomalias-evidence.csv` (máquina, uma linha por conector) e `Agents-outputs/anomalias-details.md` (leitura no GitHub, por OPC) já foram gerados por `scripts/anomalias_evidence.py` — NÃO os regeneres nem listes todas as linhas no relatório.
+### [CRÍTICO] potência declarada vs V×I
+- **Regra:** esperada = `V × I` (DC e AC monofásico), `√3 × V × I` em `mode3AC3p`; `ratio = declarada / esperada`; `> 1,25` = impossível.
+- **Afetados:** 1390 de 1504 linhas (92,4 %; 1322 sobre + 68 sub). Exemplos: `AVT-00002-01`, `AVT-00002-02`, `AVT-00003-01` (sites `AVT-00002`, `AVT-00003`).
+- **Evidência:**
 
-| ponto | site | tomada / modo | tensao / corrente / declarada / esperada | ratio |
-|---|---|---|---|---|
-| `AVT-00002-01` | `AVT-00002` | iec62196T2 / mode3AC3p | 230 V / 32 A / 22.0 kW / 12.7 kW | 1.726 |
-| `AVT-00002-02` | `AVT-00002` | iec62196T2 / mode3AC3p | 230 V / 32 A / 22.0 kW / 12.7 kW | 1.726 |
-| `AVT-00003-01` | `AVT-00003` | iec62196T2 / mode3AC3p | 230 V / 32 A / 22.0 kW / 12.7 kW | 1.726 |
-| `AVT-00003-02` | `AVT-00003` | iec62196T2 / mode3AC3p | 230 V / 32 A / 22.0 kW / 12.7 kW | 1.726 |
-| `AVT-00004-01` | `AVT-00004` | iec62196T2 / mode3AC3p | 230 V / 32 A / 22.0 kW / 12.7 kW | 1.726 |
-| … | … | +1317 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-TRUE)) |
-- **Veredito:** impossível — a potência declarada excede a capacidade física `V × I` para além da tolerância; indicia potência do posto herdada pela tomada ou erro de introdução.
-
-### [MÉDIO] Potência sub-declarada (derating)
-- **Regra:** `ratio = declarada / esperada < 0.75` (mesma esperada e tolerância).
-- **Afetados:** 68 linhas de conector em 68 pontos de 1503 (4.5%). Exemplos: `BRR-00126-01`, `BRR-00127-01`, `CMN-00014-01`, `BRR-00126`, `BRR-00127`.
-- **Evidência:** tabela curta (≤10 linhas) com ids e valores. Os ficheiros exaustivos `Agents-outputs/anomalias-evidence.csv` (máquina, uma linha por conector) e `Agents-outputs/anomalias-details.md` (leitura no GitHub, por OPC) já foram gerados por `scripts/anomalias_evidence.py` — NÃO os regeneres nem listes todas as linhas no relatório.
-
-| ponto | site | tomada / modo | tensao / corrente / declarada / esperada | ratio |
-|---|---|---|---|---|
-| `LSB-01076-01` | `LSB-01076` | chademo / mode4DC | 400 V / 320 A / 50.0 kW / 128.0 kW | 0.391 |
-| `LSB-01076-02` | `LSB-01076` | iec62196T2COMBO / mode4DC | 400 V / 320 A / 50.0 kW / 128.0 kW | 0.391 |
-| `SRN-00003-01` | `SRN-00003` | iec62196T2COMBO / mode4DC | 950 V / 288 A / 150.0 kW / 273.6 kW | 0.548 |
-| `SRN-00003-02` | `SRN-00003` | iec62196T2COMBO / mode4DC | 950 V / 288 A / 150.0 kW / 273.6 kW | 0.548 |
-| `BRR-00126-01` | `BRR-00126` | iec62196T2 / mode3AC3p | 240 V / 96 A / 22.0 kW / 39.9 kW | 0.551 |
-| … | … | +63 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-TRUE)) |
-- **Veredito:** suspeito — declarada 25%+ abaixo da capacidade `V × I`; provável derating operacional, limitação partilhada ou erro de introdução (não viola física).
-
-### [BAIXO] `usage_type` em falta
-- **Regra:** `usage_type` vazio ou fora do enum do XSD (`energyInfrastructure.xsd`).
-- **Afetados:** 8 linhas de conector. Exemplos: `CSC-00573-01`, `CSC-00573-02`, `LSB-01382-01`, `CSC-00573`.
-- **Evidência:** `nap_static_points.csv` coluna `usage_type` vazia nestas linhas; total global 635 linhas em falta (só este OPC: 8).
-- **Veredito:** suspeito (metadado omisso) — campo fora do enum, assumedível como uso público mas por confirmar.
+| ponto | site | tomada | modo | tensão / corrente / declarada / esperada | ratio |
+|---|---|---|---|---|---|
+| `AVT-00002-01` | `AVT-00002` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22 kW / 12.7479 kW | 1.73 |
+| `AVT-00002-02` | `AVT-00002` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22 kW / 12.7479 kW | 1.73 |
+| `AVT-00003-01` | `AVT-00003` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22 kW / 12.7479 kW | 1.73 |
+| … | … | … | … | … | +1387 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-TRUE)) |
+- **Veredito:** impossível (sobre-declaração sistemática em Type2 AC: 22 kW declarados contra ~12,7 kW físicos a 230 V/32 A trifásico) — erro de introdução em massa; a minoria sub-declarada é suspeita.
 
 [↑ índice](#indice)
 
@@ -214,62 +188,61 @@ Totais analisados: 8375 sites, 21010 `point_id` distintos (21139 linhas de conec
 <a id="opc-ATLA"></a>
 
 <details open>
-<summary><b>ATLA — Atlante Infra Portugal, S.A (609 sites, 1425 pontos)</b> · 2 MÉDIO, 2 BAIXO, 1 CRÍTICO</summary>
+<summary><b>ATLA — Atlante Infra Portugal, S.A (609 sites, 1425 pontos)</b> · 2 MÉDIO, 1 CRÍTICO, 1 ALTO</summary>
 
-### [CRÍTICO] Potência sobre-declarada
-- **Regra:** `ratio = declarada / esperada > 1.25`; esperada = `V × I` (`√3 × V × I` em `mode3AC3p`; tolerância 25%).
-- **Afetados:** 432 linhas de conector em 430 pontos de 1425 (30.2%). Exemplos: `ACB-00019-01`, `ACB-00019-02`, `ACH-00020-01`, `ACB-00019`, `ACH-00020`.
-- **Evidência:** tabela curta (≤10 linhas) com ids e valores. Os ficheiros exaustivos `Agents-outputs/anomalias-evidence.csv` (máquina, uma linha por conector) e `Agents-outputs/anomalias-details.md` (leitura no GitHub, por OPC) já foram gerados por `scripts/anomalias_evidence.py` — NÃO os regeneres nem listes todas as linhas no relatório.
-
-| ponto | site | tomada / modo | tensao / corrente / declarada / esperada | ratio |
-|---|---|---|---|---|
-| `CSC-00518-01` | `CSC-00518` | iec62196T2 / mode2AC1p | 230 V / 10 A / 7.4 kW / 2.3 kW | 3.217 |
-| `CSC-00518-02` | `CSC-00518` | iec62196T2 / mode2AC1p | 230 V / 10 A / 7.4 kW / 2.3 kW | 3.217 |
-| `ALR-80001-01` | `ALR-80001` | iec62196T2 / mode3AC3p | 230 V / 10 A / 8.0 kW / 4.0 kW | 2.008 |
-| `ALR-80001-02` | `ALR-80001` | iec62196T2 / mode3AC3p | 230 V / 10 A / 8.0 kW / 4.0 kW | 2.008 |
-| `CSC-00511-01` | `CSC-00511` | iec62196T2 / mode3AC3p | 230 V / 10 A / 7.4 kW / 4.0 kW | 1.858 |
-| … | … | +427 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-ATLA)) |
-- **Veredito:** impossível — a potência declarada excede a capacidade física `V × I` para além da tolerância; indicia potência do posto herdada pela tomada ou erro de introdução.
-
-### [MÉDIO] Potência sub-declarada (derating)
-- **Regra:** `ratio = declarada / esperada < 0.75` (mesma esperada e tolerância).
-- **Afetados:** 182 linhas de conector em 182 pontos de 1425 (12.8%). Exemplos: `ABF-00186-01`, `ABF-00186-02`, `ACH-00042-01`, `ABF-00186`, `ACH-00042`.
-- **Evidência:** tabela curta (≤10 linhas) com ids e valores. Os ficheiros exaustivos `Agents-outputs/anomalias-evidence.csv` (máquina, uma linha por conector) e `Agents-outputs/anomalias-details.md` (leitura no GitHub, por OPC) já foram gerados por `scripts/anomalias_evidence.py` — NÃO os regeneres nem listes todas as linhas no relatório.
-
-| ponto | site | tomada / modo | tensao / corrente / declarada / esperada | ratio |
-|---|---|---|---|---|
-| `OBD-00026-01` | `OBD-00026` | iec62196T2COMBO / mode4DC | 1000 V / 300 A / 50.0 kW / 300.0 kW | 0.167 |
-| `OBD-00026-02` | `OBD-00026` | iec62196T2COMBO / mode4DC | 1000 V / 300 A / 50.0 kW / 300.0 kW | 0.167 |
-| `CSC-00569-01` | `CSC-00569` | iec62196T2COMBO / mode4DC | 1000 V / 300 A / 55.0 kW / 300.0 kW | 0.183 |
-| `CSC-00569-02` | `CSC-00569` | iec62196T2COMBO / mode4DC | 1000 V / 300 A / 55.0 kW / 300.0 kW | 0.183 |
-| `CVD-00006-01` | `CVD-00006` | iec62196T2COMBO / mode4DC | 1000 V / 300 A / 55.0 kW / 300.0 kW | 0.183 |
-| … | … | +177 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-ATLA)) |
-- **Veredito:** suspeito — declarada 25%+ abaixo da capacidade `V × I`; provável derating operacional, limitação partilhada ou erro de introdução (não viola física).
-
-### [MÉDIO] `connector_format` cruzado (`socket` em DC rápido)
-- **Regra:** `socket` só com `mode3*`; em `mode4DC` = `otherCable` esperado.
-- **Afetados:** Exemplos: `SNS-00014-01`, `PRT-00228-02`, `MTS-00149-02`, `SNS-00014` — 4 linhas: `SNS-00014-01` (`SNS-00014`), `PRT-00228-02` (`PRT-00228`), `MTS-00149-02` (`MTS-00149`), `MTS-00150-02` (`MTS-00150`), todas CCS Combo2 em `mode4DC` com `socket`.
+### [CRÍTICO] potência declarada vs V×I
+- **Regra:** `ratio > 1,25` impossível; `ratio < 0,75` derating suspeito (ver Metodologia).
+- **Afetados:** 614 de 1426 linhas (43,1 %; 432 sobre + 182 sub). Exemplos: `CSC-00518-01`, `CSC-00518-02`, `ALR-80001-01` (sites `CSC-00518`, `ALR-80001`).
 - **Evidência:**
 
-| ponto | site | tomada / modo / formato |
+| ponto | site | tomada | modo | tensão / corrente / declarada / esperada | ratio |
+|---|---|---|---|---|---|
+| `CSC-00518-01` | `CSC-00518` | iec62196T2 | mode2AC1p | 230 V / 10 A / 7.4 kW / 2.3 kW | 3.22 |
+| `CSC-00518-02` | `CSC-00518` | iec62196T2 | mode2AC1p | 230 V / 10 A / 7.4 kW / 2.3 kW | 3.22 |
+| `ALR-80001-01` | `ALR-80001` | iec62196T2 | mode3AC3p | 230 V / 10 A / 8 kW / 3.9837 kW | 2.01 |
+| … | … | … | … | … | +611 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-ATLA)) |
+- **Veredito:** impossível para as 432 sobre-declarações (ex. 7,4 kW declarados a 230 V/10 A monofásico = 2,3 kW); as 182 sub são suspeitas.
+
+### [MÉDIO] fragmentação do nome do operador
+- **Regra:** um `operator_id` deve ter um `operator_name`; grafias divergentes = fragmentação.
+- **Afetados:** 7 grafias em 609 sites (ex. "Atlante" puro em 19 sites). Exemplos: `CHV-00017`, `LSB-00652`, `VNG-00136` (nome "Atlante"), `AMD-00104` ("Atlante Infra Portugal S.a."), `PRD-00019` ("Atlante Infra Portugal S.A").
+- **Evidência:**
+
+| site | operator_name registado |
+|---|---|
+| `CHV-00017` | Atlante |
+| `LSB-00652` | Atlante |
+| `VNG-00136` | Atlante |
+| `AMD-00104` | Atlante Infra Portugal S.a. |
+| `MTS-00152` | Atlante Infra Portugal S.a. |
+| `PRD-00019` | Atlante Infra Portugal S.A |
+- **Veredito:** suspeito (20 `operator_id` fragmentados no snapshot; ATLA é o pior com 7 variantes) — normalizar para `Atlante Infra Portugal, S.A`.
+
+### [ALTO] `point_external_id` nulo com `point_id` fora do formato eMI3
+- **Regra:** `point_external_id` deve cumprir `^PT\*[A-Z0-9]+\*.+`; nulo = chave eMI3 em falta.
+- **Afetados:** 3 de 1425 pontos (0,2 %). Exemplos: `AMD-00095-01-REMOVED`, `AMD-00095-02-REMOVED`, `AMD-00095-03-REMOVED` (site `AMD-00095`).
+- **Evidência:**
+
+| point_id | site | point_external_id |
 |---|---|---|
-| `SNS-00014-01` | `SNS-00014` | iec62196T2COMBO / mode4DC / socket |
-| `PRT-00228-02` | `PRT-00228` | iec62196T2COMBO / mode4DC / socket |
-| `MTS-00149-02` | `MTS-00149` | iec62196T2COMBO / mode4DC / socket |
-| `MTS-00150-02` | `MTS-00150` | iec62196T2COMBO / mode4DC / socket |
-- **Veredito:** suspeito — DC rápido sem cabo fixo declarado; provável valor por omissão do campo.
+| `AMD-00095-01-REMOVED` | `AMD-00095` | (nulo) |
+| `AMD-00095-02-REMOVED` | `AMD-00095` | (nulo) |
+| `AMD-00095-03-REMOVED` | `AMD-00095` | (nulo) |
+- **Veredito:** suspeito forte (sufixo "-REMOVED" + eMI3 nulo indica remoção lógica mal propagada ao estático).
 
-### [BAIXO] `usage_type` em falta
-- **Regra:** `usage_type` vazio ou fora do enum do XSD (`energyInfrastructure.xsd`).
-- **Afetados:** 27 linhas de conector. Exemplos: `MTS-00202-01`, `MTS-00202-02`, `MTS-00203-01`, `MTS-00202`.
-- **Evidência:** `nap_static_points.csv` coluna `usage_type` vazia nestas linhas; total global 635 linhas em falta (só este OPC: 27).
-- **Veredito:** suspeito (metadado omisso) — campo fora do enum, assumedível como uso público mas por confirmar.
+### [MÉDIO] `connector_format` socket em modo DC
+- **Regra:** `socket` só com `mode3*`; em `mode4DC` = formato cruzado.
+- **Afetados:** 5 de 1426 linhas (as 6 linhas socket+DC do snapshot são 5 ATLA + 1 GLPP). Exemplos: `SNS-00014-01`, `PRT-00228-02`, `MTS-00149-02`, `MTS-00150-02`, `VFX-00066-01` (GLPP).
+- **Evidência:**
 
-### [BAIXO] Fragmentação do nome do operador
-- **Regra:** um `operator_id` deve ter um único `operator_name`; variantes = fragmentação de grafias.
-- **Afetados:** 7 grafias (Atlante; Atlante Infra Portugal S.A; Atlante Infra Portugal S.A.; Atlante Infra Portugal S.a; Atlante Infra Portugal S.a.; Atlante Infra Portugal, S.A; Atlante Infra Portugal, S.A.). Exemplos: `CHV-00017`, `LSB-00651`, `LSB-00652`, `CHV-00017-01`, `ATLA`.
-- **Evidência:** `nap_static_sites.csv` por `operator_id=ATLA`: Atlante ×19; Atlante Infra Portugal S.A ×1; Atlante Infra Portugal S.A. ×14; Atlante Infra Portugal S.a ×1; Atlante Infra Portugal S.a. ×2; Atlante Infra Portugal, S.A ×570; Atlante Infra Portugal, S.A. ×2.
-- **Veredito:** suspeito (metadado) — mesma entidade, grafias divergentes; normalizar para a forma canónica.
+| ponto | site | OPC | formato | modo |
+|---|---|---|---|---|
+| `SNS-00014-01` | `SNS-00014` | ATLA | socket | mode4DC |
+| `PRT-00228-02` | `PRT-00228` | ATLA | socket | mode4DC |
+| `MTS-00149-02` | `MTS-00149` | ATLA | socket | mode4DC |
+| `MTS-00150-02` | `MTS-00150` | ATLA | socket | mode4DC |
+| `VFX-00066-01` | `VFX-00066` | GLPP | socket | mode4DC |
+- **Veredito:** suspeito (tomada fixa DC com formato de tomada AC) — provável herança do `connector_format` do par AC do mesmo posto.
 
 [↑ índice](#indice)
 
@@ -278,57 +251,47 @@ Totais analisados: 8375 sites, 21010 `point_id` distintos (21139 linhas de conec
 <a id="opc-EDPC"></a>
 
 <details open>
-<summary><b>EDPC — EDP Comercial (1663 sites, 5802 pontos)</b> · 2 CRÍTICO, 1 MÉDIO, 1 BAIXO</summary>
+<summary><b>EDPC — EDP Comercial (1663 sites, 5802 pontos)</b> · 2 CRÍTICO, 1 ALTO</summary>
 
-### [CRÍTICO] Potência sobre-declarada
-- **Regra:** `ratio = declarada / esperada > 1.25`; esperada = `V × I` (`√3 × V × I` em `mode3AC3p`; tolerância 25%).
-- **Afetados:** 358 linhas de conector em 358 pontos de 5802 (6.2%). Exemplos: `AMT-00011-01`, `AMT-00011-02`, `CMR-00002-01`, `ABF-00121`, `ABF-00122`.
-- **Evidência:** tabela curta (≤10 linhas) com ids e valores. Os ficheiros exaustivos `Agents-outputs/anomalias-evidence.csv` (máquina, uma linha por conector) e `Agents-outputs/anomalias-details.md` (leitura no GitHub, por OPC) já foram gerados por `scripts/anomalias_evidence.py` — NÃO os regeneres nem listes todas as linhas no relatório.
-
-| ponto | site | tomada / modo | tensao / corrente / declarada / esperada | ratio |
-|---|---|---|---|---|
-| `PT-EDP-EPLM-00073-3` | `PLM-00073` | iec62196T2 / mode3AC3p | 40 V / 32 A / 22.0 kW / 2.2 kW | 9.923 |
-| `PLM-00029-01` | `PLM-00029` | iec62196T2 / mode2AC1p | 230 V / 16 A / 11.0 kW / 3.7 kW | 2.989 |
-| `PLM-00029-02` | `PLM-00029` | iec62196T2 / mode2AC1p | 230 V / 16 A / 11.0 kW / 3.7 kW | 2.989 |
-| `PLM-00030-01` | `PLM-00030` | iec62196T2 / mode2AC1p | 230 V / 32 A / 22.0 kW / 7.4 kW | 2.989 |
-| `PLM-00030-02` | `PLM-00030` | iec62196T2 / mode2AC1p | 230 V / 32 A / 22.0 kW / 7.4 kW | 2.989 |
-| … | … | +353 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-EDPC)) |
-- **Veredito:** impossível — a potência declarada excede a capacidade física `V × I` para além da tolerância; indicia potência do posto herdada pela tomada ou erro de introdução.
-
-### [MÉDIO] Potência sub-declarada (derating)
-- **Regra:** `ratio = declarada / esperada < 0.75` (mesma esperada e tolerância).
-- **Afetados:** 1179 linhas de conector em 1165 pontos de 5802 (20.1%). Exemplos: `ABF-00071-01`, `ABF-00071-02`, `ABT-00006-01`, `ABF-00071`, `ABF-00114`.
-- **Evidência:** tabela curta (≤10 linhas) com ids e valores. Os ficheiros exaustivos `Agents-outputs/anomalias-evidence.csv` (máquina, uma linha por conector) e `Agents-outputs/anomalias-details.md` (leitura no GitHub, por OPC) já foram gerados por `scripts/anomalias_evidence.py` — NÃO os regeneres nem listes todas as linhas no relatório.
-
-| ponto | site | tomada / modo | tensao / corrente / declarada / esperada | ratio |
-|---|---|---|---|---|
-| `LRS-80017-01` | `LRS-80017` | iec62196T2 / mode2AC1p | 240 V / 340 A / 6.9 kW / 81.6 kW | 0.085 |
-| `LRS-00067-01` | `LRS-00067` | chademo / mode4DC | 920 V / 375 A / 50.0 kW / 345.0 kW | 0.145 |
-| `PT-EDP-ECTB-00080-2` | `CTB-00080` | chademo / mode4DC | 1000 V / 300 A / 60.0 kW / 300.0 kW | 0.200 |
-| `PT-EDP-EBRG-00143-1` | `BRG-00143` | iec62196T2COMBO / mode4DC | 1000 V / 250 A / 60.0 kW / 250.0 kW | 0.240 |
-| `PT-EDP-EBRG-00143-2` | `BRG-00143` | iec62196T2COMBO / mode4DC | 1000 V / 250 A / 60.0 kW / 250.0 kW | 0.240 |
-| … | … | +1174 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-EDPC)) |
-- **Veredito:** suspeito — declarada 25%+ abaixo da capacidade `V × I`; provável derating operacional, limitação partilhada ou erro de introdução (não viola física).
-
-### [CRÍTICO] Chaves duplicadas e `point_external_id` partilhado entre sites
-- **Regra:** `point_id` único por linha; um `point_external_id` não pode viver em dois sites; sufixo de tomada = último segmento de `point_id` (int-normalizado).
-- **Afetados:** 4 ocorrências de `point_id` (ex. `PT-EDP-EGRD-00058-2` em `GRD-00058` ×4 linhas); 6 `point_external_id` em 2 sites (ex. `PT*EDP*EABF*00195*1`, `PT*EDP*EABF*00195*2` em `ABF-00195`+`ABF-00196`); 14 linhas sem `point_external_id` (ex. `PT-EDP-EGDL-00012-1`, `PT-EDP-EGDL-00012-2` em `GDL-00011`+`GDL-00010`, `PT-EDP-EFAR-00096-3` em `FAR-00096`). Exemplos: `PT-EDP-EGRD-00058-2`, `GRD-00058`, `PT*EDP*EABF*00195*1`, `ABF-00195`, `ABF-00196`.
+### [CRÍTICO] potência declarada vs V×I
+- **Regra:** `ratio > 1,25` impossível; `ratio < 0,75` suspeito.
+- **Afetados:** 1537 de 5831 linhas (26,4 %; 358 sobre + 1179 sub). Exemplos: `PT-EDP-EPLM-00073-3`, `PLM-00029-01`, `PLM-00029-02` (sites `PLM-00073`, `PLM-00029`).
 - **Evidência:**
 
-| ponto | site | `point_external_id` | problema |
-|---|---|---|---|
-| `PT-EDP-EGRD-00058-2` | `GRD-00058` | `PT*EDP*EGRD*00058*2` | `point_id` ×4 linhas |
-| `PT-EDP-EABF-00195-1` | `ABF-00195` / `ABF-00196` | `PT*EDP*EABF*00195*1` | mesmo exterior em 2 sites |
-| `PT-EDP-EABF-00195-2` | `ABF-00195` / `ABF-00196` | `PT*EDP*EABF*00195*2` | mesmo exterior em 2 sites |
-| `PT-EDP-EGDL-00012-1` | `GDL-00011` / `GDL-00010` | (vazio) | exterior vazio, `point_id` repetido |
-| `PT-EDP-EFAR-00096-3` | `FAR-00096` | (vazio) | exterior vazio |
-- **Veredito:** impossível (chave) — duplicados exatos e colisões entre sites; provável reutilização de código local `ABF` ou linhas-fantasma do ETL a montante.
+| ponto | site | tomada | modo | tensão / corrente / declarada / esperada | ratio |
+|---|---|---|---|---|---|
+| `PT-EDP-EPLM-00073-3` | `PLM-00073` | iec62196T2 | mode3AC3p | 40 V / 32 A / 22 kW / 2.217 kW | 9.92 |
+| `PLM-00029-01` | `PLM-00029` | iec62196T2 | mode2AC1p | 230 V / 16 A / 11 kW / 3.68 kW | 2.99 |
+| `PLM-00029-02` | `PLM-00029` | iec62196T2 | mode2AC1p | 230 V / 16 A / 11 kW / 3.68 kW | 2.99 |
+| … | … | … | … | … | +1534 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-EDPC)) |
+- **Veredito:** impossível para as 358 sobre (ex. 22 kW a 40 V/32 A); sub-declarações em massa (1179) suspeitas de potência de posto herdada pelo conector.
 
-### [BAIXO] `usage_type` em falta
-- **Regra:** `usage_type` vazio ou fora do enum do XSD (`energyInfrastructure.xsd`).
-- **Afetados:** 91 linhas de conector. Exemplos: `PT-EDP-EGDL-00066-1`, `PT-EDP-EGDL-00066-2`, `PT-EDP-EGDL-00068-1`, `GDL-00066`.
-- **Evidência:** `nap_static_points.csv` coluna `usage_type` vazia nestas linhas; total global 635 linhas em falta (só este OPC: 91).
-- **Veredito:** suspeito (metadado omisso) — campo fora do enum, assumedível como uso público mas por confirmar.
+### [ALTO] `point_external_id` nulo e `point_id` fora do formato eMI3
+- **Regra:** `point_external_id` cumpre `^PT\*[A-Z0-9]+\*.+`; 14 nulos no snapshot, 11 EDPC.
+- **Afetados:** 11 pontos EDPC. Exemplos: `PT-EDP-EGDL-00012-1`, `PT-EDP-EGDL-00012-2` (sites `GDL-00011`, `GDL-00010`), `PT-EDP-EFAR-00096-3` (site `FAR-00096`), `PT-EDP-ELLE-00260-1` (site `LLE-00259`).
+- **Evidência:**
+
+| point_id | site | point_external_id |
+|---|---|---|
+| `PT-EDP-EGDL-00012-1` | `GDL-00011` | (nulo) |
+| `PT-EDP-EGDL-00012-2` | `GDL-00011` | (nulo) |
+| `PT-EDP-EGDL-00012-1` | `GDL-00010` | (nulo) |
+| `PT-EDP-EFAR-00096-3` | `FAR-00096` | (nulo) |
+| `PT-EDP-ELLE-00260-1` | `LLE-00259` | (nulo) |
+- **Veredito:** suspeito forte (o point_id repete o eMI3 antigo mas a coluna eMI3 vem nula; `PT-EDP-EGDL-00012-1`/`PT-EDP-EGDL-00012-2` separam-se por dois sites) — ETL a confirmar.
+
+### [CRÍTICO] mesmo `point_external_id` em sites diferentes
+- **Regra:** `point_external_id` (EVSE ID) é chave única; repetir em dois sites = chave partida.
+- **Afetados:** 4 linhas / 2 EVSE ID em `ABF-00195` × `ABF-00196`. Exemplos: `PT-EDP-EABF-00195-1`, `PT-EDP-EABF-00195-2` (pontos), `ABF-00195`, `ABF-00196` (sites), `PT*EDP*EABF*00195*1`, `PT*EDP*EABF*00195*2` (EVSE).
+- **Evidência:**
+
+| point_id | point_external_id | site |
+|---|---|---|
+| `PT-EDP-EABF-00195-1` | `PT*EDP*EABF*00195*1` | `ABF-00195` |
+| `PT-EDP-EABF-00195-1` | `PT*EDP*EABF*00195*1` | `ABF-00196` |
+| `PT-EDP-EABF-00195-2` | `PT*EDP*EABF*00195*2` | `ABF-00195` |
+| `PT-EDP-EABF-00195-2` | `PT*EDP*EABF*00195*2` | `ABF-00196` |
+- **Veredito:** impossível como chave (duplicação exata do par ponto+EVSE em dois sites) — um dos sites herdou os conectores do outro.
 
 [↑ índice](#indice)
 
@@ -337,72 +300,46 @@ Totais analisados: 8375 sites, 21010 `point_id` distintos (21139 linhas de conec
 <a id="opc-REPS"></a>
 
 <details open>
-<summary><b>REPS — REPSOL Portuguesa Lda (214 sites, 555 pontos)</b> · 3 CRÍTICO, 2 BAIXO, 1 MÉDIO</summary>
+<summary><b>REPS — REPSOL Portuguesa Lda (214 sites, 555 pontos)</b> · 3 CRÍTICO</summary>
 
-### [CRÍTICO] Potência sobre-declarada
-- **Regra:** `ratio = declarada / esperada > 1.25`; esperada = `V × I` (`√3 × V × I` em `mode3AC3p`; tolerância 25%).
-- **Afetados:** 173 linhas de conector em 173 pontos de 555 (31.2%). Exemplos: `ABF-00035-03`, `ABT-00036-01`, `ABT-00037-01`, `ABF-00035`, `ABT-00036`.
-- **Evidência:** tabela curta (≤10 linhas) com ids e valores. Os ficheiros exaustivos `Agents-outputs/anomalias-evidence.csv` (máquina, uma linha por conector) e `Agents-outputs/anomalias-details.md` (leitura no GitHub, por OPC) já foram gerados por `scripts/anomalias_evidence.py` — NÃO os regeneres nem listes todas as linhas no relatório.
-
-| ponto | site | tomada / modo | tensao / corrente / declarada / esperada | ratio |
-|---|---|---|---|---|
-| `ESP-00017-01` | `ESP-00017` | iec62196T2 / mode3AC3p | 230 V / 63 A / 1000.0 kW / 25.1 kW | 39.844 |
-| `ESP-00017-02` | `ESP-00017` | iec62196T2COMBO / mode4DC | 400 V / 125 A / 1000.0 kW / 50.0 kW | 20.000 |
-| `ESP-00017-03` | `ESP-00017` | chademo / mode4DC | 400 V / 125 A / 1000.0 kW / 50.0 kW | 20.000 |
-| `VFX-00024-03` | `VFX-00024` | iec62196T2 / mode3AC3p | 230 V / 32 A / 45.0 kW / 12.7 kW | 3.530 |
-| `LOU-00010-03` | `LOU-00010` | iec62196T2 / mode3AC3p | 230 V / 32 A / 43.0 kW / 12.7 kW | 3.373 |
-| … | … | +168 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-REPS)) |
-- **Veredito:** impossível — a potência declarada excede a capacidade física `V × I` para além da tolerância; indicia potência do posto herdada pela tomada ou erro de introdução.
-
-### [MÉDIO] Potência sub-declarada (derating)
-- **Regra:** `ratio = declarada / esperada < 0.75` (mesma esperada e tolerância).
-- **Afetados:** 26 linhas de conector em 26 pontos de 555 (4.7%). Exemplos: `ALD-00012-02`, `AVR-00038-02`, `AVR-00046-02`, `ALD-00012`, `AVR-00038`.
-- **Evidência:** tabela curta (≤10 linhas) com ids e valores. Os ficheiros exaustivos `Agents-outputs/anomalias-evidence.csv` (máquina, uma linha por conector) e `Agents-outputs/anomalias-details.md` (leitura no GitHub, por OPC) já foram gerados por `scripts/anomalias_evidence.py` — NÃO os regeneres nem listes todas as linhas no relatório.
-
-| ponto | site | tomada / modo | tensao / corrente / declarada / esperada | ratio |
-|---|---|---|---|---|
-| `GMR-00164-02` | `GMR-00164` | chademo / mode4DC | 800 V / 175 A / 60.0 kW / 140.0 kW | 0.429 |
-| `AVR-00038-02` | `AVR-00038` | iec62196T2COMBO / mode4DC | 920 V / 150 A / 60.0 kW / 138.0 kW | 0.435 |
-| `PRT-00140-02` | `PRT-00140` | iec62196T2COMBO / mode4DC | 920 V / 150 A / 60.0 kW / 138.0 kW | 0.435 |
-| `SNT-00073-02` | `SNT-00073` | iec62196T2COMBO / mode4DC | 920 V / 150 A / 60.0 kW / 138.0 kW | 0.435 |
-| `STB-00023-02` | `STB-00023` | iec62196T2COMBO / mode4DC | 920 V / 150 A / 60.0 kW / 138.0 kW | 0.435 |
-| … | … | +21 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-REPS)) |
-- **Veredito:** suspeito — declarada 25%+ abaixo da capacidade `V × I`; provável derating operacional, limitação partilhada ou erro de introdução (não viola física).
-
-### [CRÍTICO] Potência absurda em Type2 AC (`ESP-00017`)
-- **Regra:** teto da família `iec62196T2` ≤ 50 kW; `ratio > 1.25` = impossível.
-- **Afetados:** Exemplos: `ESP-00017-01`, `ESP-00017-02`, `ESP-00017-03`, `ESP-00017` — 3 linhas no site `ESP-00017` (pontos `ESP-00017-01`, `ESP-00017-02`, `ESP-00017-03` a 999990 W).
+### [CRÍTICO] potência declarada vs V×I
+- **Regra:** `ratio > 1,25` impossível.
+- **Afetados:** 199 de 555 linhas (35,9 %; 173 sobre + 26 sub). Exemplos: `ESP-00017-01`, `ESP-00017-02`, `ESP-00017-03` (site `ESP-00017`).
 - **Evidência:**
 
-| ponto | site | tomada / modo | tensão / corrente / declarada / esperada |
+| ponto | site | tomada | modo | tensão / corrente / declarada / esperada | ratio |
+|---|---|---|---|---|---|
+| `ESP-00017-01` | `ESP-00017` | iec62196T2 | mode3AC3p | 230 V / 63 A / 999.99 kW / 25.0974 kW | 39.84 |
+| `ESP-00017-02` | `ESP-00017` | iec62196T2COMBO | mode4DC | 400 V / 125 A / 999.99 kW / 50 kW | 20.00 |
+| `ESP-00017-03` | `ESP-00017` | chademo | mode4DC | 400 V / 125 A / 999.99 kW / 50 kW | 20.00 |
+| … | … | … | … | … | +196 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-REPS)) |
+- **Veredito:** impossível (999,99 kW é o máximo do snapshot e excede qualquer posto ligeiro; Type2 AC a 999,99 kW secciona-se abaixo no teto de tomada).
+
+### [CRÍTICO] Type2 em modo DC + CHAdeMO em modo AC
+- **Regra:** tipos só-AC (`iec62196T2`) nunca em `mode4DC`; tipos só-DC (`chademo`) nunca em `mode3*` (`tesla*` isento).
+- **Afetados:** 2 de 555 linhas REPS (28 no snapshot: 23 T2-DC + 5 CHAdeMO-AC). Exemplos: `MTS-00182-01` (T2/DC, site `MTS-00182`), `MTS-00182-03` (CHAdeMO/AC, site `MTS-00182`), `STB-00035-01` (CHAdeMO/AC, site `STB-00035`, GLPP).
+- **Evidência:**
+
+| ponto | site | OPC | tomada | modo |
+|---|---|---|---|---|
+| `MTS-00182-01` | `MTS-00182` | REPS | iec62196T2 | mode4DC |
+| `MTS-00182-03` | `MTS-00182` | REPS | chademo | mode3AC3p |
+| `STB-00035-01` | `STB-00035` | GLPP | chademo | mode3AC3p |
+| `STB-00035-03` | `STB-00035` | GLPP | iec62196T2 | mode4DC |
+| `SSB-00009-01` | `SSB-00009` | GLPP | chademo | mode3AC3p |
+- **Veredito:** impossível (viola a física AC↔DC e a tabela de compatibilidade) — modos trocados entre conectores do mesmo posto.
+
+### [CRÍTICO] Type2 acima do teto da tomada (≤ 50 kW)
+- **Regra:** `iec62196T2` em PT não debita acima de 50 kW; 17 linhas acima no snapshot.
+- **Afetados:** 1 de 555 linhas REPS (`ESP-00017-01` a 999,99 kW); restantes 16 TSLA. Exemplos: `ESP-00017-01` (site `ESP-00017`), `991aebcb-011c-45f4-ba5a-ebe4cb586397`, `10681d21-e216-45ff-a4d9-54149a618967` (site `0cf4786b-f469-4eab-a793-fdc5b01e45a5`, TSLA).
+- **Evidência:**
+
+| ponto | site | OPC | declarada |
 |---|---|---|---|
-| `ESP-00017-01` | `ESP-00017` | iec62196T2 / mode3AC3p | 230 V / 63 A / 999990 W / 14,5 kW |
-| `ESP-00017-02` | `ESP-00017` | iec62196T2COMBO / mode4DC | 400 V / 125 A / 999990 W / 50 kW |
-| `ESP-00017-03` | `ESP-00017` | chademo / mode4DC | 400 V / 125 A / 999990 W / 50 kW |
-- **Veredito:** impossível — 999990 W (~1 MW) é o máximo observado no dataset e excede em 20–70× a capacidade `V × I`; provável placeholder de sistema (999990) nunca substituído. Abaixo do teto global de 1500 kW, mas fisicamente impossível para estas tomadas.
-
-### [CRÍTICO] Combinação AC↔DC impossível no mesmo site
-- **Regra:** tipos só-DC em modo AC (ou só-AC em `mode4DC`) = impossível (`tesla*` isento).
-- **Afetados:** Exemplos: `MTS-00182-03`, `MTS-00182-01`, `MTS-00182` — 2 linhas em `MTS-00182`: `MTS-00182-03` (chademo em `mode3AC3p`) e `MTS-00182-01` (Type2 em `mode4DC`).
-- **Evidência:**
-
-| ponto | site | tomada / modo |
-|---|---|---|
-| `MTS-00182-03` | `MTS-00182` | chademo / mode3AC3p (DC em modo AC) |
-| `MTS-00182-01` | `MTS-00182` | iec62196T2 / mode4DC (AC em modo DC) |
-- **Veredito:** impossível — os dois conectores do mesmo site têm modo e tomada trocados entre si; erro de introdução.
-
-### [BAIXO] `usage_type` em falta
-- **Regra:** `usage_type` vazio ou fora do enum do XSD (`energyInfrastructure.xsd`).
-- **Afetados:** 8 linhas de conector. Exemplos: `VCT-00076-01`, `VCT-00076-02`, `VCT-00076-03`, `VCT-00076`.
-- **Evidência:** `nap_static_points.csv` coluna `usage_type` vazia nestas linhas; total global 635 linhas em falta (só este OPC: 8).
-- **Veredito:** suspeito (metadado omisso) — campo fora do enum, assumedível como uso público mas por confirmar.
-
-### [BAIXO] Fragmentação do nome do operador
-- **Regra:** um `operator_id` deve ter um único `operator_name`; variantes = fragmentação de grafias.
-- **Afetados:** 2 grafias (REPSOL PORTUGUESA LDA; REPSOL Portuguesa Lda). Exemplos: `LSB-00408`, `CSC-00070`, `BRG-00045`, `LSB-00408-01`, `REPS`.
-- **Evidência:** `nap_static_sites.csv` por `operator_id=REPS`: REPSOL PORTUGUESA LDA ×35; REPSOL Portuguesa Lda ×179.
-- **Veredito:** suspeito (metadado) — mesma entidade, grafias divergentes; normalizar para a forma canónica.
+| `ESP-00017-01` | `ESP-00017` | REPS | 999.99 kW |
+| `991aebcb-011c-45f4-ba5a-ebe4cb586397` | `0cf4786b-f469-4eab-a793-fdc5b01e45a5` | TSLA | 150 kW |
+| `10681d21-e216-45ff-a4d9-54149a618967` | `0cf4786b-f469-4eab-a793-fdc5b01e45a5` | TSLA | 150 kW |
+- **Veredito:** impossível em AC (Type2 a 150–1000 kW é potência DC do posto colada no conector AC).
 
 [↑ índice](#indice)
 
@@ -411,90 +348,39 @@ Totais analisados: 8375 sites, 21010 `point_id` distintos (21139 linhas de conec
 <a id="opc-GLPP"></a>
 
 <details open>
-<summary><b>GLPP — Galp Power OPC (1589 sites, 3529 pontos)</b> · 3 BAIXO, 2 CRÍTICO, 1 MÉDIO, 1 ALTO</summary>
+<summary><b>GLPP — Galp Power OPC (1589 sites, 3529 pontos)</b> · 2 CRÍTICO</summary>
 
-### [CRÍTICO] Potência sobre-declarada
-- **Regra:** `ratio = declarada / esperada > 1.25`; esperada = `V × I` (`√3 × V × I` em `mode3AC3p`; tolerância 25%).
-- **Afetados:** 148 linhas de conector em 148 pontos de 3529 (4.2%). Exemplos: `ALB-90002-01`, `ALB-90002-02`, `ALM-00100-01`, `ALB-90002`, `ALM-00100`.
-- **Evidência:** tabela curta (≤10 linhas) com ids e valores. Os ficheiros exaustivos `Agents-outputs/anomalias-evidence.csv` (máquina, uma linha por conector) e `Agents-outputs/anomalias-details.md` (leitura no GitHub, por OPC) já foram gerados por `scripts/anomalias_evidence.py` — NÃO os regeneres nem listes todas as linhas no relatório.
-
-| ponto | site | tomada / modo | tensao / corrente / declarada / esperada | ratio |
-|---|---|---|---|---|
-| `LGS-00013-02` | `LGS-00013` | iec62196T2 / mode2AC1p | 240 V / 32 A / 22.0 kW / 7.7 kW | 2.865 |
-| `LGS-00014-02` | `LGS-00014` | iec62196T2 / mode2AC1p | 240 V / 32 A / 22.0 kW / 7.7 kW | 2.865 |
-| `TVD-00028-02` | `TVD-00028` | iec62196T2COMBO / mode4DC | 500 V / 120 A / 120.0 kW / 60.0 kW | 2.000 |
-| `TVD-00029-02` | `TVD-00029` | iec62196T2COMBO / mode4DC | 500 V / 120 A / 120.0 kW / 60.0 kW | 2.000 |
-| `TVD-00030-02` | `TVD-00030` | iec62196T2COMBO / mode4DC | 500 V / 120 A / 120.0 kW / 60.0 kW | 2.000 |
-| … | … | +143 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-GLPP)) |
-- **Veredito:** impossível — a potência declarada excede a capacidade física `V × I` para além da tolerância; indicia potência do posto herdada pela tomada ou erro de introdução.
-
-### [MÉDIO] Potência sub-declarada (derating)
-- **Regra:** `ratio = declarada / esperada < 0.75` (mesma esperada e tolerância).
-- **Afetados:** 446 linhas de conector em 445 pontos de 3529 (12.6%). Exemplos: `ABF-00061-01`, `ABF-00164-01`, `ABF-00164-02`, `ABF-00061`, `ABF-00164`.
-- **Evidência:** tabela curta (≤10 linhas) com ids e valores. Os ficheiros exaustivos `Agents-outputs/anomalias-evidence.csv` (máquina, uma linha por conector) e `Agents-outputs/anomalias-details.md` (leitura no GitHub, por OPC) já foram gerados por `scripts/anomalias_evidence.py` — NÃO os regeneres nem listes todas as linhas no relatório.
-
-| ponto | site | tomada / modo | tensao / corrente / declarada / esperada | ratio |
-|---|---|---|---|---|
-| `LSB-01124-01` | `LSB-01124` | iec62196T2COMBO / mode4DC | 1000 V / 400 A / 50.0 kW / 400.0 kW | 0.125 |
-| `LSB-01124-02` | `LSB-01124` | iec62196T2COMBO / mode4DC | 1000 V / 400 A / 50.0 kW / 400.0 kW | 0.125 |
-| `VNF-00037-02` | `VNF-00037` | iec62196T2 / mode3AC3p | 400 V / 250 A / 22.0 kW / 173.2 kW | 0.127 |
-| `LSB-01122-01` | `LSB-01122` | iec62196T2COMBO / mode4DC | 950 V / 300 A / 60.0 kW / 285.0 kW | 0.211 |
-| `LSB-01122-02` | `LSB-01122` | iec62196T2COMBO / mode4DC | 950 V / 300 A / 60.0 kW / 285.0 kW | 0.211 |
-| … | … | +441 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-GLPP)) |
-- **Veredito:** suspeito — declarada 25%+ abaixo da capacidade `V × I`; provável derating operacional, limitação partilhada ou erro de introdução (não viola física).
-
-### [CRÍTICO] Combinações AC↔DC impossíveis
-- **Regra:** tipos só-DC em modo AC (ou só-AC em `mode4DC`) = impossível.
-- **Afetados:** Exemplos: `STB-00035-01`, `SSB-00009-01`, `STB-00035-03`, `STB-00035` — 10 linhas: `STB-00035-01`, `SSB-00009-01`, `LSB-00655-01`, `CSC-00413-01` (CHAdeMO em `mode3AC3p`); `STB-00035-03`, `ODV-00047-01`, `AMD-00110-01`, `OVR-00032-01`, `VNG-00199-03`, `CTB-00057-01` (Type2 em `mode4DC`). Sites `STB-00035`, `SSB-00009`, `LSB-00655`, `CSC-00413`, `ODV-00047`, `AMD-00110`, `OVR-00032`, `VNG-00199`, `CTB-00057`.
-- **Evidência:** CHAdeMO em modo AC:
-
-| ponto | site | tomada / modo |
-|---|---|---|
-| `STB-00035-01` | `STB-00035` | chademo / mode3AC3p |
-| `SSB-00009-01` | `SSB-00009` | chademo / mode3AC3p |
-| `LSB-00655-01` | `LSB-00655` | chademo / mode3AC3p |
-| `CSC-00413-01` | `CSC-00413` | chademo / mode3AC3p |
-Type2 em modo DC:
-
-| ponto | site | tomada / modo |
-|---|---|---|
-| `STB-00035-03` | `STB-00035` | iec62196T2 / mode4DC |
-| `ODV-00047-01` | `ODV-00047` | iec62196T2 / mode4DC |
-| `AMD-00110-01` | `AMD-00110` | iec62196T2 / mode4DC |
-| `OVR-00032-01` | `OVR-00032` | iec62196T2 / mode4DC |
-| `VNG-00199-03` | `VNG-00199` | iec62196T2 / mode4DC |
-| `CTB-00057-01` | `CTB-00057` | iec62196T2 / mode4DC |
-- **Veredito:** impossível — notar `STB-00035-01` (DC em AC) e `STB-00035-03` (AC em DC) no mesmo site: modos trocados na introdução.
-
-### [ALTO] `point_id` triplicado
-- **Regra:** `point_id` único por linha.
-- **Afetados:** Exemplos: `ABF-00061-01`, `ABF-00061`, `PT*GLP*EABF*00061*01` — `ABF-00061-01` ×3 linhas idênticas no site `ABF-00061` (exterior `PT*GLP*EABF*00061*01`).
-- **Evidência:** `nap_static_points.csv` tem 3 linhas com `point_id` = `ABF-00061-01` no site `ABF-00061`.
-- **Veredito:** impossível (chave) — triplicado exato, provável re-submissão sem idempotência.
-
-### [BAIXO] Postcode fora do formato CP7
-- **Regra:** `postcode` no formato `NNNN-NNN`.
-- **Afetados:** Exemplos: `OER-00064`, `LNH-00037`, `OVR-00054` — 3 sites: `OER-00064` (`2740`), `LNH-00037` (`0`), `OVR-00054` (`380-225`).
+### [CRÍTICO] potência declarada vs V×I
+- **Regra:** `ratio > 1,25` impossível; `ratio < 0,75` suspeito.
+- **Afetados:** 594 de 3532 linhas (16,8 %; 148 sobre + 446 sub). Exemplos: `LGS-00013-02`, `LGS-00014-02`, `TVD-00028-02` (sites `LGS-00013`, `LGS-00014`, `TVD-00028`).
 - **Evidência:**
 
-| site | postcode | cidade |
-|---|---|---|
-| `OER-00064` | 2740 | Oeiras |
-| `LNH-00037` | 0 | Lourinhã |
-| `OVR-00054` | 380-225 | Ovar |
-- **Veredito:** suspeito (formato) — sufixo em falta ou inválido; `0` e `380-225` nem sequer têm CP4 válido.
+| ponto | site | tomada | modo | tensão / corrente / declarada / esperada | ratio |
+|---|---|---|---|---|---|
+| `LGS-00013-02` | `LGS-00013` | iec62196T2 | mode2AC1p | 240 V / 32 A / 22 kW / 7.68 kW | 2.87 |
+| `LGS-00014-02` | `LGS-00014` | iec62196T2 | mode2AC1p | 240 V / 32 A / 22 kW / 7.68 kW | 2.87 |
+| `TVD-00028-02` | `TVD-00028` | iec62196T2COMBO | mode4DC | 500 V / 120 A / 120 kW / 60 kW | 2.00 |
+| … | … | … | … | … | +591 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-GLPP)) |
+- **Veredito:** impossível para as 148 sobre; 446 sub suspeitas (derating > 25 %).
 
-### [BAIXO] `usage_type` em falta
-- **Regra:** `usage_type` vazio ou fora do enum do XSD (`energyInfrastructure.xsd`).
-- **Afetados:** 48 linhas de conector. Exemplos: `MTJ-00128-01`, `MTJ-00128-02`, `MTJ-00129-01`, `MTJ-00128`.
-- **Evidência:** `nap_static_points.csv` coluna `usage_type` vazia nestas linhas; total global 635 linhas em falta (só este OPC: 48).
-- **Veredito:** suspeito (metadado omisso) — campo fora do enum, assumedível como uso público mas por confirmar.
+### [CRÍTICO] combinação tomada/modo impossível (AC↔DC)
+- **Regra:** `iec62196T2` só em `mode1*/2*/3*`; `chademo` só em `mode4DC`/`ccs`.
+- **Afetados:** 10 de 3532 linhas GLPP (6 T2 em DC + 4 CHAdeMO em AC). Exemplos: `STB-00035-03`, `ODV-00047-01`, `AMD-00110-01` (T2/DC), `STB-00035-01`, `SSB-00009-01` (CHAdeMO/AC).
+- **Evidência:**
 
-### [BAIXO] Fragmentação do nome do operador
-- **Regra:** um `operator_id` deve ter um único `operator_name`; variantes = fragmentação de grafias.
-- **Afetados:** 2 grafias (Galp Power; Galp Power OPC). Exemplos: `VNF-90007`, `ORM-90001`, `OFR-90002`, `VNF-90007-01`, `GLPP`.
-- **Evidência:** `nap_static_sites.csv` por `operator_id=GLPP`: Galp Power ×126; Galp Power OPC ×1463.
-- **Veredito:** suspeito (metadado) — mesma entidade, grafias divergentes; normalizar para a forma canónica.
+| ponto | site | tomada | modo |
+|---|---|---|---|
+| `STB-00035-03` | `STB-00035` | iec62196T2 | mode4DC |
+| `ODV-00047-01` | `ODV-00047` | iec62196T2 | mode4DC |
+| `AMD-00110-01` | `AMD-00110` | iec62196T2 | mode4DC |
+| `OVR-00032-01` | `OVR-00032` | iec62196T2 | mode4DC |
+| `VNG-00199-03` | `VNG-00199` | iec62196T2 | mode4DC |
+| `CTB-00057-01` | `CTB-00057` | iec62196T2 | mode4DC |
+| `STB-00035-01` | `STB-00035` | chademo | mode3AC3p |
+| `SSB-00009-01` | `SSB-00009` | chademo | mode3AC3p |
+| `LSB-00655-01` | `LSB-00655` | chademo | mode3AC3p |
+| `CSC-00413-01` | `CSC-00413` | chademo | mode3AC3p |
+- **Veredito:** impossível (o próprio `STB-00035` tem os dois erros espelhados: `STB-00035-01` CHAdeMO/AC e `STB-00035-03` T2/DC) — modos trocados na introdução.
 
 [↑ índice](#indice)
 
@@ -503,61 +389,32 @@ Type2 em modo DC:
 <a id="opc-HORZ"></a>
 
 <details>
-<summary><b>HORZ — Powerdot, S.A (777 sites, 2108 pontos)</b> · 3 BAIXO, 1 CRÍTICO, 1 MÉDIO</summary>
+<summary><b>HORZ — Powerdot, S.A (777 sites, 2108 pontos)</b> · 1 CRÍTICO, 1 BAIXO</summary>
 
-### [CRÍTICO] Potência sobre-declarada
-- **Regra:** `ratio = declarada / esperada > 1.25`; esperada = `V × I` (`√3 × V × I` em `mode3AC3p`; tolerância 25%).
-- **Afetados:** 81 linhas de conector em 81 pontos de 2108 (3.8%). Exemplos: `ALM-00032-01`, `ALM-00032-02`, `ALM-00062-01`, `ALM-00032`, `ALM-00062`.
-- **Evidência:** tabela curta (≤10 linhas) com ids e valores. Os ficheiros exaustivos `Agents-outputs/anomalias-evidence.csv` (máquina, uma linha por conector) e `Agents-outputs/anomalias-details.md` (leitura no GitHub, por OPC) já foram gerados por `scripts/anomalias_evidence.py` — NÃO os regeneres nem listes todas as linhas no relatório.
-
-| ponto | site | tomada / modo | tensao / corrente / declarada / esperada | ratio |
-|---|---|---|---|---|
-| `ALM-00062-01` | `ALM-00062` | iec62196T2 / mode2AC1p | 240 V / 32 A / 22.0 kW / 7.7 kW | 2.865 |
-| `ALM-00062-02` | `ALM-00062` | iec62196T2 / mode2AC1p | 240 V / 32 A / 22.0 kW / 7.7 kW | 2.865 |
-| `AVV-00006-1` | `AVV-00006` | iec62196T2 / mode2AC1p | 240 V / 32 A / 22.0 kW / 7.7 kW | 2.865 |
-| `GRD-00025-1` | `GRD-00025` | iec62196T2 / mode2AC1p | 240 V / 16 A / 11.0 kW / 3.8 kW | 2.865 |
-| `LSB-00601-01` | `LSB-00601` | iec62196T2 / mode2AC1p | 240 V / 32 A / 22.0 kW / 7.7 kW | 2.865 |
-| … | … | +76 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-HORZ)) |
-- **Veredito:** impossível — a potência declarada excede a capacidade física `V × I` para além da tolerância; indicia potência do posto herdada pela tomada ou erro de introdução.
-
-### [MÉDIO] Potência sub-declarada (derating)
-- **Regra:** `ratio = declarada / esperada < 0.75` (mesma esperada e tolerância).
-- **Afetados:** 395 linhas de conector em 395 pontos de 2108 (18.7%). Exemplos: `ABF-00055-02`, `ACB-00041-01`, `ACB-00041-03`, `ABF-00055`, `ACB-00041`.
-- **Evidência:** tabela curta (≤10 linhas) com ids e valores. Os ficheiros exaustivos `Agents-outputs/anomalias-evidence.csv` (máquina, uma linha por conector) e `Agents-outputs/anomalias-details.md` (leitura no GitHub, por OPC) já foram gerados por `scripts/anomalias_evidence.py` — NÃO os regeneres nem listes todas as linhas no relatório.
-
-| ponto | site | tomada / modo | tensao / corrente / declarada / esperada | ratio |
-|---|---|---|---|---|
-| `MTA-00025-01` | `MTA-00025` | iec62196T2COMBO / mode4DC | 920 V / 400 A / 50.0 kW / 368.0 kW | 0.136 |
-| `MTA-00025-03` | `MTA-00025` | iec62196T2COMBO / mode4DC | 920 V / 400 A / 50.0 kW / 368.0 kW | 0.136 |
-| `OFR-00009-01` | `OFR-00009` | iec62196T2COMBO / mode4DC | 920 V / 400 A / 60.0 kW / 368.0 kW | 0.163 |
-| `ORM-00043-01` | `ORM-00043` | iec62196T2COMBO / mode4DC | 920 V / 400 A / 60.0 kW / 368.0 kW | 0.163 |
-| `ORM-00043-03` | `ORM-00043` | iec62196T2COMBO / mode4DC | 920 V / 400 A / 60.0 kW / 368.0 kW | 0.163 |
-| … | … | +390 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-HORZ)) |
-- **Veredito:** suspeito — declarada 25%+ abaixo da capacidade `V × I`; provável derating operacional, limitação partilhada ou erro de introdução (não viola física).
-
-### [BAIXO] `auth_methods` vazio
-- **Regra:** métodos de autenticação devem vir preenchidos.
-- **Afetados:** Exemplos: `NLS-00005`, `NLS-00006`, `NLS-00007` — 3 sites: `NLS-00005`, `NLS-00006`, `NLS-00007`.
+### [CRÍTICO] potência declarada vs V×I
+- **Regra:** `ratio > 1,25` impossível; `ratio < 0,75` suspeito.
+- **Afetados:** 476 de 2108 linhas (22,6 %; 81 sobre + 395 sub). Exemplos: `ALM-00062-01`, `ALM-00062-02`, `AVV-00006-1` (sites `ALM-00062`, `AVV-00006`).
 - **Evidência:**
 
-| site |
-|---|
-| `NLS-00005` |
-| `NLS-00006` |
-| `NLS-00007` |
-- **Veredito:** suspeito (metadado) — 3/777 sites do OPC; único caso não-Tesla com este campo vazio.
+| ponto | site | tomada | modo | tensão / corrente / declarada / esperada | ratio |
+|---|---|---|---|---|---|
+| `ALM-00062-01` | `ALM-00062` | iec62196T2 | mode2AC1p | 240 V / 32 A / 22 kW / 7.68 kW | 2.87 |
+| `ALM-00062-02` | `ALM-00062` | iec62196T2 | mode2AC1p | 240 V / 32 A / 22 kW / 7.68 kW | 2.87 |
+| `AVV-00006-1` | `AVV-00006` | iec62196T2 | mode2AC1p | 240 V / 32 A / 22 kW / 7.68 kW | 2.87 |
+| … | … | … | … | … | +473 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-HORZ)) |
+- **Veredito:** impossível para as 81 sobre (22 kW a 240 V/32 A monofásico = 7,68 kW); 395 sub suspeitas.
 
-### [BAIXO] `usage_type` em falta
-- **Regra:** `usage_type` vazio ou fora do enum do XSD (`energyInfrastructure.xsd`).
-- **Afetados:** 30 linhas de conector. Exemplos: `MLD-00052-01`, `MLD-00052-02`, `MLD-00052-03`, `MLD-00052`.
-- **Evidência:** `nap_static_points.csv` coluna `usage_type` vazia nestas linhas; total global 635 linhas em falta (só este OPC: 30).
-- **Veredito:** suspeito (metadado omisso) — campo fora do enum, assumedível como uso público mas por confirmar.
+### [BAIXO] `auth_methods` vazio
+- **Regra:** site deve declarar pelo menos um método de autenticação; 12 vazios no snapshot.
+- **Afetados:** 3 de 777 sites HORZ (9 restantes TSLA). Exemplos: `NLS-00005`, `NLS-00006`, `NLS-00007` (todos em Nelas).
+- **Evidência:**
 
-### [BAIXO] Fragmentação do nome do operador
-- **Regra:** um `operator_id` deve ter um único `operator_name`; variantes = fragmentação de grafias.
-- **Afetados:** 2 grafias (Horizondistance, Unipessoal Lda; Powerdot, S.A). Exemplos: `VFR-00007`, `STC-00004`, `PRT-00145`, `VFR-00007-01`, `HORZ`.
-- **Evidência:** `nap_static_sites.csv` por `operator_id=HORZ`: Horizondistance, Unipessoal Lda ×6; Powerdot, S.A ×771.
-- **Veredito:** suspeito (metadado) — mesma entidade, grafias divergentes; normalizar para a forma canónica.
+| site | cidade | n_points |
+|---|---|---|
+| `NLS-00005` | Nelas | 2 |
+| `NLS-00006` | Nelas | 2 |
+| `NLS-00007` | Nelas | 1 |
+- **Veredito:** suspeito (três sites gémeos sem autenticação declarada) — metadado omisso.
 
 [↑ índice](#indice)
 
@@ -566,63 +423,47 @@ Type2 em modo DC:
 <a id="opc-EPKS"></a>
 
 <details>
-<summary><b>EPKS — Telpark (8 sites, 71 pontos)</b> · 2 CRÍTICO, 2 MÉDIO, 1 BAIXO</summary>
+<summary><b>EPKS — Telpark (8 sites, 71 pontos)</b> · 2 CRÍTICO, 1 BAIXO</summary>
 
-### [CRÍTICO] Potência sobre-declarada
-- **Regra:** `ratio = declarada / esperada > 1.25`; esperada = `V × I` (`√3 × V × I` em `mode3AC3p`; tolerância 25%).
-- **Afetados:** 62 linhas de conector em 62 pontos de 71 (87.3%). Exemplos: `02C150F9-2109-4E8F-8D0A-ED5BC269E2CD`, `044BDB0B-FFBA-4C02-8F73-2504699AC85F`, `0ABEEC74-E267-440E-87D6-D07342008D10`, `AVR-00111`, `PRT-00372`.
-- **Evidência:** tabela curta (≤10 linhas) com ids e valores. Os ficheiros exaustivos `Agents-outputs/anomalias-evidence.csv` (máquina, uma linha por conector) e `Agents-outputs/anomalias-details.md` (leitura no GitHub, por OPC) já foram gerados por `scripts/anomalias_evidence.py` — NÃO os regeneres nem listes todas as linhas no relatório.
-
-| ponto | site | tomada / modo | tensao / corrente / declarada / esperada | ratio |
-|---|---|---|---|---|
-| `02C150F9-2109-4E8F-8D0A-ED5BC269E2CD` | `VNG-00264` | iec62196T2COMBO / mode4DC | 400 V / 43 A / 30.0 kW / 17.2 kW | 1.744 |
-| `D4D10F10-E9C5-41E1-B52A-6767E0423CE9` | `VNG-00264` | iec62196T2COMBO / mode4DC | 400 V / 43 A / 30.0 kW / 17.2 kW | 1.744 |
-| `044BDB0B-FFBA-4C02-8F73-2504699AC85F` | `PRT-00372` | iec62196T2 / mode3AC3p | 230 V / 32 A / 22.0 kW / 12.7 kW | 1.726 |
-| `0ABEEC74-E267-440E-87D6-D07342008D10` | `PRT-00377` | iec62196T2 / mode3AC3p | 230 V / 32 A / 22.0 kW / 12.7 kW | 1.726 |
-| `0EAA089B-F5F7-41AF-9A55-7BD9175BB71F` | `VNG-00259` | iec62196T2 / mode3AC3p | 230 V / 32 A / 22.0 kW / 12.7 kW | 1.726 |
-| … | … | +57 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-EPKS)) |
-- **Veredito:** impossível — a potência declarada excede a capacidade física `V × I` para além da tolerância; indicia potência do posto herdada pela tomada ou erro de introdução.
-
-### [MÉDIO] Potência sub-declarada (derating)
-- **Regra:** `ratio = declarada / esperada < 0.75` (mesma esperada e tolerância).
-- **Afetados:** 7 linhas de conector em 7 pontos de 71 (9.9%). Exemplos: `1E67BD51-9F31-4F89-A350-FD990F3E01BB`, `23D61AA5-F0C1-4D0C-B348-1B3DF2411337`, `6420E6CD-3A7F-4E2C-85F3-3C921103466E`, `LSB-01456`, `PRT-00377`.
-- **Evidência:** tabela curta (≤10 linhas) com ids e valores. Os ficheiros exaustivos `Agents-outputs/anomalias-evidence.csv` (máquina, uma linha por conector) e `Agents-outputs/anomalias-details.md` (leitura no GitHub, por OPC) já foram gerados por `scripts/anomalias_evidence.py` — NÃO os regeneres nem listes todas as linhas no relatório.
-
-| ponto | site | tomada / modo | tensao / corrente / declarada / esperada | ratio |
-|---|---|---|---|---|
-| `23D61AA5-F0C1-4D0C-B348-1B3DF2411337` | `PRT-00377` | iec62196T2 / mode3AC3p | 400 V / 32 A / 0.0 kW / 22.2 kW | 0.000 |
-| `6420E6CD-3A7F-4E2C-85F3-3C921103466E` | `PRT-00377` | iec62196T2 / mode3AC3p | 400 V / 32 A / 0.0 kW / 22.2 kW | 0.000 |
-| `6C4B0536-4A42-426F-95CB-B4CBA78EC485` | `PRT-00377` | iec62196T2 / mode3AC3p | 400 V / 32 A / 0.0 kW / 22.2 kW | 0.000 |
-| `72F76EA0-2824-4839-AC1D-484C684F4ABB` | `PRT-00377` | iec62196T2 / mode3AC3p | 400 V / 32 A / 0.0 kW / 22.2 kW | 0.000 |
-| `BD66C895-53E9-4311-9E3F-5B812D0ADB73` | `PRT-00377` | iec62196T2 / mode3AC3p | 400 V / 32 A / 0.0 kW / 22.2 kW | 0.000 |
-| … | … | +2 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-EPKS)) |
-- **Veredito:** suspeito — declarada 25%+ abaixo da capacidade `V × I`; provável derating operacional, limitação partilhada ou erro de introdução (não viola física).
-
-### [CRÍTICO] Potência nula
-- **Regra:** `max_power_w` nulo, zero ou negativo = impossível (teto global e Lei de Ohm).
-- **Afetados:** Exemplos: `23D61AA5-F0C1-4D0C-B348-1B3DF2411337`, `6420E6CD-3A7F-4E2C-85F3-3C921103466E`, `PRT-00377` — 5 linhas no site `PRT-00377` (ex. `23D61AA5-F0C1-4D0C-B348-1B3DF2411337`, `6420E6CD-3A7F-4E2C-85F3-3C921103466E`, `6C4B0536-4A42-426F-95CB-B4CBA78EC485`).
+### [CRÍTICO] potência declarada vs V×I
+- **Regra:** `ratio > 1,25` impossível.
+- **Afetados:** 69 de 71 linhas (97,2 %; 62 sobre + 7 sub). Exemplos: `02C150F9-2109-4E8F-8D0A-ED5BC269E2CD`, `D4D10F10-E9C5-41E1-B52A-6767E0423CE9` (site `VNG-00264`), `044BDB0B-FFBA-4C02-8F73-2504699AC85F` (site `PRT-00372`).
 - **Evidência:**
 
-| ponto | site | tomada / modo | tensão / corrente / declarada |
-|---|---|---|---|
-| `23D61AA5-F0C1-4D0C-B348-1B3DF2411337` | `PRT-00377` | iec62196T2 / mode3AC3p | 400 V / 32 A / 0 W |
-| `6420E6CD-3A7F-4E2C-85F3-3C921103466E` | `PRT-00377` | iec62196T2 / mode3AC3p | 400 V / 32 A / 0 W |
-| `6C4B0536-4A42-426F-95CB-B4CBA78EC485` | `PRT-00377` | iec62196T2 / mode3AC3p | 400 V / 32 A / 0 W |
-| `72F76EA0-2824-4839-AC1D-484C684F4ABB` | `PRT-00377` | iec62196T2 / mode3AC3p | 400 V / 32 A / 0 W |
-| `BD66C895-53E9-4311-9E3F-5B812D0ADB73` | `PRT-00377` | iec62196T2 / mode3AC3p | 400 V / 32 A / 0 W |
-- **Veredito:** impossível — potência zero com 400 V / 32 A declarados; registo por preencher.
+| ponto | site | tomada | modo | tensão / corrente / declarada / esperada | ratio |
+|---|---|---|---|---|---|
+| `02C150F9-2109-4E8F-8D0A-ED5BC269E2CD` | `VNG-00264` | iec62196T2COMBO | mode4DC | 400 V / 43 A / 30 kW / 17.2 kW | 1.74 |
+| `D4D10F10-E9C5-41E1-B52A-6767E0423CE9` | `VNG-00264` | iec62196T2COMBO | mode4DC | 400 V / 43 A / 30 kW / 17.2 kW | 1.74 |
+| `044BDB0B-FFBA-4C02-8F73-2504699AC85F` | `PRT-00372` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22 kW / 12.7479 kW | 1.73 |
+| … | … | … | … | … | +66 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-EPKS)) |
+- **Veredito:** impossível (quase todas as linhas sobre-declaram ~1,7×; padrão de 22 kW colado em 230 V/32 A).
 
-### [MÉDIO] Sites com nº de pontos extremo
-- **Regra:** cauda da distribuição de `n_points` (fora dos 4 hubs Tesla, estes são os maiores).
-- **Afetados:** Exemplos: `PRT-00372`, `044BDB0B-FFBA-4C02-8F73-2504699AC85F`, `PRT-00377` — `PRT-00372` (20 pontos, ex. `044BDB0B-FFBA-4C02-8F73-2504699AC85F`, `29FA5C24-A4C3-47B8-853D-196766AB06BD`, `3464669A-1C87-4466-B359-D1C4B2DF1FB3`) e `PRT-00377` (15 pontos).
-- **Evidência:** `nap_static_sites.csv` `EPK-PRT-00372` e `EPK-PRT-00377`; contagens confirmadas em `nap_static_points.csv` (ver seccão de rotatividade: este OPC duplicou de tamanho numa semana).
-- **Veredito:** suspeito (a confirmar) — plausível em parques de estacionamento, mas a conjugação com potência nula em `PRT-00377` recomenda auditoria.
+### [CRÍTICO] `max_power_w` zero
+- **Regra:** potência nula/zero/negativa é inválida; 5 linhas zero no snapshot, todas EPKS.
+- **Afetados:** 5 de 71 linhas (7,0 %), todas no site `PRT-00377` (15 pontos). Exemplos: `23D61AA5-F0C1-4D0C-B348-1B3DF2411337`, `6420E6CD-3A7F-4E2C-85F3-3C921103466E`, `6C4B0536-4A42-426F-95CB-B4CBA78EC485`, `72F76EA0-2824-4839-AC1D-484C684F4ABB`, `BD66C895-53E9-4311-9E3F-5B812D0ADB73`.
+- **Evidência:**
 
-### [BAIXO] `usage_type` em falta
-- **Regra:** `usage_type` vazio ou fora do enum do XSD (`energyInfrastructure.xsd`).
-- **Afetados:** 71 linhas de conector. Exemplos: `044BDB0B-FFBA-4C02-8F73-2504699AC85F`, `29FA5C24-A4C3-47B8-853D-196766AB06BD`, `3464669A-1C87-4466-B359-D1C4B2DF1FB3`, `PRT-00372`.
-- **Evidência:** `nap_static_points.csv` coluna `usage_type` vazia nestas linhas; total global 635 linhas em falta (só este OPC: 71).
-- **Veredito:** suspeito (metadado omisso) — campo fora do enum, assumedível como uso público mas por confirmar.
+| ponto | site | tomada | modo | V / A / declarada |
+|---|---|---|---|---|
+| `23D61AA5-F0C1-4D0C-B348-1B3DF2411337` | `PRT-00377` | iec62196T2 | mode3AC3p | 400 V / 32 A / 0 kW |
+| `6420E6CD-3A7F-4E2C-85F3-3C921103466E` | `PRT-00377` | iec62196T2 | mode3AC3p | 400 V / 32 A / 0 kW |
+| `6C4B0536-4A42-426F-95CB-B4CBA78EC485` | `PRT-00377` | iec62196T2 | mode3AC3p | 400 V / 32 A / 0 kW |
+| `72F76EA0-2824-4839-AC1D-484C684F4ABB` | `PRT-00377` | iec62196T2 | mode3AC3p | 400 V / 32 A / 0 kW |
+| `BD66C895-53E9-4311-9E3F-5B812D0ADB73` | `PRT-00377` | iec62196T2 | mode3AC3p | 400 V / 32 A / 0 kW |
+- **Veredito:** impossível (conectores AC com 400 V/32 A e 0 kW) — potência por preencher no site `PRT-00377`.
+
+### [BAIXO] `usage_type` em falta + site extremo
+- **Regra:** `usage_type` fora do enum/nulo = metadado omisso; cauda de `n_points` = contagem extrema.
+- **Afetados:** 71 pontos EPKS sem usage_type; site `PRT-00372` com 20 pontos (top-6 do snapshot). Exemplos: `044BDB0B-FFBA-4C02-8F73-2504699AC85F`, `29FA5C24-A4C3-47B8-853D-196766AB06BD`, `3464669A-1C87-4466-B359-D1C4B2DF1FB3` (site `PRT-00372`), `PRT-00377` (15 pontos).
+- **Evidência:**
+
+| site | n_points | exemplo de ponto |
+|---|---|---|
+| `PRT-00372` | 20 | `044BDB0B-FFBA-4C02-8F73-2504699AC85F` |
+| `PRT-00372` | 20 | `29FA5C24-A4C3-47B8-853D-196766AB06BD` |
+| `PRT-00372` | 20 | `3464669A-1C87-4466-B359-D1C4B2DF1FB3` |
+| `PRT-00377` | 15 | `23D61AA5-F0C1-4D0C-B348-1B3DF2411337` |
+- **Veredito:** suspeito (parque fechado com 20 fichas UUID sem `usage_type`; contagem plausível para hub mas a confirmar em campo).
 
 [↑ índice](#indice)
 
@@ -631,28 +472,20 @@ Type2 em modo DC:
 <a id="opc-HEXA"></a>
 
 <details>
-<summary><b>HEXA — HEXAGONAL OCEAN, LDA (38 sites, 76 pontos)</b> · 1 CRÍTICO, 1 BAIXO</summary>
+<summary><b>HEXA — HEXAGONAL OCEAN, LDA (38 sites, 76 pontos)</b> · 1 CRÍTICO</summary>
 
-### [CRÍTICO] Potência sobre-declarada
-- **Regra:** `ratio = declarada / esperada > 1.25`; esperada = `V × I` (`√3 × V × I` em `mode3AC3p`; tolerância 25%).
-- **Afetados:** 34 linhas de conector em 34 pontos de 76 (44.7%). Exemplos: `CSC-00074-01`, `CSC-00074-02`, `CSC-00075-01`, `CSC-00074`, `CSC-00075`.
-- **Evidência:** tabela curta (≤10 linhas) com ids e valores. Os ficheiros exaustivos `Agents-outputs/anomalias-evidence.csv` (máquina, uma linha por conector) e `Agents-outputs/anomalias-details.md` (leitura no GitHub, por OPC) já foram gerados por `scripts/anomalias_evidence.py` — NÃO os regeneres nem listes todas as linhas no relatório.
+### [CRÍTICO] potência declarada vs V×I
+- **Regra:** `ratio > 1,25` impossível.
+- **Afetados:** 34 de 76 linhas (44,7 %, todas sobre). Exemplos: `CSC-00074-01`, `CSC-00074-02`, `CSC-00075-01` (sites `CSC-00074`, `CSC-00075`).
+- **Evidência:**
 
-| ponto | site | tomada / modo | tensao / corrente / declarada / esperada | ratio |
-|---|---|---|---|---|
-| `CSC-00074-01` | `CSC-00074` | iec62196T2 / mode2AC1p | 240 V / 32 A / 20.0 kW / 7.7 kW | 2.604 |
-| `CSC-00074-02` | `CSC-00074` | iec62196T2 / mode2AC1p | 240 V / 32 A / 20.0 kW / 7.7 kW | 2.604 |
-| `CSC-00075-01` | `CSC-00075` | iec62196T2 / mode2AC1p | 240 V / 32 A / 20.0 kW / 7.7 kW | 2.604 |
-| `CSC-00075-02` | `CSC-00075` | iec62196T2 / mode2AC1p | 240 V / 32 A / 20.0 kW / 7.7 kW | 2.604 |
-| `LSB-00820-01` | `LSB-00820` | iec62196T2 / mode3AC3p | 240 V / 16 A / 11.0 kW / 6.7 kW | 1.654 |
-| … | … | +29 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-HEXA)) |
-- **Veredito:** impossível — a potência declarada excede a capacidade física `V × I` para além da tolerância; indicia potência do posto herdada pela tomada ou erro de introdução.
-
-### [BAIXO] Fragmentação do nome do operador
-- **Regra:** um `operator_id` deve ter um único `operator_name`; variantes = fragmentação de grafias.
-- **Afetados:** 2 grafias (HEXAGONAL OCEAN, LDA; Hexagonal Ocean). Exemplos: `GMR-00067`, `GMR-00064`, `GMR-00067-01`, `HEXA`.
-- **Evidência:** `nap_static_sites.csv` por `operator_id=HEXA`: HEXAGONAL OCEAN, LDA ×36; Hexagonal Ocean ×2.
-- **Veredito:** suspeito (metadado) — mesma entidade, grafias divergentes; normalizar para a forma canónica.
+| ponto | site | tomada | modo | tensão / corrente / declarada / esperada | ratio |
+|---|---|---|---|---|---|
+| `CSC-00074-01` | `CSC-00074` | iec62196T2 | mode2AC1p | 240 V / 32 A / 20 kW / 7.68 kW | 2.60 |
+| `CSC-00074-02` | `CSC-00074` | iec62196T2 | mode2AC1p | 240 V / 32 A / 20 kW / 7.68 kW | 2.60 |
+| `CSC-00075-01` | `CSC-00075` | iec62196T2 | mode2AC1p | 240 V / 32 A / 20 kW / 7.68 kW | 2.60 |
+| … | … | … | … | … | +31 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-HEXA)) |
+- **Veredito:** impossível (20 kW monofásico a 240 V/32 A = 7,68 kW) — padrão repetido em 34 linhas.
 
 [↑ índice](#indice)
 
@@ -661,28 +494,42 @@ Type2 em modo DC:
 <a id="opc-EMEL"></a>
 
 <details>
-<summary><b>EMEL — EMEL - Empresa Municipal de Mobilidade e Estacionamento de Lisboa, E.M., S.A. (82 sites, 182 pontos)</b> · 1 CRÍTICO, 1 BAIXO</summary>
+<summary><b>EMEL — EMEL - Empresa Municipal de Mobilidade e Estacionamento de Lisboa, E.M., S.A. (82 sites, 182 pontos)</b> · 1 CRÍTICO</summary>
 
-### [CRÍTICO] Potência sobre-declarada
-- **Regra:** `ratio = declarada / esperada > 1.25`; esperada = `V × I` (`√3 × V × I` em `mode3AC3p`; tolerância 25%).
-- **Afetados:** 24 linhas de conector em 24 pontos de 182 (13.2%). Exemplos: `LSB-00938-01`, `LSB-00938-02`, `LSB-01021-01`, `LSB-00938`, `LSB-01021`.
-- **Evidência:** tabela curta (≤10 linhas) com ids e valores. Os ficheiros exaustivos `Agents-outputs/anomalias-evidence.csv` (máquina, uma linha por conector) e `Agents-outputs/anomalias-details.md` (leitura no GitHub, por OPC) já foram gerados por `scripts/anomalias_evidence.py` — NÃO os regeneres nem listes todas as linhas no relatório.
+### [CRÍTICO] potência declarada vs V×I
+- **Regra:** `ratio > 1,25` impossível.
+- **Afetados:** 24 de 182 linhas (13,2 %, todas sobre). Exemplos: `LSB-00938-01`, `LSB-00938-02`, `LSB-01021-01` (sites `LSB-00938`, `LSB-01021`).
+- **Evidência:**
 
-| ponto | site | tomada / modo | tensao / corrente / declarada / esperada | ratio |
-|---|---|---|---|---|
-| `LSB-00938-01` | `LSB-00938` | iec62196T2 / mode3AC3p | 230 V / 32 A / 22.0 kW / 12.7 kW | 1.726 |
-| `LSB-00938-02` | `LSB-00938` | iec62196T2 / mode3AC3p | 230 V / 32 A / 22.0 kW / 12.7 kW | 1.726 |
-| `LSB-01021-01` | `LSB-01021` | iec62196T2 / mode3AC3p | 230 V / 32 A / 22.0 kW / 12.7 kW | 1.726 |
-| `LSB-01021-02` | `LSB-01021` | iec62196T2 / mode3AC3p | 230 V / 32 A / 22.0 kW / 12.7 kW | 1.726 |
-| `LSB-01022-01` | `LSB-01022` | iec62196T2 / mode3AC3p | 230 V / 32 A / 22.0 kW / 12.7 kW | 1.726 |
-| … | … | +19 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-EMEL)) |
-- **Veredito:** impossível — a potência declarada excede a capacidade física `V × I` para além da tolerância; indicia potência do posto herdada pela tomada ou erro de introdução.
+| ponto | site | tomada | modo | tensão / corrente / declarada / esperada | ratio |
+|---|---|---|---|---|---|
+| `LSB-00938-01` | `LSB-00938` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22 kW / 12.7479 kW | 1.73 |
+| `LSB-00938-02` | `LSB-00938` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22 kW / 12.7479 kW | 1.73 |
+| `LSB-01021-01` | `LSB-01021` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22 kW / 12.7479 kW | 1.73 |
+| … | … | … | … | … | +21 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-EMEL)) |
+- **Veredito:** impossível (22 kW contra ~12,7 kW trifásicos) — mesmo padrão TRUE/EPKS em 24 linhas.
 
-### [BAIXO] Fragmentação do nome do operador
-- **Regra:** um `operator_id` deve ter um único `operator_name`; variantes = fragmentação de grafias.
-- **Afetados:** 2 grafias (EMEL; EMEL - Empresa Municipal de Mobilidade e Estacionamento de Lisboa, E.M., S.A.). Exemplos: `LSB-00456`, `LSB-00457`, `LSB-00455`, `LSB-00456-01`, `EMEL`.
-- **Evidência:** `nap_static_sites.csv` por `operator_id=EMEL`: EMEL ×3; EMEL - Empresa Municipal de Mobilidade e Estacionamento de Lisboa, E.M., S.A. ×79.
-- **Veredito:** suspeito (metadado) — mesma entidade, grafias divergentes; normalizar para a forma canónica.
+[↑ índice](#indice)
+
+</details>
+
+<a id="opc-MOON"></a>
+
+<details>
+<summary><b>MOON — Siva - Sociedade de Importação de Veículos Automóveis / (sub-CEME da Iberdola) (26 sites, 56 pontos)</b> · 1 CRÍTICO</summary>
+
+### [CRÍTICO] potência declarada vs V×I
+- **Regra:** `ratio > 1,25` impossível; `ratio < 0,75` suspeito.
+- **Afetados:** 25 de 59 linhas (42,4 %; 15 sobre + 10 sub). Exemplos: `AZB-00016-12581432`, `AZB-00016-12581433`, `AZB-00016-12581434` (site `AZB-00016`).
+- **Evidência:**
+
+| ponto | site | tomada | modo | tensão / corrente / declarada / esperada | ratio |
+|---|---|---|---|---|---|
+| `AZB-00016-12581432` | `AZB-00016` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22.079 kW / 12.7479 kW | 1.73 |
+| `AZB-00016-12581433` | `AZB-00016` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22.079 kW / 12.7479 kW | 1.73 |
+| `AZB-00016-12581434` | `AZB-00016` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22.079 kW / 12.7479 kW | 1.73 |
+| … | … | … | … | … | +22 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-MOON)) |
+- **Veredito:** impossível para as 15 sobre (22,079 kW contra ~12,7 kW); 10 sub suspeitas.
 
 [↑ índice](#indice)
 
@@ -693,59 +540,18 @@ Type2 em modo DC:
 <details>
 <summary><b>MAKS — Maksu (333 sites, 370 pontos)</b> · 1 CRÍTICO</summary>
 
-### [CRÍTICO] Potência sobre-declarada
-- **Regra:** `ratio = declarada / esperada > 1.25`; esperada = `V × I` (`√3 × V × I` em `mode3AC3p`; tolerância 25%).
-- **Afetados:** 15 linhas de conector em 15 pontos de 370 (4.1%). Exemplos: `CSC-00065-1`, `CSC-00066-1`, `LSB-01183-01`, `CSC-00065`, `CSC-00066`.
-- **Evidência:** tabela curta (≤10 linhas) com ids e valores. Os ficheiros exaustivos `Agents-outputs/anomalias-evidence.csv` (máquina, uma linha por conector) e `Agents-outputs/anomalias-details.md` (leitura no GitHub, por OPC) já foram gerados por `scripts/anomalias_evidence.py` — NÃO os regeneres nem listes todas as linhas no relatório.
+### [CRÍTICO] potência declarada vs V×I
+- **Regra:** `ratio > 1,25` impossível.
+- **Afetados:** 15 de 370 linhas (4,1 %, todas sobre). Exemplos: `LSB-01183-01`, `LSB-01183-02`, `LSB-01336-01` (sites `LSB-01183`, `LSB-01336`).
+- **Evidência:**
 
-| ponto | site | tomada / modo | tensao / corrente / declarada / esperada | ratio |
-|---|---|---|---|---|
-| `LSB-01183-01` | `LSB-01183` | iec62196T2COMBO / mode4DC | 400 V / 173 A / 120.0 kW / 69.2 kW | 1.734 |
-| `LSB-01183-02` | `LSB-01183` | iec62196T2COMBO / mode4DC | 400 V / 173 A / 120.0 kW / 69.2 kW | 1.734 |
-| `LSB-01336-01` | `LSB-01336` | iec62196T2COMBO / mode4DC | 400 V / 173 A / 120.0 kW / 69.2 kW | 1.734 |
-| `LSB-01336-02` | `LSB-01336` | iec62196T2COMBO / mode4DC | 400 V / 173 A / 120.0 kW / 69.2 kW | 1.734 |
-| `PRT-00200-01` | `PRT-00200` | iec62196T2 / mode2AC1p | 400 V / 32 A / 22.0 kW / 12.8 kW | 1.719 |
-| … | … | +10 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-MAKS)) |
-- **Veredito:** impossível — a potência declarada excede a capacidade física `V × I` para além da tolerância; indicia potência do posto herdada pela tomada ou erro de introdução.
-
-[↑ índice](#indice)
-
-</details>
-
-<a id="opc-MOON"></a>
-
-<details>
-<summary><b>MOON — Siva - Sociedade de Importação de Veículos Automóveis / (sub-CEME da Iberdola) (26 sites, 56 pontos)</b> · 1 CRÍTICO, 1 MÉDIO</summary>
-
-### [CRÍTICO] Potência sobre-declarada
-- **Regra:** `ratio = declarada / esperada > 1.25`; esperada = `V × I` (`√3 × V × I` em `mode3AC3p`; tolerância 25%).
-- **Afetados:** 15 linhas de conector em 15 pontos de 56 (26.8%). Exemplos: `AMT-00007-1`, `AZB-00016-12581432`, `AZB-00016-12581433`, `AMT-00007`, `AZB-00016`.
-- **Evidência:** tabela curta (≤10 linhas) com ids e valores. Os ficheiros exaustivos `Agents-outputs/anomalias-evidence.csv` (máquina, uma linha por conector) e `Agents-outputs/anomalias-details.md` (leitura no GitHub, por OPC) já foram gerados por `scripts/anomalias_evidence.py` — NÃO os regeneres nem listes todas as linhas no relatório.
-
-| ponto | site | tomada / modo | tensao / corrente / declarada / esperada | ratio |
-|---|---|---|---|---|
-| `AZB-00016-12581432` | `AZB-00016` | iec62196T2 / mode3AC3p | 230 V / 32 A / 22.1 kW / 12.7 kW | 1.732 |
-| `AZB-00016-12581433` | `AZB-00016` | iec62196T2 / mode3AC3p | 230 V / 32 A / 22.1 kW / 12.7 kW | 1.732 |
-| `AZB-00016-12581434` | `AZB-00016` | iec62196T2 / mode3AC3p | 230 V / 32 A / 22.1 kW / 12.7 kW | 1.732 |
-| `AZB-00016-26022602` | `AZB-00016` | iec62196T2 / mode3AC3p | 230 V / 32 A / 22.1 kW / 12.7 kW | 1.732 |
-| `AZB-00016-26022603` | `AZB-00016` | iec62196T2 / mode3AC3p | 230 V / 32 A / 22.1 kW / 12.7 kW | 1.732 |
-| … | … | +10 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-MOON)) |
-- **Veredito:** impossível — a potência declarada excede a capacidade física `V × I` para além da tolerância; indicia potência do posto herdada pela tomada ou erro de introdução.
-
-### [MÉDIO] Potência sub-declarada (derating)
-- **Regra:** `ratio = declarada / esperada < 0.75` (mesma esperada e tolerância).
-- **Afetados:** 10 linhas de conector em 9 pontos de 56 (16.1%). Exemplos: `LRA-00047-01`, `LRA-00047-02`, `LRA-00047-03`, `LRA-00047`, `LRS-00152`.
-- **Evidência:** tabela curta (≤10 linhas) com ids e valores. Os ficheiros exaustivos `Agents-outputs/anomalias-evidence.csv` (máquina, uma linha por conector) e `Agents-outputs/anomalias-details.md` (leitura no GitHub, por OPC) já foram gerados por `scripts/anomalias_evidence.py` — NÃO os regeneres nem listes todas as linhas no relatório.
-
-| ponto | site | tomada / modo | tensao / corrente / declarada / esperada | ratio |
-|---|---|---|---|---|
-| `LSB-00704-01` | `LSB-00704` | iec62196T2COMBO / mode4DC | 1000 V / 500 A / 75.0 kW / 500.0 kW | 0.150 |
-| `LRS-00152-02` | `LRS-00152` | iec62196T2 / mode3AC3p | 400 V / 64 A / 22.0 kW / 44.3 kW | 0.496 |
-| `LRA-00047-03` | `LRA-00047` | iec62196T2 / mode3AC3p | 400 V / 63 A / 22.0 kW / 43.6 kW | 0.504 |
-| `PNF-00017-03` | `PNF-00017` | iec62196T2 / mode3AC3p | 400 V / 63 A / 22.0 kW / 43.6 kW | 0.504 |
-| `LSB-00703-01` | `LSB-00703` | iec62196T2COMBO / mode4DC | 1000 V / 350 A / 180.0 kW / 350.0 kW | 0.514 |
-| … | … | +5 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-MOON)) |
-- **Veredito:** suspeito — declarada 25%+ abaixo da capacidade `V × I`; provável derating operacional, limitação partilhada ou erro de introdução (não viola física).
+| ponto | site | tomada | modo | tensão / corrente / declarada / esperada | ratio |
+|---|---|---|---|---|---|
+| `LSB-01183-01` | `LSB-01183` | iec62196T2COMBO | mode4DC | 400 V / 173 A / 120 kW / 69.2 kW | 1.73 |
+| `LSB-01183-02` | `LSB-01183` | iec62196T2COMBO | mode4DC | 400 V / 173 A / 120 kW / 69.2 kW | 1.73 |
+| `LSB-01336-01` | `LSB-01336` | iec62196T2COMBO | mode4DC | 400 V / 173 A / 120 kW / 69.2 kW | 1.73 |
+| … | … | … | … | … | +12 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-MAKS)) |
+- **Veredito:** impossível (120 kW contra 69,2 kW a 400 V/173 A) — sobre-declaração repetida em 15 linhas DC.
 
 [↑ índice](#indice)
 
@@ -754,33 +560,20 @@ Type2 em modo DC:
 <a id="opc-VEIM"></a>
 
 <details>
-<summary><b>VEIM — Veimonte Lda (20 sites, 35 pontos)</b> · 1 CRÍTICO, 1 MÉDIO</summary>
+<summary><b>VEIM — Veimonte Lda (20 sites, 35 pontos)</b> · 1 CRÍTICO</summary>
 
-### [CRÍTICO] Potência sobre-declarada
-- **Regra:** `ratio = declarada / esperada > 1.25`; esperada = `V × I` (`√3 × V × I` em `mode3AC3p`; tolerância 25%).
-- **Afetados:** 10 linhas de conector em 10 pontos de 35 (28.6%). Exemplos: `EPS-00005-01`, `EPS-00005-02`, `MMN-00004-01`, `EPS-00005`, `MMN-00004`.
-- **Evidência:** tabela curta (≤10 linhas) com ids e valores. Os ficheiros exaustivos `Agents-outputs/anomalias-evidence.csv` (máquina, uma linha por conector) e `Agents-outputs/anomalias-details.md` (leitura no GitHub, por OPC) já foram gerados por `scripts/anomalias_evidence.py` — NÃO os regeneres nem listes todas as linhas no relatório.
+### [CRÍTICO] potência declarada vs V×I
+- **Regra:** `ratio > 1,25` impossível.
+- **Afetados:** 12 de 35 linhas (34,3 %; 10 sobre + 2 sub). Exemplos: `EPS-00005-01`, `EPS-00005-02`, `PRT-00211-01` (sites `EPS-00005`, `PRT-00211`).
+- **Evidência:**
 
-| ponto | site | tomada / modo | tensao / corrente / declarada / esperada | ratio |
-|---|---|---|---|---|
-| `EPS-00005-01` | `EPS-00005` | chademo / mode4DC | 400 V / 63 A / 60.0 kW / 25.2 kW | 2.381 |
-| `EPS-00005-02` | `EPS-00005` | iec62196T2COMBO / mode4DC | 400 V / 63 A / 60.0 kW / 25.2 kW | 2.381 |
-| `PRT-00211-01` | `PRT-00211` | chademo / mode4DC | 400 V / 63 A / 60.0 kW / 25.2 kW | 2.381 |
-| `PRT-00211-02` | `PRT-00211` | iec62196T2COMBO / mode4DC | 400 V / 63 A / 60.0 kW / 25.2 kW | 2.381 |
-| `VCD-00040-01` | `VCD-00040` | chademo / mode4DC | 400 V / 63 A / 60.0 kW / 25.2 kW | 2.381 |
-| … | … | +5 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-VEIM)) |
-- **Veredito:** impossível — a potência declarada excede a capacidade física `V × I` para além da tolerância; indicia potência do posto herdada pela tomada ou erro de introdução.
-
-### [MÉDIO] Potência sub-declarada (derating)
-- **Regra:** `ratio = declarada / esperada < 0.75` (mesma esperada e tolerância).
-- **Afetados:** 2 linhas de conector em 2 pontos de 35 (5.7%). Exemplos: `RDD-00003-01`, `RDD-00004-01`, `RDD-00003`, `RDD-00004`.
-- **Evidência:** tabela curta (≤10 linhas) com ids e valores. Os ficheiros exaustivos `Agents-outputs/anomalias-evidence.csv` (máquina, uma linha por conector) e `Agents-outputs/anomalias-details.md` (leitura no GitHub, por OPC) já foram gerados por `scripts/anomalias_evidence.py` — NÃO os regeneres nem listes todas as linhas no relatório.
-
-| ponto | site | tomada / modo | tensao / corrente / declarada / esperada | ratio |
-|---|---|---|---|---|
-| `RDD-00003-01` | `RDD-00003` | iec62196T2 / mode2AC1p | 400 V / 32 A / 7.4 kW / 12.8 kW | 0.578 |
-| `RDD-00004-01` | `RDD-00004` | iec62196T2 / mode2AC1p | 400 V / 32 A / 7.4 kW / 12.8 kW | 0.578 |
-- **Veredito:** suspeito — declarada 25%+ abaixo da capacidade `V × I`; provável derating operacional, limitação partilhada ou erro de introdução (não viola física).
+| ponto | site | tomada | modo | tensão / corrente / declarada / esperada | ratio |
+|---|---|---|---|---|---|
+| `EPS-00005-01` | `EPS-00005` | chademo | mode4DC | 400 V / 63 A / 60 kW / 25.2 kW | 2.38 |
+| `EPS-00005-02` | `EPS-00005` | iec62196T2COMBO | mode4DC | 400 V / 63 A / 60 kW / 25.2 kW | 2.38 |
+| `PRT-00211-01` | `PRT-00211` | chademo | mode4DC | 400 V / 63 A / 60 kW / 25.2 kW | 2.38 |
+| … | … | … | … | … | +9 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-VEIM)) |
+- **Veredito:** impossível (60 kW contra 25,2 kW a 400 V/63 A) — 10 linhas DC sobre-declaradas > 2×.
 
 [↑ índice](#indice)
 
@@ -789,43 +582,20 @@ Type2 em modo DC:
 <a id="opc-MLTR"></a>
 
 <details>
-<summary><b>MLTR — Mobiletric (108 sites, 257 pontos)</b> · 1 CRÍTICO, 1 MÉDIO, 1 BAIXO</summary>
+<summary><b>MLTR — Mobiletric (108 sites, 257 pontos)</b> · 1 CRÍTICO</summary>
 
-### [CRÍTICO] Potência sobre-declarada
-- **Regra:** `ratio = declarada / esperada > 1.25`; esperada = `V × I` (`√3 × V × I` em `mode3AC3p`; tolerância 25%).
-- **Afetados:** 8 linhas de conector em 8 pontos de 257 (3.1%). Exemplos: `CSC-00086-01`, `CSC-00086-1`, `LSB-00296-02`, `CSC-00086`, `LSB-00296`.
-- **Evidência:** tabela curta (≤10 linhas) com ids e valores. Os ficheiros exaustivos `Agents-outputs/anomalias-evidence.csv` (máquina, uma linha por conector) e `Agents-outputs/anomalias-details.md` (leitura no GitHub, por OPC) já foram gerados por `scripts/anomalias_evidence.py` — NÃO os regeneres nem listes todas as linhas no relatório.
+### [CRÍTICO] potência declarada vs V×I
+- **Regra:** `ratio > 1,25` impossível; `ratio < 0,75` suspeito.
+- **Afetados:** 27 de 257 linhas (10,5 %; 8 sobre + 19 sub). Exemplos: `CSC-00086-01`, `CSC-00086-1`, `TVD-00017-01` (sites `CSC-00086`, `TVD-00017`).
+- **Evidência:**
 
-| ponto | site | tomada / modo | tensao / corrente / declarada / esperada | ratio |
-|---|---|---|---|---|
-| `CSC-00086-01` | `CSC-00086` | iec62196T2 / mode2AC1p | 240 V / 16 A / 11.0 kW / 3.8 kW | 2.865 |
-| `CSC-00086-1` | `CSC-00086` | iec62196T2 / mode2AC1p | 240 V / 16 A / 11.0 kW / 3.8 kW | 2.865 |
-| `TVD-00017-01` | `TVD-00017` | iec62196T2 / mode2AC1p | 240 V / 32 A / 22.0 kW / 7.7 kW | 2.865 |
-| `TVD-00017-1` | `TVD-00017` | iec62196T2 / mode2AC1p | 240 V / 32 A / 22.0 kW / 7.7 kW | 2.865 |
-| `TVD-00018-01` | `TVD-00018` | iec62196T2 / mode2AC1p | 240 V / 32 A / 22.0 kW / 7.7 kW | 2.865 |
-| … | … | +3 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-MLTR)) |
-- **Veredito:** impossível — a potência declarada excede a capacidade física `V × I` para além da tolerância; indicia potência do posto herdada pela tomada ou erro de introdução.
-
-### [MÉDIO] Potência sub-declarada (derating)
-- **Regra:** `ratio = declarada / esperada < 0.75` (mesma esperada e tolerância).
-- **Afetados:** 19 linhas de conector em 19 pontos de 257 (7.4%). Exemplos: `FUN-00004-01`, `LSB-00351-02`, `MTA-00004-01`, `FUN-00004`, `LSB-00351`.
-- **Evidência:** tabela curta (≤10 linhas) com ids e valores. Os ficheiros exaustivos `Agents-outputs/anomalias-evidence.csv` (máquina, uma linha por conector) e `Agents-outputs/anomalias-details.md` (leitura no GitHub, por OPC) já foram gerados por `scripts/anomalias_evidence.py` — NÃO os regeneres nem listes todas as linhas no relatório.
-
-| ponto | site | tomada / modo | tensao / corrente / declarada / esperada | ratio |
-|---|---|---|---|---|
-| `OER-00099-01` | `OER-00099` | iec62196T2COMBO / mode4DC | 950 V / 195 A / 60.0 kW / 185.2 kW | 0.324 |
-| `OER-00099-02` | `OER-00099` | iec62196T2COMBO / mode4DC | 950 V / 195 A / 60.0 kW / 185.2 kW | 0.324 |
-| `MTA-00004-01` | `MTA-00004` | iec62196T2COMBO / mode4DC | 950 V / 195 A / 90.0 kW / 185.2 kW | 0.486 |
-| `MTA-00004-02` | `MTA-00004` | iec62196T2COMBO / mode4DC | 950 V / 195 A / 90.0 kW / 185.2 kW | 0.486 |
-| `MTA-00005-02` | `MTA-00005` | iec62196T2COMBO / mode4DC | 950 V / 195 A / 90.0 kW / 185.2 kW | 0.486 |
-| … | … | +14 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-MLTR)) |
-- **Veredito:** suspeito — declarada 25%+ abaixo da capacidade `V × I`; provável derating operacional, limitação partilhada ou erro de introdução (não viola física).
-
-### [BAIXO] Fragmentação do nome do operador
-- **Regra:** um `operator_id` deve ter um único `operator_name`; variantes = fragmentação de grafias.
-- **Afetados:** 2 grafias (Mobiletric; Mobiletric, LDA). Exemplos: `OER-00011`, `OER-00034`, `VPT-00001`, `OER-00011-01`, `MLTR`.
-- **Evidência:** `nap_static_sites.csv` por `operator_id=MLTR`: Mobiletric ×103; Mobiletric, LDA ×5.
-- **Veredito:** suspeito (metadado) — mesma entidade, grafias divergentes; normalizar para a forma canónica.
+| ponto | site | tomada | modo | tensão / corrente / declarada / esperada | ratio |
+|---|---|---|---|---|---|
+| `CSC-00086-01` | `CSC-00086` | iec62196T2 | mode2AC1p | 240 V / 16 A / 11 kW / 3.84 kW | 2.87 |
+| `CSC-00086-1` | `CSC-00086` | iec62196T2 | mode2AC1p | 240 V / 16 A / 11 kW / 3.84 kW | 2.87 |
+| `TVD-00017-01` | `TVD-00017` | iec62196T2 | mode2AC1p | 240 V / 32 A / 22 kW / 7.68 kW | 2.87 |
+| … | … | … | … | … | +24 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-MLTR)) |
+- **Veredito:** impossível para as 8 sobre (11 kW a 240 V/16 A = 3,84 kW); notar `CSC-00086-01` vs `CSC-00086-1` — sufixo de tomada duplicado com e sem zero (ver chaves eMI3).
 
 [↑ índice](#indice)
 
@@ -834,37 +604,20 @@ Type2 em modo DC:
 <a id="opc-EVCE"></a>
 
 <details>
-<summary><b>EVCE — EVCE POWER, LDA. / MOBISMART (51 sites, 89 pontos)</b> · 1 CRÍTICO, 1 MÉDIO</summary>
+<summary><b>EVCE — EVCE POWER, LDA. / MOBISMART (51 sites, 89 pontos)</b> · 1 CRÍTICO</summary>
 
-### [CRÍTICO] Potência sobre-declarada
-- **Regra:** `ratio = declarada / esperada > 1.25`; esperada = `V × I` (`√3 × V × I` em `mode3AC3p`; tolerância 25%).
-- **Afetados:** 6 linhas de conector em 6 pontos de 89 (6.7%). Exemplos: `BCL-00033-01`, `BCL-00033-02`, `BRG-00133-01`, `BCL-00033`, `BRG-00133`.
-- **Evidência:** tabela curta (≤10 linhas) com ids e valores. Os ficheiros exaustivos `Agents-outputs/anomalias-evidence.csv` (máquina, uma linha por conector) e `Agents-outputs/anomalias-details.md` (leitura no GitHub, por OPC) já foram gerados por `scripts/anomalias_evidence.py` — NÃO os regeneres nem listes todas as linhas no relatório.
+### [CRÍTICO] potência declarada vs V×I
+- **Regra:** `ratio > 1,25` impossível; `ratio < 0,75` suspeito.
+- **Afetados:** 23 de 89 linhas (25,8 %; 6 sobre + 17 sub). Exemplos: `BCL-00033-01`, `BCL-00033-02`, `BRG-00133-01` (sites `BCL-00033`, `BRG-00133`).
+- **Evidência:**
 
-| ponto | site | tomada / modo | tensao / corrente / declarada / esperada | ratio |
-|---|---|---|---|---|
-| `BCL-00033-01` | `BCL-00033` | iec62196T2 / mode3AC3p | 240 V / 32 A / 22.0 kW / 13.3 kW | 1.654 |
-| `BCL-00033-02` | `BCL-00033` | iec62196T2 / mode3AC3p | 240 V / 32 A / 22.0 kW / 13.3 kW | 1.654 |
-| `BRG-00133-01` | `BRG-00133` | iec62196T2 / mode3AC3p | 240 V / 32 A / 22.0 kW / 13.3 kW | 1.654 |
-| `BRG-00133-02` | `BRG-00133` | iec62196T2 / mode3AC3p | 240 V / 32 A / 22.0 kW / 13.3 kW | 1.654 |
-| `BRG-00134-01` | `BRG-00134` | iec62196T2 / mode3AC3p | 240 V / 32 A / 22.0 kW / 13.3 kW | 1.654 |
-| … | … | +1 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-EVCE)) |
-- **Veredito:** impossível — a potência declarada excede a capacidade física `V × I` para além da tolerância; indicia potência do posto herdada pela tomada ou erro de introdução.
-
-### [MÉDIO] Potência sub-declarada (derating)
-- **Regra:** `ratio = declarada / esperada < 0.75` (mesma esperada e tolerância).
-- **Afetados:** 17 linhas de conector em 17 pontos de 89 (19.1%). Exemplos: `AVV-00003-01`, `AVV-00003-02`, `AVV-00011-02`, `AVV-00003`, `AVV-00011`.
-- **Evidência:** tabela curta (≤10 linhas) com ids e valores. Os ficheiros exaustivos `Agents-outputs/anomalias-evidence.csv` (máquina, uma linha por conector) e `Agents-outputs/anomalias-details.md` (leitura no GitHub, por OPC) já foram gerados por `scripts/anomalias_evidence.py` — NÃO os regeneres nem listes todas as linhas no relatório.
-
-| ponto | site | tomada / modo | tensao / corrente / declarada / esperada | ratio |
-|---|---|---|---|---|
-| `PVL-00005-1` | `PVL-00005` | iec62196T2 / mode3AC3p | 400 V / 16 A / 3.7 kW / 11.1 kW | 0.334 |
-| `AVV-00003-01` | `AVV-00003` | iec62196T2COMBO / mode4DC | 1000 V / 125 A / 50.0 kW / 125.0 kW | 0.400 |
-| `AVV-00003-02` | `AVV-00003` | chademo / mode4DC | 1000 V / 125 A / 50.0 kW / 125.0 kW | 0.400 |
-| `ORM-00014-01` | `ORM-00014` | iec62196T2COMBO / mode4DC | 1000 V / 125 A / 50.0 kW / 125.0 kW | 0.400 |
-| `ORM-00014-02` | `ORM-00014` | chademo / mode4DC | 1000 V / 125 A / 50.0 kW / 125.0 kW | 0.400 |
-| … | … | +12 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-EVCE)) |
-- **Veredito:** suspeito — declarada 25%+ abaixo da capacidade `V × I`; provável derating operacional, limitação partilhada ou erro de introdução (não viola física).
+| ponto | site | tomada | modo | tensão / corrente / declarada / esperada | ratio |
+|---|---|---|---|---|---|
+| `BCL-00033-01` | `BCL-00033` | iec62196T2 | mode3AC3p | 240 V / 32 A / 22 kW / 13.3022 kW | 1.65 |
+| `BCL-00033-02` | `BCL-00033` | iec62196T2 | mode3AC3p | 240 V / 32 A / 22 kW / 13.3022 kW | 1.65 |
+| `BRG-00133-01` | `BRG-00133` | iec62196T2 | mode3AC3p | 240 V / 32 A / 22 kW / 13.3022 kW | 1.65 |
+| … | … | … | … | … | +20 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-EVCE)) |
+- **Veredito:** impossível para as 6 sobre (22 kW contra ~13,3 kW); 17 sub suspeitas.
 
 [↑ índice](#indice)
 
@@ -873,39 +626,20 @@ Type2 em modo DC:
 <a id="opc-KLCS"></a>
 
 <details>
-<summary><b>KLCS — Kilometer Low Cost II Serviços, SA (86 sites, 107 pontos)</b> · 1 CRÍTICO, 1 MÉDIO, 1 BAIXO</summary>
+<summary><b>KLCS — Kilometer Low Cost II Serviços, SA (86 sites, 107 pontos)</b> · 1 CRÍTICO</summary>
 
-### [CRÍTICO] Potência sobre-declarada
-- **Regra:** `ratio = declarada / esperada > 1.25`; esperada = `V × I` (`√3 × V × I` em `mode3AC3p`; tolerância 25%).
-- **Afetados:** 6 linhas de conector em 6 pontos de 107 (5.6%). Exemplos: `AVR-00105-01`, `AVR-00105-02`, `TBC-00004-01`, `AVR-00105`, `TBC-00004`.
-- **Evidência:** tabela curta (≤10 linhas) com ids e valores. Os ficheiros exaustivos `Agents-outputs/anomalias-evidence.csv` (máquina, uma linha por conector) e `Agents-outputs/anomalias-details.md` (leitura no GitHub, por OPC) já foram gerados por `scripts/anomalias_evidence.py` — NÃO os regeneres nem listes todas as linhas no relatório.
+### [CRÍTICO] potência declarada vs V×I
+- **Regra:** `ratio > 1,25` impossível; `ratio < 0,75` suspeito.
+- **Afetados:** 8 de 107 linhas (7,5 %; 6 sobre + 2 sub). Exemplos: `TBC-00004-01`, `TBC-00004-02`, `VBP-00008-01` (sites `TBC-00004`, `VBP-00008`).
+- **Evidência:**
 
-| ponto | site | tomada / modo | tensao / corrente / declarada / esperada | ratio |
-|---|---|---|---|---|
-| `TBC-00004-01` | `TBC-00004` | iec62196T2 / mode3AC3p | 400 V / 16 A / 22.0 kW / 11.1 kW | 1.985 |
-| `TBC-00004-02` | `TBC-00004` | iec62196T2 / mode3AC3p | 400 V / 16 A / 22.0 kW / 11.1 kW | 1.985 |
-| `VBP-00008-01` | `VBP-00008` | iec62196T2 / mode3AC3p | 400 V / 16 A / 22.0 kW / 11.1 kW | 1.985 |
-| `VBP-00008-02` | `VBP-00008` | iec62196T2 / mode3AC3p | 400 V / 16 A / 22.0 kW / 11.1 kW | 1.985 |
-| `AVR-00105-01` | `AVR-00105` | iec62196T2 / mode3AC3p | 230 V / 32 A / 22.0 kW / 12.7 kW | 1.726 |
-| … | … | +1 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-KLCS)) |
-- **Veredito:** impossível — a potência declarada excede a capacidade física `V × I` para além da tolerância; indicia potência do posto herdada pela tomada ou erro de introdução.
-
-### [MÉDIO] Potência sub-declarada (derating)
-- **Regra:** `ratio = declarada / esperada < 0.75` (mesma esperada e tolerância).
-- **Afetados:** 2 linhas de conector em 2 pontos de 107 (1.9%). Exemplos: `CLB-00010-01`, `CLB-00011-01`, `CLB-00010`, `CLB-00011`.
-- **Evidência:** tabela curta (≤10 linhas) com ids e valores. Os ficheiros exaustivos `Agents-outputs/anomalias-evidence.csv` (máquina, uma linha por conector) e `Agents-outputs/anomalias-details.md` (leitura no GitHub, por OPC) já foram gerados por `scripts/anomalias_evidence.py` — NÃO os regeneres nem listes todas as linhas no relatório.
-
-| ponto | site | tomada / modo | tensao / corrente / declarada / esperada | ratio |
-|---|---|---|---|---|
-| `CLB-00010-01` | `CLB-00010` | iec62196T2 / mode3AC3p | 400 V / 32 A / 7.4 kW / 22.2 kW | 0.334 |
-| `CLB-00011-01` | `CLB-00011` | iec62196T2 / mode3AC3p | 400 V / 32 A / 7.4 kW / 22.2 kW | 0.334 |
-- **Veredito:** suspeito — declarada 25%+ abaixo da capacidade `V × I`; provável derating operacional, limitação partilhada ou erro de introdução (não viola física).
-
-### [BAIXO] `usage_type` em falta
-- **Regra:** `usage_type` vazio ou fora do enum do XSD (`energyInfrastructure.xsd`).
-- **Afetados:** 9 linhas de conector. Exemplos: `SRP-00009-01`, `SRP-00010-01`, `FAR-00100-01`, `SRP-00009`.
-- **Evidência:** `nap_static_points.csv` coluna `usage_type` vazia nestas linhas; total global 635 linhas em falta (só este OPC: 9).
-- **Veredito:** suspeito (metadado omisso) — campo fora do enum, assumedível como uso público mas por confirmar.
+| ponto | site | tomada | modo | tensão / corrente / declarada / esperada | ratio |
+|---|---|---|---|---|---|
+| `TBC-00004-01` | `TBC-00004` | iec62196T2 | mode3AC3p | 400 V / 16 A / 22 kW / 11.0851 kW | 1.99 |
+| `TBC-00004-02` | `TBC-00004` | iec62196T2 | mode3AC3p | 400 V / 16 A / 22 kW / 11.0851 kW | 1.99 |
+| `VBP-00008-01` | `VBP-00008` | iec62196T2 | mode3AC3p | 400 V / 16 A / 22 kW / 11.0851 kW | 1.99 |
+| … | … | … | … | … | +5 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-KLCS)) |
+- **Veredito:** impossível para as 6 sobre (22 kW contra ~11,1 kW a 400 V/16 A trifásico).
 
 [↑ índice](#indice)
 
@@ -916,18 +650,18 @@ Type2 em modo DC:
 <details>
 <summary><b>VISA — VISACASA - SERVIÇOS DE ASSISTÊNCIA E MANUTENÇÃO GLOBAL S.A. (6 sites, 14 pontos)</b> · 1 CRÍTICO</summary>
 
-### [CRÍTICO] Potência sobre-declarada
-- **Regra:** `ratio = declarada / esperada > 1.25`; esperada = `V × I` (`√3 × V × I` em `mode3AC3p`; tolerância 25%).
-- **Afetados:** 4 linhas de conector em 4 pontos de 14 (28.6%). Exemplos: `VIS-00021-01`, `VIS-00021-02`, `VIS-00022-01`, `VIS-00021`, `VIS-00022`.
-- **Evidência:** tabela curta (≤10 linhas) com ids e valores. Os ficheiros exaustivos `Agents-outputs/anomalias-evidence.csv` (máquina, uma linha por conector) e `Agents-outputs/anomalias-details.md` (leitura no GitHub, por OPC) já foram gerados por `scripts/anomalias_evidence.py` — NÃO os regeneres nem listes todas as linhas no relatório.
+### [CRÍTICO] potência declarada vs V×I
+- **Regra:** `ratio > 1,25` impossível.
+- **Afetados:** 4 de 14 linhas (28,6 %, todas sobre). Exemplos: `VIS-00021-01`, `VIS-00021-02`, `VIS-00022-01` (sites `VIS-00021`, `VIS-00022`).
+- **Evidência:**
 
-| ponto | site | tomada / modo | tensao / corrente / declarada / esperada | ratio |
-|---|---|---|---|---|
-| `VIS-00021-01` | `VIS-00021` | chademo / mode4DC | 500 V / 87 A / 60.0 kW / 43.5 kW | 1.379 |
-| `VIS-00021-02` | `VIS-00021` | iec62196T2COMBO / mode4DC | 500 V / 87 A / 60.0 kW / 43.5 kW | 1.379 |
-| `VIS-00022-01` | `VIS-00022` | chademo / mode4DC | 500 V / 87 A / 60.0 kW / 43.5 kW | 1.379 |
-| `VIS-00022-02` | `VIS-00022` | iec62196T2COMBO / mode4DC | 500 V / 87 A / 60.0 kW / 43.5 kW | 1.379 |
-- **Veredito:** impossível — a potência declarada excede a capacidade física `V × I` para além da tolerância; indicia potência do posto herdada pela tomada ou erro de introdução.
+| ponto | site | tomada | modo | tensão / corrente / declarada / esperada | ratio |
+|---|---|---|---|---|---|
+| `VIS-00021-01` | `VIS-00021` | chademo | mode4DC | 500 V / 87 A / 60 kW / 43.5 kW | 1.38 |
+| `VIS-00021-02` | `VIS-00021` | iec62196T2COMBO | mode4DC | 500 V / 87 A / 60 kW / 43.5 kW | 1.38 |
+| `VIS-00022-01` | `VIS-00022` | chademo | mode4DC | 500 V / 87 A / 60 kW / 43.5 kW | 1.38 |
+| … | … | … | … | … | +1 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-VISA)) |
+- **Veredito:** impossível (60 kW contra 43,5 kW a 500 V/87 A) — 4 linhas DC do mesmo padrão.
 
 [↑ índice](#indice)
 
@@ -936,40 +670,20 @@ Type2 em modo DC:
 <a id="opc-GLPG"></a>
 
 <details>
-<summary><b>GLPG — Galpgeste (126 sites, 328 pontos)</b> · 1 CRÍTICO, 1 MÉDIO, 1 BAIXO</summary>
+<summary><b>GLPG — Galpgeste (126 sites, 328 pontos)</b> · 1 CRÍTICO</summary>
 
-### [CRÍTICO] Potência sobre-declarada
-- **Regra:** `ratio = declarada / esperada > 1.25`; esperada = `V × I` (`√3 × V × I` em `mode3AC3p`; tolerância 25%).
-- **Afetados:** 3 linhas de conector em 3 pontos de 328 (0.9%). Exemplos: `AVR-00040-01`, `VCT-00029-01`, `VCT-00030-01`, `AVR-00040`, `VCT-00029`.
-- **Evidência:** tabela curta (≤10 linhas) com ids e valores. Os ficheiros exaustivos `Agents-outputs/anomalias-evidence.csv` (máquina, uma linha por conector) e `Agents-outputs/anomalias-details.md` (leitura no GitHub, por OPC) já foram gerados por `scripts/anomalias_evidence.py` — NÃO os regeneres nem listes todas as linhas no relatório.
+### [CRÍTICO] potência declarada vs V×I
+- **Regra:** `ratio > 1,25` impossível; `ratio < 0,75` suspeito.
+- **Afetados:** 71 de 328 linhas (21,6 %; 3 sobre + 68 sub). Exemplos: `AVR-00040-01`, `VCT-00029-01`, `VCT-00030-01` (sites `AVR-00040`, `VCT-00029`, `VCT-00030`).
+- **Evidência:**
 
-| ponto | site | tomada / modo | tensao / corrente / declarada / esperada | ratio |
-|---|---|---|---|---|
-| `AVR-00040-01` | `AVR-00040` | iec62196T2COMBO / mode4DC | 500 V / 120 A / 120.0 kW / 60.0 kW | 2.000 |
-| `VCT-00029-01` | `VCT-00029` | iec62196T2COMBO / mode4DC | 500 V / 120 A / 120.0 kW / 60.0 kW | 2.000 |
-| `VCT-00030-01` | `VCT-00030` | iec62196T2COMBO / mode4DC | 500 V / 120 A / 120.0 kW / 60.0 kW | 2.000 |
-- **Veredito:** impossível — a potência declarada excede a capacidade física `V × I` para além da tolerância; indicia potência do posto herdada pela tomada ou erro de introdução.
-
-### [MÉDIO] Potência sub-declarada (derating)
-- **Regra:** `ratio = declarada / esperada < 0.75` (mesma esperada e tolerância).
-- **Afetados:** 68 linhas de conector em 68 pontos de 328 (20.7%). Exemplos: `ACH-00003-01`, `ACH-00003-02`, `AVR-00039-02`, `ACH-00003`, `AVR-00039`.
-- **Evidência:** tabela curta (≤10 linhas) com ids e valores. Os ficheiros exaustivos `Agents-outputs/anomalias-evidence.csv` (máquina, uma linha por conector) e `Agents-outputs/anomalias-details.md` (leitura no GitHub, por OPC) já foram gerados por `scripts/anomalias_evidence.py` — NÃO os regeneres nem listes todas as linhas no relatório.
-
-| ponto | site | tomada / modo | tensao / corrente / declarada / esperada | ratio |
-|---|---|---|---|---|
-| `MTS-00092-01` | `MTS-00092` | iec62196T2COMBO / mode4DC | 950 V / 250 A / 90.0 kW / 237.5 kW | 0.379 |
-| `MAI-00034-01` | `MAI-00034` | iec62196T2COMBO / mode4DC | 950 V / 200 A / 90.0 kW / 190.0 kW | 0.474 |
-| `MAI-00034-02` | `MAI-00034` | iec62196T2COMBO / mode4DC | 950 V / 200 A / 90.0 kW / 190.0 kW | 0.474 |
-| `MTS-00047-01` | `MTS-00047` | iec62196T2COMBO / mode4DC | 950 V / 200 A / 90.0 kW / 190.0 kW | 0.474 |
-| `MTS-00047-02` | `MTS-00047` | iec62196T2COMBO / mode4DC | 950 V / 200 A / 90.0 kW / 190.0 kW | 0.474 |
-| … | … | +63 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-GLPG)) |
-- **Veredito:** suspeito — declarada 25%+ abaixo da capacidade `V × I`; provável derating operacional, limitação partilhada ou erro de introdução (não viola física).
-
-### [BAIXO] Fragmentação do nome do operador
-- **Regra:** um `operator_id` deve ter um único `operator_name`; variantes = fragmentação de grafias.
-- **Afetados:** 2 grafias (Galp Gest; Galpgeste). Exemplos: `NRD-00001`, `VIS-00008`, `ASL-00009`, `NRD-00001-01`, `GLPG`.
-- **Evidência:** `nap_static_sites.csv` por `operator_id=GLPG`: Galp Gest ×3; Galpgeste ×123.
-- **Veredito:** suspeito (metadado) — mesma entidade, grafias divergentes; normalizar para a forma canónica.
+| ponto | site | tomada | modo | tensão / corrente / declarada / esperada | ratio |
+|---|---|---|---|---|---|
+| `AVR-00040-01` | `AVR-00040` | iec62196T2COMBO | mode4DC | 500 V / 120 A / 120 kW / 60 kW | 2.00 |
+| `VCT-00029-01` | `VCT-00029` | iec62196T2COMBO | mode4DC | 500 V / 120 A / 120 kW / 60 kW | 2.00 |
+| `VCT-00030-01` | `VCT-00030` | iec62196T2COMBO | mode4DC | 500 V / 120 A / 120 kW / 60 kW | 2.00 |
+| … | … | … | … | … | +68 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-GLPG)) |
+- **Veredito:** impossível para as 3 sobre (120 kW contra 60 kW); 68 sub suspeitas de derating.
 
 [↑ índice](#indice)
 
@@ -978,36 +692,20 @@ Type2 em modo DC:
 <a id="opc-LOUL"></a>
 
 <details>
-<summary><b>LOUL — Loulé Concelho Global, EM (33 sites, 70 pontos)</b> · 1 CRÍTICO, 1 MÉDIO, 1 BAIXO</summary>
+<summary><b>LOUL — Loulé Concelho Global, EM (33 sites, 70 pontos)</b> · 1 CRÍTICO</summary>
 
-### [CRÍTICO] Potência sobre-declarada
-- **Regra:** `ratio = declarada / esperada > 1.25`; esperada = `V × I` (`√3 × V × I` em `mode3AC3p`; tolerância 25%).
-- **Afetados:** 3 linhas de conector em 3 pontos de 70 (4.3%). Exemplos: `LLE-00057-02`, `LLE-00058-01`, `LLE-00058-02`, `LLE-00057`, `LLE-00058`.
-- **Evidência:** tabela curta (≤10 linhas) com ids e valores. Os ficheiros exaustivos `Agents-outputs/anomalias-evidence.csv` (máquina, uma linha por conector) e `Agents-outputs/anomalias-details.md` (leitura no GitHub, por OPC) já foram gerados por `scripts/anomalias_evidence.py` — NÃO os regeneres nem listes todas as linhas no relatório.
+### [CRÍTICO] potência declarada vs V×I
+- **Regra:** `ratio > 1,25` impossível; `ratio < 0,75` suspeito.
+- **Afetados:** 5 de 70 linhas (7,1 %; 3 sobre + 2 sub). Exemplos: `LLE-00057-02`, `LLE-00058-01`, `LLE-00058-02` (sites `LLE-00057`, `LLE-00058`).
+- **Evidência:**
 
-| ponto | site | tomada / modo | tensao / corrente / declarada / esperada | ratio |
-|---|---|---|---|---|
-| `LLE-00057-02` | `LLE-00057` | iec62196T2 / mode3AC3p | 400 V / 16 A / 22.0 kW / 11.1 kW | 1.985 |
-| `LLE-00058-01` | `LLE-00058` | chademo / mode4DC | 500 V / 63 A / 50.0 kW / 31.5 kW | 1.587 |
-| `LLE-00058-02` | `LLE-00058` | iec62196T2COMBO / mode4DC | 500 V / 63 A / 50.0 kW / 31.5 kW | 1.587 |
-- **Veredito:** impossível — a potência declarada excede a capacidade física `V × I` para além da tolerância; indicia potência do posto herdada pela tomada ou erro de introdução.
-
-### [MÉDIO] Potência sub-declarada (derating)
-- **Regra:** `ratio = declarada / esperada < 0.75` (mesma esperada e tolerância).
-- **Afetados:** 2 linhas de conector em 2 pontos de 70 (2.9%). Exemplos: `LLE-00196-01`, `LLE-00196-02`, `LLE-00196`.
-- **Evidência:** tabela curta (≤10 linhas) com ids e valores. Os ficheiros exaustivos `Agents-outputs/anomalias-evidence.csv` (máquina, uma linha por conector) e `Agents-outputs/anomalias-details.md` (leitura no GitHub, por OPC) já foram gerados por `scripts/anomalias_evidence.py` — NÃO os regeneres nem listes todas as linhas no relatório.
-
-| ponto | site | tomada / modo | tensao / corrente / declarada / esperada | ratio |
-|---|---|---|---|---|
-| `LLE-00196-01` | `LLE-00196` | iec62196T2COMBO / mode4DC | 900 V / 250 A / 100.0 kW / 225.0 kW | 0.444 |
-| `LLE-00196-02` | `LLE-00196` | chademo / mode4DC | 500 V / 200 A / 50.0 kW / 100.0 kW | 0.500 |
-- **Veredito:** suspeito — declarada 25%+ abaixo da capacidade `V × I`; provável derating operacional, limitação partilhada ou erro de introdução (não viola física).
-
-### [BAIXO] Fragmentação do nome do operador
-- **Regra:** um `operator_id` deve ter um único `operator_name`; variantes = fragmentação de grafias.
-- **Afetados:** 2 grafias (Loulé Concelho Global; Loulé Concelho Global, EM). Exemplos: `LLE-00085`, `LLE-00074`, `LLE-00132`, `LLE-00085-01`, `LOUL`.
-- **Evidência:** `nap_static_sites.csv` por `operator_id=LOUL`: Loulé Concelho Global ×5; Loulé Concelho Global, EM ×28.
-- **Veredito:** suspeito (metadado) — mesma entidade, grafias divergentes; normalizar para a forma canónica.
+| ponto | site | tomada | modo | tensão / corrente / declarada / esperada | ratio |
+|---|---|---|---|---|---|
+| `LLE-00057-02` | `LLE-00057` | iec62196T2 | mode3AC3p | 400 V / 16 A / 22 kW / 11.0851 kW | 1.99 |
+| `LLE-00058-01` | `LLE-00058` | chademo | mode4DC | 500 V / 63 A / 50 kW / 31.5 kW | 1.59 |
+| `LLE-00058-02` | `LLE-00058` | iec62196T2COMBO | mode4DC | 500 V / 63 A / 50 kW / 31.5 kW | 1.59 |
+| … | … | … | … | … | +2 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-LOUL)) |
+- **Veredito:** impossível para as 3 sobre; 2 sub suspeitas.
 
 [↑ índice](#indice)
 
@@ -1016,141 +714,20 @@ Type2 em modo DC:
 <a id="opc-NRGS"></a>
 
 <details>
-<summary><b>NRGS — Original Sunenergy, Lda (7 sites, 16 pontos)</b> · 1 CRÍTICO, 1 MÉDIO</summary>
+<summary><b>NRGS — Original Sunenergy, Lda (7 sites, 16 pontos)</b> · 1 CRÍTICO</summary>
 
-### [CRÍTICO] Potência sobre-declarada
-- **Regra:** `ratio = declarada / esperada > 1.25`; esperada = `V × I` (`√3 × V × I` em `mode3AC3p`; tolerância 25%).
-- **Afetados:** 3 linhas de conector em 3 pontos de 16 (18.8%). Exemplos: `GRD-00021-02`, `MDB-00004-03`, `MDB-00004-04`, `GRD-00021`, `MDB-00004`.
-- **Evidência:** tabela curta (≤10 linhas) com ids e valores. Os ficheiros exaustivos `Agents-outputs/anomalias-evidence.csv` (máquina, uma linha por conector) e `Agents-outputs/anomalias-details.md` (leitura no GitHub, por OPC) já foram gerados por `scripts/anomalias_evidence.py` — NÃO os regeneres nem listes todas as linhas no relatório.
+### [CRÍTICO] potência declarada vs V×I
+- **Regra:** `ratio > 1,25` impossível; `ratio < 0,75` suspeito.
+- **Afetados:** 4 de 16 linhas (25 %; 3 sobre + 1 sub). Exemplos: `MDB-00004-03`, `MDB-00004-04`, `GRD-00021-02` (sites `MDB-00004`, `GRD-00021`).
+- **Evidência:**
 
-| ponto | site | tomada / modo | tensao / corrente / declarada / esperada | ratio |
-|---|---|---|---|---|
-| `MDB-00004-03` | `MDB-00004` | iec60309x2single16 / mode3AC3p | 230 V / 32 A / 22.0 kW / 12.7 kW | 1.726 |
-| `MDB-00004-04` | `MDB-00004` | iec60309x2single16 / mode3AC3p | 230 V / 32 A / 22.0 kW / 12.7 kW | 1.726 |
-| `GRD-00021-02` | `GRD-00021` | chademo / mode4DC | 500 V / 150 A / 100.0 kW / 75.0 kW | 1.333 |
-- **Veredito:** impossível — a potência declarada excede a capacidade física `V × I` para além da tolerância; indicia potência do posto herdada pela tomada ou erro de introdução.
-
-### [MÉDIO] Potência sub-declarada (derating)
-- **Regra:** `ratio = declarada / esperada < 0.75` (mesma esperada e tolerância).
-- **Afetados:** 1 linhas de conector em 1 pontos de 16 (6.2%). Exemplos: `PLM-00025-02`, `PLM-00025`, `PT*NRG*E*PLM*00025*02`.
-- **Evidência:** tabela curta (≤10 linhas) com ids e valores. Os ficheiros exaustivos `Agents-outputs/anomalias-evidence.csv` (máquina, uma linha por conector) e `Agents-outputs/anomalias-details.md` (leitura no GitHub, por OPC) já foram gerados por `scripts/anomalias_evidence.py` — NÃO os regeneres nem listes todas as linhas no relatório.
-
-| ponto | site | tomada / modo | tensao / corrente / declarada / esperada | ratio |
-|---|---|---|---|---|
-| `PLM-00025-02` | `PLM-00025` | chademo / mode4DC | 920 V / 200 A / 120.0 kW / 184.0 kW | 0.652 |
-- **Veredito:** suspeito — declarada 25%+ abaixo da capacidade `V × I`; provável derating operacional, limitação partilhada ou erro de introdução (não viola física).
-
-[↑ índice](#indice)
-
-</details>
-
-<a id="opc-CMEL"></a>
-
-<details>
-<summary><b>CMEL — CME (22 sites, 23 pontos)</b> · 1 CRÍTICO, 1 MÉDIO</summary>
-
-### [CRÍTICO] Potência sobre-declarada
-- **Regra:** `ratio = declarada / esperada > 1.25`; esperada = `V × I` (`√3 × V × I` em `mode3AC3p`; tolerância 25%).
-- **Afetados:** 2 linhas de conector em 2 pontos de 23 (8.7%). Exemplos: `OER-00300-01`, `OER-00301-01`, `OER-00300`, `OER-00301`.
-- **Evidência:** tabela curta (≤10 linhas) com ids e valores. Os ficheiros exaustivos `Agents-outputs/anomalias-evidence.csv` (máquina, uma linha por conector) e `Agents-outputs/anomalias-details.md` (leitura no GitHub, por OPC) já foram gerados por `scripts/anomalias_evidence.py` — NÃO os regeneres nem listes todas as linhas no relatório.
-
-| ponto | site | tomada / modo | tensao / corrente / declarada / esperada | ratio |
-|---|---|---|---|---|
-| `OER-00300-01` | `OER-00300` | iec62196T2 / mode3AC3p | 230 V / 32 A / 22.0 kW / 12.7 kW | 1.726 |
-| `OER-00301-01` | `OER-00301` | iec62196T2 / mode3AC3p | 230 V / 32 A / 22.0 kW / 12.7 kW | 1.726 |
-- **Veredito:** impossível — a potência declarada excede a capacidade física `V × I` para além da tolerância; indicia potência do posto herdada pela tomada ou erro de introdução.
-
-### [MÉDIO] Potência sub-declarada (derating)
-- **Regra:** `ratio = declarada / esperada < 0.75` (mesma esperada e tolerância).
-- **Afetados:** 1 linhas de conector em 1 pontos de 23 (4.3%). Exemplos: `TND-00017-01`, `TND-00017`, `PT*CME*E*TND*00017*01`.
-- **Evidência:** tabela curta (≤10 linhas) com ids e valores. Os ficheiros exaustivos `Agents-outputs/anomalias-evidence.csv` (máquina, uma linha por conector) e `Agents-outputs/anomalias-details.md` (leitura no GitHub, por OPC) já foram gerados por `scripts/anomalias_evidence.py` — NÃO os regeneres nem listes todas as linhas no relatório.
-
-| ponto | site | tomada / modo | tensao / corrente / declarada / esperada | ratio |
-|---|---|---|---|---|
-| `TND-00017-01` | `TND-00017` | iec62196T2 / mode3AC3p | 400 V / 32 A / 11.0 kW / 22.2 kW | 0.496 |
-- **Veredito:** suspeito — declarada 25%+ abaixo da capacidade `V × I`; provável derating operacional, limitação partilhada ou erro de introdução (não viola física).
-
-[↑ índice](#indice)
-
-</details>
-
-<a id="opc-EVIO"></a>
-
-<details>
-<summary><b>EVIO — EVIO - Electrical Mobility (21 sites, 35 pontos)</b> · 1 CRÍTICO, 1 MÉDIO, 1 BAIXO</summary>
-
-### [CRÍTICO] Potência sobre-declarada
-- **Regra:** `ratio = declarada / esperada > 1.25`; esperada = `V × I` (`√3 × V × I` em `mode3AC3p`; tolerância 25%).
-- **Afetados:** 2 linhas de conector em 2 pontos de 35 (5.7%). Exemplos: `TNV-00028-01`, `TNV-00029-01`, `TNV-00028`, `TNV-00029`.
-- **Evidência:** tabela curta (≤10 linhas) com ids e valores. Os ficheiros exaustivos `Agents-outputs/anomalias-evidence.csv` (máquina, uma linha por conector) e `Agents-outputs/anomalias-details.md` (leitura no GitHub, por OPC) já foram gerados por `scripts/anomalias_evidence.py` — NÃO os regeneres nem listes todas as linhas no relatório.
-
-| ponto | site | tomada / modo | tensao / corrente / declarada / esperada | ratio |
-|---|---|---|---|---|
-| `TNV-00028-01` | `TNV-00028` | iec62196T2 / mode3AC3p | 230 V / 32 A / 22.0 kW / 12.7 kW | 1.726 |
-| `TNV-00029-01` | `TNV-00029` | iec62196T2 / mode3AC3p | 230 V / 32 A / 22.0 kW / 12.7 kW | 1.726 |
-- **Veredito:** impossível — a potência declarada excede a capacidade física `V × I` para além da tolerância; indicia potência do posto herdada pela tomada ou erro de introdução.
-
-### [MÉDIO] Potência sub-declarada (derating)
-- **Regra:** `ratio = declarada / esperada < 0.75` (mesma esperada e tolerância).
-- **Afetados:** 9 linhas de conector em 9 pontos de 35 (25.7%). Exemplos: `ETZ-00029-01`, `ETZ-00029-02`, `ETZ-00030-01`, `ETZ-00029`, `ETZ-00030`.
-- **Evidência:** tabela curta (≤10 linhas) com ids e valores. Os ficheiros exaustivos `Agents-outputs/anomalias-evidence.csv` (máquina, uma linha por conector) e `Agents-outputs/anomalias-details.md` (leitura no GitHub, por OPC) já foram gerados por `scripts/anomalias_evidence.py` — NÃO os regeneres nem listes todas as linhas no relatório.
-
-| ponto | site | tomada / modo | tensao / corrente / declarada / esperada | ratio |
-|---|---|---|---|---|
-| `ETZ-00029-01` | `ETZ-00029` | iec62196T2COMBO / mode4DC | 1000 V / 250 A / 60.0 kW / 250.0 kW | 0.240 |
-| `ETZ-00029-02` | `ETZ-00029` | iec62196T2COMBO / mode4DC | 1000 V / 250 A / 60.0 kW / 250.0 kW | 0.240 |
-| `ETZ-00030-01` | `ETZ-00030` | iec62196T2COMBO / mode4DC | 1000 V / 250 A / 60.0 kW / 250.0 kW | 0.240 |
-| `ETZ-00030-02` | `ETZ-00030` | iec62196T2COMBO / mode4DC | 1000 V / 250 A / 60.0 kW / 250.0 kW | 0.240 |
-| `OER-00299-1` | `OER-00299` | iec62196T2 / mode3AC3p | 400 V / 32 A / 11.0 kW / 22.2 kW | 0.496 |
-| … | … | +4 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-EVIO)) |
-- **Veredito:** suspeito — declarada 25%+ abaixo da capacidade `V × I`; provável derating operacional, limitação partilhada ou erro de introdução (não viola física).
-
-### [BAIXO] `usage_type` em falta
-- **Regra:** `usage_type` vazio ou fora do enum do XSD (`energyInfrastructure.xsd`).
-- **Afetados:** 5 linhas de conector. Exemplos: `OER-00298-1`, `OER-00299-1`, `MTS-00211-1`, `OER-00298`.
-- **Evidência:** `nap_static_points.csv` coluna `usage_type` vazia nestas linhas; total global 635 linhas em falta (só este OPC: 5).
-- **Veredito:** suspeito (metadado omisso) — campo fora do enum, assumedível como uso público mas por confirmar.
-
-[↑ índice](#indice)
-
-</details>
-
-<a id="opc-LUSI"></a>
-
-<details>
-<summary><b>LUSI — LUSIADAENERGIA, S.A. (14 sites, 25 pontos)</b> · 1 CRÍTICO, 1 MÉDIO, 1 BAIXO</summary>
-
-### [CRÍTICO] Potência sobre-declarada
-- **Regra:** `ratio = declarada / esperada > 1.25`; esperada = `V × I` (`√3 × V × I` em `mode3AC3p`; tolerância 25%).
-- **Afetados:** 2 linhas de conector em 2 pontos de 25 (8.0%). Exemplos: `LGA-00047-01`, `LGA-00047-02`, `LGA-00047`.
-- **Evidência:** tabela curta (≤10 linhas) com ids e valores. Os ficheiros exaustivos `Agents-outputs/anomalias-evidence.csv` (máquina, uma linha por conector) e `Agents-outputs/anomalias-details.md` (leitura no GitHub, por OPC) já foram gerados por `scripts/anomalias_evidence.py` — NÃO os regeneres nem listes todas as linhas no relatório.
-
-| ponto | site | tomada / modo | tensao / corrente / declarada / esperada | ratio |
-|---|---|---|---|---|
-| `LGA-00047-01` | `LGA-00047` | iec62196T2COMBO / mode4DC | 400 V / 190 A / 120.0 kW / 76.0 kW | 1.579 |
-| `LGA-00047-02` | `LGA-00047` | iec62196T2COMBO / mode4DC | 400 V / 190 A / 120.0 kW / 76.0 kW | 1.579 |
-- **Veredito:** impossível — a potência declarada excede a capacidade física `V × I` para além da tolerância; indicia potência do posto herdada pela tomada ou erro de introdução.
-
-### [MÉDIO] Potência sub-declarada (derating)
-- **Regra:** `ratio = declarada / esperada < 0.75` (mesma esperada e tolerância).
-- **Afetados:** 12 linhas de conector em 12 pontos de 25 (48.0%). Exemplos: `AGN-00006-01`, `AGN-00006-02`, `EVR-00036-01`, `AGN-00006`, `EVR-00036`.
-- **Evidência:** tabela curta (≤10 linhas) com ids e valores. Os ficheiros exaustivos `Agents-outputs/anomalias-evidence.csv` (máquina, uma linha por conector) e `Agents-outputs/anomalias-details.md` (leitura no GitHub, por OPC) já foram gerados por `scripts/anomalias_evidence.py` — NÃO os regeneres nem listes todas as linhas no relatório.
-
-| ponto | site | tomada / modo | tensao / corrente / declarada / esperada | ratio |
-|---|---|---|---|---|
-| `AGN-00006-01` | `AGN-00006` | iec62196T2 / mode3AC3p | 400 V / 64 A / 22.0 kW / 44.3 kW | 0.496 |
-| `AGN-00006-02` | `AGN-00006` | iec62196T2 / mode3AC3p | 400 V / 64 A / 22.0 kW / 44.3 kW | 0.496 |
-| `EVR-00036-01` | `EVR-00036` | iec62196T2 / mode3AC3p | 400 V / 64 A / 22.0 kW / 44.3 kW | 0.496 |
-| `EVR-00036-02` | `EVR-00036` | iec62196T2 / mode3AC3p | 400 V / 64 A / 22.0 kW / 44.3 kW | 0.496 |
-| `FAR-00059-01` | `FAR-00059` | iec62196T2 / mode3AC3p | 400 V / 64 A / 22.0 kW / 44.3 kW | 0.496 |
-| … | … | +7 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-LUSI)) |
-- **Veredito:** suspeito — declarada 25%+ abaixo da capacidade `V × I`; provável derating operacional, limitação partilhada ou erro de introdução (não viola física).
-
-### [BAIXO] `usage_type` em falta
-- **Regra:** `usage_type` vazio ou fora do enum do XSD (`energyInfrastructure.xsd`).
-- **Afetados:** 3 linhas de conector. Exemplos: `ABF-00194-01`, `LGA-00049-01`, `LLE-00266-01`, `ABF-00194`.
-- **Evidência:** `nap_static_points.csv` coluna `usage_type` vazia nestas linhas; total global 635 linhas em falta (só este OPC: 3).
-- **Veredito:** suspeito (metadado omisso) — campo fora do enum, assumedível como uso público mas por confirmar.
+| ponto | site | tomada | modo | tensão / corrente / declarada / esperada | ratio |
+|---|---|---|---|---|---|
+| `MDB-00004-03` | `MDB-00004` | iec60309x2single16 | mode3AC3p | 230 V / 32 A / 22 kW / 12.7479 kW | 1.73 |
+| `MDB-00004-04` | `MDB-00004` | iec60309x2single16 | mode3AC3p | 230 V / 32 A / 22 kW / 12.7479 kW | 1.73 |
+| `GRD-00021-02` | `GRD-00021` | chademo | mode4DC | 500 V / 150 A / 100 kW / 75 kW | 1.33 |
+| … | … | … | … | … | +1 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-NRGS)) |
+- **Veredito:** impossível para as 3 sobre; 1 sub suspeita.
 
 [↑ índice](#indice)
 
@@ -1159,39 +736,129 @@ Type2 em modo DC:
 <a id="opc-MOTA"></a>
 
 <details>
-<summary><b>MOTA — Mota-Engil Renewing (174 sites, 311 pontos)</b> · 1 CRÍTICO, 1 MÉDIO, 1 BAIXO</summary>
+<summary><b>MOTA — Mota-Engil Renewing (174 sites, 311 pontos)</b> · 1 CRÍTICO</summary>
 
-### [CRÍTICO] Potência sobre-declarada
-- **Regra:** `ratio = declarada / esperada > 1.25`; esperada = `V × I` (`√3 × V × I` em `mode3AC3p`; tolerância 25%).
-- **Afetados:** 2 linhas de conector em 2 pontos de 311 (0.6%). Exemplos: `CBC-00019-01`, `CBC-00019-02`, `CBC-00019`.
-- **Evidência:** tabela curta (≤10 linhas) com ids e valores. Os ficheiros exaustivos `Agents-outputs/anomalias-evidence.csv` (máquina, uma linha por conector) e `Agents-outputs/anomalias-details.md` (leitura no GitHub, por OPC) já foram gerados por `scripts/anomalias_evidence.py` — NÃO os regeneres nem listes todas as linhas no relatório.
+### [CRÍTICO] potência declarada vs V×I
+- **Regra:** `ratio > 1,25` impossível; `ratio < 0,75` suspeito.
+- **Afetados:** 142 de 311 linhas (45,7 %; 2 sobre + 140 sub). Exemplos: `CBC-00019-01`, `CBC-00019-02`, `CBC-00021-02` (sites `CBC-00019`, `CBC-00021`).
+- **Evidência:**
 
-| ponto | site | tomada / modo | tensao / corrente / declarada / esperada | ratio |
-|---|---|---|---|---|
-| `CBC-00019-01` | `CBC-00019` | iec62196T2COMBO / mode4DC | 400 V / 320 A / 180.0 kW / 128.0 kW | 1.406 |
-| `CBC-00019-02` | `CBC-00019` | iec62196T2COMBO / mode4DC | 400 V / 320 A / 180.0 kW / 128.0 kW | 1.406 |
-- **Veredito:** impossível — a potência declarada excede a capacidade física `V × I` para além da tolerância; indicia potência do posto herdada pela tomada ou erro de introdução.
+| ponto | site | tomada | modo | tensão / corrente / declarada / esperada | ratio |
+|---|---|---|---|---|---|
+| `CBC-00019-01` | `CBC-00019` | iec62196T2COMBO | mode4DC | 400 V / 320 A / 180 kW / 128 kW | 1.41 |
+| `CBC-00019-02` | `CBC-00019` | iec62196T2COMBO | mode4DC | 400 V / 320 A / 180 kW / 128 kW | 1.41 |
+| `CBC-00021-02` | `CBC-00021` | iec62196T2COMBO | mode4DC | 1000 V / 500 A / 30 kW / 500 kW | 0.06 |
+| … | … | … | … | … | +139 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-MOTA)) |
+- **Veredito:** impossível para as 2 sobre; 140 sub suspeitas (ex. 30 kW contra 500 kW físicos — derating extremo ou potência de outro conector).
 
-### [MÉDIO] Potência sub-declarada (derating)
-- **Regra:** `ratio = declarada / esperada < 0.75` (mesma esperada e tolerância).
-- **Afetados:** 140 linhas de conector em 140 pontos de 311 (45.0%). Exemplos: `ALM-00070-01`, `ALM-00070-02`, `ALM-00070-03`, `ALM-00070`, `ALM-00109`.
-- **Evidência:** tabela curta (≤10 linhas) com ids e valores. Os ficheiros exaustivos `Agents-outputs/anomalias-evidence.csv` (máquina, uma linha por conector) e `Agents-outputs/anomalias-details.md` (leitura no GitHub, por OPC) já foram gerados por `scripts/anomalias_evidence.py` — NÃO os regeneres nem listes todas as linhas no relatório.
+[↑ índice](#indice)
 
-| ponto | site | tomada / modo | tensao / corrente / declarada / esperada | ratio |
-|---|---|---|---|---|
-| `CBC-00021-02` | `CBC-00021` | iec62196T2COMBO / mode4DC | 1000 V / 500 A / 30.0 kW / 500.0 kW | 0.060 |
-| `OER-00244-01` | `OER-00244` | iec62196T2COMBO / mode4DC | 1000 V / 250 A / 25.0 kW / 250.0 kW | 0.100 |
-| `OER-00244-02` | `OER-00244` | iec62196T2COMBO / mode4DC | 1000 V / 250 A / 25.0 kW / 250.0 kW | 0.100 |
-| `GMR-00142-01` | `GMR-00142` | iec62196T2COMBO / mode4DC | 1000 V / 500 A / 60.0 kW / 500.0 kW | 0.120 |
-| `GMR-00142-02` | `GMR-00142` | iec62196T2COMBO / mode4DC | 1000 V / 500 A / 60.0 kW / 500.0 kW | 0.120 |
-| … | … | +135 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-MOTA)) |
-- **Veredito:** suspeito — declarada 25%+ abaixo da capacidade `V × I`; provável derating operacional, limitação partilhada ou erro de introdução (não viola física).
+</details>
 
-### [BAIXO] `usage_type` em falta
-- **Regra:** `usage_type` vazio ou fora do enum do XSD (`energyInfrastructure.xsd`).
-- **Afetados:** 4 linhas de conector. Exemplos: `VNG-00258-01`, `VNG-00258-02`, `CBC-00021-01`, `VNG-00258`.
-- **Evidência:** `nap_static_points.csv` coluna `usage_type` vazia nestas linhas; total global 635 linhas em falta (só este OPC: 4).
-- **Veredito:** suspeito (metadado omisso) — campo fora do enum, assumedível como uso público mas por confirmar.
+<a id="opc-PRIO"></a>
+
+<details>
+<summary><b>PRIO — Prio.E Mobility Solutions, Lda (162 sites, 292 pontos)</b> · 1 CRÍTICO</summary>
+
+### [CRÍTICO] potência declarada vs V×I
+- **Regra:** `ratio > 1,25` impossível; `ratio < 0,75` suspeito.
+- **Afetados:** 134 de 319 linhas (42,0 %; 2 sobre + 132 sub). Exemplos: `SSB-00010-01`, `OBD-00003-2`, `PRT-00198-01` (sites `SSB-00010`, `OBD-00003`, `PRT-00198`).
+- **Evidência:**
+
+| ponto | site | tomada | modo | tensão / corrente / declarada / esperada | ratio |
+|---|---|---|---|---|---|
+| `SSB-00010-01` | `SSB-00010` | iec62196T2COMBO | mode4DC | 500 V / 12 A / 50 kW / 6 kW | 8.33 |
+| `OBD-00003-2` | `OBD-00003` | iec62196T2 | mode3AC3p | 400 V / 16 A / 22 kW / 11.0851 kW | 1.99 |
+| `PRT-00198-01` | `PRT-00198` | iec62196T2 | mode3AC3p | 380 V / 32 A / 3.7 kW / 21.0617 kW | 0.18 |
+| … | … | … | … | … | +131 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-PRIO)) |
+- **Veredito:** impossível para as 2 sobre (`SSB-00010-01`: 50 kW a 500 V/12 A = 6 kW, ratio 8,33); 132 sub suspeitas.
+
+[↑ índice](#indice)
+
+</details>
+
+<a id="opc-REMO"></a>
+
+<details>
+<summary><b>REMO — MOTA-ENGIL REMO CHARGING S.A (16 sites, 38 pontos)</b> · 1 CRÍTICO</summary>
+
+### [CRÍTICO] potência declarada vs V×I
+- **Regra:** `ratio > 1,25` impossível; `ratio < 0,75` suspeito.
+- **Afetados:** 38 de 38 linhas (100 %; 2 sobre + 36 sub). Exemplos: `CNF-00009-01`, `CNF-00009-02`, `BCL-00050-01` (sites `CNF-00009`, `BCL-00050`).
+- **Evidência:**
+
+| ponto | site | tomada | modo | tensão / corrente / declarada / esperada | ratio |
+|---|---|---|---|---|---|
+| `CNF-00009-01` | `CNF-00009` | iec62196T2COMBO | mode4DC | 400 V / 93 A / 60 kW / 37.2 kW | 1.61 |
+| `CNF-00009-02` | `CNF-00009` | iec62196T2COMBO | mode4DC | 400 V / 93 A / 60 kW / 37.2 kW | 1.61 |
+| `BCL-00050-01` | `BCL-00050` | iec62196T2COMBO | mode4DC | 1000 V / 500 A / 120 kW / 500 kW | 0.24 |
+| … | … | … | … | … | +35 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-REMO)) |
+- **Veredito:** impossível para as 2 sobre; todas as linhas do OPC divergem > 25 % (padrão sistemático, não pontual).
+
+[↑ índice](#indice)
+
+</details>
+
+<a id="opc-LUSI"></a>
+
+<details>
+<summary><b>LUSI — LUSIADAENERGIA, S.A. (14 sites, 25 pontos)</b> · 1 CRÍTICO</summary>
+
+### [CRÍTICO] potência declarada vs V×I
+- **Regra:** `ratio > 1,25` impossível; `ratio < 0,75` suspeito.
+- **Afetados:** 14 de 25 linhas (56 %; 2 sobre + 12 sub). Exemplos: `LGA-00047-01`, `LGA-00047-02`, `AGN-00006-01` (sites `LGA-00047`, `AGN-00006`).
+- **Evidência:**
+
+| ponto | site | tomada | modo | tensão / corrente / declarada / esperada | ratio |
+|---|---|---|---|---|---|
+| `LGA-00047-01` | `LGA-00047` | iec62196T2COMBO | mode4DC | 400 V / 190 A / 120 kW / 76 kW | 1.58 |
+| `LGA-00047-02` | `LGA-00047` | iec62196T2COMBO | mode4DC | 400 V / 190 A / 120 kW / 76 kW | 1.58 |
+| `AGN-00006-01` | `AGN-00006` | iec62196T2 | mode3AC3p | 400 V / 64 A / 22 kW / 44.3405 kW | 0.50 |
+| … | … | … | … | … | +11 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-LUSI)) |
+- **Veredito:** impossível para as 2 sobre (120 kW contra 76 kW); 12 sub suspeitas.
+
+[↑ índice](#indice)
+
+</details>
+
+<a id="opc-EVIO"></a>
+
+<details>
+<summary><b>EVIO — EVIO - Electrical Mobility (21 sites, 35 pontos)</b> · 1 CRÍTICO</summary>
+
+### [CRÍTICO] potência declarada vs V×I
+- **Regra:** `ratio > 1,25` impossível; `ratio < 0,75` suspeito.
+- **Afetados:** 11 de 35 linhas (31,4 %; 2 sobre + 9 sub). Exemplos: `TNV-00028-01`, `TNV-00029-01`, `ETZ-00029-01` (sites `TNV-00028`, `TNV-00029`, `ETZ-00029`).
+- **Evidência:**
+
+| ponto | site | tomada | modo | tensão / corrente / declarada / esperada | ratio |
+|---|---|---|---|---|---|
+| `TNV-00028-01` | `TNV-00028` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22 kW / 12.7479 kW | 1.73 |
+| `TNV-00029-01` | `TNV-00029` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22 kW / 12.7479 kW | 1.73 |
+| `ETZ-00029-01` | `ETZ-00029` | iec62196T2COMBO | mode4DC | 1000 V / 250 A / 60 kW / 250 kW | 0.24 |
+| … | … | … | … | … | +8 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-EVIO)) |
+- **Veredito:** impossível para as 2 sobre; 9 sub suspeitas.
+
+[↑ índice](#indice)
+
+</details>
+
+<a id="opc-CMEL"></a>
+
+<details>
+<summary><b>CMEL — CME (22 sites, 23 pontos)</b> · 1 CRÍTICO</summary>
+
+### [CRÍTICO] potência declarada vs V×I
+- **Regra:** `ratio > 1,25` impossível; `ratio < 0,75` suspeito.
+- **Afetados:** 3 de 23 linhas (13,0 %; 2 sobre + 1 sub). Exemplos: `OER-00300-01`, `OER-00301-01`, `TND-00017-01` (sites `OER-00300`, `OER-00301`, `TND-00017`).
+- **Evidência:**
+
+| ponto | site | tomada | modo | tensão / corrente / declarada / esperada | ratio |
+|---|---|---|---|---|---|
+| `OER-00300-01` | `OER-00300` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22 kW / 12.7479 kW | 1.73 |
+| `OER-00301-01` | `OER-00301` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22 kW / 12.7479 kW | 1.73 |
+| `TND-00017-01` | `TND-00017` | iec62196T2 | mode3AC3p | 400 V / 32 A / 11 kW / 22.1703 kW | 0.50 |
+- **Veredito:** impossível para as 2 sobre; 1 sub suspeita.
 
 [↑ índice](#indice)
 
@@ -1202,86 +869,16 @@ Type2 em modo DC:
 <details>
 <summary><b>PQTJ — Parques Tejo, E.M. (2 sites, 2 pontos)</b> · 1 CRÍTICO</summary>
 
-### [CRÍTICO] Potência sobre-declarada
-- **Regra:** `ratio = declarada / esperada > 1.25`; esperada = `V × I` (`√3 × V × I` em `mode3AC3p`; tolerância 25%).
-- **Afetados:** 2 linhas de conector em 2 pontos de 2 (100.0%). Exemplos: `OER-00296-01`, `OER-00297-01`, `OER-00296`, `OER-00297`.
-- **Evidência:** tabela curta (≤10 linhas) com ids e valores. Os ficheiros exaustivos `Agents-outputs/anomalias-evidence.csv` (máquina, uma linha por conector) e `Agents-outputs/anomalias-details.md` (leitura no GitHub, por OPC) já foram gerados por `scripts/anomalias_evidence.py` — NÃO os regeneres nem listes todas as linhas no relatório.
+### [CRÍTICO] potência declarada vs V×I
+- **Regra:** `ratio > 1,25` impossível.
+- **Afetados:** 2 de 2 linhas (100 %, ambas sobre). Exemplos: `OER-00296-01`, `OER-00297-01` (sites `OER-00296`, `OER-00297`).
+- **Evidência:**
 
-| ponto | site | tomada / modo | tensao / corrente / declarada / esperada | ratio |
-|---|---|---|---|---|
-| `OER-00296-01` | `OER-00296` | iec62196T2 / mode2AC1p | 230 V / 32 A / 22.0 kW / 7.4 kW | 2.989 |
-| `OER-00297-01` | `OER-00297` | iec62196T2 / mode2AC1p | 230 V / 32 A / 22.0 kW / 7.4 kW | 2.989 |
-- **Veredito:** impossível — a potência declarada excede a capacidade física `V × I` para além da tolerância; indicia potência do posto herdada pela tomada ou erro de introdução.
-
-[↑ índice](#indice)
-
-</details>
-
-<a id="opc-PRIO"></a>
-
-<details>
-<summary><b>PRIO — Prio.E Mobility Solutions, Lda (162 sites, 292 pontos)</b> · 1 CRÍTICO, 1 MÉDIO</summary>
-
-### [CRÍTICO] Potência sobre-declarada
-- **Regra:** `ratio = declarada / esperada > 1.25`; esperada = `V × I` (`√3 × V × I` em `mode3AC3p`; tolerância 25%).
-- **Afetados:** 2 linhas de conector em 2 pontos de 292 (0.7%). Exemplos: `OBD-00003-2`, `SSB-00010-01`, `OBD-00003`, `SSB-00010`.
-- **Evidência:** tabela curta (≤10 linhas) com ids e valores. Os ficheiros exaustivos `Agents-outputs/anomalias-evidence.csv` (máquina, uma linha por conector) e `Agents-outputs/anomalias-details.md` (leitura no GitHub, por OPC) já foram gerados por `scripts/anomalias_evidence.py` — NÃO os regeneres nem listes todas as linhas no relatório.
-
-| ponto | site | tomada / modo | tensao / corrente / declarada / esperada | ratio |
-|---|---|---|---|---|
-| `SSB-00010-01` | `SSB-00010` | iec62196T2COMBO / mode4DC | 500 V / 12 A / 50.0 kW / 6.0 kW | 8.333 |
-| `OBD-00003-2` | `OBD-00003` | iec62196T2 / mode3AC3p | 400 V / 16 A / 22.0 kW / 11.1 kW | 1.985 |
-- **Veredito:** impossível — a potência declarada excede a capacidade física `V × I` para além da tolerância; indicia potência do posto herdada pela tomada ou erro de introdução.
-
-### [MÉDIO] Potência sub-declarada (derating)
-- **Regra:** `ratio = declarada / esperada < 0.75` (mesma esperada e tolerância).
-- **Afetados:** 132 linhas de conector em 132 pontos de 292 (45.2%). Exemplos: `ACB-00032-01`, `ACB-00032-02`, `ALD-00007-02`, `ACB-00032`, `ALD-00007`.
-- **Evidência:** tabela curta (≤10 linhas) com ids e valores. Os ficheiros exaustivos `Agents-outputs/anomalias-evidence.csv` (máquina, uma linha por conector) e `Agents-outputs/anomalias-details.md` (leitura no GitHub, por OPC) já foram gerados por `scripts/anomalias_evidence.py` — NÃO os regeneres nem listes todas as linhas no relatório.
-
-| ponto | site | tomada / modo | tensao / corrente / declarada / esperada | ratio |
-|---|---|---|---|---|
-| `PRT-00198-01` | `PRT-00198` | iec62196T2 / mode3AC3p | 380 V / 32 A / 3.7 kW / 21.1 kW | 0.176 |
-| `BRR-00159-01` | `BRR-00159` | iec62196T2COMBO / mode4DC | 950 V / 300 A / 60.0 kW / 285.0 kW | 0.211 |
-| `BRR-00159-02` | `BRR-00159` | iec62196T2COMBO / mode4DC | 950 V / 300 A / 60.0 kW / 285.0 kW | 0.211 |
-| `CSC-00188-01` | `CSC-00188` | chademo / mode4DC | 950 V / 250 A / 60.0 kW / 237.5 kW | 0.253 |
-| `GMR-00168-01` | `GMR-00168` | iec62196T2COMBO / mode4DC | 950 V / 250 A / 60.0 kW / 237.5 kW | 0.253 |
-| … | … | +127 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-PRIO)) |
-- **Veredito:** suspeito — declarada 25%+ abaixo da capacidade `V × I`; provável derating operacional, limitação partilhada ou erro de introdução (não viola física).
-
-[↑ índice](#indice)
-
-</details>
-
-<a id="opc-REMO"></a>
-
-<details>
-<summary><b>REMO — MOTA-ENGIL REMO CHARGING S.A (16 sites, 38 pontos)</b> · 1 CRÍTICO, 1 MÉDIO</summary>
-
-### [CRÍTICO] Potência sobre-declarada
-- **Regra:** `ratio = declarada / esperada > 1.25`; esperada = `V × I` (`√3 × V × I` em `mode3AC3p`; tolerância 25%).
-- **Afetados:** 2 linhas de conector em 2 pontos de 38 (5.3%). Exemplos: `CNF-00009-01`, `CNF-00009-02`, `CNF-00009`.
-- **Evidência:** tabela curta (≤10 linhas) com ids e valores. Os ficheiros exaustivos `Agents-outputs/anomalias-evidence.csv` (máquina, uma linha por conector) e `Agents-outputs/anomalias-details.md` (leitura no GitHub, por OPC) já foram gerados por `scripts/anomalias_evidence.py` — NÃO os regeneres nem listes todas as linhas no relatório.
-
-| ponto | site | tomada / modo | tensao / corrente / declarada / esperada | ratio |
-|---|---|---|---|---|
-| `CNF-00009-01` | `CNF-00009` | iec62196T2COMBO / mode4DC | 400 V / 93 A / 60.0 kW / 37.2 kW | 1.613 |
-| `CNF-00009-02` | `CNF-00009` | iec62196T2COMBO / mode4DC | 400 V / 93 A / 60.0 kW / 37.2 kW | 1.613 |
-- **Veredito:** impossível — a potência declarada excede a capacidade física `V × I` para além da tolerância; indicia potência do posto herdada pela tomada ou erro de introdução.
-
-### [MÉDIO] Potência sub-declarada (derating)
-- **Regra:** `ratio = declarada / esperada < 0.75` (mesma esperada e tolerância).
-- **Afetados:** 36 linhas de conector em 36 pontos de 38 (94.7%). Exemplos: `AMT-00043-01`, `AMT-00043-02`, `BCL-00050-01`, `AMT-00043`, `BCL-00050`.
-- **Evidência:** tabela curta (≤10 linhas) com ids e valores. Os ficheiros exaustivos `Agents-outputs/anomalias-evidence.csv` (máquina, uma linha por conector) e `Agents-outputs/anomalias-details.md` (leitura no GitHub, por OPC) já foram gerados por `scripts/anomalias_evidence.py` — NÃO os regeneres nem listes todas as linhas no relatório.
-
-| ponto | site | tomada / modo | tensao / corrente / declarada / esperada | ratio |
-|---|---|---|---|---|
-| `BCL-00050-01` | `BCL-00050` | iec62196T2COMBO / mode4DC | 1000 V / 500 A / 120.0 kW / 500.0 kW | 0.240 |
-| `CNF-00010-01` | `CNF-00010` | iec62196T2COMBO / mode4DC | 1000 V / 400 A / 120.0 kW / 400.0 kW | 0.300 |
-| `CNF-00010-02` | `CNF-00010` | iec62196T2COMBO / mode4DC | 1000 V / 400 A / 120.0 kW / 400.0 kW | 0.300 |
-| `GMR-00167-01` | `GMR-00167` | iec62196T2COMBO / mode4DC | 1000 V / 500 A / 150.0 kW / 500.0 kW | 0.300 |
-| `GMR-00167-02` | `GMR-00167` | iec62196T2COMBO / mode4DC | 1000 V / 500 A / 150.0 kW / 500.0 kW | 0.300 |
-| … | … | +31 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-REMO)) |
-- **Veredito:** suspeito — declarada 25%+ abaixo da capacidade `V × I`; provável derating operacional, limitação partilhada ou erro de introdução (não viola física).
+| ponto | site | tomada | modo | tensão / corrente / declarada / esperada | ratio |
+|---|---|---|---|---|---|
+| `OER-00296-01` | `OER-00296` | iec62196T2 | mode2AC1p | 230 V / 32 A / 22 kW / 7.36 kW | 2.99 |
+| `OER-00297-01` | `OER-00297` | iec62196T2 | mode2AC1p | 230 V / 32 A / 22 kW / 7.36 kW | 2.99 |
+- **Veredito:** impossível (22 kW monofásico a 230 V/32 A = 7,36 kW) — as 2 linhas do OPC.
 
 [↑ índice](#indice)
 
@@ -1290,35 +887,18 @@ Type2 em modo DC:
 <a id="opc-SEGM"></a>
 
 <details>
-<summary><b>SEGM — SEGMA - Serviços de Engenharia Gestão e Manutenção Lda (73 sites, 134 pontos)</b> · 1 CRÍTICO, 1 MÉDIO, 1 BAIXO</summary>
+<summary><b>SEGM — SEGMA - Serviços de Engenharia Gestão e Manutenção Lda (73 sites, 134 pontos)</b> · 1 CRÍTICO</summary>
 
-### [CRÍTICO] Potência sobre-declarada
-- **Regra:** `ratio = declarada / esperada > 1.25`; esperada = `V × I` (`√3 × V × I` em `mode3AC3p`; tolerância 25%).
-- **Afetados:** 2 linhas de conector em 2 pontos de 134 (1.5%). Exemplos: `PDL-00005-01`, `PDL-00005-02`, `PDL-00005`.
-- **Evidência:** tabela curta (≤10 linhas) com ids e valores. Os ficheiros exaustivos `Agents-outputs/anomalias-evidence.csv` (máquina, uma linha por conector) e `Agents-outputs/anomalias-details.md` (leitura no GitHub, por OPC) já foram gerados por `scripts/anomalias_evidence.py` — NÃO os regeneres nem listes todas as linhas no relatório.
-
-| ponto | site | tomada / modo | tensao / corrente / declarada / esperada | ratio |
-|---|---|---|---|---|
-| `PDL-00005-01` | `PDL-00005` | iec62196T2 / mode2AC1p | 240 V / 16 A / 7.4 kW / 3.8 kW | 1.927 |
-| `PDL-00005-02` | `PDL-00005` | iec62196T2 / mode2AC1p | 240 V / 16 A / 7.4 kW / 3.8 kW | 1.927 |
-- **Veredito:** impossível — a potência declarada excede a capacidade física `V × I` para além da tolerância; indicia potência do posto herdada pela tomada ou erro de introdução.
-
-### [MÉDIO] `available_charging_power` acima do máximo dos conectores
-- **Regra:** agregado do ponto ≤ `max()` dos seus conectores (tolerância 25%).
-- **Afetados:** Exemplos: `VFC-00007-01`, `VFC-00007-02`, `VFC-00007` — 2 pontos em `VFC-00007`: `VFC-00007-01`, `VFC-00007-02` (44 kW agregados vs 22 kW máx. por conector).
+### [CRÍTICO] potência declarada vs V×I
+- **Regra:** `ratio > 1,25` impossível.
+- **Afetados:** 2 de 134 linhas (1,5 %, ambas sobre). Exemplos: `PDL-00005-01`, `PDL-00005-02` (site `PDL-00005`), `AGH-00003-01` (site `AGH-00003`, linha limpa de referência).
 - **Evidência:**
 
-| ponto | site | agregada | máx. conector |
-|---|---|---|---|
-| `VFC-00007-01` | `VFC-00007` | 44 kW | 22 kW |
-| `VFC-00007-02` | `VFC-00007` | 44 kW | 22 kW |
-- **Veredito:** suspeito — agregada = 2× o conector; provável soma dos dois conectores do ponto em vez do máximo; só 351/21010 pontos trazem este campo, pelo que o impacto é localizado.
-
-### [BAIXO] Fragmentação do nome do operador
-- **Regra:** um `operator_id` deve ter um único `operator_name`; variantes = fragmentação de grafias.
-- **Afetados:** 3 grafias (SEGMA - Serviços de Engenharia Gestão e Manutenção Lda; SEGMA – Serviços de Engenharia Gestão e Manutenção Lda; Segma). Exemplos: `RGR-00007`, `SCG-00003`, `AGH-00006`, `RGR-00007-01`, `SEGM`.
-- **Evidência:** `nap_static_sites.csv` por `operator_id=SEGM`: SEGMA - Serviços de Engenharia Gestão e Manutenção Lda ×59; SEGMA – Serviços de Engenharia Gestão e Manutenção Lda ×5; Segma ×9.
-- **Veredito:** suspeito (metadado) — mesma entidade, grafias divergentes; normalizar para a forma canónica.
+| ponto | site | tomada | modo | tensão / corrente / declarada / esperada | ratio |
+|---|---|---|---|---|---|
+| `PDL-00005-01` | `PDL-00005` | iec62196T2 | mode2AC1p | 240 V / 16 A / 7.4 kW / 3.84 kW | 1.93 |
+| `PDL-00005-02` | `PDL-00005` | iec62196T2 | mode2AC1p | 240 V / 16 A / 7.4 kW / 3.84 kW | 1.93 |
+- **Veredito:** impossível (7,4 kW contra 3,84 kW) — apenas o site `PDL-00005`; restante OPC limpo nesta regra.
 
 [↑ índice](#indice)
 
@@ -1327,38 +907,41 @@ Type2 em modo DC:
 <a id="opc-HELX"></a>
 
 <details>
-<summary><b>HELX — Helexia II Energy Services, Lda. (228 sites, 438 pontos)</b> · 1 CRÍTICO, 1 MÉDIO, 1 BAIXO</summary>
+<summary><b>HELX — Helexia II Energy Services, Lda. (228 sites, 438 pontos)</b> · 1 CRÍTICO</summary>
 
-### [CRÍTICO] Potência sobre-declarada
-- **Regra:** `ratio = declarada / esperada > 1.25`; esperada = `V × I` (`√3 × V × I` em `mode3AC3p`; tolerância 25%).
-- **Afetados:** 1 linhas de conector em 1 pontos de 438 (0.2%). Exemplos: `TVD-00089-02`, `TVD-00089`, `PT*HLX*E*TVD*00089*02`.
-- **Evidência:** tabela curta (≤10 linhas) com ids e valores. Os ficheiros exaustivos `Agents-outputs/anomalias-evidence.csv` (máquina, uma linha por conector) e `Agents-outputs/anomalias-details.md` (leitura no GitHub, por OPC) já foram gerados por `scripts/anomalias_evidence.py` — NÃO os regeneres nem listes todas as linhas no relatório.
+### [CRÍTICO] potência declarada vs V×I
+- **Regra:** `ratio > 1,25` impossível; `ratio < 0,75` suspeito.
+- **Afetados:** 177 de 438 linhas (40,4 %; 1 sobre + 176 sub). Exemplos: `TVD-00089-02`, `RMR-00016-02`, `OBD-00010-01` (sites `TVD-00089`, `RMR-00016`, `OBD-00010`).
+- **Evidência:**
 
-| ponto | site | tomada / modo | tensao / corrente / declarada / esperada | ratio |
-|---|---|---|---|---|
-| `TVD-00089-02` | `TVD-00089` | iec62196T2COMBO / mode4DC | 240 V / 150 A / 60.0 kW / 36.0 kW | 1.667 |
-- **Veredito:** impossível — a potência declarada excede a capacidade física `V × I` para além da tolerância; indicia potência do posto herdada pela tomada ou erro de introdução.
+| ponto | site | tomada | modo | tensão / corrente / declarada / esperada | ratio |
+|---|---|---|---|---|---|
+| `TVD-00089-02` | `TVD-00089` | iec62196T2COMBO | mode4DC | 240 V / 150 A / 60 kW / 36 kW | 1.67 |
+| `RMR-00016-02` | `RMR-00016` | iec62196T2COMBO | mode4DC | 1000 V / 375 A / 15 kW / 375 kW | 0.04 |
+| `OBD-00010-01` | `OBD-00010` | iec62196T2COMBO | mode4DC | 1000 V / 500 A / 50 kW / 500 kW | 0.10 |
+| … | … | … | … | … | +174 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-HELX)) |
+- **Veredito:** impossível para a sobre; 176 sub suspeitas (derating extremo até 0,04 — potência do posto não propagada ao conector).
 
-### [MÉDIO] Potência sub-declarada (derating)
-- **Regra:** `ratio = declarada / esperada < 0.75` (mesma esperada e tolerância).
-- **Afetados:** 176 linhas de conector em 176 pontos de 438 (40.2%). Exemplos: `ACN-00011-01`, `ACN-00011-02`, `AVR-00107-01`, `ACN-00011`, `AVR-00107`.
-- **Evidência:** tabela curta (≤10 linhas) com ids e valores. Os ficheiros exaustivos `Agents-outputs/anomalias-evidence.csv` (máquina, uma linha por conector) e `Agents-outputs/anomalias-details.md` (leitura no GitHub, por OPC) já foram gerados por `scripts/anomalias_evidence.py` — NÃO os regeneres nem listes todas as linhas no relatório.
+[↑ índice](#indice)
 
-| ponto | site | tomada / modo | tensao / corrente / declarada / esperada | ratio |
-|---|---|---|---|---|
-| `RMR-00016-02` | `RMR-00016` | iec62196T2COMBO / mode4DC | 1000 V / 375 A / 15.0 kW / 375.0 kW | 0.040 |
-| `OBD-00010-01` | `OBD-00010` | iec62196T2COMBO / mode4DC | 1000 V / 500 A / 50.0 kW / 500.0 kW | 0.100 |
-| `STR-00046-01` | `STR-00046` | iec62196T2COMBO / mode4DC | 920 V / 60 A / 11.0 kW / 55.2 kW | 0.199 |
-| `OBD-00013-01` | `OBD-00013` | iec62196T2COMBO / mode4DC | 1000 V / 500 A / 100.0 kW / 500.0 kW | 0.200 |
-| `OBD-00016-01` | `OBD-00016` | iec62196T2COMBO / mode4DC | 1000 V / 500 A / 100.0 kW / 500.0 kW | 0.200 |
-| … | … | +171 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-HELX)) |
-- **Veredito:** suspeito — declarada 25%+ abaixo da capacidade `V × I`; provável derating operacional, limitação partilhada ou erro de introdução (não viola física).
+</details>
 
-### [BAIXO] `usage_type` em falta
-- **Regra:** `usage_type` vazio ou fora do enum do XSD (`energyInfrastructure.xsd`).
-- **Afetados:** 9 linhas de conector. Exemplos: `NLS-00012-01`, `NLS-00012-02`, `BTC-00002-01`, `NLS-00012`.
-- **Evidência:** `nap_static_points.csv` coluna `usage_type` vazia nestas linhas; total global 635 linhas em falta (só este OPC: 9).
-- **Veredito:** suspeito (metadado omisso) — campo fora do enum, assumedível como uso público mas por confirmar.
+<a id="opc-PLUG"></a>
+
+<details>
+<summary><b>PLUG — e-Plug, Lda (31 sites, 62 pontos)</b> · 1 CRÍTICO</summary>
+
+### [CRÍTICO] potência declarada vs V×I
+- **Regra:** `ratio > 1,25` impossível; `ratio < 0,75` suspeito.
+- **Afetados:** 3 de 62 linhas (4,8 %; 1 sobre + 2 sub). Exemplos: `TMR-00007-01`, `TMR-00008-01`, `TMR-00008-02` (sites `TMR-00007`, `TMR-00008`).
+- **Evidência:**
+
+| ponto | site | tomada | modo | tensão / corrente / declarada / esperada | ratio |
+|---|---|---|---|---|---|
+| `TMR-00007-01` | `TMR-00007` | iec62196T2COMBO | mode4DC | 500 V / 60 A / 50 kW / 30 kW | 1.67 |
+| `TMR-00008-01` | `TMR-00008` | iec62196T2 | mode3AC3p | 400 V / 32 A / 7.4 kW / 22.1703 kW | 0.33 |
+| `TMR-00008-02` | `TMR-00008` | iec62196T2 | mode3AC3p | 400 V / 32 A / 7.4 kW / 22.1703 kW | 0.33 |
+- **Veredito:** impossível para a sobre (50 kW contra 30 kW); 2 sub suspeitas.
 
 [↑ índice](#indice)
 
@@ -1369,45 +952,15 @@ Type2 em modo DC:
 <details>
 <summary><b>PARI — Parinox Energia (6 sites, 7 pontos)</b> · 1 CRÍTICO</summary>
 
-### [CRÍTICO] Potência sobre-declarada
-- **Regra:** `ratio = declarada / esperada > 1.25`; esperada = `V × I` (`√3 × V × I` em `mode3AC3p`; tolerância 25%).
-- **Afetados:** 1 linhas de conector em 1 pontos de 7 (14.3%). Exemplos: `AGD-00040-01`, `AGD-00040`, `PT*PAR*E*AGD*00040*01`.
-- **Evidência:** tabela curta (≤10 linhas) com ids e valores. Os ficheiros exaustivos `Agents-outputs/anomalias-evidence.csv` (máquina, uma linha por conector) e `Agents-outputs/anomalias-details.md` (leitura no GitHub, por OPC) já foram gerados por `scripts/anomalias_evidence.py` — NÃO os regeneres nem listes todas as linhas no relatório.
+### [CRÍTICO] potência declarada vs V×I
+- **Regra:** `ratio > 1,25` impossível.
+- **Afetados:** 1 de 7 linhas (14,3 %). Exemplos: `AGD-00040-01` (site `AGD-00040`), `AGD-00039-01` (site `AGD-00039`, linha limpa), `AGD-00043-01` (site `AGD-00043`, linha limpa).
+- **Evidência:**
 
-| ponto | site | tomada / modo | tensao / corrente / declarada / esperada | ratio |
-|---|---|---|---|---|
-| `AGD-00040-01` | `AGD-00040` | iec62196T2COMBO / mode4DC | 400 V / 50 A / 30.0 kW / 20.0 kW | 1.500 |
-- **Veredito:** impossível — a potência declarada excede a capacidade física `V × I` para além da tolerância; indicia potência do posto herdada pela tomada ou erro de introdução.
-
-[↑ índice](#indice)
-
-</details>
-
-<a id="opc-PLUG"></a>
-
-<details>
-<summary><b>PLUG — e-Plug, Lda (31 sites, 62 pontos)</b> · 1 CRÍTICO, 1 MÉDIO</summary>
-
-### [CRÍTICO] Potência sobre-declarada
-- **Regra:** `ratio = declarada / esperada > 1.25`; esperada = `V × I` (`√3 × V × I` em `mode3AC3p`; tolerância 25%).
-- **Afetados:** 1 linhas de conector em 1 pontos de 62 (1.6%). Exemplos: `TMR-00007-01`, `TMR-00007`, `PT*PLG*E*TMR*00007*01`.
-- **Evidência:** tabela curta (≤10 linhas) com ids e valores. Os ficheiros exaustivos `Agents-outputs/anomalias-evidence.csv` (máquina, uma linha por conector) e `Agents-outputs/anomalias-details.md` (leitura no GitHub, por OPC) já foram gerados por `scripts/anomalias_evidence.py` — NÃO os regeneres nem listes todas as linhas no relatório.
-
-| ponto | site | tomada / modo | tensao / corrente / declarada / esperada | ratio |
-|---|---|---|---|---|
-| `TMR-00007-01` | `TMR-00007` | iec62196T2COMBO / mode4DC | 500 V / 60 A / 50.0 kW / 30.0 kW | 1.667 |
-- **Veredito:** impossível — a potência declarada excede a capacidade física `V × I` para além da tolerância; indicia potência do posto herdada pela tomada ou erro de introdução.
-
-### [MÉDIO] Potência sub-declarada (derating)
-- **Regra:** `ratio = declarada / esperada < 0.75` (mesma esperada e tolerância).
-- **Afetados:** 2 linhas de conector em 2 pontos de 62 (3.2%). Exemplos: `TMR-00008-01`, `TMR-00008-02`, `TMR-00008`.
-- **Evidência:** tabela curta (≤10 linhas) com ids e valores. Os ficheiros exaustivos `Agents-outputs/anomalias-evidence.csv` (máquina, uma linha por conector) e `Agents-outputs/anomalias-details.md` (leitura no GitHub, por OPC) já foram gerados por `scripts/anomalias_evidence.py` — NÃO os regeneres nem listes todas as linhas no relatório.
-
-| ponto | site | tomada / modo | tensao / corrente / declarada / esperada | ratio |
-|---|---|---|---|---|
-| `TMR-00008-01` | `TMR-00008` | iec62196T2 / mode3AC3p | 400 V / 32 A / 7.4 kW / 22.2 kW | 0.334 |
-| `TMR-00008-02` | `TMR-00008` | iec62196T2 / mode3AC3p | 400 V / 32 A / 7.4 kW / 22.2 kW | 0.334 |
-- **Veredito:** suspeito — declarada 25%+ abaixo da capacidade `V × I`; provável derating operacional, limitação partilhada ou erro de introdução (não viola física).
+| ponto | site | tomada | modo | tensão / corrente / declarada / esperada | ratio |
+|---|---|---|---|---|---|
+| `AGD-00040-01` | `AGD-00040` | iec62196T2COMBO | mode4DC | 400 V / 50 A / 30 kW / 20 kW | 1.50 |
+- **Veredito:** impossível (30 kW contra 20 kW a 400 V/50 A) — caso único no OPC.
 
 [↑ índice](#indice)
 
@@ -1416,68 +969,69 @@ Type2 em modo DC:
 <a id="opc-FCTO"></a>
 
 <details>
-<summary><b>FCTO — Iberdrola | bp pulse (288 sites, 1196 pontos)</b> · 2 MÉDIO, 2 BAIXO, 1 CRÍTICO, 1 ALTO</summary>
+<summary><b>FCTO — Iberdrola | bp pulse (288 sites, 1196 pontos)</b> · 2 ALTO, 1 MÉDIO, 1 CRÍTICO</summary>
 
-### [MÉDIO] Potência sub-declarada (derating)
-- **Regra:** `ratio = declarada / esperada < 0.75` (mesma esperada e tolerância).
-- **Afetados:** 904 linhas de conector em 904 pontos de 1196 (75.6%). Exemplos: `100`, `101`, `102`, `ACB-00027`, `ACB-00033`.
-- **Evidência:** tabela curta (≤10 linhas) com ids e valores. Os ficheiros exaustivos `Agents-outputs/anomalias-evidence.csv` (máquina, uma linha por conector) e `Agents-outputs/anomalias-details.md` (leitura no GitHub, por OPC) já foram gerados por `scripts/anomalias_evidence.py` — NÃO os regeneres nem listes todas as linhas no relatório.
-
-| ponto | site | tomada / modo | tensao / corrente / declarada / esperada | ratio |
-|---|---|---|---|---|
-| `FAR-00074-01` | `FAR-00074` | iec62196T2COMBO / mode4DC | 1000 V / 500 A / 50.0 kW / 500.0 kW | 0.100 |
-| `FAR-00074-02` | `FAR-00074` | iec62196T2COMBO / mode4DC | 1000 V / 500 A / 50.0 kW / 500.0 kW | 0.100 |
-| `CLD-00045-02` | `CLD-00045` | chademo / mode4DC | 1000 V / 500 A / 80.0 kW / 500.0 kW | 0.160 |
-| `NZR-00040-01` | `NZR-00040` | iec62196T2COMBO / mode4DC | 1000 V / 600 A / 100.0 kW / 600.0 kW | 0.167 |
-| `NZR-00040-02` | `NZR-00040` | iec62196T2COMBO / mode4DC | 1000 V / 600 A / 100.0 kW / 600.0 kW | 0.167 |
-| … | … | +899 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-FCTO)) |
-- **Veredito:** suspeito — declarada 25%+ abaixo da capacidade `V × I`; provável derating operacional, limitação partilhada ou erro de introdução (não viola física).
-
-### [CRÍTICO] Valores crus suspeitos: 1200 V / 600 A
-- **Regra:** tensão de 1200 V e corrente de 600 A em conector de ligeiros = suspeitos já observados ( LEI de Ohm dá centenas de kW incompatíveis com a declarada).
-- **Afetados:** 12 linhas a 1200 V e 159 linhas a 600 A. Exemplos: `MGL-00014-01`, `MGL-00014-02`, `MGL-00015-01`, `CTB-00052-01`, `GDL-00040-01`, `MGL-00014`, `MGL-00015`, `CTB-00052`.
+### [MÉDIO] potência declarada vs V×I (sub-declaração sistemática)
+- **Regra:** esperada = `V × I` (DC), `√3 × V × I` em `mode3AC3p`; `ratio < 0,75` = derating suspeito.
+- **Afetados:** 904 de 1199 linhas (75,4 %, todas sub). Exemplos: `FAR-00074-01`, `FAR-00074-02`, `CLD-00045-02` (sites `FAR-00074`, `CLD-00045`).
 - **Evidência:**
 
-| ponto | site | tomada / modo | tensão / corrente / declarada |
-|---|---|---|---|
-| `MGL-00014-01` | `MGL-00014` | iec62196T2COMBO / mode4DC | 1200 V / 600 A / 200 kW |
-| `MGL-00014-02` | `MGL-00014` | iec62196T2COMBO / mode4DC | 1200 V / 600 A / 200 kW |
-| `CTB-00052-01` | `CTB-00052` | iec62196T2COMBO / mode4DC | 1200 V / 600 A / 200 kW |
-| `GDL-00040-01` | `GDL-00040` | iec62196T2COMBO / mode4DC | 1000 V / 600 A / 400 kW |
-| `SXL-00077-01` | `SXL-00077` | iec62196T2COMBO / mode4DC | 1000 V / 600 A / 600 kW |
-- **Veredito:** impossível — 1200 V não existe em carregamento de ligeiros (nem HPC chega a 1000 V); 600 A sem arrefecimento a líquido declarado é implausível; provável erro de escala/unidade no preenchimento.
+| ponto | site | tomada | modo | tensão / corrente / declarada / esperada | ratio |
+|---|---|---|---|---|---|
+| `FAR-00074-01` | `FAR-00074` | iec62196T2COMBO | mode4DC | 1000 V / 500 A / 50 kW / 500 kW | 0.10 |
+| `FAR-00074-02` | `FAR-00074` | iec62196T2COMBO | mode4DC | 1000 V / 500 A / 50 kW / 500 kW | 0.10 |
+| `CLD-00045-02` | `CLD-00045` | chademo | mode4DC | 1000 V / 500 A / 80 kW / 500 kW | 0.16 |
+| … | … | … | … | … | +901 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-FCTO)) |
+- **Veredito:** suspeito (maior bolsa de sub do snapshot: 904 linhas a 0,1–0,7 do físico; ex. 50 kW contra 500 kW) — potência de posto partilhada não refletida por conector, a confirmar com o OPC.
 
-### [ALTO] `point_id` duplicados, bare-numeric e colisão entre sites
-- **Regra:** `point_id` único; formato esperado `LOCAL-NNNNN-TT`; `point_external_id` único por site.
-- **Afetados:** Exemplos: `618`, `617`, `654`, `ORQ-00010` — `618` ×2 linhas em `ORQ-00010` (com `617`, `654`, `655` bare); `PT*FCT*E*NZR*00053*01` e `PT*FCT*E*NZR*00053*02` em `NZR-00052`+`NZR-00053` (com `NZR-00053-01`, `NZR-00053-02`); `467`/`468` duplicados com `SXL-00077-01`/`SXL-00077-02` em `SXL-00077`.
+### [ALTO] valores crus suspeitos (1200 V / 600 A)
+- **Regra:** 1200 V e 600 A estão muito acima dos patamares PT (400–1000 V, ≤ 500 A); 3600 V e 300 kV noutros OPCs (ver CEPS/ECOI).
+- **Afetados:** 12 linhas a 1200 V (12/12 do snapshot, todas FCTO) + corrente 600 A em massa (201 linhas no snapshot). Exemplos: `MGL-00014-01`, `MGL-00014-02`, `MGL-00015-01` (sites `MGL-00014`, `MGL-00015`), `CTB-00052-01` (site `CTB-00052`), `GDL-00040-01` (site `GDL-00040`, 1000 V/600 A).
 - **Evidência:**
 
-| ponto | site | `point_external_id` | problema |
-|---|---|---|---|
-| `618` | `ORQ-00010` | `PT*FCT*E252*2` | ×2 linhas, ids bare, exterior truncado |
-| `617` | `ORQ-00010` | `PT*FCT*E252*1` | id bare, exterior truncado |
-| `35` | `NZR-00052` / `NZR-00053` | `PT*FCT*E*NZR*00053*01` | mesmo exterior em 2 sites |
-| `NZR-00053-01` | `NZR-00053` | `PT*FCT*E*NZR*00053*01` | colide com o bare `35` |
-| `467` | `SXL-00077` | `PT*FCT*E*SXL*00077*01` | duplica `SXL-00077-01` |
-- **Veredito:** impossível (chave) — duplicados exatos e migração de esquema de ids a meio (numéricos crus vs `SITE-TT`); corrigir no upstream e republicar.
+| ponto | site | V / A / declarada |
+|---|---|---|
+| `MGL-00014-01` | `MGL-00014` | 1200 V / 600 A / 200 kW |
+| `MGL-00014-02` | `MGL-00014` | 1200 V / 600 A / 200 kW |
+| `MGL-00015-01` | `MGL-00015` | 1200 V / 600 A / 200 kW |
+| `MGL-00015-02` | `MGL-00015` | 1200 V / 600 A / 200 kW |
+| `CTB-00052-01` | `CTB-00052` | 1200 V / 600 A / 200 kW |
+| `CTB-00052-02` | `CTB-00052` | 1200 V / 600 A / 200 kW |
+| `GDL-00040-01` | `GDL-00040` | 1000 V / 600 A / 400 kW |
+| `GDL-00040-02` | `GDL-00040` | 1000 V / 600 A / 400 kW |
+- **Veredito:** suspeito forte (1200 V não existe em carregamento ligeiro PT; 600 A acima de qualquer cabo arrefecido instalado) — valores de plataforma herdados, a corrigir para 400–1000 V / ≤ 500 A.
 
-### [MÉDIO] `n_points` declarado vs pontos reais (`ORQ-00010`)
-- **Regra:** `sites.n_points` = nº de `point_id` distintos do site.
-- **Afetados:** Exemplos: `617`, `618`, `654`, `ORQ-00010` — 1 site (`ORQ-00010`) declara 5 mas tem 4 `point_id` distintos (`617`, `618`, `654`, `655`, com `618` repetido).
-- **Evidência:** `nap_static_sites.csv` `FCT-ORQ-00010` com `n_points=5`; `nap_static_points.csv` tem 5 linhas em `ORQ-00010` mas só 4 `point_id` distintos.
-- **Veredito:** suspeito — contagem declarada se refere a linhas, não a pontos distintos.
+### [ALTO] `n_points` declarado ≠ pontos reais + `point_id` duplicado
+- **Regra:** `sites.n_points` deve igualar o nº de `point_id` distintos; `point_id` é único por linha.
+- **Afetados:** 1 site (`ORQ-00010` declara 5, tem 4 distintos) com point_id repetido. Exemplos: `ORQ-00010` (site), `617`, `618`, `654`, `655` (pontos).
+- **Evidência:**
 
-### [BAIXO] `usage_type` em falta
-- **Regra:** `usage_type` vazio ou fora do enum do XSD (`energyInfrastructure.xsd`).
-- **Afetados:** 38 linhas de conector. Exemplos: `629`, `630`, `673`, `CTB-00081`.
-- **Evidência:** `nap_static_points.csv` coluna `usage_type` vazia nestas linhas; total global 635 linhas em falta (só este OPC: 38).
-- **Veredito:** suspeito (metadado omisso) — campo fora do enum, assumedível como uso público mas por confirmar.
+| site | n_points declarado | point_id distintos reais |
+|---|---|---|
+| `ORQ-00010` | 5 | 4 (`617`, `618`, `654`, `655`) |
+| ponto | point_external_id | ocorrências |
+|---|---|---|
+| `618` | `PT*FCT*E252*2` | 2× em `ORQ-00010` |
+| `617` | `PT*FCT*E252*1` | 1× em `ORQ-00010` |
+| `654` | `PT*FCT*E*ORQ*00010*01` | 1× em `ORQ-00010` |
+- **Veredito:** impossível como contagem (único mismatch declarado×real do snapshot) + duplicado intra-site — dois esquemas de numeração (E252 vs E-ORQ) colados no mesmo site.
 
-### [BAIXO] Fragmentação do nome do operador
-- **Regra:** um `operator_id` deve ter um único `operator_name`; variantes = fragmentação de grafias.
-- **Afetados:** 2 grafias (CHARGING TOGETHER, UNIPESSOAL LDA; Iberdrola | bp pulse). Exemplos: `MRS-00005`, `727`, `FCTO`.
-- **Evidência:** `nap_static_sites.csv` por `operator_id=FCTO`: CHARGING TOGETHER, UNIPESSOAL LDA ×1; Iberdrola | bp pulse ×287.
-- **Veredito:** suspeito (metadado) — mesma entidade, grafias divergentes; normalizar para a forma canónica.
+### [CRÍTICO] `point_id` numérico curto colide entre OPCs
+- **Regra:** `point_id` é chave; ids bare (`16`, `17`, …) repetem-se em OPCs distintos.
+- **Afetados:** point_id 117 valores duplicados / 246 linhas no snapshot. Exemplos: `16`, `17` (sites `LSB-01305` ACCI e `CBR-00121` FCTO), `18` (sites `LSB-01305` ACCI e `NZR-00048` FCTO), `19` (sites `PRT-00361` ACCI e `NZR-00048` FCTO).
+- **Evidência:**
+
+| point_id | site | OPC |
+|---|---|---|
+| `16` | `LSB-01305` | ACCI |
+| `16` | `CBR-00121` | FCTO |
+| `17` | `LSB-01305` | ACCI |
+| `17` | `CBR-00121` | FCTO |
+| `18` | `LSB-01305` | ACCI |
+| `18` | `NZR-00048` | FCTO |
+| `19` | `PRT-00361` | ACCI |
+| `19` | `NZR-00048` | FCTO |
+- **Veredito:** impossível como chave global (o mesmo `point_id` em dois OPCs) — `UID_TOMADA` numérico MOBI.E propagado sem prefixo de operador; prefixar com `operator_id`.
 
 [↑ índice](#indice)
 
@@ -1486,51 +1040,75 @@ Type2 em modo DC:
 <a id="opc-TSLA"></a>
 
 <details>
-<summary><b>TSLA — Tesla (9 sites, 192 pontos)</b> · 2 MÉDIO, 2 BAIXO, 1 CRÍTICO</summary>
+<summary><b>TSLA — Tesla (9 sites, 192 pontos)</b> · 2 MÉDIO, 2 CRÍTICO, 1 BAIXO</summary>
 
-### [MÉDIO] Potência sub-declarada (derating)
-- **Regra:** `ratio = declarada / esperada < 0.75` (mesma esperada e tolerância).
-- **Afetados:** 181 linhas de conector em 176 pontos de 192 (91.7%). Exemplos: `0030b1e0-c1c1-4578-8d30-fa44d7f4191d`, `00711859-da1d-4a63-893b-6cc8fc274e86`, `027ad7f9-f371-4437-a6da-0b6ec4da001f`, `24a78962-ea22-4aa2-ad71-7413f8a68166`, `381a4acf-82a3-4799-bd23-291aa7c319a6`.
-- **Evidência:** tabela curta (≤10 linhas) com ids e valores. Os ficheiros exaustivos `Agents-outputs/anomalias-evidence.csv` (máquina, uma linha por conector) e `Agents-outputs/anomalias-details.md` (leitura no GitHub, por OPC) já foram gerados por `scripts/anomalias_evidence.py` — NÃO os regeneres nem listes todas as linhas no relatório.
+### [MÉDIO] potência declarada vs V×I (sub-declaração)
+- **Regra:** `ratio < 0,75` suspeito.
+- **Afetados:** 181 de 213 linhas (85,0 %, todas sub). Exemplos: `0030b1e0-c1c1-4578-8d30-fa44d7f4191d`, `00711859-da1d-4a63-893b-6cc8fc274e86`, `027ad7f9-f371-4437-a6da-0b6ec4da001f` (sites `d9df0db6-7829-4f68-be57-13dbb28dbae1`, `b798e614-a4b7-45ba-9a5f-8b1dfbc009b4`, `24a78962-ea22-4aa2-ad71-7413f8a68166`).
+- **Evidência:**
 
-| ponto | site | tomada / modo | tensao / corrente / declarada / esperada | ratio |
+| ponto | site | tomada | modo | tensão / corrente / declarada / esperada | ratio |
+|---|---|---|---|---|---|
+| `0030b1e0-c1c1-4578-8d30-fa44d7f4191d` | `d9df0db6-7829-4f68-be57-13dbb28dbae1` | iec62196T2COMBO | mode4DC | 470 V / 1000 A / 250 kW / 470 kW | 0.53 |
+| `00711859-da1d-4a63-893b-6cc8fc274e86` | `b798e614-a4b7-45ba-9a5f-8b1dfbc009b4` | iec62196T2COMBO | mode4DC | 470 V / 1000 A / 250 kW / 470 kW | 0.53 |
+| `027ad7f9-f371-4437-a6da-0b6ec4da001f` | `24a78962-ea22-4aa2-ad71-7413f8a68166` | iec62196T2COMBO | mode4DC | 470 V / 1000 A / 250 kW / 470 kW | 0.53 |
+| … | … | … | … | … | +178 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-TSLA)) |
+- **Veredito:** suspeito (250 kW contra 470 kW a 470 V/1000 A — derating uniforme da frota Supercharger; 1000 A é corrente de barramento, não do cabo).
+
+### [CRÍTICO] Type2 em modo DC a 150 kW (teto 50 kW)
+- **Regra:** `iec62196T2` só-AC e ≤ 50 kW; 16 linhas TSLA violam ambas.
+- **Afetados:** 16 de 213 linhas TSLA. Exemplos: `991aebcb-011c-45f4-ba5a-ebe4cb586397`, `10681d21-e216-45ff-a4d9-54149a618967`, `82f925bc-b169-453d-a35d-60429ffc94bc` (site `0cf4786b-f469-4eab-a793-fdc5b01e45a5`).
+- **Evidência:**
+
+| ponto | site | tomada | modo | V / A / declarada |
 |---|---|---|---|---|
-| `0030b1e0-c1c1-4578-8d30-fa44d7f4191d` | `d9df0db6-7829-4f68-be57-13dbb28dbae1` | iec62196T2COMBO / mode4DC | 470 V / 1000 A / 250.0 kW / 470.0 kW | 0.532 |
-| `00711859-da1d-4a63-893b-6cc8fc274e86` | `b798e614-a4b7-45ba-9a5f-8b1dfbc009b4` | iec62196T2COMBO / mode4DC | 470 V / 1000 A / 250.0 kW / 470.0 kW | 0.532 |
-| `027ad7f9-f371-4437-a6da-0b6ec4da001f` | `24a78962-ea22-4aa2-ad71-7413f8a68166` | iec62196T2COMBO / mode4DC | 470 V / 1000 A / 250.0 kW / 470.0 kW | 0.532 |
-| `03f9f115-bff1-4586-b74c-1a6b6a8649c6` | `d9df0db6-7829-4f68-be57-13dbb28dbae1` | iec62196T2COMBO / mode4DC | 470 V / 1000 A / 250.0 kW / 470.0 kW | 0.532 |
-| `04661d10-e5ae-44ad-b33d-1f6b51d15d75` | `b798e614-a4b7-45ba-9a5f-8b1dfbc009b4` | iec62196T2COMBO / mode4DC | 470 V / 1000 A / 250.0 kW / 470.0 kW | 0.532 |
-| … | … | +176 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-TSLA)) |
-- **Veredito:** suspeito — declarada 25%+ abaixo da capacidade `V × I`; provável derating operacional, limitação partilhada ou erro de introdução (não viola física).
+| `991aebcb-011c-45f4-ba5a-ebe4cb586397` | `0cf4786b-f469-4eab-a793-fdc5b01e45a5` | iec62196T2 | mode4DC | 464 V / 400 A / 150 kW |
+| `10681d21-e216-45ff-a4d9-54149a618967` | `0cf4786b-f469-4eab-a793-fdc5b01e45a5` | iec62196T2 | mode4DC | 464 V / 400 A / 150 kW |
+| `82f925bc-b169-453d-a35d-60429ffc94bc` | `0cf4786b-f469-4eab-a793-fdc5b01e45a5` | iec62196T2 | mode4DC | 464 V / 400 A / 150 kW |
+| `05b8e450-9d32-45c9-9c55-3b041a96bb8e` | `0cf4786b-f469-4eab-a793-fdc5b01e45a5` | iec62196T2 | mode4DC | 464 V / 400 A / 150 kW |
+- **Veredito:** impossível em AC (tomada Type2 a 150 kW em `mode4DC`) — ficha CCS mal tipada como T2 no site da Guarda.
 
-### [CRÍTICO] Type2 em `mode4DC` a 150 kW
-- **Regra:** `iec62196T2` é só-AC (`mode1*`–`mode3*`); em `mode4DC` = impossível; teto da família 50 kW.
-- **Afetados:** Exemplos: `991aebcb-011c-45f4-ba5a-ebe4cb586397`, `10681d21-e216-45ff-a4d9-54149a618967`, `0cf4786b-f469-4eab-a793-fdc5b01e45a5` — 16 linhas em 2 sites (`0cf4786b-f469-4eab-a793-fdc5b01e45a5` ×8 e `fff4f058-9075-4833-96f5-e021cb263344` ×8; ex. `991aebcb-011c-45f4-ba5a-ebe4cb586397`, `10681d21-e216-45ff-a4d9-54149a618967`, `82f925bc-b169-453d-a35d-60429ffc94bc`).
-- **Evidência:** tabela completa — 16 linhas agregadas por site:
+### [MÉDIO] contagens extremas (cauda de `n_points`)
+- **Regra:** cauda da distribuição em vez de limiar fixo; top-download do snapshot.
+- **Afetados:** 5 sites TSLA na cauda (40/32/32/24/20) + `PRT-00372` (EPKS, 20). Exemplos: `eddf8de0-ea2f-4d4a-90d4-f0e5639662a1` (40), `b798e614-a4b7-45ba-9a5f-8b1dfbc009b4` (32), `381a4acf-82a3-4799-bd23-291aa7c319a6` (32), `d9df0db6-7829-4f68-be57-13dbb28dbae1` (24).
+- **Evidência:**
 
-| site | tomada / modo | linhas | exemplo de ponto | tensão / corrente / declarada |
-|---|---|---|---|---|
-| `0cf4786b-f469-4eab-a793-fdc5b01e45a5` | iec62196T2 / mode4DC | 8 | `991aebcb-011c-45f4-ba5a-ebe4cb586397`, `10681d21-e216-45ff-a4d9-54149a618967`, `82f925bc-b169-453d-a35d-60429ffc94bc` | 464 V / 400 A / 150 kW |
-| `fff4f058-9075-4833-96f5-e021cb263344` | iec62196T2 / mode4DC | 8 | `3aaeef54-74d5-45cd-8571-5cd73bb30c74`, `3bab25ab-ac08-4895-9c94-82f2d8cc23a1`, `8d4b1f08-d4e6-4e17-a608-61e12e70431d` | 464 V / 400 A / 150 kW |
-- **Veredito:** impossível — tomada AC declarada em modo DC rápido (além de 3× o teto da família); provável erro de mapeamento do conector Tesla.
+| site | OPC | n_points | cidade |
+|---|---|---|---|
+| `eddf8de0-ea2f-4d4a-90d4-f0e5639662a1` | TSLA | 40 | Mealhada |
+| `b798e614-a4b7-45ba-9a5f-8b1dfbc009b4` | TSLA | 32 | Alcacer do Sal |
+| `381a4acf-82a3-4799-bd23-291aa7c319a6` | TSLA | 32 | Fátima |
+| `d9df0db6-7829-4f68-be57-13dbb28dbae1` | TSLA | 24 | Almancil |
+| `fe9fc57f-14eb-42a4-aa2e-14e270053cab` | TSLA | 20 | Matosinhos |
+| `PRT-00372` | EPKS | 20 | Porto |
+- **Veredito:** suspeito mas plausível (hubs Supercharger/Telpark com dezenas de fichas; contagens reais confirmadas contra `point_id` distintos exceto `ORQ-00010`).
 
-### [MÉDIO] Sites com nº de pontos extremo
-- **Regra:** cauda da distribuição de `n_points` (máx. global 40, 4 sites Tesla ≥24 pontos).
-- **Afetados:** Exemplos: `eddf8de0-ea2f-4d4a-90d4-f0e5639662a1`, `b798e614-a4b7-45ba-9a5f-8b1dfbc009b4`, `381a4acf-82a3-4799-bd23-291aa7c319a6` — 4 sites: `eddf8de0-ea2f-4d4a-90d4-f0e5639662a1` (40), `b798e614-a4b7-45ba-9a5f-8b1dfbc009b4` (32), `381a4acf-82a3-4799-bd23-291aa7c319a6` (32), `d9df0db6-7829-4f68-be57-13dbb28dbae1` (24).
-- **Evidência:** `nap_static_sites.csv` `n_points` destes 4 `site_id` (`TSL-*`); contagens confirmadas nas linhas de `nap_static_points.csv`.
-- **Veredito:** suspeito (a confirmar) — plausível em hubs Tesla de grande dimensão, mas destoa fortemente da mediana (≈1–2); verificar se são agregações de vários postos.
+### [CRÍTICO] `point_id` duplicado (mesmo UUID 2×)
+- **Regra:** `point_id` único; 117 valores / 246 linhas duplicadas no snapshot, maioria TSLA (um conector, duas linhas).
+- **Afetados:** dezenas de UUID TSLA repetidos 2×. Exemplos: `05b8e450-9d32-45c9-9c55-3b041a96bb8e`, `0856060b-4ca9-4e4a-9b8a-8c034b597041`, `10681d21-e216-45ff-a4d9-54149a618967` (sites `0cf4786b-f469-4eab-a793-fdc5b01e45a5`, `fff4f058-9075-4833-96f5-e021cb263344`).
+- **Evidência:**
 
-### [BAIXO] Metadados em falta (`auth_methods`, `brands_accepted`, `usage_type`)
-- **Regra:** `auth_methods`/`brands_accepted` vazios e `usage_type` fora do enum.
-- **Afetados:** Exemplos: `d9df0db6-7829-4f68-be57-13dbb28dbae1`, `eddf8de0-ea2f-4d4a-90d4-f0e5639662a1`, `0e3f5a8c-1d5f-4e80-a7fc-33d8e7703053` — 9 sites sem `auth_methods` (ex. `d9df0db6-7829-4f68-be57-13dbb28dbae1`, `eddf8de0-ea2f-4d4a-90d4-f0e5639662a1`, `b798e614-a4b7-45ba-9a5f-8b1dfbc009b4`); 213 linhas sem `brands_accepted` (ex. `0e3f5a8c-1d5f-4e80-a7fc-33d8e7703053`, `2a031d34-94d3-4376-88fd-12f7b982d335`, `49ad1d56-3f77-4ad6-9f12-abd626cb05d3`); 213 linhas sem `usage_type`.
-- **Evidência:** `nap_static_sites.csv` coluna `auth_methods` vazia nos 9 `site_id` `TSL-*`; `nap_static_points.csv` colunas `brands_accepted`/`usage_type` vazias nas linhas citadas.
-- **Veredito:** suspeito (metadado) — expectável numa rede fechada, mas os campos deviam vir preenchidos ou com valor explícito.
+| point_id | site | ocorrências |
+|---|---|---|
+| `05b8e450-9d32-45c9-9c55-3b041a96bb8e` | `0cf4786b-f469-4eab-a793-fdc5b01e45a5` | 2× |
+| `0856060b-4ca9-4e4a-9b8a-8c034b597041` | `fff4f058-9075-4833-96f5-e021cb263344` | 2× |
+| `10681d21-e216-45ff-a4d9-54149a618967` | `0cf4786b-f469-4eab-a793-fdc5b01e45a5` | 2× |
+- **Veredito:** impossível como chave (mesmo UUID, mesmo EVSE `PT*TSL*EA4U6OQ`, duas linhas) — duplicação no XML fonte ou no ETL por tomada.
 
-### [BAIXO] `usage_type` em falta
-- **Regra:** `usage_type` vazio ou fora do enum do XSD (`energyInfrastructure.xsd`).
-- **Afetados:** 213 linhas de conector. Exemplos: `0e3f5a8c-1d5f-4e80-a7fc-33d8e7703053`, `2a031d34-94d3-4376-88fd-12f7b982d335`, `49ad1d56-3f77-4ad6-9f12-abd626cb05d3`, `d9df0db6-7829-4f68-be57-13dbb28dbae1`.
-- **Evidência:** `nap_static_points.csv` coluna `usage_type` vazia nestas linhas; total global 635 linhas em falta (só este OPC: 213).
-- **Veredito:** suspeito (metadado omisso) — campo fora do enum, assumedível como uso público mas por confirmar.
+### [BAIXO] metadados em falta (`usage_type`, `auth_methods`, `brands_accepted`)
+- **Regra:** `usage_type` no enum; `auth_methods`/`brands_accepted` não vazios (BRIG/BBGE ver secções próprias).
+- **Afetados:** TSLA concentra 213 usage_type nulos, 9 sites sem auth_methods, dezenas sem brands_accepted. Exemplos: `0e3f5a8c-1d5f-4e80-a7fc-33d8e7703053`, `2a031d34-94d3-4376-88fd-12f7b982d335`, `49ad1d56-3f77-4ad6-9f12-abd626cb05d3` (site `d9df0db6-7829-4f68-be57-13dbb28dbae1`), `MTJ-00128-01` (site `MTJ-00128`, GLPP), `MTS-00202-01` (site `MTS-00202`, ATLA).
+- **Evidência:**
+
+| ponto | site | OPC | campo em falta |
+|---|---|---|---|
+| `0e3f5a8c-1d5f-4e80-a7fc-33d8e7703053` | `d9df0db6-7829-4f68-be57-13dbb28dbae1` | TSLA | usage_type, brands |
+| `2a031d34-94d3-4376-88fd-12f7b982d335` | `d9df0db6-7829-4f68-be57-13dbb28dbae1` | TSLA | usage_type, brands |
+| `MTJ-00128-01` | `MTJ-00128` | GLPP | usage_type |
+| `MTJ-00128-02` | `MTJ-00128` | GLPP | usage_type |
+| `MTS-00202-01` | `MTS-00202` | ATLA | usage_type |
+| `MTS-00202-02` | `MTS-00202` | ATLA | usage_type |
+- **Veredito:** suspeito (635 `usage_type` nulos no snapshot: TSLA 213, EDPC 91, EPKS 71, GLPP 48, FCTO 38) — omissão sistemática por OPC, não aleatória.
 
 [↑ índice](#indice)
 
@@ -1539,22 +1117,31 @@ Type2 em modo DC:
 <a id="opc-CEPS"></a>
 
 <details>
-<summary><b>CEPS — Cepsa Portuguesa Petroleos (33 sites, 59 pontos)</b> · 1 MÉDIO</summary>
+<summary><b>CEPS — Cepsa Portuguesa Petroleos (33 sites, 59 pontos)</b> · 1 MÉDIO, 1 ALTO</summary>
 
-### [MÉDIO] Potência sub-declarada (derating)
-- **Regra:** `ratio = declarada / esperada < 0.75` (mesma esperada e tolerância).
-- **Afetados:** 55 linhas de conector em 55 pontos de 59 (93.2%). Exemplos: `ABT-00017-01`, `ABT-00017-02`, `ABT-00018-01`, `ABT-00017`, `ABT-00018`.
-- **Evidência:** tabela curta (≤10 linhas) com ids e valores. Os ficheiros exaustivos `Agents-outputs/anomalias-evidence.csv` (máquina, uma linha por conector) e `Agents-outputs/anomalias-details.md` (leitura no GitHub, por OPC) já foram gerados por `scripts/anomalias_evidence.py` — NÃO os regeneres nem listes todas as linhas no relatório.
+### [MÉDIO] potência declarada vs V×I (sub-declaração)
+- **Regra:** `ratio < 0,75` suspeito.
+- **Afetados:** 55 de 59 linhas (93,2 %, todas sub). Exemplos: `VCT-00079-01`, `VCT-00079-02`, `ABT-00017-01` (sites `VCT-00079`, `ABT-00017`).
+- **Evidência:**
 
-| ponto | site | tomada / modo | tensao / corrente / declarada / esperada | ratio |
-|---|---|---|---|---|
-| `VCT-00079-01` | `VCT-00079` | iec62196T2COMBO / mode4DC | 300000 V / 375 A / 400.0 kW / 112500.0 kW | 0.004 |
-| `VCT-00079-02` | `VCT-00079` | iec62196T2COMBO / mode4DC | 300000 V / 375 A / 400.0 kW / 112500.0 kW | 0.004 |
-| `ABT-00017-01` | `ABT-00017` | iec62196T2COMBO / mode4DC | 1000 V / 500 A / 100.0 kW / 500.0 kW | 0.200 |
-| `ABT-00017-02` | `ABT-00017` | iec62196T2COMBO / mode4DC | 1000 V / 500 A / 100.0 kW / 500.0 kW | 0.200 |
-| `ABT-00018-01` | `ABT-00018` | iec62196T2COMBO / mode4DC | 1000 V / 500 A / 100.0 kW / 500.0 kW | 0.200 |
-| … | … | +50 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-CEPS)) |
-- **Veredito:** suspeito — declarada 25%+ abaixo da capacidade `V × I`; provável derating operacional, limitação partilhada ou erro de introdução (não viola física).
+| ponto | site | tomada | modo | tensão / corrente / declarada / esperada | ratio |
+|---|---|---|---|---|---|
+| `VCT-00079-01` | `VCT-00079` | iec62196T2COMBO | mode4DC | 300000 V / 375 A / 400 kW / 112500 kW | 0.00 |
+| `VCT-00079-02` | `VCT-00079` | iec62196T2COMBO | mode4DC | 300000 V / 375 A / 400 kW / 112500 kW | 0.00 |
+| `ABT-00017-01` | `ABT-00017` | iec62196T2COMBO | mode4DC | 1000 V / 500 A / 100 kW / 500 kW | 0.20 |
+| … | … | … | … | … | +52 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-CEPS)) |
+- **Veredito:** suspeito (derating em massa; as duas primeiras linhas escondem o erro cru abaixo).
+
+### [ALTO] tensão crua de 300 000 V
+- **Regra:** tensão acima de 1000 V em ligeiros é implausível; 300 000 V = 300 kV (alta tensão da rede).
+- **Afetados:** 2 de 59 linhas (únicas > 10 000 V do snapshot). Exemplos: `VCT-00079-01`, `VCT-00079-02` (site `VCT-00079`).
+- **Evidência:**
+
+| ponto | site | tomada | V / A / declarada |
+|---|---|---|---|
+| `VCT-00079-01` | `VCT-00079` | iec62196T2COMBO | 300000 V / 375 A / 400 kW |
+| `VCT-00079-02` | `VCT-00079` | iec62196T2COMBO | 300000 V / 375 A / 400 kW |
+- **Veredito:** suspeito forte (provável 300 V com três zeros a mais) — corrigir para 300–400 V e recalcular a potência.
 
 [↑ índice](#indice)
 
@@ -1563,28 +1150,20 @@ Type2 em modo DC:
 <a id="opc-DTEI"></a>
 
 <details>
-<summary><b>DTEI — DTE, Instalacoes Especiais (84 sites, 197 pontos)</b> · 1 MÉDIO, 1 BAIXO</summary>
+<summary><b>DTEI — DTE, Instalacoes Especiais (84 sites, 197 pontos)</b> · 1 MÉDIO</summary>
 
-### [MÉDIO] Potência sub-declarada (derating)
-- **Regra:** `ratio = declarada / esperada < 0.75` (mesma esperada e tolerância).
-- **Afetados:** 42 linhas de conector em 42 pontos de 197 (21.3%). Exemplos: `AGD-00020-01`, `AGD-00020-02`, `AGD-00021-01`, `AGD-00020`, `AGD-00021`.
-- **Evidência:** tabela curta (≤10 linhas) com ids e valores. Os ficheiros exaustivos `Agents-outputs/anomalias-evidence.csv` (máquina, uma linha por conector) e `Agents-outputs/anomalias-details.md` (leitura no GitHub, por OPC) já foram gerados por `scripts/anomalias_evidence.py` — NÃO os regeneres nem listes todas as linhas no relatório.
+### [MÉDIO] potência declarada vs V×I
+- **Regra:** `ratio < 0,75` suspeito.
+- **Afetados:** 42 de 197 linhas (21,3 %, todas sub). Exemplos: `AGD-00020-01`, `AGD-00020-02`, `AGD-00021-01` (sites `AGD-00020`, `AGD-00021`).
+- **Evidência:**
 
-| ponto | site | tomada / modo | tensao / corrente / declarada / esperada | ratio |
-|---|---|---|---|---|
-| `AGD-00020-01` | `AGD-00020` | iec62196T2COMBO / mode4DC | 1000 V / 150 A / 60.0 kW / 150.0 kW | 0.400 |
-| `AGD-00020-02` | `AGD-00020` | iec62196T2COMBO / mode4DC | 1000 V / 150 A / 60.0 kW / 150.0 kW | 0.400 |
-| `AGD-00021-01` | `AGD-00021` | iec62196T2COMBO / mode4DC | 1000 V / 150 A / 60.0 kW / 150.0 kW | 0.400 |
-| `AGD-00021-02` | `AGD-00021` | iec62196T2COMBO / mode4DC | 1000 V / 150 A / 60.0 kW / 150.0 kW | 0.400 |
-| `AGD-00022-01` | `AGD-00022` | iec62196T2COMBO / mode4DC | 1000 V / 150 A / 60.0 kW / 150.0 kW | 0.400 |
-| … | … | +37 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-DTEI)) |
-- **Veredito:** suspeito — declarada 25%+ abaixo da capacidade `V × I`; provável derating operacional, limitação partilhada ou erro de introdução (não viola física).
-
-### [BAIXO] `usage_type` em falta
-- **Regra:** `usage_type` vazio ou fora do enum do XSD (`energyInfrastructure.xsd`).
-- **Afetados:** 10 linhas de conector. Exemplos: `CVL-00059-01`, `CVL-00059-02`, `CVL-00059-03`, `CVL-00059`.
-- **Evidência:** `nap_static_points.csv` coluna `usage_type` vazia nestas linhas; total global 635 linhas em falta (só este OPC: 10).
-- **Veredito:** suspeito (metadado omisso) — campo fora do enum, assumedível como uso público mas por confirmar.
+| ponto | site | tomada | modo | tensão / corrente / declarada / esperada | ratio |
+|---|---|---|---|---|---|
+| `AGD-00020-01` | `AGD-00020` | iec62196T2COMBO | mode4DC | 1000 V / 150 A / 60 kW / 150 kW | 0.40 |
+| `AGD-00020-02` | `AGD-00020` | iec62196T2COMBO | mode4DC | 1000 V / 150 A / 60 kW / 150 kW | 0.40 |
+| `AGD-00021-01` | `AGD-00021` | iec62196T2COMBO | mode4DC | 1000 V / 150 A / 60 kW / 150 kW | 0.40 |
+| … | … | … | … | … | +39 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-DTEI)) |
+- **Veredito:** suspeito (60 kW contra 150 kW — padrão 0,40 repetido).
 
 [↑ índice](#indice)
 
@@ -1593,28 +1172,20 @@ Type2 em modo DC:
 <a id="opc-CAPW"></a>
 
 <details>
-<summary><b>CAPW — Capwatt Services (14 sites, 74 pontos)</b> · 1 MÉDIO, 1 BAIXO</summary>
+<summary><b>CAPW — Capwatt Services (14 sites, 74 pontos)</b> · 1 MÉDIO</summary>
 
-### [MÉDIO] Potência sub-declarada (derating)
-- **Regra:** `ratio = declarada / esperada < 0.75` (mesma esperada e tolerância).
-- **Afetados:** 24 linhas de conector em 24 pontos de 74 (32.4%). Exemplos: `LSB-00379-01`, `LSB-00379-02`, `LSB-00379-03`, `LSB-00379`, `LSB-00380`.
-- **Evidência:** tabela curta (≤10 linhas) com ids e valores. Os ficheiros exaustivos `Agents-outputs/anomalias-evidence.csv` (máquina, uma linha por conector) e `Agents-outputs/anomalias-details.md` (leitura no GitHub, por OPC) já foram gerados por `scripts/anomalias_evidence.py` — NÃO os regeneres nem listes todas as linhas no relatório.
+### [MÉDIO] potência declarada vs V×I
+- **Regra:** `ratio < 0,75` suspeito.
+- **Afetados:** 24 de 74 linhas (32,4 %, todas sub). Exemplos: `LSB-00379-01`, `LSB-00379-02`, `LSB-00379-03` (site `LSB-00379`).
+- **Evidência:**
 
-| ponto | site | tomada / modo | tensao / corrente / declarada / esperada | ratio |
-|---|---|---|---|---|
-| `LSB-00379-01` | `LSB-00379` | iec62196T2 / mode3AC3p | 400 V / 32 A / 11.0 kW / 22.2 kW | 0.496 |
-| `LSB-00379-02` | `LSB-00379` | iec62196T2 / mode3AC3p | 400 V / 32 A / 11.0 kW / 22.2 kW | 0.496 |
-| `LSB-00379-03` | `LSB-00379` | iec62196T2 / mode3AC3p | 400 V / 32 A / 11.0 kW / 22.2 kW | 0.496 |
-| `LSB-00379-04` | `LSB-00379` | iec62196T2 / mode3AC3p | 400 V / 32 A / 11.0 kW / 22.2 kW | 0.496 |
-| `LSB-00379-05` | `LSB-00379` | iec62196T2 / mode3AC3p | 400 V / 32 A / 11.0 kW / 22.2 kW | 0.496 |
-| … | … | +19 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-CAPW)) |
-- **Veredito:** suspeito — declarada 25%+ abaixo da capacidade `V × I`; provável derating operacional, limitação partilhada ou erro de introdução (não viola física).
-
-### [BAIXO] Fragmentação do nome do operador
-- **Regra:** um `operator_id` deve ter um único `operator_name`; variantes = fragmentação de grafias.
-- **Afetados:** 2 grafias (Capwatt Services; Capwatt Services, S.A.). Exemplos: `LSB-00380`, `LSB-00379`, `CVL-00009`, `LSB-00380-01`, `CAPW`.
-- **Evidência:** `nap_static_sites.csv` por `operator_id=CAPW`: Capwatt Services ×8; Capwatt Services, S.A. ×6.
-- **Veredito:** suspeito (metadado) — mesma entidade, grafias divergentes; normalizar para a forma canónica.
+| ponto | site | tomada | modo | tensão / corrente / declarada / esperada | ratio |
+|---|---|---|---|---|---|
+| `LSB-00379-01` | `LSB-00379` | iec62196T2 | mode3AC3p | 400 V / 32 A / 11 kW / 22.1703 kW | 0.50 |
+| `LSB-00379-02` | `LSB-00379` | iec62196T2 | mode3AC3p | 400 V / 32 A / 11 kW / 22.1703 kW | 0.50 |
+| `LSB-00379-03` | `LSB-00379` | iec62196T2 | mode3AC3p | 400 V / 32 A / 11 kW / 22.1703 kW | 0.50 |
+| … | … | … | … | … | +21 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-CAPW)) |
+- **Veredito:** suspeito (11 kW contra 22,17 kW — metade exata, provável fase única declarada em tomada trifásica).
 
 [↑ índice](#indice)
 
@@ -1623,44 +1194,30 @@ Type2 em modo DC:
 <a id="opc-ECOI"></a>
 
 <details>
-<summary><b>ECOI — Ecoinside - Soluções em Ecoeficiência e Sustentabilidade Lda (56 sites, 142 pontos)</b> · 2 BAIXO, 1 MÉDIO, 1 ALTO</summary>
+<summary><b>ECOI — Ecoinside - Soluções em Ecoeficiência e Sustentabilidade Lda (56 sites, 142 pontos)</b> · 1 MÉDIO, 1 ALTO</summary>
 
-### [MÉDIO] Potência sub-declarada (derating)
-- **Regra:** `ratio = declarada / esperada < 0.75` (mesma esperada e tolerância).
-- **Afetados:** 24 linhas de conector em 24 pontos de 142 (16.9%). Exemplos: `BRG-00090-01`, `BRG-00090-02`, `CLD-00025-01`, `BRG-00090`, `CLD-00025`.
-- **Evidência:** tabela curta (≤10 linhas) com ids e valores. Os ficheiros exaustivos `Agents-outputs/anomalias-evidence.csv` (máquina, uma linha por conector) e `Agents-outputs/anomalias-details.md` (leitura no GitHub, por OPC) já foram gerados por `scripts/anomalias_evidence.py` — NÃO os regeneres nem listes todas as linhas no relatório.
-
-| ponto | site | tomada / modo | tensao / corrente / declarada / esperada | ratio |
-|---|---|---|---|---|
-| `MLD-00029-04` | `MLD-00029` | iec60309x2single16 / mode2AC1p | 3600 V / 16 A / 3.6 kW / 57.6 kW | 0.062 |
-| `MGR-00025-01` | `MGR-00025` | iec62196T2COMBO / mode4DC | 1000 V / 250 A / 100.0 kW / 250.0 kW | 0.400 |
-| `MGR-00025-02` | `MGR-00025` | iec62196T2COMBO / mode4DC | 1000 V / 250 A / 100.0 kW / 250.0 kW | 0.400 |
-| `RMZ-00003-01` | `RMZ-00003` | iec62196T2COMBO / mode4DC | 920 V / 150 A / 60.0 kW / 138.0 kW | 0.435 |
-| `RMZ-00003-02` | `RMZ-00003` | iec62196T2COMBO / mode4DC | 920 V / 150 A / 60.0 kW / 138.0 kW | 0.435 |
-| … | … | +19 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-ECOI)) |
-- **Veredito:** suspeito — declarada 25%+ abaixo da capacidade `V × I`; provável derating operacional, limitação partilhada ou erro de introdução (não viola física).
-
-### [ALTO] Tensão crua suspeita: 3600 V
-- **Regra:** 3600 V em tomada doméstica/industrial de ligeiros = valor cru já observado como suspeito.
-- **Afetados:** Exemplos: `MLD-00029-04`, `MLD-00029`, `MLD-00029-01`, `MLD-00029-02` — 1 linha, `MLD-00029-04` no site `MLD-00029` (com `MLD-00029-01`, `MLD-00029-02`, `MLD-00029-03` sãs no mesmo site).
+### [MÉDIO] potência declarada vs V×I
+- **Regra:** `ratio < 0,75` suspeito.
+- **Afetados:** 24 de 142 linhas (16,9 %, todas sub). Exemplos: `MLD-00029-04`, `MGR-00025-01`, `MGR-00025-02` (sites `MLD-00029`, `MGR-00025`).
 - **Evidência:**
 
-| ponto | site | tomada / modo | tensão / corrente / declarada |
+| ponto | site | tomada | modo | tensão / corrente / declarada / esperada | ratio |
+|---|---|---|---|---|---|
+| `MLD-00029-04` | `MLD-00029` | iec60309x2single16 | mode2AC1p | 3600 V / 16 A / 3.6 kW / 57.6 kW | 0.06 |
+| `MGR-00025-01` | `MGR-00025` | iec62196T2COMBO | mode4DC | 1000 V / 250 A / 100 kW / 250 kW | 0.40 |
+| `MGR-00025-02` | `MGR-00025` | iec62196T2COMBO | mode4DC | 1000 V / 250 A / 100 kW / 250 kW | 0.40 |
+| … | … | … | … | … | +21 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-ECOI)) |
+- **Veredito:** suspeito (a primeira linha esconde o erro cru abaixo).
+
+### [ALTO] tensão crua de 3600 V
+- **Regra:** 3600 V não existe em carregamento (única linha > 10 kV além das 2 de 300 kV da CEPS).
+- **Afetados:** 1 de 142 linhas. Exemplos: `MLD-00029-04` (site `MLD-00029`), `MGR-00025-01`, `MGR-00025-02` (linhas limpas de referência do mesmo OPC).
+- **Evidência:**
+
+| ponto | site | tomada | V / A / declarada |
 |---|---|---|---|
-| `MLD-00029-04` | `MLD-00029` | iec60309x2single16 / mode2AC1p | 3600 V / 16 A / 3,6 kW |
-- **Veredito:** impossível — 3600 V não existe em BT; provável confusão V↔W (3600 W) no preenchimento.
-
-### [BAIXO] `usage_type` em falta
-- **Regra:** `usage_type` vazio ou fora do enum do XSD (`energyInfrastructure.xsd`).
-- **Afetados:** 6 linhas de conector. Exemplos: `ACN-00016-01`, `ACN-00016-02`, `ACN-00017-01`, `ACN-00016`.
-- **Evidência:** `nap_static_points.csv` coluna `usage_type` vazia nestas linhas; total global 635 linhas em falta (só este OPC: 6).
-- **Veredito:** suspeito (metadado omisso) — campo fora do enum, assumedível como uso público mas por confirmar.
-
-### [BAIXO] Fragmentação do nome do operador
-- **Regra:** um `operator_id` deve ter um único `operator_name`; variantes = fragmentação de grafias.
-- **Afetados:** 2 grafias (ECOINSIDE; Ecoinside - Soluções em Ecoeficiência e Sustentabilidade Lda). Exemplos: `RMZ-00003`, `RMZ-00004`, `RMZ-00003-01`, `ECOI`.
-- **Evidência:** `nap_static_sites.csv` por `operator_id=ECOI`: ECOINSIDE ×2; Ecoinside - Soluções em Ecoeficiência e Sustentabilidade Lda ×54.
-- **Veredito:** suspeito (metadado) — mesma entidade, grafias divergentes; normalizar para a forma canónica.
+| `MLD-00029-04` | `MLD-00029` | iec60309x2single16 | 3600 V / 16 A / 3.6 kW |
+- **Veredito:** suspeito forte (3,6 kW a 16 A dá 225 V — provável 230 V com zeros colados) — corrigir para 230 V.
 
 [↑ índice](#indice)
 
@@ -1671,20 +1228,18 @@ Type2 em modo DC:
 <details>
 <summary><b>ENBL — Enable Mobility Solutions, S.A. (24 sites, 52 pontos)</b> · 1 MÉDIO</summary>
 
-### [MÉDIO] Potência sub-declarada (derating)
-- **Regra:** `ratio = declarada / esperada < 0.75` (mesma esperada e tolerância).
-- **Afetados:** 24 linhas de conector em 24 pontos de 52 (46.2%). Exemplos: `AVR-00099-01`, `AVR-00099-02`, `AVR-00100-01`, `AVR-00099`, `AVR-00100`.
-- **Evidência:** tabela curta (≤10 linhas) com ids e valores. Os ficheiros exaustivos `Agents-outputs/anomalias-evidence.csv` (máquina, uma linha por conector) e `Agents-outputs/anomalias-details.md` (leitura no GitHub, por OPC) já foram gerados por `scripts/anomalias_evidence.py` — NÃO os regeneres nem listes todas as linhas no relatório.
+### [MÉDIO] potência declarada vs V×I
+- **Regra:** `ratio < 0,75` suspeito.
+- **Afetados:** 24 de 52 linhas (46,2 %, todas sub). Exemplos: `AVR-00101-01`, `AVR-00101-02`, `AVR-00102-01` (sites `AVR-00101`, `AVR-00102`).
+- **Evidência:**
 
-| ponto | site | tomada / modo | tensao / corrente / declarada / esperada | ratio |
-|---|---|---|---|---|
-| `AVR-00101-01` | `AVR-00101` | iec62196T2COMBO / mode4DC | 1000 V / 375 A / 150.0 kW / 375.0 kW | 0.400 |
-| `AVR-00101-02` | `AVR-00101` | iec62196T2COMBO / mode4DC | 1000 V / 375 A / 150.0 kW / 375.0 kW | 0.400 |
-| `AVR-00102-01` | `AVR-00102` | iec62196T2COMBO / mode4DC | 1000 V / 375 A / 150.0 kW / 375.0 kW | 0.400 |
-| `AVR-00102-02` | `AVR-00102` | iec62196T2COMBO / mode4DC | 1000 V / 375 A / 150.0 kW / 375.0 kW | 0.400 |
-| `AVR-00103-01` | `AVR-00103` | iec62196T2COMBO / mode4DC | 1000 V / 375 A / 150.0 kW / 375.0 kW | 0.400 |
-| … | … | +19 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-ENBL)) |
-- **Veredito:** suspeito — declarada 25%+ abaixo da capacidade `V × I`; provável derating operacional, limitação partilhada ou erro de introdução (não viola física).
+| ponto | site | tomada | modo | tensão / corrente / declarada / esperada | ratio |
+|---|---|---|---|---|---|
+| `AVR-00101-01` | `AVR-00101` | iec62196T2COMBO | mode4DC | 1000 V / 375 A / 150 kW / 375 kW | 0.40 |
+| `AVR-00101-02` | `AVR-00101` | iec62196T2COMBO | mode4DC | 1000 V / 375 A / 150 kW / 375 kW | 0.40 |
+| `AVR-00102-01` | `AVR-00102` | iec62196T2COMBO | mode4DC | 1000 V / 375 A / 150 kW / 375 kW | 0.40 |
+| … | … | … | … | … | +21 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-ENBL)) |
+- **Veredito:** suspeito (150 kW contra 375 kW — padrão 0,40 em todo o OPC).
 
 [↑ índice](#indice)
 
@@ -1693,28 +1248,20 @@ Type2 em modo DC:
 <a id="opc-IBRD"></a>
 
 <details>
-<summary><b>IBRD — Iberdrola Clientes Portugal, Unipessoal, Lda (184 sites, 361 pontos)</b> · 1 MÉDIO, 1 BAIXO</summary>
+<summary><b>IBRD — Iberdrola Clientes Portugal, Unipessoal, Lda (184 sites, 361 pontos)</b> · 1 MÉDIO</summary>
 
-### [MÉDIO] Potência sub-declarada (derating)
-- **Regra:** `ratio = declarada / esperada < 0.75` (mesma esperada e tolerância).
-- **Afetados:** 24 linhas de conector em 24 pontos de 361 (6.6%). Exemplos: `BGC-00013-01`, `BGC-00013-02`, `BGC-00027-01`, `BGC-00013`, `BGC-00027`.
-- **Evidência:** tabela curta (≤10 linhas) com ids e valores. Os ficheiros exaustivos `Agents-outputs/anomalias-evidence.csv` (máquina, uma linha por conector) e `Agents-outputs/anomalias-details.md` (leitura no GitHub, por OPC) já foram gerados por `scripts/anomalias_evidence.py` — NÃO os regeneres nem listes todas as linhas no relatório.
+### [MÉDIO] potência declarada vs V×I
+- **Regra:** `ratio < 0,75` suspeito.
+- **Afetados:** 24 de 366 linhas (6,6 %, todas sub). Exemplos: `LMG-00027-01`, `LMG-00027-02`, `MTS-00037-01` (sites `LMG-00027`, `MTS-00037`).
+- **Evidência:**
 
-| ponto | site | tomada / modo | tensao / corrente / declarada / esperada | ratio |
-|---|---|---|---|---|
-| `LMG-00027-01` | `LMG-00027` | iec62196T2COMBO / mode4DC | 1000 V / 150 A / 50.0 kW / 150.0 kW | 0.333 |
-| `LMG-00027-02` | `LMG-00027` | iec62196T2COMBO / mode4DC | 1000 V / 150 A / 50.0 kW / 150.0 kW | 0.333 |
-| `MTS-00037-01` | `MTS-00037` | chademo / mode4DC | 500 V / 120 A / 20.0 kW / 60.0 kW | 0.333 |
-| `MTS-00037-02` | `MTS-00037` | iec62196T2COMBO / mode4DC | 500 V / 120 A / 20.0 kW / 60.0 kW | 0.333 |
-| `VNG-00207-01` | `VNG-00207` | iec62196T2COMBO / mode4DC | 1000 V / 150 A / 50.0 kW / 150.0 kW | 0.333 |
-| … | … | +19 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-IBRD)) |
-- **Veredito:** suspeito — declarada 25%+ abaixo da capacidade `V × I`; provável derating operacional, limitação partilhada ou erro de introdução (não viola física).
-
-### [BAIXO] `usage_type` em falta
-- **Regra:** `usage_type` vazio ou fora do enum do XSD (`energyInfrastructure.xsd`).
-- **Afetados:** 12 linhas de conector. Exemplos: `BRG-00171-01`, `BRG-00171-02`, `MTA-00102-01`, `BRG-00171`.
-- **Evidência:** `nap_static_points.csv` coluna `usage_type` vazia nestas linhas; total global 635 linhas em falta (só este OPC: 12).
-- **Veredito:** suspeito (metadado omisso) — campo fora do enum, assumedível como uso público mas por confirmar.
+| ponto | site | tomada | modo | tensão / corrente / declarada / esperada | ratio |
+|---|---|---|---|---|---|
+| `LMG-00027-01` | `LMG-00027` | iec62196T2COMBO | mode4DC | 1000 V / 150 A / 50 kW / 150 kW | 0.33 |
+| `LMG-00027-02` | `LMG-00027` | iec62196T2COMBO | mode4DC | 1000 V / 150 A / 50 kW / 150 kW | 0.33 |
+| `MTS-00037-01` | `MTS-00037` | chademo | mode4DC | 500 V / 120 A / 20 kW / 60 kW | 0.33 |
+| … | … | … | … | … | +21 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-IBRD)) |
+- **Veredito:** suspeito (padrão 0,33 — um terço exato, indicia potência por tomada de posto triplo).
 
 [↑ índice](#indice)
 
@@ -1723,34 +1270,20 @@ Type2 em modo DC:
 <a id="opc-ACCI"></a>
 
 <details>
-<summary><b>ACCI — ACCIONA RECARGA PORTUGAL,UNIPESSOAL LDA (12 sites, 23 pontos)</b> · 2 BAIXO, 1 MÉDIO</summary>
+<summary><b>ACCI — ACCIONA RECARGA PORTUGAL,UNIPESSOAL LDA (12 sites, 23 pontos)</b> · 1 MÉDIO</summary>
 
-### [MÉDIO] Potência sub-declarada (derating)
-- **Regra:** `ratio = declarada / esperada < 0.75` (mesma esperada e tolerância).
-- **Afetados:** 13 linhas de conector em 13 pontos de 23 (56.5%). Exemplos: `11`, `16`, `17`, `GRD-00044`, `LSB-01305`.
-- **Evidência:** tabela curta (≤10 linhas) com ids e valores. Os ficheiros exaustivos `Agents-outputs/anomalias-evidence.csv` (máquina, uma linha por conector) e `Agents-outputs/anomalias-details.md` (leitura no GitHub, por OPC) já foram gerados por `scripts/anomalias_evidence.py` — NÃO os regeneres nem listes todas as linhas no relatório.
+### [MÉDIO] potência declarada vs V×I
+- **Regra:** `ratio < 0,75` suspeito.
+- **Afetados:** 13 de 23 linhas (56,5 %, todas sub). Exemplos: `11`, `16`, `17` (sites `GRD-00044`, `LSB-01305`).
+- **Evidência:**
 
-| ponto | site | tomada / modo | tensao / corrente / declarada / esperada | ratio |
-|---|---|---|---|---|
-| `11` | `GRD-00044` | chademo / mode4DC | 400 V / 250 A / 50.0 kW / 100.0 kW | 0.500 |
-| `16` | `LSB-01305` | iec62196T2COMBO / mode4DC | 400 V / 250 A / 50.0 kW / 100.0 kW | 0.500 |
-| `17` | `LSB-01305` | chademo / mode4DC | 400 V / 250 A / 50.0 kW / 100.0 kW | 0.500 |
-| `40` | `VRL-00064` | iec62196T2COMBO / mode4DC | 1000 V / 400 A / 200.0 kW / 400.0 kW | 0.500 |
-| `41` | `VRL-00064` | iec62196T2COMBO / mode4DC | 1000 V / 400 A / 200.0 kW / 400.0 kW | 0.500 |
-| … | … | +8 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-ACCI)) |
-- **Veredito:** suspeito — declarada 25%+ abaixo da capacidade `V × I`; provável derating operacional, limitação partilhada ou erro de introdução (não viola física).
-
-### [BAIXO] `usage_type` em falta
-- **Regra:** `usage_type` vazio ou fora do enum do XSD (`energyInfrastructure.xsd`).
-- **Afetados:** 7 linhas de conector. Exemplos: `48`, `49`, `46`, `CRS-00005`.
-- **Evidência:** `nap_static_points.csv` coluna `usage_type` vazia nestas linhas; total global 635 linhas em falta (só este OPC: 7).
-- **Veredito:** suspeito (metadado omisso) — campo fora do enum, assumedível como uso público mas por confirmar.
-
-### [BAIXO] Fragmentação do nome do operador
-- **Regra:** um `operator_id` deve ter um único `operator_name`; variantes = fragmentação de grafias.
-- **Afetados:** 2 grafias (ACCIONA RECARGA PORTUGAL,UNIPESSOAL LDA; Acciona Recarga Portugal). Exemplos: `LSB-01305`, `CRS-00005`, `SJP-00004`, `16`, `ACCI`.
-- **Evidência:** `nap_static_sites.csv` por `operator_id=ACCI`: ACCIONA RECARGA PORTUGAL,UNIPESSOAL LDA ×7; Acciona Recarga Portugal ×5.
-- **Veredito:** suspeito (metadado) — mesma entidade, grafias divergentes; normalizar para a forma canónica.
+| ponto | site | tomada | modo | tensão / corrente / declarada / esperada | ratio |
+|---|---|---|---|---|---|
+| `11` | `GRD-00044` | chademo | mode4DC | 400 V / 250 A / 50 kW / 100 kW | 0.50 |
+| `16` | `LSB-01305` | iec62196T2COMBO | mode4DC | 400 V / 250 A / 50 kW / 100 kW | 0.50 |
+| `17` | `LSB-01305` | chademo | mode4DC | 400 V / 250 A / 50 kW / 100 kW | 0.50 |
+| … | … | … | … | … | +10 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-ACCI)) |
+- **Veredito:** suspeito (50 kW contra 100 kW — metade exata; notar `point_id` numéricos curtos que colidem com FCTO, ver secção FCTO).
 
 [↑ índice](#indice)
 
@@ -1761,20 +1294,18 @@ Type2 em modo DC:
 <details>
 <summary><b>INTV — Instavolt Portugal Lda. (13 sites, 24 pontos)</b> · 1 MÉDIO</summary>
 
-### [MÉDIO] Potência sub-declarada (derating)
-- **Regra:** `ratio = declarada / esperada < 0.75` (mesma esperada e tolerância).
-- **Afetados:** 13 linhas de conector em 13 pontos de 24 (54.2%). Exemplos: `AND-00012-01`, `AND-00013-01`, `ELV-00011-01`, `AND-00012`, `AND-00013`.
-- **Evidência:** tabela curta (≤10 linhas) com ids e valores. Os ficheiros exaustivos `Agents-outputs/anomalias-evidence.csv` (máquina, uma linha por conector) e `Agents-outputs/anomalias-details.md` (leitura no GitHub, por OPC) já foram gerados por `scripts/anomalias_evidence.py` — NÃO os regeneres nem listes todas as linhas no relatório.
+### [MÉDIO] potência declarada vs V×I
+- **Regra:** `ratio < 0,75` suspeito.
+- **Afetados:** 13 de 26 linhas (50 %, todas sub). Exemplos: `PTG-00027-01`, `AND-00012-01`, `AND-00013-01` (sites `PTG-00027`, `AND-00012`, `AND-00013`).
+- **Evidência:**
 
-| ponto | site | tomada / modo | tensao / corrente / declarada / esperada | ratio |
-|---|---|---|---|---|
-| `PTG-00027-01` | `PTG-00027` | iec62196T2COMBO / mode4DC | 1000 V / 500 A / 160.0 kW / 500.0 kW | 0.320 |
-| `AND-00012-01` | `AND-00012` | iec62196T2COMBO / mode4DC | 1000 V / 400 A / 160.0 kW / 400.0 kW | 0.400 |
-| `AND-00013-01` | `AND-00013` | iec62196T2COMBO / mode4DC | 1000 V / 400 A / 160.0 kW / 400.0 kW | 0.400 |
-| `ELV-00011-01` | `ELV-00011` | iec62196T2COMBO / mode4DC | 1000 V / 400 A / 160.0 kW / 400.0 kW | 0.400 |
-| `ELV-00012-01` | `ELV-00012` | iec62196T2COMBO / mode4DC | 1000 V / 400 A / 160.0 kW / 400.0 kW | 0.400 |
-| … | … | +8 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-INTV)) |
-- **Veredito:** suspeito — declarada 25%+ abaixo da capacidade `V × I`; provável derating operacional, limitação partilhada ou erro de introdução (não viola física).
+| ponto | site | tomada | modo | tensão / corrente / declarada / esperada | ratio |
+|---|---|---|---|---|---|
+| `PTG-00027-01` | `PTG-00027` | iec62196T2COMBO | mode4DC | 1000 V / 500 A / 160 kW / 500 kW | 0.32 |
+| `AND-00012-01` | `AND-00012` | iec62196T2COMBO | mode4DC | 1000 V / 400 A / 160 kW / 400 kW | 0.40 |
+| `AND-00013-01` | `AND-00013` | iec62196T2COMBO | mode4DC | 1000 V / 400 A / 160 kW / 400 kW | 0.40 |
+| … | … | … | … | … | +10 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-INTV)) |
+- **Veredito:** suspeito (160 kW contra 400–500 kW físicos).
 
 [↑ índice](#indice)
 
@@ -1785,20 +1316,18 @@ Type2 em modo DC:
 <details>
 <summary><b>VIAV — Via Verde Transição Energética, S.A. (5 sites, 13 pontos)</b> · 1 MÉDIO</summary>
 
-### [MÉDIO] Potência sub-declarada (derating)
-- **Regra:** `ratio = declarada / esperada < 0.75` (mesma esperada e tolerância).
-- **Afetados:** 6 linhas de conector em 6 pontos de 13 (46.2%). Exemplos: `615`, `616`, `617`, `OER-00285`, `OER-00286`.
-- **Evidência:** tabela curta (≤10 linhas) com ids e valores. Os ficheiros exaustivos `Agents-outputs/anomalias-evidence.csv` (máquina, uma linha por conector) e `Agents-outputs/anomalias-details.md` (leitura no GitHub, por OPC) já foram gerados por `scripts/anomalias_evidence.py` — NÃO os regeneres nem listes todas as linhas no relatório.
+### [MÉDIO] potência declarada vs V×I
+- **Regra:** `ratio < 0,75` suspeito.
+- **Afetados:** 6 de 13 linhas (46,2 %, todas sub). Exemplos: `615`, `616`, `617` (sites `OER-00285`, `OER-00286`).
+- **Evidência:**
 
-| ponto | site | tomada / modo | tensao / corrente / declarada / esperada | ratio |
-|---|---|---|---|---|
-| `615` | `OER-00285` | iec62196T2COMBO / mode4DC | 1000 V / 600 A / 400.0 kW / 600.0 kW | 0.667 |
-| `616` | `OER-00285` | iec62196T2COMBO / mode4DC | 1000 V / 600 A / 400.0 kW / 600.0 kW | 0.667 |
-| `617` | `OER-00286` | iec62196T2COMBO / mode4DC | 1000 V / 600 A / 400.0 kW / 600.0 kW | 0.667 |
-| `618` | `OER-00286` | iec62196T2COMBO / mode4DC | 1000 V / 600 A / 400.0 kW / 600.0 kW | 0.667 |
-| `619` | `OER-00287` | iec62196T2COMBO / mode4DC | 1000 V / 600 A / 400.0 kW / 600.0 kW | 0.667 |
-| … | … | +1 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-VIAV)) |
-- **Veredito:** suspeito — declarada 25%+ abaixo da capacidade `V × I`; provável derating operacional, limitação partilhada ou erro de introdução (não viola física).
+| ponto | site | tomada | modo | tensão / corrente / declarada / esperada | ratio |
+|---|---|---|---|---|---|
+| `615` | `OER-00285` | iec62196T2COMBO | mode4DC | 1000 V / 600 A / 400 kW / 600 kW | 0.67 |
+| `616` | `OER-00285` | iec62196T2COMBO | mode4DC | 1000 V / 600 A / 400 kW / 600 kW | 0.67 |
+| `617` | `OER-00286` | iec62196T2COMBO | mode4DC | 1000 V / 600 A / 400 kW / 600 kW | 0.67 |
+| … | … | … | … | … | +3 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-VIAV)) |
+- **Veredito:** suspeito (400 kW contra 600 kW; 600 A também é valor cru suspeito — ver FCTO).
 
 [↑ índice](#indice)
 
@@ -1807,27 +1336,20 @@ Type2 em modo DC:
 <a id="opc-IMAG"></a>
 
 <details>
-<summary><b>IMAG — Image4all - Eficiência Energética, Comunicação e Imagem (5 sites, 9 pontos)</b> · 1 MÉDIO, 1 BAIXO</summary>
+<summary><b>IMAG — Image4all - Eficiência Energética, Comunicação e Imagem (5 sites, 9 pontos)</b> · 1 MÉDIO</summary>
 
-### [MÉDIO] Potência sub-declarada (derating)
-- **Regra:** `ratio = declarada / esperada < 0.75` (mesma esperada e tolerância).
-- **Afetados:** 5 linhas de conector em 5 pontos de 9 (55.6%). Exemplos: `LSB-00499-01`, `LSB-00499-02`, `LSB-00502-01`, `LSB-00499`, `LSB-00502`.
-- **Evidência:** tabela curta (≤10 linhas) com ids e valores. Os ficheiros exaustivos `Agents-outputs/anomalias-evidence.csv` (máquina, uma linha por conector) e `Agents-outputs/anomalias-details.md` (leitura no GitHub, por OPC) já foram gerados por `scripts/anomalias_evidence.py` — NÃO os regeneres nem listes todas as linhas no relatório.
+### [MÉDIO] potência declarada vs V×I
+- **Regra:** `ratio < 0,75` suspeito.
+- **Afetados:** 5 de 9 linhas (55,6 %, todas sub). Exemplos: `LSB-00797-01`, `LSB-00499-01`, `LSB-00499-02` (sites `LSB-00797`, `LSB-00499`).
+- **Evidência:**
 
-| ponto | site | tomada / modo | tensao / corrente / declarada / esperada | ratio |
-|---|---|---|---|---|
-| `LSB-00797-01` | `LSB-00797` | iec62196T2 / mode3AC3p | 400 V / 32 A / 11.0 kW / 22.2 kW | 0.496 |
-| `LSB-00499-01` | `LSB-00499` | iec62196T2 / mode3AC3p | 400 V / 63 A / 22.0 kW / 43.6 kW | 0.504 |
-| `LSB-00499-02` | `LSB-00499` | iec62196T2 / mode3AC3p | 400 V / 63 A / 22.0 kW / 43.6 kW | 0.504 |
-| `LSB-00502-01` | `LSB-00502` | iec62196T2 / mode3AC3p | 400 V / 63 A / 22.0 kW / 43.6 kW | 0.504 |
-| `LSB-00502-02` | `LSB-00502` | iec62196T2 / mode3AC3p | 400 V / 63 A / 22.0 kW / 43.6 kW | 0.504 |
-- **Veredito:** suspeito — declarada 25%+ abaixo da capacidade `V × I`; provável derating operacional, limitação partilhada ou erro de introdução (não viola física).
-
-### [BAIXO] Fragmentação do nome do operador
-- **Regra:** um `operator_id` deve ter um único `operator_name`; variantes = fragmentação de grafias.
-- **Afetados:** 2 grafias (Image 4 all – Eficiência Energética, Comunicação e Imagem,Lda; Image4all - Eficiência Energética, Comunicação e Imagem). Exemplos: `LSB-00499`, `LSB-00502`, `LSB-00499-01`, `IMAG`.
-- **Evidência:** `nap_static_sites.csv` por `operator_id=IMAG`: Image 4 all – Eficiência Energética, Comunicação e Imagem,Lda ×2; Image4all - Eficiência Energética, Comunicação e Imagem ×3.
-- **Veredito:** suspeito (metadado) — mesma entidade, grafias divergentes; normalizar para a forma canónica.
+| ponto | site | tomada | modo | tensão / corrente / declarada / esperada | ratio |
+|---|---|---|---|---|---|
+| `LSB-00797-01` | `LSB-00797` | iec62196T2 | mode3AC3p | 400 V / 32 A / 11 kW / 22.1703 kW | 0.50 |
+| `LSB-00499-01` | `LSB-00499` | iec62196T2 | mode3AC3p | 400 V / 63 A / 22 kW / 43.6477 kW | 0.50 |
+| `LSB-00499-02` | `LSB-00499` | iec62196T2 | mode3AC3p | 400 V / 63 A / 22 kW / 43.6477 kW | 0.50 |
+| … | … | … | … | … | +2 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-IMAG)) |
+- **Veredito:** suspeito (metade exata — mesmo padrão CAPW).
 
 [↑ índice](#indice)
 
@@ -1836,26 +1358,20 @@ Type2 em modo DC:
 <a id="opc-CIRC"></a>
 
 <details>
-<summary><b>CIRC — Circuitos Energy Solutions, Lda. (12 sites, 22 pontos)</b> · 1 MÉDIO, 1 BAIXO</summary>
+<summary><b>CIRC — Circuitos Energy Solutions, Lda. (12 sites, 22 pontos)</b> · 1 MÉDIO</summary>
 
-### [MÉDIO] Potência sub-declarada (derating)
-- **Regra:** `ratio = declarada / esperada < 0.75` (mesma esperada e tolerância).
-- **Afetados:** 4 linhas de conector em 4 pontos de 22 (18.2%). Exemplos: `LSB-00273-1`, `MDB-00003-1`, `PRD-00007-01`, `LSB-00273`, `MDB-00003`.
-- **Evidência:** tabela curta (≤10 linhas) com ids e valores. Os ficheiros exaustivos `Agents-outputs/anomalias-evidence.csv` (máquina, uma linha por conector) e `Agents-outputs/anomalias-details.md` (leitura no GitHub, por OPC) já foram gerados por `scripts/anomalias_evidence.py` — NÃO os regeneres nem listes todas as linhas no relatório.
+### [MÉDIO] potência declarada vs V×I
+- **Regra:** `ratio < 0,75` suspeito.
+- **Afetados:** 4 de 22 linhas (18,2 %, todas sub). Exemplos: `PRD-00007-01`, `PRD-00007-02`, `LSB-00273-1` (sites `PRD-00007`, `LSB-00273`).
+- **Evidência:**
 
-| ponto | site | tomada / modo | tensao / corrente / declarada / esperada | ratio |
-|---|---|---|---|---|
-| `PRD-00007-01` | `PRD-00007` | iec62196T2COMBO / mode4DC | 920 V / 250 A / 50.0 kW / 230.0 kW | 0.217 |
-| `PRD-00007-02` | `PRD-00007` | chademo / mode4DC | 920 V / 250 A / 50.0 kW / 230.0 kW | 0.217 |
-| `LSB-00273-1` | `LSB-00273` | iec62196T2 / mode3AC3p | 400 V / 32 A / 7.4 kW / 22.2 kW | 0.334 |
-| `MDB-00003-1` | `MDB-00003` | iec62196T2COMBO / mode4DC | 920 V / 72 A / 24.0 kW / 66.2 kW | 0.362 |
-- **Veredito:** suspeito — declarada 25%+ abaixo da capacidade `V × I`; provável derating operacional, limitação partilhada ou erro de introdução (não viola física).
-
-### [BAIXO] Fragmentação do nome do operador
-- **Regra:** um `operator_id` deve ter um único `operator_name`; variantes = fragmentação de grafias.
-- **Afetados:** 2 grafias (Circuitos Energy Solutions, Lda.; Circuitos de Inovação). Exemplos: `PRD-00005`, `PRD-00016`, `MDB-00003`, `PRD-00005-01`, `CIRC`.
-- **Evidência:** `nap_static_sites.csv` por `operator_id=CIRC`: Circuitos Energy Solutions, Lda. ×7; Circuitos de Inovação ×5.
-- **Veredito:** suspeito (metadado) — mesma entidade, grafias divergentes; normalizar para a forma canónica.
+| ponto | site | tomada | modo | tensão / corrente / declarada / esperada | ratio |
+|---|---|---|---|---|---|
+| `PRD-00007-01` | `PRD-00007` | iec62196T2COMBO | mode4DC | 920 V / 250 A / 50 kW / 230 kW | 0.22 |
+| `PRD-00007-02` | `PRD-00007` | chademo | mode4DC | 920 V / 250 A / 50 kW / 230 kW | 0.22 |
+| `LSB-00273-1` | `LSB-00273` | iec62196T2 | mode3AC3p | 400 V / 32 A / 7.4 kW / 22.1703 kW | 0.33 |
+| … | … | … | … | … | +1 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-CIRC)) |
+- **Veredito:** suspeito (50 kW contra 230 kW no par CCS+CHAdeMO do mesmo posto).
 
 [↑ índice](#indice)
 
@@ -1866,18 +1382,18 @@ Type2 em modo DC:
 <details>
 <summary><b>EMAC — EMACOM - Telecomunicações da Madeira, Unipessoal, Lda (25 sites, 44 pontos)</b> · 1 MÉDIO</summary>
 
-### [MÉDIO] Potência sub-declarada (derating)
-- **Regra:** `ratio = declarada / esperada < 0.75` (mesma esperada e tolerância).
-- **Afetados:** 4 linhas de conector em 4 pontos de 44 (9.1%). Exemplos: `MCH-00002-02`, `MCH-00002-03`, `RAM-CML-00001-03`, `MCH-00002`, `RAM-CML-00001`.
-- **Evidência:** tabela curta (≤10 linhas) com ids e valores. Os ficheiros exaustivos `Agents-outputs/anomalias-evidence.csv` (máquina, uma linha por conector) e `Agents-outputs/anomalias-details.md` (leitura no GitHub, por OPC) já foram gerados por `scripts/anomalias_evidence.py` — NÃO os regeneres nem listes todas as linhas no relatório.
+### [MÉDIO] potência declarada vs V×I
+- **Regra:** `ratio < 0,75` suspeito.
+- **Afetados:** 4 de 45 linhas (8,9 %, todas sub). Exemplos: `MCH-00002-02`, `RAM-CML-00001-03`, `SCR-00023-03` (sites `MCH-00002`, `RAM-CML-00001`, `SCR-00023`).
+- **Evidência:**
 
-| ponto | site | tomada / modo | tensao / corrente / declarada / esperada | ratio |
-|---|---|---|---|---|
-| `MCH-00002-02` | `MCH-00002` | iec62196T2 / mode3AC3p | 400 V / 125 A / 22.0 kW / 86.6 kW | 0.254 |
-| `RAM-CML-00001-03` | `RAM-CML-00001` | iec62196T2 / mode3AC3p | 400 V / 63 A / 22.0 kW / 43.6 kW | 0.504 |
-| `SCR-00023-03` | `SCR-00023` | iec62196T2COMBO / mode4DC | 950 V / 125 A / 60.0 kW / 118.8 kW | 0.505 |
-| `MCH-00002-03` | `MCH-00002` | iec62196T2COMBO / mode4DC | 950 V / 120 A / 60.0 kW / 114.0 kW | 0.526 |
-- **Veredito:** suspeito — declarada 25%+ abaixo da capacidade `V × I`; provável derating operacional, limitação partilhada ou erro de introdução (não viola física).
+| ponto | site | tomada | modo | tensão / corrente / declarada / esperada | ratio |
+|---|---|---|---|---|---|
+| `MCH-00002-02` | `MCH-00002` | iec62196T2 | mode3AC3p | 400 V / 125 A / 22 kW / 86.6025 kW | 0.25 |
+| `RAM-CML-00001-03` | `RAM-CML-00001` | iec62196T2 | mode3AC3p | 400 V / 63 A / 22 kW / 43.6477 kW | 0.50 |
+| `SCR-00023-03` | `SCR-00023` | iec62196T2COMBO | mode4DC | 950 V / 125 A / 60 kW / 118.75 kW | 0.51 |
+| … | … | … | … | … | +1 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-EMAC)) |
+- **Veredito:** suspeito (derating 0,25–0,51 em 4 linhas madeirenses).
 
 [↑ índice](#indice)
 
@@ -1888,18 +1404,18 @@ Type2 em modo DC:
 <details>
 <summary><b>FRTR — FRONTROW, LDA (5 sites, 8 pontos)</b> · 1 MÉDIO</summary>
 
-### [MÉDIO] Potência sub-declarada (derating)
-- **Regra:** `ratio = declarada / esperada < 0.75` (mesma esperada e tolerância).
-- **Afetados:** 4 linhas de conector em 4 pontos de 8 (50.0%). Exemplos: `BJA-00065-01`, `BJA-00065-02`, `CNT-00038-01`, `BJA-00065`, `CNT-00038`.
-- **Evidência:** tabela curta (≤10 linhas) com ids e valores. Os ficheiros exaustivos `Agents-outputs/anomalias-evidence.csv` (máquina, uma linha por conector) e `Agents-outputs/anomalias-details.md` (leitura no GitHub, por OPC) já foram gerados por `scripts/anomalias_evidence.py` — NÃO os regeneres nem listes todas as linhas no relatório.
+### [MÉDIO] potência declarada vs V×I
+- **Regra:** `ratio < 0,75` suspeito.
+- **Afetados:** 4 de 8 linhas (50 %, todas sub). Exemplos: `BJA-00065-01`, `BJA-00065-02`, `CNT-00038-01` (sites `BJA-00065`, `CNT-00038`).
+- **Evidência:**
 
-| ponto | site | tomada / modo | tensao / corrente / declarada / esperada | ratio |
-|---|---|---|---|---|
-| `BJA-00065-01` | `BJA-00065` | iec62196T2COMBO / mode4DC | 950 V / 133 A / 50.0 kW / 126.3 kW | 0.396 |
-| `BJA-00065-02` | `BJA-00065` | iec62196T2COMBO / mode4DC | 950 V / 133 A / 50.0 kW / 126.3 kW | 0.396 |
-| `CNT-00038-01` | `CNT-00038` | iec62196T2COMBO / mode4DC | 950 V / 133 A / 50.0 kW / 126.3 kW | 0.396 |
-| `CNT-00038-02` | `CNT-00038` | iec62196T2COMBO / mode4DC | 950 V / 133 A / 50.0 kW / 126.3 kW | 0.396 |
-- **Veredito:** suspeito — declarada 25%+ abaixo da capacidade `V × I`; provável derating operacional, limitação partilhada ou erro de introdução (não viola física).
+| ponto | site | tomada | modo | tensão / corrente / declarada / esperada | ratio |
+|---|---|---|---|---|---|
+| `BJA-00065-01` | `BJA-00065` | iec62196T2COMBO | mode4DC | 950 V / 133 A / 50 kW / 126.35 kW | 0.40 |
+| `BJA-00065-02` | `BJA-00065` | iec62196T2COMBO | mode4DC | 950 V / 133 A / 50 kW / 126.35 kW | 0.40 |
+| `CNT-00038-01` | `CNT-00038` | iec62196T2COMBO | mode4DC | 950 V / 133 A / 50 kW / 126.35 kW | 0.40 |
+| … | … | … | … | … | +1 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-FRTR)) |
+- **Veredito:** suspeito (50 kW contra ~126 kW — padrão 0,40).
 
 [↑ índice](#indice)
 
@@ -1910,18 +1426,18 @@ Type2 em modo DC:
 <details>
 <summary><b>IHOM — iHome Lda (6 sites, 10 pontos)</b> · 1 MÉDIO</summary>
 
-### [MÉDIO] Potência sub-declarada (derating)
-- **Regra:** `ratio = declarada / esperada < 0.75` (mesma esperada e tolerância).
-- **Afetados:** 4 linhas de conector em 4 pontos de 10 (40.0%). Exemplos: `ABF-00050-01`, `ABF-00050-02`, `ABF-00051-01`, `ABF-00050`, `ABF-00051`.
-- **Evidência:** tabela curta (≤10 linhas) com ids e valores. Os ficheiros exaustivos `Agents-outputs/anomalias-evidence.csv` (máquina, uma linha por conector) e `Agents-outputs/anomalias-details.md` (leitura no GitHub, por OPC) já foram gerados por `scripts/anomalias_evidence.py` — NÃO os regeneres nem listes todas as linhas no relatório.
+### [MÉDIO] potência declarada vs V×I
+- **Regra:** `ratio < 0,75` suspeito.
+- **Afetados:** 4 de 10 linhas (40 %, todas sub). Exemplos: `ABF-00050-01`, `ABF-00051-01`, `ABF-00050-02` (sites `ABF-00050`, `ABF-00051`).
+- **Evidência:**
 
-| ponto | site | tomada / modo | tensao / corrente / declarada / esperada | ratio |
-|---|---|---|---|---|
-| `ABF-00050-01` | `ABF-00050` | iec62196T2COMBO / mode4DC | 920 V / 375 A / 120.0 kW / 345.0 kW | 0.348 |
-| `ABF-00051-01` | `ABF-00051` | iec62196T2COMBO / mode4DC | 920 V / 200 A / 90.0 kW / 184.0 kW | 0.489 |
-| `ABF-00050-02` | `ABF-00050` | chademo / mode4DC | 500 V / 200 A / 50.0 kW / 100.0 kW | 0.500 |
-| `ABF-00051-02` | `ABF-00051` | chademo / mode4DC | 500 V / 200 A / 50.0 kW / 100.0 kW | 0.500 |
-- **Veredito:** suspeito — declarada 25%+ abaixo da capacidade `V × I`; provável derating operacional, limitação partilhada ou erro de introdução (não viola física).
+| ponto | site | tomada | modo | tensão / corrente / declarada / esperada | ratio |
+|---|---|---|---|---|---|
+| `ABF-00050-01` | `ABF-00050` | iec62196T2COMBO | mode4DC | 920 V / 375 A / 120 kW / 345 kW | 0.35 |
+| `ABF-00051-01` | `ABF-00051` | iec62196T2COMBO | mode4DC | 920 V / 200 A / 90 kW / 184 kW | 0.49 |
+| `ABF-00050-02` | `ABF-00050` | chademo | mode4DC | 500 V / 200 A / 50 kW / 100 kW | 0.50 |
+| … | … | … | … | … | +1 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-IHOM)) |
+- **Veredito:** suspeito (derating 0,35–0,50).
 
 [↑ índice](#indice)
 
@@ -1932,18 +1448,18 @@ Type2 em modo DC:
 <details>
 <summary><b>SOLX — SOLX (4 sites, 8 pontos)</b> · 1 MÉDIO</summary>
 
-### [MÉDIO] Potência sub-declarada (derating)
-- **Regra:** `ratio = declarada / esperada < 0.75` (mesma esperada e tolerância).
-- **Afetados:** 4 linhas de conector em 4 pontos de 8 (50.0%). Exemplos: `RPN-00004-01`, `RPN-00004-02`, `RPN-00005-01`, `RPN-00004`, `RPN-00005`.
-- **Evidência:** tabela curta (≤10 linhas) com ids e valores. Os ficheiros exaustivos `Agents-outputs/anomalias-evidence.csv` (máquina, uma linha por conector) e `Agents-outputs/anomalias-details.md` (leitura no GitHub, por OPC) já foram gerados por `scripts/anomalias_evidence.py` — NÃO os regeneres nem listes todas as linhas no relatório.
+### [MÉDIO] potência declarada vs V×I
+- **Regra:** `ratio < 0,75` suspeito.
+- **Afetados:** 4 de 8 linhas (50 %, todas sub). Exemplos: `RPN-00004-01`, `RPN-00004-02`, `RPN-00005-01` (sites `RPN-00004`, `RPN-00005`).
+- **Evidência:**
 
-| ponto | site | tomada / modo | tensao / corrente / declarada / esperada | ratio |
-|---|---|---|---|---|
-| `RPN-00004-01` | `RPN-00004` | iec62196T2 / mode3AC3p | 400 V / 32 A / 11.0 kW / 22.2 kW | 0.496 |
-| `RPN-00004-02` | `RPN-00004` | iec62196T2 / mode3AC3p | 400 V / 32 A / 11.0 kW / 22.2 kW | 0.496 |
-| `RPN-00005-01` | `RPN-00005` | iec62196T2 / mode3AC3p | 690 V / 32 A / 22.0 kW / 38.2 kW | 0.575 |
-| `RPN-00005-02` | `RPN-00005` | iec62196T2 / mode3AC3p | 690 V / 32 A / 22.0 kW / 38.2 kW | 0.575 |
-- **Veredito:** suspeito — declarada 25%+ abaixo da capacidade `V × I`; provável derating operacional, limitação partilhada ou erro de introdução (não viola física).
+| ponto | site | tomada | modo | tensão / corrente / declarada / esperada | ratio |
+|---|---|---|---|---|---|
+| `RPN-00004-01` | `RPN-00004` | iec62196T2 | mode3AC3p | 400 V / 32 A / 11 kW / 22.1703 kW | 0.50 |
+| `RPN-00004-02` | `RPN-00004` | iec62196T2 | mode3AC3p | 400 V / 32 A / 11 kW / 22.1703 kW | 0.50 |
+| `RPN-00005-01` | `RPN-00005` | iec62196T2 | mode3AC3p | 690 V / 32 A / 22 kW / 38.2437 kW | 0.57 |
+| … | … | … | … | … | +1 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-SOLX)) |
+- **Veredito:** suspeito (metade exata em `RPN-00004`; 690 V em `RPN-00005-01` é tensão entre-fases de rede 400 V mal registada).
 
 [↑ índice](#indice)
 
@@ -1954,18 +1470,18 @@ Type2 em modo DC:
 <details>
 <summary><b>WENE — WENEA SERVICES SPAIN S.L. (2 sites, 4 pontos)</b> · 1 MÉDIO</summary>
 
-### [MÉDIO] Potência sub-declarada (derating)
-- **Regra:** `ratio = declarada / esperada < 0.75` (mesma esperada e tolerância).
-- **Afetados:** 4 linhas de conector em 4 pontos de 4 (100.0%). Exemplos: `LSB-00610-01`, `LSB-00610-02`, `LSB-00611-01`, `LSB-00610`, `LSB-00611`.
-- **Evidência:** tabela curta (≤10 linhas) com ids e valores. Os ficheiros exaustivos `Agents-outputs/anomalias-evidence.csv` (máquina, uma linha por conector) e `Agents-outputs/anomalias-details.md` (leitura no GitHub, por OPC) já foram gerados por `scripts/anomalias_evidence.py` — NÃO os regeneres nem listes todas as linhas no relatório.
+### [MÉDIO] potência declarada vs V×I
+- **Regra:** `ratio < 0,75` suspeito.
+- **Afetados:** 4 de 4 linhas (100 %, todas sub). Exemplos: `LSB-00610-01`, `LSB-00610-02`, `LSB-00611-01` (sites `LSB-00610`, `LSB-00611`).
+- **Evidência:**
 
-| ponto | site | tomada / modo | tensao / corrente / declarada / esperada | ratio |
-|---|---|---|---|---|
-| `LSB-00610-01` | `LSB-00610` | iec62196T2 / mode2AC1p | 240 V / 63 A / 7.4 kW / 15.1 kW | 0.489 |
-| `LSB-00610-02` | `LSB-00610` | iec62196T2 / mode2AC1p | 240 V / 63 A / 7.4 kW / 15.1 kW | 0.489 |
-| `LSB-00611-01` | `LSB-00611` | iec62196T2 / mode2AC1p | 240 V / 63 A / 7.4 kW / 15.1 kW | 0.489 |
-| `LSB-00611-02` | `LSB-00611` | iec62196T2 / mode2AC1p | 240 V / 63 A / 7.4 kW / 15.1 kW | 0.489 |
-- **Veredito:** suspeito — declarada 25%+ abaixo da capacidade `V × I`; provável derating operacional, limitação partilhada ou erro de introdução (não viola física).
+| ponto | site | tomada | modo | tensão / corrente / declarada / esperada | ratio |
+|---|---|---|---|---|---|
+| `LSB-00610-01` | `LSB-00610` | iec62196T2 | mode2AC1p | 240 V / 63 A / 7.4 kW / 15.12 kW | 0.49 |
+| `LSB-00610-02` | `LSB-00610` | iec62196T2 | mode2AC1p | 240 V / 63 A / 7.4 kW / 15.12 kW | 0.49 |
+| `LSB-00611-01` | `LSB-00611` | iec62196T2 | mode2AC1p | 240 V / 63 A / 7.4 kW / 15.12 kW | 0.49 |
+| … | … | … | … | … | +1 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-WENE)) |
+- **Veredito:** suspeito (7,4 kW contra 15,12 kW a 240 V/63 A — metade exata nas 4 linhas do OPC).
 
 [↑ índice](#indice)
 
@@ -1974,25 +1490,19 @@ Type2 em modo DC:
 <a id="opc-GENJ"></a>
 
 <details>
-<summary><b>GENJ — Generation Journey Lda (21 sites, 41 pontos)</b> · 1 MÉDIO, 1 BAIXO</summary>
+<summary><b>GENJ — Generation Journey Lda (21 sites, 41 pontos)</b> · 1 MÉDIO</summary>
 
-### [MÉDIO] Potência sub-declarada (derating)
-- **Regra:** `ratio = declarada / esperada < 0.75` (mesma esperada e tolerância).
-- **Afetados:** 3 linhas de conector em 3 pontos de 41 (7.3%). Exemplos: `GMR-00103-01`, `GMR-00103-02`, `GMR-00104-1`, `GMR-00103`, `GMR-00104`.
-- **Evidência:** tabela curta (≤10 linhas) com ids e valores. Os ficheiros exaustivos `Agents-outputs/anomalias-evidence.csv` (máquina, uma linha por conector) e `Agents-outputs/anomalias-details.md` (leitura no GitHub, por OPC) já foram gerados por `scripts/anomalias_evidence.py` — NÃO os regeneres nem listes todas as linhas no relatório.
+### [MÉDIO] potência declarada vs V×I
+- **Regra:** `ratio < 0,75` suspeito.
+- **Afetados:** 3 de 41 linhas (7,3 %, todas sub). Exemplos: `GMR-00103-01`, `GMR-00103-02`, `GMR-00104-1` (sites `GMR-00103`, `GMR-00104`).
+- **Evidência:**
 
-| ponto | site | tomada / modo | tensao / corrente / declarada / esperada | ratio |
-|---|---|---|---|---|
-| `GMR-00103-01` | `GMR-00103` | iec62196T2 / mode2AC1p | 240 V / 50 A / 7.4 kW / 12.0 kW | 0.617 |
-| `GMR-00103-02` | `GMR-00103` | iec62196T2 / mode2AC1p | 240 V / 50 A / 7.4 kW / 12.0 kW | 0.617 |
-| `GMR-00104-1` | `GMR-00104` | iec62196T2 / mode2AC1p | 240 V / 50 A / 7.4 kW / 12.0 kW | 0.617 |
-- **Veredito:** suspeito — declarada 25%+ abaixo da capacidade `V × I`; provável derating operacional, limitação partilhada ou erro de introdução (não viola física).
-
-### [BAIXO] Fragmentação do nome do operador
-- **Regra:** um `operator_id` deve ter um único `operator_name`; variantes = fragmentação de grafias.
-- **Afetados:** 2 grafias (Generation Journey; Generation Journey Lda). Exemplos: `GMR-00082`, `GMR-00082-01`, `GENJ`.
-- **Evidência:** `nap_static_sites.csv` por `operator_id=GENJ`: Generation Journey ×1; Generation Journey Lda ×20.
-- **Veredito:** suspeito (metadado) — mesma entidade, grafias divergentes; normalizar para a forma canónica.
+| ponto | site | tomada | modo | tensão / corrente / declarada / esperada | ratio |
+|---|---|---|---|---|---|
+| `GMR-00103-01` | `GMR-00103` | iec62196T2 | mode2AC1p | 240 V / 50 A / 7.4 kW / 12 kW | 0.62 |
+| `GMR-00103-02` | `GMR-00103` | iec62196T2 | mode2AC1p | 240 V / 50 A / 7.4 kW / 12 kW | 0.62 |
+| `GMR-00104-1` | `GMR-00104` | iec62196T2 | mode2AC1p | 240 V / 50 A / 7.4 kW / 12 kW | 0.62 |
+- **Veredito:** suspeito (7,4 kW contra 12 kW — padrão 0,62 em 3 linhas).
 
 [↑ índice](#indice)
 
@@ -2003,17 +1513,17 @@ Type2 em modo DC:
 <details>
 <summary><b>PTER — PETROTERMICA ENERGIA, S.A. (2 sites, 4 pontos)</b> · 1 MÉDIO</summary>
 
-### [MÉDIO] Potência sub-declarada (derating)
-- **Regra:** `ratio = declarada / esperada < 0.75` (mesma esperada e tolerância).
-- **Afetados:** 3 linhas de conector em 3 pontos de 4 (75.0%). Exemplos: `EPS-00040-01`, `EPS-00040-02`, `VFR-00078-02`, `EPS-00040`, `VFR-00078`.
-- **Evidência:** tabela curta (≤10 linhas) com ids e valores. Os ficheiros exaustivos `Agents-outputs/anomalias-evidence.csv` (máquina, uma linha por conector) e `Agents-outputs/anomalias-details.md` (leitura no GitHub, por OPC) já foram gerados por `scripts/anomalias_evidence.py` — NÃO os regeneres nem listes todas as linhas no relatório.
+### [MÉDIO] potência declarada vs V×I
+- **Regra:** `ratio < 0,75` suspeito.
+- **Afetados:** 3 de 4 linhas (75 %, todas sub). Exemplos: `EPS-00040-01`, `EPS-00040-02`, `VFR-00078-02` (sites `EPS-00040`, `VFR-00078`).
+- **Evidência:**
 
-| ponto | site | tomada / modo | tensao / corrente / declarada / esperada | ratio |
-|---|---|---|---|---|
-| `EPS-00040-01` | `EPS-00040` | iec62196T2COMBO / mode4DC | 950 V / 120 A / 60.0 kW / 114.0 kW | 0.526 |
-| `EPS-00040-02` | `EPS-00040` | iec62196T2COMBO / mode4DC | 950 V / 120 A / 60.0 kW / 114.0 kW | 0.526 |
-| `VFR-00078-02` | `VFR-00078` | iec62196T2COMBO / mode4DC | 950 V / 120 A / 60.0 kW / 114.0 kW | 0.526 |
-- **Veredito:** suspeito — declarada 25%+ abaixo da capacidade `V × I`; provável derating operacional, limitação partilhada ou erro de introdução (não viola física).
+| ponto | site | tomada | modo | tensão / corrente / declarada / esperada | ratio |
+|---|---|---|---|---|---|
+| `EPS-00040-01` | `EPS-00040` | iec62196T2COMBO | mode4DC | 950 V / 120 A / 60 kW / 114 kW | 0.53 |
+| `EPS-00040-02` | `EPS-00040` | iec62196T2COMBO | mode4DC | 950 V / 120 A / 60 kW / 114 kW | 0.53 |
+| `VFR-00078-02` | `VFR-00078` | iec62196T2COMBO | mode4DC | 950 V / 120 A / 60 kW / 114 kW | 0.53 |
+- **Veredito:** suspeito (60 kW contra 114 kW — padrão 0,53).
 
 [↑ índice](#indice)
 
@@ -2024,16 +1534,16 @@ Type2 em modo DC:
 <details>
 <summary><b>ALFA — Alfa Energia (13 sites, 25 pontos)</b> · 1 MÉDIO</summary>
 
-### [MÉDIO] Potência sub-declarada (derating)
-- **Regra:** `ratio = declarada / esperada < 0.75` (mesma esperada e tolerância).
-- **Afetados:** 2 linhas de conector em 2 pontos de 25 (8.0%). Exemplos: `AND-00014-01`, `AND-00014-02`, `AND-00014`.
-- **Evidência:** tabela curta (≤10 linhas) com ids e valores. Os ficheiros exaustivos `Agents-outputs/anomalias-evidence.csv` (máquina, uma linha por conector) e `Agents-outputs/anomalias-details.md` (leitura no GitHub, por OPC) já foram gerados por `scripts/anomalias_evidence.py` — NÃO os regeneres nem listes todas as linhas no relatório.
+### [MÉDIO] potência declarada vs V×I
+- **Regra:** `ratio < 0,75` suspeito.
+- **Afetados:** 2 de 26 linhas (7,7 %, ambas sub). Exemplos: `AND-00014-01`, `AND-00014-02` (site `AND-00014`), `FLG-00022-01` (site `FLG-00022`, linha limpa de referência).
+- **Evidência:**
 
-| ponto | site | tomada / modo | tensao / corrente / declarada / esperada | ratio |
-|---|---|---|---|---|
-| `AND-00014-01` | `AND-00014` | iec62196T2COMBO / mode4DC | 1000 V / 200 A / 40.0 kW / 200.0 kW | 0.200 |
-| `AND-00014-02` | `AND-00014` | iec62196T2COMBO / mode4DC | 1000 V / 200 A / 40.0 kW / 200.0 kW | 0.200 |
-- **Veredito:** suspeito — declarada 25%+ abaixo da capacidade `V × I`; provável derating operacional, limitação partilhada ou erro de introdução (não viola física).
+| ponto | site | tomada | modo | tensão / corrente / declarada / esperada | ratio |
+|---|---|---|---|---|---|
+| `AND-00014-01` | `AND-00014` | iec62196T2COMBO | mode4DC | 1000 V / 200 A / 40 kW / 200 kW | 0.20 |
+| `AND-00014-02` | `AND-00014` | iec62196T2COMBO | mode4DC | 1000 V / 200 A / 40 kW / 200 kW | 0.20 |
+- **Veredito:** suspeito (40 kW contra 200 kW — um quinto exato; restante OPC limpo).
 
 [↑ índice](#indice)
 
@@ -2044,16 +1554,16 @@ Type2 em modo DC:
 <details>
 <summary><b>BRIG — Brightcity S.A. (2 sites, 4 pontos)</b> · 1 MÉDIO</summary>
 
-### [MÉDIO] Potência sub-declarada (derating)
-- **Regra:** `ratio = declarada / esperada < 0.75` (mesma esperada e tolerância).
-- **Afetados:** 2 linhas de conector em 2 pontos de 4 (50.0%). Exemplos: `MTS-00192-01`, `MTS-00192-02`, `MTS-00192`.
-- **Evidência:** tabela curta (≤10 linhas) com ids e valores. Os ficheiros exaustivos `Agents-outputs/anomalias-evidence.csv` (máquina, uma linha por conector) e `Agents-outputs/anomalias-details.md` (leitura no GitHub, por OPC) já foram gerados por `scripts/anomalias_evidence.py` — NÃO os regeneres nem listes todas as linhas no relatório.
+### [MÉDIO] potência declarada vs V×I
+- **Regra:** `ratio < 0,75` suspeito.
+- **Afetados:** 2 de 4 linhas (50 %, ambas sub). Exemplos: `MTS-00192-01`, `MTS-00192-02` (site `MTS-00192`), `MTS-00190-01` (site `MTS-00190`, linha limpa de referência).
+- **Evidência:**
 
-| ponto | site | tomada / modo | tensao / corrente / declarada / esperada | ratio |
-|---|---|---|---|---|
-| `MTS-00192-01` | `MTS-00192` | iec62196T2COMBO / mode4DC | 1000 V / 200 A / 60.0 kW / 200.0 kW | 0.300 |
-| `MTS-00192-02` | `MTS-00192` | iec62196T2COMBO / mode4DC | 1000 V / 200 A / 60.0 kW / 200.0 kW | 0.300 |
-- **Veredito:** suspeito — declarada 25%+ abaixo da capacidade `V × I`; provável derating operacional, limitação partilhada ou erro de introdução (não viola física).
+| ponto | site | tomada | modo | tensão / corrente / declarada / esperada | ratio |
+|---|---|---|---|---|---|
+| `MTS-00192-01` | `MTS-00192` | iec62196T2COMBO | mode4DC | 1000 V / 200 A / 60 kW / 200 kW | 0.30 |
+| `MTS-00192-02` | `MTS-00192` | iec62196T2COMBO | mode4DC | 1000 V / 200 A / 60 kW / 200 kW | 0.30 |
+- **Veredito:** suspeito (60 kW contra 200 kW no par do site `MTS-00192`).
 
 [↑ índice](#indice)
 
@@ -2064,16 +1574,16 @@ Type2 em modo DC:
 <details>
 <summary><b>LOGI — uCharge (26 sites, 35 pontos)</b> · 1 MÉDIO</summary>
 
-### [MÉDIO] Potência sub-declarada (derating)
-- **Regra:** `ratio = declarada / esperada < 0.75` (mesma esperada e tolerância).
-- **Afetados:** 2 linhas de conector em 2 pontos de 35 (5.7%). Exemplos: `CSC-00126-01`, `CSC-00126-02`, `CSC-00126`.
-- **Evidência:** tabela curta (≤10 linhas) com ids e valores. Os ficheiros exaustivos `Agents-outputs/anomalias-evidence.csv` (máquina, uma linha por conector) e `Agents-outputs/anomalias-details.md` (leitura no GitHub, por OPC) já foram gerados por `scripts/anomalias_evidence.py` — NÃO os regeneres nem listes todas as linhas no relatório.
+### [MÉDIO] potência declarada vs V×I
+- **Regra:** `ratio < 0,75` suspeito.
+- **Afetados:** 2 de 35 linhas (5,7 %, ambas sub). Exemplos: `CSC-00126-01`, `CSC-00126-02` (site `CSC-00126`), `LSB-00203-01` (site `LSB-00203`, linha limpa de referência).
+- **Evidência:**
 
-| ponto | site | tomada / modo | tensao / corrente / declarada / esperada | ratio |
-|---|---|---|---|---|
-| `CSC-00126-01` | `CSC-00126` | iec62196T2COMBO / mode4DC | 1000 V / 375 A / 150.0 kW / 375.0 kW | 0.400 |
-| `CSC-00126-02` | `CSC-00126` | iec62196T2COMBO / mode4DC | 1000 V / 375 A / 150.0 kW / 375.0 kW | 0.400 |
-- **Veredito:** suspeito — declarada 25%+ abaixo da capacidade `V × I`; provável derating operacional, limitação partilhada ou erro de introdução (não viola física).
+| ponto | site | tomada | modo | tensão / corrente / declarada / esperada | ratio |
+|---|---|---|---|---|---|
+| `CSC-00126-01` | `CSC-00126` | iec62196T2COMBO | mode4DC | 1000 V / 375 A / 150 kW / 375 kW | 0.40 |
+| `CSC-00126-02` | `CSC-00126` | iec62196T2COMBO | mode4DC | 1000 V / 375 A / 150 kW / 375 kW | 0.40 |
+- **Veredito:** suspeito (150 kW contra 375 kW — padrão 0,40).
 
 [↑ índice](#indice)
 
@@ -2084,16 +1594,16 @@ Type2 em modo DC:
 <details>
 <summary><b>SFAF — Superfafe- supermercados,lda (2 sites, 6 pontos)</b> · 1 MÉDIO</summary>
 
-### [MÉDIO] Potência sub-declarada (derating)
-- **Regra:** `ratio = declarada / esperada < 0.75` (mesma esperada e tolerância).
-- **Afetados:** 2 linhas de conector em 2 pontos de 6 (33.3%). Exemplos: `FAF-00004-01`, `FAF-00004-02`, `FAF-00004`.
-- **Evidência:** tabela curta (≤10 linhas) com ids e valores. Os ficheiros exaustivos `Agents-outputs/anomalias-evidence.csv` (máquina, uma linha por conector) e `Agents-outputs/anomalias-details.md` (leitura no GitHub, por OPC) já foram gerados por `scripts/anomalias_evidence.py` — NÃO os regeneres nem listes todas as linhas no relatório.
+### [MÉDIO] potência declarada vs V×I
+- **Regra:** `ratio < 0,75` suspeito.
+- **Afetados:** 2 de 6 linhas (33,3 %, ambas sub). Exemplos: `FAF-00004-01`, `FAF-00004-02` (site `FAF-00004`), `FAF-00003-01` (site `FAF-00003`, linha limpa de referência).
+- **Evidência:**
 
-| ponto | site | tomada / modo | tensao / corrente / declarada / esperada | ratio |
-|---|---|---|---|---|
-| `FAF-00004-01` | `FAF-00004` | iec62196T2COMBO / mode4DC | 1000 V / 200 A / 90.0 kW / 200.0 kW | 0.450 |
-| `FAF-00004-02` | `FAF-00004` | iec62196T2COMBO / mode4DC | 1000 V / 200 A / 90.0 kW / 200.0 kW | 0.450 |
-- **Veredito:** suspeito — declarada 25%+ abaixo da capacidade `V × I`; provável derating operacional, limitação partilhada ou erro de introdução (não viola física).
+| ponto | site | tomada | modo | tensão / corrente / declarada / esperada | ratio |
+|---|---|---|---|---|---|
+| `FAF-00004-01` | `FAF-00004` | iec62196T2COMBO | mode4DC | 1000 V / 200 A / 90 kW / 200 kW | 0.45 |
+| `FAF-00004-02` | `FAF-00004` | iec62196T2COMBO | mode4DC | 1000 V / 200 A / 90 kW / 200 kW | 0.45 |
+- **Veredito:** suspeito (90 kW contra 200 kW no par do site `FAF-00004`).
 
 [↑ índice](#indice)
 
@@ -2104,16 +1614,16 @@ Type2 em modo DC:
 <details>
 <summary><b>SGMR — Superguimarães - Supermercados,lda (2 sites, 6 pontos)</b> · 1 MÉDIO</summary>
 
-### [MÉDIO] Potência sub-declarada (derating)
-- **Regra:** `ratio = declarada / esperada < 0.75` (mesma esperada e tolerância).
-- **Afetados:** 2 linhas de conector em 2 pontos de 6 (33.3%). Exemplos: `GMR-00022-01`, `GMR-00022-02`, `GMR-00022`.
-- **Evidência:** tabela curta (≤10 linhas) com ids e valores. Os ficheiros exaustivos `Agents-outputs/anomalias-evidence.csv` (máquina, uma linha por conector) e `Agents-outputs/anomalias-details.md` (leitura no GitHub, por OPC) já foram gerados por `scripts/anomalias_evidence.py` — NÃO os regeneres nem listes todas as linhas no relatório.
+### [MÉDIO] potência declarada vs V×I
+- **Regra:** `ratio < 0,75` suspeito.
+- **Afetados:** 2 de 6 linhas (33,3 %, ambas sub). Exemplos: `GMR-00022-01`, `GMR-00022-02`, `GMR-00022-03` (site `GMR-00022`, a terceira tomada é linha limpa de referência).
+- **Evidência:**
 
-| ponto | site | tomada / modo | tensao / corrente / declarada / esperada | ratio |
-|---|---|---|---|---|
-| `GMR-00022-01` | `GMR-00022` | iec62196T2COMBO / mode4DC | 1000 V / 200 A / 120.0 kW / 200.0 kW | 0.600 |
-| `GMR-00022-02` | `GMR-00022` | iec62196T2COMBO / mode4DC | 1000 V / 200 A / 120.0 kW / 200.0 kW | 0.600 |
-- **Veredito:** suspeito — declarada 25%+ abaixo da capacidade `V × I`; provável derating operacional, limitação partilhada ou erro de introdução (não viola física).
+| ponto | site | tomada | modo | tensão / corrente / declarada / esperada | ratio |
+|---|---|---|---|---|---|
+| `GMR-00022-01` | `GMR-00022` | iec62196T2COMBO | mode4DC | 1000 V / 200 A / 120 kW / 200 kW | 0.60 |
+| `GMR-00022-02` | `GMR-00022` | iec62196T2COMBO | mode4DC | 1000 V / 200 A / 120 kW / 200 kW | 0.60 |
+- **Veredito:** suspeito (120 kW contra 200 kW em 2 das 3 tomadas do site `GMR-00022`).
 
 [↑ índice](#indice)
 
@@ -2122,24 +1632,18 @@ Type2 em modo DC:
 <a id="opc-ZUND"></a>
 
 <details>
-<summary><b>ZUND — Grupo Easycharger, SL (14 sites, 27 pontos)</b> · 1 MÉDIO, 1 BAIXO</summary>
+<summary><b>ZUND — Grupo Easycharger, SL (14 sites, 27 pontos)</b> · 1 MÉDIO</summary>
 
-### [MÉDIO] Potência sub-declarada (derating)
-- **Regra:** `ratio = declarada / esperada < 0.75` (mesma esperada e tolerância).
-- **Afetados:** 2 linhas de conector em 2 pontos de 27 (7.4%). Exemplos: `BRG-00085-01`, `BRG-00085-02`, `BRG-00085`.
-- **Evidência:** tabela curta (≤10 linhas) com ids e valores. Os ficheiros exaustivos `Agents-outputs/anomalias-evidence.csv` (máquina, uma linha por conector) e `Agents-outputs/anomalias-details.md` (leitura no GitHub, por OPC) já foram gerados por `scripts/anomalias_evidence.py` — NÃO os regeneres nem listes todas as linhas no relatório.
+### [MÉDIO] potência declarada vs V×I
+- **Regra:** `ratio < 0,75` suspeito.
+- **Afetados:** 2 de 27 linhas (7,4 %, ambas sub). Exemplos: `BRG-00085-01`, `BRG-00085-02` (site `BRG-00085`), `ABF-00184-01` (site `ABF-00184`, linha limpa de referência).
+- **Evidência:**
 
-| ponto | site | tomada / modo | tensao / corrente / declarada / esperada | ratio |
-|---|---|---|---|---|
-| `BRG-00085-01` | `BRG-00085` | iec62196T2COMBO / mode4DC | 1000 V / 500 A / 23.0 kW / 500.0 kW | 0.046 |
-| `BRG-00085-02` | `BRG-00085` | iec62196T2COMBO / mode4DC | 1000 V / 500 A / 23.0 kW / 500.0 kW | 0.046 |
-- **Veredito:** suspeito — declarada 25%+ abaixo da capacidade `V × I`; provável derating operacional, limitação partilhada ou erro de introdução (não viola física).
-
-### [BAIXO] `usage_type` em falta
-- **Regra:** `usage_type` vazio ou fora do enum do XSD (`energyInfrastructure.xsd`).
-- **Afetados:** 24 linhas de conector. Exemplos: `EPS-00041-01`, `EPS-00041-02`, `EPS-00042-01`, `EPS-00041`.
-- **Evidência:** `nap_static_points.csv` coluna `usage_type` vazia nestas linhas; total global 635 linhas em falta (só este OPC: 24).
-- **Veredito:** suspeito (metadado omisso) — campo fora do enum, assumedível como uso público mas por confirmar.
+| ponto | site | tomada | modo | tensão / corrente / declarada / esperada | ratio |
+|---|---|---|---|---|---|
+| `BRG-00085-01` | `BRG-00085` | iec62196T2COMBO | mode4DC | 1000 V / 500 A / 23 kW / 500 kW | 0.05 |
+| `BRG-00085-02` | `BRG-00085` | iec62196T2COMBO | mode4DC | 1000 V / 500 A / 23 kW / 500 kW | 0.05 |
+- **Veredito:** suspeito (23 kW contra 500 kW — ratio 0,05, o mais baixo do norte; provável 230 kW truncado para 23 kW).
 
 [↑ índice](#indice)
 
@@ -2150,15 +1654,40 @@ Type2 em modo DC:
 <details>
 <summary><b>EVPW — EVpower, Charging Solutions Lda (22 sites, 46 pontos)</b> · 1 MÉDIO</summary>
 
-### [MÉDIO] Potência sub-declarada (derating)
-- **Regra:** `ratio = declarada / esperada < 0.75` (mesma esperada e tolerância).
-- **Afetados:** 1 linhas de conector em 1 pontos de 46 (2.2%). Exemplos: `FIG-00002-03`, `FIG-00002`, `PT*EVP*E*FIG*00002*03`.
-- **Evidência:** tabela curta (≤10 linhas) com ids e valores. Os ficheiros exaustivos `Agents-outputs/anomalias-evidence.csv` (máquina, uma linha por conector) e `Agents-outputs/anomalias-details.md` (leitura no GitHub, por OPC) já foram gerados por `scripts/anomalias_evidence.py` — NÃO os regeneres nem listes todas as linhas no relatório.
+### [MÉDIO] potência declarada vs V×I
+- **Regra:** `ratio < 0,75` suspeito.
+- **Afetados:** 1 de 46 linhas (2,2 %). Exemplos: `FIG-00002-03` (site `FIG-00002`), `FIG-00002-01`, `FIG-00002-02` (mesmo site, linhas limpas de referência).
+- **Evidência:**
 
-| ponto | site | tomada / modo | tensao / corrente / declarada / esperada | ratio |
-|---|---|---|---|---|
-| `FIG-00002-03` | `FIG-00002` | iec62196T2 / mode3AC3p | 400 V / 63 A / 22.0 kW / 43.6 kW | 0.504 |
-- **Veredito:** suspeito — declarada 25%+ abaixo da capacidade `V × I`; provável derating operacional, limitação partilhada ou erro de introdução (não viola física).
+| ponto | site | tomada | modo | tensão / corrente / declarada / esperada | ratio |
+|---|---|---|---|---|---|
+| `FIG-00002-03` | `FIG-00002` | iec62196T2 | mode3AC3p | 400 V / 63 A / 22 kW / 43.6477 kW | 0.50 |
+- **Veredito:** suspeito (22 kW contra ~43,6 kW — metade exata; caso único no OPC).
+
+[↑ índice](#indice)
+
+</details>
+
+<a id="opc-IONY"></a>
+
+<details>
+<summary><b>IONY — IONITY GmbH (20 sites, 106 pontos)</b> · 1 MÉDIO</summary>
+
+### [MÉDIO] código postal sem CP7 (só CP4)
+- **Regra:** `postcode` deve cumprir `NNNN-NNN`; 24 linhas trazem só o CP4 (`DDDD`) no snapshot.
+- **Afetados:** 8 de 20 sites IONY (16 linhas) + casos GLPP/ATLA. Exemplos: `ADV-00017`, `ADV-00018` (Almodôvar, 7700), `BCL-00027` (Barcelos, 4750), `ETZ-00025` (Estremoz, 7100), `OER-00064` (Oeiras, 2740, GLPP), `ALQ-00017` (Alenquer, 2580, ATLA).
+- **Evidência:**
+
+| site | OPC | postcode | cidade |
+|---|---|---|---|
+| `ADV-00017` | IONY | 7700 | Almodôvar |
+| `ADV-00018` | IONY | 7700 | Almodôvar |
+| `BCL-00027` | IONY | 4750 | Barcelos |
+| `BCL-00028` | IONY | 4750 | Barcelos |
+| `ETZ-00025` | IONY | 7100 | Estremoz |
+| `OER-00064` | GLPP | 2740 | Oeiras |
+| `ALQ-00017` | ATLA | 2580 | Alenquer |
+- **Veredito:** suspeito (CP4 sem os 3 dígitos — morada não geocodificável ao portal; IONY concentra 16/24) — completar o CP7. Potência do OPC limpa (0/106).
 
 [↑ índice](#indice)
 
@@ -2170,117 +1699,29 @@ Type2 em modo DC:
 <summary><b>BBGE — Morenergy (2 sites, 3 pontos)</b> · 1 BAIXO</summary>
 
 ### [BAIXO] `brands_accepted` vazio
-- **Regra:** lista de CEMEs aceites deve vir preenchida (é global por ponto, não discriminante).
-- **Afetados:** Exemplos: `VVRPUB11`, `VVRPUB12`, `CBRPUB11`, `VVRPUB1` — 3 linhas: `VVRPUB11`, `VVRPUB12` (site `VVRPUB1`), `CBRPUB11` (site `CBRPUB1`).
+- **Regra:** `brands_accepted` é a lista global CEME por ponto; vazio = metadado omisso (216 linhas no snapshot).
+- **Afetados:** 3 de 3 pontos BBGE. Exemplos: `VVRPUB11`, `VVRPUB12` (site `VVRPUB1`), `CBRPUB11` (site `CBRPUB1`).
 - **Evidência:**
 
-| ponto | site |
-|---|---|
-| `VVRPUB11` | `VVRPUB1` |
-| `VVRPUB12` | `VVRPUB1` |
-| `CBRPUB11` | `CBRPUB1` |
-- **Veredito:** suspeito (metadado) — únicos 3 pontos não-Tesla sem lista; confirmar se são pilotos/fechados.
-
-[↑ índice](#indice)
-
-</details>
-
-<a id="opc-CEVE"></a>
-
-<details>
-<summary><b>CEVE — CEVE - Cooperativa Eléctrica do Vale D’Este C.R.L. (4 sites, 10 pontos)</b> · 1 BAIXO</summary>
-
-### [BAIXO] Fragmentação do nome do operador
-- **Regra:** um `operator_id` deve ter um único `operator_name`; variantes = fragmentação de grafias.
-- **Afetados:** 2 grafias (CEVE - Cooperativa Eléctrica do Vale D’Este C.R.L.; Cooperativa Elétrica de Vale d´Este). Exemplos: `BRG-00063`, `BRG-00062`, `BRG-00063-01`, `CEVE`.
-- **Evidência:** `nap_static_sites.csv` por `operator_id=CEVE`: CEVE - Cooperativa Eléctrica do Vale D’Este C.R.L. ×2; Cooperativa Elétrica de Vale d´Este ×2.
-- **Veredito:** suspeito (metadado) — mesma entidade, grafias divergentes; normalizar para a forma canónica.
-
-[↑ índice](#indice)
-
-</details>
-
-<a id="opc-CSCP"></a>
-
-<details>
-<summary><b>CSCP — Cascais Proxima (8 sites, 16 pontos)</b> · 1 BAIXO</summary>
-
-### [BAIXO] Fragmentação do nome do operador
-- **Regra:** um `operator_id` deve ter um único `operator_name`; variantes = fragmentação de grafias.
-- **Afetados:** 2 grafias (Cascais Proxima; Cascais Próxima). Exemplos: `CSC-00109`, `CSC-00110`, `CSC-00109-01`, `CSCP`.
-- **Evidência:** `nap_static_sites.csv` por `operator_id=CSCP`: Cascais Proxima ×6; Cascais Próxima ×2.
-- **Veredito:** suspeito (metadado) — mesma entidade, grafias divergentes; normalizar para a forma canónica.
-
-[↑ índice](#indice)
-
-</details>
-
-<a id="opc-GREE"></a>
-
-<details>
-<summary><b>GREE — GREEN CHARGE - MOBILIDADE ELÉTRICA, LDA (16 sites, 17 pontos)</b> · 1 BAIXO</summary>
-
-### [BAIXO] Fragmentação do nome do operador
-- **Regra:** um `operator_id` deve ter um único `operator_name`; variantes = fragmentação de grafias.
-- **Afetados:** 2 grafias (GREEN CHARGE - MOBILIDADE ELÉTRICA, LDA; Green Charge - Mobilidade Eletrica). Exemplos: `OER-00159`, `OER-00159-1`, `GREE`.
-- **Evidência:** `nap_static_sites.csv` por `operator_id=GREE`: GREEN CHARGE - MOBILIDADE ELÉTRICA, LDA ×15; Green Charge - Mobilidade Eletrica ×1.
-- **Veredito:** suspeito (metadado) — mesma entidade, grafias divergentes; normalizar para a forma canónica.
-
-[↑ índice](#indice)
-
-</details>
-
-<a id="opc-IONY"></a>
-
-<details>
-<summary><b>IONY — IONITY GmbH (20 sites, 106 pontos)</b> · 1 BAIXO</summary>
-
-### [BAIXO] Postcode fora do formato CP7
-- **Regra:** `postcode` no formato `NNNN-NNN`.
-- **Afetados:** 20 sites (CP4 sem sufixo). Exemplos: `ALB-00019`, `ADV-00017`, `ADV-00018`, `BCL-00027`.
-- **Evidência:**
-
-| site | postcode | cidade |
+| ponto | site | brands_accepted |
 |---|---|---|
-| `ALB-00019` | 3850-165 | Albergaria-a-Velha |
-| `ADV-00017` | 7700 | Almodôvar |
-| `ADV-00018` | 7700 | Almodôvar |
-| `BCL-00027` | 4750 | Barcelos |
-| `BCL-00028` | 4750 | Barcelos |
-Restantes:
-
-| site | postcode | cidade (cont.) |
-|---|---|---|
-| `CTB-00037` | 6005-999 | Castelo Branco |
-| `CTB-00038` | 6005-999 | Castelo Branco |
-| `ETZ-00025` | 7100 | Estremoz |
-| `ETZ-00026` | 7100 | Estremoz |
-- **Veredito:** suspeito (formato) — sufixo em falta de forma sistemática neste OPC; georreferenciação por CP fica degradada. Casos isolados noutros OPCs: `ALQ-00017` (`2580`, ATLA), `OER-00064` (`2740`, GLPP).
+| `VVRPUB11` | `VVRPUB1` | (vazio) |
+| `VVRPUB12` | `VVRPUB1` | (vazio) |
+| `CBRPUB11` | `CBRPUB1` | (vazio) |
+- **Veredito:** suspeito (todo o OPC sem lista CEME; potência limpa 0/3) — preencher a lista global.
 
 [↑ índice](#indice)
 
 </details>
 
-## Mudanças de OPCs (desde 2026-09-14)
+## Mudanças de OPCs (desde 2026-09-21)
 
-| OPC | estado | sites (antes→agora) | pontos (antes→agora) | nota |
-|---|---|---|---|---|
-| `EPKS` | crescimento | 4→8 | 36→71 | Telpark |
+Sem alterações: os 92 OPCs do censo anterior (`HEAD:Agents-outputs/opc-census.json`, 2026-09-21T12:04:02Z) coincidem com os 92 atuais (2026-09-21T12:35:02Z) em sites e pontos por OPC — nenhuma entrada, saída ou variação ≥ 20 pontos e ≥ 20 %.
 
 ## Metodologia
 
-- Ficheiros: `nap_static_sites.csv` + `nap_static_points.csv` (ETL de `evChargingInfra_latest.xml`, snapshot 2026-09-21T03:00:04.457Z), `agents-summary.json` (pré-agregação determinística), roteiro de Ohm/`√3·V·I` (tolerância 25%), teto global 1500 kW, tetos por família, crosstab modo↔tomada, enums vs `assets/schemas/*.xsd`, chaves eMI3, coerência CP4↔cidade (moda em CP4 com ≥5 sites), censos `Agents-outputs/opc-census.json` vs HEAD.
-- Evidência exaustiva de potência (uma linha por conector) gerada por `scripts/anomalias_evidence.py`: `Agents-outputs/anomalias-evidence.csv` (máquina) + `Agents-outputs/anomalias-details.md` (leitura no GitHub, por OPC, âncoras `#opc-<ID>`); este relatório resume (≤5 linhas por tabela de potência) e linka ambos na linha de elipse sempre que trunca. Contagens de Afetados conferidas contra esses ficheiros.
-- Geração deste relatório: `scripts/anomalias_report.py` (lê os CSVs/JSON, não altera a evidência).
+Ficheiros: `nap_static_sites.csv` (8375 sites) + `nap_static_points.csv` (21139 linhas de conector), gerados por `scripts/nap_etl.py` a partir de `evChargingInfra_latest.xml`; enums validados contra `assets/schemas/*.xsd` (ver `scripts/check_quality.py`, `scripts/extract_enums.py`). Pré-agregação determinística em `agents-summary.json` (`scripts/anomalias_summary.py`); evidência exaustiva de potência (uma linha por conector anómalo) gerada por `scripts/anomalias_evidence.py` em `Agents-outputs/anomalias-evidence.csv` (7016 linhas: 2726 sobre + 4290 sub) + `Agents-outputs/anomalias-details.md` (leitura no GitHub, por OPC) — as tabelas acima mostram ≤ 10 linhas e linkam ambos na elipse quando truncadas. Limiares: Ohm aproximado `ratio > 1,25` impossível / `< 0,75` suspeito (esperada `V × I`, `√3 × V × I` em `mode3AC3p`); teto global 1500 kW; tetos por tomada (ex. T2 ≤ 50 kW); compatibilidade AC↔DC; eMI3 `^PT\*[A-Z0-9]+\*.+`; CP7 `NNNN-NNN`; rotatividade `|Δpontos| ≥ 20` e `≥ 20 %`. Spot-checks manuais de 2–3 linhas por categoria confirmados nos CSVs antes da escrita.
 
 ## Não-anomalias verificadas
 
-- Enums do schema: 0 linhas fora do XSD em `charging_mode`, `connector_type`, `connector_format`; `usage_type` só com 635 vazios (reportados por OPC), sem valores inválidos.
-- Localização: 0 sites fora dos limites PT; 0 divergências `nuts1`↔coordenadas; 0 `city`/`postcode` vazios; 0 `country` ≠ PT.
-- Operador: 0 `operator_id`/`operator_name` nulos; 0 pontos com `operator_id` ≠ site; 0 nomes partilhados por vários ids.
-- Contagens: 0 sites com `n_points = 0`; 0 sites sem linhas de ponto; `station_ids` nunca vazio; só 1 divergência declarado-vs-distintos (`ORQ-00010`, reportada).
-- Teto global 1500 kW: 0 linhas acima (máximo observado 999990 W em `ESP-00017`); `available_charging_power` só existe em 351/21010 pontos (339 abaixo do máx., plausível partilha — só `VFC-00007` acima, reportado).
-- `connector_format`: `cableMode3` em DC (8631 linhas) é a convenção sistemática do dataset (não existe `otherCable`); `socket`+`mode2AC1p`/`mode3AC3p` conforme; só 6 `socket`+`mode4DC` (reportados em ATLA).
-- eMI3: o 2.º segmento (`EDP`, `GLP`, `HRZ`, …) diverge sistematicamente do `operator_id` atual (`EDPC`, `GLPP`, `HORZ`, …) — limitação documentada (códigos históricos, prefixo `E` colado não-fiável), não anomalia; tal como `brands_accepted` global e NUTS só-nível-1.
-- CP7↔cidade: 206 linhas fora da moda do CP4, quase todas variantes de localidade no mesmo CP4 (ruído modal, ex. `BRR-00021`/`BRR-00022` Barreiro em CP4 2835) — só postcodes truncados reportados (IONY/TSLA/GLPP); códigos `*-9000x` com `1600-233` (ex. `MRA-90001`, `PNC-90001`) são placeholder de sede, não erro de morada.
-- Rotatividade: nenhum OPC novo/saído; só `EPKS` com grande variação (reportada).
+Teto global 1500 kW: limpo (máximo 999,99 kW em `ESP-00017-01`, `ESP-00017-02`, `ESP-00017-03`). Coordenadas fora de PT: 0. `nuts1` em desacordo: 0. `city`/`postcode` em falta: 0. `country` ≠ PT: 0. `operator_id`/`operator_name` nulos: 0. Operador ponto≠site: 0. Sites com `n_points = 0`: 0. Sites sem linhas de ponto: 0. `charging_mode`/`connector_type`/`connector_format` fora do schema: 0. `usage_type` fora do enum além dos 635 nulos: 0. `is_green_energy` nulo: 0. `last_updated` em falta/futuro/pré-2020: 0. `applicable_vehicles` vazio nos 8375 sites é estrutural (coluna nunca preenchida no XML) — registado, não anomalia de introdução.
