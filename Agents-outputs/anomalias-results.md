@@ -1,6 +1,6 @@
 # Anomalias — dados estáticos NAP (2026-09-21, snapshot 2026-09-21T03:00:04Z)
 
-Snapshot: `evChargingInfra` com `last_updated` máximo em 2026-09-21T03:00:04Z (recolha 2026-09-21T12:33:27Z). Totais: 8375 sites, 21010 `point_id` distintos, 21139 linhas de conector com V/I/P numéricos. Potência: 2726 sobre-declarações (`ratio > 1,25`) e 4290 sub-declarações (`ratio < 0,75`), 7016 linhas anómalas em 57 OPCs (ficheiros exaustivos em baixo).
+Snapshot: `evChargingInfra` com `last_updated` máximo em 2026-09-21T03:00:04Z (recolha 2026-09-21T14:38:01Z). Totais: 8375 sites, 21010 `point_id` distintos, 21139 linhas de conector com V/I/P numéricos. Potência: 2726 sobre-declarações (`ratio > 1,25`) e 4290 sub-declarações (`ratio < 0,75`), 7016 linhas anómalas em 57 OPCs (ficheiros exaustivos em baixo).
 
 ## Resumo por OPC
 
@@ -1716,7 +1716,7 @@ Snapshot: `evChargingInfra` com `last_updated` máximo em 2026-09-21T03:00:04Z (
 
 ## Mudanças de OPCs (desde 2026-09-21)
 
-Sem alterações: os 92 OPCs do censo anterior (`HEAD:Agents-outputs/opc-census.json`, 2026-09-21T12:04:02Z) coincidem com os 92 atuais (2026-09-21T12:35:02Z) em sites e pontos por OPC — nenhuma entrada, saída ou variação ≥ 20 pontos e ≥ 20 %.
+Sem alterações: os 92 OPCs do censo anterior (`HEAD:Agents-outputs/opc-census.json`, 2026-09-21T12:35:02Z) coincidem com os 92 atuais (2026-09-21T14:39:36Z) em sites e pontos por OPC — nenhuma entrada, saída ou variação ≥ 20 pontos e ≥ 20 %.
 
 ## Metodologia
 
