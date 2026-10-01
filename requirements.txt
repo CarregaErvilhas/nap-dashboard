@@ -2,5 +2,5 @@
 # Kept in sync by Dependabot (pip, monthly grouped). After editing, rebuild
 # any deliverable that depends on the pipeline output.
 lxml==6.1.3
-pandas==3.0.5
+pandas==3.0.6
 pdfplumber==0.11.10
