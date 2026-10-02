@@ -105,7 +105,7 @@ site_status = pts.groupby('site_external_id')['status'].agg(
 site_npts = pts.groupby('site_external_id')['point_id'].count()
 site_maxkw = pts.groupby('site_external_id')['max_power_kw'].max()
 site_conn = P.groupby('site_external_id')['connector_type'].apply(
-    lambda s: sorted({CONN_NAMES.get(t, t) for t in s}))
+    lambda s: sorted({CONN_NAMES.get(t, t) for t in s if pd.notna(t)}))
 
 osm = pd.read_csv('osm_umap.csv', dtype=str) if os.path.exists('osm_umap.csv') else None
 caca = pd.read_csv('osm_caca.csv', dtype=str) if os.path.exists('osm_caca.csv') else None
