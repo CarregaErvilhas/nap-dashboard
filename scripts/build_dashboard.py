@@ -82,7 +82,7 @@ def _max_power(s):
 
 
 conn_map = pts.groupby('point_id')['connector_type'].apply(
-    lambda s: '|'.join(sorted({CONN_NAMES.get(t, t) for t in s})))
+    lambda s: '|'.join(sorted({CONN_NAMES.get(t, t) for t in s if pd.notna(t)})))
 pow_map = pts.groupby('point_id')['max_power_w'].apply(_max_power)
 pts = pts.drop_duplicates('point_id')[['point_id', 'site_external_id', 'operator_id',
                                        'is_green_energy']].copy()
