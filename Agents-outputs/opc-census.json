@@ -1,11 +1,11 @@
 {
-  "snapshot_date": "2026-09-21",
-  "generated_utc": "2026-09-21T14:39:36+00:00",
+  "snapshot_date": "2026-10-02",
+  "generated_utc": "2026-10-02T11:54:00+00:00",
   "opcs": {
     "ACCI": {
       "name": "ACCIONA RECARGA PORTUGAL,UNIPESSOAL LDA",
-      "sites": 12,
-      "points": 23
+      "sites": 14,
+      "points": 26
     },
     "ALFA": {
       "name": "Alfa Energia",
@@ -14,8 +14,8 @@
     },
     "ATLA": {
       "name": "Atlante Infra Portugal, S.A",
-      "sites": 609,
-      "points": 1425
+      "sites": 610,
+      "points": 1413
     },
     "AUCH": {
       "name": "Auchan Retail Portugal S.A",
@@ -59,8 +59,8 @@
     },
     "CEPS": {
       "name": "Cepsa Portuguesa Petroleos",
-      "sites": 33,
-      "points": 59
+      "sites": 34,
+      "points": 61
     },
     "CEVE": {
       "name": "CEVE - Cooperativa Eléctrica do Vale D’Este C.R.L.",
@@ -89,8 +89,8 @@
     },
     "DTEI": {
       "name": "DTE, Instalacoes Especiais",
-      "sites": 84,
-      "points": 197
+      "sites": 85,
+      "points": 200
     },
     "ECOI": {
       "name": "Ecoinside - Soluções em Ecoeficiência e Sustentabilidade Lda",
@@ -99,8 +99,8 @@
     },
     "EDPC": {
       "name": "EDP Comercial",
-      "sites": 1663,
-      "points": 5802
+      "sites": 1669,
+      "points": 3504
     },
     "EMAC": {
       "name": "EMACOM - Telecomunicações da Madeira, Unipessoal, Lda",
@@ -124,8 +124,8 @@
     },
     "EPKS": {
       "name": "Telpark",
-      "sites": 8,
-      "points": 71
+      "sites": 15,
+      "points": 135
     },
     "EPOC": {
       "name": "EPOCH",
@@ -174,8 +174,8 @@
     },
     "FCTO": {
       "name": "Iberdrola | bp pulse",
-      "sites": 288,
-      "points": 1196
+      "sites": 293,
+      "points": 702
     },
     "FRIO": {
       "name": "Distrifrio Supermercados, Lda",
@@ -204,8 +204,8 @@
     },
     "GLPP": {
       "name": "Galp Power OPC",
-      "sites": 1589,
-      "points": 3529
+      "sites": 1597,
+      "points": 3418
     },
     "GOLD": {
       "name": "Gold Energy",
@@ -224,8 +224,8 @@
     },
     "HELX": {
       "name": "Helexia II Energy Services, Lda.",
-      "sites": 228,
-      "points": 438
+      "sites": 229,
+      "points": 440
     },
     "HEXA": {
       "name": "HEXAGONAL OCEAN, LDA",
@@ -234,13 +234,13 @@
     },
     "HIGH": {
       "name": "High Green Power, Unipessoal Lda.",
-      "sites": 25,
-      "points": 27
+      "sites": 40,
+      "points": 42
     },
     "HORZ": {
       "name": "Powerdot, S.A",
-      "sites": 777,
-      "points": 2108
+      "sites": 782,
+      "points": 2123
     },
     "IBRD": {
       "name": "Iberdrola Clientes Portugal, Unipessoal, Lda",
@@ -257,11 +257,6 @@
       "sites": 5,
       "points": 9
     },
-    "INTV": {
-      "name": "Instavolt Portugal Lda.",
-      "sites": 13,
-      "points": 24
-    },
     "INVP": {
       "name": "Intervilapraia",
       "sites": 1,
@@ -274,8 +269,8 @@
     },
     "KLCS": {
       "name": "Kilometer Low Cost II Serviços, SA",
-      "sites": 86,
-      "points": 107
+      "sites": 88,
+      "points": 109
     },
     "KPMS": {
       "name": "KPM Serviços de Engenheria, Unip Lda",
@@ -299,8 +294,8 @@
     },
     "MAKS": {
       "name": "Maksu",
-      "sites": 333,
-      "points": 370
+      "sites": 300,
+      "points": 340
     },
     "MEOE": {
       "name": "MEO Energia - Comercialização de Energia, SA",
@@ -310,7 +305,7 @@
     "MLTR": {
       "name": "Mobiletric",
       "sites": 108,
-      "points": 257
+      "points": 222
     },
     "MOBA": {
       "name": "MOBI A - Mobilidade e Ambiente, Lda",
@@ -325,7 +320,7 @@
     "MOON": {
       "name": "Siva - Sociedade de Importação de Veículos Automóveis / (sub-CEME da Iberdola)",
       "sites": 26,
-      "points": 56
+      "points": 49
     },
     "MOTA": {
       "name": "Mota-Engil Renewing",
@@ -384,8 +379,8 @@
     },
     "REPS": {
       "name": "REPSOL Portuguesa Lda",
-      "sites": 214,
-      "points": 555
+      "sites": 221,
+      "points": 574
     },
     "SARE": {
       "name": "Superareosa Supermercados, Lda",
@@ -429,8 +424,8 @@
     },
     "TRUE": {
       "name": "WOWPLUG",
-      "sites": 751,
-      "points": 1503
+      "sites": 760,
+      "points": 1521
     },
     "TSLA": {
       "name": "Tesla",
