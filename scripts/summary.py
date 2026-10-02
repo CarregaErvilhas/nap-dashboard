@@ -32,17 +32,24 @@ pts = points.drop_duplicates('point_id')
 print(f"unique points: {len(pts)}, connector rows: {len(points)}")
 
 def pw_class(w):
-    w = float(w)
+    try:
+        w = float(w)
+    except (TypeError, ValueError):
+        return 'unknown'
+    if pd.isna(w):
+        return 'unknown'
     if w < 22000: return 'AC slow (<22kW)'
     if w < 50000: return 'AC/DC 22-50kW'
     if w < 150000: return 'DC fast 50-150kW'
     if w < 350000: return 'DC ultra 150-350kW'
     return 'DC ultra (>=350kW)'
 
+# Fresh upstream data can carry NaN power/connector_type on some rows —
+# drop NaNs inside the aggregations instead of crashing the weekly run.
 agg = points.groupby('point_id').agg(
-    max_power_w=('max_power_w', lambda s: max(float(x) for x in s)),
+    max_power_w=('max_power_w', lambda s: max((float(x) for x in s if pd.notna(x)), default=float('nan'))),
     operator_id=('operator_id', 'first'),
-    connector_types=('connector_type', lambda s: '|'.join(sorted(set(s)))),
+    connector_types=('connector_type', lambda s: '|'.join(sorted({str(x) for x in s if pd.notna(x)}))),
 ).reset_index()
 agg['pw_class'] = agg['max_power_w'].apply(pw_class)
 p = agg['max_power_w']
