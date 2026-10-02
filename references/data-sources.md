@@ -52,9 +52,9 @@ transitional regime runs until 31 Dec 2027.
 ## DGEG — registered operators
 
 - **OPC list** (HTML table `Nº | Entidade | Validade | Morada | NIF | Site`):
-  `https://www.dgeg.gov.pt/pt/areas-setoriais/energia/energia-eletrica/mobilidade-eletrica/operacao-de-pontos-de-carregamento/opc-para-a-mobilidade-eletrica/opc-com-reconhecimento-previo-dgeg/`
+  `https://www.dgeg.gov.pt/pt/areas-setoriais/energia/energia-eletrica/mobilidade-eletrica/operacao-e-comercializacao/lista-de-opc/`
 - **CEME list** (HTML table `Nº | Empresa | Sede | Site | NIPC | Obs.`):
-  `https://www.dgeg.gov.pt/pt/areas-setoriais/energia/energia-eletrica/mobilidade-eletrica/operacao-de-pontos-de-carregamento/comercializadores-de-eletricidade-para-a-mobilidade-eletrica/ceme-registados/`
+  `https://www.dgeg.gov.pt/pt/areas-setoriais/energia/energia-eletrica/mobilidade-eletrica/operacao-e-comercializacao/regime-transitorio/ceme-registados/`
 
   Note: the two tables have **different column names** (OPC: Entidade/Validade/
   Morada/NIF/Site; CEME: Empresa/Sede/Site/NIPC/Obs.). `scripts/dgeg_lists.py`

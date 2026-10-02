@@ -55,13 +55,16 @@ fetch "https://www.mobie.pt/documents/42032/106470/Tarifas" mobie_tarifas.csv cs
 fetch "https://www.mobie.pt/documents/42032/223588/PartyID_MOBIE.pdf/3f0f61d7-a579-ca1c-4804-a39d4f2df8bc?t=1646652329843" mobie_partyid.pdf pdf
 
 # DGEG — registered OPC list (HTML table)
+# 2026-10: DGEG restructured the site under DL 93/2025
+# (operacao-e-comercializacao/); the old operacao-de-pontos-de-carregamento/
+# deep URLs now 301 to the homepage (no <table>) and fail the content check.
 fetch \
-  "https://www.dgeg.gov.pt/pt/areas-setoriais/energia/energia-eletrica/mobilidade-eletrica/operacao-de-pontos-de-carregamento/opc-para-a-mobilidade-eletrica/opc-com-reconhecimento-previo-dgeg/" \
+  "https://www.dgeg.gov.pt/pt/areas-setoriais/energia/energia-eletrica/mobilidade-eletrica/operacao-e-comercializacao/lista-de-opc/" \
   dgeg_opc.html html-table -A "Mozilla/5.0 (Macintosh)"
 
-# DGEG — registered CEME list (HTML table)
+# DGEG — registered CEME list (HTML table, transitional regime)
 fetch \
-  "https://www.dgeg.gov.pt/pt/areas-setoriais/energia/energia-eletrica/mobilidade-eletrica/operacao-de-pontos-de-carregamento/comercializadores-de-eletricidade-para-a-mobilidade-eletrica/ceme-registados/" \
+  "https://www.dgeg.gov.pt/pt/areas-setoriais/energia/energia-eletrica/mobilidade-eletrica/operacao-e-comercializacao/regime-transitorio/ceme-registados/" \
   dgeg_ceme.html html-table -A "Mozilla/5.0 (Macintosh)"
 
 echo "fetched:"

@@ -13,6 +13,7 @@ permissions:
   contents: write
   pages: write
   id-token: write
+  issues: write
 
 concurrency:
   group: "refresh"
@@ -117,6 +118,17 @@ jobs:
       - uses: actions/upload-pages-artifact@v5
         with:
           path: public
+      # A fetch/pipeline failure leaves the dashboard silently stale (agents
+      # skips, Pages doesn't deploy). Open an issue so the next Monday isn't
+      # discovered a week later — same pattern as agents.yml.
+      - name: Notify on failure
+        if: failure()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh issue create --repo "$GITHUB_REPOSITORY" \
+            --title "Weekly refresh failed (run $GITHUB_RUN_ID)" \
+            --body "Fetch/pipeline failed; dashboard stays on last good. Run: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
 
   # Deploy dedicado porque pushes feitos com GITHUB_TOKEN não disparam
   # o pages.yml (é de propósito, anti-loop). Reaproveita o artefacto
