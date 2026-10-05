@@ -1,13 +1,13 @@
 # Erros reportáveis (dados NAP / MOBI.E / DGEG)
 
 ## 1. Tensão / corrente / potência inconsistentes (NAP estático)
-33,8% das tomadas (6.152/18.214) têm potência declarada que não bate com V×I (&gt;25% de diferença). Destas, 2.718 (14,9%) declaram potência acima da capacidade elétrica (fisicamente impossível), ex. 1200 V × 600 A = 720 kW declarados como 200 kW. Valores suspeitos no dataset: tensões de 1200 V e 3600 V, correntes de 600 A.
+33,8% das tomadas (6.147/18.191) têm potência declarada que não bate com V×I (&gt;25% de diferença). Destas, 2.715 (14,9%) declaram potência acima da capacidade elétrica (fisicamente impossível), ex. 1200 V × 600 A = 720 kW declarados como 200 kW. Valores suspeitos no dataset: tensões de 1200 V e 3600 V, correntes de 600 A.
 
 ## 2. Potência NAP vs MOBI.E em contradição (1 pontos)
 As duas fontes oficiais divergem &gt;30%. Ex.: `ABF-00061-01` (NAP 120 kW, MOBI.E 60 kW).
 
 ## 3. Estado duplicado / contraditório no feed dinâmico
-21 pontos aparecem 2–3× no evActualStatus com estados diferentes (ex. `16` aparece como charging e como unknown). 21 linhas a mais no ficheiro.
+22 pontos aparecem 2–3× no evActualStatus com estados diferentes (ex. `17` aparece como available e como unknown). 23 linhas a mais no ficheiro.
 
 ## 4. Fragmentação de nomes de operadores (NAP)
 A mesma entidade legal com múltiplas grafias (22 operadores afetados): Galp (Galp Power / Galpgeste / Galp Gest), Atlante (6 variantes), Iberdrola (3), REPSOL (maiúsculas/minúsculas). Torna a agregação por operador frágil.
@@ -16,16 +16,16 @@ A mesma entidade legal com múltiplas grafias (22 operadores afetados): Galp (Ga
 Só NUTS1 (PT1/PT2/PT3) no estático; sem NUTS2/NUTS3, que o esquema DATEX II suporta e o enquadramento AFIR/INSPIRE prevê.
 
 ## 6. usage_type em falta
-729 tomadas (4,0%) sem tipo de utilização.
+737 tomadas (4,1%) sem tipo de utilização.
 
 ## 7. UID_TOMADA MOBI.E inconsistente
-827 linhas com ids numéricos ('97', '98'…) fora de qualquer formato; mistura de formatos com/sem prefixo PT- e segmento de conector presente/ausente.
+903 linhas com ids numéricos ('97', '98'…) fora de qualquer formato; mistura de formatos com/sem prefixo PT- e segmento de conector presente/ausente.
 
 ## 8. PartyID MOBI.E desatualizado (ficheiro 2022)
 36 códigos ativos no tarifário não estão no ficheiro oficial de códigos (operadores pós-2022: ATL, ZUN, SLX, KLS, WEN…); 22 códigos do ficheiro não têm um único posto. Recomenda-se atualização do documento público.
 
 ## 9. Preços anómalos
-Taxa fixa até 2,50 €/carga; no NAP dinâmico pricePerChargingTime até 3,00 €/min (4 pontos &gt;1 €/min, provável erro de unidade €/min vs €/hora); energia a 0 €/kWh combinada com taxa fixa &gt;0 em 1.963 pontos (suspeito de dados incompletos).
+Taxa fixa até 2,50 €/carga; no NAP dinâmico pricePerChargingTime até 3,00 €/min (4 pontos &gt;1 €/min, provável erro de unidade €/min vs €/hora); energia a 0 €/kWh combinada com taxa fixa &gt;0 em 1.965 pontos (suspeito de dados incompletos).
 
 ## 10. Pontos 'removed' ainda no inventário estático
 0 pontos (0%) marcados 'removed' no dinâmico continuam listados como infraestrutura ativa no estático.
@@ -147,21 +147,21 @@ O mapa "Caça aos Postos de Carregamento" (umap, OSM) registou **177 pontos** de
 
 O mesmo mapa tem ainda **7** postos em construção/obra e **2** para verificar (lista completa em `osm_caca.csv`).
 
-Pagamento ad-hoc: em **185** sites o OSM indica pagamento por cartão ou sem autenticação, mas o `auth_methods` do NAP só lista app/rfid (ex. `BRR-00159`, `VFX-00136`, `ABT-00017`). Pode ser um posto novo com cartão ativo não registado, ou desatualização num dos lados.
+Pagamento ad-hoc: em **184** sites o OSM indica pagamento por cartão ou sem autenticação, mas o `auth_methods` do NAP só lista app/rfid (ex. `BRR-00159`, `VFX-00136`, `ABT-00017`). Pode ser um posto novo com cartão ativo não registado, ou desatualização num dos lados.
 
-Operador: **1634** sites com correspondência código-a-código têm operador OSM diferente do NAP. A maioria é variante de grafia ou rebranding; os pares mais frequentes:
+Operador: **1637** sites com correspondência código-a-código têm operador OSM diferente do NAP. A maioria é variante de grafia ou rebranding; os pares mais frequentes:
 
 | sites | operador NAP | operador OSM |
 |---|---|---|
-| 738 | WOWPLUG | True Kare |
-| 289 | Iberdrola | bp pulse | Charging Together |
-| 151 | Mota-Engil Renewing | Mota Engil II |
-| 115 | Galpgeste | Galp Geste |
+| 737 | WOWPLUG | True Kare |
+| 290 | Iberdrola | bp pulse | Charging Together |
+| 154 | Mota-Engil Renewing | Mota Engil II |
+| 114 | Galpgeste | Galp Geste |
 | 76 | Kilometer Low Cost II Serviços, SA | KLC Serviços |
 | 38 | FactorENERGIA | Factor Energia |
 | 22 | Siva - Sociedade de Importação de Veículos Automóveis / (sub-CEME da Iberdola) | Moon |
 | 21 | uCharge | Logical Gravity |
-| 18 | EVpower, Charging Solutions Lda | EV Power |
+| 19 | EVpower, Charging Solutions Lda | EV Power |
 | 15 | EZ - CHARG3, Lda | EZ-Charg3 |
 | 14 | LUSIADAENERGIA, S.A. | Luzigás |
 | 11 | GREEN CHARGE - MOBILIDADE ELÉTRICA, LDA | GreenCharge |
@@ -169,4 +169,4 @@ Operador: **1634** sites com correspondência código-a-código têm operador OS
 | 9 | Galp Power OPC | Galp Geste |
 | 9 | Gold Energy | Goldenergy |
 
-Cobertura OSM (dump do autor do mapa v2.1): **8017 sites NAP** (95%) com código MOBI.E; 111 divergências de localização >150 m em correspondências de código único.
+Cobertura OSM (dump do autor do mapa v2.1): **7958 sites NAP** (94%) com código MOBI.E; 111 divergências de localização >150 m em correspondências de código único.
