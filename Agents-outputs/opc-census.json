@@ -1,11 +1,11 @@
 {
-  "snapshot_date": "2026-10-02",
-  "generated_utc": "2026-10-02T11:54:00+00:00",
+  "snapshot_date": "2026-10-06",
+  "generated_utc": "2026-10-06T11:22:25+00:00",
   "opcs": {
     "ACCI": {
       "name": "ACCIONA RECARGA PORTUGAL,UNIPESSOAL LDA",
       "sites": 14,
-      "points": 26
+      "points": 25
     },
     "ALFA": {
       "name": "Alfa Energia",
@@ -14,8 +14,8 @@
     },
     "ATLA": {
       "name": "Atlante Infra Portugal, S.A",
-      "sites": 610,
-      "points": 1413
+      "sites": 593,
+      "points": 1371
     },
     "AUCH": {
       "name": "Auchan Retail Portugal S.A",
@@ -120,12 +120,12 @@
     "ENBL": {
       "name": "Enable Mobility Solutions, S.A.",
       "sites": 24,
-      "points": 52
+      "points": 53
     },
     "EPKS": {
       "name": "Telpark",
-      "sites": 15,
-      "points": 135
+      "sites": 23,
+      "points": 265
     },
     "EPOC": {
       "name": "EPOCH",
@@ -174,7 +174,7 @@
     },
     "FCTO": {
       "name": "Iberdrola | bp pulse",
-      "sites": 293,
+      "sites": 294,
       "points": 702
     },
     "FRIO": {
@@ -204,8 +204,8 @@
     },
     "GLPP": {
       "name": "Galp Power OPC",
-      "sites": 1597,
-      "points": 3418
+      "sites": 1598,
+      "points": 3420
     },
     "GOLD": {
       "name": "Gold Energy",
@@ -359,7 +359,7 @@
     },
     "PRIO": {
       "name": "Prio.E Mobility Solutions, Lda",
-      "sites": 162,
+      "sites": 161,
       "points": 292
     },
     "PROP": {
