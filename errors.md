@@ -1,13 +1,13 @@
 # Erros reportáveis (dados NAP / MOBI.E / DGEG)
 
 ## 1. Tensão / corrente / potência inconsistentes (NAP estático)
-33,8% das tomadas (6.147/18.191) têm potência declarada que não bate com V×I (&gt;25% de diferença). Destas, 2.715 (14,9%) declaram potência acima da capacidade elétrica (fisicamente impossível), ex. 1200 V × 600 A = 720 kW declarados como 200 kW. Valores suspeitos no dataset: tensões de 1200 V e 3600 V, correntes de 600 A.
+34,3% das tomadas (6.631/19.359) têm potência declarada que não bate com V×I (&gt;25% de diferença). Destas, 3.100 (16,0%) declaram potência acima da capacidade elétrica (fisicamente impossível), ex. 1200 V × 600 A = 720 kW declarados como 200 kW. Valores suspeitos no dataset: tensões de 1200 V e 3600 V, correntes de 600 A.
 
-## 2. Potência NAP vs MOBI.E em contradição (1 pontos)
-As duas fontes oficiais divergem &gt;30%. Ex.: `ABF-00061-01` (NAP 120 kW, MOBI.E 60 kW).
+## 2. Potência NAP vs MOBI.E em contradição (38 pontos)
+As duas fontes oficiais divergem &gt;30%. Ex.: `D4D10F10-E9C5-41E1-B52A-6767E0423CE9` (NAP 30 kW, MOBI.E 22 kW); `02C150F9-2109-4E8F-8D0A-ED5BC269E2CD` (NAP 30 kW, MOBI.E 22 kW); `7952E4B9-4B3F-4B8D-B16A-0DE1988520B5` (NAP 30 kW, MOBI.E 22 kW).
 
 ## 3. Estado duplicado / contraditório no feed dinâmico
-22 pontos aparecem 2–3× no evActualStatus com estados diferentes (ex. `17` aparece como available e como unknown). 23 linhas a mais no ficheiro.
+29 pontos aparecem 2–3× no evActualStatus com estados diferentes (ex. `162` aparece como charging e como available). 29 linhas a mais no ficheiro.
 
 ## 4. Fragmentação de nomes de operadores (NAP)
 A mesma entidade legal com múltiplas grafias (22 operadores afetados): Galp (Galp Power / Galpgeste / Galp Gest), Atlante (6 variantes), Iberdrola (3), REPSOL (maiúsculas/minúsculas). Torna a agregação por operador frágil.
@@ -16,16 +16,16 @@ A mesma entidade legal com múltiplas grafias (22 operadores afetados): Galp (Ga
 Só NUTS1 (PT1/PT2/PT3) no estático; sem NUTS2/NUTS3, que o esquema DATEX II suporta e o enquadramento AFIR/INSPIRE prevê.
 
 ## 6. usage_type em falta
-737 tomadas (4,1%) sem tipo de utilização.
+2.008 tomadas (10,4%) sem tipo de utilização.
 
 ## 7. UID_TOMADA MOBI.E inconsistente
-903 linhas com ids numéricos ('97', '98'…) fora de qualquer formato; mistura de formatos com/sem prefixo PT- e segmento de conector presente/ausente.
+191.774 linhas com ids numéricos ('97', '98'…) fora de qualquer formato; mistura de formatos com/sem prefixo PT- e segmento de conector presente/ausente.
 
 ## 8. PartyID MOBI.E desatualizado (ficheiro 2022)
-36 códigos ativos no tarifário não estão no ficheiro oficial de códigos (operadores pós-2022: ATL, ZUN, SLX, KLS, WEN…); 22 códigos do ficheiro não têm um único posto. Recomenda-se atualização do documento público.
+37 códigos ativos no tarifário não estão no ficheiro oficial de códigos (operadores pós-2022: ATL, ZUN, SLX, KLS, WEN…); 22 códigos do ficheiro não têm um único posto. Recomenda-se atualização do documento público.
 
 ## 9. Preços anómalos
-Taxa fixa até 2,50 €/carga; no NAP dinâmico pricePerChargingTime até 3,00 €/min (4 pontos &gt;1 €/min, provável erro de unidade €/min vs €/hora); energia a 0 €/kWh combinada com taxa fixa &gt;0 em 1.965 pontos (suspeito de dados incompletos).
+Taxa fixa até 2,50 €/carga; no NAP dinâmico pricePerChargingTime até 3,00 €/min (4 pontos &gt;1 €/min, provável erro de unidade €/min vs €/hora); energia a 0 €/kWh combinada com taxa fixa &gt;0 em 1.968 pontos (suspeito de dados incompletos).
 
 ## 10. Pontos 'removed' ainda no inventário estático
 0 pontos (0%) marcados 'removed' no dinâmico continuam listados como infraestrutura ativa no estático.
@@ -118,12 +118,13 @@ O mapa "Caça aos Postos de Carregamento" (umap, OSM) lista pontos onde a comuni
 | `GLP-VIS-00067` | VIS | Viseu | Mortágua | 45 |
 ## 12. Dúvidas da comunidade OSM/umap perto de sites ativos do NAP
 
-O mapa "Caça aos Postos de Carregamento" (umap, OSM) registou **177 pontos** de dúvida da comunidade. Destes, **20** são "nada no local" a ≤500 m de um site que o NAP lista como infraestrutura ativa — sinal de coordenadas erradas, site inexistente ou ainda não inaugurado:
+O mapa "Caça aos Postos de Carregamento" (umap, OSM) registou **151 pontos** de dúvida da comunidade. Destes, **26** são "nada no local" a ≤500 m de um site que o NAP lista como infraestrutura ativa — sinal de coordenadas erradas, site inexistente ou ainda não inaugurado:
 
 | ponto umap | dúvida | site NAP próximo | distância |
 |---|---|---|---|
 | `QVJdP` | Possível novo posto além do PCN existente da Galp, nada no local em 2026-09-19 | `ALM-90027` (Almada, GLPP) | 6 m |
 | `jWH43` | Possíveis novos postos além do PCN Galp existente, nada no local em 2026-09-19 | `ALM-00017` (Almada, GLPP) | 18 m |
+| `9AWmV` | Possível novo posto além do PCN existente da Atlante, nada no local em 2026-10-07 | `ALM-80021` (Almada, ATLA) | 21 m |
 | `3jmsI` | Possível novo Tesla Supercharger segundo o site da Tesla, nada no local em 2026-07-08 | `PTM-00032` (Portimão, EDPC) | 38 m |
 | `IsqBO` | Possível posto novo no Aldi, nada no local em 2026-07-12 | `MFR-00041` (Mafra, FCTO) | 69 m |
 | `UEdrg` | Possível local para futuro Tesla Supercharger, nada no local em 2026-08-06 | `ALB-00004` (Albergaria-a-Velha, HORZ) | 79 m |
@@ -131,42 +132,47 @@ O mapa "Caça aos Postos de Carregamento" (umap, OSM) registou **177 pontos** de
 | `xiUGo` | Procurar novo posto, sem ser o MTA-00082, na Rua Fernando Pessoa, nada no local em 31-Jul- | `MTA-00082` (Moita, TRUE) | 121 m |
 | `oezEf` | Possível novo posto no Continente, nada no local em 2026-08-30 | `STS-00012` (Santo Tirso, HORZ) | 158 m |
 | `vP0EY` | Possível novo posto lento, nada no local em 2026-08-28 | `SJM-90001` (São João da Madeira, HORZ) | 173 m |
+| `1g5VF` | Possível novo posto no Burger King, nada no local em 2026-10-07 | `SSB-00015` (Sesimbra, ATLA) | 189 m |
 | `mTBIz` | Procurar novo posto, sem ser o MTA-00044, na Rua Miguel Torga, nada no local em 2026-09-14 | `MTA-00044` (Moita, TRUE) | 191 m |
 | `FgpQJ` | Procurar novo posto, nada no local em 2026-06-27 | `OLH-00030` (Olhão, TRUE) | 193 m |
+| `e0VRy` | Possível novo posto, nada no local em 2026-10-07 | `ALM-00115` (Almada, MOTA) | 197 m |
 | `tczNY` | Possível novo posto, nada no local em 2026-08-23 | `ALM-00124` (Almada, EZC3) | 215 m |
 | `goqF9` | Procurar novo posto, nada no local em 2026-07-05 | `OLH-00045` (Olhão, LUSI) | 257 m |
 | `nWkHf` | Possível posto novo, nada no local em 2026-09-10 | `ALM-90004` (Almada, HORZ) | 257 m |
+| `44UZz` | Possível novo posto, nada no local em 2026-10-07 | `ALM-90028` (Almada, HORZ) | 290 m |
+| `BU0LJ` | Possível novo posto rápido, , nada no local em 2026-10-07 | `6174PL0001` (nan, CONT) | 296 m |
 | `ZBJkE` | Possível posto novo, nada no local em 2026-09-10 | `ALM-90004` (Almada, HORZ) | 314 m |
 | `34Ieo` | Possível novo posto lento, nada no local em 2026-08-04 | `VNH-00002` (Vinhais, EDPC) | 323 m |
 | `axhaN` | Possível novo posto, nada no local em 2026-08-03 | `CLD-00036` (Caldas da Rainha, EDPC) | 335 m |
 | `mdbLU` | Possível novo posto no ALDI, nada no local em 2026-06-27 | `SXL-00030` (Seixal, GLPP) | 348 m |
 | `FvAls` | Possível novo posto, nada no local em 2026-08-04 | `PTG-00021` (Portalegre, ATLA) | 391 m |
 | `0rZu2` | Possível novo posto, nada no local em 2026-09-13 | `ALM-00087` (Almada, EVGR) | 420 m |
+| `wf0cl` | Possível posto novo, nada no local em 2026-10-07 | `SXL-00063` (Seixal, IBRD) | 483 m |
 
 > Nota: o umap é curado pela comunidade, não é fonte oficial; serve como pista para verificação no terreno.
 
 O mesmo mapa tem ainda **7** postos em construção/obra e **2** para verificar (lista completa em `osm_caca.csv`).
 
-Pagamento ad-hoc: em **184** sites o OSM indica pagamento por cartão ou sem autenticação, mas o `auth_methods` do NAP só lista app/rfid (ex. `BRR-00159`, `VFX-00136`, `ABT-00017`). Pode ser um posto novo com cartão ativo não registado, ou desatualização num dos lados.
+Pagamento ad-hoc: em **190** sites o OSM indica pagamento por cartão ou sem autenticação, mas o `auth_methods` do NAP só lista app/rfid (ex. `BRR-00159`, `VFX-00136`, `ABT-00017`). Pode ser um posto novo com cartão ativo não registado, ou desatualização num dos lados.
 
-Operador: **1637** sites com correspondência código-a-código têm operador OSM diferente do NAP. A maioria é variante de grafia ou rebranding; os pares mais frequentes:
+Operador: **1645** sites com correspondência código-a-código têm operador OSM diferente do NAP. A maioria é variante de grafia ou rebranding; os pares mais frequentes:
 
 | sites | operador NAP | operador OSM |
 |---|---|---|
-| 737 | WOWPLUG | True Kare |
-| 290 | Iberdrola | bp pulse | Charging Together |
+| 739 | WOWPLUG | True Kare |
+| 291 | Iberdrola | bp pulse | Charging Together |
 | 154 | Mota-Engil Renewing | Mota Engil II |
-| 114 | Galpgeste | Galp Geste |
-| 76 | Kilometer Low Cost II Serviços, SA | KLC Serviços |
+| 113 | Galpgeste | Galp Geste |
+| 78 | Kilometer Low Cost II Serviços, SA | KLC Serviços |
 | 38 | FactorENERGIA | Factor Energia |
-| 22 | Siva - Sociedade de Importação de Veículos Automóveis / (sub-CEME da Iberdola) | Moon |
+| 21 | Siva - Sociedade de Importação de Veículos Automóveis / (sub-CEME da Iberdola) | Moon |
 | 21 | uCharge | Logical Gravity |
 | 19 | EVpower, Charging Solutions Lda | EV Power |
 | 15 | EZ - CHARG3, Lda | EZ-Charg3 |
+| 14 | Grupo Easycharger, SL | Zunder |
 | 14 | LUSIADAENERGIA, S.A. | Luzigás |
 | 11 | GREEN CHARGE - MOBILIDADE ELÉTRICA, LDA | GreenCharge |
-| 10 | Grupo Easycharger, SL | Zunder |
-| 9 | Galp Power OPC | Galp Geste |
+| 10 | Galp Power OPC | Galp Geste |
 | 9 | Gold Energy | Goldenergy |
 
-Cobertura OSM (dump do autor do mapa v2.1): **7958 sites NAP** (94%) com código MOBI.E; 111 divergências de localização >150 m em correspondências de código único.
+Cobertura OSM (dump do autor do mapa v2.1): **7889 sites NAP** (88%) com código MOBI.E; 102 divergências de localização >150 m em correspondências de código único.
