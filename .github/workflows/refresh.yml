@@ -11,8 +11,6 @@ on:
 
 permissions:
   contents: write
-  pages: write
-  id-token: write
   issues: write
 
 concurrency:
@@ -108,16 +106,9 @@ jobs:
           git add dashboard.html dashboard.png facts.md errors.md novidades.md network-census.json
           git diff --cached --quiet && echo "no changes to commit" || git commit -m "Weekly dashboard refresh: $(date -u +%F)"
           git push
-      - name: Stage site
-        run: |
-          mkdir -p public
-          cp dashboard.html public/index.html
-          cp dashboard.html public/dashboard.html
-          cp dashboard.png public/dashboard.png
-          echo "nap.ocarroeletrico.com" > public/CNAME
-      - uses: actions/upload-pages-artifact@v5
-        with:
-          path: public
+      # O push acima (via PAT, não GITHUB_TOKEN) dispara o pages.yml, que é a
+      # única via de deploy — este workflow não publica no Pages diretamente
+      # para não correr dois deployments em simultâneo (400 "in progress").
       # A fetch/pipeline failure leaves the dashboard silently stale (agents
       # skips, Pages doesn't deploy). Open an issue so the next Monday isn't
       # discovered a week later — same pattern as agents.yml.
@@ -129,16 +120,3 @@ jobs:
           gh issue create --repo "$GITHUB_REPOSITORY" \
             --title "Weekly refresh failed (run $GITHUB_RUN_ID)" \
             --body "Fetch/pipeline failed; dashboard stays on last good. Run: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
-
-  # Deploy dedicado porque pushes feitos com GITHUB_TOKEN não disparam
-  # o pages.yml (é de propósito, anti-loop). Reaproveita o artefacto
-  # subido pelo job refresh (mesmo run).
-  deploy:
-    needs: refresh
-    runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - id: deployment
-        uses: actions/deploy-pages@v5
