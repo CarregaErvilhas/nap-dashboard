@@ -1,6 +1,6 @@
 {
-  "snapshot_date": "2026-10-06",
-  "generated_utc": "2026-10-06T11:22:25+00:00",
+  "snapshot_date": "2026-10-12",
+  "generated_utc": "2026-10-12T15:06:59+00:00",
   "opcs": {
     "ACCI": {
       "name": "ACCIONA RECARGA PORTUGAL,UNIPESSOAL LDA",
@@ -14,8 +14,8 @@
     },
     "ATLA": {
       "name": "Atlante Infra Portugal, S.A",
-      "sites": 593,
-      "points": 1371
+      "sites": 596,
+      "points": 1377
     },
     "AUCH": {
       "name": "Auchan Retail Portugal S.A",
@@ -23,7 +23,7 @@
       "points": 3
     },
     "BBGE": {
-      "name": "Morenergy",
+      "name": "BBG Energia Unipessoal, Lda",
       "sites": 2,
       "points": 3
     },
@@ -82,6 +82,11 @@
       "sites": 3,
       "points": 6
     },
+    "CONT": {
+      "name": "Modelo Continente Hipermercados, S.A.",
+      "sites": 450,
+      "points": 954
+    },
     "CSCP": {
       "name": "Cascais Proxima",
       "sites": 8,
@@ -94,13 +99,13 @@
     },
     "ECOI": {
       "name": "Ecoinside - Soluções em Ecoeficiência e Sustentabilidade Lda",
-      "sites": 56,
-      "points": 142
+      "sites": 57,
+      "points": 145
     },
     "EDPC": {
       "name": "EDP Comercial",
-      "sites": 1669,
-      "points": 3504
+      "sites": 1677,
+      "points": 3519
     },
     "EMAC": {
       "name": "EMACOM - Telecomunicações da Madeira, Unipessoal, Lda",
@@ -224,8 +229,8 @@
     },
     "HELX": {
       "name": "Helexia II Energy Services, Lda.",
-      "sites": 229,
-      "points": 440
+      "sites": 234,
+      "points": 451
     },
     "HEXA": {
       "name": "HEXAGONAL OCEAN, LDA",
@@ -239,13 +244,13 @@
     },
     "HORZ": {
       "name": "Powerdot, S.A",
-      "sites": 782,
-      "points": 2123
+      "sites": 783,
+      "points": 2126
     },
     "IBRD": {
       "name": "Iberdrola Clientes Portugal, Unipessoal, Lda",
-      "sites": 184,
-      "points": 361
+      "sites": 188,
+      "points": 369
     },
     "IHOM": {
       "name": "iHome Lda",
@@ -294,8 +299,8 @@
     },
     "MAKS": {
       "name": "Maksu",
-      "sites": 300,
-      "points": 340
+      "sites": 236,
+      "points": 269
     },
     "MEOE": {
       "name": "MEO Energia - Comercialização de Energia, SA",
