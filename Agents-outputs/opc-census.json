@@ -1,6 +1,6 @@
 {
-  "snapshot_date": "2026-10-12",
-  "generated_utc": "2026-10-12T15:06:59+00:00",
+  "snapshot_date": "2026-10-17",
+  "generated_utc": "2026-10-17T22:59:34+00:00",
   "opcs": {
     "ACCI": {
       "name": "ACCIONA RECARGA PORTUGAL,UNIPESSOAL LDA",
@@ -14,8 +14,8 @@
     },
     "ATLA": {
       "name": "Atlante Infra Portugal, S.A",
-      "sites": 596,
-      "points": 1377
+      "sites": 598,
+      "points": 1381
     },
     "AUCH": {
       "name": "Auchan Retail Portugal S.A",
@@ -104,8 +104,8 @@
     },
     "EDPC": {
       "name": "EDP Comercial",
-      "sites": 1677,
-      "points": 3519
+      "sites": 1678,
+      "points": 3521
     },
     "EMAC": {
       "name": "EMACOM - Telecomunicações da Madeira, Unipessoal, Lda",
@@ -114,8 +114,8 @@
     },
     "EMEL": {
       "name": "EMEL - Empresa Municipal de Mobilidade e Estacionamento de Lisboa, E.M., S.A.",
-      "sites": 82,
-      "points": 182
+      "sites": 83,
+      "points": 184
     },
     "EMOB": {
       "name": "Emobtec - Tec. Mobilidade Elétrica, unipessoal Lda",
@@ -129,8 +129,8 @@
     },
     "EPKS": {
       "name": "Telpark",
-      "sites": 23,
-      "points": 265
+      "sites": 35,
+      "points": 370
     },
     "EPOC": {
       "name": "EPOCH",
@@ -179,8 +179,8 @@
     },
     "FCTO": {
       "name": "Iberdrola | bp pulse",
-      "sites": 294,
-      "points": 702
+      "sites": 297,
+      "points": 707
     },
     "FRIO": {
       "name": "Distrifrio Supermercados, Lda",
@@ -204,13 +204,13 @@
     },
     "GLPG": {
       "name": "Galpgeste",
-      "sites": 126,
-      "points": 328
+      "sites": 123,
+      "points": 319
     },
     "GLPP": {
       "name": "Galp Power OPC",
-      "sites": 1598,
-      "points": 3420
+      "sites": 1597,
+      "points": 3418
     },
     "GOLD": {
       "name": "Gold Energy",
@@ -240,17 +240,17 @@
     "HIGH": {
       "name": "High Green Power, Unipessoal Lda.",
       "sites": 40,
-      "points": 42
+      "points": 43
     },
     "HORZ": {
       "name": "Powerdot, S.A",
-      "sites": 783,
-      "points": 2126
+      "sites": 785,
+      "points": 2135
     },
     "IBRD": {
       "name": "Iberdrola Clientes Portugal, Unipessoal, Lda",
-      "sites": 188,
-      "points": 369
+      "sites": 189,
+      "points": 371
     },
     "IHOM": {
       "name": "iHome Lda",
@@ -299,8 +299,8 @@
     },
     "MAKS": {
       "name": "Maksu",
-      "sites": 236,
-      "points": 269
+      "sites": 47,
+      "points": 47
     },
     "MEOE": {
       "name": "MEO Energia - Comercialização de Energia, SA",
@@ -329,8 +329,8 @@
     },
     "MOTA": {
       "name": "Mota-Engil Renewing",
-      "sites": 174,
-      "points": 311
+      "sites": 175,
+      "points": 312
     },
     "NEUR": {
       "name": "Neureifen - Electric Mobility, Lda",
@@ -384,8 +384,8 @@
     },
     "REPS": {
       "name": "REPSOL Portuguesa Lda",
-      "sites": 221,
-      "points": 574
+      "sites": 222,
+      "points": 577
     },
     "SARE": {
       "name": "Superareosa Supermercados, Lda",
