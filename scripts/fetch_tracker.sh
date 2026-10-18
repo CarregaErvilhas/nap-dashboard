@@ -48,38 +48,53 @@ fi
 
 # An Office file is a ZIP container ("PK"). Anything else — an HTML login page,
 # Drive's "can't scan for viruses" interstitial, a truncated transfer — is not
-# the tracker and must never overwrite the last good copy.
+# the tracker and must never overwrite the last good copy. Silencioso: quem
+# chama decide o que dizer, para uma tentativa não duplicar o aviso.
 accept() {
-  if [ ! -s "$1" ]; then
-    echo "aviso: download do tracker vazio — descartado." >&2
-    rm -f "$1"; return 1
-  fi
-  if ! head -c 2 "$1" | grep -q 'PK'; then
-    echo "aviso: o download não é um xlsx (ZIP) — descartado." >&2
-    head -c 200 "$1" | tr -d '\0' | sed 's/^/        /' >&2 || true
-    rm -f "$1"; return 1
-  fi
-  return 0
+  [ -s "$1" ] && head -c 2 "$1" | grep -q 'PK'
 }
 
 fetched=0
 tried=""
+LAST_CODE=""
+LAST_BODY=""
+
+# Uma tentativa de download anónimo. Guarda o código HTTP e o corpo da resposta
+# para o aviso final ser diagnosticável: sem isto, um HTTP 400 do Google parecia
+# o mesmo que "URL não configurada".
+try_anonymous() {
+  local code
+  code=$(curl -sSL --retry 2 --max-time 120 -w '%{http_code}' \
+              "$@" -o "$TMP" 2>/dev/null) || code="curl_error"
+  LAST_CODE="$code"
+  if [ "$code" = "200" ]; then
+    if accept "$TMP"; then return 0; fi
+    LAST_BODY="$(head -c 200 "$TMP" | tr -d '\0' | tr '\n' ' ')"
+    LAST_BODY="200 mas não é ZIP: ${LAST_BODY}"
+  else
+    [ -s "$TMP" ] && LAST_BODY="$(head -c 200 "$TMP" | tr -d '\0' | tr '\n' ' ')"
+  fi
+  rm -f "$TMP"
+  return 1
+}
 
 # 1. anonymous (CI path)
 if [ -n "${TRACKER_URL:-}" ]; then
-  echo "-> ${DEST} (anónimo, TRACKER_URL)"
   tried="TRACKER_URL"
-  # Sem -f: queremos o corpo para o accept() poder dizer O QUE voltou. Guardamos
-  # o código HTTP para o aviso final ser diagnosticável — a primeira versão
-  # silenciava o curl com 2>/dev/null e um 403 do Google parecia "sem URL".
-  code=$(curl -sSL --retry 2 --max-time 120 -w '%{http_code}' \
-              "$TRACKER_URL" -o "$TMP" 2>/dev/null) || code="curl_error"
-  if [ "$code" != "200" ]; then
-    echo "       a origem respondeu HTTP ${code} (o Drive pode estar a bloquear" >&2
-    echo "       o IP das runners ou a pedir interstitial)" >&2
-    rm -f "$TMP"
-  elif accept "$TMP"; then
+  echo "-> ${DEST} (anónimo, TRACKER_URL)"
+  # O Drive respondeu HTTP 400 ao IP das runners do GitHub (não 403), por isso
+  # a hipótese de bloqueio de IP não está confirmada. Tentamos primeiro o curl
+  # simples; se falhar, com um User-Agent de browser e com confirm=t, que é o
+  # que o Drive usa quando o download passa pelo interstitial de virus scan.
+  UA_BROWSER='Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36'
+  if try_anonymous "$TRACKER_URL"; then
     mv "$TMP" "$DEST"; fetched=1
+  elif try_anonymous -A "$UA_BROWSER" "${TRACKER_URL/&/&confirm=t&}"; then
+    echo "   (o Download só passou com User-Agent de browser + confirm=t)" >&2
+    mv "$TMP" "$DEST"; fetched=1
+  else
+    echo "       a origem respondeu HTTP ${LAST_CODE}" >&2
+    [ -n "$LAST_BODY" ] && echo "       corpo: ${LAST_BODY}" >&2
   fi
 fi
 
@@ -94,7 +109,9 @@ fi
 
 if [ "$fetched" -eq 0 ]; then
   if [ -n "$tried" ]; then
-    echo "aviso: o tracker não foi descarregado (tentado: ${tried})." >&2
+    echo "aviso: o tracker não foi descarregado (tentado: ${tried})" >&2
+    echo "       via curl simples e via User-Agent de browser; última resposta:" >&2
+    echo "       HTTP ${LAST_CODE:-?} ${LAST_BODY}" >&2
   else
     echo "aviso: o tracker não foi descarregado (nem TRACKER_URL nem 'gog' com" >&2
     echo "       TRACKER_FILE_ID estão disponíveis)." >&2
