@@ -13,12 +13,38 @@ stay under their own terms.
 | NAP MOBI.E static + dynamic feeds (DATEX II 3.3 XML) | `https://pgm.mobie.pt/integration/nap/evChargingInfra`, `/evActualStatus` via NAP `nap-portugal.imt-ip.pt` (fichas 148/149, org. MOBI.E) | IMT NAP terms: free use **with source attribution, no lucrative/illicit use**. AFIR/NAP free-access framework. | Attribution in dashboard footer + here. Not re-licensed. |
 | MOBI.E OPC tariff CSV + PartyID PDF | `https://www.mobie.pt/documents/42032/106470/Tarifas`, `.../PartyID_MOBIE.pdf/...` | `© MOBI.E, all rights reserved` — **no explicit reuse licence**. Used as factual reference; redistribution basis unclear. | Attribution in footer. If MOBI.E objects, we remove/redact on request. Contact in `LICENSE`. |
 | DGEG OPC / CEME lists | `https://www.dgeg.gov.pt/.../operacao-e-comercializacao/lista-de-opc/`, `.../regime-transitorio/ceme-registados/` | DGEG site terms: free use **with source mention, no commercial use** against public interest; IP belongs to DGEG. | Attribution in footer + here. |
+| PCVE error tracker (`pt-pcve-errors.xlsx`) | Shared by its owner (PCVE/data-owners side) on Google Drive as an Office file; **no public API and no licence statement found**. Not redistributed here — fetched at run time. | **Unknown / no explicit licence.** The owner shares it as "anyone with the link", which authorises *reading*, but says nothing about republication. | **Read and derive only.** Source file, URL and file id are never committed (URL lives in the `TRACKER_URL` secret). See the derived-data note below. |
 | CAOP concelho boundaries (via `jotanmiguel/caop_GeoJSON` fork of official DGT data) | `https://raw.githubusercontent.com/jotanmiguel/caop_GeoJSON/master/geograficas/...` — official data: DGT | **CC-BY 4.0** (DGT open data): free use incl. commercial, **must credit Direção-Geral do Território**. The GitHub fork itself has no explicit licence; the underlying data is DGT's. | `assets/pt_outline.json` + concelho check derived from it. Credited as `© DGT (CAOP)` in footer, map and here. This file and any CAOP-derived geometry are **excluded from the PolyForm non-commercial restriction**. |
 | OpenStreetMap data (via `avataranedotas/umap_postos` `Todos.json` Overpass dump) | `https://raw.githubusercontent.com/avataranedotas/umap_postos/main/Todos.json` | **ODbL 1.0**: **must credit `© OpenStreetMap contributors`** + make clear data is available under ODbL (link below); derivative databases shared under ODbL on public use. | Credited in footer + map. Per-site OSM fields in `dashboard.html` (`pay`, `osm_op`, `osm_access`, `osm_fee`, `ad_hoc`, `doubt`) are ODbL-covered. |
 | Community umap layers (curadoria: Alexandre Moleiro) | `Postos de Carregamento v2.1` (`https://umap.openstreetmap.fr/pt-pt/map/postos-de-carregamento-v21_690884`, map 690884) and `Caça aos Postos de Carregamento` (`https://umap.openstreetmap.fr/en/map/caca-aos-postos-de-carregamento_1386222`, map 1386222) | ODbL (underlying OSM) **plus the curator's own rights** (no explicit licence found). | Credited + linked in footer and here. Treat as reference leads, never ground truth. |
 | DATEX II 3.3 XSDs (`assets/schemas/*.xsd`) | `http://datex2.eu/schema/3/<module>` (see `assets/schemas/README.md`) | **© CEN / DATEX II organisation**. Free to use for implementation; **not** re-licensed under PolyForm. | Vendored copies kept only for enum validation (`scripts/check_quality.py`, `scripts/extract_enums.py`). Re-fetch with `scripts/fetch_schemas.sh`. |
 | Python runtime deps | `requirements.txt` (`pandas`, `lxml`, `pdfplumber`, transitive `numpy`) | BSD-3 / BSD / MIT (permissive). Not distributed, installed via pip. | Compatible. No action needed. |
 | GitHub Actions (`checkout`, `setup-python`, `upload-artifact`, `deploy-pages`) | `actions/*` | MIT. Build-time only, not distributed. | Compatible. |
+
+## Derived data from the PCVE error tracker — needs the owner's OK
+
+The tracker is fetched at run time and **not** redistributed, but three derived
+files are **versioned in this (public) repo** and one report is published:
+
+| Versioned | What it is |
+|---|---|
+| `data/opc_registry_authority.csv` | 99 rows: `PartyId`, `PartyCode`, official operator name |
+| `data/tracker_errors.csv` | 3153 rows: the owners' error list (asset id, status, error type, current/correct value) |
+| `data/tracker_meta.json` | sha256 + sync date (no content) |
+| `errors.md` item 13 | findings derived from the above, e.g. `site_external_id`/`point_id` + operator |
+
+This is a deliberate exception to "fetched data stays out of git": the weekly CI
+cannot fetch the tracker (it needs Drive access), so the snapshot is versioned
+to keep the cross-check working, and `tracker_meta.json` carries its age.
+
+The operator names are public (NAP/MOBI.E publish them), so the registry is low
+risk. `tracker_errors.csv` is different in kind: it is the operators' internal
+list of **their own outstanding data defects**, which nobody asked us to publish.
+Before pushing this branch it should be confirmed with the tracker's owner, or
+the file replaced by a non-committed artefact (the pipeline already works that
+way — only the CI fallback depends on it being in git). The file itself
+redacts nothing; `errors.md` item 13 quotes asset ids and operators but no
+contact details.
 
 ## Required attribution (copy-paste)
 

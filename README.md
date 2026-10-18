@@ -20,6 +20,7 @@ elétricos em Portugal, a partir de fontes públicas oficiais. O objetivo é:
 | MOBI.E PartyID (PDF) | Códigos oficiais de operadores/CEME | `data/mobie_partyid.pdf` |
 | DGEG | Listas de OPC e CEME reconhecidos | `data/dgeg_opc.csv`, `data/dgeg_ceme.csv` |
 | OSM/umap (comunidade) | Dump Overpass do mapa "Postos de Carregamento v2.1" + umap "Caça aos Postos" | `data/umap_cache/`, `data/osm_umap.csv` |
+| Tracker de erros PCVE | Erros reportados pelos donos dos dados, por operador/asset | `data/pt_pcve_errors.xlsx` (ver nota abaixo) |
 
 ## Resultados
 
@@ -63,6 +64,8 @@ venv/bin/python scripts/partyid_crossref.py # cruza com o PartyID PDF
 venv/bin/python scripts/concelho_check.py    # valida coordenadas vs concelho CAOP
 venv/bin/python scripts/osm_umap.py          # cruza NAP com OSM/umap (comunidade)
 venv/bin/python scripts/make_pt_outline.py   # gera assets/pt_outline.json (mapa)
+venv/bin/python scripts/tracker_sync.py  # tracker PCVE -> registo OPC + erros rotulados
+venv/bin/python scripts/tracker_checks.py # tracker + NAP -> errors.md item 13
 venv/bin/python scripts/build_dashboard.py # gera dashboard.html, facts.md, errors.md
 ```
 
@@ -101,6 +104,9 @@ python3 scripts/check_agents.py
 | `scripts/partyid_crossref.py` | Enriquecimento com o PartyID oficial |
 | `scripts/concelho_check.py` | Verificação de coordenadas vs limites concelho (CAOP) |
 | `scripts/osm_umap.py` | Cross-check com OSM/umap da comunidade (operadores, pagamento, dúvidas) |
+| `scripts/fetch_tracker.sh` | Descarrega o tracker de erros PCVE (sem credenciais na CI; URL em segredo) |
+| `scripts/tracker_sync.py` | Tracker xlsx -> registo OPC autoritativo + conjunto de erros rotulado |
+| `scripts/tracker_checks.py` | Cruza tracker + NAP -> `errors.md` item 13 (identidade de OPC, assets removidos, tensões placeholder) |
 | `scripts/make_pt_outline.py` | Contorno de Portugal para o mapa SVG (a partir do CAOP) |
 | `scripts/check_quality.py` | Validações de sanidade física e de schema |
 | `scripts/build_dashboard.py` | Gera o dashboard autónomo + factos/erros |
@@ -111,8 +117,16 @@ python3 scripts/check_agents.py
 
 ## Dados intermédios (CSV)
 
-`sites`, `points`, `status`, `pricing` (saída NAP), `nap_opc_points` (NA
-P+tarifas), `nap_opc_registry` (código OPC→entidade), `mobie_tarifas`, `dgeg_*`, `mobie_partyid`.
+Tudo o que é descarregado ou derivado vive em `data/` (gitignored, exceto as três
+excepções do tracker abaixo). A raiz do repo fica só com código, docs e deliverables.
+
+`sites`, `points`, `status`, `pricing` (saída NAP), `nap_opc_points` (NAP
++tarifas), `nap_opc_registry` (código OPC→entidade), `mobie_tarifas`, `dgeg_*`, `mobie_partyid`.
+
+Do tracker de erros PCVE: `opc_registry_authority` (PartyId/PartyCode/nome, 99
+CPO), `tracker_errors` (3153 defeitos rotulados) e `tracker_meta` (data+sha256).
+Estes três **são versionados** — ver a nota em `THIRD-PARTY-NOTICES.md` sobre
+republicar dados de terceiros.
 
 ## Notas de engenharia / armadilhas
 

@@ -72,3 +72,47 @@
   `label()` using an undefined `max` instead of the local `m`. If charts are
   blank below the KPIs, suspect a runtime error and eval the script with a DOM
   stub in node.
+## Operator identity (`operator_id` is not an OPC key)
+
+- **Never group by NAP `operator_id` alone.** 21 ids carry more than one
+  `operator_name` (3448 sites; `ATLA` alone has 7 spellings over 598 sites) and
+  3 operators publish under the registry's `PartyCode` instead of its `PartyId`
+  (`BBGE`, `CIRC`, `CONT`).
+- **`CONT` is a genuine mis-attribution**: NAP publishes 450 sites as "Modelo
+  Continente Hipermercados, S.A." — the acquirer — while the CPO is `CNT`
+  "Continente Plug & Charge". This is also why asset matching needs both
+  `CNT-0002PL0012` and `0002PL0012`: the prefix comes and goes.
+- The authoritative `PartyId | PartyCode | name` table comes from the PCVE error
+  tracker (`data/opc_registry_authority.csv`, via `scripts/tracker_sync.py`).
+  `scripts/tracker_checks.py` resolves an operator by `operator_name`
+  (exact, then containment for legal-form variants like "Acciona Recarga
+  Portugal" vs "ACCIONA RECARGA PORTUGAL,UNIPESSOAL LDA") — so an operator that
+  renames itself drops out until the tracker catches up. That is a limitation of
+  the source, not a bug to paper over with fuzzy matching.
+- The MOBI.E PartyID PDF (`scripts/partyid_crossref.py`) is **2022**; the tracker
+  is the only current source.
+
+## PCVE error tracker (`pt-pcve-errors.xlsx`)
+
+- It is an **Office file, not a native Google Sheet**: the Sheets API and
+  `/export?format=xlsx` both fail with
+  `400 failedPrecondition: must not be an Office file`. Use
+  `drive.google.com/uc?export=download?id=…`.
+- `Error List`: header on **row 15**, data from **row 16**, columns **B..K**.
+  Column B (`CPO`) is a `VLOOKUP` against the `CPO` tab, so an openpyxl rewrite
+  keeps the formula but loses the cached value — Excel/Sheets recalculate.
+- The `Error Stats` / `Error details` tabs are pivot tables with **no cached
+  values**: they read as empty until refreshed in Excel/Sheets.
+- The declared error-type vocabulary has 11 entries but only 10 are used —
+  `AFIR compliant` has zero rows. A few `DOUBT` rows have no `Error type` at
+  all (the text went into `Notes`), so any filter on that column silently drops
+  them.
+- Use it as a **labelled set**: it pairs each real defect with the value the
+  owner considers correct. That is what makes an anomaly rule non-speculative —
+  e.g. 171 rows of `750 V → 500 V` justify the placeholder-voltage check, and
+  199 rows of `mode3AC3p → mode2AC1p` justify the three-phase check.
+- What it refutes: **pricing is not a useful outlier source**. `min_fee` spans
+  0–3,0 with no absurd values since the `97,561 €/min` class was fixed, so a
+  global band yields zero findings, and a per-operator band (>10× the operator
+  median) yields >1300 false positives. `min_fee = 0` covers 46% of pricing
+  rows and is **not** an anomaly.
