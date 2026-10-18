@@ -1,118 +1,131 @@
-# Gotchas (all verified against the 2026-08-16 snapshot)
+# Armadilhas (todas verificadas no snapshot de 2026-08-16)
 
-## Joining NAP ↔ MOBI.E
+## Junção NAP ↔ MOBI.E
 
-- **Join key**: `site_external_id` (= MOBI.E `ID`) + last segment of `point_id`
-  (the tomada/plug, **int-normalized**: strip leading zeros). This matches
-  18 923 / 20 521 points (92.2%).
-- **Do NOT join on `point_external_id`.** Its format `PT*op*[E]*reg*num*tom` is
-  unreliable: the region part sometimes has a glued `E` prefix (`ELSB` vs MOBI.E
-  `LSB`), and the segment count varies (3–7). Parse `site_external_id` directly.
-- MOBI.E `UID_TOMADA` comes in several formats (`PT-EDP-EABF-00009-1-1`,
-  `PT-*…`, bare numerics). `mobie_join.py` takes the second-to-last `-`-segment
-  then int-normalizes. 733 `UID_TOMADA` values are bare numeric ids (`97`, `98`).
-- The tariff has multiple rows per (site, plug): keep the `REGULAR` tariff type
-  when present, else any; pivot `FLAT/ENERGY/TIME/PARKING_TIME` to wide.
-- MOBI.E OPC tariffs are the **station-usage fee, not the energy price**:
-  `ENERGY` (€/kWh) is the usage component indexed on energy — the energy itself
-  is billed by the driver's CEME. Only ad-hoc / off-MOBI.E OPCs charge the final
-  all-in price. Never label `ENERGY` means as "energy price" in UI text.
+- **Chave da junção**: `site_external_id` (= `ID` do MOBI.E) + último segmento de
+  `point_id` (a tomada, **normalizada como inteiro**: sem zeros à esquerda). Isto
+  faz correspondência em 18 923 / 20 521 pontos (92,2%).
+- **NÃO juncionar por `point_external_id`.** O formato `PT*op*[E]*reg*num*tom` é
+  pouco fiável: a parte da região tem por vezes o prefixo `E` colado (`ELSB`
+  contra `LSB` do MOBI.E) e o número de segmentos varia (3–7). Analisar
+  diretamente o `site_external_id`.
+- O `UID_TOMADA` do MOBI.E aparece em vários formatos (`PT-EDP-EABF-00009-1-1`,
+  `PT-*…`, só números). `mobie_join.py` pega no penúltimo segmento separado por
+  `-` e normaliza como inteiro. Há 733 valores de `UID_TOMADA` que são só
+  identificadores numéricos (`97`, `98`).
+- A tarifa tem várias linhas por (posto, tomada): manter o tipo de tarifa
+  `REGULAR` quando exista, senão qualquer uma; rodar
+  `FLAT/ENERGY/TIME/PARKING_TIME` para largo.
+- As tarifas OPC do MOBI.E são a **taxa de utilização do posto, não o preço da
+  energia**: `ENERGY` (€/kWh) é a componente de utilização indexada à energia — a
+  energia em si é faturada pela CEME de quem carrega. Só os OPC ad-hoc ou fora do
+  MOBI.E cobram o preço final completo. Nunca rotular `ENERGY` como "preço da
+  energia" em texto de interface.
 
-## NAP static XML quirks
+## Particularidades do XML estático do NAP
 
-- `brands_accepted` is the **global CEME list per point**, NOT an operator
-  discriminator. Don't use it to attribute operators.
-- `facilityLocation` (address, postcode, city) lives in the
-  **`locationReferencing`** namespace, not `locationExtension`.
-- NUTS is **level-1 only** (`nuts1Code`); `nuts2Code`/`nuts3Code` never appear.
-- One point can appear with several connectors — aggregate to point level with
-  `max(max_power_w)` and a `|`-joined connector set.
-- Coordinates: mainland `lon∈(-9.8,-5.5) lat∈(36.5,42.5)`, Açores
-  `lon∈(-32,-24) lat∈(36.5,40)`, Madeira `lon∈(-17.5,-16) lat∈(32,33.5)`. All
-  sites pass these bounds; city↔coords was not spot-checked (needs reverse
-  geocoding).
-- Read the XMLs with `lxml.etree.iterparse(…, huge_tree=True)` streaming — they
-  don't fit in memory as DOM.
+- `brands_accepted` é a **lista global de CEME por ponto**, NÃO um discriminador
+  de operador. Não usar para atribuir operadores.
+- `facilityLocation` (morada, código postal, localidade) vive no namespace
+  **`locationReferencing`**, não em `locationExtension`.
+- NUTS é **só de nível 1** (`nuts1Code`); `nuts2Code`/`nuts3Code` nunca aparecem.
+- Um ponto pode aparecer com vários conectores — agregar ao nível do ponto com
+  `max(max_power_w)` e o conjunto de conectores unido por `|`.
+- Coordenadas: continente `lon∈(-9.8,-5.5) lat∈(36.5,42.5)`, Açores
+  `lon∈(-32,-24) lat∈(36.5,40)`, Madeira `lon∈(-17.5,-16) lat∈(32,33.5)`. Todos
+  os sites passam estes limites; a coerência localidade↔coordenadas não foi
+  verificada ponto a ponto (exige geocodificação inversa).
+- Ler os XML com `lxml.etree.iterparse(…, huge_tree=True)` em streaming — não
+  cabem em memória como DOM.
 
-## Dynamic (evActualStatus) quirks
+## Particularidades do dinâmico (evActualStatus)
 
-- Dynamic and static point ids match 100%. But **46 points appear 2–3×** in the
-  dynamic feed with conflicting states (48 extra rows) — dedupe with
-  `keep='first'` and note the conflict in errors.
-- `pricePerChargingTime` can reach 3.00 €/min (4 points >1.0 €/min) — likely a
-  €/min vs €/h unit error.
+- Os identificadores de ponto do dinâmico e do estático coincidem 100%. Mas
+  **46 pontos aparecem 2–3×** no feed dinâmico com estados contraditórios (48
+  linhas a mais) — eliminar duplicados com `keep='first'` e assinalar o conflito
+  nos erros.
+- `pricePerChargingTime` pode chegar a 3,00 €/min (4 pontos >1,0 €/min) —
+  provavelmente um erro de unidade €/min contra €/h.
 
-## Quality findings (reportable)
+## Achados de qualidade (reportáveis)
 
-- 30% of connector rows (6 206/20 624) have declared `max_power_w` inconsistent
-  with `voltage × current` (>25% off). Of these, 2 690 declare power **above**
-  the electrical capability (impossible, e.g. 1200 V × 600 A = 720 kW declared as
-  200 kW). Suspicious raw values: 1200 V, 3600 V, 600 A.
-  For `mode3AC3p` the physical power is `√3 × V × I`; single-phase `V × I`.
-- NAP↔MOBI.E power agreement is 99.8% — only 29/18 923 points diverge >30%.
-- MOBI.E PartyID (2022): 38 active tariff codes missing from the PDF, 22 codes in
-  the PDF unused. Post-2022 operators (ATL, ZUN, SLX, KLS, WEN, …) are absent.
-- 227 points (1%) have no `usage_type`.
-- 3 013 points (15%) marked `removed` in the dynamic feed are still listed in the
-  static inventory.
-- Operator names are fragmented (Galp Power/Galpgeste/Galp Gest; 6 Atlante
-  variants; 3 Iberdrola; REPSOL case variants) — normalize before aggregating.
+- 30% das linhas de conector (6206/20 624) têm `max_power_w` declarado
+  inconsistente com `voltage × current` (>25% de desvio). Destas, 2690 declaram
+  potência **acima** da capacidade elétrica (impossível, por exemplo 1200 V ×
+  600 A = 720 kW declarados como 200 kW). Valores crus suspeitos: 1200 V,
+  3600 V, 600 A. Para `mode3AC3p` a potência física é `√3 × V × I`; a monofásica
+  é `V × I`.
+- A concordância de potência NAP↔MOBI.E é de 99,8% — apenas 29/18 923 pontos
+  divergem mais de 30%.
+- MOBI.E PartyID (2022): faltam 38 códigos de tarifa ativos no PDF e há 22
+  códigos no PDF sem uso. Os operadores posteriores a 2022 (ATL, ZUN, SLX, KLS,
+  WEN, …) não constam.
+- 227 pontos (1%) não têm `usage_type`.
+- 3013 pontos (15%) marcados como `removed` no feed dinâmico continuam listados no
+  inventário estático.
+- Os nomes de operador estão fragmentados (Galp Power/Galpgeste/Galp Gest; 6
+  variantes da Atlante; 3 da Iberdrola; variantes de maiúsculas/minúsculas da
+  REPSOL) — normalizar antes de agregar.
 
-## Dashboard build
+## Build do dashboard
 
-- `build_dashboard.py` injects data into `assets/dashboard_template.html` at the
-  `/*__DATA__*/` marker via
+- `build_dashboard.py` injeta os dados em `assets/dashboard_template.html` no
+  marcador `/*__DATA__*/` através de
   `json.dumps(clean(data), ensure_ascii=False, allow_nan=False)`.
-- **Must** sanitize NaN/Inf floats → null before dumping; bare `NaN` breaks the
-  browser's `JSON.parse` (historical bug, now fixed by the `clean()` helper).
-- Validate after rebuilding: `json.loads` the extracted `const D = (.*?);` JSON,
-  and `node --check` on the extracted `<script>` block.
-- Dashboard must open via `file://` with no external libs (pure CSS/JS).
-- Historical JS bugs to watch: reference to a non-existent element id `status`;
-  `label()` using an undefined `max` instead of the local `m`. If charts are
-  blank below the KPIs, suspect a runtime error and eval the script with a DOM
-  stub in node.
-## Operator identity (`operator_id` is not an OPC key)
+- **Tem** de higienizar os float NaN/Inf para null antes do dump; um `NaN` cru
+  quebra o `JSON.parse` do browser (bug histórico, já corrigido pelo helper
+  `clean()`).
+- Validar depois de reconstruir: fazer `json.loads` ao JSON extraído de
+  `const D = (.*?);` e passar `node --check` no bloco `<script>` extraído.
+- O dashboard tem de abrir por `file://`, sem bibliotecas externas (CSS/JS puro).
+- Bugs JS históricos a vigiar: referência a um id de elemento `status` que não
+  existe; `label()` a usar uma `max` indefinida em vez da `m` local. Se os
+  gráficos ficarem vazios abaixo dos KPIs, suspeitar de um erro de runtime e
+  avaliar o script com um DOM stub em node.
 
-- **Never group by NAP `operator_id` alone.** 21 ids carry more than one
-  `operator_name` (3448 sites; `ATLA` alone has 7 spellings over 598 sites) and
-  3 operators publish under the registry's `PartyCode` instead of its `PartyId`
-  (`BBGE`, `CIRC`, `CONT`).
-- **`CONT` is a genuine mis-attribution**: NAP publishes 450 sites as "Modelo
-  Continente Hipermercados, S.A." — the acquirer — while the CPO is `CNT`
-  "Continente Plug & Charge". This is also why asset matching needs both
-  `CNT-0002PL0012` and `0002PL0012`: the prefix comes and goes.
-- The authoritative `PartyId | PartyCode | name` table comes from the PCVE error
-  tracker (`data/opc_registry_authority.csv`, via `scripts/tracker_sync.py`).
-  `scripts/tracker_checks.py` resolves an operator by `operator_name`
-  (exact, then containment for legal-form variants like "Acciona Recarga
-  Portugal" vs "ACCIONA RECARGA PORTUGAL,UNIPESSOAL LDA") — so an operator that
-  renames itself drops out until the tracker catches up. That is a limitation of
-  the source, not a bug to paper over with fuzzy matching.
-- The MOBI.E PartyID PDF (`scripts/partyid_crossref.py`) is **2022**; the tracker
-  is the only current source.
+## Identidade de operador (`operator_id` não é uma chave de OPC)
 
-## PCVE error tracker (`pt-pcve-errors.xlsx`)
+- **Nunca agrupar só pelo `operator_id` do NAP.** Há 21 ids com mais do que um
+  `operator_name` (3448 sites; só a `ATLA` tem 7 grafias em 598 sites) e 3
+  operadores publicam com o `PartyCode` do registo em vez do `PartyId` (`BBGE`,
+  `CIRC`, `CONT`).
+- **O `CONT` é uma desatribuição genuína**: o NAP publica 450 sites como "Modelo
+  Continente Hipermercados, S.A." — o adquirente — enquanto o CPO é a `CNT`
+  "Continente Plug & Charge". É também por isso que o cruzamento de assets
+  precisa de `CNT-0002PL0012` e de `0002PL0012`: o prefixo ora aparece, ora não.
+- A tabela autoritativa `PartyId | PartyCode | nome` vem do tracker de erros
+  PCVE (`data/opc_registry_authority.csv`, via `scripts/tracker_sync.py`).
+  O `scripts/tracker_checks.py` resolve um operador pelo `operator_name`
+  (exato e depois por contenção, para variantes da forma legal como "Acciona
+  Recarga Portugal" contra "ACCIONA RECARGA PORTUGAL,UNIPESSOAL LDA") — logo um
+  operador que se renomeie deixa de resolver até o tracker acompanhar. É uma
+  limitação da fonte, não um defeito a tapar com correspondência difusa.
+- O PDF PartyID do MOBI.E (`scripts/partyid_crossref.py`) é de **2022**; o
+  tracker é a única fonte atual.
 
-- It is an **Office file, not a native Google Sheet**: the Sheets API and
-  `/export?format=xlsx` both fail with
-  `400 failedPrecondition: must not be an Office file`. Use
-  `drive.google.com/uc?export=download?id=…`.
-- `Error List`: header on **row 15**, data from **row 16**, columns **B..K**.
-  Column B (`CPO`) is a `VLOOKUP` against the `CPO` tab, so an openpyxl rewrite
-  keeps the formula but loses the cached value — Excel/Sheets recalculate.
-- The `Error Stats` / `Error details` tabs are pivot tables with **no cached
-  values**: they read as empty until refreshed in Excel/Sheets.
-- The declared error-type vocabulary has 11 entries but only 10 are used —
-  `AFIR compliant` has zero rows. A few `DOUBT` rows have no `Error type` at
-  all (the text went into `Notes`), so any filter on that column silently drops
-  them.
-- Use it as a **labelled set**: it pairs each real defect with the value the
-  owner considers correct. That is what makes an anomaly rule non-speculative —
-  e.g. 171 rows of `750 V → 500 V` justify the placeholder-voltage check, and
-  199 rows of `mode3AC3p → mode2AC1p` justify the three-phase check.
-- What it refutes: **pricing is not a useful outlier source**. `min_fee` spans
-  0–3,0 with no absurd values since the `97,561 €/min` class was fixed, so a
-  global band yields zero findings, and a per-operator band (>10× the operator
-  median) yields >1300 false positives. `min_fee = 0` covers 46% of pricing
-  rows and is **not** an anomaly.
+## Tracker de erros PCVE (`pt-pcve-errors.xlsx`)
+
+- É um ficheiro **Office, não uma Google Sheet nativa**: tanto a API Sheets como
+  o `/export?format=xlsx` falham com
+  `400 failedPrecondition: must not be an Office file`. Usar
+  `drive.google.com/uc?export=download&id=…`.
+- `Error List`: cabeçalho na **linha 15**, dados a partir da **linha 16**,
+  colunas **B..K**. A coluna B (`CPO`) é um `VLOOKUP` à aba `CPO`, por isso uma
+  reescrita com openpyxl mantém a fórmula mas perde o valor em cache — o
+  Excel/Sheets recalcula.
+- As abas `Error Stats` e `Error details` são tabelas dinâmicas **sem valores em
+  cache**: leem-se como vazias até serem atualizadas no Excel/Sheets.
+- O vocabulário declarado de tipos de erro tem 11 entradas mas só 10 são usadas —
+  `AFIR compliant` não tem linhas. Algumas linhas `DOUBT` não têm `Error type`
+  (o texto foi parar a `Notes`), pelo que qualquer filtro sobre essa coluna as
+  descarta em silêncio.
+- Usar como **conjunto rotulado**: associa cada defeito real ao valor que o dono
+  considera correto. É isso que torna uma regra de anomalia fundamentada em vez
+  de especulativa — por exemplo, 171 linhas de `750 V → 500 V` justificam a
+  verificação das tensões placeholder, e 199 linhas de
+  `mode3AC3p → mode2AC1p` justificam a verificação do trifásico.
+- O que refuta: **os preços não são uma boa fonte de outliers**. O `min_fee` vai
+  de 0 a 3,0 sem valores absurdos desde que a classe dos `97,561 €/min` foi
+  corrigida, pelo que uma banda global dá zero achados e uma banda por operador
+  (>10× a mediana do operador) dá mais de 1300 falsos positivos. `min_fee = 0`
+  cobre 46% das linhas de preço e **não** é uma anomalia.

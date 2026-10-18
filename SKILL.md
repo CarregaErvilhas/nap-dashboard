@@ -58,14 +58,15 @@ venv/bin/python scripts/mobie_join.py         # NAP ↔ MOBI.E tariffs -> data/n
 venv/bin/python scripts/dgeg_lists.py         # DGEG pages -> data/dgeg_opc.csv, data/dgeg_ceme.csv
 venv/bin/python scripts/dgeg_crossref.py      # OPC codes -> entities -> data/nap_opc_registry.csv
 venv/bin/python scripts/partyid_crossref.py   # enrich with PartyID
-venv/bin/python scripts/tracker_sync.py       # PCVE tracker xlsx -> versioned CSVs + provenance
+venv/bin/python scripts/tracker_sync.py       # PCVE tracker xlsx -> derived CSVs (never versioned)
 venv/bin/python scripts/tracker_checks.py     # tracker + NAP -> data/tracker_findings.md (errors.md item 13)
 venv/bin/python scripts/build_dashboard.py    # -> dashboard.html, facts.md, errors.md
 ```
 
-`fetch_tracker.sh` / `tracker_sync.py` are optional: without the xlsx the
-pipeline keeps the versioned `data/tracker_*.{csv,json}` snapshot and
-`tracker_checks.py` reports its age. Never fails the run.
+`fetch_tracker.sh` / `tracker_sync.py` need the tracker to be fetched: nothing
+derived from it is versioned, so without the xlsx there is no cross-check and
+errors.md simply has no tracker item. That is deliberate — a frozen copy of
+somebody else's error list would go stale silently. Never fails the run.
 
 Outputs to give the user:
 - `dashboard.html` — open with `open dashboard.html`
@@ -122,8 +123,7 @@ the historical bugs in `references/gotchas.md`.
 `.github/workflows/pr-checks.yml` runs on every PR to `main`: ~1 s, no network,
 no dependencies. `scripts/ci_paths.py` asserts that (A) no data file sits in the
 repo root, (B) every reference to a data file is `data/`-prefixed, (C) every
-`scripts/*` cited in a workflow exists, (D) the three versioned tracker
-artifacts are still tracked. Plus `compileall` and `bash -n`.
+`scripts/*` cited in a workflow exists, (D) the tracker's derived files are NOT tracked. Plus `compileall` and `bash -n`.
 
 It deliberately does **not** run the full pipeline (`fetch_data.sh` is ~230 MB and
 `osm_umap.py` pulls an Overpass dump — don't hammer the official sources on every

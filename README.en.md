@@ -119,16 +119,18 @@ python3 scripts/check_agents.py
 
 ## Intermediate data (CSV)
 
-Everything fetched or derived lives in `data/` (gitignored, except the three tracker
-exceptions below). The repo root holds only code, docs and deliverables.
+Everything fetched or derived lives in `data/`, which is gitignored without
+exceptions. The repo root holds only code, docs and deliverables.
 
 `sites`, `points`, `status`, `pricing` (NAP output), `nap_opc_points` (NAP
 +tariffs), `nap_opc_registry` (OPC code→entity), `mobie_tarifas`, `dgeg_*`, `mobie_partyid`.
 
 From the PCVE error tracker: `opc_registry_authority` (PartyId/PartyCode/name, 99
 CPOs), `tracker_errors` (3153 labelled defects) and `tracker_meta` (date+sha256).
-These three **are versioned** — see the note in `THIRD-PARTY-NOTICES.md` about
-republishing third-party data.
+These are always re-extracted from the source xls on each run and **never
+versioned** — they are third-party data with no reuse licence. If the tracker
+cannot be fetched, errors.md simply has no tracker item. See
+`THIRD-PARTY-NOTICES.md`.
 
 ## Engineering notes / pitfalls
 

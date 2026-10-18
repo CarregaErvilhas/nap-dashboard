@@ -28,9 +28,10 @@ produces CSVs + a self-contained dashboard (`dashboard.html`, `facts.md`,
   dump) + `data/caop_cache/` (CAOP concelho polygons) caches. All gitignored
   (`data/*`, with `data/.gitkeep` kept) except the three tracker artifacts below.
   Still run every script from the repo root — paths are `data/…` relative to it.
-- **Versioned exceptions inside `data/`**: `data/opc_registry_authority.csv`,
-  `data/tracker_errors.csv`, `data/tracker_meta.json` — the fallback snapshot for
-  CI, which cannot always refetch the tracker (see below).
+- **Nothing derived from the tracker is versioned.** `data/tracker_errors.csv`,
+  `data/opc_registry_authority.csv` and `data/tracker_meta.json` are
+  re-extracted from the source xlsx on every run and stay out of git: they are
+  a third party's data with no reuse licence, and this repo is public.
 - The repo root holds only code, docs and deliverables: `dashboard.html`,
   `dashboard.png`, `facts.md`, `errors.md`, `novidades.md`,
   `network-census.json`, `assets/`, `scripts/`, `Agents/`, `Agents-outputs/`.
@@ -110,7 +111,7 @@ owners' own error list per operator/asset. Refresh cycle:
 
 ```bash
 bash scripts/fetch_tracker.sh                # TRACKER_URL, or gog, or skip
-venv/bin/python scripts/tracker_sync.py     # xlsx -> versioned CSVs
+venv/bin/python scripts/tracker_sync.py     # xlsx -> data/tracker_*.csv (derivados, fora do git)
 venv/bin/python scripts/tracker_checks.py   # CSVs + NAP -> findings
 ```
 
@@ -124,10 +125,10 @@ venv/bin/python scripts/tracker_checks.py   # CSVs + NAP -> findings
   file. Set the secret to the shareable download URL of the xlsx.
 - `data/opc_registry_authority.csv`, `data/tracker_errors.csv` and `data/tracker_meta.json` are
   versioned on purpose (the exception to "everything fetched is gitignored"):
-  they are the fallback whenever the fetch is unavailable, and `data/tracker_meta.json`
-  carries `synced_at` + the xlsx `sha256`, so a stale snapshot is reported in
-  errors.md item 13 instead of being silently trusted. A changed `sha256` after a
-  refresh means the owners updated the tracker.
+  `tracker_meta.json` carries `synced_at` + the xlsx `sha256` on every run, so
+  errors.md item 13 always states which version of the tracker it came from. If
+  the fetch fails, `tracker_checks.py` warns and skips the item rather than
+  publishing a stale copy of somebody else's data.
 - The tracker is an **Office file, not a native Google Sheet**: the Sheets API
   rejects it with `400 failedPrecondition: must not be an Office file`, hence
   the Drive download.
@@ -264,9 +265,10 @@ Gate de ~1 s em cada PR para `main`, sem rede e sem dependências (stdlib).
   tem de aparecer com o prefixo `data/` (apanha um `pd.read_csv('nap_static_sites.csv')`
   que volte ao sítio antigo);
 - **C** — cada `scripts/*.py`/`*.sh` citado num workflow existe no disco;
-- **D** — os três artefactos do tracker excepção continuam versionados (testa o
-  índice com `git ls-files`, **não** `git check-ignore`: este reporta ficheiros
-  já versionados como "não ignorados", que é precisamente o caso a proteger).
+- **D** — os derivados do tracker estão **fora** do git, e o `.gitignore` não
+  tem excepções para eles (testa o índice com `git ls-files`, **não**
+  `git check-ignore`: este reporta ficheiros já versionados como "não
+  ignorados", que é precisamente o caso proibido).
 
 Mais `compileall` nos scripts Python e `bash -n` nos shell, para o check não ser
 decorativo (um erro de sintaxe só apareceria no refresh da semana seguinte).

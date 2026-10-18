@@ -26,25 +26,26 @@ stay under their own terms.
 The tracker is fetched at run time and **not** redistributed, but three derived
 files are **versioned in this (public) repo** and one report is published:
 
-| Versioned | What it is |
+| Derived (never versioned) | What it is |
 |---|---|
 | `data/opc_registry_authority.csv` | 99 rows: `PartyId`, `PartyCode`, official operator name |
 | `data/tracker_errors.csv` | 3153 rows: the owners' error list (asset id, status, error type, current/correct value) |
 | `data/tracker_meta.json` | sha256 + sync date (no content) |
-| `errors.md` item 13 | findings derived from the above, e.g. `site_external_id`/`point_id` + operator |
 
-This is a deliberate exception to "fetched data stays out of git": the weekly CI
-cannot fetch the tracker (it needs Drive access), so the snapshot is versioned
-to keep the cross-check working, and `tracker_meta.json` carries its age.
+`errors.md` item 13 is the only place derived findings are published, and it
+quotes `site_external_id`/`point_id` + operator — no contact details.
 
-The operator names are public (NAP/MOBI.E publish them), so the registry is low
-risk. `tracker_errors.csv` is different in kind: it is the operators' internal
-list of **their own outstanding data defects**, which nobody asked us to publish.
-Before pushing this branch it should be confirmed with the tracker's owner, or
-the file replaced by a non-committed artefact (the pipeline already works that
-way — only the CI fallback depends on it being in git). The file itself
-redacts nothing; `errors.md` item 13 quotes asset ids and operators but no
-contact details.
+**None of them is versioned.** They are re-extracted from the source xlsx on
+every run (`fetch_tracker.sh` → `tracker_sync.py`) and stay gitignored; the
+weekly CI fetches the xls itself via the `TRACKER_URL` secret. A copy of a third
+party's internal defect list has no place in a public repository, and a
+versioned one would also go stale without saying anything.
+
+Consequence to be aware of: if the fetch stops working, errors.md simply has no
+tracker item. That is the intended failure mode — an absent section is honest,
+a frozen snapshot is not. `tracker_meta.json` is rewritten on each run and
+records `synced_at` + the xlsx `sha256`, so item 13 always names the version it
+came from.
 
 ## Required attribution (copy-paste)
 

@@ -117,16 +117,18 @@ python3 scripts/check_agents.py
 
 ## Dados intermédios (CSV)
 
-Tudo o que é descarregado ou derivado vive em `data/` (gitignored, exceto as três
-excepções do tracker abaixo). A raiz do repo fica só com código, docs e deliverables.
+Tudo o que é descarregado ou derivado vive em `data/`, que é gitignored sem
+excepções. A raiz do repo fica só com código, docs e deliverables.
 
 `sites`, `points`, `status`, `pricing` (saída NAP), `nap_opc_points` (NAP
 +tarifas), `nap_opc_registry` (código OPC→entidade), `mobie_tarifas`, `dgeg_*`, `mobie_partyid`.
 
 Do tracker de erros PCVE: `opc_registry_authority` (PartyId/PartyCode/nome, 99
 CPO), `tracker_errors` (3153 defeitos rotulados) e `tracker_meta` (data+sha256).
-Estes três **são versionados** — ver a nota em `THIRD-PARTY-NOTICES.md` sobre
-republicar dados de terceiros.
+São sempre re-extraídos do xls de origem em cada corrida e **nunca versionados**
+— são dados de terceiros, sem licença de reutilização. Se o tracker não for
+buscado, o item 13 de `errors.md` simplesmente não é escrito. Ver
+`THIRD-PARTY-NOTICES.md`.
 
 ## Notas de engenharia / armadilhas
 
