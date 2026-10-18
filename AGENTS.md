@@ -115,20 +115,24 @@ venv/bin/python scripts/tracker_sync.py     # xlsx -> data/tracker_*.csv (deriva
 venv/bin/python scripts/tracker_checks.py   # CSVs + NAP -> findings
 ```
 
-- `fetch_tracker.sh` has three strategies, none of which may fail the pipeline:
+- `fetch_tracker.sh` has two strategies, neither of which may fail the pipeline:
   `TRACKER_URL` (anonymous download — **what CI uses**, since the file's owner
   shares it as "anyone with the link", so no credentials are needed), then `gog`
-  (authenticated Drive download, for when link sharing is off — local only), then
-  fall back to the versioned snapshot. `nap-dashboard` is a **public** repo, so
-  keep that URL in the `TRACKER_URL` repo secret, never as a literal in the
-  workflow — otherwise the repo publishes a permanent pointer to the data owners'
-  file. Set the secret to the shareable download URL of the xlsx.
-- `data/opc_registry_authority.csv`, `data/tracker_errors.csv` and `data/tracker_meta.json` are
-  versioned on purpose (the exception to "everything fetched is gitignored"):
-  `tracker_meta.json` carries `synced_at` + the xlsx `sha256` on every run, so
-  errors.md item 13 always states which version of the tracker it came from. If
-  the fetch fails, `tracker_checks.py` warns and skips the item rather than
-  publishing a stale copy of somebody else's data.
+  (authenticated Drive download, for when link sharing is off — local only).
+  Nothing is versioned: if both fail, `tracker_sync.py` skips and `tracker_checks.py`
+  warns, so errors.md simply has **no** tracker item for that run. `nap-dashboard`
+  is a **public** repo, so keep that URL in the `TRACKER_URL` repo secret, never
+  as a literal in the workflow — otherwise the repo publishes a permanent pointer
+  to the data owners' file. Set the secret to the shareable download URL of the xlsx.
+- **Google may block the runners' IP range.** The first CI run of the anonymous
+  fetch failed in ~0.1 s with no diagnostic. `fetch_tracker.sh` now reports the
+  HTTP status so this is visible (`HTTP 403`/`429` = blocked or rate-limited,
+  `200` + non-ZIP = Drive interstitial). If it turns out to be an IP block, the
+  fallback is a Google service account (JSON key as a secret) with the file
+  shared to its address — the Drive API then works from any IP. Do not work
+  around it by committing a copy of the tracker.
+- `data/tracker_meta.json` carries `synced_at` + the xlsx `sha256` on every run,
+  so errors.md item 13 always states which version of the tracker it came from.
 - The tracker is an **Office file, not a native Google Sheet**: the Sheets API
   rejects it with `400 failedPrecondition: must not be an Office file`, hence
   the Drive download.
