@@ -148,7 +148,8 @@ def main():
 
     if not os.path.exists(args.tracker):
         msg = (f"tracker ausente: {args.tracker} (use bash scripts/fetch_tracker.sh "
-               f"ou --tracker CAMINHO). A manter a última {REGISTRY_CSV} versionada.")
+               f"ou --tracker CAMINHO). Nada a cruzar; o item 13 de errors.md "
+               f"ficará de fora desta corrida.")
         if args.force:
             sys.exit(msg)
         print(f'aviso: {msg}')
