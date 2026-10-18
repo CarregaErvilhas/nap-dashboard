@@ -39,7 +39,9 @@ DEFAULT_TRACKER = 'pt_pcve_errors.xlsx'
 REGISTRY_CSV = 'opc_registry_authority.csv'
 ERRORS_CSV = 'tracker_errors.csv'
 META_JSON = 'tracker_meta.json'
-FILE_ID = '1zsEHrtPvcjDXJxuoyoPlqTMv3BPxW6ZW'
+# Provenance is the sha256 + date, deliberately not the Drive file id: this repo
+# is public and meta is versioned, so a hardcoded/recorded id would publish a
+# permanent pointer to the data owners' file.
 
 # Error List layout (1-based Excel columns B..K), verified against 2026-10.
 COL_CPO, COL_PARTYID, COL_ASSET, COL_STATUS, COL_ERRTYPE = 1, 2, 3, 4, 5
@@ -179,7 +181,6 @@ def main():
 
     meta = {
         'source': 'pt-pcve-errors.xlsx (PCVE error tracker, Office file on Drive)',
-        'drive_file_id': FILE_ID,
         'tracker_sha256': sha256(args.tracker),
         'synced_at': dt.date.today().isoformat(),
         'cpos': len(registry),

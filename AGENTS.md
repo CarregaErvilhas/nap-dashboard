@@ -101,17 +101,25 @@ snapshot against the **PCVE error tracker** (`pt-pcve-errors.xlsx`), the data
 owners' own error list per operator/asset. Refresh cycle:
 
 ```bash
-bash scripts/fetch_tracker.sh      # local-only: Drive download (gog)
+bash scripts/fetch_tracker.sh                # TRACKER_URL, or gog, or skip
 venv/bin/python scripts/tracker_sync.py     # xlsx -> versioned CSVs
 venv/bin/python scripts/tracker_checks.py   # CSVs + NAP -> findings
 ```
 
-- `fetch_tracker.sh` needs Drive credentials, so it is **local-only** and never
-  fails the pipeline; in CI `tracker_sync.py` skips and the versioned
-  `opc_registry_authority.csv` / `tracker_errors.csv` / `tracker_meta.json` are
-  reused. Those three are the deliberate exception to "everything fetched is
-  gitignored" — CI cannot refetch them, and `tracker_meta.json` carries
-  `synced_at` + the xlsx `sha256` so staleness is visible, not silent.
+- `fetch_tracker.sh` has three strategies, none of which may fail the pipeline:
+  `TRACKER_URL` (anonymous download — **what CI uses**, since the file's owner
+  shares it as "anyone with the link", so no credentials are needed), then `gog`
+  (authenticated Drive download, for when link sharing is off — local only), then
+  fall back to the versioned snapshot. `nap-dashboard` is a **public** repo, so
+  keep that URL in the `TRACKER_URL` repo secret, never as a literal in the
+  workflow — otherwise the repo publishes a permanent pointer to the data owners'
+  file. Set the secret to the shareable download URL of the xlsx.
+- `opc_registry_authority.csv`, `tracker_errors.csv` and `tracker_meta.json` are
+  versioned on purpose (the exception to "everything fetched is gitignored"):
+  they are the fallback whenever the fetch is unavailable, and `tracker_meta.json`
+  carries `synced_at` + the xlsx `sha256`, so a stale snapshot is reported in
+  errors.md item 13 instead of being silently trusted. A changed `sha256` after a
+  refresh means the owners updated the tracker.
 - The tracker is an **Office file, not a native Google Sheet**: the Sheets API
   rejects it with `400 failedPrecondition: must not be an Office file`, hence
   the Drive download.

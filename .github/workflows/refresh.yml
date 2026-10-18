@@ -79,10 +79,14 @@ jobs:
           python scripts/concelho_check.py
           python scripts/osm_umap.py
       - name: PCVE tracker cross-check
+        env:
+          # Secret, not a literal: nap-dashboard is public and the data owners'
+          # file should not be pointed at from it. Set it to the shareable
+          # download URL of pt-pcve-errors.xlsx. When absent, tracker_sync.py
+          # keeps the versioned snapshot (tracker_meta.json reports its age).
+          TRACKER_URL: ${{ secrets.TRACKER_URL }}
         run: |
-          # No Drive auth in CI: tracker_sync.py skips and keeps the versioned
-          # opc_registry_authority.csv / tracker_errors.csv (tracker_meta.json
-          # carries their age, which tracker_checks.py surfaces when stale).
+          bash scripts/fetch_tracker.sh
           python scripts/tracker_sync.py
           python scripts/tracker_checks.py
       - name: Build dashboard
