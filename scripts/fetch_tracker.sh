@@ -63,12 +63,22 @@ accept() {
 }
 
 fetched=0
+tried=""
 
 # 1. anonymous (CI path)
 if [ -n "${TRACKER_URL:-}" ]; then
   echo "-> ${DEST} (anónimo, TRACKER_URL)"
-  if curl -fsSL --retry 2 --max-time 120 "$TRACKER_URL" -o "$TMP" 2>/dev/null \
-     && accept "$TMP"; then
+  tried="TRACKER_URL"
+  # Sem -f: queremos o corpo para o accept() poder dizer O QUE voltou. Guardamos
+  # o código HTTP para o aviso final ser diagnosticável — a primeira versão
+  # silenciava o curl com 2>/dev/null e um 403 do Google parecia "sem URL".
+  code=$(curl -sSL --retry 2 --max-time 120 -w '%{http_code}' \
+              "$TRACKER_URL" -o "$TMP" 2>/dev/null) || code="curl_error"
+  if [ "$code" != "200" ]; then
+    echo "       a origem respondeu HTTP ${code} (o Drive pode estar a bloquear" >&2
+    echo "       o IP das runners ou a pedir interstitial)" >&2
+    rm -f "$TMP"
+  elif accept "$TMP"; then
     mv "$TMP" "$DEST"; fetched=1
   fi
 fi
@@ -83,9 +93,15 @@ if [ "$fetched" -eq 0 ] && [ -n "$FILE_ID" ] && command -v gog >/dev/null 2>&1; 
 fi
 
 if [ "$fetched" -eq 0 ]; then
-  echo "aviso: não foi possível actualizar o tracker (sem TRACKER_URL e sem 'gog' com TRACKER_FILE_ID)." >&2
-  echo "       O pipeline continua com a última data/opc_registry_authority.csv versionada;" >&2
-  echo "       a data dessa versão é reportada em data/tracker_meta.json / errors.md item 13." >&2
+  if [ -n "$tried" ]; then
+    echo "aviso: o tracker não foi descarregado (tentado: ${tried})." >&2
+  else
+    echo "aviso: o tracker não foi descarregado (nem TRACKER_URL nem 'gog' com" >&2
+    echo "       TRACKER_FILE_ID estão disponíveis)." >&2
+  fi
+  echo "       O pipeline continua sem o cross-check: o item 13 de errors.md" >&2
+  echo "       simplesmente não é escrito nesta corrida. Preferimos uma secção" >&2
+  echo "       em falta a um item congelado sem dizer nada." >&2
   rm -f "$TMP"
   exit 0
 fi
