@@ -15,9 +15,11 @@ Quatro verificações:
      antigo depois de uma refactorização.
   C. **Scripts referenciados existem** — cada `scripts/*.py` / `*.sh` citado num
      workflow está no disco (apanha typos e renomeações a meio).
-  D. **Excepções versionadas** — os três artefactos do tracker que o `.gitignore`
-     mantém versionados existem e continuam versionados. Se alguém perder o
-     `!data/...`, a CI passa a calar-se em silêncio.
+  D. **Derivados do tracker fora do git** — `data/tracker_errors.csv`,
+     `data/opc_registry_authority.csv` e `data/tracker_meta.json` são sempre
+     re-extraídos do xlsx de origem e nunca versionados: republicar a lista de
+     erros de outrem não é coisa que este repo possa fazer. O check apanha
+     alguém a reintroduzir o ficheiro no índice ou a excepção no `.gitignore`.
 
 Porquê não correr o pipeline todo no PR: `fetch_data.sh` são ~230 MB e o
 `osm_umap.py` traz um dump Overpass. Bater nos servidores oficiais a cada PR
@@ -52,10 +54,10 @@ DATA_FILES = [
 ]
 CACHE_DIRS = ['umap_cache', 'caop_cache']
 
-# Excepções deliberadas ao "data/ está ignorado": a CI não consegue ir buscar o
-# tracker, logo o snapshot é versionado. `tracker_meta.json` guarda a data+sha256
-# para um snapshot velho ser reportado em vez de usado em silêncio.
-VERSIONED_IN_DATA = {
+# Ficheiros derivados do tracker. NÃO são versionados: são sempre re-extraídos
+# do xlsx de origem (fetch_tracker.sh -> tracker_sync.py). Versioná-los seria
+# republicar a lista de erros de outrem sem licença, e envelheceria em silêncio.
+TRACKER_DERIVED = {
     'opc_registry_authority.csv', 'tracker_errors.csv', 'tracker_meta.json',
 }
 
@@ -85,12 +87,6 @@ def tracked_paths():
     out = subprocess.run(['git', 'ls-files'], capture_output=True, text=True,
                          check=True).stdout.splitlines()
     return [p for p in out if p]
-
-
-def is_tracked(path):
-    r = subprocess.run(['git', 'ls-files', '--error-unmatch', '--', path],
-                       capture_output=True, text=True)
-    return r.returncode == 0
 
 
 # --- A. raiz limpa ----------------------------------------------------------
@@ -131,20 +127,20 @@ for wf in ('refresh.yml', 'agents.yml', 'pr-checks.yml'):
                 if not os.path.exists(os.path.join('scripts', ref)):
                     fail('C', f'{p}:{lineno}: referencia scripts/{ref} que não existe')
 
-# --- D. excepções versionadas ----------------------------------------------
+# --- D. derivados do tracker nunca versionados ------------------------------
 # Testamos o índice com `git ls-files`, não `git check-ignore`: este último
-# reporta ficheiros JÁ versionados como "não ignorados", mesmo que a negação
-# tenha desaparecido do .gitignore — que é exactamente o que queremos apanhar.
-for name in sorted(VERSIONED_IN_DATA):
+# reporta ficheiros JÁ versionados como "não ignorados", que é exactamente o
+# caso proibido aqui.
+tracked = set(tracked_paths())
+for name in sorted(TRACKER_DERIVED):
     p = os.path.join('data', name)
-    if not os.path.exists(p):
-        fail('D', f'data/{name} não existe — a CI perde o fallback do tracker')
-    elif not is_tracked(p):
-        fail('D', f'data/{name} não está versionado; tem de ser a excepção '
-                  f'`!data/{name}` no .gitignore para a CI ter o snapshot')
-    elif f'!{p}' not in GITIGNORE:
-        fail('D', f'.gitignore perdeu `!{p}` — se o ficheiro for removido do '
-                  f'índice deixa de poder ser versionado')
+    if p in tracked:
+        fail('D', f'{p} está versionado — o tracker tem de ser sempre extraído da '
+                  f'origem (fetch_tracker.sh + tracker_sync.py), nunca copiado '
+                  f'para o git')
+    if f'!{p}' in GITIGNORE:
+        fail('D', f'.gitignore tem `!{p}` — essa excepção volta a pôr no git '
+                  f'dados derivados de terceiros')
 
 # --- relatório --------------------------------------------------------------
 if errors:
@@ -156,5 +152,5 @@ if errors:
     sys.exit(1)
 
 print(f'OK: raiz limpa, {len(DATA_FILES)} ficheiros de dados só referenciados '
-      f'como data/…, scripts dos workflows existem, {len(VERSIONED_IN_DATA)} '
-      f'excepções versionadas presentes.')
+      f'como data/…, scripts dos workflows existem, {len(TRACKER_DERIVED)} '
+      f'derivados do tracker fora do git.')

@@ -29,9 +29,11 @@ jobs:
     steps:
       - uses: actions/checkout@v5
 
+      # Mesma versão dos outros workflows (3.13) — alinhar evita dois runtimes
+      # diferentes entre o gate e o refresh semanal.
       - uses: actions/setup-python@v6
         with:
-          python-version: '3.12'
+          python-version: "3.13"
 
       - name: Guardar os dados em data/
         run: python3 scripts/ci_paths.py

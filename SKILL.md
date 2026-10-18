@@ -70,7 +70,9 @@ pipeline keeps the versioned `data/tracker_*.{csv,json}` snapshot and
 Outputs to give the user:
 - `dashboard.html` — open with `open dashboard.html`
 - `facts.md` — interesting facts
-- `errors.md` — reportable data errors (13 items; item 13 is the tracker cross-check)
+- `errors.md` — reportable data errors, numbered; the last item is the PCVE
+  tracker cross-check (only present when the tracker was fetched — do not
+  hard-code a total, it goes stale)
 
 ## Data sources
 

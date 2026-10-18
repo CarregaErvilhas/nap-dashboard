@@ -158,8 +158,14 @@ def main():
 
     for p in (REGISTRY_CSV, ERRORS_CSV):
         if not os.path.exists(p):
-            sys.exit(f"erro: {p} em falta — correr antes scripts/tracker_sync.py "
-                     f"(bash scripts/fetch_tracker.sh para actualizar)")
+            # Nada disto é versionado: o tracker tem de ser sempre extraído da
+            # origem (scripts/fetch_tracker.sh -> scripts/tracker_sync.py). Sem
+            # ele não há o que cruzar, mas isso não é motivo para o pipeline
+            # parar — o item 13 de errors.md simplesmente não é escrito.
+            print(f"aviso: {p} em falta — o tracker não foi extraído nesta "
+                  f"corrida; a correr sem o cross-check (item 13 de errors.md "
+                  f"fica de fora). Ver bash scripts/fetch_tracker.sh", file=sys.stderr)
+            return 0
     meta = json.load(open(META_JSON, encoding='utf-8')) if os.path.exists(META_JSON) else {}
     sites = pd.read_csv('data/nap_static_sites.csv', dtype=str)
     points = pd.read_csv('data/nap_static_points.csv')

@@ -16,14 +16,11 @@ __pycache__/
 data/*
 !data/.gitkeep
 
-# The tracker-derived registry and its ground-truth labels are the deliberate
-# exception: they come from an external authority file that CI cannot always
-# refetch, so the snapshot is versioned and tracker_meta.json carries its
-# synced_at + sha256 (a stale snapshot is reported in errors.md item 13 rather
-# than silently trusted). Everything else under data/ stays out of git.
-!data/opc_registry_authority.csv
-!data/tracker_errors.csv
-!data/tracker_meta.json
+# The tracker's derived files (opc_registry_authority.csv, tracker_errors.csv,
+# tracker_meta.json) are NOT versioned either: they are always re-extracted from
+# the source xlsx by scripts/tracker_sync.py. A versioned copy of somebody
+# else's error list is third-party data this repo has no licence to republish,
+# and it would also go stale silently.
 
 # Stray exploratory OSM analyses (one-off debris, see scripts/osm_umap.py)
 caca_analysis.csv
