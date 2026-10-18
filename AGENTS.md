@@ -12,7 +12,8 @@ produces CSVs + a self-contained dashboard (`dashboard.html`, `facts.md`,
 - `scripts/` — pipeline (fetch_data.sh, nap_etl.py, mobie_join.py, dgeg_lists.py,
   dgeg_crossref.py, partyid_crossref.py, check_quality.py, summary.py,
   concelho_check.py, osm_umap.py, make_pt_outline.py, extract_enums.py,
-  build_dashboard.py, fetch_tracker.sh, tracker_sync.py, tracker_checks.py)
+  build_dashboard.py, fetch_tracker.sh, tracker_sync.py, tracker_checks.py,
+  ci_paths.py)
 - `assets/` — `dashboard_template.html`, `pt_outline.json` (PT outline for the
   map), `schemas/*.xsd` (DATEX II 3.3 © CEN; ver `assets/schemas/README.md`)
 - `references/` — docs for the SKILL.md (data sources, gotchas)
@@ -252,6 +253,37 @@ venv/bin/python scripts/validate_dashboard.py
 - **tensão**, nunca "voltagem". Unidades abreviam-se `V`/`A`/`kW` normalmente.
 - `voltage`/`max_current` mantêm-se em inglês só quando referem identificadores
   de código ou colunas (CSV, DATEX II, snippets) — em prosa portuguesa é tensão.
+
+## PR checks (`.github/workflows/pr-checks.yml`)
+
+Gate de ~1 s em cada PR para `main`, sem rede e sem dependências (stdlib).
+`scripts/ci_paths.py` corre quatro verificações:
+
+- **A** — nenhum ficheiro de dados na raiz do repo;
+- **B** — em código, workflows e docs, qualquer menção a um ficheiro de dados
+  tem de aparecer com o prefixo `data/` (apanha um `pd.read_csv('nap_static_sites.csv')`
+  que volte ao sítio antigo);
+- **C** — cada `scripts/*.py`/`*.sh` citado num workflow existe no disco;
+- **D** — os três artefactos do tracker excepção continuam versionados (testa o
+  índice com `git ls-files`, **não** `git check-ignore`: este reporta ficheiros
+  já versionados como "não ignorados", que é precisamente o caso a proteger).
+
+Mais `compileall` nos scripts Python e `bash -n` nos shell, para o check não ser
+decorativo (um erro de sintaxe só apareceria no refresh da semana seguinte).
+
+**O que este gate não cobre, de propósito:** o pipeline completo não corre no PR
+— `fetch_data.sh` são ~230 MB e o `osm_umap.py` traz um dump Overpass; bater nos
+servidores oficiais a cada PR não é aceitável. Em troca, o `refresh.yml` semanal
+é o teste de integração a sério.
+
+Fica em aberto, se quiseres mais cobertura: correr `build_dashboard.py` +
+`validate_dashboard.py` em cima de fixtures. Exige versionar uma amostra dos
+CSVs do NAP, e isso levanta a mesma questão de republicação de dados de terceiros
+que o `tracker_errors.csv` já levanta (ver `THIRD-PARTY-NOTICES.md`) — por isso
+não foi feito sem decisão.
+
+Ao mover/renomear um ficheiro de dados, actualizar a lista `DATA_FILES` em
+`scripts/ci_paths.py`: é a fonte de verdade dos quatro checks.
 
 ## Deliverables
 - `dashboard.html` — the interactive dashboard (open with `open dashboard.html`)

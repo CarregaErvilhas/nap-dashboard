@@ -115,6 +115,19 @@ node --check /tmp/dash_check.js
 If the dashboard renders nothing below the KPIs, it's a JS runtime error — see
 the historical bugs in `references/gotchas.md`.
 
+## PR checks
+
+`.github/workflows/pr-checks.yml` runs on every PR to `main`: ~1 s, no network,
+no dependencies. `scripts/ci_paths.py` asserts that (A) no data file sits in the
+repo root, (B) every reference to a data file is `data/`-prefixed, (C) every
+`scripts/*` cited in a workflow exists, (D) the three versioned tracker
+artifacts are still tracked. Plus `compileall` and `bash -n`.
+
+It deliberately does **not** run the full pipeline (`fetch_data.sh` is ~230 MB and
+`osm_umap.py` pulls an Overpass dump — don't hammer the official sources on every
+PR); the weekly `refresh.yml` is the real integration test. When you move or
+rename a data file, update `DATA_FILES` in `scripts/ci_paths.py`.
+
 ## Layout
 
 - `scripts/` — the pipeline

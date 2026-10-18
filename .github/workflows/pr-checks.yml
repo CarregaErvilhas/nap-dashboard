@@ -1,0 +1,62 @@
+# Gate mínimo de pull request.
+#
+# O pipeline completo não pode correr aqui: `fetch_data.sh` são ~230 MB e o
+# `osm_umap.py` traz um dump Overpass — bater nos servidores oficiais a cada PR
+# não é aceitável. O que fica é o que apanha a classe de erro que rebenta em
+# runtime muito depois do merge: um caminho de dados no sítio errado, um typo
+# num path de workflow, um typo num script, uma excepção do .gitignore perdida.
+#
+# Corre em ~1 s, sem dependências (stdlib) e sem rede. O refresh semanal
+# (`refresh.yml`) continua a ser o teste de integração a sério.
+name: PR checks
+
+on:
+  pull_request:
+    branches: [main]
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pr-checks-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  paths-and-syntax:
+    name: Caminhos de dados e sintaxe
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+
+      - name: Guardar os dados em data/
+        run: python3 scripts/ci_paths.py
+
+      # Sem isto o check passa a ser decorativo: um erro de sintaxe num script
+      # só apareceria na segunda-feira seguinte, em produção.
+      - name: Sintaxe dos scripts Python
+        run: python3 -m compileall -q scripts
+
+      - name: Sintaxe dos scripts shell
+        run: |
+          for f in scripts/*.sh; do bash -n "$f"; done
+
+      - name: YAML dos workflows
+        run: |
+          # python3 -c 'import yaml' falha sem pyyaml, que não é uma dependência
+          # deste repo de propósito. O GitHub valida o workflow ao correr, mas
+          # um YAML partido faz o job não arrancar em silêncio — daí o aviso
+          # explícito em vez de assumir que está bom.
+          if python3 -c 'import yaml' 2>/dev/null; then
+            for f in .github/workflows/*.yml; do python3 -c "
+          import sys, yaml
+          yaml.safe_load(open(sys.argv[1]))
+          print('YAML OK', sys.argv[1])
+          " "$f"; done
+          else
+            echo "::warning::pyyaml ausente; YAML não validado localmente"
+          fi
