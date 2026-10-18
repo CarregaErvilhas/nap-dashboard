@@ -45,15 +45,15 @@ def parse_table(path, headers, label):
     return rows
 
 
-opc = parse_table('dgeg_opc.html', ['Nº', 'Entidade', 'Validade', 'Morada', 'NIF', 'Site'], 'OPC')
-with open('dgeg_opc.csv', 'w', newline='', encoding='utf-8') as fh:
+opc = parse_table('data/dgeg_opc.html', ['Nº', 'Entidade', 'Validade', 'Morada', 'NIF', 'Site'], 'OPC')
+with open('data/dgeg_opc.csv', 'w', newline='', encoding='utf-8') as fh:
     w = csv.writer(fh)
     w.writerow(['num', 'entidade', 'validade', 'morada', 'nif', 'site'])
     w.writerows(opc)
 print(f'OPC: {len(opc)} entries')
 
-ceme = parse_table('dgeg_ceme.html', ['Nº', 'Entidade', 'Validade', 'Morada', 'NIF', 'Site'], 'CEME')
-with open('dgeg_ceme.csv', 'w', newline='', encoding='utf-8') as fh:
+ceme = parse_table('data/dgeg_ceme.html', ['Nº', 'Entidade', 'Validade', 'Morada', 'NIF', 'Site'], 'CEME')
+with open('data/dgeg_ceme.csv', 'w', newline='', encoding='utf-8') as fh:
     w = csv.writer(fh)
     w.writerow(['num', 'entidade', 'validade', 'morada', 'nif', 'site'])
     w.writerows(ceme)

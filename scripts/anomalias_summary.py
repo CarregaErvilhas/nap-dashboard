@@ -1,7 +1,7 @@
 """Pre-aggregation for the anomalias agent (deterministic part).
 
-Reads nap_static_sites.csv + nap_static_points.csv (run nap_etl.py first) and
-writes agents-summary.json: compact per-OPC anomaly evidence that the LLM turns
+Reads data/nap_static_sites.csv + data/nap_static_points.csv (run nap_etl.py first) and
+writes data/agents-summary.json: compact per-OPC anomaly evidence that the LLM turns
 into Agents-outputs/anomalias-results.md. All samples are capped so the JSON
 stays small enough to fit in model context.
 
@@ -17,7 +17,7 @@ import pandas as pd
 from lxml import etree
 
 SAMPLE = 5  # max example rows/ids per category
-OUT = 'agents-summary.json'
+OUT = 'data/agents-summary.json'
 XS = 'http://www.w3.org/2001/XMLSchema'
 
 
@@ -69,8 +69,8 @@ def region(lon, lat):
 
 def main():
     try:
-        sites = pd.read_csv('nap_static_sites.csv', dtype=str)
-        points = pd.read_csv('nap_static_points.csv', dtype=str)
+        sites = pd.read_csv('data/nap_static_sites.csv', dtype=str)
+        points = pd.read_csv('data/nap_static_points.csv', dtype=str)
     except FileNotFoundError as e:
         print(f'MISSING INPUT: {e}\nRun fetch_data.sh + nap_etl.py first.',
               file=sys.stderr)

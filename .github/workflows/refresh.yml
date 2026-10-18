@@ -37,7 +37,7 @@ jobs:
       - name: Fetch fresh data
         run: bash scripts/fetch_data.sh
       - name: ETL
-        run: python scripts/nap_etl.py evChargingInfra_latest.xml evActualStatus_latest.xml .
+        run: python scripts/nap_etl.py data/evChargingInfra_latest.xml data/evActualStatus_latest.xml data
       # Diff semanal da rede (novidades.md + network-census.json): compara com o
       # censo commitado (HEAD) antes do build embutir o painel no dashboard.
       - name: Network news (weekly diff)
@@ -48,20 +48,20 @@ jobs:
         run: |
           python3 -c "
           import datetime, hashlib, json, os
-          files = ['nap_static_sites.csv', 'nap_static_points.csv']
+          files = ['data/nap_static_sites.csv', 'data/nap_static_points.csv']
           prov = {'refresh_run_id': os.environ.get('GITHUB_RUN_ID', ''),
                   'fetched_utc': datetime.datetime.now(datetime.timezone.utc).isoformat(timespec='seconds'),
                   'sha256': {f: hashlib.sha256(open(f, 'rb').read()).hexdigest()[:16] for f in files}}
-          json.dump(prov, open('data-provenance.json', 'w'))
+          json.dump(prov, open('data/data-provenance.json', 'w'))
           print(prov)
           "
       - uses: actions/upload-artifact@v7
         with:
           name: nap-static
           path: |
-            nap_static_sites.csv
-            nap_static_points.csv
-            data-provenance.json
+            data/nap_static_sites.csv
+            data/nap_static_points.csv
+            data/data-provenance.json
           retention-days: 7
           if-no-files-found: error
       - name: Quality + summary
@@ -78,6 +78,17 @@ jobs:
         run: |
           python scripts/concelho_check.py
           python scripts/osm_umap.py
+      - name: PCVE tracker cross-check
+        env:
+          # Secret, not a literal: nap-dashboard is public and the data owners'
+          # file should not be pointed at from it. Set it to the shareable
+          # download URL of pt-pcve-errors.xlsx. When absent, tracker_sync.py
+          # keeps the versioned snapshot (data/tracker_meta.json reports its age).
+          TRACKER_URL: ${{ secrets.TRACKER_URL }}
+        run: |
+          bash scripts/fetch_tracker.sh
+          python scripts/tracker_sync.py
+          python scripts/tracker_checks.py
       - name: Build dashboard
         run: python scripts/build_dashboard.py
       # Guard: se um upstream mudou o formato e o pipeline produziu dados

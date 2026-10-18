@@ -20,7 +20,7 @@ esperada = V × I (monofásico AC e DC), `√3 × V × I` em `mode3AC3p`;
 `<0.75` = sub-declaração (MÉDIO). Só stdlib.
 
 Uso (da raiz do repo): python3 scripts/anomalias_evidence.py
-Lê `nap_static_sites.csv` + `nap_static_points.csv` relativos à CWD.
+Lê `data/nap_static_sites.csv` + `data/nap_static_points.csv` relativos à CWD.
 """
 import csv
 import datetime
@@ -28,8 +28,8 @@ import math
 import os
 import sys
 
-SITES = 'nap_static_sites.csv'
-POINTS = 'nap_static_points.csv'
+SITES = 'data/nap_static_sites.csv'
+POINTS = 'data/nap_static_points.csv'
 OUT_DIR = 'Agents-outputs'
 OUT_CSV = os.path.join(OUT_DIR, 'anomalias-evidence.csv')
 OUT_MD = os.path.join(OUT_DIR, 'anomalias-details.md')

@@ -11,6 +11,8 @@
 # HTML em vez do CSV) tem tamanho >0 e passava no teste anterior.
 set -euo pipefail
 
+mkdir -p data
+
 # check_content <file> <expect>: xml | pdf | csv:TOKEN | html-table
 check_content() {
   local file="$1" expect="$2"
@@ -41,18 +43,18 @@ fetch() {
 }
 
 # NAP MOBI.E — DATEX II 3.3 static inventory of sites/points (200 MB)
-fetch "https://pgm.mobie.pt/integration/nap/evChargingInfra" evChargingInfra_latest.xml xml
+fetch "https://pgm.mobie.pt/integration/nap/evChargingInfra" data/evChargingInfra_latest.xml xml
 
 # NAP MOBI.E — DATEX II 3.3 dynamic status + prices (40 MB)
-fetch "https://pgm.mobie.pt/integration/nap/evActualStatus" evActualStatus_latest.xml xml
+fetch "https://pgm.mobie.pt/integration/nap/evActualStatus" data/evActualStatus_latest.xml xml
 
 # MOBI.E OPC tariff file (CSV, semicolon-separated, decimal comma)
 # Friendly Liferay URL that always resolves to the current version.
-fetch "https://www.mobie.pt/documents/42032/106470/Tarifas" mobie_tarifas.csv csv:UID_TOMADA
+fetch "https://www.mobie.pt/documents/42032/106470/Tarifas" data/mobie_tarifas.csv csv:UID_TOMADA
 
 # MOBI.E PartyID (official operator/CEME codes). PDF from 2022 — outdated:
 # use as reference only; many active tariff codes are missing from it.
-fetch "https://www.mobie.pt/documents/42032/223588/PartyID_MOBIE.pdf/3f0f61d7-a579-ca1c-4804-a39d4f2df8bc?t=1646652329843" mobie_partyid.pdf pdf
+fetch "https://www.mobie.pt/documents/42032/223588/PartyID_MOBIE.pdf/3f0f61d7-a579-ca1c-4804-a39d4f2df8bc?t=1646652329843" data/mobie_partyid.pdf pdf
 
 # DGEG — registered OPC list (HTML table)
 # 2026-10: DGEG restructured the site under DL 93/2025
@@ -60,13 +62,13 @@ fetch "https://www.mobie.pt/documents/42032/223588/PartyID_MOBIE.pdf/3f0f61d7-a5
 # deep URLs now 301 to the homepage (no <table>) and fail the content check.
 fetch \
   "https://www.dgeg.gov.pt/pt/areas-setoriais/energia/energia-eletrica/mobilidade-eletrica/operacao-e-comercializacao/lista-de-opc/" \
-  dgeg_opc.html html-table -A "Mozilla/5.0 (Macintosh)"
+  data/dgeg_opc.html html-table -A "Mozilla/5.0 (Macintosh)"
 
 # DGEG — registered CEME list (HTML table, transitional regime)
 fetch \
   "https://www.dgeg.gov.pt/pt/areas-setoriais/energia/energia-eletrica/mobilidade-eletrica/operacao-e-comercializacao/regime-transitorio/ceme-registados/" \
-  dgeg_ceme.html html-table -A "Mozilla/5.0 (Macintosh)"
+  data/dgeg_ceme.html html-table -A "Mozilla/5.0 (Macintosh)"
 
 echo "fetched:"
-ls -lh evChargingInfra_latest.xml evActualStatus_latest.xml mobie_tarifas.csv \
-      mobie_partyid.pdf dgeg_opc.html dgeg_ceme.html
+ls -lh data/evChargingInfra_latest.xml data/evActualStatus_latest.xml data/mobie_tarifas.csv \
+      data/mobie_partyid.pdf data/dgeg_opc.html data/dgeg_ceme.html

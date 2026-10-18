@@ -4,15 +4,15 @@ the concelho/distrito implied by the site_id code (errors.md item 11).
 Usage: python concelho_check.py
 
 Downloads CAOP concelho boundaries (jotanmiguel/caop_GeoJSON fork, geograficas
-WGS84 variants) into caop_cache/ on first run. Assigns each site a concelho by
+WGS84 variants) into data/caop_cache/ on first run. Assigns each site a concelho by
 point-in-polygon, derives the concelho implied by each site_id code by majority
 vote over all sites sharing that code, then reports the sites whose real
 concelho differs. The distance shown is the great-circle km from the code
 concelho's centroid to the site's actual coordinates.
 
 Writes:
-  concelho_check.csv      every site + real and code-implied concelho/distrito
-  concelho_mismatches.md  errors.md fragment: 11a (wrong district) + 11b (right
+  data/concelho_check.csv      every site + real and code-implied concelho/distrito
+  data/concelho_mismatches.md  errors.md fragment: 11a (wrong district) + 11b (right
                           district, wrong concelho) tables with distances
 """
 import json
@@ -22,7 +22,7 @@ import urllib.request
 
 import pandas as pd
 
-CAOP_DIR = 'caop_cache'
+CAOP_DIR = 'data/caop_cache'
 CAOP_FILES = [
     ('continente', 'geograficas/ContinenteConcelhos.geojson', 'Concelho', 'Distrito'),
     ('acores', 'geograficas/A%C3%A7ores/A%C3%A7oresConcelhos.geojson', 'MUNICIPIO', 'ILHA'),
@@ -135,7 +135,7 @@ def region(lon, lat):
 
 
 def main():
-    sites = pd.read_csv('nap_static_sites.csv', dtype=str)
+    sites = pd.read_csv('data/nap_static_sites.csv', dtype=str)
     sites['mcode'] = sites.site_id.apply(muncode)
 
     print('Loading CAOP polygons...')
@@ -215,7 +215,7 @@ def main():
         and centroids[(r.conc_code, r.dist_code)] else None, axis=1)
     df = df.sort_values(['mcode', 'site_id']).reset_index(drop=True)
 
-    df.to_csv('concelho_check.csv', index=False)
+    df.to_csv('data/concelho_check.csv', index=False)
 
     mis = df[df.conc_real != df.conc_code]
     cross = mis[mis.dist_real != mis.dist_code]
@@ -224,7 +224,7 @@ def main():
     print('mismatches:    %d  (cross-district %d, same-district %d)'
           % (len(mis), len(cross), len(same)))
 
-    with open('concelho_mismatches.md', 'w') as fh:
+    with open('data/concelho_mismatches.md', 'w') as fh:
         fh.write('### 11a. Fora do distrito do código (%d)\n\n' % len(cross))
         fh.write('| site_id | código | concelho do código (distrito) | coordenadas em (distrito) | distância (km) |\n')
         fh.write('|---|---|---|---|---|\n')
@@ -239,7 +239,7 @@ def main():
             fh.write('| `%s` | %s | %s | %s | %d |\n'
                      % (r.site_id, r.mcode, r.conc_code, r.conc_real, r.km))
 
-    print('wrote concelho_check.csv, concelho_mismatches.md')
+    print('wrote data/concelho_check.csv, data/concelho_mismatches.md')
 
 
 if __name__ == '__main__':

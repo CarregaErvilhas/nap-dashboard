@@ -8,7 +8,7 @@ import re
 import pandas as pd
 
 rows = []
-with pdfplumber.open('mobie_partyid.pdf') as pdf:
+with pdfplumber.open('data/mobie_partyid.pdf') as pdf:
     for page in pdf.pages:
         for ln in page.extract_text().split('\n'):
             ln = ln.strip()
@@ -20,14 +20,14 @@ with pdfplumber.open('mobie_partyid.pdf') as pdf:
                              'entity': m.group(3), 'ceme': m.group(4) == 'Sim',
                              'opc': m.group(5) == 'Sim'})
 
-with open('mobie_partyid.csv', 'w', newline='') as fh:
+with open('data/mobie_partyid.csv', 'w', newline='') as fh:
     w = csv.DictWriter(fh, fieldnames=['code_long', 'code', 'entity', 'ceme', 'opc'])
     w.writeheader()
     w.writerows(rows)
-print(f'wrote mobie_partyid.csv: {len(rows)} codes')
+print(f'wrote data/mobie_partyid.csv: {len(rows)} codes')
 
-pid = pd.read_csv('mobie_partyid.csv', dtype=str)
-reg = pd.read_csv('nap_opc_registry.csv', dtype=str)
+pid = pd.read_csv('data/mobie_partyid.csv', dtype=str)
+reg = pd.read_csv('data/nap_opc_registry.csv', dtype=str)
 
 print('\n=== codes in registry (tariff/NAP) vs PartyID file ===')
 reg_codes = set(reg.opc_operador.unique())
@@ -52,5 +52,5 @@ out = reg.merge(pid[['code', 'entity', 'ceme', 'opc']],
                 left_on='opc_operador', right_on='code', how='left')
 out = out.rename(columns={'entity': 'pid_entity', 'ceme': 'pid_ceme', 'opc': 'pid_opc'})
 out = out.drop(columns=['code'])
-out.to_csv('nap_opc_registry.csv', index=False)
-print(f'\nenriched nap_opc_registry.csv with PartyID columns ({len(out)} rows)')
+out.to_csv('data/nap_opc_registry.csv', index=False)
+print(f'\nenriched data/nap_opc_registry.csv with PartyID columns ({len(out)} rows)')

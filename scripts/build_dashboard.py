@@ -14,11 +14,11 @@ import pandas as pd
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__))))
 import dashboard_i18n as i18n
 
-S = pd.read_csv('nap_static_sites.csv', dtype=str)
-P = pd.read_csv('nap_static_points.csv', dtype=str)
-ST = pd.read_csv('nap_dynamic_status.csv', dtype=str)
-OPC = pd.read_csv('nap_opc_points.csv', dtype=str)
-REG = pd.read_csv('nap_opc_registry.csv', dtype=str)
+S = pd.read_csv('data/nap_static_sites.csv', dtype=str)
+P = pd.read_csv('data/nap_static_points.csv', dtype=str)
+ST = pd.read_csv('data/nap_dynamic_status.csv', dtype=str)
+OPC = pd.read_csv('data/nap_opc_points.csv', dtype=str)
+REG = pd.read_csv('data/nap_opc_registry.csv', dtype=str)
 
 outline = {}
 districts = {}
@@ -107,8 +107,8 @@ site_maxkw = pts.groupby('site_external_id')['max_power_kw'].max()
 site_conn = P.groupby('site_external_id')['connector_type'].apply(
     lambda s: sorted({CONN_NAMES.get(t, t) for t in s if pd.notna(t)}))
 
-osm = pd.read_csv('osm_umap.csv', dtype=str) if os.path.exists('osm_umap.csv') else None
-caca = pd.read_csv('osm_caca.csv', dtype=str) if os.path.exists('osm_caca.csv') else None
+osm = pd.read_csv('data/osm_umap.csv', dtype=str) if os.path.exists('data/osm_umap.csv') else None
+caca = pd.read_csv('data/osm_caca.csv', dtype=str) if os.path.exists('data/osm_caca.csv') else None
 osm_by_site = {}
 if osm is not None:
     for _, r in osm.iterrows():
@@ -347,7 +347,7 @@ for b in P.brands_accepted.dropna():
     brands_all.update(x for x in str(b).split('|') if x)
 n_brands = len(brands_all)
 n_both = len(brands_all & opc_codes)
-_ceme = _fsafe('dgeg_ceme.csv', dtype=str)
+_ceme = _fsafe('data/dgeg_ceme.csv', dtype=str)
 n_dgeg_ceme = len(_ceme) if _ceme is not None else None
 
 # física (lei de Ohm) — mesmo cálculo do check_quality.py / anomalias_check.py
@@ -401,10 +401,10 @@ else:
 
 n_usage_missing = int(P.drop_duplicates('point_id').usage_type.isna().sum())
 
-_Mt = _fsafe('mobie_tarifas.csv', sep=';', decimal=',', dtype=str)
+_Mt = _fsafe('data/mobie_tarifas.csv', sep=';', decimal=',', dtype=str)
 n_bare_uid = (int(_Mt.UID_TOMADA.dropna().apply(lambda x: str(x).strip().isdigit()).sum())
               if _Mt is not None and 'UID_TOMADA' in _Mt else None)
-_pidf = _fsafe('mobie_partyid.csv', dtype=str)
+_pidf = _fsafe('data/mobie_partyid.csv', dtype=str)
 if _pidf is not None and opc_codes:
     _pid_codes = set(_pidf.code.dropna())
     n_pid_missing = len(opc_codes - _pid_codes)
@@ -415,7 +415,7 @@ else:
 _fl = OPC.FLAT.dropna().apply(_num)
 _fl = _fl[_fl.apply(lambda x: x == x)]  # descarta NaN de parse: senão .max() = nan e o painel mostra "nan €/carga"
 flat_max_v = round(float(_fl.max()), 2) if len(_fl) else None
-_pr = _fsafe('nap_dynamic_pricing.csv')
+_pr = _fsafe('data/nap_dynamic_pricing.csv')
 dyn_max = dyn_gt1 = None
 if _pr is not None and 'min_fee' in _pr and 'pricing_policy' in _pr:
     _dyn = _pr[_pr.pricing_policy == 'pricePerChargingTime'].copy()
@@ -428,7 +428,7 @@ _both0 = OPC.dropna(subset=['ENERGY', 'FLAT'])
 n_zeroenergy = int(((_both0.ENERGY.apply(_num) == 0) & (_both0.FLAT.apply(_num) > 0)).sum()) \
     if len(_both0) else 0
 
-_ccf = _fsafe('concelho_check.csv')
+_ccf = _fsafe('data/concelho_check.csv')
 n_cc_mismatch = int((_ccf.conc_real != _ccf.conc_code).sum()) if _ccf is not None else None
 
 n_osm_cov = n_osm_adhoc = None
@@ -522,7 +522,7 @@ ERRS_HTML = f"""
 </li>
 <li>
   <div class="head">12. Dúvidas da comunidade OSM/umap (cross-check externo)</div>
-  <div class="meta">O mapa "Caça aos Postos de Carregamento" (umap, OSM) lista pontos onde a comunidade não confirma a existência/localização de carregadores; vários "nada no local" ficam a ≤500 m de sites listados como ativos no NAP. Lista completa e operadores divergentes no mapa OSM v2.1 em <code>osm_umap_findings.md</code> (gerado por <code>scripts/osm_umap.py</code>).</div>
+  <div class="meta">O mapa "Caça aos Postos de Carregamento" (umap, OSM) lista pontos onde a comunidade não confirma a existência/localização de carregadores; vários "nada no local" ficam a ≤500 m de sites listados como ativos no NAP. Lista completa e operadores divergentes no mapa OSM v2.1 em <code>data/osm_umap_findings.md</code> (gerado por <code>scripts/osm_umap.py</code>).</div>
 </li>
 """
 
@@ -685,11 +685,14 @@ with open('errors.md', 'w') as fh:
     fh.write('# Erros reportáveis (dados NAP / MOBI.E / DGEG)\n\n')
     for m in re.findall(r'<div class="head">(.*?)</div>\s*<div class="meta">(.*?)</div>', ERRS_HTML, re.S):
         fh.write(f'## {re.sub(r"<[^>]+>", "", m[0])}\n{re.sub(r"<[^>]+>", "", m[1]).strip()}\n\n')
-    if os.path.exists('concelho_mismatches.md'):
-        with open('concelho_mismatches.md') as frag:
+    if os.path.exists('data/concelho_mismatches.md'):
+        with open('data/concelho_mismatches.md') as frag:
             fh.write(frag.read())
-    if os.path.exists('osm_umap_findings.md'):
-        with open('osm_umap_findings.md') as frag:
+    if os.path.exists('data/osm_umap_findings.md'):
+        with open('data/osm_umap_findings.md') as frag:
+            fh.write(frag.read())
+    if os.path.exists('data/tracker_findings.md'):
+        with open('data/tracker_findings.md') as frag:
             fh.write(frag.read())
 print('facts.md and errors.md written')
 

@@ -1,9 +1,9 @@
 import pandas as pd
 
-sites = pd.read_csv('nap_static_sites.csv')
-points = pd.read_csv('nap_static_points.csv')
-status = pd.read_csv('nap_dynamic_status.csv')
-pricing = pd.read_csv('nap_dynamic_pricing.csv')
+sites = pd.read_csv('data/nap_static_sites.csv')
+points = pd.read_csv('data/nap_static_points.csv')
+status = pd.read_csv('data/nap_dynamic_status.csv')
+pricing = pd.read_csv('data/nap_dynamic_pricing.csv')
 
 def region(lon, lat):
     try:

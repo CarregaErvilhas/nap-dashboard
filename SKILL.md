@@ -41,29 +41,39 @@ agreement, 30% of connectors with V×I/power inconsistency.
   python3 -m venv venv
   venv/bin/pip install pandas lxml pdfplumber
   ```
-- Always run scripts from the repo root — they resolve data files relative to
-  the CWD (`venv/bin/python scripts/nap_etl.py`, not from inside `scripts/`).
+- Always run scripts from the repo root — data paths are `data/…` **relative to
+  it** (`venv/bin/python scripts/nap_etl.py … data`, not from inside `scripts/`).
 - Never read the ~190 MB XMLs with the Read tool; parse with `scripts/nap_etl.py`.
 
 ## Pipeline
 
 ```bash
 bash scripts/fetch_data.sh                    # fresh data from origins (see references/data-sources.md)
-venv/bin/python scripts/nap_etl.py            # XML -> nap_static_sites.csv, nap_static_points.csv,
-                                              #        nap_dynamic_status.csv, nap_dynamic_pricing.csv
+bash scripts/fetch_tracker.sh                 # PCVE error tracker -> data/pt_pcve_errors.xlsx
+venv/bin/python scripts/nap_etl.py            # XML -> data/nap_static_sites.csv, data/nap_static_points.csv,
+                                              #        data/nap_dynamic_status.csv, data/nap_dynamic_pricing.csv
 venv/bin/python scripts/check_quality.py      # enums + V×I sanity + coords
 venv/bin/python scripts/summary.py            # numeric overview
-venv/bin/python scripts/mobie_join.py         # NAP ↔ MOBI.E tariffs -> nap_opc_points.csv
-venv/bin/python scripts/dgeg_lists.py         # DGEG pages -> dgeg_opc.csv, dgeg_ceme.csv
-venv/bin/python scripts/dgeg_crossref.py      # OPC codes -> entities -> nap_opc_registry.csv
+venv/bin/python scripts/mobie_join.py         # NAP ↔ MOBI.E tariffs -> data/nap_opc_points.csv
+venv/bin/python scripts/dgeg_lists.py         # DGEG pages -> data/dgeg_opc.csv, data/dgeg_ceme.csv
+venv/bin/python scripts/dgeg_crossref.py      # OPC codes -> entities -> data/nap_opc_registry.csv
 venv/bin/python scripts/partyid_crossref.py   # enrich with PartyID
+venv/bin/python scripts/tracker_sync.py       # PCVE tracker xlsx -> derived CSVs (never versioned)
+venv/bin/python scripts/tracker_checks.py     # tracker + NAP -> data/tracker_findings.md (errors.md item 13)
 venv/bin/python scripts/build_dashboard.py    # -> dashboard.html, facts.md, errors.md
 ```
+
+`fetch_tracker.sh` / `tracker_sync.py` need the tracker to be fetched: nothing
+derived from it is versioned, so without the xlsx there is no cross-check and
+errors.md simply has no tracker item. That is deliberate — a frozen copy of
+somebody else's error list would go stale silently. Never fails the run.
 
 Outputs to give the user:
 - `dashboard.html` — open with `open dashboard.html`
 - `facts.md` — interesting facts
-- `errors.md` — reportable data errors (11 items)
+- `errors.md` — reportable data errors, numbered; the last item is the PCVE
+  tracker cross-check (only present when the tracker was fetched — do not
+  hard-code a total, it goes stale)
 
 ## Data sources
 
@@ -73,6 +83,10 @@ Outputs to give the user:
 - **OPC tariff**: `https://www.mobie.pt/documents/42032/106470/Tarifas` (CSV)
 - **PartyID**: MOBI.E documents PDF (2022, outdated — see Gotchas)
 - **DGEG**: OPC-com-reconhecimento-previo and CEME-registados pages
+- **PCVE error tracker**: `pt-pcve-errors.xlsx`, the data owners' own error list
+  per operator/asset. Not public API — fetched by `scripts/fetch_tracker.sh`
+  (anonymous link download; no URL is committed, it lives in the `TRACKER_URL`
+  secret). Gives the authoritative OPC table and the only labelled defect set.
 
 ## Non-obvious stuff (read `references/gotchas.md` in full before analysing)
 
@@ -104,12 +118,28 @@ node --check /tmp/dash_check.js
 If the dashboard renders nothing below the KPIs, it's a JS runtime error — see
 the historical bugs in `references/gotchas.md`.
 
+## PR checks
+
+`.github/workflows/pr-checks.yml` runs on every PR to `main`: ~1 s, no network,
+no dependencies. `scripts/ci_paths.py` asserts that (A) no data file sits in the
+repo root, (B) every reference to a data file is `data/`-prefixed, (C) every
+`scripts/*` cited in a workflow exists, (D) the tracker's derived files are NOT tracked. Plus `compileall` and `bash -n`.
+
+It deliberately does **not** run the full pipeline (`fetch_data.sh` is ~230 MB and
+`osm_umap.py` pulls an Overpass dump — don't hammer the official sources on every
+PR); the weekly `refresh.yml` is the real integration test. When you move or
+rename a data file, update `DATA_FILES` in `scripts/ci_paths.py`.
+
 ## Layout
 
 - `scripts/` — the pipeline
 - `assets/` — `dashboard_template.html`, `schemas/*.xsd` (DATEX II 3.3 © CEN; ver `assets/schemas/README.md`)
 - `references/` — `data-sources.md`, `gotchas.md`
-- Raw XMLs + CSVs live in the repo root, gitignored, refreshed by `fetch_data.sh`
+- `data/` — every fetched or derived file (raw XMLs, CSVs, the tracker xlsx,
+  `umap_cache/`, `caop_cache/`), gitignored. Scripts still run from the repo
+  root and read `data/…` relative to it.
+- Repo root = code, docs and deliverables only (`dashboard.html`, `facts.md`,
+  `errors.md`, `novidades.md`, `network-census.json`, `assets/`, `Agents-outputs/`)
 
 ## When NOT to use
 

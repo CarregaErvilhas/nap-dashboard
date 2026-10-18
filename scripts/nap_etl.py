@@ -1,7 +1,7 @@
 """ETL: convert NAP MOBI.E DATEX II XML (static + dynamic) into clean CSVs.
 
 Usage:
-    python nap_etl.py evChargingInfra_latest.xml evActualStatus_latest.xml [outdir]
+    python nap_etl.py data/evChargingInfra_latest.xml data/evActualStatus_latest.xml [outdir]
 """
 import csv
 import sys

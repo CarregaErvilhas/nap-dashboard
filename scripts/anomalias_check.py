@@ -2,7 +2,7 @@
 
 Uso (da raiz do repo): venv/bin/python scripts/anomalias_check.py
 Lê Agents-outputs/anomalias-results.md, extrai todos os ids em backticks e
-confirma que cada um existe em nap_static_sites.csv / nap_static_points.csv
+confirma que cada um existe em data/nap_static_sites.csv / data/nap_static_points.csv
 (point_id, site_external_id, point_external_id, site_id, external_id).
 Exige >=3 ids por linha "Exemplos:" e reproduz os totais do snapshot.
 Cruza ainda com a evidência exaustiva (`scripts/anomalias_evidence.py`):
@@ -22,8 +22,8 @@ DETAILS_MD = 'Agents-outputs/anomalias-details.md'
 
 
 def main():
-    sites = pd.read_csv('nap_static_sites.csv', dtype=str)
-    points = pd.read_csv('nap_static_points.csv', dtype=str)
+    sites = pd.read_csv('data/nap_static_sites.csv', dtype=str)
+    points = pd.read_csv('data/nap_static_points.csv', dtype=str)
     pool = set()
     for col in ('point_id', 'site_external_id', 'point_external_id',
                 'site_id'):
