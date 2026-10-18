@@ -95,6 +95,19 @@ if [ -n "${TRACKER_URL:-}" ]; then
   else
     echo "       a origem respondeu HTTP ${LAST_CODE}" >&2
     [ -n "$LAST_BODY" ] && echo "       corpo: ${LAST_BODY}" >&2
+    # Distingue "o Drive bloqueia este IP" de "a Google está inacessível a
+    # partir das runners": a API responde sem auth com 401, o que já prova que
+    # o endpoint chega. Se 401, uma service account resolve; se a chamada não
+    # volta, é bloqueio de IP e não há atalho sem sair do GitHub-hosted.
+    api_code=$(curl -s -o /dev/null -w '%{http_code}' --max-time 20 \
+               "https://www.googleapis.com/drive/v3/about" 2>/dev/null) \
+               || api_code="sem_resposta"
+    echo "       Google Drive API alcançável a partir daqui: HTTP ${api_code}" >&2
+    case "$api_code" in
+      401) echo "       -> o endpoint responde: uma service account resolveria" >&2 ;;
+      sem_resposta|000) echo "       -> sem rota: o Google parece cortar os IPs das runners" >&2 ;;
+      *) echo "       -> respondeu com ${api_code}; olhar para o proxy de rede" >&2 ;;
+    esac
   fi
 fi
 
