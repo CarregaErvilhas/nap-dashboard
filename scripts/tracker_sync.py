@@ -6,16 +6,16 @@ Run from the repo root:  venv/bin/python scripts/tracker_sync.py
 The tracker is the data owners' error list. Two products are derived from it and
 versioned in git, so the weekly CI (which has no Drive access) keeps working:
 
-  opc_registry_authority.csv  the authoritative OPC table read from the `CPO`
+  data/opc_registry_authority.csv  the authoritative OPC table read from the `CPO`
                               tab: PartyId -> PartyCode -> official name. This
                               is the only *current* source of OPC identity; the
                               MOBI.E PartyID PDF (scripts/partyid_crossref.py)
                               is from 2022 and the script says so.
-  tracker_errors.csv          the normalised `Error List` (one row per reported
+  data/tracker_errors.csv          the normalised `Error List` (one row per reported
                               defect) with a bucketed notes_class. This is the
                               pipeline's only labelled/ground-truth set: real
                               defects with the value the owner considers correct.
-  tracker_meta.json           provenance + freshness: source file id, sha256 of
+  data/tracker_meta.json           provenance + freshness: source file id, sha256 of
                               the xlsx, row counts and synced_at. tracker_checks.py
                               warns when it gets old, so a stale registry is
                               visible instead of silently wrong.
@@ -35,10 +35,10 @@ import sys
 
 import openpyxl
 
-DEFAULT_TRACKER = 'pt_pcve_errors.xlsx'
-REGISTRY_CSV = 'opc_registry_authority.csv'
-ERRORS_CSV = 'tracker_errors.csv'
-META_JSON = 'tracker_meta.json'
+DEFAULT_TRACKER = 'data/pt_pcve_errors.xlsx'
+REGISTRY_CSV = 'data/opc_registry_authority.csv'
+ERRORS_CSV = 'data/tracker_errors.csv'
+META_JSON = 'data/tracker_meta.json'
 # Provenance is the sha256 + date, deliberately not the Drive file id: this repo
 # is public and meta is versioned, so a hardcoded/recorded id would publish a
 # permanent pointer to the data owners' file.

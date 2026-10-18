@@ -14,12 +14,12 @@ elétricos em Portugal, a partir de fontes públicas oficiais. O objetivo é:
 
 | Fonte | Descrição | Ficheiro |
 |-------|-----------|----------|
-| NAP MOBI.E (DATEX II 3.3) | Inventário estático de locais/pontos | `evChargingInfra_latest.xml` |
-| NAP MOBI.E (DATEX II 3.3) | Estado dinâmico (status, preços) | `evActualStatus_latest.xml` |
-| MOBI.E tarifário OPC | Tarifas por ponto (€/kWh, €/min, taxa fixa) | `mobie_tarifas.csv` |
-| MOBI.E PartyID (PDF) | Códigos oficiais de operadores/CEME | `mobie_partyid.pdf` |
-| DGEG | Listas de OPC e CEME reconhecidos | `dgeg_opc.csv`, `dgeg_ceme.csv` |
-| OSM/umap (comunidade) | Dump Overpass do mapa "Postos de Carregamento v2.1" + umap "Caça aos Postos" | `umap_cache/`, `osm_umap.csv` |
+| NAP MOBI.E (DATEX II 3.3) | Inventário estático de locais/pontos | `data/evChargingInfra_latest.xml` |
+| NAP MOBI.E (DATEX II 3.3) | Estado dinâmico (status, preços) | `data/evActualStatus_latest.xml` |
+| MOBI.E tarifário OPC | Tarifas por ponto (€/kWh, €/min, taxa fixa) | `data/mobie_tarifas.csv` |
+| MOBI.E PartyID (PDF) | Códigos oficiais de operadores/CEME | `data/mobie_partyid.pdf` |
+| DGEG | Listas de OPC e CEME reconhecidos | `data/dgeg_opc.csv`, `data/dgeg_ceme.csv` |
+| OSM/umap (comunidade) | Dump Overpass do mapa "Postos de Carregamento v2.1" + umap "Caça aos Postos" | `data/umap_cache/`, `data/osm_umap.csv` |
 
 ## Resultados
 
@@ -56,7 +56,7 @@ bash scripts/fetch_data.sh           # baixa dados frescos das origens oficiais
 venv/bin/python scripts/nap_etl.py   # XML NAP -> CSVs estático/dinâmico
 venv/bin/python scripts/check_quality.py   # validação de qualidade
 venv/bin/python scripts/summary.py         # resumo numérico
-venv/bin/python scripts/mobie_join.py      # junta NAP + tarifário MOBI.E -> nap_opc_points.csv
+venv/bin/python scripts/mobie_join.py      # junta NAP + tarifário MOBI.E -> data/nap_opc_points.csv
 venv/bin/python scripts/dgeg_lists.py      # DGEG OPC/CEME a partir das páginas web
 venv/bin/python scripts/dgeg_crossref.py   # resolve códigos OPC -> entidades DGEG
 venv/bin/python scripts/partyid_crossref.py # cruza com o PartyID PDF

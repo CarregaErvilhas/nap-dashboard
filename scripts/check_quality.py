@@ -21,10 +21,10 @@ def enums_from(path):
 
 EI_ENUMS = enums_from('assets/schemas/energyInfrastructure.xsd')
 
-sites = pd.read_csv('nap_static_sites.csv')
-points = pd.read_csv('nap_static_points.csv')
-status = pd.read_csv('nap_dynamic_status.csv')
-pricing = pd.read_csv('nap_dynamic_pricing.csv')
+sites = pd.read_csv('data/nap_static_sites.csv')
+points = pd.read_csv('data/nap_static_points.csv')
+status = pd.read_csv('data/nap_dynamic_status.csv')
+pricing = pd.read_csv('data/nap_dynamic_pricing.csv')
 
 print('=== 1. Values not in DATEX II schema enums ===')
 bad = status[~status.status.isin(EI_ENUMS['RefillPointStatusEnum'])]

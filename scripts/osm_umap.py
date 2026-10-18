@@ -14,15 +14,15 @@ charging_station node/way (or man_made=charge_point node) in Portugal with ref
 Usage: python scripts/osm_umap.py        (run from repo root)
 
 Fetches the umap map settings (GeoJSON endpoint) + its datalayers, and the raw
-Overpass dump; caches them in umap_cache/. Joins against nap_static_sites.csv
+Overpass dump; caches them in data/umap_cache/. Joins against data/nap_static_sites.csv
 by the MOBI.E ref code (a MOBI- prefix on the OSM side is stripped; multi-code
 refs "A;B;C" are expanded; way polygons use the centroid).
 
 Writes:
-  osm_umap.csv            OSM stations matched to NAP sites (+dist, operator,
+  data/osm_umap.csv            OSM stations matched to NAP sites (+dist, operator,
                           access, fee, payment/auth divergence)
-  osm_caca.csv            Caça points with nearest NAP site + doubt category
-  osm_umap_findings.md    errors.md fragment (item 12): community-doubt flags
+  data/osm_caca.csv            Caça points with nearest NAP site + doubt category
+  data/osm_umap_findings.md    errors.md fragment (item 12): community-doubt flags
                           close to live NAP sites + operator/payment divergence
 """
 import json
@@ -36,7 +36,7 @@ import urllib.request
 import numpy as np
 import pandas as pd
 
-CACHE = 'umap_cache'
+CACHE = 'data/umap_cache'
 CACA_MAP = 1386222        # Caça aos Postos de Carregamento
 OSM_RAW = 'https://raw.githubusercontent.com/avataranedotas/umap_postos/main/Todos.json'
 USER_AGENT = 'nap-dashboard/1.0 (data cross-reference)'
@@ -126,7 +126,7 @@ def caca_features():
 
 
 def main():
-    sites = pd.read_csv('nap_static_sites.csv', dtype=str)
+    sites = pd.read_csv('data/nap_static_sites.csv', dtype=str)
     ext = set(sites.external_id)
     smap = sites.set_index('external_id')
 
@@ -168,7 +168,7 @@ def main():
     v['_info'] = v[tagcols].notna().sum(axis=1)
     v = v.sort_values(['_info', 'dist_km']).drop_duplicates('code', keep='last')
     v = v.drop(columns='_info').sort_values('code')
-    v.to_csv('osm_umap.csv', index=False)
+    v.to_csv('data/osm_umap.csv', index=False)
 
     single = v[v['osm_ref'].str.count(';') == 0].drop_duplicates('code')
 
@@ -228,7 +228,7 @@ def main():
             'near_operator': scoords.iloc[j].operator_name,
         })
     c = pd.DataFrame(caca)
-    c.to_csv('osm_caca.csv', index=False)
+    c.to_csv('data/osm_caca.csv', index=False)
 
     # ---- findings fragment (errors.md item 12) ----
     close = c[(c.cat == 'nothing_found') & (c.near_dist_km <= 0.5)].sort_values('near_dist_km')
@@ -246,7 +246,7 @@ def main():
         lines.append('')
         lines.append('> Nota: o umap é curado pela comunidade, não é fonte oficial; serve como pista para verificação no terreno.')
     lines.append('')
-    lines.append(f'O mesmo mapa tem ainda **{int((c.cat == "under_construction").sum())}** postos em construção/obra e **{int((c.cat == "to_verify").sum())}** para verificar (lista completa em `osm_caca.csv`).')
+    lines.append(f'O mesmo mapa tem ainda **{int((c.cat == "under_construction").sum())}** postos em construção/obra e **{int((c.cat == "to_verify").sum())}** para verificar (lista completa em `data/osm_caca.csv`).')
     lines.append('')
     if len(adhoc):
         lines.append(f'Pagamento ad-hoc: em **{len(adhoc)}** sites o OSM indica pagamento por cartão ou sem autenticação, mas o `auth_methods` do NAP só lista app/rfid (ex. `BRR-00159`, `VFX-00136`, `ABT-00017`). Pode ser um posto novo com cartão ativo não registado, ou desatualização num dos lados.')
@@ -263,7 +263,7 @@ def main():
         lines.append('')
     lines.append(f'Cobertura OSM (dump do autor do mapa v2.1): **{v.code.nunique()} sites NAP** ({v.code.nunique()*100//len(sites)}%) com código MOBI.E; {int((single.dist_km > 0.15).sum())} divergências de localização >150 m em correspondências de código único.')
     lines.append('')
-    with open('osm_umap_findings.md', 'w') as fh:
+    with open('data/osm_umap_findings.md', 'w') as fh:
         fh.write('\n'.join(lines))
 
     print(f'OSM raw: {len(v)} matches across {v.code.nunique()} NAP sites')
@@ -271,7 +271,7 @@ def main():
     print(f'operator divergence (single-code): {len(div)}')
     print(f'ad-hoc payment divergence: {len(adhoc)}')
     print(f'community "nothing_found" ≤500m from NAP site: {len(close)}')
-    print('wrote osm_umap.csv, osm_caca.csv, osm_umap_findings.md')
+    print('wrote data/osm_umap.csv, data/osm_caca.csv, data/osm_umap_findings.md')
 
 
 if __name__ == '__main__':

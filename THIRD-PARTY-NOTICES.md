@@ -30,7 +30,7 @@ stay under their own terms.
 
 ## ODbL share-alike — how to get the OSM-derived database
 
-`osm_umap.csv` / `osm_caca.csv` (`scripts/osm_umap.py` output, gitignored) and
+`data/osm_umap.csv` / `data/osm_caca.csv` (`scripts/osm_umap.py` output, gitignored) and
 the per-site OSM fields embedded in `dashboard.html` are derived from OSM data
 and fall under ODbL. To comply:
 

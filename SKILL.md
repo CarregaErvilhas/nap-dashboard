@@ -49,13 +49,13 @@ agreement, 30% of connectors with V×I/power inconsistency.
 
 ```bash
 bash scripts/fetch_data.sh                    # fresh data from origins (see references/data-sources.md)
-venv/bin/python scripts/nap_etl.py            # XML -> nap_static_sites.csv, nap_static_points.csv,
-                                              #        nap_dynamic_status.csv, nap_dynamic_pricing.csv
+venv/bin/python scripts/nap_etl.py            # XML -> data/nap_static_sites.csv, data/nap_static_points.csv,
+                                              #        data/nap_dynamic_status.csv, data/nap_dynamic_pricing.csv
 venv/bin/python scripts/check_quality.py      # enums + V×I sanity + coords
 venv/bin/python scripts/summary.py            # numeric overview
-venv/bin/python scripts/mobie_join.py         # NAP ↔ MOBI.E tariffs -> nap_opc_points.csv
-venv/bin/python scripts/dgeg_lists.py         # DGEG pages -> dgeg_opc.csv, dgeg_ceme.csv
-venv/bin/python scripts/dgeg_crossref.py      # OPC codes -> entities -> nap_opc_registry.csv
+venv/bin/python scripts/mobie_join.py         # NAP ↔ MOBI.E tariffs -> data/nap_opc_points.csv
+venv/bin/python scripts/dgeg_lists.py         # DGEG pages -> data/dgeg_opc.csv, data/dgeg_ceme.csv
+venv/bin/python scripts/dgeg_crossref.py      # OPC codes -> entities -> data/nap_opc_registry.csv
 venv/bin/python scripts/partyid_crossref.py   # enrich with PartyID
 venv/bin/python scripts/build_dashboard.py    # -> dashboard.html, facts.md, errors.md
 ```

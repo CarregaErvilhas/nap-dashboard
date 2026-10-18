@@ -21,11 +21,18 @@ produces CSVs + a self-contained dashboard (`dashboard.html`, `facts.md`,
   estáticos NAP → `Agents-outputs/anomalias-results.md`, agrupado por OPC).
 - `Agents-outputs/` — relatórios gerados pelos agentes (ex.
   `Agents-outputs/anomalias-results.md`).
-- Raw XMLs + intermediate CSVs live in the repo root and are gitignored
-  (downloaded via `scripts/fetch_data.sh`). Run all scripts from the repo root;
-  they resolve data files relative to the CWD.
-- `umap_cache/` + `caop_cache/` — gitignored caches (umap maps/OSM dump,
-  CAOP concelho polygons).
+- `data/` — everything fetched from a source or derived by the pipeline: raw XMLs,
+  the MOBI.E tariff CSV + PartyID PDF, the DGEG HTML/CSV, all intermediate CSVs,
+  the tracker's `data/pt_pcve_errors.xlsx`, and the `data/umap_cache/` (umap maps/OSM
+  dump) + `data/caop_cache/` (CAOP concelho polygons) caches. All gitignored
+  (`data/*`, with `data/.gitkeep` kept) except the three tracker artifacts below.
+  Still run every script from the repo root — paths are `data/…` relative to it.
+- **Versioned exceptions inside `data/`**: `data/opc_registry_authority.csv`,
+  `data/tracker_errors.csv`, `data/tracker_meta.json` — the fallback snapshot for
+  CI, which cannot always refetch the tracker (see below).
+- The repo root holds only code, docs and deliverables: `dashboard.html`,
+  `dashboard.png`, `facts.md`, `errors.md`, `novidades.md`,
+  `network-census.json`, `assets/`, `scripts/`, `Agents/`, `Agents-outputs/`.
 
 ## Environment
 - Create and use a local venv — never rely on the system Python (it may be a
@@ -37,7 +44,7 @@ produces CSVs + a self-contained dashboard (`dashboard.html`, `facts.md`,
   ```
 - Reference the venv interpreter as `venv/bin/python` in commands; do not
   hardcode absolute paths to this machine's venv.
-- Raw XMLs are big (`evChargingInfra_latest.xml` ~190 MB). Don't read them with
+- Raw XMLs are big (`data/evChargingInfra_latest.xml` ~190 MB). Don't read them with
   the Read tool or cat them; parse with `scripts/nap_etl.py`.
 
 ## Fetch fresh data
@@ -57,11 +64,11 @@ from the official origins (see `scripts/fetch_data.sh` for the exact URLs).
 `novidades.md` + novo `network-census.json`; primeira corrida = baseline) →
 `scripts/build_dashboard.py`.
 `scripts/build_dashboard.py` reads the intermediate CSVs +
-`osm_umap.csv`/`osm_caca.csv`/`assets/pt_outline.json` and writes
+`data/osm_umap.csv`/`data/osm_caca.csv`/`assets/pt_outline.json` and writes
 `dashboard.html`, `facts.md`, `errors.md`; it appends
-`concelho_mismatches.md` (written by `concelho_check.py`),
-`osm_umap_findings.md` (written by `scripts/osm_umap.py`) and
-`tracker_findings.md` (written by `scripts/tracker_checks.py`) to `errors.md`
+`data/concelho_mismatches.md` (written by `concelho_check.py`),
+`data/osm_umap_findings.md` (written by `scripts/osm_umap.py`) and
+`data/tracker_findings.md` (written by `scripts/tracker_checks.py`) to `errors.md`
 when present.
 It also regenerates `dashboard.png` (README screenshot) via headless Chrome if
 available; it only warns/skips otherwise.
@@ -76,23 +83,23 @@ para sites/pontos/join/DGEG/registo) — falha o job e o dashboard online fica
 no último bom.
 
 `scripts/concelho_check.py` locates every site inside official CAOP concelho
-polygons (downloaded on first run into `caop_cache/`, gitignored) and flags the
+polygons (downloaded on first run into `data/caop_cache/`, gitignored) and flags the
 sites whose coordinates contradict the concelho implied by the site_id code.
-Writes `concelho_check.csv` + `concelho_mismatches.md` (errors.md items 11a/11b).
+Writes `data/concelho_check.csv` + `data/concelho_mismatches.md` (errors.md items 11a/11b).
 
 `scripts/osm_umap.py` cross-references NAP sites against community OSM data: the
 Overpass dump `Todos.json` from the author of the "Postos de Carregamento v2.1"
 umap map (both `amenity=charging_station` and `man_made=charge_point` elements)
-and the "Caça aos Postos" umap doubt layers. Fetches are cached in `umap_cache/`.
+and the "Caça aos Postos" umap doubt layers. Fetches are cached in `data/umap_cache/`.
 Matches by MOBI.E `ref` code (strips a `MOBI-` prefix, expands multi-code refs
-"A;B;C", way polygons use the centroid). Writes `osm_umap.csv` (deduped per NAP
-code, preferring the row with the most payment/auth tags), `osm_caca.csv` and
-`osm_umap_findings.md` (errors.md item 12).
+"A;B;C", way polygons use the centroid). Writes `data/osm_umap.csv` (deduped per NAP
+code, preferring the row with the most payment/auth tags), `data/osm_caca.csv` and
+`data/osm_umap_findings.md` (errors.md item 12).
 
 `scripts/make_pt_outline.py` builds `assets/pt_outline.json` (decimated PT
 outline for the dashboard map **plus per-district/island labels** — `{outline:
 {region: [rings]}, districts: {region: {name: [lon, lat]}}}`) from the CAOP
-concelho polygons in `caop_cache/`. Mainland labels use the CAOP `Distrito`
+concelho polygons in `data/caop_cache/`. Mainland labels use the CAOP `Distrito`
 attribute (18), Madeira/Açores fall back to island name (`Ilha`/`ILHA`, 2+9).
 Run it once when the outline asset is missing; the JSON is committed.
 
@@ -114,20 +121,20 @@ venv/bin/python scripts/tracker_checks.py   # CSVs + NAP -> findings
   keep that URL in the `TRACKER_URL` repo secret, never as a literal in the
   workflow — otherwise the repo publishes a permanent pointer to the data owners'
   file. Set the secret to the shareable download URL of the xlsx.
-- `opc_registry_authority.csv`, `tracker_errors.csv` and `tracker_meta.json` are
+- `data/opc_registry_authority.csv`, `data/tracker_errors.csv` and `data/tracker_meta.json` are
   versioned on purpose (the exception to "everything fetched is gitignored"):
-  they are the fallback whenever the fetch is unavailable, and `tracker_meta.json`
+  they are the fallback whenever the fetch is unavailable, and `data/tracker_meta.json`
   carries `synced_at` + the xlsx `sha256`, so a stale snapshot is reported in
   errors.md item 13 instead of being silently trusted. A changed `sha256` after a
   refresh means the owners updated the tracker.
 - The tracker is an **Office file, not a native Google Sheet**: the Sheets API
   rejects it with `400 failedPrecondition: must not be an Office file`, hence
   the Drive download.
-- Products: `opc_registry_authority.csv` (the only *current* OPC identity table —
+- Products: `data/opc_registry_authority.csv` (the only *current* OPC identity table —
   `PartyId | PartyCode | name`, 99 CPO — versus the 2022 MOBI.E PartyID PDF) and
-  `tracker_errors.csv` (the project's only labelled/ground-truth set: 3153 real
+  `data/tracker_errors.csv` (the project's only labelled/ground-truth set: 3153 real
   defects with the value the owner considers correct, plus `notes_class`).
-- `tracker_checks.py` writes `tracker_findings.md`/`.csv` (errors.md item 13).
+- `tracker_checks.py` writes `data/tracker_findings.md`/`.csv` (errors.md item 13).
   Rules and the snapshot they were validated on (2026-10-18): OPC sem PartyId
   resolúvel (3), PartyCode em vez de PartyId (3: BBGE, CIRC, CONT), nomes
   fragmentados (21 ids / 3448 sites), CPO do tracker sem sites (10), tensão
@@ -253,6 +260,6 @@ venv/bin/python scripts/validate_dashboard.py
   records; panel above "Visão geral", EN via `dashboard_i18n.MAP`) with
   `network-census.json` (committed state for next week's diff)
 - `errors.md` — reportable data errors (13 items, for the data owners; item 13
-  is the tracker cross-check, appended from `tracker_findings.md`)
+  is the tracker cross-check, appended from `data/tracker_findings.md`)
 - `Agents-outputs/anomalias-results.md` — output do agente `Agents/anomalias.md`
   (anomalias dos dados estáticos, agrupadas por OPC)

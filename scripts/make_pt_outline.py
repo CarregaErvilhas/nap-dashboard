@@ -1,5 +1,5 @@
 """Generate a compact Portugal outline + district labels (assets/pt_outline.json)
-from the CAOP concelho boundaries cached in caop_cache/ (same source as
+from the CAOP concelho boundaries cached in data/caop_cache/ (same source as
 concelho_check.py).
 
 Decimates each polygon ring so the dashboard map has a recognizable coastline +
@@ -14,7 +14,7 @@ import json
 import os
 import re
 
-CAOP_DIR = 'caop_cache'
+CAOP_DIR = 'data/caop_cache'
 OUT = 'assets/pt_outline.json'
 FILES = [
     ('mainland', 'ContinenteConcelhos.geojson'),

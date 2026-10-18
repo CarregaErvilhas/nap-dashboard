@@ -15,12 +15,12 @@ public data sources. The goal:
 
 | Source | Description | File |
 |-------|-----------|----------|
-| NAP MOBI.E (DATEX II 3.3) | Static inventory of sites/points | `evChargingInfra_latest.xml` |
-| NAP MOBI.E (DATEX II 3.3) | Dynamic status (state, prices) | `evActualStatus_latest.xml` |
-| MOBI.E OPC tariff | Per-point tariffs (€/kWh, €/min, flat fee) | `mobie_tarifas.csv` |
-| MOBI.E PartyID (PDF) | Official operator/CEME codes | `mobie_partyid.pdf` |
-| DGEG | Recognized OPC and CEME lists | `dgeg_opc.csv`, `dgeg_ceme.csv` |
-| OSM/umap (community) | Overpass dump of the "Postos de Carregamento v2.1" map + "Caça aos Postos" umap | `umap_cache/`, `osm_umap.csv` |
+| NAP MOBI.E (DATEX II 3.3) | Static inventory of sites/points | `data/evChargingInfra_latest.xml` |
+| NAP MOBI.E (DATEX II 3.3) | Dynamic status (state, prices) | `data/evActualStatus_latest.xml` |
+| MOBI.E OPC tariff | Per-point tariffs (€/kWh, €/min, flat fee) | `data/mobie_tarifas.csv` |
+| MOBI.E PartyID (PDF) | Official operator/CEME codes | `data/mobie_partyid.pdf` |
+| DGEG | Recognized OPC and CEME lists | `data/dgeg_opc.csv`, `data/dgeg_ceme.csv` |
+| OSM/umap (community) | Overpass dump of the "Postos de Carregamento v2.1" map + "Caça aos Postos" umap | `data/umap_cache/`, `data/osm_umap.csv` |
 
 ## Results
 
@@ -58,7 +58,7 @@ bash scripts/fetch_data.sh            # download fresh data from official origin
 venv/bin/python scripts/nap_etl.py    # NAP XML -> static/dynamic CSVs
 venv/bin/python scripts/check_quality.py   # quality validation
 venv/bin/python scripts/summary.py         # numeric summary
-venv/bin/python scripts/mobie_join.py      # join NAP + MOBI.E tariff -> nap_opc_points.csv
+venv/bin/python scripts/mobie_join.py      # join NAP + MOBI.E tariff -> data/nap_opc_points.csv
 venv/bin/python scripts/dgeg_lists.py      # DGEG OPC/CEME from the web pages
 venv/bin/python scripts/dgeg_crossref.py   # resolve OPC codes -> DGEG entities
 venv/bin/python scripts/partyid_crossref.py # cross-reference with the PartyID PDF

@@ -33,7 +33,9 @@
 # destination name.
 set -euo pipefail
 
-DEST="${TRACKER_FILE:-pt_pcve_errors.xlsx}"
+mkdir -p data
+
+DEST="${TRACKER_FILE:-data/pt_pcve_errors.xlsx}"
 # No default file id on purpose: this repo is public, so the pointer to the data
 # owners' file lives in the environment/secret, never in the source.
 FILE_ID="${TRACKER_FILE_ID:-}"
@@ -82,8 +84,8 @@ fi
 
 if [ "$fetched" -eq 0 ]; then
   echo "aviso: não foi possível actualizar o tracker (sem TRACKER_URL e sem 'gog' com TRACKER_FILE_ID)." >&2
-  echo "       O pipeline continua com a última opc_registry_authority.csv versionada;" >&2
-  echo "       a data dessa versão é reportada em tracker_meta.json / errors.md item 13." >&2
+  echo "       O pipeline continua com a última data/opc_registry_authority.csv versionada;" >&2
+  echo "       a data dessa versão é reportada em data/tracker_meta.json / errors.md item 13." >&2
   rm -f "$TMP"
   exit 0
 fi

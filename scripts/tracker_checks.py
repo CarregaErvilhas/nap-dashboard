@@ -4,15 +4,15 @@
 Run from the repo root:  venv/bin/python scripts/tracker_checks.py
 
 Inputs (all gitignored except the first two):
-  opc_registry_authority.csv  from scripts/tracker_sync.py (the `CPO` tab)
-  tracker_errors.csv          from scripts/tracker_sync.py (the `Error List` tab)
-  tracker_meta.json           provenance/freshness of the two above
-  nap_static_sites.csv        from scripts/nap_etl.py
-  nap_static_points.csv       from scripts/nap_etl.py
+  data/opc_registry_authority.csv  from scripts/tracker_sync.py (the `CPO` tab)
+  data/tracker_errors.csv          from scripts/tracker_sync.py (the `Error List` tab)
+  data/tracker_meta.json           provenance/freshness of the two above
+  data/nap_static_sites.csv        from scripts/nap_etl.py
+  data/nap_static_points.csv       from scripts/nap_etl.py
 
 Outputs:
-  tracker_findings.csv        one row per finding (machine)
-  tracker_findings.md         report appended to errors.md by build_dashboard.py
+  data/tracker_findings.csv        one row per finding (machine)
+  data/tracker_findings.md         report appended to errors.md by build_dashboard.py
 
 What is checked, and why each rule exists (all counts measured on the
 2026-10-18 snapshot; the tracker row counts are the historical evidence that
@@ -53,11 +53,11 @@ from collections import Counter, defaultdict
 
 import pandas as pd
 
-REGISTRY_CSV = 'opc_registry_authority.csv'
-ERRORS_CSV = 'tracker_errors.csv'
-META_JSON = 'tracker_meta.json'
-OUT_CSV = 'tracker_findings.csv'
-OUT_MD = 'tracker_findings.md'
+REGISTRY_CSV = 'data/opc_registry_authority.csv'
+ERRORS_CSV = 'data/tracker_errors.csv'
+META_JSON = 'data/tracker_meta.json'
+OUT_CSV = 'data/tracker_findings.csv'
+OUT_MD = 'data/tracker_findings.md'
 ERRORS_ITEM = 13  # errors.md item number
 
 # NB: kept lowercase — `is_dc()` lowercases the value before startswith(), and
@@ -161,8 +161,8 @@ def main():
             sys.exit(f"erro: {p} em falta — correr antes scripts/tracker_sync.py "
                      f"(bash scripts/fetch_tracker.sh para actualizar)")
     meta = json.load(open(META_JSON, encoding='utf-8')) if os.path.exists(META_JSON) else {}
-    sites = pd.read_csv('nap_static_sites.csv', dtype=str)
-    points = pd.read_csv('nap_static_points.csv')
+    sites = pd.read_csv('data/nap_static_sites.csv', dtype=str)
+    points = pd.read_csv('data/nap_static_points.csv')
     with open(REGISTRY_CSV, encoding='utf-8', newline='') as fh:
         reg = [(r['party_id'], r['party_code'], r['cpo_name'])
                for r in csv.DictReader(fh)]

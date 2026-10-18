@@ -4,7 +4,7 @@ Esta pasta guarda as system prompts dos agentes automáticos do projeto `nap-das
 
 ## Conteúdo atual
 
-- `anomalias.md` — deteção automática de anomalias e divergências nos dados **estáticos** do NAP (lei de Ohm aproximada `P vs V×I`, teto global 1500 kW, tetos de potência por tipo de tomada, compatibilidade modo↔tomada AC/DC, enums fora do schema DATEX II, duplicados, chaves eMI3 e coerência CP7↔localidade, coordenadas, metadados) mais rotatividade de OPCs (novos, saídos, grandes variações de pontos). Lê `nap_static_sites.csv` / `nap_static_points.csv` e escreve `Agents-outputs/anomalias-results.md`, agrupado por OPC (`operator_id — operator_name`). A evidência exaustiva de potência (uma linha por conector) é gerada deterministicamente por `scripts/anomalias_evidence.py` em `Agents-outputs/anomalias-evidence.csv` (máquina) + `Agents-outputs/anomalias-details.md` (leitura no GitHub); o relatório resume (≤10 linhas por tabela) e linka ambos na linha de elipse.
+- `anomalias.md` — deteção automática de anomalias e divergências nos dados **estáticos** do NAP (lei de Ohm aproximada `P vs V×I`, teto global 1500 kW, tetos de potência por tipo de tomada, compatibilidade modo↔tomada AC/DC, enums fora do schema DATEX II, duplicados, chaves eMI3 e coerência CP7↔localidade, coordenadas, metadados) mais rotatividade de OPCs (novos, saídos, grandes variações de pontos). Lê `data/nap_static_sites.csv` / `data/nap_static_points.csv` e escreve `Agents-outputs/anomalias-results.md`, agrupado por OPC (`operator_id — operator_name`). A evidência exaustiva de potência (uma linha por conector) é gerada deterministicamente por `scripts/anomalias_evidence.py` em `Agents-outputs/anomalias-evidence.csv` (máquina) + `Agents-outputs/anomalias-details.md` (leitura no GitHub); o relatório resume (≤10 linhas por tabela) e linka ambos na linha de elipse.
 
 ## Convenções
 
@@ -35,7 +35,7 @@ Agents-outputs/anomalias-results.md no formato exato definido na prompt.
 ```
 
 Pré-requisito: os CSVs do ETL (`bash scripts/fetch_data.sh`, depois
-`venv/bin/python scripts/nap_etl.py evChargingInfra_latest.xml evActualStatus_latest.xml .`).
+`venv/bin/python scripts/nap_etl.py data/evChargingInfra_latest.xml data/evActualStatus_latest.xml data`).
 A prompt já manda o agente tratar disso se faltarem.
 
 ## Automático (CI)
@@ -44,7 +44,7 @@ A prompt já manda o agente tratar disso se faltarem.
 dispara quando o `Weekly dashboard refresh` completa com sucesso (mais botão
 manual `workflow_dispatch`), gera CSVs frescos, corre o eval
 (`scripts/check_agents.py`), a pré-agregação (`scripts/anomalias_summary.py` →
-`agents-summary.json`, gitignored), a evidência exaustiva
+`data/agents-summary.json`, gitignored), a evidência exaustiva
 (`scripts/anomalias_evidence.py` → `Agents-outputs/anomalias-evidence.csv` +
 `Agents-outputs/anomalias-details.md`) e o `opencode2 run` com a prompt desta pasta.
 Cadeia de fallback pela variable `OPENCODE_MODEL` (lista por prioridade),

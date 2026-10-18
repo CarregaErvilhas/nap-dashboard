@@ -1,6 +1,6 @@
 """Build OPC registry: NAP operator_id + MOBI.E OPC code + DGEG registered entity.
 
-Output: nap_opc_registry.csv  (one row per MOBI.E OPC code active in the network)
+Output: data/nap_opc_registry.csv  (one row per MOBI.E OPC code active in the network)
 """
 import difflib
 import re
@@ -16,11 +16,11 @@ def norm(s):
     return re.sub(r'[^a-z0-9]+', '', s)
 
 
-dgeg = pd.read_csv('dgeg_opc.csv', dtype=str)
+dgeg = pd.read_csv('data/dgeg_opc.csv', dtype=str)
 dgeg['n'] = dgeg.entidade.apply(norm)
-sites = pd.read_csv('nap_static_sites.csv', dtype=str)
-opc = pd.read_csv('nap_opc_points.csv', dtype=str)
-points = pd.read_csv('nap_static_points.csv', dtype=str)
+sites = pd.read_csv('data/nap_static_sites.csv', dtype=str)
+opc = pd.read_csv('data/nap_opc_points.csv', dtype=str)
+points = pd.read_csv('data/nap_static_points.csv', dtype=str)
 
 # site-level: operator_id -> set of MOBI.E OPC codes
 site_op = sites[['external_id', 'operator_id', 'operator_name']].drop_duplicates('external_id')
@@ -107,7 +107,7 @@ df['dgeg_entidade'] = res.apply(lambda t: t[0])
 df['dgeg_validade'] = res.apply(lambda t: t[1])
 df['match_score'] = res.apply(lambda t: t[2])
 
-df.to_csv('nap_opc_registry.csv', index=False)
+df.to_csv('data/nap_opc_registry.csv', index=False)
 print(f'registry: {len(df)} OPC-code/operator combos, DGEG-matched: {df.dgeg_entidade.notna().sum()}')
 print('\n=== unmatched ===')
 un = df[df.dgeg_entidade.isna()].sort_values('n_sites', ascending=False)
@@ -118,7 +118,7 @@ print(df[df.dgeg_entidade.notna()].sort_values('n_sites', ascending=False).head(
       .to_string(index=False))
 
 # --- CEME cross-check: brand codes accepted across the network vs DGEG CEME list ---
-ceme_reg = pd.read_csv('dgeg_ceme.csv', dtype=str)
+ceme_reg = pd.read_csv('data/dgeg_ceme.csv', dtype=str)
 brands = set()
 for b in points.brands_accepted.dropna():
     brands.update(b.split('|'))

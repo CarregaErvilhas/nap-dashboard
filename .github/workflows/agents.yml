@@ -41,14 +41,17 @@ jobs:
         uses: actions/download-artifact@v8
         with:
           name: nap-static
-          path: .
+          # O artifact nap-static guarda os ficheiros relativos a data/ (o LCA
+          # dos tres paths no upload), por isso extraem-se para data/ e nao
+          # para a raiz — os scripts leem-nos de la.
+          path: data
           run-id: ${{ github.event.workflow_run.id }}
           github-token: ${{ github.token }}
       - name: Fetch fresh data + ETL (manual runs only)
         if: github.event_name == 'workflow_dispatch'
         run: |
           bash scripts/fetch_data.sh
-          python3 scripts/nap_etl.py evChargingInfra_latest.xml evActualStatus_latest.xml .
+          python3 scripts/nap_etl.py data/evChargingInfra_latest.xml data/evActualStatus_latest.xml data
       - name: Eval gate (agent triggerability)
         run: python3 scripts/check_agents.py
       - name: Pre-aggregation for the agent
@@ -107,7 +110,7 @@ jobs:
           import json, os, re, subprocess, sys, urllib.request
 
           PROMPT = ("Segue estritamente a system prompt em Agents/anomalias.md "
-                    "sobre os dados atuais (CSVs já gerados; agents-summary.json "
+                    "sobre os dados atuais (CSVs já gerados; data/agents-summary.json "
                     "em anexo traz pré-agregação determinística). A evidência "
                     "exaustiva de potência já foi gerada por "
                     "scripts/anomalias_evidence.py "
@@ -159,8 +162,8 @@ jobs:
           # com '-', com dígito, sem '.'/'/', só ASCII). Calibrado no relatório
           # humano: 1539 reais, 0 inventados.
           import pandas as pd
-          _pts = pd.read_csv('nap_static_points.csv', dtype=str)
-          _sts = pd.read_csv('nap_static_sites.csv', dtype=str)
+          _pts = pd.read_csv('data/nap_static_points.csv', dtype=str)
+          _sts = pd.read_csv('data/nap_static_sites.csv', dtype=str)
           IDS = (set(_pts.point_id.dropna().astype(str))
                  | set(_pts.point_external_id.dropna().astype(str))
                  | set(_pts.site_id.dropna().astype(str))
@@ -238,7 +241,7 @@ jobs:
                   os.remove(REPORT)
               try:
                   p = sh(["opencode2", "run", "--standalone", "-m", ref,
-                          "--format", "json", "--file", "agents-summary.json",
+                          "--format", "json", "--file", "data/agents-summary.json",
                           PROMPT], timeout=PER_MODEL_TIMEOUT)
                   out = (p.stdout + p.stderr)[-2000:]
               except subprocess.TimeoutExpired:
@@ -287,7 +290,7 @@ jobs:
               import datetime
               day = datetime.datetime.now(datetime.timezone.utc).strftime('%F')
               try:
-                  prov = json.load(open('data-provenance.json'))
+                  prov = json.load(open('data/data-provenance.json'))
                   src = f"dados do refresh #{prov.get('refresh_run_id', '?')}"
               except (FileNotFoundError, ValueError):
                   src = "dados manuais"
@@ -317,7 +320,7 @@ jobs:
             Agents-outputs/anomalias-results.md
             Agents-outputs/anomalias-evidence.csv
             Agents-outputs/anomalias-details.md
-            agents-summary.json
+            data/agents-summary.json
           if-no-files-found: warn
       # Safety net: só dispara se morreu antes de notificar (fetch/ETL/eval/
       # install). Sem marker → sem Issue duplicada.

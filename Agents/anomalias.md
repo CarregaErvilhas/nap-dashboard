@@ -9,21 +9,21 @@ mode: subagent
 
 ## Âmbito (estrito)
 
-- Analisa APENAS o inventário estático: `nap_static_sites.csv` e `nap_static_points.csv` (gerados por `scripts/nap_etl.py` a partir de `evChargingInfra_latest.xml`).
-- NÃO analises o feed dinâmico (`nap_dynamic_status.csv`, `nap_dynamic_pricing.csv`), tarifários MOBI.E, DGEG, PartyID, OSM/umap ou concelhos CAOP — exceto como contexto para evitar duplicar achados já conhecidos.
+- Analisa APENAS o inventário estático: `data/nap_static_sites.csv` e `data/nap_static_points.csv` (gerados por `scripts/nap_etl.py` a partir de `data/evChargingInfra_latest.xml`).
+- NÃO analises o feed dinâmico (`data/nap_dynamic_status.csv`, `data/nap_dynamic_pricing.csv`), tarifários MOBI.E, DGEG, PartyID, OSM/umap ou concelhos CAOP — exceto como contexto para evitar duplicar achados já conhecidos.
 - NÃO inventes dados. Cada anomalia tem de citar `site_id` / `point_id` / `site_external_id` reais e contagens reproduzíveis.
 
 ## Fonte externa: tracker de erros PCVE
 
 `scripts/tracker_checks.py` cruza o inventário com o tracker de erros dos
-operadores (`opc_registry_authority.csv`, `tracker_errors.csv`,
-`tracker_meta.json`, gerados por `scripts/tracker_sync.py` a partir de
+operadores (`data/opc_registry_authority.csv`, `data/tracker_errors.csv`,
+`data/tracker_meta.json`, gerados por `scripts/tracker_sync.py` a partir de
 `pt-pcve-errors.xlsx`). Esses CSVs são a única fonte **atual** da identidade dos
 OPC (PartyId/PartyCode) e a única lista positiva de assets que o operador
 declarou removidos — o PDF PartyID do MOBI.E é de 2022.
 
 Não reimplementes estas regras: já correm no pipeline e escrevem
-`tracker_findings.md`/`.csv`, que `build_dashboard.py` anexa a `errors.md` como
+`data/tracker_findings.md`/`.csv`, que `build_dashboard.py` anexa a `errors.md` como
 item 13. Em vez disso:
 
 - **Usa o PartyId do tracker** ao agrupar por OPC. O `operator_id` do NAP é
@@ -51,7 +51,7 @@ item 13. Em vez disso:
   achados e a variante "outlier dentro do operador" (>10× a mediana do operador)
   produz >1300 falsos positivos. Só use um limite absoluto alto como rede de
   segurança.
-- Se o tracker estiver desatualizado (`tracker_meta.json` com `synced_at`
+- Se o tracker estiver desatualizado (`data/tracker_meta.json` com `synced_at`
   antigo), o relatório tem de dizer na secção 13 — não recalcular em silêncio.
 
 
@@ -60,7 +60,7 @@ item 13. Em vez disso:
 - Corre sempre a partir da raiz do repo (`nap-dashboard/`); os scripts resolvem ficheiros relativos à CWD.
 - Usa o venv do projeto: `venv/bin/python` (nunca o Python do sistema). Só assume `pandas`, `lxml`.
 - Os XMLs crus têm ~190 MB: NUNCA os leias com `cat`/`Read`; usa `lxml.etree.iterparse(..., huge_tree=True)` ou, preferencialmente, os CSVs já gerados pelo ETL.
-- Se os CSVs não existirem, gera-os: `bash scripts/fetch_data.sh` seguido de `venv/bin/python scripts/nap_etl.py evChargingInfra_latest.xml evActualStatus_latest.xml .`
+- Se os CSVs não existirem, gera-os: `bash scripts/fetch_data.sh` seguido de `venv/bin/python scripts/nap_etl.py data/evChargingInfra_latest.xml data/evActualStatus_latest.xml data`
 - Valida enums contra `assets/schemas/*.xsd` (sobretudo `energyInfrastructure.xsd`): `charging_mode`, `connector_type`, `connector_format`, `usage_type`. Ver `scripts/check_quality.py` e `scripts/extract_enums.py` como referência.
 - Se escreveres código de análise reutilizável, guarda-o em `scripts/` (ex. `scripts/anomalias_check.py`); não deixes lógica só no terminal ou em `/tmp`.
 - Verifica o teu próprio resultado por execução: corre o script, confirma totais e faz spot-checks manuais de 2–3 linhas por categoria antes de escrever o relatório.

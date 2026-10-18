@@ -64,6 +64,41 @@ transitional regime runs until 31 Dec 2027.
   Licence: DGEG site terms — free use with source mention, no commercial use
   against the public interest; IP belongs to DGEG. Keep the footer attribution.
 
+## PCVE error tracker — `pt-pcve-errors.xlsx`
+
+The data owners' own error list: real defects per operator and asset, with the
+value each owner considers correct, the status (`TO FIX`/`FIXED`/`DOUBT`) and the
+requested/fixed dates. Two things come out of it (`scripts/tracker_sync.py`):
+
+- `data/opc_registry_authority.csv` — the `CPO` tab (`PartyId | PartyCode |
+  name`). The only **current** source of OPC identity; the MOBI.E PartyID PDF
+  above is from 2022 and `scripts/partyid_crossref.py` says so.
+- `data/tracker_errors.csv` — the `Error List` normalised, with a bucketed
+  `notes_class`. The project's only labelled set: a real defect *and* its
+  correct value, which is what makes a new anomaly rule non-speculative.
+
+Fetched by `scripts/fetch_tracker.sh`, which needs no credentials in CI (the
+file is shared by its owner as "anyone with the link") and falls back to `gog`
+locally. **No URL or file id is committed**: this repo is public, so the pointer
+lives in the `TRACKER_URL` secret — see `.gitignore` and `AGENTS.md`.
+
+Gotchas (verified):
+
+- It is an **Office file, not a native Google Sheet**. The Sheets API and
+  `/export?format=xlsx` both reject it with
+  `400 failedPrecondition: must not be an Office file`. Use
+  `drive.google.com/uc?export=download&id=…`.
+- `Error List` header is on row 15, data starts on row 16; columns B..K. Column
+  B (`CPO`) is a `VLOOKUP` against the `CPO` tab, so reading it with
+  `data_only` after a rewrite gives blanks until Excel/Sheets recalculates.
+- The `Error Stats` / `Error details` tabs are pivot tables with **no cached
+  values** — they read as empty until refreshed in Excel/Sheets.
+- The declared error-type vocabulary has 11 entries but only 10 are used:
+  `AFIR compliant` has zero rows.
+- A few rows (all `DOUBT`) have no `Error type` — the description was typed into
+  `Notes` ("Check HW amperage"), so any filter on `Error type` silently drops
+  them.
+
 ## AFIR — power classes (reporting)
 
 - **Regulation (EU) 2023/1804** (AFIR), stable link:
@@ -109,7 +144,7 @@ implementation/validation; vendored only as enum source.
 Used by `scripts/osm_umap.py` to enrich NAP sites with community-sourced operator,
 payment/authentication and location-doubt data. These are **not official sources**
 — they are community-maintained maps/dumps; use as a lead for field verification,
-never as ground truth. Fetches are cached in `umap_cache/` (gitignored).
+never as ground truth. Fetches are cached in `data/umap_cache/` (gitignored).
 
 Licence: underlying OSM data is **ODbL 1.0** — public use requires `©`
 OpenStreetMap contributors + ODbL link **in the dashboard itself** (footer +
@@ -152,7 +187,7 @@ licence found) — always credit + link them.
 
 Used by `scripts/concelho_check.py` (point-in-polygon → concelho) and
 `scripts/make_pt_outline.py` (PT outline + district/island labels). Downloaded on
-first run into `caop_cache/` (gitignored) from the `jotanmiguel/caop_GeoJSON`
+first run into `data/caop_cache/` (gitignored) from the `jotanmiguel/caop_GeoJSON`
 fork (kept current; the upstream `nmota/caop_GeoJSON` mirror is older) of
 official CAOP data (WGS84 `geograficas` variants):
 `https://raw.githubusercontent.com/jotanmiguel/caop_GeoJSON/master/`

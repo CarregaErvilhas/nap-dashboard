@@ -1,17 +1,17 @@
 """Join NAP static data with MOBI.E official OPC tariffs.
 
 Produces:
-  nap_opc_points.csv   - per point: NAP power/connector/geo + MOBI.E OPC prices
-  nap_opc_join_report.txt - match-rate report
+  data/nap_opc_points.csv   - per point: NAP power/connector/geo + MOBI.E OPC prices
+  data/nap_opc_join_report.txt - match-rate report
 
 Usage: python mobie_join.py
 """
 import re
 import pandas as pd
 
-M = pd.read_csv('mobie_tarifas.csv', sep=';', decimal=',', dtype=str)
-S = pd.read_csv('nap_static_sites.csv', dtype=str)
-P = pd.read_csv('nap_static_points.csv', dtype=str)
+M = pd.read_csv('data/mobie_tarifas.csv', sep=';', decimal=',', dtype=str)
+S = pd.read_csv('data/nap_static_sites.csv', dtype=str)
+P = pd.read_csv('data/nap_static_points.csv', dtype=str)
 
 
 def parse_nap_point(x):
@@ -95,7 +95,7 @@ report = f"""MOBI.E join report
   ENERGY (per kWh):  {joined['ENERGY'].notna().sum()}
   TIME (per min):    {joined['TIME'].notna().sum()}
 """
-open('nap_opc_join_report.txt', 'w').write(report)
+open('data/nap_opc_join_report.txt', 'w').write(report)
 print(report)
 
 cols = ['point_id', 'point_external_id', 'site_ext', 'tomada', 'station_id', 'operator_id',
@@ -109,5 +109,5 @@ out = joined[[c for c in cols if c in joined.columns]].rename(columns={
     'NIVELTENSAO': 'opc_nivel_tensao', 'TIPO_TARIFARIO': 'opc_tipo_tarifario',
     'TIPO_TOMADA': 'opc_tipo_tomada', 'FORMATO_TOMADA': 'opc_formato_tomada',
     'POTENCIA_TOMADA': 'opc_potencia_kw'})
-out.to_csv('nap_opc_points.csv', index=False)
-print(f'wrote nap_opc_points.csv: {len(out)} rows, {out.opc_operador.notna().sum()} with OPC')
+out.to_csv('data/nap_opc_points.csv', index=False)
+print(f'wrote data/nap_opc_points.csv: {len(out)} rows, {out.opc_operador.notna().sum()} with OPC')

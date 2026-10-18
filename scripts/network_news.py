@@ -1,7 +1,7 @@
 """Novidades semanais da rede (diff determinístico entre snapshots).
 
-Compara os CSVs atuais (`nap_static_sites.csv`, `nap_static_points.csv`,
-`nap_dynamic_status.csv`) com o censo da semana anterior
+Compara os CSVs atuais (`data/nap_static_sites.csv`, `data/nap_static_points.csv`,
+`data/nap_dynamic_status.csv`) com o censo da semana anterior
 (`network-census.json` no `HEAD` do git; em falta = baseline silenciosa) e
 escreve:
 
@@ -24,9 +24,9 @@ import subprocess
 import sys
 from collections import Counter
 
-SITES = 'nap_static_sites.csv'
-POINTS = 'nap_static_points.csv'
-STATUS = 'nap_dynamic_status.csv'
+SITES = 'data/nap_static_sites.csv'
+POINTS = 'data/nap_static_points.csv'
+STATUS = 'data/nap_dynamic_status.csv'
 CENSUS = 'network-census.json'
 NEWS = 'novidades.md'
 

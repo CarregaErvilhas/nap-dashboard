@@ -56,8 +56,8 @@ def main():
 
     # --- fontes obrigatórias ---
     try:
-        S = pd.read_csv('nap_static_sites.csv', dtype=str)
-        P = pd.read_csv('nap_static_points.csv', dtype=str)
+        S = pd.read_csv('data/nap_static_sites.csv', dtype=str)
+        P = pd.read_csv('data/nap_static_points.csv', dtype=str)
     except FileNotFoundError as e:
         print(f'FAIL  {e.filename} em falta — pipeline incompleto', file=sys.stderr)
         return 1
@@ -67,23 +67,23 @@ def main():
     check('points', n_points, lambda v: f'{v}')
 
     try:
-        ST = pd.read_csv('nap_dynamic_status.csv', dtype=str)
+        ST = pd.read_csv('data/nap_dynamic_status.csv', dtype=str)
         check('status_rows', len(ST), lambda v: f'{v}')
     except FileNotFoundError:
-        print('FAIL  nap_dynamic_status.csv em falta', file=sys.stderr)
+        print('FAIL  data/nap_dynamic_status.csv em falta', file=sys.stderr)
         ok = False
 
     # --- join NAP↔MOBI.E: um formato novo no tarifário → 0% é sinal de alerta ---
     try:
-        OPC = pd.read_csv('nap_opc_points.csv', dtype=str)
+        OPC = pd.read_csv('data/nap_opc_points.csv', dtype=str)
         rate = OPC.opc_operador.notna().mean() if len(OPC) else 0
         check('join_rate', rate, lambda v: f'{100 * v:.1f}%')
     except FileNotFoundError:
-        print('FAIL  nap_opc_points.csv em falta', file=sys.stderr)
+        print('FAIL  data/nap_opc_points.csv em falta', file=sys.stderr)
         ok = False
 
     # --- DGEG: layout da página mudou → lista vazia/curta ---
-    for name, path in (('dgeg_opc', 'dgeg_opc.csv'), ('dgeg_ceme', 'dgeg_ceme.csv')):
+    for name, path in (('dgeg_opc', 'data/dgeg_opc.csv'), ('dgeg_ceme', 'data/dgeg_ceme.csv')):
         try:
             d = pd.read_csv(path, dtype=str)
             check(name, len(d), lambda v: f'{v}')
@@ -93,11 +93,11 @@ def main():
 
     # --- registo OPC⇄DGEG: fuzzy match a desligar → fração a cair ---
     try:
-        REG = pd.read_csv('nap_opc_registry.csv', dtype=str)
+        REG = pd.read_csv('data/nap_opc_registry.csv', dtype=str)
         frac = REG.dgeg_entidade.notna().mean() if len(REG) else 0
         check('registry_matched', frac, lambda v: f'{100 * v:.1f}%')
     except FileNotFoundError:
-        print('FAIL  nap_opc_registry.csv em falta', file=sys.stderr)
+        print('FAIL  data/nap_opc_registry.csv em falta', file=sys.stderr)
         ok = False
 
     print()
