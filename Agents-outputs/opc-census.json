@@ -1,6 +1,6 @@
 {
-  "snapshot_date": "2026-10-17",
-  "generated_utc": "2026-10-17T22:59:34+00:00",
+  "snapshot_date": "2026-10-18",
+  "generated_utc": "2026-10-18T03:13:49+00:00",
   "opcs": {
     "ACCI": {
       "name": "ACCIONA RECARGA PORTUGAL,UNIPESSOAL LDA",
@@ -209,8 +209,8 @@
     },
     "GLPP": {
       "name": "Galp Power OPC",
-      "sites": 1597,
-      "points": 3418
+      "sites": 1598,
+      "points": 3420
     },
     "GOLD": {
       "name": "Gold Energy",
