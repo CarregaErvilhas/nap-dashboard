@@ -13,6 +13,48 @@ mode: subagent
 - NÃO analises o feed dinâmico (`nap_dynamic_status.csv`, `nap_dynamic_pricing.csv`), tarifários MOBI.E, DGEG, PartyID, OSM/umap ou concelhos CAOP — exceto como contexto para evitar duplicar achados já conhecidos.
 - NÃO inventes dados. Cada anomalia tem de citar `site_id` / `point_id` / `site_external_id` reais e contagens reproduzíveis.
 
+## Fonte externa: tracker de erros PCVE
+
+`scripts/tracker_checks.py` cruza o inventário com o tracker de erros dos
+operadores (`opc_registry_authority.csv`, `tracker_errors.csv`,
+`tracker_meta.json`, gerados por `scripts/tracker_sync.py` a partir de
+`pt-pcve-errors.xlsx`). Esses CSVs são a única fonte **atual** da identidade dos
+OPC (PartyId/PartyCode) e a única lista positiva de assets que o operador
+declarou removidos — o PDF PartyID do MOBI.E é de 2022.
+
+Não reimplementes estas regras: já correm no pipeline e escrevem
+`tracker_findings.md`/`.csv`, que `build_dashboard.py` anexa a `errors.md` como
+item 13. Em vez disso:
+
+- **Usa o PartyId do tracker** ao agrupar por OPC. O `operator_id` do NAP é
+  inconsistente (21 ids com várias grafias; 3 operadores publicam com o
+  `PartyCode` em vez do `PartyId`; o `CONT` publica 450 sites com o nome do
+  adquirente, «Modelo Continente Hipermercados», em vez do CPO `CNT`
+  «Continente Plug & Charge»).
+- **Trata `notes_class` como evidência de classes reais.** O tracker é o único
+  conjunto rotulado do projeto (defeito real + valor considerado correto). As
+  classes abaixo foram todas pedidas por operadores reais, portanto uma regra
+  nova que as reproduza é fundamentada, não especulativa:
+
+  | Classe no tracker | Linhas | Regra correspondente |
+  |---|---|---|
+  | `750 V → 500 V` (CHAdeMO/DC) | 171 | tensão placeholder em conector DC (regra 1) |
+  | `mode3AC3p → mode2AC1p` | 199 | trifásico declarado sem potência trifásica |
+  | `AC<n> plug, 230 V → 400 V` | 86 | conector AC com tensão DC (regra 1) |
+  | `remove. replaced with new asset` | 20 | asset declarado removido ainda publicado |
+  | `missing cpo` | 46 | operador em falta (regra 7) |
+  | `iva / vat` | 238 | já fechadas; `min_fee = 0` não é sinal (46% das linhas) |
+
+  Regras que a experiência do tracker refuta: **preços não são uma fonte de
+  outliers globais** — `min_fee` vai de 0 a 3,0 e não há valores absurdos desde
+  que os `97,561 €/min` desapareceram; uma regra por banda absoluta teria zero
+  achados e a variante "outlier dentro do operador" (>10× a mediana do operador)
+  produz >1300 falsos positivos. Só use um limite absoluto alto como rede de
+  segurança.
+- Se o tracker estiver desatualizado (`tracker_meta.json` com `synced_at`
+  antigo), o relatório tem de dizer na secção 13 — não recalcular em silêncio.
+
+
 ## Ambiente e regras de execução
 
 - Corre sempre a partir da raiz do repo (`nap-dashboard/`); os scripts resolvem ficheiros relativos à CWD.

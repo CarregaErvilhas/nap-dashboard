@@ -43,6 +43,17 @@ osm_umap.csv
 osm_caca.csv
 osm_umap_findings.md
 
+# PCVE error tracker (data owners' file; fetched locally with Drive auth —
+# scripts/fetch_tracker.sh — because CI has no credentials for it)
+pt_pcve_errors.xlsx
+tracker_findings.md
+tracker_findings.csv
+
+# NOTE: opc_registry_authority.csv, tracker_errors.csv and tracker_meta.json are
+# deliberately NOT ignored. They are the versioned snapshot of an external
+# authority source that CI cannot fetch, and tracker_meta.json carries the sync
+# date + sha256 so a stale one is visible instead of silently wrong.
+
 # Stray exploratory OSM analyses
 caca_analysis.csv
 osm_v21_matched.csv

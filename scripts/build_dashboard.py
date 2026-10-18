@@ -691,6 +691,9 @@ with open('errors.md', 'w') as fh:
     if os.path.exists('osm_umap_findings.md'):
         with open('osm_umap_findings.md') as frag:
             fh.write(frag.read())
+    if os.path.exists('tracker_findings.md'):
+        with open('tracker_findings.md') as frag:
+            fh.write(frag.read())
 print('facts.md and errors.md written')
 
 data = {

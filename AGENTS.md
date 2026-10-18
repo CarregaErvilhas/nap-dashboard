@@ -12,7 +12,7 @@ produces CSVs + a self-contained dashboard (`dashboard.html`, `facts.md`,
 - `scripts/` — pipeline (fetch_data.sh, nap_etl.py, mobie_join.py, dgeg_lists.py,
   dgeg_crossref.py, partyid_crossref.py, check_quality.py, summary.py,
   concelho_check.py, osm_umap.py, make_pt_outline.py, extract_enums.py,
-  build_dashboard.py)
+  build_dashboard.py, fetch_tracker.sh, tracker_sync.py, tracker_checks.py)
 - `assets/` — `dashboard_template.html`, `pt_outline.json` (PT outline for the
   map), `schemas/*.xsd` (DATEX II 3.3 © CEN; ver `assets/schemas/README.md`)
 - `references/` — docs for the SKILL.md (data sources, gotchas)
@@ -51,15 +51,18 @@ from the official origins (see `scripts/fetch_data.sh` for the exact URLs).
 `scripts/nap_etl.py` → (`scripts/check_quality.py`, `scripts/summary.py`) →
 `scripts/mobie_join.py` → `scripts/dgeg_lists.py` → `scripts/dgeg_crossref.py` →
 `scripts/partyid_crossref.py` → `scripts/concelho_check.py` →
-`scripts/osm_umap.py` → `scripts/make_pt_outline.py` →
+`scripts/osm_umap.py` → `scripts/tracker_sync.py` + `scripts/tracker_checks.py` →
+`scripts/make_pt_outline.py` →
 `scripts/network_news.py` (diff semanal vs `network-census.json` do HEAD →
 `novidades.md` + novo `network-census.json`; primeira corrida = baseline) →
 `scripts/build_dashboard.py`.
 `scripts/build_dashboard.py` reads the intermediate CSVs +
 `osm_umap.csv`/`osm_caca.csv`/`assets/pt_outline.json` and writes
 `dashboard.html`, `facts.md`, `errors.md`; it appends
-`concelho_mismatches.md` (written by `concelho_check.py`) and
-`osm_umap_findings.md` (written by `osm_umap.py`) to `errors.md` when present.
+`concelho_mismatches.md` (written by `concelho_check.py`),
+`osm_umap_findings.md` (written by `scripts/osm_umap.py`) and
+`tracker_findings.md` (written by `scripts/tracker_checks.py`) to `errors.md`
+when present.
 It also regenerates `dashboard.png` (README screenshot) via headless Chrome if
 available; it only warns/skips otherwise.
 
@@ -92,6 +95,41 @@ outline for the dashboard map **plus per-district/island labels** — `{outline:
 concelho polygons in `caop_cache/`. Mainland labels use the CAOP `Distrito`
 attribute (18), Madeira/Açores fall back to island name (`Ilha`/`ILHA`, 2+9).
 Run it once when the outline asset is missing; the JSON is committed.
+
+`scripts/tracker_sync.py` + `scripts/tracker_checks.py` cross-check the NAP
+snapshot against the **PCVE error tracker** (`pt-pcve-errors.xlsx`), the data
+owners' own error list per operator/asset. Refresh cycle:
+
+```bash
+bash scripts/fetch_tracker.sh      # local-only: Drive download (gog)
+venv/bin/python scripts/tracker_sync.py     # xlsx -> versioned CSVs
+venv/bin/python scripts/tracker_checks.py   # CSVs + NAP -> findings
+```
+
+- `fetch_tracker.sh` needs Drive credentials, so it is **local-only** and never
+  fails the pipeline; in CI `tracker_sync.py` skips and the versioned
+  `opc_registry_authority.csv` / `tracker_errors.csv` / `tracker_meta.json` are
+  reused. Those three are the deliberate exception to "everything fetched is
+  gitignored" — CI cannot refetch them, and `tracker_meta.json` carries
+  `synced_at` + the xlsx `sha256` so staleness is visible, not silent.
+- The tracker is an **Office file, not a native Google Sheet**: the Sheets API
+  rejects it with `400 failedPrecondition: must not be an Office file`, hence
+  the Drive download.
+- Products: `opc_registry_authority.csv` (the only *current* OPC identity table —
+  `PartyId | PartyCode | name`, 99 CPO — versus the 2022 MOBI.E PartyID PDF) and
+  `tracker_errors.csv` (the project's only labelled/ground-truth set: 3153 real
+  defects with the value the owner considers correct, plus `notes_class`).
+- `tracker_checks.py` writes `tracker_findings.md`/`.csv` (errors.md item 13).
+  Rules and the snapshot they were validated on (2026-10-18): OPC sem PartyId
+  resolúvel (3), PartyCode em vez de PartyId (3: BBGE, CIRC, CONT), nomes
+  fragmentados (21 ids / 3448 sites), CPO do tracker sem sites (10), tensão
+  placeholder 750/600 V em conector DC (58), `mode3AC3p` sem potência trifásica
+  (35 linhas / 24 sites), assets declarados removidos ainda publicados (5).
+  The rules are mined from the tracker's own classes (171 rows of 750→500 V,
+  199 of `mode3AC3p`→`mode2AC1p`), which is what makes them non-speculative.
+- Known limits: OPC identity resolves by `operator_name`, so an operator that
+  renames itself drops out until the tracker catches up; `min_fee = 0` covers
+  46% of pricing rows, so zero is **not** a pricing anomaly.
 
 ## Housekeeping: save ad-hoc analysis scripts
 When an interactive query ends up producing new analysis code (point-in-polygon,
@@ -127,6 +165,17 @@ venv/bin/python scripts/validate_dashboard.py
   V×I (>25% off); 2 686 declare power above physical capacity (impossible, e.g.
   1200 V × 600 A = 720 kW declared as 200 kW).
 - MOBI.E PartyID is a 2022 PDF: 37 active tariff codes missing, 22 unused codes.
+- NAP `operator_id` is not a reliable OPC key: 21 ids carry more than one
+  `operator_name` (3448 sites; ATLA alone has 7 spellings over 598 sites) and 3
+  operators publish under the PartyCode instead of the PartyId (`BBGE`, `CIRC`,
+  `CONT`). `CONT` is the Continente case — 450 sites under the acquirer's name
+  ("Modelo Continente Hipermercados, S.A.") while the CPO is `CNT`
+  "Continente Plug & Charge". Use the tracker's PartyId (see
+  `scripts/tracker_checks.py`), and note that some operators publish sites
+  without their own prefix (`CNT-0002PL0012` → `0002PL0012`), so asset matching
+  needs both forms.
+- NAP `min_fee = 0` is not an anomaly (46% of pricing rows); `min_fee` currently
+  ranges 0–3,0 with no absurd values since the `97,561 €/min` class was fixed.
 - 764 MOBI.E `UID_TOMADA` values are bare numeric ids.
 - Power agreement NAP↔MOBI.E is 99.8% (only 27/16 601 diverge >30%).
 - OSM: charging sites are tagged two ways — `amenity=charging_station` (node **or**
@@ -195,6 +244,7 @@ venv/bin/python scripts/validate_dashboard.py
 - `novidades.md` — weekly network news (new/removed sites, OPC moves, power
   records; panel above "Visão geral", EN via `dashboard_i18n.MAP`) with
   `network-census.json` (committed state for next week's diff)
-- `errors.md` — reportable data errors (12 items, for the data owners)
+- `errors.md` — reportable data errors (13 items, for the data owners; item 13
+  is the tracker cross-check, appended from `tracker_findings.md`)
 - `Agents-outputs/anomalias-results.md` — output do agente `Agents/anomalias.md`
   (anomalias dos dados estáticos, agrupadas por OPC)
