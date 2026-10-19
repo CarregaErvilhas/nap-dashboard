@@ -1,6 +1,6 @@
 {
-  "snapshot_date": "2026-10-18",
-  "generated_utc": "2026-10-18T03:13:49+00:00",
+  "snapshot_date": "2026-10-19",
+  "generated_utc": "2026-10-19T12:48:10+00:00",
   "opcs": {
     "ACCI": {
       "name": "ACCIONA RECARGA PORTUGAL,UNIPESSOAL LDA",
@@ -104,8 +104,8 @@
     },
     "EDPC": {
       "name": "EDP Comercial",
-      "sites": 1678,
-      "points": 3521
+      "sites": 1679,
+      "points": 3523
     },
     "EMAC": {
       "name": "EMACOM - Telecomunicações da Madeira, Unipessoal, Lda",
