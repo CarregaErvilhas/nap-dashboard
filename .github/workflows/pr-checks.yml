@@ -6,6 +6,10 @@
 # runtime muito depois do merge: um caminho de dados no sítio errado, um typo
 # num path de workflow, um typo num script, uma excepção do .gitignore perdida.
 #
+# Inclui também a validação do dashboard.html (o artefacto que o pages.yml
+# publica sem validação nenhuma): JSON embutido, sequências de breakout do
+# <script>, sintaxe JS e inicialização.
+#
 # Corre em ~1 s, sem dependências (stdlib) e sem rede. O refresh semanal
 # (`refresh.yml`) continua a ser o teste de integração a sério.
 name: PR checks
@@ -62,3 +66,11 @@ jobs:
           else
             echo "::warning::pyyaml ausente; YAML não validado localmente"
           fi
+
+      # O dashboard.html é o que o pages.yml publica (sem validação nenhuma).
+      # Sem este passo, um PR podia injectar <script>/</script> no ficheiro
+      # (ou reintroduzir a injeção no build) e o merge publicava-o. O
+      # validador checa o JSON embutido, as sequências de breakout do
+      # <script>, a sintaxe JS e a inicialização.
+      - name: Validar o dashboard (JSON + escape + JS + DOM-stub)
+        run: python3 scripts/validate_dashboard.py

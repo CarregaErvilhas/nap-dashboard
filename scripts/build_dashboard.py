@@ -13,6 +13,7 @@ import pandas as pd
 
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__))))
 import dashboard_i18n as i18n
+import dashboard_payload
 
 S = pd.read_csv('data/nap_static_sites.csv', dtype=str)
 P = pd.read_csv('data/nap_static_points.csv', dtype=str)
@@ -759,7 +760,11 @@ def clean(o):
     return o
 
 tmpl = open('assets/dashboard_template.html').read()
-html = tmpl.replace('/*__DATA__*/', json.dumps(clean(data), ensure_ascii=False, allow_nan=False))
+# O payload vai para dentro de um <script>: tem de estar escapado para esse
+# contexto (dashboard_payload.dump_payload escapa <, >, & — sem isso um
+# "</script>" num dado do OSM/umap fechava o elemento e executava JS
+# arbitrário no dashboard publicado).
+html = tmpl.replace('/*__DATA__*/', dashboard_payload.dump_payload(clean(data)))
 open('dashboard.html', 'w').write(html)
 print(f'dashboard.html written: {len(pts)} points, {len(data["points"])} records, {len(html)/1e6:.1f} MB')
 

@@ -113,7 +113,14 @@ jobs:
           # push via PAT: autentica como owner, que faz bypass ao ruleset
           # "review" (o GITHUB_TOKEN é recusado). O valor vem de secrets e é
           # mascarado nos logs.
-          git remote set-url origin "https://x-access-token:${PUSH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+          #
+          # Autenticação pelo header HTTP, não pela URL do remote: assim o
+          # token não fica gravado no .git/config nem aparece no argv de
+          # nenhum processo (o /proc/<pid>/cmdline é legível por qualquer um).
+          AUTH="$(printf 'x-access-token:%s' "$PUSH_TOKEN" | base64 | tr -d '\n')"
+          export GIT_CONFIG_COUNT=1
+          export GIT_CONFIG_KEY_0="http.https://github.com/.extraheader"
+          export GIT_CONFIG_VALUE_0="AUTHORIZATION: basic ${AUTH}"
           git add dashboard.html dashboard.png facts.md errors.md novidades.md network-census.json
           git diff --cached --quiet && echo "no changes to commit" || git commit -m "Weekly dashboard refresh: $(date -u +%F)"
           git push
