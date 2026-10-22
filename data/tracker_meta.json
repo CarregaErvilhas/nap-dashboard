@@ -1,0 +1,43 @@
+{
+  "source": "pt-pcve-errors.xlsx (PCVE error tracker, Office file on Drive)",
+  "tracker_sha256": "e7e2737fccf6d04e1ffce9e07c3f876bcad59a41b71ec077c146b19f058228ef",
+  "synced_at": "2026-10-18",
+  "cpos": 99,
+  "cpos_without_party_code": 7,
+  "errors": 3153,
+  "status_counts": {
+    "TO FIX": 2222,
+    "FIXED": 920,
+    "DOUBT": 11
+  },
+  "error_type_counts": {
+    "Tariff": 242,
+    "Amperage": 282,
+    "Voltage": 1766,
+    "Location": 457,
+    "Charge mode": 238,
+    "Payment info": 7,
+    "Register": 121,
+    "Plug type": 7,
+    "Power": 26,
+    "(vazio)": 5,
+    "Cable": 2
+  },
+  "declared_error_types": [
+    "Location",
+    "Amperage",
+    "Voltage",
+    "Power",
+    "Plug type",
+    "Charge mode",
+    "Payment info",
+    "Register",
+    "Cable",
+    "Tariff",
+    "AFIR compliant"
+  ],
+  "declared_but_unused_error_types": [
+    "AFIR compliant"
+  ],
+  "rows_without_error_type": 5
+}
