@@ -92,10 +92,12 @@ derivados é versionado; são sempre re-extraídos do xls de origem.
 
 Armadilhas (verificadas):
 
-- É um ficheiro **Office, não uma Google Sheet nativa**. A API Sheets e o
-  `/export?format=xlsx` rejeitam-no com
-  `400 failedPrecondition: must not be an Office file`. Usar
-  `drive.google.com/uc?export=download&id=…`.
+- A cópia original era um ficheiro **Office, não uma Google Sheet nativa**: a API
+  Sheets e o `/export?format=xlsx` rejeitavam-no com
+  `400 failedPrecondition: must not be an Office file` (usava-se
+  `drive.google.com/uc?export=download&id=…`). Desde 2026-10-24 existe uma
+  Google Sheet nativa, onde `/export?format=xlsx` funciona; é essa que
+  `TRACKER_URL` deve apontar.
 - O cabeçalho da `Error List` está na linha 15, os dados começam na linha 16;
   colunas B..K. A coluna B (`CPO`) é um `VLOOKUP` à aba `CPO`, pelo que depois
   de uma reescrita a leitura com `data_only` devolve vazios até o Excel/Sheets
