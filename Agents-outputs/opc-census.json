@@ -1,6 +1,6 @@
 {
-  "snapshot_date": "2026-10-17",
-  "generated_utc": "2026-10-17T22:59:34+00:00",
+  "snapshot_date": "2026-10-19",
+  "generated_utc": "2026-10-19T12:48:10+00:00",
   "opcs": {
     "ACCI": {
       "name": "ACCIONA RECARGA PORTUGAL,UNIPESSOAL LDA",
@@ -104,8 +104,8 @@
     },
     "EDPC": {
       "name": "EDP Comercial",
-      "sites": 1678,
-      "points": 3521
+      "sites": 1679,
+      "points": 3523
     },
     "EMAC": {
       "name": "EMACOM - Telecomunicações da Madeira, Unipessoal, Lda",
@@ -209,8 +209,8 @@
     },
     "GLPP": {
       "name": "Galp Power OPC",
-      "sites": 1597,
-      "points": 3418
+      "sites": 1598,
+      "points": 3420
     },
     "GOLD": {
       "name": "Gold Energy",

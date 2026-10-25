@@ -124,6 +124,9 @@ the historical bugs in `references/gotchas.md`.
 no dependencies. `scripts/ci_paths.py` asserts that (A) no data file sits in the
 repo root, (B) every reference to a data file is `data/`-prefixed, (C) every
 `scripts/*` cited in a workflow exists, (D) the tracker's derived files are NOT tracked. Plus `compileall` and `bash -n`.
+It also runs `scripts/validate_dashboard.py` on the committed `dashboard.html`
+(the artifact `pages.yml` publishes unchecked): embedded JSON, payload escaped
+for the `<script>` context, JS syntax and init.
 
 It deliberately does **not** run the full pipeline (`fetch_data.sh` is ~230 MB and
 `osm_umap.py` pulls an Overpass dump — don't hammer the official sources on every

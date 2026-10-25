@@ -9,6 +9,7 @@ Cruza ainda com a evidência exaustiva (`scripts/anomalias_evidence.py`):
 contagens sobre/sub por OPC e cobertura dos ids.
 Sem rede. Exit 0 = tudo verificado, 1 = falhas (lista-as).
 """
+import json
 import math
 import os
 import re
@@ -42,8 +43,13 @@ def main():
         if len(ids) < 3:
             errors.append(f'Exemplos com <3 ids: {ln.strip()[:160]}')
 
-    # 2. Cada id em backticks existe nos CSVs
-    all_ids = re.findall(r'`([^`]+)`', text)
+    # 2. Cada id (forma de id) em backticks existe nos CSVs. Expressões como
+    #    `ratio > 1.25` ou enums (`mode3AC3p`) não têm forma de id.
+    SHAPE = re.compile(r'^[A-Za-z0-9_-]+$')
+    def looks_like_id(t):
+        return (len(t) >= 8 and '-' in t and '.' not in t and '/' not in t
+                and any(c.isdigit() for c in t) and SHAPE.match(t))
+    all_ids = [t for t in re.findall(r'`([^`]+)`', text) if looks_like_id(t)]
     uniq = sorted(set(all_ids))
     print(f'ids distintos em backticks: {len(uniq)} '
           f'({len(all_ids)} ocorrências)')
@@ -51,21 +57,27 @@ def main():
     for i in missing:
         errors.append(f'id em backticks ausente nos CSVs: {i!r}')
 
-    # 3. Totais reproduzíveis
+    # 3. Totais reproduzíveis (sem constantes fixas: compara com a
+    #    pré-agregação determinística do próprio snapshot).
+    summary = json.load(open('data/agents-summary.json', encoding='utf-8'))
     print(f'sites: {len(sites)} (header excl.) | '
           f'connector_rows: {len(points)} | '
           f'distinct point_id: {points.point_id.nunique()} | '
           f'distinct site_id: {sites.site_id.nunique()} | '
           f'OPCs: {sites.operator_id.nunique()}')
-    assert len(sites) == 8357, len(sites)
-    assert len(points) == 21056, len(points)
+    if len(sites) != summary['totals']['sites']:
+        errors.append(f'sites {len(sites)} != resumo '
+                      f'{summary["totals"]["sites"]}')
+    if len(points) != summary['totals']['connector_rows']:
+        errors.append(f'linhas {len(points)} != resumo '
+                      f'{summary["totals"]["connector_rows"]}')
 
     # 4. Formato: secções exigidas
     for marker in ('## Resumo por OPC', '## Mudanças de OPCs',
                    '## Metodologia', '## Não-anomalias verificadas'):
         if marker not in text:
             errors.append(f'secção em falta: {marker}')
-    n_opc_sections = len(re.findall(r'^## [A-Z0-9]+ — ', text, re.M))
+    n_opc_sections = len(re.findall(r'^(?:## |<summary><b>)[A-Z0-9]+ — ', text, re.M))
     print(f'secções por OPC: {n_opc_sections}')
     if n_opc_sections < 50:
         errors.append('poucas secções por OPC')
@@ -83,8 +95,10 @@ def main():
         import csv as _csv
         with open(EVIDENCE_CSV, encoding='utf-8') as fh:
             ev = list(_csv.DictReader(fh))
-        ev_ids = {r['point_id'] for r in ev} | {r['site_external_id'] for r in ev}
-        missing_ev = sorted(i for i in ev_ids if i and i not in pool)
+        ev_ids = {r['point_id'].strip() for r in ev} | \
+            {r['site_external_id'].strip() for r in ev}
+        pool_norm = {i.strip() for i in pool}
+        missing_ev = sorted(i for i in ev_ids if i and i not in pool_norm)
         for i in missing_ev[:10]:
             errors.append(f'id da evidência ausente nos CSVs: {i!r}')
         # Recomputa a regra de forma independente e compara contagens por OPC
@@ -98,11 +112,13 @@ def main():
         ratio = p / exp
         over = points[ok & (ratio > 1.25)]
         under = points[ok & (ratio < 0.75)]
-        exp_over = set(zip(over.operator_id.astype(str), over.point_id.astype(str)))
-        exp_under = set(zip(under.operator_id.astype(str), under.point_id.astype(str)))
-        got_over = {(r['operator_id'], r['point_id']) for r in ev
+        exp_over = set(zip(over.operator_id.fillna('').astype(str),
+                           over.point_id.astype(str).str.strip()))
+        exp_under = set(zip(under.operator_id.fillna('').astype(str),
+                            under.point_id.astype(str).str.strip()))
+        got_over = {(r['operator_id'].strip(), r['point_id'].strip()) for r in ev
                     if r['categoria'].startswith('sobre')}
-        got_under = {(r['operator_id'], r['point_id']) for r in ev
+        got_under = {(r['operator_id'].strip(), r['point_id'].strip()) for r in ev
                      if r['categoria'].startswith('sub')}
         if exp_over != got_over:
             errors.append(f'evidência sobre-declaração diverge: '

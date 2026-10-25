@@ -75,14 +75,16 @@ when present.
 It also regenerates `dashboard.png` (README screenshot) via headless Chrome if
 available; it only warns/skips otherwise.
 
-`scripts/validate_dashboard.py` (rode no `refresh.yml` antes do commit e em
-local depois de qualquer build) valida o `dashboard.html`: o JSON embutido
-`const D = {…}` tem de fazer `json.loads`, cada `<script>` tem de passar
-`node --check`, e a inicialização tem de correr sem exceção numa eval com DOM
-stub. `scripts/pipeline_guard.py` travará o commit se um upstream mudar o
-formato e o pipeline produzir dados absurdos sem rebentar (limiares mínimos
-para sites/pontos/join/DGEG/registo) — falha o job e o dashboard online fica
-no último bom.
+`scripts/validate_dashboard.py` (rode no `refresh.yml` antes do commit, no
+`pr-checks.yml` em cada PR, e em local depois de qualquer build) valida o
+`dashboard.html`: o JSON embutido `const D = {…}` tem de fazer `json.loads`,
+tem de estar escapado para o contexto `<script>` (sem `<`, `>` ou `&` crus — ver
+"Dashboard specifics"), cada `<script>` tem de passar `node --check`, e a
+inicialização tem de correr sem exceção numa eval com DOM stub.
+`scripts/pipeline_guard.py` travará o commit se um upstream mudar o formato e o
+pipeline produzir dados absurdos sem rebentar (limiares mínimos para
+sites/pontos/join/DGEG/registo) — falha o job e o dashboard online fica no
+último bom.
 
 `scripts/concelho_check.py` locates every site inside official CAOP concelho
 polygons (downloaded on first run into `data/caop_cache/`, gitignored) and flags the
@@ -133,9 +135,25 @@ venv/bin/python scripts/tracker_checks.py   # CSVs + NAP -> findings
   around it by committing a copy of the tracker.
 - `data/tracker_meta.json` carries `synced_at` + the xlsx `sha256` on every run,
   so errors.md item 13 always states which version of the tracker it came from.
-- The tracker is an **Office file, not a native Google Sheet**: the Sheets API
-  rejects it with `400 failedPrecondition: must not be an Office file`, hence
-  the Drive download.
+- The tracker now lives as a **native Google Sheet** (since 2026-10-24), so
+  `TRACKER_URL` can be its `…/spreadsheets/d/<id>/export?format=xlsx`;
+  `fetch_tracker.sh` takes it unchanged. The previous copy was an **Office file**
+  uploaded to Drive, which the Sheets API and `/export?format=xlsx` reject with
+  `400 failedPrecondition: must not be an Office file` — hence `uc?export=download`
+  back then. Keep the URL in the `TRACKER_URL` secret (public repo).
+- `scripts/tracker_fixed.py` (run after `nap_etl.py` + `tracker_sync.py`) replaces
+  the manual match: for each `TO FIX` row with a `correct_data` it finds the site
+  (same `asset_variants` as `tracker_checks.py`) and compares the current NAP
+  value with the wrong and the correct one. Verdicts: `FIXED_CANDIDATA`,
+  `AINDA_ERRADO`, `MISTO` (wrong and correct coexist on the site — several
+  connectors, review by hand), `ALTERADO_OUTRO`, `SITE_NAO_ENCONTRADO`,
+  `NAO_VERIFICAVEL` (Register/Payment info/Cable/Tariff have no static NAP
+  field). Covers Voltage, Amperage, Power, Charge mode, Plug type, Location
+  (≤25 m of the correct coordinates). Writes `data/tracker_fixed.csv` + `.md`
+  (gitignored). Backtest on the 1000 already-`FIXED` rows (2026-10-24): Location
+  373/397, Amperage 75/85, Charge mode 29/30 are recovered; Voltage is weak
+  (`MISTO` 131/184), so only `FIXED_CANDIDATA` is trustworthy there. These are
+  *candidates* for the owners to flip to `FIXED`, never an automatic status change.
 - Products: `data/opc_registry_authority.csv` (the only *current* OPC identity table —
   `PartyId | PartyCode | name`, 99 CPO — versus the 2022 MOBI.E PartyID PDF) and
   `data/tracker_errors.csv` (the project's only labelled/ground-truth set: 3153 real
@@ -212,9 +230,18 @@ venv/bin/python scripts/validate_dashboard.py
 
 ## Dashboard specifics
 - Data injected into `assets/dashboard_template.html` at the `/*__DATA__*/` marker via
-  `json.dumps(clean(data), ensure_ascii=False, allow_nan=False)`.
+  `dashboard_payload.dump_payload(clean(data))` (`scripts/dashboard_payload.py`).
 - **Must** sanitize NaN/Inf floats to null before dumping — bare `NaN` breaks
   browser `JSON.parse`. The `clean()` helper in `build_dashboard.py` does this.
+- **Must** dump through `dashboard_payload.dump_payload()`, never a raw
+  `json.dumps()`: the payload vive dentro de um `<script>` e o tokenizer HTML
+  fecha o elemento no primeiro `</script`, mesmo dentro de uma string JSON — um
+  `</script>` num dado do OSM/umap (campos `doubt`, `osm_op`, `osm_fee`…) saía
+  do elemento e o resto do ficheiro passava a ser HTML executado (XSS
+  armazenado no dashboard publicado). O escaper converte `<`, `>` e `&` em
+  `\u003c`/`\u003e`/`\u0026`; o `JSON.parse` reconstrói os caracteres originais,
+  por isso o valor em runtime é idêntico. `validate_dashboard.py` chumba
+  qualquer payload com `<`, `>` ou `&` crus.
 - No external libs, pure CSS/JS, must open via `file://`.
 - Bilingual PT/EN (single file): `detectLang()` shows PT for `pt*` browsers,
   EN otherwise; PT|EN toggle persists to `localStorage`, `?lang=pt|en` overrides.
@@ -277,16 +304,21 @@ Gate de ~1 s em cada PR para `main`, sem rede e sem dependências (stdlib).
 Mais `compileall` nos scripts Python e `bash -n` nos shell, para o check não ser
 decorativo (um erro de sintaxe só apareceria no refresh da semana seguinte).
 
+**E `scripts/validate_dashboard.py`**, que valida o `dashboard.html` commitado
+(o artefacto que o `pages.yml` publica sem validação nenhuma): JSON embutido,
+escape do payload para o contexto `<script>`, sintaxe JS e inicialização. Sem
+isto, um PR podia injectar `<script>`/`</script>` no ficheiro e o merge
+publicava-o.
+
 **O que este gate não cobre, de propósito:** o pipeline completo não corre no PR
 — `fetch_data.sh` são ~230 MB e o `osm_umap.py` traz um dump Overpass; bater nos
 servidores oficiais a cada PR não é aceitável. Em troca, o `refresh.yml` semanal
 é o teste de integração a sério.
 
-Fica em aberto, se quiseres mais cobertura: correr `build_dashboard.py` +
-`validate_dashboard.py` em cima de fixtures. Exige versionar uma amostra dos
-CSVs do NAP, e isso levanta a mesma questão de republicação de dados de terceiros
-que o `tracker_errors.csv` já levanta (ver `THIRD-PARTY-NOTICES.md`) — por isso
-não foi feito sem decisão.
+Fica em aberto, se quiseres mais cobertura: correr `build_dashboard.py` em cima
+de fixtures. Exige versionar uma amostra dos CSVs do NAP, e isso levanta a mesma
+questão de republicação de dados de terceiros que o `tracker_errors.csv` já
+levanta (ver `THIRD-PARTY-NOTICES.md`) — por isso não foi feito sem decisão.
 
 Ao mover/renomear um ficheiro de dados, actualizar a lista `DATA_FILES` em
 `scripts/ci_paths.py`: é a fonte de verdade dos quatro checks.

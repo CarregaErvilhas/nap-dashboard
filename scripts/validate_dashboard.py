@@ -3,19 +3,28 @@
 
 Corre no refresh.yml a seguir ao build, antes do commit; falha (exit != 0) se:
   1. o objeto `const D = {...}` não fizer JSON.parse (NaN/Inf, chaves partidas);
-  2. algum bloco <script> falhar `node --check` (erro de sintaxe);
-  3. a inicialização rebentar na eval com um DOM stub (erros de runtime como o
+  2. o payload embutido contiver sequências que escapem do elemento <script>
+     (XSS armazenado — ver scripts/dashboard_payload.py);
+  3. algum bloco <script> falhar `node --check` (erro de sintaxe);
+  4. a inicialização rebentar na eval com um DOM stub (erros de runtime como o
      histórico `#status`/`max` — o painel fica vazio abaixo dos KPIs sem exceção
      visível no browser).
+
+Também corre no pr-checks.yml: sem isto, um dashboard.html alterado num PR
+passava o gate e era publicado pelo pages.yml sem qualquer verificação.
 
 Só usa stdlib + node (pré-instalado nas runners ubuntu-latest e no macOS).
 """
 import json
 import os
 import re
+import shutil
 import subprocess
 import sys
 import tempfile
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import dashboard_payload
 
 STUB = r"""
 // DOM stub minimalista: devolve um elemento genérico para qualquer id, para a
@@ -101,19 +110,64 @@ def main():
 
     # 1. JSON embutido
     try:
-        D = json.loads(extract_const_d(html))
+        payload = extract_const_d(html)
+    except ValueError as e:
+        print(f'FAIL: {e}', file=sys.stderr)
+        return 1
+    try:
+        D = json.loads(payload)
     except (ValueError, json.JSONDecodeError) as e:
         print(f'FAIL: JSON embutido não parseia: {e}', file=sys.stderr)
         return 1
     print(f'JSON OK: {len(D.get("sites", []))} sites, '
           f'{len(D.get("points", []))} pontos, snapshot {D.get("snapshot")}')
 
+    # 2. o payload não pode conter sequências que escapem do <script>
+    #    (o tokenizer HTML fecha o elemento no primeiro "</script", mesmo dentro
+    #    de uma string JSON — o resto do ficheiro passava a ser HTML executado)
+    bad = dashboard_payload.unsafe_sequences(payload)
+    if bad:
+        print(f'FAIL: payload embutido contém sequências que escapam do '
+              f'<script>: {bad} — o dashboard pode executar markup hostil '
+              f'(XSS armazenado). Reconstruir com scripts/build_dashboard.py.',
+              file=sys.stderr)
+        return 1
+    # Invariante mais forte: o payload tem de estar escapado para o contexto
+    # <script>, ou seja sem <, > ou & crus. Sem esta regra, reintroduzir o
+    # json.dumps cru passava o gate — e o dashboard publicado voltava a
+    # executar markup hostil vindo dos dados.
+    raw_chars = sorted({c for c in '<>&' if c in payload})
+    if raw_chars:
+        print(f'FAIL: payload embutido tem {raw_chars} crus — tem de estar '
+              f'escapado para o contexto <script> '
+              f'(dashboard_payload.dump_payload).', file=sys.stderr)
+        return 1
+    print('payload OK: escapado para o contexto <script>')
+
+    # 2b. o serializador tem de neutralizar uma carga hostil (auto-teste).
+    #     Fecha o buraco em que um PR mexe no build/template e reintroduz a
+    #     injeção: o payload gerado ficaria seguro só por este teste.
+    hostile = dashboard_payload.dump_payload(
+        {'x': '</script><script>alert(1)</script>', 'y': '<!--<script>'})
+    if dashboard_payload.unsafe_sequences(hostile):
+        print('FAIL: dashboard_payload.dump_payload não neutraliza sequências '
+              'de breakout', file=sys.stderr)
+        return 1
+    if json.loads(hostile)['x'] != '</script><script>alert(1)</script>':
+        print('FAIL: o escape altera o valor dos dados', file=sys.stderr)
+        return 1
+    print('dump_payload OK: escape não mexe nos valores')
+
     scripts = re.findall(r'<script>([\s\S]*?)</script>', html)
     if not scripts:
         print('FAIL: nenhum bloco <script>', file=sys.stderr)
         return 1
 
-    # 2. sintaxe JS
+    # 3. sintaxe JS
+    if not shutil.which('node'):
+        print('FAIL: node não encontrado (necessário para --check/eval)',
+              file=sys.stderr)
+        return 1
     for i, s in enumerate(scripts):
         with tempfile.NamedTemporaryFile('w', suffix='.js', delete=False) as fh:
             fh.write(s)
@@ -128,7 +182,7 @@ def main():
             return 1
     print(f'node --check OK ({len(scripts)} script(s))')
 
-    # 3. eval de inicialização com DOM stub (apanha erros de runtime)
+    # 4. eval de inicialização com DOM stub (apanha erros de runtime)
     for i, s in enumerate(scripts):
         with tempfile.NamedTemporaryFile('w', suffix='.js', delete=False) as fh:
             fh.write(STUB + '\n' + s)
