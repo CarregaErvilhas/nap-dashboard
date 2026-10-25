@@ -22,14 +22,14 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 180
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           # sem credencial persistida: o checkout grava o GITHUB_TOKEN num
           # http.extraheader, que tem precedência sobre as credenciais do URL
           # e faria o push sair como o bot (recusado pelo ruleset) em vez de
           # usar o remote com PAT definido no fim. Fetch é anónimo (repo público).
           persist-credentials: false
-      - uses: actions/setup-python@v7
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
         with:
           python-version: "3.13"
       - name: Install deps
@@ -55,7 +55,7 @@ jobs:
           json.dump(prov, open('data/data-provenance.json', 'w'))
           print(prov)
           "
-      - uses: actions/upload-artifact@v7
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: nap-static
           path: |
