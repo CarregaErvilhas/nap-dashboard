@@ -24,10 +24,11 @@
 #      off. Needs local Drive credentials, so it never works in CI.
 #   3. neither          -> warn and keep the versioned snapshot.
 #
-# `drive.google.com/uc?export=download` is the right endpoint here: the file is
-# an Office file, NOT a native Google Sheet, so both the Sheets API and the
-# /export?format=xlsx endpoint reject it with
-# `400 failedPrecondition: must not be an Office file`.
+# TRACKER_URL may be either endpoint. The original copy was an Office file, NOT
+# a native Google Sheet, so the Sheets API and /export?format=xlsx rejected it
+# with `400 failedPrecondition: must not be an Office file` and
+# `drive.google.com/uc?export=download` was needed. The current copy is a native
+# Sheet (2026-10-24), where `…/export?format=xlsx` works.
 #
 # Escape hatches: SKIP_TRACKER=1 to skip entirely, TRACKER_FILE to change the
 # destination name.

@@ -135,9 +135,25 @@ venv/bin/python scripts/tracker_checks.py   # CSVs + NAP -> findings
   around it by committing a copy of the tracker.
 - `data/tracker_meta.json` carries `synced_at` + the xlsx `sha256` on every run,
   so errors.md item 13 always states which version of the tracker it came from.
-- The tracker is an **Office file, not a native Google Sheet**: the Sheets API
-  rejects it with `400 failedPrecondition: must not be an Office file`, hence
-  the Drive download.
+- The tracker now lives as a **native Google Sheet** (since 2026-10-24), so
+  `TRACKER_URL` can be its `…/spreadsheets/d/<id>/export?format=xlsx`;
+  `fetch_tracker.sh` takes it unchanged. The previous copy was an **Office file**
+  uploaded to Drive, which the Sheets API and `/export?format=xlsx` reject with
+  `400 failedPrecondition: must not be an Office file` — hence `uc?export=download`
+  back then. Keep the URL in the `TRACKER_URL` secret (public repo).
+- `scripts/tracker_fixed.py` (run after `nap_etl.py` + `tracker_sync.py`) replaces
+  the manual match: for each `TO FIX` row with a `correct_data` it finds the site
+  (same `asset_variants` as `tracker_checks.py`) and compares the current NAP
+  value with the wrong and the correct one. Verdicts: `FIXED_CANDIDATA`,
+  `AINDA_ERRADO`, `MISTO` (wrong and correct coexist on the site — several
+  connectors, review by hand), `ALTERADO_OUTRO`, `SITE_NAO_ENCONTRADO`,
+  `NAO_VERIFICAVEL` (Register/Payment info/Cable/Tariff have no static NAP
+  field). Covers Voltage, Amperage, Power, Charge mode, Plug type, Location
+  (≤25 m of the correct coordinates). Writes `data/tracker_fixed.csv` + `.md`
+  (gitignored). Backtest on the 1000 already-`FIXED` rows (2026-10-24): Location
+  373/397, Amperage 75/85, Charge mode 29/30 are recovered; Voltage is weak
+  (`MISTO` 131/184), so only `FIXED_CANDIDATA` is trustworthy there. These are
+  *candidates* for the owners to flip to `FIXED`, never an automatic status change.
 - Products: `data/opc_registry_authority.csv` (the only *current* OPC identity table —
   `PartyId | PartyCode | name`, 99 CPO — versus the 2022 MOBI.E PartyID PDF) and
   `data/tracker_errors.csv` (the project's only labelled/ground-truth set: 3153 real
