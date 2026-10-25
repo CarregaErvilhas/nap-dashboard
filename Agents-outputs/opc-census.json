@@ -1,6 +1,6 @@
 {
-  "snapshot_date": "2026-10-19",
-  "generated_utc": "2026-10-19T12:48:10+00:00",
+  "snapshot_date": "2026-10-25",
+  "generated_utc": "2026-10-25T21:08:21+00:00",
   "opcs": {
     "ACCI": {
       "name": "ACCIONA RECARGA PORTUGAL,UNIPESSOAL LDA",
@@ -59,8 +59,8 @@
     },
     "CEPS": {
       "name": "Cepsa Portuguesa Petroleos",
-      "sites": 34,
-      "points": 61
+      "sites": 35,
+      "points": 63
     },
     "CEVE": {
       "name": "CEVE - Cooperativa Eléctrica do Vale D’Este C.R.L.",
@@ -104,8 +104,8 @@
     },
     "EDPC": {
       "name": "EDP Comercial",
-      "sites": 1679,
-      "points": 3523
+      "sites": 1684,
+      "points": 3534
     },
     "EMAC": {
       "name": "EMACOM - Telecomunicações da Madeira, Unipessoal, Lda",
@@ -129,8 +129,8 @@
     },
     "EPKS": {
       "name": "Telpark",
-      "sites": 35,
-      "points": 370
+      "sites": 36,
+      "points": 381
     },
     "EPOC": {
       "name": "EPOCH",
@@ -179,8 +179,8 @@
     },
     "FCTO": {
       "name": "Iberdrola | bp pulse",
-      "sites": 297,
-      "points": 707
+      "sites": 304,
+      "points": 720
     },
     "FRIO": {
       "name": "Distrifrio Supermercados, Lda",
@@ -209,8 +209,8 @@
     },
     "GLPP": {
       "name": "Galp Power OPC",
-      "sites": 1598,
-      "points": 3420
+      "sites": 1603,
+      "points": 3430
     },
     "GOLD": {
       "name": "Gold Energy",
@@ -239,13 +239,13 @@
     },
     "HIGH": {
       "name": "High Green Power, Unipessoal Lda.",
-      "sites": 40,
-      "points": 43
+      "sites": 38,
+      "points": 40
     },
     "HORZ": {
       "name": "Powerdot, S.A",
-      "sites": 785,
-      "points": 2135
+      "sites": 786,
+      "points": 2138
     },
     "IBRD": {
       "name": "Iberdrola Clientes Portugal, Unipessoal, Lda",
@@ -299,8 +299,8 @@
     },
     "MAKS": {
       "name": "Maksu",
-      "sites": 47,
-      "points": 47
+      "sites": 49,
+      "points": 49
     },
     "MEOE": {
       "name": "MEO Energia - Comercialização de Energia, SA",
@@ -329,8 +329,8 @@
     },
     "MOTA": {
       "name": "Mota-Engil Renewing",
-      "sites": 175,
-      "points": 312
+      "sites": 189,
+      "points": 340
     },
     "NEUR": {
       "name": "Neureifen - Electric Mobility, Lda",
@@ -364,8 +364,8 @@
     },
     "PRIO": {
       "name": "Prio.E Mobility Solutions, Lda",
-      "sites": 161,
-      "points": 292
+      "sites": 162,
+      "points": 294
     },
     "PROP": {
       "name": "PROPEL - PRODUTOS DE PETRÓLEO, LDA",
@@ -384,8 +384,8 @@
     },
     "REPS": {
       "name": "REPSOL Portuguesa Lda",
-      "sites": 222,
-      "points": 577
+      "sites": 221,
+      "points": 575
     },
     "SARE": {
       "name": "Superareosa Supermercados, Lda",
@@ -444,8 +444,8 @@
     },
     "VIAV": {
       "name": "Via Verde Transição Energética, S.A.",
-      "sites": 5,
-      "points": 13
+      "sites": 11,
+      "points": 27
     },
     "VISA": {
       "name": "VISACASA - SERVIÇOS DE ASSISTÊNCIA E MANUTENÇÃO GLOBAL S.A.",

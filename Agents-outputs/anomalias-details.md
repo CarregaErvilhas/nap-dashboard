@@ -1,6 +1,6 @@
-# Anomalias — evidência exaustiva (2026-10-19)
+# Anomalias — evidência exaustiva (2026-10-25)
 
-6777 linhas de conector anómalas (3222 sobre-declarações com `ratio > 1.25`, 3555 sub-declarações com `ratio < 0.75`) em 48 OPCs. Gerado por `scripts/anomalias_evidence.py` a partir de `data/nap_static_sites.csv` + `data/nap_static_points.csv` (regra `V × I`, `√3 × V × I` em `mode3AC3p`).
+6861 linhas de conector anómalas (3235 sobre-declarações com `ratio > 1.25`, 3626 sub-declarações com `ratio < 0.75`) em 49 OPCs. Gerado por `scripts/anomalias_evidence.py` a partir de `data/nap_static_sites.csv` + `data/nap_static_points.csv` (regra `V × I`, `√3 × V × I` em `mode3AC3p`).
 
 [← voltar ao resumo](./anomalias-results.md) · máquina: [anomalias-evidence.csv](./anomalias-evidence.csv)
 
@@ -8,68 +8,67 @@
 
 ## Índice
 
-- [ — ? (144)](#opc-)
+- [ — ? (148)](#opc-)
 - [ACCI — ACCIONA RECARGA PORTUGAL,UNIPESSOAL LDA (12)](#opc-ACCI)
 - [ALFA — Alfa Energia (2)](#opc-ALFA)
 - [ATLA — Atlante Infra Portugal, S.A (599)](#opc-ATLA)
 - [BRIG — Brightcity S.A. (2)](#opc-BRIG)
-- [CEPS — Cepsa Portuguesa Petroleos (57)](#opc-CEPS)
+- [CEPS — Cepsa Portuguesa Petroleos (59)](#opc-CEPS)
 - [CIRC — Circuitos Energy Solutions, Lda. (4)](#opc-CIRC)
 - [CONT — Modelo Continente Hipermercados, S.A. (480)](#opc-CONT)
 - [DTEI — DTE, Instalacoes Especiais (43)](#opc-DTEI)
 - [ECOI — ECOINSIDE (25)](#opc-ECOI)
-- [EDPC — EDP Comercial (1032)](#opc-EDPC)
+- [EDPC — EDP Comercial (1037)](#opc-EDPC)
 - [EMAC — EMACOM - Telecomunicações da Madeira, Unipessoal, Lda (2)](#opc-EMAC)
 - [EMEL — EMEL - Empresa Municipal de Mobilidade e Estacionamento de Lisboa, E.M., S.A. (26)](#opc-EMEL)
 - [ENBL — Enable Mobility Solutions, S.A. (24)](#opc-ENBL)
-- [EPKS — Telpark (349)](#opc-EPKS)
+- [EPKS — Telpark (359)](#opc-EPKS)
 - [EVCE — EVCE POWER, LDA. / MOBISMART (23)](#opc-EVCE)
 - [EVIO — EVIO - Electrical Mobility (8)](#opc-EVIO)
-- [FCTO — Iberdrola | bp pulse (391)](#opc-FCTO)
+- [FCTO — Iberdrola | bp pulse (400)](#opc-FCTO)
 - [FRTR — FRONTROW, LDA (4)](#opc-FRTR)
 - [GENJ — Generation Journey Lda (3)](#opc-GENJ)
-- [GLPG — Galpgeste (71)](#opc-GLPG)
-- [GLPP — Galp Power OPC (600)](#opc-GLPP)
+- [GLPG — Galpgeste (72)](#opc-GLPG)
+- [GLPP — Galp Power OPC (610)](#opc-GLPP)
 - [HELX — Helexia II Energy Services, Lda. (162)](#opc-HELX)
 - [HEXA — HEXAGONAL OCEAN, LDA (34)](#opc-HEXA)
-- [HORZ — Powerdot, S.A (497)](#opc-HORZ)
+- [HORZ — Powerdot, S.A (499)](#opc-HORZ)
 - [IBRD — Iberdrola Clientes Portugal, Unipessoal, Lda (13)](#opc-IBRD)
 - [IHOM — iHome Lda (4)](#opc-IHOM)
 - [KLCS — Kilometer Low Cost II Serviços, SA (5)](#opc-KLCS)
 - [LOGI — uCharge (2)](#opc-LOGI)
 - [LOUL — Loulé Concelho Global, EM (3)](#opc-LOUL)
 - [LUSI — LUSIADAENERGIA, S.A. (2)](#opc-LUSI)
+- [MAKS — Maksu (2)](#opc-MAKS)
 - [MLTR — Mobiletric (23)](#opc-MLTR)
 - [MOON — Siva - Sociedade de Importação de Veículos Automóveis / (sub-CEME da Iberdola) (18)](#opc-MOON)
-- [MOTA — Mota-Engil Renewing (140)](#opc-MOTA)
+- [MOTA — Mota-Engil Renewing (166)](#opc-MOTA)
 - [NRGS — Original Sunenergy, Lda (4)](#opc-NRGS)
 - [PARI — Parinox Energia (1)](#opc-PARI)
-- [PRIO — Prio.E Mobility Solutions, Lda (124)](#opc-PRIO)
+- [PRIO — Prio.E Mobility Solutions, Lda (126)](#opc-PRIO)
 - [PTER — PETROTERMICA ENERGIA, S.A. (3)](#opc-PTER)
 - [REMO — MOTA-ENGIL REMO CHARGING S.A (38)](#opc-REMO)
-- [REPS — REPSOL Portuguesa Lda (204)](#opc-REPS)
+- [REPS — REPSOL Portuguesa Lda (203)](#opc-REPS)
 - [SFAF — Superfafe- supermercados,lda (2)](#opc-SFAF)
 - [SGMR — Superguimarães - Supermercados,lda (2)](#opc-SGMR)
 - [TRUE — WOWPLUG (1408)](#opc-TRUE)
 - [TSLA — Tesla (176)](#opc-TSLA)
 - [VEIM — Veimonte Lda (1)](#opc-VEIM)
-- [VIAV — Via Verde Transição Energética, S.A. (6)](#opc-VIAV)
+- [VIAV — Via Verde Transição Energética, S.A. (18)](#opc-VIAV)
 - [WENE — WENEA SERVICES SPAIN S.L. (2)](#opc-WENE)
 - [ZUND — Grupo Easycharger, SL (2)](#opc-ZUND)
 
 <a id="opc-"></a>
 
 <details open>
-<summary><b> — ? (144 linhas)</b></summary>
+<summary><b> — ? (148 linhas)</b></summary>
 
-##  — ? (144 linhas)
+##  — ? (148 linhas)
 
 ### sobre-declaração (ratio > 1,25): 116 linhas
 
 | ponto | site | tomada | modo | tensão / corrente / declarada / esperada | ratio |
 |---|---|---|---|---|---|
-| `0001PL0001.01` | `0001PL0001` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22 kW / 12,75 kW | 1,73 |
-| `0001PL0001.02` | `0001PL0001` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22 kW / 12,75 kW | 1,73 |
 | `0001PL0002.01` | `0001PL0002` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22 kW / 12,75 kW | 1,73 |
 | `0001PL0002.02` | `0001PL0002` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22 kW / 12,75 kW | 1,73 |
 | `0001PL0003.01` | `0001PL0003` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22 kW / 12,75 kW | 1,73 |
@@ -184,8 +183,10 @@
 | `7695PL0001.02` | `7695PL0001` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22 kW / 12,75 kW | 1,73 |
 | `7940PL0001.01` | `7940PL0001` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22 kW / 12,75 kW | 1,73 |
 | `7940PL0001.02` | `7940PL0001` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22 kW / 12,75 kW | 1,73 |
+| `9379PL0001.01` | `9379PL0001` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22 kW / 12,75 kW | 1,73 |
+| `9379PL0001.02` | `9379PL0001` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22 kW / 12,75 kW | 1,73 |
 
-### sub-declaração (ratio < 0,75): 28 linhas
+### sub-declaração (ratio < 0,75): 32 linhas
 
 | ponto | site | tomada | modo | tensão / corrente / declarada / esperada | ratio |
 |---|---|---|---|---|---|
@@ -195,6 +196,8 @@
 | `0239PR0003.03` | `0239PR0003` | iec62196T2COMBO | mode4DC | 1000 V / 200 A / 120 kW / 200 kW | 0,60 |
 | `0278PR0002.01` | `0278PR0002` | iec62196T2COMBO | mode4DC | 1000 V / 200 A / 120 kW / 200 kW | 0,60 |
 | `0278PR0002.03` | `0278PR0002` | iec62196T2COMBO | mode4DC | 1000 V / 200 A / 120 kW / 200 kW | 0,60 |
+| `0295PR0002.01` | `0295PR0002` | iec62196T2COMBO | mode4DC | 1000 V / 200 A / 120 kW / 200 kW | 0,60 |
+| `0295PR0002.03` | `0295PR0002` | iec62196T2COMBO | mode4DC | 1000 V / 200 A / 120 kW / 200 kW | 0,60 |
 | `0446PR0003.01` | `0446PR0003` | iec62196T2COMBO | mode4DC | 1000 V / 200 A / 120 kW / 200 kW | 0,60 |
 | `0446PR0003.03` | `0446PR0003` | iec62196T2COMBO | mode4DC | 1000 V / 200 A / 120 kW / 200 kW | 0,60 |
 | `0845PR0002.01` | `0845PR0002` | iec62196T2COMBO | mode4DC | 1000 V / 200 A / 120 kW / 200 kW | 0,60 |
@@ -213,6 +216,8 @@
 | `3778PR0002.03` | `3778PR0002` | iec62196T2COMBO | mode4DC | 1000 V / 200 A / 120 kW / 200 kW | 0,60 |
 | `5767PR0003.01` | `5767PR0003` | iec62196T2COMBO | mode4DC | 1000 V / 200 A / 120 kW / 200 kW | 0,60 |
 | `5767PR0003.02` | `5767PR0003` | iec62196T2COMBO | mode4DC | 1000 V / 200 A / 120 kW / 200 kW | 0,60 |
+| `9379PR0003.01` | `9379PR0003` | iec62196T2COMBO | mode4DC | 1000 V / 200 A / 120 kW / 200 kW | 0,60 |
+| `9379PR0003.03` | `9379PR0003` | iec62196T2COMBO | mode4DC | 1000 V / 200 A / 120 kW / 200 kW | 0,60 |
 | `0461PR0005.01` | `0461PR0005` | iec62196T2COMBO | mode4DC | 1000 V / 350 A / 240 kW / 350 kW | 0,69 |
 | `0461PR0005.02` | `0461PR0005` | iec62196T2COMBO | mode4DC | 1000 V / 350 A / 240 kW / 350 kW | 0,69 |
 | `0461PR0006.01` | `0461PR0006` | iec62196T2COMBO | mode4DC | 1000 V / 350 A / 240 kW / 350 kW | 0,69 |
@@ -909,9 +914,16 @@
 <a id="opc-CEPS"></a>
 
 <details>
-<summary><b>CEPS — Cepsa Portuguesa Petroleos (57 linhas)</b></summary>
+<summary><b>CEPS — Cepsa Portuguesa Petroleos (59 linhas)</b></summary>
 
-## CEPS — Cepsa Portuguesa Petroleos (57 linhas)
+## CEPS — Cepsa Portuguesa Petroleos (59 linhas)
+
+### sobre-declaração (ratio > 1,25): 2 linhas
+
+| ponto | site | tomada | modo | tensão / corrente / declarada / esperada | ratio |
+|---|---|---|---|---|---|
+| `MTJ-00139-01` | `MTJ-00139` | iec62196T2COMBO | mode4DC | 400 V / 375 A / 300 kW / 150 kW | 2,00 |
+| `MTJ-00139-02` | `MTJ-00139` | iec62196T2COMBO | mode4DC | 400 V / 375 A / 300 kW / 150 kW | 2,00 |
 
 ### sub-declaração (ratio < 0,75): 57 linhas
 
@@ -1603,9 +1615,9 @@
 <a id="opc-EDPC"></a>
 
 <details>
-<summary><b>EDPC — EDP Comercial (1032 linhas)</b></summary>
+<summary><b>EDPC — EDP Comercial (1037 linhas)</b></summary>
 
-## EDPC — EDP Comercial (1032 linhas)
+## EDPC — EDP Comercial (1037 linhas)
 
 ### sobre-declaração (ratio > 1,25): 286 linhas
 
@@ -1898,7 +1910,7 @@
 | `PT-EDP-ECSC-00217-3` | `CSC-00217` | iec62196T2 | mode3AC3p | 240 V / 32 A / 22 kW / 13,30 kW | 1,65 |
 | `PT-EDP-EGMR-00155-3` | `GMR-00155` | iec62196T2 | mode3AC3p | 240 V / 32 A / 22 kW / 13,30 kW | 1,65 |
 
-### sub-declaração (ratio < 0,75): 746 linhas
+### sub-declaração (ratio < 0,75): 751 linhas
 
 | ponto | site | tomada | modo | tensão / corrente / declarada / esperada | ratio |
 |---|---|---|---|---|---|
@@ -1990,6 +2002,8 @@
 | `PT-EDP-ELLE-00259-2` | `LLE-00259` | iec62196T2COMBO | mode4DC | 1000 V / 200 A / 60 kW / 200 kW | 0,30 |
 | `PT-EDP-ELLE-00261-1` | `LLE-00261` | iec62196T2COMBO | mode4DC | 1000 V / 200 A / 60 kW / 200 kW | 0,30 |
 | `PT-EDP-ELLE-00261-2` | `LLE-00261` | iec62196T2COMBO | mode4DC | 1000 V / 200 A / 60 kW / 200 kW | 0,30 |
+| `PT-EDP-ELRA-00189-1` | `LRA-00189` | iec62196T2COMBO | mode4DC | 1000 V / 200 A / 60 kW / 200 kW | 0,30 |
+| `PT-EDP-ELRA-00189-2` | `LRA-00189` | iec62196T2COMBO | mode4DC | 1000 V / 200 A / 60 kW / 200 kW | 0,30 |
 | `PT-EDP-ELSB-00716-1` | `LSB-00716` | iec62196T2COMBO | mode4DC | 1000 V / 200 A / 60 kW / 200 kW | 0,30 |
 | `PT-EDP-ELSB-00716-2` | `LSB-00716` | iec62196T2COMBO | mode4DC | 1000 V / 200 A / 60 kW / 200 kW | 0,30 |
 | `PT-EDP-ELSB-00852-1` | `LSB-00852` | iec62196T2COMBO | mode4DC | 1000 V / 200 A / 60 kW / 200 kW | 0,30 |
@@ -2131,9 +2145,12 @@
 | `PT-EDP-ELGS-00042-1` | `LGS-00042` | iec62196T2COMBO | mode4DC | 1000 V / 300 A / 120 kW / 300 kW | 0,40 |
 | `PT-EDP-ELGS-00042-2` | `LGS-00042` | iec62196T2COMBO | mode4DC | 1000 V / 300 A / 120 kW / 300 kW | 0,40 |
 | `PT-EDP-ELNH-00015-1` | `LNH-00015` | iec62196T2COMBO | mode4DC | 1000 V / 300 A / 120 kW / 300 kW | 0,40 |
+| `PT-EDP-ELRA-00122-1` | `LRA-00122` | iec62196T2COMBO | mode4DC | 1000 V / 300 A / 120 kW / 300 kW | 0,40 |
 | `PT-EDP-ELRA-00130-1` | `LRA-00130` | iec62196T2COMBO | mode4DC | 1000 V / 300 A / 120 kW / 300 kW | 0,40 |
 | `PT-EDP-ELRA-00145-1` | `LRA-00145` | iec62196T2COMBO | mode4DC | 1000 V / 300 A / 120 kW / 300 kW | 0,40 |
 | `PT-EDP-ELRA-00145-2` | `LRA-00145` | iec62196T2COMBO | mode4DC | 1000 V / 300 A / 120 kW / 300 kW | 0,40 |
+| `PT-EDP-ELRA-00188-1` | `LRA-00188` | iec62196T2COMBO | mode4DC | 1000 V / 300 A / 120 kW / 300 kW | 0,40 |
+| `PT-EDP-ELRA-00188-2` | `LRA-00188` | iec62196T2COMBO | mode4DC | 1000 V / 300 A / 120 kW / 300 kW | 0,40 |
 | `PT-EDP-ELRS-00063-2` | `LRS-00063` | iec62196T2COMBO | mode4DC | 1000 V / 300 A / 120 kW / 300 kW | 0,40 |
 | `PT-EDP-ELRS-00229-1` | `LRS-00229` | iec62196T2COMBO | mode4DC | 1000 V / 300 A / 120 kW / 300 kW | 0,40 |
 | `PT-EDP-ELRS-00229-2` | `LRS-00229` | iec62196T2COMBO | mode4DC | 1000 V / 300 A / 120 kW / 300 kW | 0,40 |
@@ -2756,11 +2773,11 @@
 <a id="opc-EPKS"></a>
 
 <details>
-<summary><b>EPKS — Telpark (349 linhas)</b></summary>
+<summary><b>EPKS — Telpark (359 linhas)</b></summary>
 
-## EPKS — Telpark (349 linhas)
+## EPKS — Telpark (359 linhas)
 
-### sobre-declaração (ratio > 1,25): 322 linhas
+### sobre-declaração (ratio > 1,25): 333 linhas
 
 | ponto | site | tomada | modo | tensão / corrente / declarada / esperada | ratio |
 |---|---|---|---|---|---|
@@ -2782,6 +2799,7 @@
 | `0031A8B6-41EF-42AD-9A6A-0FED092C6108` | `LSB-01482` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22 kW / 12,75 kW | 1,73 |
 | `02001964-F5E4-400B-B1FD-358F82F46C41` | `LSB-01482` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22 kW / 12,75 kW | 1,73 |
 | `044BDB0B-FFBA-4C02-8F73-2504699AC85F` | `PRT-00372` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22 kW / 12,75 kW | 1,73 |
+| `0709373F-2A3E-4F7C-ACE4-E9E04826E5DB` | `LSB-01548` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22 kW / 12,75 kW | 1,73 |
 | `0709439A-63AE-4EC8-B8CB-47D93FA3F658` | `CSC-00577` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22 kW / 12,75 kW | 1,73 |
 | `07F21083-D56D-45C4-9065-10A1497B2E7E` | `LSB-01482` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22 kW / 12,75 kW | 1,73 |
 | `08D5423B-F7A4-473B-8833-6543C33FACA6` | `LSB-01472` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22 kW / 12,75 kW | 1,73 |
@@ -2815,8 +2833,10 @@
 | `226787A9-8E9C-4D5B-B76C-F8FEBF45A745` | `LSB-01482` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22 kW / 12,75 kW | 1,73 |
 | `235862F2-9A7F-4E32-AD66-FE51A240CAEF` | `PRT-00374` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22 kW / 12,75 kW | 1,73 |
 | `23B0AE60-355A-4B52-A3CD-054A0E6753FD` | `VNG-00259` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22 kW / 12,75 kW | 1,73 |
+| `23D61AA5-F0C1-4D0C-B348-1B3DF2411337` | `PRT-00377` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22 kW / 12,75 kW | 1,73 |
 | `241C5628-D663-4BB9-903B-C2F8D99B5207` | `LSB-01481` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22 kW / 12,75 kW | 1,73 |
 | `2490EAFE-DB48-4BC8-BA2F-E7DF58D0FC0C` | `LSB-01477` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22 kW / 12,75 kW | 1,73 |
+| `2491A096-26F5-4603-883A-370082E01C31` | `LSB-01548` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22 kW / 12,75 kW | 1,73 |
 | `249E1A63-40DF-4E41-832A-D1F1955BF900` | `LSB-01473` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22 kW / 12,75 kW | 1,73 |
 | `2533B610-B81C-485F-9B4E-EF141FDBC188` | `LSB-01482` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22 kW / 12,75 kW | 1,73 |
 | `26849B90-ED2D-41F0-A659-450725CD0746` | `LSB-01477` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22 kW / 12,75 kW | 1,73 |
@@ -2876,6 +2896,7 @@
 | `554B93E7-9AF7-40F5-9E5C-D017C20BAF78` | `PRT-00372` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22 kW / 12,75 kW | 1,73 |
 | `56348048-EE40-4D90-B80A-42A73DF31C78` | `VNG-00264` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22 kW / 12,75 kW | 1,73 |
 | `5642C146-BA2F-4815-8DA5-36389158017F` | `LSB-01477` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22 kW / 12,75 kW | 1,73 |
+| `56814B60-A1B1-494F-BD7E-D6016913F7FF` | `LSB-01548` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22 kW / 12,75 kW | 1,73 |
 | `56DA9F52-7423-41F9-A817-22F7211A47C1` | `LSB-01488` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22 kW / 12,75 kW | 1,73 |
 | `583F5604-2107-428F-ADE4-61C35DE77696` | `LSB-01478` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22 kW / 12,75 kW | 1,73 |
 | `585D865E-32DC-46F8-9430-03AC0FB2BF2A` | `PRT-00376` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22 kW / 12,75 kW | 1,73 |
@@ -2887,6 +2908,7 @@
 | `62CC2BAD-A5F4-480F-B246-72088762AA14` | `LSB-01482` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22 kW / 12,75 kW | 1,73 |
 | `62F3AD63-6DD3-41AD-8710-A0D9DD38CEAE` | `LSB-01481` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22 kW / 12,75 kW | 1,73 |
 | `64016E5A-2708-4957-AD78-DC4D6EB1E40F` | `PRT-00372` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22 kW / 12,75 kW | 1,73 |
+| `6420E6CD-3A7F-4E2C-85F3-3C921103466E` | `PRT-00377` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22 kW / 12,75 kW | 1,73 |
 | `65839646-5A32-4BBE-B70E-2FC36C245603` | `LSB-01476` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22 kW / 12,75 kW | 1,73 |
 | `66F4659F-8940-40FE-BD50-A7D9EE0AB363` | `LSB-01485` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22 kW / 12,75 kW | 1,73 |
 | `67204692-B24F-4EB4-9951-884A424471E0` | `PRT-00377` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22 kW / 12,75 kW | 1,73 |
@@ -2898,6 +2920,7 @@
 | `69AAED3D-03EE-42FD-B0F5-6103548D392A` | `PRT-00372` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22 kW / 12,75 kW | 1,73 |
 | `6A256528-4196-4D64-B01E-879EF0F865CB` | `LSB-01476` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22 kW / 12,75 kW | 1,73 |
 | `6B6C736A-FFDB-4F89-8817-14F69A8CEEC2` | `LSB-01467` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22 kW / 12,75 kW | 1,73 |
+| `6C4B0536-4A42-426F-95CB-B4CBA78EC485` | `PRT-00377` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22 kW / 12,75 kW | 1,73 |
 | `6D8B2DEC-A295-4005-AA3A-0E1C6ABD2A07` | `LSB-01467` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22 kW / 12,75 kW | 1,73 |
 | `6DF7D98C-0053-4BB4-93A3-53D760AA7686` | `LSB-01488` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22 kW / 12,75 kW | 1,73 |
 | `6EBDA77A-73A2-4DA2-86FB-049285748E39` | `LSB-01478` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22 kW / 12,75 kW | 1,73 |
@@ -2905,6 +2928,7 @@
 | `714BC1A0-2436-4331-845E-F48487203AE6` | `LSB-01479` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22 kW / 12,75 kW | 1,73 |
 | `72A490E7-0343-47A3-9D00-40ACF6104C3A` | `LSB-01473` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22 kW / 12,75 kW | 1,73 |
 | `72E27F9A-4531-492C-AE2A-362CAD85065B` | `LSB-01470` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22 kW / 12,75 kW | 1,73 |
+| `72F76EA0-2824-4839-AC1D-484C684F4ABB` | `PRT-00377` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22 kW / 12,75 kW | 1,73 |
 | `73669AF9-E29B-4FB6-86D6-BB8AF8AF0AA4` | `LSB-01482` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22 kW / 12,75 kW | 1,73 |
 | `73FB0E5C-C346-4C20-B853-B9C64F521B96` | `LSB-01482` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22 kW / 12,75 kW | 1,73 |
 | `754DFF3C-72ED-4C46-B862-B5B6E07CFF04` | `LSB-01470` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22 kW / 12,75 kW | 1,73 |
@@ -2917,6 +2941,7 @@
 | `7B3099F1-B22B-418C-AC21-A941AD9A0870` | `LSB-01467` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22 kW / 12,75 kW | 1,73 |
 | `7D0C5167-03BA-4478-A25F-3423D20FA310` | `LSB-01482` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22 kW / 12,75 kW | 1,73 |
 | `7D6171ED-8D2F-4CDB-99D8-8BE21177030A` | `LSB-01466` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22 kW / 12,75 kW | 1,73 |
+| `7D660E10-1502-4FFA-9CF3-515C398A4CAC` | `LSB-01548` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22 kW / 12,75 kW | 1,73 |
 | `7E3ED690-6B8C-4E8D-AA3F-6E5AB2C902C5` | `LSB-01480` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22 kW / 12,75 kW | 1,73 |
 | `7FAF84F5-EC5F-4D6D-ABBD-28ADE554CD44` | `LSB-01491` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22 kW / 12,75 kW | 1,73 |
 | `804F87CF-1C60-482C-83B0-596F92F1423B` | `PRT-00372` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22 kW / 12,75 kW | 1,73 |
@@ -3001,6 +3026,7 @@
 | `BBB5C102-AB0B-424C-B9D6-F89A107759B2` | `AVR-00111` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22 kW / 12,75 kW | 1,73 |
 | `BBF1C4AE-D37E-4D06-9517-F8A8258D3022` | `LSB-01481` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22 kW / 12,75 kW | 1,73 |
 | `BC4E2D8C-386D-41D6-A94C-B174EDB75800` | `LSB-01479` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22 kW / 12,75 kW | 1,73 |
+| `BD66C895-53E9-4311-9E3F-5B812D0ADB73` | `PRT-00377` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22 kW / 12,75 kW | 1,73 |
 | `BD6C542D-6B7A-40D0-901A-EC8CA56A3C1C` | `LSB-01467` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22 kW / 12,75 kW | 1,73 |
 | `BE545244-7D92-4DB4-90A4-247B21D68681` | `PRT-00374` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22 kW / 12,75 kW | 1,73 |
 | `BE72F22D-7404-4879-A095-3FCBBC940DBE` | `LSB-01476` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22 kW / 12,75 kW | 1,73 |
@@ -3064,6 +3090,7 @@
 | `E779571A-3B36-4F54-B38E-65C4CCC03963` | `AVR-00111` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22 kW / 12,75 kW | 1,73 |
 | `E97CC185-E157-4F27-81D1-7AAEECED7D0F` | `LSB-01470` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22 kW / 12,75 kW | 1,73 |
 | `E9BADCB2-90DA-4687-9E87-E8DC1FA92148` | `LSB-01487` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22 kW / 12,75 kW | 1,73 |
+| `EA9E8427-547F-404C-9C8F-0B7724F97C1B` | `LSB-01477` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22 kW / 12,75 kW | 1,73 |
 | `EAD64287-0B2A-43DE-98BA-639A5D7BB527` | `PRT-00376` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22 kW / 12,75 kW | 1,73 |
 | `EC8180C2-4090-4AA5-9D54-5E6C18395C99` | `LSB-01473` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22 kW / 12,75 kW | 1,73 |
 | `EDB99A60-31EA-4CA9-96D1-477A7792F68E` | `LSB-01473` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22 kW / 12,75 kW | 1,73 |
@@ -3071,6 +3098,7 @@
 | `F150B179-6D55-4A7D-8455-27F0348C183C` | `LSB-01494` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22 kW / 12,75 kW | 1,73 |
 | `F1D39AFF-207A-4F18-8F3D-BFFA9084E526` | `LSB-01473` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22 kW / 12,75 kW | 1,73 |
 | `F38E9C34-30F9-442D-9086-005C84C09BB7` | `LSB-01469` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22 kW / 12,75 kW | 1,73 |
+| `F4720DDA-728D-46B1-B861-2FFF6527234E` | `LSB-01479` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22 kW / 12,75 kW | 1,73 |
 | `F5CCE99A-EA0E-4F58-B1E7-6B43A1A2E4DC` | `PRT-00372` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22 kW / 12,75 kW | 1,73 |
 | `F67660BC-C46E-4C0A-9C47-6A51A231AB5D` | `LSB-01474` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22 kW / 12,75 kW | 1,73 |
 | `F787EF0C-61DB-414B-8103-7600584D04E6` | `LSB-01469` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22 kW / 12,75 kW | 1,73 |
@@ -3087,7 +3115,7 @@
 | `D69EF9D0-A45E-4E68-A21E-4744B7ABF65B` | `CSC-00577` | iec62196T2COMBO | mode4DC | 400 V / 40 A / 27 kW / 16 kW | 1,69 |
 | `707D9623-DAA9-4371-B7BE-CCF03A640C2A` | `CSC-00577` | iec62196T2COMBO | mode4DC | 400 V / 43 A / 27 kW / 17,20 kW | 1,57 |
 
-### sub-declaração (ratio < 0,75): 27 linhas
+### sub-declaração (ratio < 0,75): 26 linhas
 
 | ponto | site | tomada | modo | tensão / corrente / declarada / esperada | ratio |
 |---|---|---|---|---|---|
@@ -3097,7 +3125,6 @@
 | `21EBCBA0-648C-43EA-BAD1-5F48958A4F59` | `LSB-01487` | iec62196T2 | mode3AC3p | 400 V / 32 A / 0 kW / 22,17 kW | 0,00 |
 | `3BBD1845-7A6A-41D2-9D91-21D886D2E17A` | `LSB-01478` | iec62196T2 | mode3AC3p | 400 V / 32 A / 0 kW / 22,17 kW | 0,00 |
 | `47CEBC7A-2C40-49F9-AF64-0AC9DBE7AC39` | `LSB-01479` | iec62196T2 | mode3AC3p | 400 V / 32 A / 0 kW / 22,17 kW | 0,00 |
-| `4ADBBAF3-9CDB-4F1C-AE9E-A98F9B948F16` | `LSB-01479` | iec62196T2COMBO | mode4DC | 1000 V / 125 A / 0 kW / 125 kW | 0,00 |
 | `4DE8AB57-EF41-4D3C-AD31-8C1BB88E4BAC` | `LSB-01485` | iec62196T2 | mode3AC3p | 400 V / 32 A / 0 kW / 22,17 kW | 0,00 |
 | `560AC11F-7443-4D72-9B6D-FF637DBF5AD4` | `LSB-01485` | iec62196T2 | mode3AC3p | 400 V / 32 A / 0 kW / 22,17 kW | 0,00 |
 | `597B8EC1-9215-48DC-93ED-0DF69158BA3E` | `LSB-01476` | iec62196T2 | mode3AC3p | 400 V / 32 A / 0 kW / 22,17 kW | 0,00 |
@@ -3109,15 +3136,15 @@
 | `C187C88F-E6F7-4EFD-884B-6C7970344E20` | `LSB-01478` | iec62196T2 | mode3AC3p | 400 V / 32 A / 0 kW / 22,17 kW | 0,00 |
 | `C83B622D-EA4A-4740-8FED-B46EC4F39A4B` | `LSB-01478` | iec62196T2 | mode3AC3p | 400 V / 32 A / 0 kW / 22,17 kW | 0,00 |
 | `D4E106D5-635F-47E6-BB05-31EF49C46DAA` | `LSB-01479` | iec62196T2 | mode3AC3p | 400 V / 32 A / 0 kW / 22,17 kW | 0,00 |
-| `EA9E8427-547F-404C-9C8F-0B7724F97C1B` | `LSB-01477` | iec62196T2 | mode3AC3p | 400 V / 32 A / 0 kW / 22,17 kW | 0,00 |
 | `EFEE9DDA-AE27-4E0A-8342-B7DEAEDC3F4B` | `LSB-01478` | iec62196T2 | mode3AC3p | 400 V / 32 A / 0 kW / 22,17 kW | 0,00 |
-| `F4720DDA-728D-46B1-B861-2FFF6527234E` | `LSB-01479` | iec62196T2 | mode3AC3p | 400 V / 32 A / 0 kW / 22,17 kW | 0,00 |
 | `F6785AFF-1D1D-48A2-9A09-AD44C5CFC001` | `LSB-01481` | iec62196T2 | mode3AC3p | 400 V / 32 A / 0 kW / 22,17 kW | 0,00 |
 | `F6E673C2-AAF6-4654-900F-650FF89509CD` | `LSB-01477` | iec62196T2 | mode3AC3p | 400 V / 32 A / 0 kW / 22,17 kW | 0,00 |
 | `1E67BD51-9F31-4F89-A350-FD990F3E01BB` | `LSB-01456` | iec62196T2COMBO | mode4DC | 1000 V / 400 A / 172 kW / 400 kW | 0,43 |
 | `A69487F9-4606-4582-8B92-004926D71AB6` | `LSB-01456` | iec62196T2COMBO | mode4DC | 1000 V / 400 A / 172 kW / 400 kW | 0,43 |
 | `02C150F9-2109-4E8F-8D0A-ED5BC269E2CD` | `VNG-00264` | iec62196T2COMBO | mode4DC | 1000 V / 43 A / 30 kW / 43 kW | 0,70 |
 | `D4D10F10-E9C5-41E1-B52A-6767E0423CE9` | `VNG-00264` | iec62196T2COMBO | mode4DC | 1000 V / 43 A / 30 kW / 43 kW | 0,70 |
+| `DACD0D48-8439-4098-851F-25742017442F` | `LSB-01548` | iec62196T2COMBO | mode4DC | 1000 V / 43 A / 30 kW / 43 kW | 0,70 |
+| `EC3A0C66-57DD-4003-99E6-A6DBB740C322` | `LSB-01548` | iec62196T2COMBO | mode4DC | 1000 V / 43 A / 30 kW / 43 kW | 0,70 |
 
 [↑ índice](#indice)
 
@@ -3199,11 +3226,11 @@
 <a id="opc-FCTO"></a>
 
 <details>
-<summary><b>FCTO — Iberdrola | bp pulse (391 linhas)</b></summary>
+<summary><b>FCTO — Iberdrola | bp pulse (400 linhas)</b></summary>
 
-## FCTO — Iberdrola | bp pulse (391 linhas)
+## FCTO — Iberdrola | bp pulse (400 linhas)
 
-### sub-declaração (ratio < 0,75): 391 linhas
+### sub-declaração (ratio < 0,75): 400 linhas
 
 | ponto | site | tomada | modo | tensão / corrente / declarada / esperada | ratio |
 |---|---|---|---|---|---|
@@ -3515,6 +3542,12 @@
 | `661` | `BRG-00164` | iec62196T2COMBO | mode4DC | 1000 V / 150 A / 50 kW / 150 kW | 0,33 |
 | `727` | `MRS-00005` | iec62196T2COMBO | mode4DC | 1000 V / 150 A / 50 kW / 150 kW | 0,33 |
 | `728` | `MRS-00005` | iec62196T2COMBO | mode4DC | 1000 V / 150 A / 50 kW / 150 kW | 0,33 |
+| `813` | `VIS-00138` | iec62196T2COMBO | mode4DC | 1000 V / 150 A / 50 kW / 150 kW | 0,33 |
+| `813` | `CRS-00007` | iec62196T2COMBO | mode4DC | 1000 V / 150 A / 50 kW / 150 kW | 0,33 |
+| `814` | `VIS-00138` | iec62196T2COMBO | mode4DC | 1000 V / 150 A / 50 kW / 150 kW | 0,33 |
+| `814` | `CRS-00007` | iec62196T2COMBO | mode4DC | 1000 V / 150 A / 50 kW / 150 kW | 0,33 |
+| `826` | `STR-00080` | iec62196T2COMBO | mode4DC | 1000 V / 150 A / 50 kW / 150 kW | 0,33 |
+| `827` | `STR-00080` | iec62196T2COMBO | mode4DC | 1000 V / 150 A / 50 kW / 150 kW | 0,33 |
 | `97` | `ACB-00027` | iec62196T2COMBO | mode4DC | 1000 V / 150 A / 50 kW / 150 kW | 0,33 |
 | `98` | `ACB-00027` | iec62196T2COMBO | mode4DC | 1000 V / 150 A / 50 kW / 150 kW | 0,33 |
 | `191` | `EVR-00072` | iec62196T2COMBO | mode4DC | 1000 V / 500 A / 200 kW / 500 kW | 0,40 |
@@ -3523,7 +3556,6 @@
 | `216` | `GDL-00042` | iec62196T2COMBO | mode4DC | 1000 V / 500 A / 200 kW / 500 kW | 0,40 |
 | `217` | `GDL-00043` | iec62196T2COMBO | mode4DC | 1000 V / 500 A / 200 kW / 500 kW | 0,40 |
 | `218` | `GDL-00043` | iec62196T2COMBO | mode4DC | 1000 V / 500 A / 200 kW / 500 kW | 0,40 |
-| `237` | `LRA-00117` | chademo | mode4DC | 1000 V / 200 A / 80 kW / 200 kW | 0,40 |
 | `318` | `ODV-00039` | iec62196T2COMBO | mode4DC | 1000 V / 500 A / 200 kW / 500 kW | 0,40 |
 | `319` | `ODV-00039` | iec62196T2COMBO | mode4DC | 1000 V / 500 A / 200 kW / 500 kW | 0,40 |
 | `324` | `ODV-00046` | iec62196T2COMBO | mode4DC | 1000 V / 500 A / 200 kW / 500 kW | 0,40 |
@@ -3546,14 +3578,18 @@
 | `663` | `BRG-00165` | iec62196T2COMBO | mode4DC | 1000 V / 500 A / 200 kW / 500 kW | 0,40 |
 | `664` | `BRG-00166` | iec62196T2COMBO | mode4DC | 1000 V / 500 A / 200 kW / 500 kW | 0,40 |
 | `665` | `BRG-00166` | iec62196T2COMBO | mode4DC | 1000 V / 500 A / 200 kW / 500 kW | 0,40 |
+| `731` | `CTB-00087` | iec62196T2COMBO | mode4DC | 1000 V / 500 A / 200 kW / 500 kW | 0,40 |
+| `732` | `CTB-00087` | iec62196T2COMBO | mode4DC | 1000 V / 500 A / 200 kW / 500 kW | 0,40 |
 | `776` | `LRS-00196` | iec62196T2COMBO | mode4DC | 1000 V / 500 A / 200 kW / 500 kW | 0,40 |
 | `777` | `LRS-00196` | iec62196T2COMBO | mode4DC | 1000 V / 500 A / 200 kW / 500 kW | 0,40 |
 | `789` | `LSB-01464` | iec62196T2COMBO | mode4DC | 1000 V / 500 A / 200 kW / 500 kW | 0,40 |
-| `789` | `LSB-01475` | iec62196T2COMBO | mode4DC | 1000 V / 500 A / 200 kW / 500 kW | 0,40 |
 | `790` | `LSB-01464` | iec62196T2COMBO | mode4DC | 1000 V / 500 A / 200 kW / 500 kW | 0,40 |
-| `790` | `LSB-01475` | iec62196T2COMBO | mode4DC | 1000 V / 500 A / 200 kW / 500 kW | 0,40 |
 | `805` | `MGL-00024` | iec62196T2COMBO | mode4DC | 1000 V / 500 A / 200 kW / 500 kW | 0,40 |
 | `806` | `MGL-00024` | iec62196T2COMBO | mode4DC | 1000 V / 500 A / 200 kW / 500 kW | 0,40 |
+| `815` | `VIS-00139` | iec62196T2COMBO | mode4DC | 1000 V / 500 A / 200 kW / 500 kW | 0,40 |
+| `815` | `CRS-00008` | iec62196T2COMBO | mode4DC | 1000 V / 500 A / 200 kW / 500 kW | 0,40 |
+| `816` | `VIS-00139` | iec62196T2COMBO | mode4DC | 1000 V / 500 A / 200 kW / 500 kW | 0,40 |
+| `816` | `CRS-00008` | iec62196T2COMBO | mode4DC | 1000 V / 500 A / 200 kW / 500 kW | 0,40 |
 | `170` | `CNT-00029` | iec62196T2COMBO | mode4DC | 1000 V / 500 A / 300 kW / 500 kW | 0,60 |
 | `172` | `CNT-00029` | iec62196T2COMBO | mode4DC | 1000 V / 500 A / 300 kW / 500 kW | 0,60 |
 | `305` | `MTJ-00108` | iec62196T2COMBO | mode4DC | 1000 V / 500 A / 300 kW / 500 kW | 0,60 |
@@ -3645,9 +3681,9 @@
 <a id="opc-GLPG"></a>
 
 <details>
-<summary><b>GLPG — Galpgeste (71 linhas)</b></summary>
+<summary><b>GLPG — Galpgeste (72 linhas)</b></summary>
 
-## GLPG — Galpgeste (71 linhas)
+## GLPG — Galpgeste (72 linhas)
 
 ### sobre-declaração (ratio > 1,25): 3 linhas
 
@@ -3657,7 +3693,7 @@
 | `VCT-00029-01` | `VCT-00029` | iec62196T2COMBO | mode4DC | 500 V / 120 A / 120 kW / 60 kW | 2,00 |
 | `VCT-00030-01` | `VCT-00030` | iec62196T2COMBO | mode4DC | 500 V / 120 A / 120 kW / 60 kW | 2,00 |
 
-### sub-declaração (ratio < 0,75): 68 linhas
+### sub-declaração (ratio < 0,75): 69 linhas
 
 | ponto | site | tomada | modo | tensão / corrente / declarada / esperada | ratio |
 |---|---|---|---|---|---|
@@ -3717,6 +3753,7 @@
 | `VIS-00044-02` | `VIS-00044` | iec62196T2COMBO | mode4DC | 950 V / 200 A / 120 kW / 190 kW | 0,63 |
 | `VIS-00058-01` | `VIS-00058` | iec62196T2COMBO | mode4DC | 950 V / 200 A / 120 kW / 190 kW | 0,63 |
 | `VIS-00058-02` | `VIS-00058` | iec62196T2COMBO | mode4DC | 950 V / 200 A / 120 kW / 190 kW | 0,63 |
+| `VLG-00017-01` | `VLG-00017` | iec62196T2COMBO | mode4DC | 950 V / 200 A / 120 kW / 190 kW | 0,63 |
 | `VLG-00017-02` | `VLG-00017` | iec62196T2COMBO | mode4DC | 950 V / 200 A / 120 kW / 190 kW | 0,63 |
 | `VNG-00082-02` | `VNG-00082` | iec62196T2COMBO | mode4DC | 950 V / 200 A / 120 kW / 190 kW | 0,63 |
 | `ACH-00003-01` | `ACH-00003` | chademo | mode4DC | 500 V / 125 A / 43 kW / 62,50 kW | 0,69 |
@@ -3737,9 +3774,9 @@
 <a id="opc-GLPP"></a>
 
 <details>
-<summary><b>GLPP — Galp Power OPC (600 linhas)</b></summary>
+<summary><b>GLPP — Galp Power OPC (610 linhas)</b></summary>
 
-## GLPP — Galp Power OPC (600 linhas)
+## GLPP — Galp Power OPC (610 linhas)
 
 ### sobre-declaração (ratio > 1,25): 144 linhas
 
@@ -3890,13 +3927,17 @@
 | `VLG-00056-02` | `VLG-00056` | iec62196T2COMBO | mode4DC | 500 V / 32 A / 22 kW / 16 kW | 1,38 |
 | `VVD-00023-01` | `VVD-00023` | iec62196T2 | mode2AC1p | 500 V / 32 A / 22 kW / 16 kW | 1,38 |
 
-### sub-declaração (ratio < 0,75): 456 linhas
+### sub-declaração (ratio < 0,75): 466 linhas
 
 | ponto | site | tomada | modo | tensão / corrente / declarada / esperada | ratio |
 |---|---|---|---|---|---|
 | `LSB-01124-01` | `LSB-01124` | iec62196T2COMBO | mode4DC | 1000 V / 400 A / 50 kW / 400 kW | 0,12 |
 | `LSB-01124-02` | `LSB-01124` | iec62196T2COMBO | mode4DC | 1000 V / 400 A / 50 kW / 400 kW | 0,12 |
 | `VNF-00037-02` | `VNF-00037` | iec62196T2 | mode3AC3p | 400 V / 250 A / 22 kW / 173,21 kW | 0,13 |
+| `CBR-00164-01` | `CBR-00164` | iec62196T2COMBO | mode4DC | 1000 V / 500 A / 100 kW / 500 kW | 0,20 |
+| `CBR-00164-02` | `CBR-00164` | iec62196T2COMBO | mode4DC | 1000 V / 500 A / 100 kW / 500 kW | 0,20 |
+| `LOU-00025-01` | `LOU-00025` | iec62196T2COMBO | mode4DC | 1000 V / 500 A / 100 kW / 500 kW | 0,20 |
+| `LOU-00025-02` | `LOU-00025` | iec62196T2COMBO | mode4DC | 1000 V / 500 A / 100 kW / 500 kW | 0,20 |
 | `LSB-01122-01` | `LSB-01122` | iec62196T2COMBO | mode4DC | 950 V / 300 A / 60 kW / 285 kW | 0,21 |
 | `LSB-01122-02` | `LSB-01122` | iec62196T2COMBO | mode4DC | 950 V / 300 A / 60 kW / 285 kW | 0,21 |
 | `CSC-00516-01` | `CSC-00516` | iec62196T2COMBO | mode4DC | 1000 V / 400 A / 90 kW / 400 kW | 0,23 |
@@ -3917,6 +3958,8 @@
 | `PCV-00008-02` | `PCV-00008` | iec62196T2COMBO | mode4DC | 950 V / 200 A / 60 kW / 190 kW | 0,32 |
 | `VFR-00098-01` | `VFR-00098` | iec62196T2COMBO | mode4DC | 950 V / 300 A / 90 kW / 285 kW | 0,32 |
 | `VFR-00098-02` | `VFR-00098` | iec62196T2COMBO | mode4DC | 950 V / 300 A / 90 kW / 285 kW | 0,32 |
+| `VIS-00137-01` | `VIS-00137` | iec62196T2COMBO | mode4DC | 950 V / 300 A / 90 kW / 285 kW | 0,32 |
+| `VIS-00137-02` | `VIS-00137` | iec62196T2COMBO | mode4DC | 950 V / 300 A / 90 kW / 285 kW | 0,32 |
 | `VZL-00006-01` | `VZL-00006` | iec62196T2COMBO | mode4DC | 950 V / 300 A / 90 kW / 285 kW | 0,32 |
 | `VZL-00006-02` | `VZL-00006` | iec62196T2COMBO | mode4DC | 950 V / 300 A / 90 kW / 285 kW | 0,32 |
 | `VZL-00007-01` | `VZL-00007` | iec62196T2COMBO | mode4DC | 950 V / 300 A / 90 kW / 285 kW | 0,32 |
@@ -3992,6 +4035,10 @@
 | `AVR-00091-02` | `AVR-00091` | iec62196T2COMBO | mode4DC | 950 V / 250 A / 90 kW / 237,50 kW | 0,38 |
 | `ETR-00017-01` | `ETR-00017` | iec62196T2COMBO | mode4DC | 950 V / 250 A / 90 kW / 237,50 kW | 0,38 |
 | `ETR-00017-02` | `ETR-00017` | iec62196T2COMBO | mode4DC | 950 V / 250 A / 90 kW / 237,50 kW | 0,38 |
+| `FNC-00081-01` | `FNC-00081` | iec62196T2COMBO | mode4DC | 950 V / 250 A / 90 kW / 237,50 kW | 0,38 |
+| `FNC-00081-02` | `FNC-00081` | iec62196T2COMBO | mode4DC | 950 V / 250 A / 90 kW / 237,50 kW | 0,38 |
+| `FNC-00082-01` | `FNC-00082` | iec62196T2COMBO | mode4DC | 950 V / 250 A / 90 kW / 237,50 kW | 0,38 |
+| `FNC-00082-02` | `FNC-00082` | iec62196T2COMBO | mode4DC | 950 V / 250 A / 90 kW / 237,50 kW | 0,38 |
 | `LGS-00038-01` | `LGS-00038` | iec62196T2COMBO | mode4DC | 950 V / 250 A / 90 kW / 237,50 kW | 0,38 |
 | `LGS-00038-02` | `LGS-00038` | iec62196T2COMBO | mode4DC | 950 V / 250 A / 90 kW / 237,50 kW | 0,38 |
 | `LMG-00016-01` | `LMG-00016` | iec62196T2COMBO | mode4DC | 950 V / 250 A / 90 kW / 237,50 kW | 0,38 |
@@ -4071,6 +4118,10 @@
 | `SMA-00003-02` | `SMA-00003` | iec62196T2COMBO | mode4DC | 950 V / 150 A / 60 kW / 142,50 kW | 0,42 |
 | `SNT-00239-01` | `SNT-00239` | iec62196T2COMBO | mode4DC | 950 V / 150 A / 60 kW / 142,50 kW | 0,42 |
 | `SNT-00239-02` | `SNT-00239` | iec62196T2COMBO | mode4DC | 950 V / 150 A / 60 kW / 142,50 kW | 0,42 |
+| `STS-00056-01` | `STS-00056` | iec62196T2COMBO | mode4DC | 950 V / 300 A / 120 kW / 285 kW | 0,42 |
+| `STS-00056-02` | `STS-00056` | iec62196T2COMBO | mode4DC | 950 V / 300 A / 120 kW / 285 kW | 0,42 |
+| `STS-00059-01` | `STS-00059` | iec62196T2COMBO | mode4DC | 950 V / 300 A / 120 kW / 285 kW | 0,42 |
+| `STS-00059-02` | `STS-00059` | iec62196T2COMBO | mode4DC | 950 V / 300 A / 120 kW / 285 kW | 0,42 |
 | `SVC-00006-01` | `SVC-00006` | iec62196T2COMBO | mode4DC | 950 V / 300 A / 120 kW / 285 kW | 0,42 |
 | `SVC-00006-02` | `SVC-00006` | iec62196T2COMBO | mode4DC | 950 V / 300 A / 120 kW / 285 kW | 0,42 |
 | `TND-00021-01` | `TND-00021` | iec62196T2COMBO | mode4DC | 950 V / 150 A / 60 kW / 142,50 kW | 0,42 |
@@ -4172,10 +4223,6 @@
 | `EPS-00031-02` | `EPS-00031` | iec62196T2COMBO | mode4DC | 950 V / 250 A / 120 kW / 237,50 kW | 0,51 |
 | `EPS-00032-01` | `EPS-00032` | iec62196T2COMBO | mode4DC | 950 V / 250 A / 120 kW / 237,50 kW | 0,51 |
 | `EPS-00032-02` | `EPS-00032` | iec62196T2COMBO | mode4DC | 950 V / 250 A / 120 kW / 237,50 kW | 0,51 |
-| `FNC-00081-01` | `FNC-00081` | iec62196T2COMBO | mode4DC | 950 V / 250 A / 120 kW / 237,50 kW | 0,51 |
-| `FNC-00081-02` | `FNC-00081` | iec62196T2COMBO | mode4DC | 950 V / 250 A / 120 kW / 237,50 kW | 0,51 |
-| `FNC-00082-01` | `FNC-00082` | iec62196T2COMBO | mode4DC | 950 V / 250 A / 120 kW / 237,50 kW | 0,51 |
-| `FNC-00082-02` | `FNC-00082` | iec62196T2COMBO | mode4DC | 950 V / 250 A / 120 kW / 237,50 kW | 0,51 |
 | `GDL-00023-01` | `GDL-00023` | iec62196T2COMBO | mode4DC | 950 V / 250 A / 120 kW / 237,50 kW | 0,51 |
 | `GDL-00023-02` | `GDL-00023` | iec62196T2COMBO | mode4DC | 950 V / 250 A / 120 kW / 237,50 kW | 0,51 |
 | `LNH-00035-01` | `LNH-00035` | iec62196T2COMBO | mode4DC | 950 V / 250 A / 120 kW / 237,50 kW | 0,51 |
@@ -4586,9 +4633,9 @@
 <a id="opc-HORZ"></a>
 
 <details>
-<summary><b>HORZ — Powerdot, S.A (497 linhas)</b></summary>
+<summary><b>HORZ — Powerdot, S.A (499 linhas)</b></summary>
 
-## HORZ — Powerdot, S.A (497 linhas)
+## HORZ — Powerdot, S.A (499 linhas)
 
 ### sobre-declaração (ratio > 1,25): 81 linhas
 
@@ -4676,7 +4723,7 @@
 | `ODV-00018-02` | `ODV-00018` | iec62196T2COMBO | mode4DC | 500 V / 300 A / 200 kW / 150 kW | 1,33 |
 | `CSC-00103-06` | `CSC-00103` | iec62196T2COMBO | mode4DC | 500 V / 125 A / 80 kW / 62,50 kW | 1,28 |
 
-### sub-declaração (ratio < 0,75): 416 linhas
+### sub-declaração (ratio < 0,75): 418 linhas
 
 | ponto | site | tomada | modo | tensão / corrente / declarada / esperada | ratio |
 |---|---|---|---|---|---|
@@ -4849,6 +4896,8 @@
 | `VIS-00121-02` | `VIS-00121` | iec62196T2COMBO | mode4DC | 1000 V / 300 A / 120 kW / 300 kW | 0,40 |
 | `VNG-00209-03` | `VNG-00209` | chademo | mode4DC | 1000 V / 125 A / 50 kW / 125 kW | 0,40 |
 | `VRL-00024-01` | `VRL-00024` | iec62196T2COMBO | mode4DC | 1000 V / 300 A / 120 kW / 300 kW | 0,40 |
+| `VRL-00052-01` | `VRL-00052` | iec62196T2COMBO | mode4DC | 1000 V / 125 A / 50 kW / 125 kW | 0,40 |
+| `VRL-00052-02` | `VRL-00052` | iec62196T2COMBO | mode4DC | 1000 V / 125 A / 50 kW / 125 kW | 0,40 |
 | `CBR-00157-01` | `CBR-00157` | iec62196T2COMBO | mode4DC | 920 V / 400 A / 150 kW / 368 kW | 0,41 |
 | `CBR-00157-03` | `CBR-00157` | iec62196T2COMBO | mode4DC | 920 V / 400 A / 150 kW / 368 kW | 0,41 |
 | `ACB-00041-01` | `ACB-00041` | iec62196T2COMBO | mode4DC | 800 V / 300 A / 100 kW / 240 kW | 0,42 |
@@ -5231,6 +5280,24 @@
 
 </details>
 
+<a id="opc-MAKS"></a>
+
+<details>
+<summary><b>MAKS — Maksu (2 linhas)</b></summary>
+
+## MAKS — Maksu (2 linhas)
+
+### sub-declaração (ratio < 0,75): 2 linhas
+
+| ponto | site | tomada | modo | tensão / corrente / declarada / esperada | ratio |
+|---|---|---|---|---|---|
+| `LSB-01462-01` | `LSB-01462` | iec62196T2COMBO | mode4DC | 1000 V / 63 A / 30 kW / 63 kW | 0,48 |
+| `LSB-01463-01` | `LSB-01463` | iec62196T2COMBO | mode4DC | 1000 V / 63 A / 30 kW / 63 kW | 0,48 |
+
+[↑ índice](#indice)
+
+</details>
+
 <a id="opc-MLTR"></a>
 
 <details>
@@ -5317,11 +5384,11 @@
 <a id="opc-MOTA"></a>
 
 <details>
-<summary><b>MOTA — Mota-Engil Renewing (140 linhas)</b></summary>
+<summary><b>MOTA — Mota-Engil Renewing (166 linhas)</b></summary>
 
-## MOTA — Mota-Engil Renewing (140 linhas)
+## MOTA — Mota-Engil Renewing (166 linhas)
 
-### sub-declaração (ratio < 0,75): 140 linhas
+### sub-declaração (ratio < 0,75): 166 linhas
 
 | ponto | site | tomada | modo | tensão / corrente / declarada / esperada | ratio |
 |---|---|---|---|---|---|
@@ -5342,6 +5409,10 @@
 | `TVD-00065-02` | `TVD-00065` | iec62196T2COMBO | mode4DC | 1000 V / 250 A / 60 kW / 250 kW | 0,24 |
 | `TVD-00076-01` | `TVD-00076` | iec62196T2COMBO | mode4DC | 1000 V / 250 A / 60 kW / 250 kW | 0,24 |
 | `TVD-00076-02` | `TVD-00076` | iec62196T2COMBO | mode4DC | 1000 V / 250 A / 60 kW / 250 kW | 0,24 |
+| `ALM-00113-01` | `ALM-00113` | iec62196T2COMBO | mode4DC | 1000 V / 500 A / 150 kW / 500 kW | 0,30 |
+| `ALM-00113-02` | `ALM-00113` | iec62196T2COMBO | mode4DC | 1000 V / 500 A / 150 kW / 500 kW | 0,30 |
+| `ALM-00133-01` | `ALM-00133` | iec62196T2COMBO | mode4DC | 1000 V / 500 A / 150 kW / 500 kW | 0,30 |
+| `ALM-00133-02` | `ALM-00133` | iec62196T2COMBO | mode4DC | 1000 V / 500 A / 150 kW / 500 kW | 0,30 |
 | `ALM-00151-01` | `ALM-00151` | iec62196T2COMBO | mode4DC | 1000 V / 500 A / 150 kW / 500 kW | 0,30 |
 | `ALM-00151-02` | `ALM-00151` | iec62196T2COMBO | mode4DC | 1000 V / 500 A / 150 kW / 500 kW | 0,30 |
 | `AMT-00025-01` | `AMT-00025` | iec62196T2COMBO | mode4DC | 1000 V / 200 A / 60 kW / 200 kW | 0,30 |
@@ -5352,6 +5423,8 @@
 | `GMR-00156-02` | `GMR-00156` | iec62196T2COMBO | mode4DC | 1000 V / 200 A / 60 kW / 200 kW | 0,30 |
 | `LOU-00009-01` | `LOU-00009` | iec62196T2COMBO | mode4DC | 1000 V / 200 A / 60 kW / 200 kW | 0,30 |
 | `LOU-00009-02` | `LOU-00009` | iec62196T2COMBO | mode4DC | 1000 V / 200 A / 60 kW / 200 kW | 0,30 |
+| `MFR-00057-01` | `MFR-00057` | iec62196T2COMBO | mode4DC | 1000 V / 500 A / 150 kW / 500 kW | 0,30 |
+| `MFR-00057-02` | `MFR-00057` | iec62196T2COMBO | mode4DC | 1000 V / 500 A / 150 kW / 500 kW | 0,30 |
 | `OVR-00027-01` | `OVR-00027` | iec62196T2COMBO | mode4DC | 1000 V / 400 A / 120 kW / 400 kW | 0,30 |
 | `OVR-00027-02` | `OVR-00027` | iec62196T2COMBO | mode4DC | 1000 V / 400 A / 120 kW / 400 kW | 0,30 |
 | `PFR-00015-01` | `PFR-00015` | iec62196T2COMBO | mode4DC | 1000 V / 200 A / 60 kW / 200 kW | 0,30 |
@@ -5380,6 +5453,8 @@
 | `TVD-00078-02` | `TVD-00078` | iec62196T2COMBO | mode4DC | 1000 V / 400 A / 120 kW / 400 kW | 0,30 |
 | `TVD-00080-01` | `TVD-00080` | iec62196T2COMBO | mode4DC | 1000 V / 400 A / 120 kW / 400 kW | 0,30 |
 | `TVD-00080-02` | `TVD-00080` | iec62196T2COMBO | mode4DC | 1000 V / 400 A / 120 kW / 400 kW | 0,30 |
+| `TVD-00081-01` | `TVD-00081` | iec62196T2COMBO | mode4DC | 1000 V / 400 A / 120 kW / 400 kW | 0,30 |
+| `TVD-00081-02` | `TVD-00081` | iec62196T2COMBO | mode4DC | 1000 V / 400 A / 120 kW / 400 kW | 0,30 |
 | `VNG-00257-01` | `VNG-00257` | iec62196T2COMBO | mode4DC | 1000 V / 500 A / 150 kW / 500 kW | 0,30 |
 | `TVD-00083-01` | `TVD-00083` | iec62196T2COMBO | mode4DC | 1000 V / 375 A / 120 kW / 375 kW | 0,32 |
 | `TVD-00083-02` | `TVD-00083` | iec62196T2COMBO | mode4DC | 1000 V / 375 A / 120 kW / 375 kW | 0,32 |
@@ -5397,6 +5472,10 @@
 | `CTB-00041-02` | `CTB-00041` | iec62196T2COMBO | mode4DC | 1000 V / 300 A / 100 kW / 300 kW | 0,33 |
 | `CTB-00042-01` | `CTB-00042` | iec62196T2COMBO | mode4DC | 1000 V / 300 A / 100 kW / 300 kW | 0,33 |
 | `CTB-00042-02` | `CTB-00042` | iec62196T2COMBO | mode4DC | 1000 V / 300 A / 100 kW / 300 kW | 0,33 |
+| `FAR-00111-01` | `FAR-00111` | iec62196T2COMBO | mode4DC | 1000 V / 150 A / 50 kW / 150 kW | 0,33 |
+| `FAR-00111-02` | `FAR-00111` | iec62196T2COMBO | mode4DC | 1000 V / 150 A / 50 kW / 150 kW | 0,33 |
+| `FAR-00112-01` | `FAR-00112` | iec62196T2COMBO | mode4DC | 1000 V / 150 A / 50 kW / 150 kW | 0,33 |
+| `FAR-00112-02` | `FAR-00112` | iec62196T2COMBO | mode4DC | 1000 V / 150 A / 50 kW / 150 kW | 0,33 |
 | `TVD-00053-01` | `TVD-00053` | iec62196T2COMBO | mode4DC | 1000 V / 250 A / 90 kW / 250 kW | 0,36 |
 | `VLC-00019-01` | `VLC-00019` | iec62196T2COMBO | mode4DC | 1000 V / 125 A / 45 kW / 125 kW | 0,36 |
 | `VLC-00019-02` | `VLC-00019` | iec62196T2COMBO | mode4DC | 1000 V / 125 A / 45 kW / 125 kW | 0,36 |
@@ -5408,8 +5487,6 @@
 | `ALM-00116-02` | `ALM-00116` | iec62196T2COMBO | mode4DC | 1000 V / 125 A / 50 kW / 125 kW | 0,40 |
 | `ALM-00120-01` | `ALM-00120` | iec62196T2COMBO | mode4DC | 1000 V / 375 A / 150 kW / 375 kW | 0,40 |
 | `ALM-00120-02` | `ALM-00120` | iec62196T2COMBO | mode4DC | 1000 V / 375 A / 150 kW / 375 kW | 0,40 |
-| `ALM-00133-01` | `ALM-00133` | iec62196T2COMBO | mode4DC | 1000 V / 375 A / 150 kW / 375 kW | 0,40 |
-| `ALM-00133-02` | `ALM-00133` | iec62196T2COMBO | mode4DC | 1000 V / 375 A / 150 kW / 375 kW | 0,40 |
 | `ALM-00146-01` | `ALM-00146` | iec62196T2COMBO | mode4DC | 1000 V / 125 A / 50 kW / 125 kW | 0,40 |
 | `ALM-00146-02` | `ALM-00146` | iec62196T2COMBO | mode4DC | 1000 V / 125 A / 50 kW / 125 kW | 0,40 |
 | `CHV-00028-01` | `CHV-00028` | iec62196T2COMBO | mode4DC | 1000 V / 375 A / 150 kW / 375 kW | 0,40 |
@@ -5461,6 +5538,22 @@
 | `LSB-00865-02` | `LSB-00865` | iec62196T2COMBO | mode4DC | 950 V / 120 A / 60 kW / 114 kW | 0,53 |
 | `CHV-00031-02` | `CHV-00031` | chademo | mode4DC | 500 V / 200 A / 60 kW / 100 kW | 0,60 |
 | `CHV-00032-02` | `CHV-00032` | chademo | mode4DC | 500 V / 200 A / 60 kW / 100 kW | 0,60 |
+| `FAR-00108-01` | `FAR-00108` | iec62196T2COMBO | mode4DC | 1000 V / 500 A / 300 kW / 500 kW | 0,60 |
+| `FAR-00108-02` | `FAR-00108` | iec62196T2COMBO | mode4DC | 1000 V / 500 A / 300 kW / 500 kW | 0,60 |
+| `FAR-00109-01` | `FAR-00109` | iec62196T2COMBO | mode4DC | 1000 V / 500 A / 300 kW / 500 kW | 0,60 |
+| `FAR-00109-02` | `FAR-00109` | iec62196T2COMBO | mode4DC | 1000 V / 500 A / 300 kW / 500 kW | 0,60 |
+| `FAR-00110-01` | `FAR-00110` | iec62196T2COMBO | mode4DC | 1000 V / 500 A / 300 kW / 500 kW | 0,60 |
+| `FAR-00110-02` | `FAR-00110` | iec62196T2COMBO | mode4DC | 1000 V / 500 A / 300 kW / 500 kW | 0,60 |
+| `FAR-00113-01` | `FAR-00113` | iec62196T2COMBO | mode4DC | 1000 V / 500 A / 300 kW / 500 kW | 0,60 |
+| `FAR-00113-02` | `FAR-00113` | iec62196T2COMBO | mode4DC | 1000 V / 500 A / 300 kW / 500 kW | 0,60 |
+| `FAR-00114-01` | `FAR-00114` | iec62196T2COMBO | mode4DC | 1000 V / 500 A / 300 kW / 500 kW | 0,60 |
+| `FAR-00114-02` | `FAR-00114` | iec62196T2COMBO | mode4DC | 1000 V / 500 A / 300 kW / 500 kW | 0,60 |
+| `FAR-00115-01` | `FAR-00115` | iec62196T2COMBO | mode4DC | 1000 V / 500 A / 300 kW / 500 kW | 0,60 |
+| `FAR-00115-02` | `FAR-00115` | iec62196T2COMBO | mode4DC | 1000 V / 500 A / 300 kW / 500 kW | 0,60 |
+| `VIS-00119-01` | `VIS-00119` | iec62196T2COMBO | mode4DC | 1000 V / 500 A / 300 kW / 500 kW | 0,60 |
+| `VIS-00119-02` | `VIS-00119` | iec62196T2COMBO | mode4DC | 1000 V / 500 A / 300 kW / 500 kW | 0,60 |
+| `VIS-00131-01` | `VIS-00131` | iec62196T2COMBO | mode4DC | 1000 V / 500 A / 300 kW / 500 kW | 0,60 |
+| `VIS-00131-02` | `VIS-00131` | iec62196T2COMBO | mode4DC | 1000 V / 500 A / 300 kW / 500 kW | 0,60 |
 | `ALM-00070-01` | `ALM-00070` | iec62196T2COMBO | mode4DC | 1000 V / 300 A / 200 kW / 300 kW | 0,67 |
 | `ALM-00070-02` | `ALM-00070` | iec62196T2COMBO | mode4DC | 1000 V / 300 A / 200 kW / 300 kW | 0,67 |
 | `ALM-00070-03` | `ALM-00070` | iec62196T2COMBO | mode4DC | 1000 V / 300 A / 200 kW / 300 kW | 0,67 |
@@ -5515,11 +5608,11 @@
 <a id="opc-PRIO"></a>
 
 <details>
-<summary><b>PRIO — Prio.E Mobility Solutions, Lda (124 linhas)</b></summary>
+<summary><b>PRIO — Prio.E Mobility Solutions, Lda (126 linhas)</b></summary>
 
-## PRIO — Prio.E Mobility Solutions, Lda (124 linhas)
+## PRIO — Prio.E Mobility Solutions, Lda (126 linhas)
 
-### sub-declaração (ratio < 0,75): 124 linhas
+### sub-declaração (ratio < 0,75): 126 linhas
 
 | ponto | site | tomada | modo | tensão / corrente / declarada / esperada | ratio |
 |---|---|---|---|---|---|
@@ -5627,6 +5720,8 @@
 | `GMR-00138-02` | `GMR-00138` | iec62196T2COMBO | mode4DC | 950 V / 300 A / 150 kW / 285 kW | 0,53 |
 | `SVV-00006-01` | `SVV-00006` | iec62196T2COMBO | mode4DC | 950 V / 300 A / 150 kW / 285 kW | 0,53 |
 | `SVV-00006-02` | `SVV-00006` | iec62196T2COMBO | mode4DC | 950 V / 300 A / 150 kW / 285 kW | 0,53 |
+| `VIS-00136-01` | `VIS-00136` | iec62196T2COMBO | mode4DC | 950 V / 300 A / 150 kW / 285 kW | 0,53 |
+| `VIS-00136-02` | `VIS-00136` | iec62196T2COMBO | mode4DC | 950 V / 300 A / 150 kW / 285 kW | 0,53 |
 | `SAT-00002-01` | `SAT-00002` | chademo | mode4DC | 750 V / 150 A / 60 kW / 112,50 kW | 0,53 |
 | `SAT-00002-02` | `SAT-00002` | iec62196T2COMBO | mode4DC | 750 V / 150 A / 60 kW / 112,50 kW | 0,53 |
 | `VNP-00002-01` | `VNP-00002` | chademo | mode4DC | 750 V / 150 A / 60 kW / 112,50 kW | 0,53 |
@@ -5728,9 +5823,9 @@
 <a id="opc-REPS"></a>
 
 <details>
-<summary><b>REPS — REPSOL Portuguesa Lda (204 linhas)</b></summary>
+<summary><b>REPS — REPSOL Portuguesa Lda (203 linhas)</b></summary>
 
-## REPS — REPSOL Portuguesa Lda (204 linhas)
+## REPS — REPSOL Portuguesa Lda (203 linhas)
 
 ### sobre-declaração (ratio > 1,25): 179 linhas
 
@@ -5916,7 +6011,7 @@
 | `CVL-00057-02` | `CVL-00057` | iec62196T2COMBO | mode4DC | 400 V / 200 A / 120 kW / 80 kW | 1,50 |
 | `LLE-00253-01` | `LLE-00253` | iec62196T2COMBO | mode4DC | 400 V / 250 A / 150 kW / 100 kW | 1,50 |
 
-### sub-declaração (ratio < 0,75): 25 linhas
+### sub-declaração (ratio < 0,75): 24 linhas
 
 | ponto | site | tomada | modo | tensão / corrente / declarada / esperada | ratio |
 |---|---|---|---|---|---|
@@ -5937,7 +6032,6 @@
 | `LRA-00182-02` | `LRA-00182` | iec62196T2COMBO | mode4DC | 750 V / 150 A / 60 kW / 112,50 kW | 0,53 |
 | `OER-00279-01` | `OER-00279` | iec62196T2COMBO | mode4DC | 800 V / 200 A / 90 kW / 160 kW | 0,56 |
 | `LLE-00253-02` | `LLE-00253` | chademo | mode4DC | 800 V / 125 A / 60 kW / 100 kW | 0,60 |
-| `PT-REP-E18473-2` | `FIG-00073` | iec62196T2COMBO | mode4DC | 800 V / 250 A / 120 kW / 200 kW | 0,60 |
 | `STS-00062-01` | `STS-00062` | iec62196T2COMBO | mode4DC | 800 V / 250 A / 120 kW / 200 kW | 0,60 |
 | `STS-00062-02` | `STS-00062` | iec62196T2COMBO | mode4DC | 800 V / 250 A / 120 kW / 200 kW | 0,60 |
 | `VFX-00137-01` | `VFX-00137` | iec62196T2COMBO | mode4DC | 800 V / 250 A / 120 kW / 200 kW | 0,60 |
@@ -7627,11 +7721,11 @@
 <a id="opc-VIAV"></a>
 
 <details>
-<summary><b>VIAV — Via Verde Transição Energética, S.A. (6 linhas)</b></summary>
+<summary><b>VIAV — Via Verde Transição Energética, S.A. (18 linhas)</b></summary>
 
-## VIAV — Via Verde Transição Energética, S.A. (6 linhas)
+## VIAV — Via Verde Transição Energética, S.A. (18 linhas)
 
-### sub-declaração (ratio < 0,75): 6 linhas
+### sub-declaração (ratio < 0,75): 18 linhas
 
 | ponto | site | tomada | modo | tensão / corrente / declarada / esperada | ratio |
 |---|---|---|---|---|---|
@@ -7641,6 +7735,18 @@
 | `618` | `OER-00286` | iec62196T2COMBO | mode4DC | 1000 V / 600 A / 400 kW / 600 kW | 0,67 |
 | `619` | `OER-00287` | iec62196T2COMBO | mode4DC | 1000 V / 600 A / 400 kW / 600 kW | 0,67 |
 | `620` | `OER-00287` | iec62196T2COMBO | mode4DC | 1000 V / 600 A / 400 kW / 600 kW | 0,67 |
+| `651` | `TRF-00023` | iec62196T2COMBO | mode4DC | 1000 V / 600 A / 400 kW / 600 kW | 0,67 |
+| `653` | `TRF-00023` | iec62196T2COMBO | mode4DC | 1000 V / 600 A / 400 kW / 600 kW | 0,67 |
+| `654` | `TRF-00024` | iec62196T2COMBO | mode4DC | 1000 V / 600 A / 400 kW / 600 kW | 0,67 |
+| `655` | `TRF-00024` | iec62196T2COMBO | mode4DC | 1000 V / 600 A / 400 kW / 600 kW | 0,67 |
+| `656` | `TRF-00025` | iec62196T2COMBO | mode4DC | 1000 V / 600 A / 400 kW / 600 kW | 0,67 |
+| `657` | `TRF-00025` | iec62196T2COMBO | mode4DC | 1000 V / 600 A / 400 kW / 600 kW | 0,67 |
+| `658` | `TRF-00026` | iec62196T2COMBO | mode4DC | 1000 V / 600 A / 400 kW / 600 kW | 0,67 |
+| `660` | `TRF-00026` | iec62196T2COMBO | mode4DC | 1000 V / 600 A / 400 kW / 600 kW | 0,67 |
+| `661` | `TRF-00027` | iec62196T2COMBO | mode4DC | 1000 V / 600 A / 400 kW / 600 kW | 0,67 |
+| `662` | `TRF-00027` | iec62196T2COMBO | mode4DC | 1000 V / 600 A / 400 kW / 600 kW | 0,67 |
+| `663` | `TRF-00028` | iec62196T2COMBO | mode4DC | 1000 V / 600 A / 400 kW / 600 kW | 0,67 |
+| `664` | `TRF-00028` | iec62196T2COMBO | mode4DC | 1000 V / 600 A / 400 kW / 600 kW | 0,67 |
 
 [↑ índice](#indice)
 

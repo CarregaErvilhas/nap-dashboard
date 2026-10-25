@@ -1,104 +1,104 @@
-# Anomalias — dados estáticos NAP (2026-10-19, snapshot 2026-10-19T03:00:03.925Z)
+# Anomalias — dados estáticos NAP (2026-10-25, snapshot 2026-10-25)
 
-Totais: 8 733 sites, 19 259 pontos distintos (19 376 linhas de conector), 92 OPCs (mais 101 sites sem operador). Sem teto global violado (máx. 600 kW). 6 777 linhas de conector com potência anómala (3 222 sobre-declarações `ratio > 1.25`, 3 555 sub-declarações `ratio < 0.75`). As contagens de potência batem com `Agents-outputs/anomalias-evidence.csv` + `Agents-outputs/anomalias-details.md` (gerados por `scripts/anomalias_evidence.py`; as tabelas abaixo mostram ≤10 linhas e linkam ambos quando truncam). `impossíveis` = linhas/sites afetados por achados CRÍTICOS; `suspeitos` = restantes (ALTO/MÉDIO/BAIXO); um mesmo id pode contar em mais de uma categoria.
+Totais: 8776 sites, 19477 linhas de conector (19345 point_id distintos), 8776 site_id distintos, 92 OPCs (+ 104 sites sem operador).
 
 ## Resumo por OPC
 
 | OPC (id — nome) | sites | pontos | impossíveis | suspeitos | categorias |
 |---|---|---|---|---|---|
-| TRUE — WOWPLUG | 760 | 1521 | 1342 | 113 | sobre, sub, dup, localidade, metadados |
-| ATLA — Atlante Infra Portugal, S.A | 598 | 1381 | 419 | 262 | sobre, sub, identificador de ponto com espaço inicial, operador, localidade, metadados |
-| EPKS — Telpark | 35 | 370 | 322 | 422 | sobre, sub, tensão, eMI3, metadados |
-| EDPC — EDP Comercial | 1679 | 3523 | 297 | 902 | sobre, sub, tensão, dup, formato, localidade, metadados, conector |
-| CONT — Modelo Continente Hipermercados, S.A. | 450 | 954 | 246 | 2457 | sobre, sub, tensão, localização, localidade, metadados |
-| REPS — REPSOL Portuguesa Lda | 222 | 577 | 181 | 96 | sobre, sub, combo, formato, eMI3, operador, localidade, metadados |
-| GLPP — Galp Power OPC | 1598 | 3420 | 157 | 792 | sobre, sub, combo, dup, formato, operador, localidade, metadados |
-| (sem operador) — sites sem `operator_id` | 101 | 211 | 116 | 583 | sobre, sub, tensão, operador, localização, localidade, metadados |
-| HORZ — Powerdot, S.A | 785 | 2135 | 81 | 510 | sobre, sub, localidade, metadados |
-| TSLA — Tesla | 9 | 192 | 64 | 613 | sub, combo, teto, dup, localidade, metadados |
-| PRIO — Prio.E Mobility Solutions, Lda | 161 | 292 | 54 | 134 | sub, dup, localidade |
-| FCTO — Iberdrola \| bp pulse | 297 | 707 | 53 | 459 | sub, tensão, teto, dup, operador, localidade, metadados, conector |
-| HEXA — HEXAGONAL OCEAN, LDA | 38 | 76 | 34 | 2 | sobre, operador |
-| EMEL — EMEL - Empresa Municipal de Mobilidade e Estacionamento de Lisboa, E.M., S.A. | 83 | 184 | 26 | 17 | sobre, formato, operador, metadados |
-| ACCI — ACCIONA RECARGA PORTUGAL,UNIPESSOAL LDA | 14 | 25 | 22 | 30 | sub, dup, operador, metadados |
-| HIGH — High Green Power, Unipessoal Lda. | 40 | 43 | 16 | 36 | dup, operador, localidade, metadados |
-| MOON — Siva - Sociedade de Importação de Veículos Automóveis / (sub-CEME da Iberdola) | 26 | 49 | 14 | 15 | sobre, sub, dup, eMI3 |
-| IBRD — Iberdrola Clientes Portugal, Unipessoal, Lda | 189 | 371 | 10 | 44 | sub, dup, formato, localidade, metadados |
-| VIAV — Via Verde Transição Energética, S.A. | 5 | 13 | 9 | 10 | sub, dup, localidade |
-| KLCS — Kilometer Low Cost II Serviços, SA | 88 | 109 | 8 | 20 | sobre, sub, dup, formato, operador, metadados |
-| EVCE — EVCE POWER, LDA. / MOBISMART | 51 | 89 | 6 | 17 | sobre, sub |
-| MLTR — Mobiletric | 108 | 222 | 4 | 28 | sobre, sub, formato, operador |
-| GLPG — Galpgeste | 123 | 319 | 3 | 74 | sobre, sub, operador, localidade |
-| NRGS — Original Sunenergy, Lda | 7 | 16 | 3 | 1 | sobre, sub |
-| EMAC — EMACOM - Telecomunicações da Madeira, Unipessoal, Lda | 25 | 44 | 2 | 2 | sub, dup |
-| ALFA — Alfa Energia | 13 | 25 | 2 | 2 | sub, dup |
-| EVGR — Green Evolut, LDA | 6 | 10 | 2 | 0 | dup |
-| EVIO — EVIO - Electrical Mobility | 21 | 35 | 1 | 12 | sobre, sub, metadados |
-| HELX — Helexia II Energy Services, Lda. | 234 | 451 | 0 | 180 | sub, localidade, metadados |
-| MOTA — Mota-Engil Renewing | 175 | 312 | 0 | 145 | sub, metadados |
-| CEPS — Cepsa Portuguesa Petroleos | 34 | 61 | 0 | 64 | sub, localidade, metadados |
-| DTEI — DTE, Instalacoes Especiais | 85 | 200 | 0 | 56 | sub, metadados |
-| REMO — MOTA-ENGIL REMO CHARGING S.A | 16 | 38 | 0 | 38 | sub |
-| ECOI — Ecoinside - Soluções em Ecoeficiência e Sustentabilidade Lda | 57 | 145 | 0 | 33 | sub, operador, metadados |
-| ZUND — Grupo Easycharger, SL | 14 | 27 | 0 | 26 | sub, metadados |
-| ENBL — Enable Mobility Solutions, S.A. | 24 | 53 | 0 | 24 | sub |
-| SEGM — SEGMA - Serviços de Engenharia Gestão e Manutenção Lda | 73 | 134 | 0 | 14 | operador |
-| LOGI — uCharge | 26 | 35 | 0 | 12 | sub, localidade |
-| IONY — IONITY GmbH | 20 | 106 | 0 | 9 | localidade |
-| LOUL — Loulé Concelho Global, EM | 33 | 70 | 0 | 8 | sub, operador |
-| CIRC — Circuitos Energy Solutions, Lda. | 12 | 22 | 0 | 8 | sub, operador |
-| CAPW — Capwatt Services | 14 | 74 | 0 | 6 | operador |
-| LUSI — LUSIADAENERGIA, S.A. | 14 | 25 | 0 | 5 | sub, metadados |
-| CMEL — CME | 22 | 23 | 0 | 4 | formato |
-| GENJ — Generation Journey Lda | 21 | 41 | 0 | 4 | sub, operador |
-| IHOM — iHome Lda | 6 | 10 | 0 | 4 | sub |
-| FRTR — FRONTROW, LDA | 5 | 8 | 0 | 4 | sub |
-| BBGE — BBG Energia Unipessoal, Lda | 2 | 3 | 0 | 4 | operador, metadados |
-| EVPW — EVpower, Charging Solutions Lda | 22 | 46 | 0 | 3 | formato |
-| PTER — PETROTERMICA ENERGIA, S.A. | 2 | 4 | 0 | 3 | sub |
-| CSCP — Cascais Proxima | 8 | 16 | 0 | 2 | operador |
-| CEVE — CEVE - Cooperativa Eléctrica do Vale D’Este C.R.L. | 4 | 10 | 0 | 2 | operador |
-| BRIG — Brightcity S.A. | 2 | 4 | 0 | 2 | sub |
-| SFAF — Superfafe- supermercados,lda | 2 | 6 | 0 | 2 | sub |
-| SGMR — Superguimarães - Supermercados,lda | 2 | 6 | 0 | 2 | sub |
-| WENE — WENEA SERVICES SPAIN S.L. | 2 | 4 | 0 | 2 | sub |
-| VEIM — Veimonte Lda | 20 | 35 | 0 | 1 | sub |
-| GREE — GREEN CHARGE - MOBILIDADE ELÉTRICA, LDA | 16 | 17 | 0 | 1 | operador |
-| PARI — Parinox Energia | 6 | 7 | 0 | 1 | sub |
-| MAKS — Maksu | 47 | 47 | 0 | 0 | — |
-| FACT — FactorENERGIA | 38 | 76 | 0 | 0 | — |
-| PLUG — e-Plug, Lda | 31 | 62 | 0 | 0 | — |
-| EZC3 — EZ - CHARG3, Lda | 15 | 15 | 0 | 0 | — |
-| GOLD — Gold Energy | 9 | 16 | 0 | 0 | — |
-| BELM — Blk Mobility, LDA | 7 | 17 | 0 | 0 | — |
-| CARG — Cargga Inteligente | 6 | 12 | 0 | 0 | — |
-| VISA — VISACASA - SERVIÇOS DE ASSISTÊNCIA E MANUTENÇÃO GLOBAL S.A. | 6 | 14 | 0 | 0 | — |
-| BLUE — Bluecharge, Lda | 5 | 10 | 0 | 0 | — |
-| GASF — GASFOMENTO - Sistemas e Instalações de Gás, S.A. | 5 | 16 | 0 | 0 | — |
-| IMAG — Image4all - Eficiência Energética, Comunicação e Imagem | 5 | 9 | 0 | 0 | — |
-| MOBA — MOBI A - Mobilidade e Ambiente, Lda | 5 | 10 | 0 | 0 | — |
-| MOBI — MOBIE | 5 | 10 | 0 | 0 | — |
-| EVAE — EVAZ Energy, LDA | 4 | 9 | 0 | 0 | — |
-| NEUR — Neureifen - Electric Mobility, Lda | 4 | 8 | 0 | 0 | — |
-| SOLX — SOLX | 4 | 8 | 0 | 0 | — |
+| EDPC — EDP Comercial | 1684 | 3534 | 297 | 5694 | 13 categorias |
+| CONT — Modelo Continente Hipermercados, S.A. | 450 | 954 | 294 | 5362 | 13 categorias |
+| GLPP — Galp Power OPC | 1603 | 3430 | 157 | 5440 | 10 categorias |
+| ATLA — Atlante Infra Portugal, S.A | 598 | 1381 | 419 | 2300 | 8 categorias |
+| HORZ — Powerdot, S.A | 786 | 2138 | 81 | 1917 | 8 categorias |
+| TSLA — Tesla | 9 | 192 | 64 | 1723 | 15 categorias |
+| EPKS — Telpark | 36 | 381 | 353 | 1394 | 10 categorias |
+| TRUE — WOWPLUG | 760 | 1521 | 1342 | 217 | 6 categorias |
+| SEMOPC — (sem operador identificado) | 104 | 219 | 122 | 1298 | 14 categorias |
+| FCTO — Iberdrola \| bp pulse | 304 | 720 | 74 | 1233 | 10 categorias |
+| REPS — REPSOL Portuguesa Lda | 221 | 575 | 181 | 717 | 10 categorias |
+| GLPG — Galpgeste | 123 | 319 | 3 | 641 | 5 categorias |
+| PRIO — Prio.E Mobility Solutions, Lda | 162 | 294 | 54 | 435 | 6 categorias |
+| MLTR — Mobiletric | 108 | 222 | 4 | 369 | 5 categorias |
+| EMEL — EMEL - Empresa Municipal de Mobilidade e Estacionamento de Lisboa, E.M., S.A. | 83 | 184 | 26 | 111 | 4 categorias |
+| VIAV — Via Verde Transição Energética, S.A. | 11 | 27 | 23 | 113 | 7 categorias |
+| CEPS — Cepsa Portuguesa Petroleos | 35 | 63 | 2 | 132 | 5 categorias |
+| IBRD — Iberdrola Clientes Portugal, Unipessoal, Lda | 189 | 371 | 10 | 100 | 6 categorias |
+| ACCI — ACCIONA RECARGA PORTUGAL,UNIPESSOAL LDA | 14 | 25 | 22 | 66 | 7 categorias |
+| MOON — Siva - Sociedade de Importação de Veículos Automóveis / (sub-CEME da Iberdola) | 26 | 49 | 14 | 51 | 6 categorias |
+| KLCS — Kilometer Low Cost II Serviços, SA | 88 | 109 | 12 | 48 | 8 categorias |
+| EVCE — EVCE POWER, LDA. / MOBISMART | 51 | 89 | 6 | 42 | 4 categorias |
+| EVIO — EVIO - Electrical Mobility | 21 | 35 | 1 | 41 | 5 categorias |
+| HEXA — HEXAGONAL OCEAN, LDA | 38 | 76 | 34 | 6 | 3 categorias |
+| HIGH — High Green Power, Unipessoal Lda. | 38 | 40 | 15 | 24 | 5 categorias |
+| EMAC — EMACOM - Telecomunicações da Madeira, Unipessoal, Lda | 25 | 44 | 2 | 28 | 4 categorias |
+| NRGS — Original Sunenergy, Lda | 7 | 16 | 3 | 15 | 4 categorias |
+| EVGR — Green Evolut, LDA | 6 | 10 | 2 | 6 | 2 categorias |
+| ALFA — Alfa Energia | 13 | 25 | 2 | 4 | 3 categorias |
+| HELX — Helexia II Energy Services, Lda. | 234 | 451 | 0 | 465 | 5 categorias |
+| MOTA — Mota-Engil Renewing | 189 | 340 | 0 | 391 | 4 categorias |
+| IONY — IONITY GmbH | 20 | 106 | 0 | 362 | 5 categorias |
+| DTEI — DTE, Instalacoes Especiais | 85 | 200 | 0 | 154 | 3 categorias |
+| ECOI — ECOINSIDE | 57 | 145 | 0 | 107 | 5 categorias |
+| REMO — MOTA-ENGIL REMO CHARGING S.A | 16 | 38 | 0 | 78 | 3 categorias |
+| ENBL — Enable Mobility Solutions, S.A. | 24 | 53 | 0 | 74 | 3 categorias |
+| ZUND — Grupo Easycharger, SL | 14 | 27 | 0 | 52 | 3 categorias |
+| PLUG — e-Plug, Lda | 31 | 62 | 0 | 30 | 2 categorias |
+| LOGI — uCharge | 26 | 35 | 0 | 25 | 3 categorias |
+| EVPW — EVpower, Charging Solutions Lda | 22 | 46 | 0 | 17 | 1 categorias |
+| VEIM — Veimonte Lda | 20 | 35 | 0 | 16 | 3 categorias |
+| MAKS — Maksu | 49 | 49 | 0 | 15 | 4 categorias |
+| CIRC — Circuitos Energy Solutions, Lda. | 12 | 22 | 0 | 14 | 3 categorias |
+| CEVE — CEVE - Cooperativa Eléctrica do Vale D’Este C.R.L. | 4 | 10 | 0 | 11 | 2 categorias |
+| IHOM — iHome Lda | 6 | 10 | 0 | 11 | 2 categorias |
+| LOUL — Loulé Concelho Global, EM | 33 | 70 | 0 | 11 | 2 categorias |
+| FACT — FactorENERGIA | 38 | 76 | 0 | 10 | 2 categorias |
+| FRTR — FRONTROW, LDA | 5 | 8 | 0 | 10 | 3 categorias |
+| GENJ — Generation Journey Lda | 21 | 41 | 0 | 10 | 3 categorias |
+| LUSI — LUSIADAENERGIA, S.A. | 14 | 25 | 0 | 10 | 4 categorias |
+| PTER — PETROTERMICA ENERGIA, S.A. | 2 | 4 | 0 | 9 | 3 categorias |
+| SEGM — SEGMA - Serviços de Engenharia Gestão e Manutenção Lda | 73 | 134 | 0 | 9 | 2 categorias |
+| BBGE — BBG Energia Unipessoal, Lda | 2 | 3 | 0 | 8 | 3 categorias |
+| MOBI — MOBIE | 5 | 10 | 0 | 8 | 2 categorias |
+| CMEL — CME | 22 | 23 | 0 | 7 | 2 categorias |
+| BELM — Blk Mobility, LDA | 7 | 17 | 0 | 6 | 1 categorias |
+| BINT — Bluint - Engenharia e Tecnologias Integradas, Unipessoal, Lda | 2 | 4 | 0 | 6 | 2 categorias |
+| GASF — GASFOMENTO - Sistemas e Instalações de Gás, S.A. | 5 | 16 | 0 | 6 | 1 categorias |
+| SFAF — Superfafe- supermercados,lda | 2 | 6 | 0 | 6 | 2 categorias |
+| SGMR — Superguimarães - Supermercados,lda | 2 | 6 | 0 | 6 | 2 categorias |
+| WENE — WENEA SERVICES SPAIN S.L. | 2 | 4 | 0 | 6 | 2 categorias |
+| CAPW — Capwatt Services, S.A. | 14 | 74 | 0 | 5 | 1 categorias |
+| CSCP — Cascais Próxima | 8 | 16 | 0 | 5 | 1 categorias |
+| BRIG — Brightcity S.A. | 2 | 4 | 0 | 4 | 2 categorias |
+| EVAE — EVAZ Energy, LDA | 4 | 9 | 0 | 4 | 1 categorias |
+| PARI — Parinox Energia | 6 | 7 | 0 | 4 | 2 categorias |
+| PROP — PROPEL - PRODUTOS DE PETRÓLEO, LDA | 2 | 6 | 0 | 4 | 1 categorias |
+| SDBR — SodiBraga - Supermercados Lda | 2 | 6 | 0 | 4 | 1 categorias |
+| VISA — VISACASA - SERVIÇOS DE ASSISTÊNCIA E MANUTENÇÃO GLOBAL S.A. | 6 | 14 | 0 | 4 | 1 categorias |
+| CARG — Cargga Inteligente | 6 | 12 | 0 | 2 | 1 categorias |
+| EZUR — Ezu Energia | 2 | 4 | 0 | 2 | 1 categorias |
+| GRCA — Grcapp, Unipessoal Lda | 1 | 2 | 0 | 2 | 1 categorias |
+| INVP — Intervilapraia | 1 | 3 | 0 | 2 | 1 categorias |
+| KPMS — KPM Serviços de Engenheria, Unip Lda | 1 | 3 | 0 | 2 | 1 categorias |
+| SARE — Superareosa Supermercados, Lda | 1 | 3 | 0 | 2 | 1 categorias |
+| SOLX — SOLX | 4 | 8 | 0 | 2 | 1 categorias |
+| PACO — PACORP, LDA | 1 | 1 | 0 | 1 | 1 categorias |
+| PQTJ — Parques Tejo, E.M. | 2 | 2 | 0 | 2 | 1 categorias |
 | AUCH — Auchan Retail Portugal S.A | 3 | 3 | 0 | 0 | — |
+| BLUE — Bluecharge, Lda | 5 | 10 | 0 | 0 | — |
 | CONM — ConectaMais, Lda | 3 | 6 | 0 | 0 | — |
-| SCRZ — Município de Santa Cruz | 3 | 3 | 0 | 0 | — |
-| BINT — Bluint - Engenharia e Tecnologias Integradas, Unipessoal, Lda | 2 | 4 | 0 | 0 | — |
 | EMOB — Emobtec - Tec. Mobilidade Elétrica, unipessoal Lda | 2 | 4 | 0 | 0 | — |
 | EPOC — EPOCH | 2 | 5 | 0 | 0 | — |
-| EZUR — Ezu Energia | 2 | 4 | 0 | 0 | — |
-| PQTJ — Parques Tejo, E.M. | 2 | 2 | 0 | 0 | — |
-| PROP — PROPEL - PRODUTOS DE PETRÓLEO, LDA | 2 | 6 | 0 | 0 | — |
-| SDBR — SodiBraga - Supermercados Lda | 2 | 6 | 0 | 0 | — |
-| SILV — Silver Ridge - Asset Management | 2 | 4 | 0 | 0 | — |
+| EZC3 — EZ - CHARG3, Lda | 15 | 15 | 0 | 0 | — |
 | FRIO — Distrifrio Supermercados, Lda | 1 | 2 | 0 | 0 | — |
-| GRCA — Grcapp, Unipessoal Lda | 1 | 2 | 0 | 0 | — |
-| INVP — Intervilapraia | 1 | 3 | 0 | 0 | — |
-| KPMS — KPM Serviços de Engenheria, Unip Lda | 1 | 3 | 0 | 0 | — |
+| GOLD — Gold Energy | 9 | 16 | 0 | 0 | — |
+| GREE — GREEN CHARGE - MOBILIDADE ELÉTRICA, LDA | 16 | 17 | 0 | 0 | — |
+| IMAG — Image4all - Eficiência Energética, Comunicação e Imagem | 5 | 9 | 0 | 0 | — |
 | MEOE — MEO Energia - Comercialização de Energia, SA | 1 | 2 | 0 | 0 | — |
-| PACO — PACORP, LDA | 1 | 1 | 0 | 0 | — |
-| SARE — Superareosa Supermercados, Lda | 1 | 3 | 0 | 0 | — |
+| MOBA — MOBI A - Mobilidade e Ambiente, Lda | 5 | 10 | 0 | 0 | — |
+| NEUR — Neureifen - Electric Mobility, Lda | 4 | 8 | 0 | 0 | — |
+| SCRZ — Município de Santa Cruz | 3 | 3 | 0 | 0 | — |
+| SILV — Silver Ridge - Asset Management | 2 | 4 | 0 | 0 | — |
 
 <a id="indice"></a>
 
@@ -106,603 +106,163 @@ Totais: 8 733 sites, 19 259 pontos distintos (19 376 linhas de conector), 92 OPC
 
 ## Índice
 
-- [Índice](#sec-ndice) · 82 MÉDIO, 52 BAIXO, 37 CRÍTICO, 5 ALTO
+- [Índice](#sec-ndice) · 169 MÉDIO, 88 BAIXO, 45 CRÍTICO, 10 ALTO
 
 <a id="sec-ndice"></a>
 
 <details open>
-<summary><b>Índice</b> · 82 MÉDIO, 52 BAIXO, 37 CRÍTICO, 5 ALTO</summary>
+<summary><b>Índice</b> · 169 MÉDIO, 88 BAIXO, 45 CRÍTICO, 10 ALTO</summary>
 
-- [GLPP — Galp Power OPC (1598 sites, 3420 pontos)](#opc-GLPP) · 3 CRÍTICO, 3 MÉDIO, 3 BAIXO
-- [TSLA — Tesla (9 sites, 192 pontos)](#opc-TSLA) · 3 CRÍTICO, 2 MÉDIO, 2 BAIXO
-- [TRUE — WOWPLUG (760 sites, 1521 pontos)](#opc-TRUE) · 2 CRÍTICO, 2 MÉDIO, 1 BAIXO
-- [EDPC — EDP Comercial (1679 sites, 3523 pontos)](#opc-EDPC) · 4 MÉDIO, 2 CRÍTICO, 1 ALTO, 1 BAIXO
-- [REPS — REPSOL Portuguesa Lda (222 sites, 577 pontos)](#opc-REPS) · 4 MÉDIO, 2 CRÍTICO, 2 BAIXO
-- [MOON — Siva - Sociedade de Importação de Veículos Automóveis / (sub-CEME da Iberdola) (26 sites, 49 pontos)](#opc-MOON) · 2 CRÍTICO, 2 MÉDIO
-- [KLCS — Kilometer Low Cost II Serviços, SA (88 sites, 109 pontos)](#opc-KLCS) · 2 CRÍTICO, 2 MÉDIO, 2 BAIXO
-- [CONT — Modelo Continente Hipermercados, S.A. (450 sites, 954 pontos)](#opc-CONT) · 3 MÉDIO, 2 BAIXO, 1 CRÍTICO, 1 ALTO
-- [EPKS — Telpark (35 sites, 370 pontos)](#opc-EPKS) · 3 MÉDIO, 1 CRÍTICO, 1 BAIXO
-- [(sem operador) — sites sem `operator_id` (101 sites, 211 pontos)](#sec-sem-operador-sites-sem-operator-id-101-sites-211-pontos) · 3 MÉDIO, 2 ALTO, 2 BAIXO, 1 CRÍTICO
-- [ATLA — Atlante Infra Portugal, S.A (598 sites, 1381 pontos)](#opc-ATLA) · 3 BAIXO, 2 MÉDIO, 1 CRÍTICO
-- [HORZ — Powerdot, S.A (785 sites, 2135 pontos)](#opc-HORZ) · 2 MÉDIO, 1 CRÍTICO, 1 BAIXO
-- [FCTO — Iberdrola | bp pulse (297 sites, 707 pontos)](#opc-FCTO) · 4 MÉDIO, 2 BAIXO, 1 CRÍTICO, 1 ALTO
-- [PRIO — Prio.E Mobility Solutions, Lda (161 sites, 292 pontos)](#opc-PRIO) · 2 MÉDIO, 1 CRÍTICO
-- [GLPG — Galpgeste (123 sites, 319 pontos)](#opc-GLPG) · 2 MÉDIO, 1 CRÍTICO, 1 BAIXO
-- [IBRD — Iberdrola Clientes Portugal, Unipessoal, Lda (189 sites, 371 pontos)](#opc-IBRD) · 3 MÉDIO, 1 CRÍTICO, 1 BAIXO
-- [ACCI — ACCIONA RECARGA PORTUGAL,UNIPESSOAL LDA (14 sites, 25 pontos)](#opc-ACCI) · 2 BAIXO, 1 CRÍTICO, 1 MÉDIO
-- [HIGH — High Green Power, Unipessoal Lda. (40 sites, 43 pontos)](#opc-HIGH) · 2 BAIXO, 1 CRÍTICO, 1 MÉDIO
-- [EMEL — EMEL - Empresa Municipal de Mobilidade e Estacionamento de Lisboa, E.M., S.A. (83 sites, 184 pontos)](#opc-EMEL) · 2 BAIXO, 1 CRÍTICO, 1 MÉDIO
-- [HEXA — HEXAGONAL OCEAN, LDA (38 sites, 76 pontos)](#opc-HEXA) · 1 CRÍTICO, 1 BAIXO
-- [MLTR — Mobiletric (108 sites, 222 pontos)](#opc-MLTR) · 2 MÉDIO, 1 CRÍTICO, 1 BAIXO
-- [EVCE — EVCE POWER, LDA. / MOBISMART (51 sites, 89 pontos)](#opc-EVCE) · 1 CRÍTICO, 1 MÉDIO
-- [VIAV — Via Verde Transição Energética, S.A. (5 sites, 13 pontos)](#opc-VIAV) · 2 MÉDIO, 1 CRÍTICO
-- [EVIO — EVIO - Electrical Mobility (21 sites, 35 pontos)](#opc-EVIO) · 1 CRÍTICO, 1 MÉDIO, 1 BAIXO
-- [ALFA — Alfa Energia (13 sites, 25 pontos)](#opc-ALFA) · 1 CRÍTICO, 1 MÉDIO
-- [EMAC — EMACOM - Telecomunicações da Madeira, Unipessoal, Lda (25 sites, 44 pontos)](#opc-EMAC) · 1 CRÍTICO, 1 MÉDIO
-- [NRGS — Original Sunenergy, Lda (7 sites, 16 pontos)](#opc-NRGS) · 1 CRÍTICO, 1 MÉDIO
-- [EVGR — Green Evolut, LDA (6 sites, 10 pontos)](#opc-EVGR) · 1 CRÍTICO
-- [HELX — Helexia II Energy Services, Lda. (234 sites, 451 pontos)](#opc-HELX) · 2 MÉDIO, 1 BAIXO
-- [MOTA — Mota-Engil Renewing (175 sites, 312 pontos)](#opc-MOTA) · 1 MÉDIO, 1 BAIXO
-- [CEPS — Cepsa Portuguesa Petroleos (34 sites, 61 pontos)](#opc-CEPS) · 2 MÉDIO, 1 BAIXO
-- [DTEI — DTE, Instalacoes Especiais (85 sites, 200 pontos)](#opc-DTEI) · 1 MÉDIO, 1 BAIXO
-- [REMO — MOTA-ENGIL REMO CHARGING S.A (16 sites, 38 pontos)](#opc-REMO) · 1 MÉDIO
-- [ECOI — Ecoinside - Soluções em Ecoeficiência e Sustentabilidade Lda (57 sites, 145 pontos)](#opc-ECOI) · 2 BAIXO, 1 MÉDIO
-- [ZUND — Grupo Easycharger, SL (14 sites, 27 pontos)](#opc-ZUND) · 1 MÉDIO, 1 BAIXO
-- [ENBL — Enable Mobility Solutions, S.A. (24 sites, 53 pontos)](#opc-ENBL) · 1 MÉDIO
-- [SEGM — SEGMA - Serviços de Engenharia Gestão e Manutenção Lda (73 sites, 134 pontos)](#opc-SEGM) · 1 BAIXO
-- [LOGI — uCharge (26 sites, 35 pontos)](#opc-LOGI) · 2 MÉDIO
-- [IONY — IONITY GmbH (20 sites, 106 pontos)](#opc-IONY) · 1 BAIXO
-- [CIRC — Circuitos Energy Solutions, Lda. (12 sites, 22 pontos)](#opc-CIRC) · 1 MÉDIO, 1 BAIXO
-- [LOUL — Loulé Concelho Global, EM (33 sites, 70 pontos)](#opc-LOUL) · 1 MÉDIO, 1 BAIXO
-- [CAPW — Capwatt Services (14 sites, 74 pontos)](#opc-CAPW) · 1 BAIXO
-- [LUSI — LUSIADAENERGIA, S.A. (14 sites, 25 pontos)](#opc-LUSI) · 1 MÉDIO, 1 BAIXO
-- [BBGE — BBG Energia Unipessoal, Lda (2 sites, 3 pontos)](#opc-BBGE) · 2 BAIXO
-- [CMEL — CME (22 sites, 23 pontos)](#opc-CMEL) · 1 MÉDIO
-- [FRTR — FRONTROW, LDA (5 sites, 8 pontos)](#opc-FRTR) · 1 MÉDIO
-- [GENJ — Generation Journey Lda (21 sites, 41 pontos)](#opc-GENJ) · 1 MÉDIO, 1 BAIXO
-- [IHOM — iHome Lda (6 sites, 10 pontos)](#opc-IHOM) · 1 MÉDIO
+- [EDPC — EDP Comercial (1684 sites, 3534 pontos)](#opc-EDPC) · 5 ALTO, 3 MÉDIO, 3 BAIXO, 2 CRÍTICO
+- [CONT — Modelo Continente Hipermercados, S.A. (450 sites, 954 pontos)](#opc-CONT) · 7 BAIXO, 3 MÉDIO, 2 CRÍTICO, 1 ALTO
+- [GLPP — Galp Power OPC (1603 sites, 3430 pontos)](#opc-GLPP) · 4 CRÍTICO, 3 MÉDIO, 3 BAIXO
+- [ATLA — Atlante Infra Portugal, S.A (598 sites, 1381 pontos)](#opc-ATLA) · 4 MÉDIO, 3 BAIXO, 1 CRÍTICO
+- [HORZ — Powerdot, S.A (786 sites, 2138 pontos)](#opc-HORZ) · 4 BAIXO, 3 MÉDIO, 1 CRÍTICO
+- [TSLA — Tesla (9 sites, 192 pontos)](#opc-TSLA) · 8 BAIXO, 4 MÉDIO, 3 CRÍTICO
+- [EPKS — Telpark (36 sites, 381 pontos)](#opc-EPKS) · 5 BAIXO, 3 MÉDIO, 2 CRÍTICO
+- [TRUE — WOWPLUG (760 sites, 1521 pontos)](#opc-TRUE) · 3 MÉDIO, 2 CRÍTICO, 1 BAIXO
+- [SEMOPC — (sem operador identificado) (104 sites, 219 pontos)](#opc-SEMOPC) · 7 BAIXO, 3 MÉDIO, 2 CRÍTICO, 2 ALTO
+- [FCTO — Iberdrola | bp pulse (304 sites, 720 pontos)](#opc-FCTO) · 4 MÉDIO, 3 BAIXO, 2 CRÍTICO, 1 ALTO
+- [REPS — REPSOL Portuguesa Lda (221 sites, 575 pontos)](#opc-REPS) · 4 MÉDIO, 3 CRÍTICO, 3 BAIXO
+- [GLPG — Galpgeste (123 sites, 319 pontos)](#opc-GLPG) · 3 MÉDIO, 1 CRÍTICO, 1 BAIXO
+- [PRIO — Prio.E Mobility Solutions, Lda (162 sites, 294 pontos)](#opc-PRIO) · 3 MÉDIO, 2 BAIXO, 1 CRÍTICO
+- [MLTR — Mobiletric (108 sites, 222 pontos)](#opc-MLTR) · 3 MÉDIO, 1 CRÍTICO, 1 BAIXO
+- [EMEL — EMEL - Empresa Municipal de Mobilidade e Estacionamento de Lisboa, E.M., S.A. (83 sites, 184 pontos)](#opc-EMEL) · 2 MÉDIO, 1 CRÍTICO, 1 BAIXO
+- [VIAV — Via Verde Transição Energética, S.A. (11 sites, 27 pontos)](#opc-VIAV) · 3 MÉDIO, 2 BAIXO, 1 CRÍTICO, 1 ALTO
+- [CEPS — Cepsa Portuguesa Petroleos (35 sites, 63 pontos)](#opc-CEPS) · 3 MÉDIO, 1 CRÍTICO, 1 BAIXO
+- [IBRD — Iberdrola Clientes Portugal, Unipessoal, Lda (189 sites, 371 pontos)](#opc-IBRD) · 3 MÉDIO, 2 BAIXO, 1 CRÍTICO
+- [ACCI — ACCIONA RECARGA PORTUGAL,UNIPESSOAL LDA (14 sites, 25 pontos)](#opc-ACCI) · 3 MÉDIO, 3 BAIXO, 1 CRÍTICO
+- [MOON — Siva - Sociedade de Importação de Veículos Automóveis / (sub-CEME da Iberdola) (26 sites, 49 pontos)](#opc-MOON) · 3 MÉDIO, 2 CRÍTICO, 1 BAIXO
+- [KLCS — Kilometer Low Cost II Serviços, SA (88 sites, 109 pontos)](#opc-KLCS) · 3 CRÍTICO, 3 MÉDIO, 2 BAIXO
+- [EVCE — EVCE POWER, LDA. / MOBISMART (51 sites, 89 pontos)](#opc-EVCE) · 3 MÉDIO, 1 CRÍTICO
+- [EVIO — EVIO - Electrical Mobility (21 sites, 35 pontos)](#opc-EVIO) · 2 MÉDIO, 2 BAIXO, 1 CRÍTICO
+- [HEXA — HEXAGONAL OCEAN, LDA (38 sites, 76 pontos)](#opc-HEXA) · 2 MÉDIO, 1 CRÍTICO
+- [HIGH — High Green Power, Unipessoal Lda. (38 sites, 40 pontos)](#opc-HIGH) · 3 BAIXO, 1 CRÍTICO, 1 MÉDIO
+- [EMAC — EMACOM - Telecomunicações da Madeira, Unipessoal, Lda (25 sites, 44 pontos)](#opc-EMAC) · 3 MÉDIO, 1 CRÍTICO
+- [NRGS — Original Sunenergy, Lda (7 sites, 16 pontos)](#opc-NRGS) · 3 MÉDIO, 1 CRÍTICO
+- [EVGR — Green Evolut, LDA (6 sites, 10 pontos)](#opc-EVGR) · 1 CRÍTICO, 1 BAIXO
+- [ALFA — Alfa Energia (13 sites, 25 pontos)](#opc-ALFA) · 2 MÉDIO, 1 CRÍTICO
+- [HELX — Helexia II Energy Services, Lda. (234 sites, 451 pontos)](#opc-HELX) · 3 MÉDIO, 2 BAIXO
+- [MOTA — Mota-Engil Renewing (189 sites, 340 pontos)](#opc-MOTA) · 2 MÉDIO, 2 BAIXO
+- [IONY — IONITY GmbH (20 sites, 106 pontos)](#opc-IONY) · 3 MÉDIO, 2 BAIXO
+- [DTEI — DTE, Instalacoes Especiais (85 sites, 200 pontos)](#opc-DTEI) · 2 MÉDIO, 1 BAIXO
+- [ECOI — ECOINSIDE (57 sites, 145 pontos)](#opc-ECOI) · 4 MÉDIO, 1 BAIXO
+- [REMO — MOTA-ENGIL REMO CHARGING S.A (16 sites, 38 pontos)](#opc-REMO) · 3 MÉDIO
+- [ENBL — Enable Mobility Solutions, S.A. (24 sites, 53 pontos)](#opc-ENBL) · 2 MÉDIO, 1 BAIXO
+- [ZUND — Grupo Easycharger, SL (14 sites, 27 pontos)](#opc-ZUND) · 2 MÉDIO, 1 BAIXO
+- [PLUG — e-Plug, Lda (31 sites, 62 pontos)](#opc-PLUG) · 2 MÉDIO
+- [LOGI — uCharge (26 sites, 35 pontos)](#opc-LOGI) · 3 MÉDIO
 - [EVPW — EVpower, Charging Solutions Lda (22 sites, 46 pontos)](#opc-EVPW) · 1 MÉDIO
-- [PTER — PETROTERMICA ENERGIA, S.A. (2 sites, 4 pontos)](#opc-PTER) · 1 MÉDIO
-- [BRIG — Brightcity S.A. (2 sites, 4 pontos)](#opc-BRIG) · 1 MÉDIO
-- [CEVE — CEVE - Cooperativa Eléctrica do Vale D’Este C.R.L. (4 sites, 10 pontos)](#opc-CEVE) · 1 BAIXO
-- [CSCP — Cascais Proxima (8 sites, 16 pontos)](#opc-CSCP) · 1 BAIXO
-- [SFAF — Superfafe- supermercados,lda (2 sites, 6 pontos)](#opc-SFAF) · 1 MÉDIO
-- [SGMR — Superguimarães - Supermercados,lda (2 sites, 6 pontos)](#opc-SGMR) · 1 MÉDIO
-- [WENE — WENEA SERVICES SPAIN S.L. (2 sites, 4 pontos)](#opc-WENE) · 1 MÉDIO
-- [GREE — GREEN CHARGE - MOBILIDADE ELÉTRICA, LDA (16 sites, 17 pontos)](#opc-GREE) · 1 BAIXO
-- [PARI — Parinox Energia (6 sites, 7 pontos)](#opc-PARI) · 1 MÉDIO
-- [VEIM — Veimonte Lda (20 sites, 35 pontos)](#opc-VEIM) · 1 MÉDIO
-
-<a id="opc-GLPP"></a>
-
-<details open>
-<summary><b>GLPP — Galp Power OPC (1598 sites, 3420 pontos)</b> · 3 CRÍTICO, 3 MÉDIO, 3 BAIXO</summary>
-
-### [CRÍTICO] Potência sobre-declarada
-
-- **Regra:** `ratio = declarada / (V × I)` (monofásico AC e DC) ou `/ (√3 × V × I)` (`mode3AC3p`); `ratio > 1.25` = fisicamente impossível (capacidade excedida).
-
-- **Afetados:** 144 de 3422 linhas de conector (4%). Exemplos: `LGS-00013-02`, `LGS-00013`, `LGS-00014-02`, `LGS-00014`
-
-- **Evidência:**
-
-| point_id | site | tomada | modo | V / A / P declarada / esperada (kW) | ratio |
-|---|---|---|---|---|---|
-| `LGS-00013-02` | `LGS-00013` | iec62196T2 | mode2AC1p | 240/32/22/7,68 | 2,87 |
-| `LGS-00014-02` | `LGS-00014` | iec62196T2 | mode2AC1p | 240/32/22/7,68 | 2,87 |
-| `TVD-00028-02` | `TVD-00028` | iec62196T2COMBO | mode4DC | 500/120/120/60 | 2,00 |
-| `TVD-00029-02` | `TVD-00029` | iec62196T2COMBO | mode4DC | 500/120/120/60 | 2,00 |
-| `TVD-00030-02` | `TVD-00030` | iec62196T2COMBO | mode4DC | 500/120/120/60 | 2,00 |
-| `LLE-00256-01` | `LLE-00256` | iec62196T2 | mode3AC3p | 400/16/22/11,09 | 1,99 |
-| `PRT-00098-03` | `PRT-00098` | iec62196T2 | mode3AC3p | 400/32/43/22,17 | 1,94 |
-| `PRT-00099-03` | `PRT-00099` | iec62196T2 | mode3AC3p | 400/32/43/22,17 | 1,94 |
-| `VFR-00075-03` | `VFR-00075` | iec62196T2 | mode3AC3p | 400/32/43/22,17 | 1,94 |
-| `LRS-80003-01` | `LRS-80003` | iec62196T2 | mode2AC1p | 240/16/7,40/3,84 | 1,93 |
-| … | … | … | … | … | +134 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-GLPP)) |
-
-- **Veredito:** impossível — a potência declarada excede o produto V×I; padrão recorrente de potência do posto colada na tomada ou convenção de reporte errada.
-
-### [CRÍTICO] Combinação tomada/modo impossível
-
-- **Regra:** Tomadas só-DC (`chademo`, `iec62196T1COMBO`, `iec62196T2COMBO`, pantógrafos) em `mode1*`/`mode2*`/`mode3*`, ou tomadas só-AC (`iec62196T2`, `iec60309x2*`, `cee3`/`cee5`, `domestic*`) em `mode4DC`/`ccs`.
-
-- **Afetados:** 10 linhas de conector. Exemplos: `STB-00035-01`, `STB-00035`, `STB-00035-03`
-
-- **Evidência:**
-
-| point_id | site | tomada | modo |
-|---|---|---|---|
-| `STB-00035-01` | `STB-00035` | chademo | mode3AC3p |
-| `STB-00035-03` | `STB-00035` | iec62196T2 | mode4DC |
-| `SSB-00009-01` | `SSB-00009` | chademo | mode3AC3p |
-| `LSB-00655-01` | `LSB-00655` | chademo | mode3AC3p |
-| `ODV-00047-01` | `ODV-00047` | iec62196T2 | mode4DC |
-| `AMD-00110-01` | `AMD-00110` | iec62196T2 | mode4DC |
-| `CSC-00413-01` | `CSC-00413` | chademo | mode3AC3p |
-| `OVR-00032-01` | `OVR-00032` | iec62196T2 | mode4DC |
-| `VNG-00199-03` | `VNG-00199` | iec62196T2 | mode4DC |
-| `CTB-00057-01` | `CTB-00057` | iec62196T2 | mode4DC |
-
-- **Veredito:** impossível — AC e DC não são compatíveis; modo ou tomada trocados no inventário.
-
-### [CRÍTICO] Chave duplicada (`point_id`)
-
-- **Regra:** `point_id` identifica a tomada; duplicado = linhas fantasma ou conectores churnados sem limpeza.
-
-- **Afetados:** 3 linhas em 1 chaves duplicadas. Exemplos: `ABF-00061-01`, `ABF-00061`, `ABF-00061-02`, `VNC-90001-01`
-
-- **Evidência:**
-
-| point_id | site | ocorrências |
-|---|---|---|
-| `ABF-00061-01` | `ABF-00061` | 3 |
-| … | … | +2 restantes nos CSVs |
-
-- **Veredito:** impossível (chave) — chave da tomada duplicada; linhas fantasma ou churn não limpo.
-
-### [MÉDIO] Potência sub-declarada
-
-- **Regra:** `ratio < 0.75` = derating suspeito ou erro de introdução; `ratio = declarada / esperada`.
-
-- **Afetados:** 456 de 3422 linhas de conector (13%). Exemplos: `LSB-01124-01`, `LSB-01124`, `LSB-01124-02`
-
-- **Evidência:**
-
-| point_id | site | tomada | modo | V / A / P declarada / esperada (kW) | ratio |
-|---|---|---|---|---|---|
-| `LSB-01124-01` | `LSB-01124` | iec62196T2COMBO | mode4DC | 1000/400/50/400 | 0,12 |
-| `LSB-01124-02` | `LSB-01124` | iec62196T2COMBO | mode4DC | 1000/400/50/400 | 0,12 |
-| `VNF-00037-02` | `VNF-00037` | iec62196T2 | mode3AC3p | 400/250/22/173,21 | 0,13 |
-| `LSB-01122-01` | `LSB-01122` | iec62196T2COMBO | mode4DC | 950/300/60/285 | 0,21 |
-| `LSB-01122-02` | `LSB-01122` | iec62196T2COMBO | mode4DC | 950/300/60/285 | 0,21 |
-| `CSC-00516-01` | `CSC-00516` | iec62196T2COMBO | mode4DC | 1000/400/90/400 | 0,23 |
-| `CSC-00516-02` | `CSC-00516` | iec62196T2COMBO | mode4DC | 1000/400/90/400 | 0,23 |
-| `PRT-00316-01` | `PRT-00316` | iec62196T2COMBO | mode4DC | 1000/150/40/150 | 0,27 |
-| `PRT-00316-02` | `PRT-00316` | iec62196T2COMBO | mode4DC | 1000/150/40/150 | 0,27 |
-| `AVV-00015-01` | `AVV-00015` | iec62196T2COMBO | mode4DC | 950/300/90/285 | 0,32 |
-| … | … | … | … | … | +446 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-GLPP)) |
-
-- **Veredito:** suspeito — potência declarada muito abaixo de V×I; derating do posto partilhado ou número trocado. Rever contra a chapa do posto.
-
-### [MÉDIO] Formato de conector incompatível com o modo
-
-- **Regra:** `cableMode2` só com `mode1*`/`mode2*`; `cableMode3`/`socket` com `mode3*`; `otherCable` só com `mode4DC`/`ccs`.
-
-- **Afetados:** 122 linhas de conector. Exemplos: `MOBI-LSB-00266-01`, `MOBI-LSB-00266`, `MOBI-LSB-00108-01`, `MOBI-LSB-00108`
-
-- **Evidência:**
-
-| point_id | site | formato | modo |
-|---|---|---|---|
-| `MOBI-LSB-00266-01` | `MOBI-LSB-00266` | cableMode3 | mode2AC1p |
-| `MOBI-LSB-00108-01` | `MOBI-LSB-00108` | cableMode3 | mode2AC1p |
-| `MOBI-LSB-00099-01` | `MOBI-LSB-00099` | cableMode3 | mode2AC1p |
-| `MOBI-LSB-00263-01` | `MOBI-LSB-00263` | cableMode3 | mode2AC1p |
-| `MOBI-LSB-00115-01` | `MOBI-LSB-00115` | cableMode3 | mode2AC1p |
-| `MOBI-LSB-00260-01` | `MOBI-LSB-00260` | cableMode3 | mode2AC1p |
-| `MOBI-LSB-00104-01` | `MOBI-LSB-00104` | cableMode3 | mode2AC1p |
-| `MOBI-LSB-00100-01` | `MOBI-LSB-00100` | cableMode3 | mode2AC1p |
-| `MOBI-LSB-00102-01` | `MOBI-LSB-00102` | cableMode3 | mode2AC1p |
-| `MOBI-LSB-00106-01` | `MOBI-LSB-00106` | cableMode3 | mode2AC1p |
-| … | … | … | +112 restantes nos CSVs |
-
-- **Veredito:** suspeito — formato de cabo/tomada incoerente com o modo declarado; corrigir o par.
-
-### [MÉDIO] Localidade divergente do CP7 (CP4→cidade modal)
-
-- **Regra:** Agrupa-se por CP4 (4 primeiros dígitos) e toma-se a `city` modal dos CP4 com ≥5 sites; par (CP4 → `city`) divergente = suspeito.
-
-- **Afetados:** 35 sites. Exemplos: `TVD-00026`, `VFR-00064`, `VFR-00058`, `VFR-00065`
-
-- **Evidência:**
-
-| site | postcode | city | cidade modal do CP4 |
-|---|---|---|---|
-| `TVD-00026` | 4460-841 | Torres Vedras | Matosinhos |
-| `VFR-00064` | 3700-000 | Santa Maria da Feira | São João da Madeira |
-| `VFR-00058` | 3700-738 | Santa Maria da Feira | São João da Madeira |
-| `VFR-00065` | 3700-000 | Santa Maria da Feira | São João da Madeira |
-| `LRS-90025` | 2680-122 | Loures | Camarate |
-| `FAR-90003` | 8900-201 | Faro | Vila Real de Santo António |
-| `VCT-90005` | 3500-233 | Viana do Castelo | Viseu |
-| `TNV-00004` | 4460-841 | Torres Novas | Matosinhos |
-| `VFR-00034` | 4500-762 | Santa Maria da Feira | Espinho |
-| `VFR-00048` | 3700-839 | Santa Maria da Feira | São João da Madeira |
-| … | … | … | +25 restantes nos CSVs |
-
-- **Veredito:** suspeito — CP trocado ou localidade errada; CTT muda códigos e há grafias variantes.
-
-### [BAIXO] Fragmentação do nome do operador
-
-- **Regra:** Mesmo `operator_id` com várias grafias de `operator_name`; parte a identidade em relatórios e no tracker.
-
-- **Afetados:** 2 grafias; 116 de 1598 sites usam uma grafia não modal. Exemplos: `VNC-90001`, `VNF-90007`, `CLD-90001`, `FEUP-00001`
-
-- **Evidência:**
-
-| variante de nome | sites |
-|---|---|
-| Galp Power | 116 |
-| Galp Power OPC | 1482 |
-| … | +1596 restantes nos CSVs |
-
-- **Veredito:** suspeito (identidade) — fixar uma grafia única por OPC; não é erro de dados do site.
-
-### [BAIXO] Localidade ou código postal em falta/fora do formato
-
-- **Regra:** `city` vazia com `postcode` presente (ou inverso); `postcode` fora do formato CP7 `NNNN-NNN`.
-
-- **Afetados:** 3 sites. Exemplos: `OER-00064`, `VNC-90001`, `LNH-00037`, `VNF-90007`
-
-- **Evidência:**
-
-| site | campo |
-|---|---|
-| `OER-00064` | postcode 2740 |
-| `LNH-00037` | postcode 0 |
-| `OVR-00054` | postcode 380-225 |
-
-- **Veredito:** suspeito (metadados) — normalizar a morada; não impede a localização por coordenadas.
-
-### [BAIXO] Metadados em falta
-
-- **Regra:** `usage_type`, `auth_methods` ou `brands_accepted` vazios no inventário estático.
-
-- **Afetados:** 60 campos em falta (60 `usage_type`, 0 `auth_methods`, 0 `brands_accepted`). Exemplos: `MTJ-00128-01`, `MTJ-00128-02`, `MTJ-00129-01`, `MTJ-00129-02`
-
-- **Evidência:**
-
-| id | campo em falta |
-|---|---|
-| `MTJ-00128-01` | usage_type |
-| `MTJ-00128-02` | usage_type |
-| `MTJ-00129-01` | usage_type |
-| `MTJ-00129-02` | usage_type |
-| … | +56 restantes nos CSVs |
-
-- **Veredito:** suspeito (metadados) — preencher os campos; não afecta a física do ponto.
-
-[↑ índice](#indice)
-
-</details>
-
-<a id="opc-TSLA"></a>
-
-<details open>
-<summary><b>TSLA — Tesla (9 sites, 192 pontos)</b> · 3 CRÍTICO, 2 MÉDIO, 2 BAIXO</summary>
-
-### [CRÍTICO] Combinação tomada/modo impossível
-
-- **Regra:** Tomadas só-DC (`chademo`, `iec62196T1COMBO`, `iec62196T2COMBO`, pantógrafos) em `mode1*`/`mode2*`/`mode3*`, ou tomadas só-AC (`iec62196T2`, `iec60309x2*`, `cee3`/`cee5`, `domestic*`) em `mode4DC`/`ccs`.
-
-- **Afetados:** 16 linhas de conector. Exemplos: `991aebcb-011c-45f4-ba5a-ebe4cb586397`, `0cf4786b-f469-4eab-a793-fdc5b01e45a5`, `10681d21-e216-45ff-a4d9-54149a618967`
-
-- **Evidência:**
-
-| point_id | site | tomada | modo |
-|---|---|---|---|
-| `991aebcb-011c-45f4-ba5a-ebe4cb586397` | `0cf4786b-f469-4eab-a793-fdc5b01e45a5` | iec62196T2 | mode4DC |
-| `10681d21-e216-45ff-a4d9-54149a618967` | `0cf4786b-f469-4eab-a793-fdc5b01e45a5` | iec62196T2 | mode4DC |
-| `82f925bc-b169-453d-a35d-60429ffc94bc` | `0cf4786b-f469-4eab-a793-fdc5b01e45a5` | iec62196T2 | mode4DC |
-| `ccfce8d6-5a3c-45da-ac74-f64be3f5d6d1` | `0cf4786b-f469-4eab-a793-fdc5b01e45a5` | iec62196T2 | mode4DC |
-| `05b8e450-9d32-45c9-9c55-3b041a96bb8e` | `0cf4786b-f469-4eab-a793-fdc5b01e45a5` | iec62196T2 | mode4DC |
-| `a65d0b83-d08c-4c8a-9671-59ee37ae57b3` | `0cf4786b-f469-4eab-a793-fdc5b01e45a5` | iec62196T2 | mode4DC |
-| `6367681a-cfe3-421f-be2e-1cd4361a7b02` | `0cf4786b-f469-4eab-a793-fdc5b01e45a5` | iec62196T2 | mode4DC |
-| `bb006f74-1884-4bb7-bcf7-419a43cab4fe` | `0cf4786b-f469-4eab-a793-fdc5b01e45a5` | iec62196T2 | mode4DC |
-| `3aaeef54-74d5-45cd-8571-5cd73bb30c74` | `fff4f058-9075-4833-96f5-e021cb263344` | iec62196T2 | mode4DC |
-| `3bab25ab-ac08-4895-9c94-82f2d8cc23a1` | `fff4f058-9075-4833-96f5-e021cb263344` | iec62196T2 | mode4DC |
-| … | … | … | +6 restantes nos CSVs |
-
-- **Veredito:** impossível — AC e DC não são compatíveis; modo ou tomada trocados no inventário.
-
-### [CRÍTICO] Potência acima do teto da tomada
-
-- **Regra:** Teto físico por família de tomada (Type2 ≤ 50 kW, CCS ≤ 500 kW, CHAdeMO ≤ 400 kW, AC industrial ≤ 125 kW); exceder indicia potência do posto herdada pela tomada.
-
-- **Afetados:** 16 linhas de conector. Exemplos: `991aebcb-011c-45f4-ba5a-ebe4cb586397`, `0cf4786b-f469-4eab-a793-fdc5b01e45a5`, `10681d21-e216-45ff-a4d9-54149a618967`
-
-- **Evidência:**
-
-| point_id | site | tomada | P declarada (kW) | teto (kW) |
-|---|---|---|---|---|
-| `991aebcb-011c-45f4-ba5a-ebe4cb586397` | `0cf4786b-f469-4eab-a793-fdc5b01e45a5` | iec62196T2 | 150 | 50 |
-| `10681d21-e216-45ff-a4d9-54149a618967` | `0cf4786b-f469-4eab-a793-fdc5b01e45a5` | iec62196T2 | 150 | 50 |
-| `82f925bc-b169-453d-a35d-60429ffc94bc` | `0cf4786b-f469-4eab-a793-fdc5b01e45a5` | iec62196T2 | 150 | 50 |
-| `ccfce8d6-5a3c-45da-ac74-f64be3f5d6d1` | `0cf4786b-f469-4eab-a793-fdc5b01e45a5` | iec62196T2 | 150 | 50 |
-| `05b8e450-9d32-45c9-9c55-3b041a96bb8e` | `0cf4786b-f469-4eab-a793-fdc5b01e45a5` | iec62196T2 | 150 | 50 |
-| `a65d0b83-d08c-4c8a-9671-59ee37ae57b3` | `0cf4786b-f469-4eab-a793-fdc5b01e45a5` | iec62196T2 | 150 | 50 |
-| `6367681a-cfe3-421f-be2e-1cd4361a7b02` | `0cf4786b-f469-4eab-a793-fdc5b01e45a5` | iec62196T2 | 150 | 50 |
-| `bb006f74-1884-4bb7-bcf7-419a43cab4fe` | `0cf4786b-f469-4eab-a793-fdc5b01e45a5` | iec62196T2 | 150 | 50 |
-| `3aaeef54-74d5-45cd-8571-5cd73bb30c74` | `fff4f058-9075-4833-96f5-e021cb263344` | iec62196T2 | 150 | 50 |
-| `3bab25ab-ac08-4895-9c94-82f2d8cc23a1` | `fff4f058-9075-4833-96f5-e021cb263344` | iec62196T2 | 150 | 50 |
-| … | … | … | … | +6 restantes nos CSVs |
-
-- **Veredito:** impossível em Type2 (>50 kW em AC); suspeito nos restantes — valor herdado do posto ou erro de introdução.
-
-### [CRÍTICO] Chave duplicada (`point_id`)
-
-- **Regra:** `point_id` identifica a tomada; duplicado = linhas fantasma ou conectores churnados sem limpeza.
-
-- **Afetados:** 32 linhas em 16 chaves duplicadas. Exemplos: `991aebcb-011c-45f4-ba5a-ebe4cb586397`, `0cf4786b-f469-4eab-a793-fdc5b01e45a5`, `10681d21-e216-45ff-a4d9-54149a618967`, `fff4f058-9075-4833-96f5-e021cb263344`
-
-- **Evidência:**
-
-| point_id | site | ocorrências |
-|---|---|---|
-| `991aebcb-011c-45f4-ba5a-ebe4cb586397` | `0cf4786b-f469-4eab-a793-fdc5b01e45a5` | 2 |
-| `10681d21-e216-45ff-a4d9-54149a618967` | `0cf4786b-f469-4eab-a793-fdc5b01e45a5` | 2 |
-| `82f925bc-b169-453d-a35d-60429ffc94bc` | `0cf4786b-f469-4eab-a793-fdc5b01e45a5` | 2 |
-| `ccfce8d6-5a3c-45da-ac74-f64be3f5d6d1` | `0cf4786b-f469-4eab-a793-fdc5b01e45a5` | 2 |
-| `05b8e450-9d32-45c9-9c55-3b041a96bb8e` | `0cf4786b-f469-4eab-a793-fdc5b01e45a5` | 2 |
-| `a65d0b83-d08c-4c8a-9671-59ee37ae57b3` | `0cf4786b-f469-4eab-a793-fdc5b01e45a5` | 2 |
-| `6367681a-cfe3-421f-be2e-1cd4361a7b02` | `0cf4786b-f469-4eab-a793-fdc5b01e45a5` | 2 |
-| `bb006f74-1884-4bb7-bcf7-419a43cab4fe` | `0cf4786b-f469-4eab-a793-fdc5b01e45a5` | 2 |
-| `3aaeef54-74d5-45cd-8571-5cd73bb30c74` | `fff4f058-9075-4833-96f5-e021cb263344` | 2 |
-| `3bab25ab-ac08-4895-9c94-82f2d8cc23a1` | `fff4f058-9075-4833-96f5-e021cb263344` | 2 |
-| … | … | +22 restantes nos CSVs |
-
-- **Veredito:** impossível (chave) — chave da tomada duplicada; linhas fantasma ou churn não limpo.
-
-### [MÉDIO] Potência sub-declarada
-
-- **Regra:** `ratio < 0.75` = derating suspeito ou erro de introdução; `ratio = declarada / esperada`.
-
-- **Afetados:** 176 de 208 linhas de conector (85%). Exemplos: `00711859-da1d-4a63-893b-6cc8fc274e86`, `b798e614-a4b7-45ba-9a5f-8b1dfbc009b4`, `027ad7f9-f371-4437-a6da-0b6ec4da001f`, `24a78962-ea22-4aa2-ad71-7413f8a68166`
-
-- **Evidência:**
-
-| point_id | site | tomada | modo | V / A / P declarada / esperada (kW) | ratio |
-|---|---|---|---|---|---|
-| `00711859-da1d-4a63-893b-6cc8fc274e86` | `b798e614-a4b7-45ba-9a5f-8b1dfbc009b4` | iec62196T2COMBO | mode4DC | 470/1000/250/470 | 0,53 |
-| `027ad7f9-f371-4437-a6da-0b6ec4da001f` | `24a78962-ea22-4aa2-ad71-7413f8a68166` | iec62196T2COMBO | mode4DC | 470/1000/250/470 | 0,53 |
-| `03f9f115-bff1-4586-b74c-1a6b6a8649c6` | `d9df0db6-7829-4f68-be57-13dbb28dbae1` | iec62196T2COMBO | mode4DC | 470/1000/250/470 | 0,53 |
-| `04661d10-e5ae-44ad-b33d-1f6b51d15d75` | `b798e614-a4b7-45ba-9a5f-8b1dfbc009b4` | iec62196T2COMBO | mode4DC | 470/1000/250/470 | 0,53 |
-| `0631cb91-2af5-4dcd-8e74-976dfe22bcc8` | `381a4acf-82a3-4799-bd23-291aa7c319a6` | iec62196T2COMBO | mode4DC | 470/1000/250/470 | 0,53 |
-| `06323b5a-bf23-4ed8-a17f-49e1559ca036` | `eddf8de0-ea2f-4d4a-90d4-f0e5639662a1` | iec62196T2COMBO | mode4DC | 470/1000/250/470 | 0,53 |
-| `0af37b73-21fc-41fe-8dd4-e22cd35e9d90` | `fe9fc57f-14eb-42a4-aa2e-14e270053cab` | iec62196T2COMBO | mode4DC | 470/1000/250/470 | 0,53 |
-| `0b58286d-ae1b-403b-830b-dc5e6669ee70` | `381a4acf-82a3-4799-bd23-291aa7c319a6` | iec62196T2COMBO | mode4DC | 470/1000/250/470 | 0,53 |
-| `0d906ad0-be63-4404-9085-6b0511eec768` | `381a4acf-82a3-4799-bd23-291aa7c319a6` | iec62196T2COMBO | mode4DC | 470/1000/250/470 | 0,53 |
-| `0e8c694a-24b0-458e-bad1-21fcb39ae58d` | `eddf8de0-ea2f-4d4a-90d4-f0e5639662a1` | iec62196T2COMBO | mode4DC | 470/1000/250/470 | 0,53 |
-| … | … | … | … | … | +166 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-TSLA)) |
-
-- **Veredito:** suspeito — potência declarada muito abaixo de V×I; derating do posto partilhado ou número trocado. Rever contra a chapa do posto.
-
-### [MÉDIO] Localidade divergente do CP7 (CP4→cidade modal)
-
-- **Regra:** Agrupa-se por CP4 (4 primeiros dígitos) e toma-se a `city` modal dos CP4 com ≥5 sites; par (CP4 → `city`) divergente = suspeito.
-
-- **Afetados:** 3 sites. Exemplos: `d9df0db6-7829-4f68-be57-13dbb28dbae1`, `b798e614-a4b7-45ba-9a5f-8b1dfbc009b4`, `381a4acf-82a3-4799-bd23-291aa7c319a6`
-
-- **Evidência:**
-
-| site | postcode | city | cidade modal do CP4 |
-|---|---|---|---|
-| `d9df0db6-7829-4f68-be57-13dbb28dbae1` | 8135 | Almancil | Loulé |
-| `b798e614-a4b7-45ba-9a5f-8b1dfbc009b4` | 7580 | Alcacer do Sal | Alcácer do Sal |
-| `381a4acf-82a3-4799-bd23-291aa7c319a6` | 2495 | Fátima | Ourém |
-
-- **Veredito:** suspeito — CP trocado ou localidade errada; CTT muda códigos e há grafias variantes.
-
-### [BAIXO] Localidade ou código postal em falta/fora do formato
-
-- **Regra:** `city` vazia com `postcode` presente (ou inverso); `postcode` fora do formato CP7 `NNNN-NNN`.
-
-- **Afetados:** 9 sites. Exemplos: `d9df0db6-7829-4f68-be57-13dbb28dbae1`, `eddf8de0-ea2f-4d4a-90d4-f0e5639662a1`, `0e3f5a8c-1d5f-4e80-a7fc-33d8e7703053`, `2a031d34-94d3-4376-88fd-12f7b982d335`
-
-- **Evidência:**
-
-| site | campo |
-|---|---|
-| `d9df0db6-7829-4f68-be57-13dbb28dbae1` | postcode 8135 |
-| `eddf8de0-ea2f-4d4a-90d4-f0e5639662a1` | postcode 3050 |
-| `b798e614-a4b7-45ba-9a5f-8b1dfbc009b4` | postcode 7580 |
-| `85086418-c731-4784-86cc-e0d004445db5` | postcode 4870 |
-| `381a4acf-82a3-4799-bd23-291aa7c319a6` | postcode 2495 |
-| `24a78962-ea22-4aa2-ad71-7413f8a68166` | postcode 6000 |
-| `0cf4786b-f469-4eab-a793-fdc5b01e45a5` | postcode 6300 |
-| `fe9fc57f-14eb-42a4-aa2e-14e270053cab` | postcode 4450 |
-| `fff4f058-9075-4833-96f5-e021cb263344` | postcode 7050 |
-
-- **Veredito:** suspeito (metadados) — normalizar a morada; não impede a localização por coordenadas.
-
-### [BAIXO] Metadados em falta
-
-- **Regra:** `usage_type`, `auth_methods` ou `brands_accepted` vazios no inventário estático.
-
-- **Afetados:** 425 campos em falta (208 `usage_type`, 9 `auth_methods`, 208 `brands_accepted`). Exemplos: `0e3f5a8c-1d5f-4e80-a7fc-33d8e7703053`, `d9df0db6-7829-4f68-be57-13dbb28dbae1`, `2a031d34-94d3-4376-88fd-12f7b982d335`, `eddf8de0-ea2f-4d4a-90d4-f0e5639662a1`
-
-- **Evidência:**
-
-| id | campo em falta |
-|---|---|
-| `0e3f5a8c-1d5f-4e80-a7fc-33d8e7703053` | usage_type |
-| `2a031d34-94d3-4376-88fd-12f7b982d335` | usage_type |
-| `49ad1d56-3f77-4ad6-9f12-abd626cb05d3` | usage_type |
-| `992eef84-1129-4454-a367-797376d1b085` | usage_type |
-| `d9df0db6-7829-4f68-be57-13dbb28dbae1` | auth_methods |
-| `eddf8de0-ea2f-4d4a-90d4-f0e5639662a1` | auth_methods |
-| `b798e614-a4b7-45ba-9a5f-8b1dfbc009b4` | auth_methods |
-| `0e3f5a8c-1d5f-4e80-a7fc-33d8e7703053` | brands_accepted |
-| `2a031d34-94d3-4376-88fd-12f7b982d335` | brands_accepted |
-| `49ad1d56-3f77-4ad6-9f12-abd626cb05d3` | brands_accepted |
-| … | +415 restantes nos CSVs |
-
-- **Veredito:** suspeito (metadados) — preencher os campos; não afecta a física do ponto.
-
-[↑ índice](#indice)
-
-</details>
-
-<a id="opc-TRUE"></a>
-
-<details open>
-<summary><b>TRUE — WOWPLUG (760 sites, 1521 pontos)</b> · 2 CRÍTICO, 2 MÉDIO, 1 BAIXO</summary>
-
-### [CRÍTICO] Potência sobre-declarada
-
-- **Regra:** `ratio = declarada / (V × I)` (monofásico AC e DC) ou `/ (√3 × V × I)` (`mode3AC3p`); `ratio > 1.25` = fisicamente impossível (capacidade excedida).
-
-- **Afetados:** 1340 de 1522 linhas de conector (88%). Exemplos: `AVT-00002-01`, `AVT-00002`, `AVT-00002-02`
-
-- **Evidência:**
-
-| point_id | site | tomada | modo | V / A / P declarada / esperada (kW) | ratio |
-|---|---|---|---|---|---|
-| `AVT-00002-01` | `AVT-00002` | iec62196T2 | mode3AC3p | 230/32/22/12,75 | 1,73 |
-| `AVT-00002-02` | `AVT-00002` | iec62196T2 | mode3AC3p | 230/32/22/12,75 | 1,73 |
-| `AVT-00003-01` | `AVT-00003` | iec62196T2 | mode3AC3p | 230/32/22/12,75 | 1,73 |
-| `AVT-00003-02` | `AVT-00003` | iec62196T2 | mode3AC3p | 230/32/22/12,75 | 1,73 |
-| `AVT-00004-01` | `AVT-00004` | iec62196T2 | mode3AC3p | 230/32/22/12,75 | 1,73 |
-| `AVT-00004-02` | `AVT-00004` | iec62196T2 | mode3AC3p | 230/32/22/12,75 | 1,73 |
-| `BJA-00032-01` | `BJA-00032` | iec62196T2 | mode3AC3p | 230/32/22/12,75 | 1,73 |
-| `BJA-00032-02` | `BJA-00032` | iec62196T2 | mode3AC3p | 230/32/22/12,75 | 1,73 |
-| `BJA-00033-01` | `BJA-00033` | iec62196T2 | mode3AC3p | 230/32/22/12,75 | 1,73 |
-| `BJA-00033-02` | `BJA-00033` | iec62196T2 | mode3AC3p | 230/32/22/12,75 | 1,73 |
-| … | … | … | … | … | +1330 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-TRUE)) |
-
-- **Veredito:** impossível — a potência declarada excede o produto V×I; padrão recorrente de potência do posto colada na tomada ou convenção de reporte errada.
-
-### [CRÍTICO] Chave duplicada (`point_id`)
-
-- **Regra:** `point_id` identifica a tomada; duplicado = linhas fantasma ou conectores churnados sem limpeza.
-
-- **Afetados:** 2 linhas em 1 chaves duplicadas. Exemplos: `PCV-00005-01`, `PCV-00005`, `TMR-00004-01`, `TMR-00004-02`
-
-- **Evidência:**
-
-| point_id | site | ocorrências |
-|---|---|---|
-| `PCV-00005-01` | `PCV-00005` | 2 |
-| … | … | +1 restantes nos CSVs |
-
-- **Veredito:** impossível (chave) — chave da tomada duplicada; linhas fantasma ou churn não limpo.
-
-### [MÉDIO] Potência sub-declarada
-
-- **Regra:** `ratio < 0.75` = derating suspeito ou erro de introdução; `ratio = declarada / esperada`.
-
-- **Afetados:** 68 de 1522 linhas de conector (4%). Exemplos: `LSB-01076-01`, `LSB-01076`, `LSB-01076-02`
-
-- **Evidência:**
-
-| point_id | site | tomada | modo | V / A / P declarada / esperada (kW) | ratio |
-|---|---|---|---|---|---|
-| `LSB-01076-01` | `LSB-01076` | chademo | mode4DC | 400/320/50/128 | 0,39 |
-| `LSB-01076-02` | `LSB-01076` | iec62196T2COMBO | mode4DC | 400/320/50/128 | 0,39 |
-| `SRN-00003-01` | `SRN-00003` | iec62196T2COMBO | mode4DC | 950/288/150/273,60 | 0,55 |
-| `SRN-00003-02` | `SRN-00003` | iec62196T2COMBO | mode4DC | 950/288/150/273,60 | 0,55 |
-| `BRR-00126-01` | `BRR-00126` | iec62196T2 | mode3AC3p | 240/96/22/39,91 | 0,55 |
-| `BRR-00127-01` | `BRR-00127` | iec62196T2 | mode3AC3p | 240/96/22/39,91 | 0,55 |
-| `CMN-00014-01` | `CMN-00014` | iec62196T2 | mode3AC3p | 240/96/22/39,91 | 0,55 |
-| `CMN-00015-01` | `CMN-00015` | iec62196T2 | mode3AC3p | 240/96/22/39,91 | 0,55 |
-| `CMN-00016-01` | `CMN-00016` | iec62196T2 | mode3AC3p | 240/96/22/39,91 | 0,55 |
-| `CMN-00017-01` | `CMN-00017` | iec62196T2 | mode3AC3p | 240/96/22/39,91 | 0,55 |
-| … | … | … | … | … | +58 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-TRUE)) |
-
-- **Veredito:** suspeito — potência declarada muito abaixo de V×I; derating do posto partilhado ou número trocado. Rever contra a chapa do posto.
-
-### [MÉDIO] Localidade divergente do CP7 (CP4→cidade modal)
-
-- **Regra:** Agrupa-se por CP4 (4 primeiros dígitos) e toma-se a `city` modal dos CP4 com ≥5 sites; par (CP4 → `city`) divergente = suspeito.
-
-- **Afetados:** 25 sites. Exemplos: `BRR-00021`, `BRR-00022`, `BRR-00030`, `BRR-00028`
-
-- **Evidência:**
-
-| site | postcode | city | cidade modal do CP4 |
-|---|---|---|---|
-| `BRR-00021` | 2835-493 | Barreiro | Moita |
-| `BRR-00022` | 2835-337 | Barreiro | Moita |
-| `BRR-00030` | 2835-516 | Barreiro | Moita |
-| `BRR-00028` | 2835-314 | Barreiro | Moita |
-| `BRR-00102` | 2835-490 | Barreiro | Moita |
-| `BRR-00085` | 2835-319 | Barreiro | Moita |
-| `BRR-00084` | 2835-446 | Barreiro | Moita |
-| `BRR-00083` | 2835-412 | Barreiro | Moita |
-| `BRR-00079` | 2835-345 | Barreiro | Moita |
-| `BRR-00086` | 2835-399 | Barreiro | Moita |
-| … | … | … | +15 restantes nos CSVs |
-
-- **Veredito:** suspeito — CP trocado ou localidade errada; CTT muda códigos e há grafias variantes.
-
-### [BAIXO] Metadados em falta
-
-- **Regra:** `usage_type`, `auth_methods` ou `brands_accepted` vazios no inventário estático.
-
-- **Afetados:** 20 campos em falta (20 `usage_type`, 0 `auth_methods`, 0 `brands_accepted`). Exemplos: `CSC-00573-01`, `CSC-00573-02`, `LSB-01382-01`, `LSB-01382-02`
-
-- **Evidência:**
-
-| id | campo em falta |
-|---|---|
-| `CSC-00573-01` | usage_type |
-| `CSC-00573-02` | usage_type |
-| `LSB-01382-01` | usage_type |
-| `LSB-01382-02` | usage_type |
-| … | +16 restantes nos CSVs |
-
-- **Veredito:** suspeito (metadados) — preencher os campos; não afecta a física do ponto.
-
-[↑ índice](#indice)
-
-</details>
+- [VEIM — Veimonte Lda (20 sites, 35 pontos)](#opc-VEIM) · 3 MÉDIO
+- [MAKS — Maksu (49 sites, 49 pontos)](#opc-MAKS) · 2 MÉDIO, 2 BAIXO
+- [CIRC — Circuitos Energy Solutions, Lda. (12 sites, 22 pontos)](#opc-CIRC) · 3 MÉDIO
+- [CEVE — CEVE - Cooperativa Eléctrica do Vale D’Este C.R.L. (4 sites, 10 pontos)](#opc-CEVE) · 2 MÉDIO
+- [IHOM — iHome Lda (6 sites, 10 pontos)](#opc-IHOM) · 2 MÉDIO
+- [LOUL — Loulé Concelho Global, EM (33 sites, 70 pontos)](#opc-LOUL) · 2 MÉDIO
+- [FACT — FactorENERGIA (38 sites, 76 pontos)](#opc-FACT) · 2 MÉDIO
+- [FRTR — FRONTROW, LDA (5 sites, 8 pontos)](#opc-FRTR) · 3 MÉDIO
+- [GENJ — Generation Journey Lda (21 sites, 41 pontos)](#opc-GENJ) · 3 MÉDIO
+- [LUSI — LUSIADAENERGIA, S.A. (14 sites, 25 pontos)](#opc-LUSI) · 3 MÉDIO, 1 BAIXO
+- [PTER — PETROTERMICA ENERGIA, S.A. (2 sites, 4 pontos)](#opc-PTER) · 3 MÉDIO
+- [SEGM — SEGMA - Serviços de Engenharia Gestão e Manutenção Lda (73 sites, 134 pontos)](#opc-SEGM) · 2 MÉDIO
+- [BBGE — BBG Energia Unipessoal, Lda (2 sites, 3 pontos)](#opc-BBGE) · 2 BAIXO, 1 MÉDIO
+- [MOBI — MOBIE (5 sites, 10 pontos)](#opc-MOBI) · 1 MÉDIO, 1 BAIXO
+- [CMEL — CME (22 sites, 23 pontos)](#opc-CMEL) · 1 MÉDIO, 1 BAIXO
+- [BELM — Blk Mobility, LDA (7 sites, 17 pontos)](#opc-BELM) · 1 MÉDIO
+- [BINT — Bluint - Engenharia e Tecnologias Integradas, Unipessoal, Lda (2 sites, 4 pontos)](#opc-BINT) · 1 MÉDIO, 1 BAIXO
+- [GASF — GASFOMENTO - Sistemas e Instalações de Gás, S.A. (5 sites, 16 pontos)](#opc-GASF) · 1 MÉDIO
+- [SFAF — Superfafe- supermercados,lda (2 sites, 6 pontos)](#opc-SFAF) · 2 MÉDIO
+- [SGMR — Superguimarães - Supermercados,lda (2 sites, 6 pontos)](#opc-SGMR) · 2 MÉDIO
+- [WENE — WENEA SERVICES SPAIN S.L. (2 sites, 4 pontos)](#opc-WENE) · 2 MÉDIO
+- [CAPW — Capwatt Services, S.A. (14 sites, 74 pontos)](#opc-CAPW) · 1 MÉDIO
+- [CSCP — Cascais Próxima (8 sites, 16 pontos)](#opc-CSCP) · 1 MÉDIO
+- [BRIG — Brightcity S.A. (2 sites, 4 pontos)](#opc-BRIG) · 2 MÉDIO
+- [EVAE — EVAZ Energy, LDA (4 sites, 9 pontos)](#opc-EVAE) · 1 MÉDIO
+- [PARI — Parinox Energia (6 sites, 7 pontos)](#opc-PARI) · 2 MÉDIO
+- [PROP — PROPEL - PRODUTOS DE PETRÓLEO, LDA (2 sites, 6 pontos)](#opc-PROP) · 1 MÉDIO
+- [SDBR — SodiBraga - Supermercados Lda (2 sites, 6 pontos)](#opc-SDBR) · 1 MÉDIO
+- [VISA — VISACASA - SERVIÇOS DE ASSISTÊNCIA E MANUTENÇÃO GLOBAL S.A. (6 sites, 14 pontos)](#opc-VISA) · 1 MÉDIO
+- [CARG — Cargga Inteligente (6 sites, 12 pontos)](#opc-CARG) · 1 MÉDIO
+- [EZUR — Ezu Energia (2 sites, 4 pontos)](#opc-EZUR) · 1 MÉDIO
+- [GRCA — Grcapp, Unipessoal Lda (1 sites, 2 pontos)](#opc-GRCA) · 1 MÉDIO
+- [INVP — Intervilapraia (1 sites, 3 pontos)](#opc-INVP) · 1 MÉDIO
+- [KPMS — KPM Serviços de Engenheria, Unip Lda (1 sites, 3 pontos)](#opc-KPMS) · 1 MÉDIO
+- [SARE — Superareosa Supermercados, Lda (1 sites, 3 pontos)](#opc-SARE) · 1 MÉDIO
+- [SOLX — SOLX (4 sites, 8 pontos)](#opc-SOLX) · 1 MÉDIO
+- [PACO — PACORP, LDA (1 sites, 1 pontos)](#opc-PACO) · 1 MÉDIO
+- [PQTJ — Parques Tejo, E.M. (2 sites, 2 pontos)](#opc-PQTJ) · 1 BAIXO
 
 <a id="opc-EDPC"></a>
 
 <details open>
-<summary><b>EDPC — EDP Comercial (1679 sites, 3523 pontos)</b> · 4 MÉDIO, 2 CRÍTICO, 1 ALTO, 1 BAIXO</summary>
+<summary><b>EDPC — EDP Comercial (1684 sites, 3534 pontos)</b> · 5 ALTO, 3 MÉDIO, 3 BAIXO, 2 CRÍTICO</summary>
 
-### [CRÍTICO] Potência sobre-declarada
-
-- **Regra:** `ratio = declarada / (V × I)` (monofásico AC e DC) ou `/ (√3 × V × I)` (`mode3AC3p`); `ratio > 1.25` = fisicamente impossível (capacidade excedida).
-
-- **Afetados:** 286 de 3530 linhas de conector (8%). Exemplos: `PT-EDP-EPLM-00073-3`, `PLM-00073`, `ETZ-90001-01`, `ETZ-90001`
-
+### [CRÍTICO] Física/Ohm — sobre-declaração (ratio>1,25)
+- **Regra:** potência declarada > 1,25 × V×I (monofásico) / √3×V×I (mode3AC3p).
+- **Afetados:** 286 de 3541 pontos (8.1%). Exemplos: `ETZ-90001-01`, `PT-EDP-EPRT-00076-3`, `PT-EDP-EPRT-00089-3`, `PT-EDP-ELSB-00316-3`, `PT-EDP-EPRT-00075-3`, `ETZ-90001`.
 - **Evidência:**
 
-| point_id | site | tomada | modo | V / A / P declarada / esperada (kW) | ratio |
+| ponto | site | tomada | modo | tensão / corrente / declarada / esperada | ratio |
 |---|---|---|---|---|---|
-| `PT-EDP-EPLM-00073-3` | `PLM-00073` | iec62196T2 | mode3AC3p | 40/32/22/2,22 | 9,92 |
-| `ETZ-90001-01` | `ETZ-90001` | iec62196T2 | mode2AC1p | 240/32/22/7,68 | 2,87 |
-| `PT-EDP-ECSC-00521-1` | `CSC-00521` | iec62196T2 | mode3AC3p | 230/30/22/11,95 | 1,84 |
-| `PT-EDP-ECSC-00521-2` | `CSC-00521` | iec62196T2 | mode3AC3p | 230/30/22/11,95 | 1,84 |
-| `PT-EDP-EVCD-00084-1` | `VCD-00084` | iec62196T2 | mode3AC3p | 230/30/20,70/11,95 | 1,73 |
-| `PT-EDP-EVCD-00084-2` | `VCD-00084` | iec62196T2 | mode3AC3p | 230/30/20,70/11,95 | 1,73 |
-| `PT-EDP-EABF-00121-1` | `ABF-00121` | iec62196T2 | mode3AC3p | 230/32/22/12,75 | 1,73 |
-| `PT-EDP-EABF-00121-2` | `ABF-00121` | iec62196T2 | mode3AC3p | 230/32/22/12,75 | 1,73 |
-| `PT-EDP-EABF-00122-1` | `ABF-00122` | iec62196T2 | mode3AC3p | 230/32/22/12,75 | 1,73 |
-| `PT-EDP-EABF-00122-2` | `ABF-00122` | iec62196T2 | mode3AC3p | 230/32/22/12,75 | 1,73 |
-| … | … | … | … | … | +276 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-EDPC)) |
+| `ETZ-90001-01` | `ETZ-90001` | iec62196T2 | mode2AC1p | 240 V / 32 A / 22000 W / 7680.0 W | 2.865 |
+| `PT-EDP-EPRT-00076-3` | `PRT-00076` | iec62196T2 | mode2AC1p | 400 V / 63 A / 43000 W / 25200.0 W | 1.706 |
+| `PT-EDP-EPRT-00089-3` | `PRT-00089` | iec62196T2 | mode2AC1p | 400 V / 63 A / 43000 W / 25200.0 W | 1.706 |
+| `PT-EDP-ELSB-00316-3` | `LSB-00316` | iec62196T2 | mode2AC1p | 400 V / 63 A / 43000 W / 25200.0 W | 1.706 |
+| `PT-EDP-EPRT-00075-3` | `PRT-00075` | iec62196T2 | mode2AC1p | 400 V / 63 A / 43000 W / 25200.0 W | 1.706 |
+| `PT-EDP-EPRT-00079-3` | `PRT-00079` | iec62196T2 | mode2AC1p | 400 V / 63 A / 43000 W / 25200.0 W | 1.706 |
+| `PT-EDP-EPRT-00084-3` | `PRT-00084` | iec62196T2 | mode2AC1p | 400 V / 63 A / 43000 W / 25200.0 W | 1.706 |
+| `LSA-90002-01` | `LSA-90002` | iec62196T2 | mode3AC3p | 240 V / 32 A / 22000 W / 13302.2 W | 1.654 |
+| `PT-EDP-EPNL-00002-3` | `PNL-00002` | iec62196T2 | mode2AC1p | 400 V / 63 A / 43000 W / 25200.0 W | 1.706 |
+| `PT-EDP-EPRT-00090-3` | `PRT-00090` | iec62196T2 | mode2AC1p | 400 V / 63 A / 43000 W / 25200.0 W | 1.706 |
+| … | … | +276 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-EDPC)) |
+- **Veredito:** crítico — sobre-declaração (ratio>1,25).
 
-- **Veredito:** impossível — a potência declarada excede o produto V×I; padrão recorrente de potência do posto colada na tomada ou convenção de reporte errada.
-
-### [CRÍTICO] Chave duplicada (`point_id`)
-
-- **Regra:** `point_id` identifica a tomada; duplicado = linhas fantasma ou conectores churnados sem limpeza.
-
-- **Afetados:** 11 linhas em 4 chaves duplicadas. Exemplos: `PT-EDP-EPLM-00067-3`, `PLM-00067`, `PT-EDP-EVNH-00002-1`, `VNH-00002`
-
+### [CRÍTICO] Duplicados — point_id
+- **Regra:** point_id duplicado no inventário.
+- **Afetados:** 11 de 3541 pontos (0.3%). Exemplos: `PT-EDP-EPLM-00067-3`, `PT-EDP-EVNH-00002-1`, `PLM-00067`, `VNH-00002`.
 - **Evidência:**
 
-| point_id | site | ocorrências |
-|---|---|---|
-| `PT-EDP-EPLM-00067-3` | `PLM-00067` | 2 |
-| `PT-EDP-EVNH-00002-1` | `VNH-00002` | 3 |
-| `PT-EDP-ESJM-00057-1` | `SJM-00057` | 3 |
-| `PT-EDP-ECVL-00064-1` | `CVL-00064` | 3 |
-| … | … | +7 restantes nos CSVs |
+| ponto | site |
+|---|---|
+| `PT-EDP-EPLM-00067-3` | `PLM-00067` |
+| `PT-EDP-EPLM-00067-3` | `PLM-00067` |
+| `PT-EDP-EVNH-00002-1` | `VNH-00002` |
+| `PT-EDP-EVNH-00002-1` | `VNH-00002` |
+| `PT-EDP-EVNH-00002-1` | `VNH-00002` |
+| `PT-EDP-ESJM-00057-1` | `SJM-00057` |
+| `PT-EDP-ESJM-00057-1` | `SJM-00057` |
+| `PT-EDP-ESJM-00057-1` | `SJM-00057` |
+| `PT-EDP-ECVL-00064-1` | `CVL-00064` |
+| `PT-EDP-ECVL-00064-1` | `CVL-00064` |
+| … | … | +1 restantes |
+- **Veredito:** crítico — point_id.
 
-- **Veredito:** impossível (chave) — chave da tomada duplicada; linhas fantasma ou churn não limpo.
-
-### [ALTO] Ponto sem conector
-
-- **Regra:** Linha de ponto sem `connector_type`/`charging_mode`; a tomada não é utilizável nem verificável por V×I.
-
-- **Afetados:** 6 linhas de conector. Exemplos: `MOBI-BRG-00047-01`, `MOBI-BRG-00047`, `MOBI-BRG-00047-02`
-
+### [ALTO] Física — valores crus suspeitos
+- **Regra:** V=1200/3600 V ou I=600 A.
+- **Afetados:** 36 de 3541 pontos (1.0%). Exemplos: `PT-EDP-ELRS-00225-1`, `PT-EDP-ELRS-00225-2`, `PT-EDP-ELRS-00226-1`, `PT-EDP-ELRS-00226-2`, `PT-EDP-EGDL-00066-1`, `LRS-00225`.
 - **Evidência:**
 
-| point_id | site |
+| ponto | site |
+|---|---|
+| `PT-EDP-ELRS-00225-1` | `LRS-00225` |
+| `PT-EDP-ELRS-00225-2` | `LRS-00225` |
+| `PT-EDP-ELRS-00226-1` | `LRS-00226` |
+| `PT-EDP-ELRS-00226-2` | `LRS-00226` |
+| `PT-EDP-EGDL-00066-1` | `GDL-00066` |
+| `PT-EDP-EGDL-00066-2` | `GDL-00066` |
+| `PT-EDP-EGDL-00068-1` | `GDL-00068` |
+| `PT-EDP-EGDL-00068-2` | `GDL-00068` |
+| `PT-EDP-EGDL-00069-1` | `GDL-00069` |
+| `PT-EDP-EGDL-00069-2` | `GDL-00069` |
+| … | … | +26 restantes |
+- **Veredito:** alto — valores crus suspeitos.
+
+### [ALTO] Física — V/I/P nulos
+- **Regra:** voltage/max_current/max_power_w nulo.
+- **Afetados:** 6 de 3541 pontos (0.2%). Exemplos: `MOBI-BRG-00047-01`, `MOBI-BRG-00047-02`, `PT-EDP-EPLM-00059-1`, `PT-EDP-EPLM-00059-2`, `PT-EDP-EPLM-00059-3`, `MOBI-BRG-00047`.
+- **Evidência:**
+
+| ponto | site |
 |---|---|
 | `MOBI-BRG-00047-01` | `MOBI-BRG-00047` |
 | `MOBI-BRG-00047-02` | `MOBI-BRG-00047` |
@@ -710,477 +270,165 @@ Totais: 8 733 sites, 19 259 pontos distintos (19 376 linhas de conector), 92 OPC
 | `PT-EDP-EPLM-00059-2` | `PLM-00059` |
 | `PT-EDP-EPLM-00059-3` | `PLM-00059` |
 | `PT-EDP-ELSB-01117-2` | `LSB-01117` |
+- **Veredito:** alto — V/I/P nulos.
 
-- **Veredito:** suspeito — conector em falta no exportador; corrigir a origem.
-
-### [MÉDIO] Potência sub-declarada
-
-- **Regra:** `ratio < 0.75` = derating suspeito ou erro de introdução; `ratio = declarada / esperada`.
-
-- **Afetados:** 746 de 3530 linhas de conector (21%). Exemplos: `PT-EDP-ECTB-00080-2`, `CTB-00080`, `PT-EDP-EBRG-00143-1`, `BRG-00143`
-
+### [ALTO] Enum fora do schema — charging_mode
+- **Regra:** charging_mode fora do XSD (nan/unknown).
+- **Afetados:** 6 de 3541 pontos (0.2%). Exemplos: `MOBI-BRG-00047-01`, `MOBI-BRG-00047-02`, `PT-EDP-EPLM-00059-1`, `PT-EDP-EPLM-00059-2`, `PT-EDP-EPLM-00059-3`, `MOBI-BRG-00047`.
 - **Evidência:**
 
-| point_id | site | tomada | modo | V / A / P declarada / esperada (kW) | ratio |
-|---|---|---|---|---|---|
-| `PT-EDP-ECTB-00080-2` | `CTB-00080` | chademo | mode4DC | 1000/300/60/300 | 0,20 |
-| `PT-EDP-EBRG-00143-1` | `BRG-00143` | iec62196T2COMBO | mode4DC | 1000/250/60/250 | 0,24 |
-| `PT-EDP-EBRG-00143-2` | `BRG-00143` | iec62196T2COMBO | mode4DC | 1000/250/60/250 | 0,24 |
-| `PT-EDP-ESXL-00016-1` | `SXL-00016` | chademo | mode4DC | 1000/175/50/175 | 0,29 |
-| `ILH-00032-01` | `ILH-00032` | iec62196T2COMBO | mode4DC | 1000/200/60/200 | 0,30 |
-| `ILH-00032-02` | `ILH-00032` | iec62196T2COMBO | mode4DC | 1000/200/60/200 | 0,30 |
-| `LRA-00129-01` | `LRA-00129` | iec62196T2COMBO | mode4DC | 1000/200/60/200 | 0,30 |
-| `LRA-00129-02` | `LRA-00129` | iec62196T2COMBO | mode4DC | 1000/200/60/200 | 0,30 |
-| `ORM-00028-01` | `ORM-00028` | chademo | mode4DC | 1000/200/60/200 | 0,30 |
-| `ORM-00028-02` | `ORM-00028` | iec62196T2COMBO | mode4DC | 1000/200/60/200 | 0,30 |
-| … | … | … | … | … | +736 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-EDPC)) |
-
-- **Veredito:** suspeito — potência declarada muito abaixo de V×I; derating do posto partilhado ou número trocado. Rever contra a chapa do posto.
-
-### [MÉDIO] Tensão, corrente ou potência inválida
-
-- **Regra:** `voltage`/`max_current` nulos ou ≤0, ou `max_power_w` nulo/≤0; valores crus que impedem a verificação por V×I.
-
-- **Afetados:** 6 de 3530 linhas de conector. Exemplos: `MOBI-BRG-00047-01`, `MOBI-BRG-00047`, `MOBI-BRG-00047-02`
-
-- **Evidência:**
-
-| point_id | site | V | A | P (W) |
-|---|---|---|---|---|
-| `MOBI-BRG-00047-01` | `MOBI-BRG-00047` | — | — | — |
-| `MOBI-BRG-00047-02` | `MOBI-BRG-00047` | — | — | — |
-| `PT-EDP-EPLM-00059-1` | `PLM-00059` | — | — | — |
-| `PT-EDP-EPLM-00059-2` | `PLM-00059` | — | — | — |
-| `PT-EDP-EPLM-00059-3` | `PLM-00059` | — | — | — |
-| `PT-EDP-ELSB-01117-2` | `LSB-01117` | — | — | — |
-
-- **Veredito:** suspeito — valor não positivo ou em falta; corrigir na origem para permitir validar a potência.
-
-### [MÉDIO] Formato de conector incompatível com o modo
-
-- **Regra:** `cableMode2` só com `mode1*`/`mode2*`; `cableMode3`/`socket` com `mode3*`; `otherCable` só com `mode4DC`/`ccs`.
-
-- **Afetados:** 11 linhas de conector. Exemplos: `PT-EDP-EPRT-00076-3`, `PRT-00076`, `PT-EDP-EPRT-00089-3`, `PRT-00089`
-
-- **Evidência:**
-
-| point_id | site | formato | modo |
-|---|---|---|---|
-| `PT-EDP-EPRT-00076-3` | `PRT-00076` | cableMode3 | mode2AC1p |
-| `PT-EDP-EPRT-00089-3` | `PRT-00089` | cableMode3 | mode2AC1p |
-| `PT-EDP-ELSB-00316-3` | `LSB-00316` | cableMode3 | mode2AC1p |
-| `PT-EDP-EPRT-00075-3` | `PRT-00075` | cableMode3 | mode2AC1p |
-| `PT-EDP-EPRT-00079-3` | `PRT-00079` | cableMode3 | mode2AC1p |
-| `PT-EDP-EPRT-00084-3` | `PRT-00084` | cableMode3 | mode2AC1p |
-| `PT-EDP-EPNL-00002-3` | `PNL-00002` | cableMode3 | mode2AC1p |
-| `PT-EDP-EPRT-00090-3` | `PRT-00090` | cableMode3 | mode2AC1p |
-| `PT-EDP-EPRT-00074-3` | `PRT-00074` | cableMode3 | mode2AC1p |
-| `PT-EDP-EPRT-00077-3` | `PRT-00077` | cableMode3 | mode2AC1p |
-| … | … | … | +1 restantes nos CSVs |
-
-- **Veredito:** suspeito — formato de cabo/tomada incoerente com o modo declarado; corrigir o par.
-
-### [MÉDIO] Localidade divergente do CP7 (CP4→cidade modal)
-
-- **Regra:** Agrupa-se por CP4 (4 primeiros dígitos) e toma-se a `city` modal dos CP4 com ≥5 sites; par (CP4 → `city`) divergente = suspeito.
-
-- **Afetados:** 36 sites. Exemplos: `OHP-90002`, `PNC-90001`, `TBR-00003`, `ETR-00007`
-
-- **Evidência:**
-
-| site | postcode | city | cidade modal do CP4 |
-|---|---|---|---|
-| `OHP-90002` | 6270-497 | Oliveira do Hospital | Seia |
-| `PNC-90001` | 1600-233 | Penamacor | Lisboa |
-| `TBR-00003` | 4850-054 | Terras de Bouro | Vieira do Minho |
-| `ETR-00007` | 3800-524 | Estarreja | Aveiro |
-| `ADL-90001` | 1600-233 | Alandroal | Lisboa |
-| `STB-00051` | 2845-415 | Setúbal | Seixal |
-| `FAR-00032` | 8700-207 | Faro | Olhão |
-| `ARC-00004` | 3730-282 | Arouca | Vale de Cambra |
-| `VND-00010` | 2965-441 | Vendas Novas | Palmela |
-| `VCT-00035` | 4920-140 | Viana do Castelo | Vila Nova de Cerveira |
-| … | … | … | +26 restantes nos CSVs |
-
-- **Veredito:** suspeito — CP trocado ou localidade errada; CTT muda códigos e há grafias variantes.
-
-### [BAIXO] Metadados em falta
-
-- **Regra:** `usage_type`, `auth_methods` ou `brands_accepted` vazios no inventário estático.
-
-- **Afetados:** 97 campos em falta (97 `usage_type`, 0 `auth_methods`, 0 `brands_accepted`). Exemplos: `PT-EDP-EGDL-00066-1`, `PT-EDP-EGDL-00066-2`, `PT-EDP-EGDL-00068-1`, `PT-EDP-EGDL-00068-2`
-
-- **Evidência:**
-
-| id | campo em falta |
+| ponto | site |
 |---|---|
-| `PT-EDP-EGDL-00066-1` | usage_type |
-| `PT-EDP-EGDL-00066-2` | usage_type |
-| `PT-EDP-EGDL-00068-1` | usage_type |
-| `PT-EDP-EGDL-00068-2` | usage_type |
-| … | +93 restantes nos CSVs |
+| `MOBI-BRG-00047-01` | `MOBI-BRG-00047` |
+| `MOBI-BRG-00047-02` | `MOBI-BRG-00047` |
+| `PT-EDP-EPLM-00059-1` | `PLM-00059` |
+| `PT-EDP-EPLM-00059-2` | `PLM-00059` |
+| `PT-EDP-EPLM-00059-3` | `PLM-00059` |
+| `PT-EDP-ELSB-01117-2` | `LSB-01117` |
+- **Veredito:** alto — charging_mode.
 
-- **Veredito:** suspeito (metadados) — preencher os campos; não afecta a física do ponto.
-
-[↑ índice](#indice)
-
-</details>
-
-<a id="opc-REPS"></a>
-
-<details open>
-<summary><b>REPS — REPSOL Portuguesa Lda (222 sites, 577 pontos)</b> · 4 MÉDIO, 2 CRÍTICO, 2 BAIXO</summary>
-
-### [CRÍTICO] Potência sobre-declarada
-
-- **Regra:** `ratio = declarada / (V × I)` (monofásico AC e DC) ou `/ (√3 × V × I)` (`mode3AC3p`); `ratio > 1.25` = fisicamente impossível (capacidade excedida).
-
-- **Afetados:** 179 de 577 linhas de conector (31%). Exemplos: `VFX-00024-03`, `VFX-00024`, `LOU-00010-03`, `LOU-00010`
-
+### [ALTO] Enum fora do schema — connector_type
+- **Regra:** connector_type fora do XSD (nan/unknown).
+- **Afetados:** 6 de 3541 pontos (0.2%). Exemplos: `MOBI-BRG-00047-01`, `MOBI-BRG-00047-02`, `PT-EDP-EPLM-00059-1`, `PT-EDP-EPLM-00059-2`, `PT-EDP-EPLM-00059-3`, `MOBI-BRG-00047`.
 - **Evidência:**
 
-| point_id | site | tomada | modo | V / A / P declarada / esperada (kW) | ratio |
-|---|---|---|---|---|---|
-| `VFX-00024-03` | `VFX-00024` | iec62196T2 | mode3AC3p | 230/32/45/12,75 | 3,53 |
-| `LOU-00010-03` | `LOU-00010` | iec62196T2 | mode3AC3p | 230/32/43/12,75 | 3,37 |
-| `MTS-00182-03` | `MTS-00182` | chademo | mode3AC3p | 230/32/43/12,75 | 3,37 |
-| `ODM-00005-03` | `ODM-00005` | iec62196T2 | mode3AC3p | 230/32/43/12,75 | 3,37 |
-| `VNG-00101-03` | `VNG-00101` | iec62196T2 | mode3AC3p | 230/32/43/12,75 | 3,37 |
-| `MAI-00100-03` | `MAI-00100` | iec62196T2 | mode2AC1p | 230/32/22/7,36 | 2,99 |
-| `MAI-00101-03` | `MAI-00101` | iec62196T2 | mode2AC1p | 230/32/22/7,36 | 2,99 |
-| `MTS-00195-03` | `MTS-00195` | iec62196T2 | mode2AC1p | 230/32/22/7,36 | 2,99 |
-| `VGS-00023-01` | `VGS-00023` | iec62196T2 | mode2AC1p | 230/32/22/7,36 | 2,99 |
-| `AMD-00121-01` | `AMD-00121` | iec62196T2 | mode2AC1p | 230/63/43/14,49 | 2,97 |
-| … | … | … | … | … | +169 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-REPS)) |
-
-- **Veredito:** impossível — a potência declarada excede o produto V×I; padrão recorrente de potência do posto colada na tomada ou convenção de reporte errada.
-
-### [CRÍTICO] Combinação tomada/modo impossível
-
-- **Regra:** Tomadas só-DC (`chademo`, `iec62196T1COMBO`, `iec62196T2COMBO`, pantógrafos) em `mode1*`/`mode2*`/`mode3*`, ou tomadas só-AC (`iec62196T2`, `iec60309x2*`, `cee3`/`cee5`, `domestic*`) em `mode4DC`/`ccs`.
-
-- **Afetados:** 2 linhas de conector. Exemplos: `MTS-00182-01`, `MTS-00182`, `MTS-00182-03`
-
-- **Evidência:**
-
-| point_id | site | tomada | modo |
-|---|---|---|---|
-| `MTS-00182-01` | `MTS-00182` | iec62196T2 | mode4DC |
-| `MTS-00182-03` | `MTS-00182` | chademo | mode3AC3p |
-
-- **Veredito:** impossível — AC e DC não são compatíveis; modo ou tomada trocados no inventário.
-
-### [MÉDIO] Potência sub-declarada
-
-- **Regra:** `ratio < 0.75` = derating suspeito ou erro de introdução; `ratio = declarada / esperada`.
-
-- **Afetados:** 25 de 577 linhas de conector (4%). Exemplos: `GMR-00164-02`, `GMR-00164`, `AVR-00038-02`, `AVR-00038`
-
-- **Evidência:**
-
-| point_id | site | tomada | modo | V / A / P declarada / esperada (kW) | ratio |
-|---|---|---|---|---|---|
-| `GMR-00164-02` | `GMR-00164` | chademo | mode4DC | 800/175/60/140 | 0,43 |
-| `AVR-00038-02` | `AVR-00038` | iec62196T2COMBO | mode4DC | 920/150/60/138 | 0,43 |
-| `PRT-00140-02` | `PRT-00140` | iec62196T2COMBO | mode4DC | 920/150/60/138 | 0,43 |
-| `SNT-00073-02` | `SNT-00073` | iec62196T2COMBO | mode4DC | 920/150/60/138 | 0,43 |
-| `STB-00023-02` | `STB-00023` | iec62196T2COMBO | mode4DC | 920/150/60/138 | 0,43 |
-| `SCR-00026-01` | `SCR-00026` | iec62196T2COMBO | mode4DC | 800/325/120/260 | 0,46 |
-| `SCR-00026-02` | `SCR-00026` | iec62196T2COMBO | mode4DC | 800/325/120/260 | 0,46 |
-| `ODV-00012-02` | `ODV-00012` | iec62196T2COMBO | mode4DC | 750/80/30/60 | 0,50 |
-| `PLM-00011-02` | `PLM-00011` | iec62196T2COMBO | mode4DC | 750/80/30/60 | 0,50 |
-| `TNV-00008-02` | `TNV-00008` | iec62196T2COMBO | mode4DC | 750/80/30/60 | 0,50 |
-| … | … | … | … | … | +15 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-REPS)) |
-
-- **Veredito:** suspeito — potência declarada muito abaixo de V×I; derating do posto partilhado ou número trocado. Rever contra a chapa do posto.
-
-### [MÉDIO] Formato de conector incompatível com o modo
-
-- **Regra:** `cableMode2` só com `mode1*`/`mode2*`; `cableMode3`/`socket` com `mode3*`; `otherCable` só com `mode4DC`/`ccs`.
-
-- **Afetados:** 15 linhas de conector. Exemplos: `MTS-00195-03`, `MTS-00195`, `AMD-00121-01`, `AMD-00121`
-
-- **Evidência:**
-
-| point_id | site | formato | modo |
-|---|---|---|---|
-| `MTS-00195-03` | `MTS-00195` | cableMode3 | mode2AC1p |
-| `AMD-00121-01` | `AMD-00121` | cableMode3 | mode2AC1p |
-| `AMD-00122-01` | `AMD-00122` | cableMode3 | mode2AC1p |
-| `BRG-00170-01` | `BRG-00170` | cableMode3 | mode2AC1p |
-| `MAI-00100-03` | `MAI-00100` | cableMode3 | mode2AC1p |
-| `MAI-00101-03` | `MAI-00101` | cableMode3 | mode2AC1p |
-| `CTB-00074-01` | `CTB-00074` | cableMode3 | mode2AC1p |
-| `CTB-00076-01` | `CTB-00076` | cableMode3 | mode2AC1p |
-| `PTL-00041-01` | `PTL-00041` | cableMode3 | mode2AC1p |
-| `PTL-00042-01` | `PTL-00042` | cableMode3 | mode2AC1p |
-| … | … | … | +5 restantes nos CSVs |
-
-- **Veredito:** suspeito — formato de cabo/tomada incoerente com o modo declarado; corrigir o par.
-
-### [MÉDIO] Sufixo de tomada divergente no eMI3
-
-- **Regra:** Último segmento de `point_external_id` (tomada, int-normalizado e sem o `E` colado) tem de coincidir com o último segmento de `point_id`.
-
-- **Afetados:** 2 linhas. Exemplos: `OER-00279-01`, `OER-00279`, `OER-00279-02`
-
-- **Evidência:**
-
-| point_id | point_external_id | sufixo eMI3 | sufixo point_id |
-|---|---|---|---|
-| `OER-00279-01` | `PT*REP*E17563*2` | 2 | 01 |
-| `OER-00279-02` | `PT*REP*E17563*1` | 1 | 02 |
-
-- **Veredito:** suspeito — código de tomada trocado entre o id interno e o EVSE ID.
-
-### [MÉDIO] Localidade divergente do CP7 (CP4→cidade modal)
-
-- **Regra:** Agrupa-se por CP4 (4 primeiros dígitos) e toma-se a `city` modal dos CP4 com ≥5 sites; par (CP4 → `city`) divergente = suspeito.
-
-- **Afetados:** 7 sites. Exemplos: `TNV-00003`, `CBR-00084`, `VIS-00085`, `VIS-00086`
-
-- **Evidência:**
-
-| site | postcode | city | cidade modal do CP4 |
-|---|---|---|---|
-| `TNV-00003` | 2840-166 | Torres Novas | Seixal |
-| `CBR-00084` | 3130-200 | Coimbra | Soure |
-| `VIS-00085` | 5370-205 | Viseu | Mirandela |
-| `VIS-00086` | 5370-205 | Viseu | Mirandela |
-| `BRR-00128` | 2835-490 | Barreiro | Moita |
-| `OAZ-00008` | 3700-766 | Oliveira de Azeméis | São João da Madeira |
-| `PRD-00046` | 4440-104 | Paredes | Valongo |
-
-- **Veredito:** suspeito — CP trocado ou localidade errada; CTT muda códigos e há grafias variantes.
-
-### [BAIXO] Fragmentação do nome do operador
-
-- **Regra:** Mesmo `operator_id` com várias grafias de `operator_name`; parte a identidade em relatórios e no tracker.
-
-- **Afetados:** 2 grafias; 33 de 222 sites usam uma grafia não modal. Exemplos: `PRT-00097`, `LSB-00408`, `LSB-00552`, `CSC-00070`
-
-- **Evidência:**
-
-| variante de nome | sites |
+| ponto | site |
 |---|---|
-| REPSOL PORTUGUESA LDA | 33 |
-| REPSOL Portuguesa Lda | 189 |
-| … | +220 restantes nos CSVs |
+| `MOBI-BRG-00047-01` | `MOBI-BRG-00047` |
+| `MOBI-BRG-00047-02` | `MOBI-BRG-00047` |
+| `PT-EDP-EPLM-00059-1` | `PLM-00059` |
+| `PT-EDP-EPLM-00059-2` | `PLM-00059` |
+| `PT-EDP-EPLM-00059-3` | `PLM-00059` |
+| `PT-EDP-ELSB-01117-2` | `LSB-01117` |
+- **Veredito:** alto — connector_type.
 
-- **Veredito:** suspeito (identidade) — fixar uma grafia única por OPC; não é erro de dados do site.
-
-### [BAIXO] Metadados em falta
-
-- **Regra:** `usage_type`, `auth_methods` ou `brands_accepted` vazios no inventário estático.
-
-- **Afetados:** 14 campos em falta (14 `usage_type`, 0 `auth_methods`, 0 `brands_accepted`). Exemplos: `STR-00078-01`, `STR-00078-02`, `STR-00078-03`, `VCT-00076-01`
-
+### [ALTO] Enum fora do schema — connector_format
+- **Regra:** connector_format fora do XSD (nan/unknown).
+- **Afetados:** 6 de 3541 pontos (0.2%). Exemplos: `MOBI-BRG-00047-01`, `MOBI-BRG-00047-02`, `PT-EDP-EPLM-00059-1`, `PT-EDP-EPLM-00059-2`, `PT-EDP-EPLM-00059-3`, `MOBI-BRG-00047`.
 - **Evidência:**
 
-| id | campo em falta |
+| ponto | site |
 |---|---|
-| `STR-00078-01` | usage_type |
-| `STR-00078-02` | usage_type |
-| `STR-00078-03` | usage_type |
-| `VCT-00076-01` | usage_type |
-| … | +10 restantes nos CSVs |
+| `MOBI-BRG-00047-01` | `MOBI-BRG-00047` |
+| `MOBI-BRG-00047-02` | `MOBI-BRG-00047` |
+| `PT-EDP-EPLM-00059-1` | `PLM-00059` |
+| `PT-EDP-EPLM-00059-2` | `PLM-00059` |
+| `PT-EDP-EPLM-00059-3` | `PLM-00059` |
+| `PT-EDP-ELSB-01117-2` | `LSB-01117` |
+- **Veredito:** alto — connector_format.
 
-- **Veredito:** suspeito (metadados) — preencher os campos; não afecta a física do ponto.
-
-[↑ índice](#indice)
-
-</details>
-
-<a id="opc-MOON"></a>
-
-<details>
-<summary><b>MOON — Siva - Sociedade de Importação de Veículos Automóveis / (sub-CEME da Iberdola) (26 sites, 49 pontos)</b> · 2 CRÍTICO, 2 MÉDIO</summary>
-
-### [CRÍTICO] Potência sobre-declarada
-
-- **Regra:** `ratio = declarada / (V × I)` (monofásico AC e DC) ou `/ (√3 × V × I)` (`mode3AC3p`); `ratio > 1.25` = fisicamente impossível (capacidade excedida).
-
-- **Afetados:** 8 de 52 linhas de conector (15%). Exemplos: `AZB-00016-26510829`, `AZB-00016`, `AZB-00021-27398580`, `AZB-00021`
-
+### [MÉDIO] Combinação formato/tomada
+- **Regra:** connector_format incompatível com charging_mode.
+- **Afetados:** 1701 de 3541 pontos (48.0%). Exemplos: `PT-EDP-ECRT-00002-1`, `LRA-90003-1`, `LRA-90003-2`, `LSB-90140-1`, `LSB-90140-2`, `CRT-00002`.
 - **Evidência:**
 
-| point_id | site | tomada | modo | V / A / P declarada / esperada (kW) | ratio |
-|---|---|---|---|---|---|
-| `AZB-00016-26510829` | `AZB-00016` | iec62196T2 | mode3AC3p | 230/32/22,08/12,75 | 1,73 |
-| `AZB-00021-27398580` | `AZB-00021` | iec62196T2 | mode3AC3p | 230/32/22,08/12,75 | 1,73 |
-| `AMT-00007-1` | `AMT-00007` | iec62196T2COMBO | mode4DC | 400/32/22/12,80 | 1,72 |
-| `MOBI-CTB-00004-01` | `MOBI-CTB-00004` | iec62196T2COMBO | mode4DC | 400/40/24/16 | 1,50 |
-| `MOBI-PRT-00089-01` | `MOBI-PRT-00089` | iec62196T2COMBO | mode4DC | 400/125/75/50 | 1,50 |
-| `MOBI-PRT-00089-02` | `MOBI-PRT-00089` | chademo | mode4DC | 400/125/75/50 | 1,50 |
-| `PRT-00160-01` | `PRT-00160` | iec62196T2COMBO | mode4DC | 500/250/180/125 | 1,44 |
-| `STC-00007-1` | `STC-00007` | iec62196T2COMBO | mode4DC | 500/32/22/16 | 1,38 |
-
-- **Veredito:** impossível — a potência declarada excede o produto V×I; padrão recorrente de potência do posto colada na tomada ou convenção de reporte errada.
-
-### [CRÍTICO] Chave duplicada (`point_id`)
-
-- **Regra:** `point_id` identifica a tomada; duplicado = linhas fantasma ou conectores churnados sem limpeza.
-
-- **Afetados:** 6 linhas em 3 chaves duplicadas. Exemplos: `LSB-00704-01`, `LSB-00704`, `AZB-00021-27398579`, `AZB-00021`
-
-- **Evidência:**
-
-| point_id | site | ocorrências |
-|---|---|---|
-| `LSB-00704-01` | `LSB-00704` | 2 |
-| `AZB-00021-27398579` | `AZB-00021` | 2 |
-| `LRS-00152-01` | `LRS-00152` | 2 |
-| … | … | +3 restantes nos CSVs |
-
-- **Veredito:** impossível (chave) — chave da tomada duplicada; linhas fantasma ou churn não limpo.
-
-### [MÉDIO] Potência sub-declarada
-
-- **Regra:** `ratio < 0.75` = derating suspeito ou erro de introdução; `ratio = declarada / esperada`.
-
-- **Afetados:** 10 de 52 linhas de conector (19%). Exemplos: `LSB-00704-01`, `LSB-00704`, `LRS-00152-02`, `LRS-00152`
-
-- **Evidência:**
-
-| point_id | site | tomada | modo | V / A / P declarada / esperada (kW) | ratio |
-|---|---|---|---|---|---|
-| `LSB-00704-01` | `LSB-00704` | iec62196T2COMBO | mode4DC | 1000/500/75/500 | 0,15 |
-| `LRS-00152-02` | `LRS-00152` | iec62196T2 | mode3AC3p | 400/64/22/44,34 | 0,50 |
-| `LRA-00047-03` | `LRA-00047` | iec62196T2 | mode3AC3p | 400/63/22/43,65 | 0,50 |
-| `PNF-00017-03` | `PNF-00017` | iec62196T2 | mode3AC3p | 400/63/22/43,65 | 0,50 |
-| `LSB-00703-01` | `LSB-00703` | iec62196T2COMBO | mode4DC | 1000/350/180/350 | 0,51 |
-| `LRA-00047-01` | `LRA-00047` | iec62196T2COMBO | mode4DC | 500/250/75/125 | 0,60 |
-| `LRA-00047-02` | `LRA-00047` | chademo | mode4DC | 500/250/75/125 | 0,60 |
-| `PNF-00017-02` | `PNF-00017` | chademo | mode4DC | 500/250/75/125 | 0,60 |
-| `LSB-00704-01` | `LSB-00704` | chademo | mode4DC | 500/200/63/100 | 0,63 |
-| `SEI-00010-01` | `SEI-00010` | iec62196T2 | mode3AC3p | 400/64/30/44,34 | 0,68 |
-
-- **Veredito:** suspeito — potência declarada muito abaixo de V×I; derating do posto partilhado ou número trocado. Rever contra a chapa do posto.
-
-### [MÉDIO] Sufixo de tomada divergente no eMI3
-
-- **Regra:** Último segmento de `point_external_id` (tomada, int-normalizado e sem o `E` colado) tem de coincidir com o último segmento de `point_id`.
-
-- **Afetados:** 5 linhas. Exemplos: `AZB-00016-26510828`, `AZB-00016`, `AZB-00016-26510829`
-
-- **Evidência:**
-
-| point_id | point_external_id | sufixo eMI3 | sufixo point_id |
-|---|---|---|---|
-| `AZB-00016-26510828` | `PT*MOO*E0008*006*1` | 1 | 26510828 |
-| `AZB-00016-26510829` | `PT*MOO*E0008*006*2` | 2 | 26510829 |
-| `AZB-00021-27398579` | `PT*MOO*E0021*001*1` | 1 | 27398579 |
-| `AZB-00021-27398579` | `PT*MOO*E0021*001*1` | 1 | 27398579 |
-| `AZB-00021-27398580` | `PT*MOO*E0021*001*2` | 2 | 27398580 |
-
-- **Veredito:** suspeito — código de tomada trocado entre o id interno e o EVSE ID.
-
-[↑ índice](#indice)
-
-</details>
-
-<a id="opc-KLCS"></a>
-
-<details>
-<summary><b>KLCS — Kilometer Low Cost II Serviços, SA (88 sites, 109 pontos)</b> · 2 CRÍTICO, 2 MÉDIO, 2 BAIXO</summary>
-
-### [CRÍTICO] Potência sobre-declarada
-
-- **Regra:** `ratio = declarada / (V × I)` (monofásico AC e DC) ou `/ (√3 × V × I)` (`mode3AC3p`); `ratio > 1.25` = fisicamente impossível (capacidade excedida).
-
-- **Afetados:** 4 de 111 linhas de conector (4%). Exemplos: `331`, `LSB-01461`, `LSB-01483`
-
-- **Evidência:**
-
-| point_id | site | tomada | modo | V / A / P declarada / esperada (kW) | ratio |
-|---|---|---|---|---|---|
-| `331` | `LSB-01461` | iec62196T2 | mode3AC3p | 230/11/7,40/4,38 | 1,69 |
-| `331` | `LSB-01483` | iec62196T2 | mode3AC3p | 230/11/7,40/4,38 | 1,69 |
-| `332` | `LSB-01461` | iec62196T2 | mode3AC3p | 230/11/7,40/4,38 | 1,69 |
-| `332` | `LSB-01483` | iec62196T2 | mode3AC3p | 230/11/7,40/4,38 | 1,69 |
-
-- **Veredito:** impossível — a potência declarada excede o produto V×I; padrão recorrente de potência do posto colada na tomada ou convenção de reporte errada.
-
-### [CRÍTICO] Chave duplicada (`point_id`)
-
-- **Regra:** `point_id` identifica a tomada; duplicado = linhas fantasma ou conectores churnados sem limpeza.
-
-- **Afetados:** 4 linhas em 2 chaves duplicadas. Exemplos: `331`, `LSB-01461`, `332`, `LSB-01483`
-
-- **Evidência:**
-
-| point_id | site | ocorrências |
-|---|---|---|
-| `331` | `LSB-01461, LSB-01483, ODV-00056` | 3 |
-| `332` | `LSB-01461, LSB-01483, ODV-00056` | 3 |
-| … | … | +2 restantes nos CSVs |
-
-- **Veredito:** impossível (chave) — chave da tomada duplicada; linhas fantasma ou churn não limpo.
-
-### [MÉDIO] Potência sub-declarada
-
-- **Regra:** `ratio < 0.75` = derating suspeito ou erro de introdução; `ratio = declarada / esperada`.
-
-- **Afetados:** 1 de 111 linhas de conector (1%). Exemplos: `CLB-00010-01`, `CLB-00010`, `OER-00150-1`, `OER-00151-1`
-
-- **Evidência:**
-
-| point_id | site | tomada | modo | V / A / P declarada / esperada (kW) | ratio |
-|---|---|---|---|---|---|
-| `CLB-00010-01` | `CLB-00010` | iec62196T2 | mode3AC3p | 400/32/7,40/22,17 | 0,33 |
-
-- **Veredito:** suspeito — potência declarada muito abaixo de V×I; derating do posto partilhado ou número trocado. Rever contra a chapa do posto.
-
-### [MÉDIO] Formato de conector incompatível com o modo
-
-- **Regra:** `cableMode2` só com `mode1*`/`mode2*`; `cableMode3`/`socket` com `mode3*`; `otherCable` só com `mode4DC`/`ccs`.
-
-- **Afetados:** 4 linhas de conector. Exemplos: `CTB-00077-01`, `CTB-00077`, `CTB-00078-01`, `CTB-00078`
-
-- **Evidência:**
-
-| point_id | site | formato | modo |
-|---|---|---|---|
-| `CTB-00077-01` | `CTB-00077` | cableMode3 | mode2AC1p |
-| `CTB-00078-01` | `CTB-00078` | cableMode3 | mode2AC1p |
-| `FND-00037-01` | `FND-00037` | cableMode3 | mode2AC1p |
-| `FND-00038-01` | `FND-00038` | cableMode3 | mode2AC1p |
-
-- **Veredito:** suspeito — formato de cabo/tomada incoerente com o modo declarado; corrigir o par.
-
-### [BAIXO] Fragmentação do nome do operador
-
-- **Regra:** Mesmo `operator_id` com várias grafias de `operator_name`; parte a identidade em relatórios e no tracker.
-
-- **Afetados:** 2 grafias; 2 de 88 sites usam uma grafia não modal. Exemplos: `OER-00150`, `OER-00151`, `OER-00148`, `OER-00149`
-
-- **Evidência:**
-
-| variante de nome | sites |
+| ponto | site |
 |---|---|
-| KLC | 2 |
-| Kilometer Low Cost II Serviços, SA | 86 |
-| … | +86 restantes nos CSVs |
+| `PT-EDP-ECRT-00002-1` | `CRT-00002` |
+| `LRA-90003-1` | `LRA-90003` |
+| `LRA-90003-2` | `LRA-90003` |
+| `LSB-90140-1` | `LSB-90140` |
+| `LSB-90140-2` | `LSB-90140` |
+| `PT-EDP-EACN-00006-1` | `ACN-00006` |
+| `PT-EDP-EACN-00006-2` | `ACN-00006` |
+| `PT-EDP-EALM-00043-1` | `ALM-00043` |
+| `PT-EDP-EALM-00043-2` | `ALM-00043` |
+| `PT-EDP-EACN-00007-1` | `ACN-00007` |
+| … | … | +1691 restantes |
+- **Veredito:** médio — Combinação formato/tomada.
 
-- **Veredito:** suspeito (identidade) — fixar uma grafia única por OPC; não é erro de dados do site.
-
-### [BAIXO] Metadados em falta
-
-- **Regra:** `usage_type`, `auth_methods` ou `brands_accepted` vazios no inventário estático.
-
-- **Afetados:** 13 campos em falta (13 `usage_type`, 0 `auth_methods`, 0 `brands_accepted`). Exemplos: `SRP-00009-01`, `SRP-00010-01`, `FAR-00100-01`, `LOU-00022-01`
-
+### [MÉDIO] Física/Ohm — sub-declaração (ratio<0,75)
+- **Regra:** potência declarada < 0,75 × V×I / √3×V×I.
+- **Afetados:** 751 de 3541 pontos (21.2%). Exemplos: `PT-EDP-EALM-00043-1`, `PT-EDP-EALM-00043-2`, `PT-EDP-ESNT-00105-1`, `PT-EDP-ESNT-00105-2`, `PT-EDP-ESNS-00008-1`, `ALM-00043`.
 - **Evidência:**
 
-| id | campo em falta |
-|---|---|
-| `SRP-00009-01` | usage_type |
-| `SRP-00010-01` | usage_type |
-| `FAR-00100-01` | usage_type |
-| `LOU-00022-01` | usage_type |
-| … | +9 restantes nos CSVs |
+| ponto | site | tomada | modo | tensão / corrente / declarada / esperada | ratio |
+|---|---|---|---|---|---|
+| `PT-EDP-EALM-00043-1` | `ALM-00043` | iec62196T2COMBO | mode4DC | 1000 V / 200 A / 120000 W / 200000.0 W | 0.6 |
+| `PT-EDP-EALM-00043-2` | `ALM-00043` | iec62196T2COMBO | mode4DC | 1000 V / 200 A / 120000 W / 200000.0 W | 0.6 |
+| `PT-EDP-ESNT-00105-1` | `SNT-00105` | iec62196T2COMBO | mode4DC | 1000 V / 200 A / 120000 W / 200000.0 W | 0.6 |
+| `PT-EDP-ESNT-00105-2` | `SNT-00105` | iec62196T2COMBO | mode4DC | 1000 V / 200 A / 120000 W / 200000.0 W | 0.6 |
+| `PT-EDP-ESNS-00008-1` | `SNS-00008` | iec62196T2COMBO | mode4DC | 1000 V / 200 A / 90000 W / 200000.0 W | 0.45 |
+| `PT-EDP-EVNG-00073-1` | `VNG-00073` | iec62196T2COMBO | mode4DC | 1000 V / 200 A / 120000 W / 200000.0 W | 0.6 |
+| `PT-EDP-EBCL-00018-1` | `BCL-00018` | iec62196T2COMBO | mode4DC | 1000 V / 200 A / 90000 W / 200000.0 W | 0.45 |
+| `PT-EDP-EPNF-00014-1` | `PNF-00014` | iec62196T2COMBO | mode4DC | 1000 V / 200 A / 120000 W / 200000.0 W | 0.6 |
+| `PT-EDP-EOER-00136-1` | `OER-00136` | iec62196T2COMBO | mode4DC | 1000 V / 200 A / 90000 W / 200000.0 W | 0.45 |
+| `PT-EDP-EOER-00136-2` | `OER-00136` | iec62196T2COMBO | mode4DC | 1000 V / 200 A / 120000 W / 200000.0 W | 0.6 |
+| … | … | +741 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-EDPC)) |
+- **Veredito:** médio — sub-declaração (ratio<0,75).
 
-- **Veredito:** suspeito (metadados) — preencher os campos; não afecta a física do ponto.
+### [MÉDIO] Localização — CP7↔localidade
+- **Regra:** CP4 com city divergente da moda.
+- **Afetados:** 80 de 3541 pontos (2.3%). Exemplos: `PT-EDP-EMRA-90001-1`, `PT-EDP-EMRA-90001-2`, `OHP-90002-1`, `OHP-90002-2`, `PT-EDP-EPNC-90001-1`, `MRA-90001`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `PT-EDP-EMRA-90001-1` | `MRA-90001` |
+| `PT-EDP-EMRA-90001-2` | `MRA-90001` |
+| `OHP-90002-1` | `OHP-90002` |
+| `OHP-90002-2` | `OHP-90002` |
+| `PT-EDP-EPNC-90001-1` | `PNC-90001` |
+| `PT-EDP-EPNC-90001-2` | `PNC-90001` |
+| `PT-EDP-ETBR-00003-1` | `TBR-00003` |
+| `PT-EDP-EETR-00007-1` | `ETR-00007` |
+| `PT-EDP-EETR-00007-2` | `ETR-00007` |
+| `PT-EDP-EADL-90001-1` | `ADL-90001` |
+| … | … | +70 restantes |
+- **Veredito:** médio — CP7↔localidade.
+
+### [BAIXO] Chaves eMI3 — código local disperso
+- **Regra:** mesmo <LOCAL> em cidades/CP4 dispersos.
+- **Afetados:** 3001 de 3541 pontos (84.8%). Exemplos: `PT-EDP-ECRT-00002-1`, `PT-EDP-ELRS-90018-1`, `PT-EDP-ELRS-90018-2`, `PT-EDP-ELSB-00180-1`, `PT-EDP-ELSB-00180-2`, `CRT-00002`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `PT-EDP-ECRT-00002-1` | `CRT-00002` |
+| `PT-EDP-ELRS-90018-1` | `LRS-90018` |
+| `PT-EDP-ELRS-90018-2` | `LRS-90018` |
+| `PT-EDP-ELSB-00180-1` | `LSB-00180` |
+| `PT-EDP-ELSB-00180-2` | `LSB-00180` |
+| `PT-EDP-EACN-00006-1` | `ACN-00006` |
+| `PT-EDP-EACN-00006-2` | `ACN-00006` |
+| `PT-EDP-EALM-00043-1` | `ALM-00043` |
+| `PT-EDP-EALM-00043-2` | `ALM-00043` |
+| `PT-EDP-EALM-00043-3` | `ALM-00043` |
+| … | … | +2991 restantes |
+- **Veredito:** baixo — código local disperso.
+
+### [BAIXO] Metadados — usage_type em falta
+- **Regra:** usage_type nulo/fora do enum.
+- **Afetados:** 97 de 3541 pontos (2.7%). Exemplos: `PT-EDP-EGDL-00066-1`, `PT-EDP-EGDL-00066-2`, `PT-EDP-EGDL-00068-1`, `PT-EDP-EGDL-00068-2`, `PT-EDP-EGDL-00069-1`, `GDL-00066`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `PT-EDP-EGDL-00066-1` | `GDL-00066` |
+| `PT-EDP-EGDL-00066-2` | `GDL-00066` |
+| `PT-EDP-EGDL-00068-1` | `GDL-00068` |
+| `PT-EDP-EGDL-00068-2` | `GDL-00068` |
+| `PT-EDP-EGDL-00069-1` | `GDL-00069` |
+| `PT-EDP-EGDL-00069-2` | `GDL-00069` |
+| `PT-EDP-EGDL-00070-1` | `GDL-00070` |
+| `PT-EDP-EGDL-00070-2` | `GDL-00070` |
+| `PT-EDP-EGDL-00071-1` | `GDL-00071` |
+| `PT-EDP-EGDL-00071-2` | `GDL-00071` |
+| … | … | +87 restantes |
+- **Veredito:** baixo — usage_type em falta.
+
+### [BAIXO] Chaves eMI3 — códigos locais mistos
+- **Regra:** tomadas do mesmo site com <LOCAL> diferentes.
+- **Afetados:** 4 de 3541 pontos (0.1%). Exemplos: `MOBI-BRG-00047-01`, `MOBI-BRG-00047-02`, `PT-EDP-EMOBI-BRG-00047-1`, `PT-EDP-EMOBI-BRG-00047-2`, `MOBI-BRG-00047`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `MOBI-BRG-00047-01` | `MOBI-BRG-00047` |
+| `MOBI-BRG-00047-02` | `MOBI-BRG-00047` |
+| `PT-EDP-EMOBI-BRG-00047-1` | `MOBI-BRG-00047` |
+| `PT-EDP-EMOBI-BRG-00047-2` | `MOBI-BRG-00047` |
+- **Veredito:** baixo — códigos locais mistos.
 
 [↑ índice](#indice)
 
@@ -1188,173 +436,1039 @@ Totais: 8 733 sites, 19 259 pontos distintos (19 376 linhas de conector), 92 OPC
 
 <a id="opc-CONT"></a>
 
+<details open>
+<summary><b>CONT — Modelo Continente Hipermercados, S.A. (450 sites, 954 pontos)</b> · 7 BAIXO, 3 MÉDIO, 2 CRÍTICO, 1 ALTO</summary>
+
+### [CRÍTICO] Física/Ohm — sobre-declaração (ratio>1,25)
+- **Regra:** potência declarada > 1,25 × V×I (monofásico) / √3×V×I (mode3AC3p).
+- **Afetados:** 246 de 954 pontos (25.8%). Exemplos: `0001PL0011.01`, `0001PL0011.02`, `0001PL0012.01`, `0001PL0012.02`, `0002PL0007.01`, `0001PL0011`.
+- **Evidência:**
+
+| ponto | site | tomada | modo | tensão / corrente / declarada / esperada | ratio |
+|---|---|---|---|---|---|
+| `0001PL0011.01` | `0001PL0011` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22000 W / 12747.9 W | 1.726 |
+| `0001PL0011.02` | `0001PL0011` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22000 W / 12747.9 W | 1.726 |
+| `0001PL0012.01` | `0001PL0012` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22000 W / 12747.9 W | 1.726 |
+| `0001PL0012.02` | `0001PL0012` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22000 W / 12747.9 W | 1.726 |
+| `0002PL0007.01` | `0002PL0007` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22000 W / 12747.9 W | 1.726 |
+| `0002PL0007.02` | `0002PL0007` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22000 W / 12747.9 W | 1.726 |
+| `0002PL0008.01` | `0002PL0008` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22000 W / 12747.9 W | 1.726 |
+| `0002PL0008.02` | `0002PL0008` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22000 W / 12747.9 W | 1.726 |
+| `0002PL0011.01` | `0002PL0011` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22000 W / 12747.9 W | 1.726 |
+| `0002PL0011.02` | `0002PL0011` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22000 W / 12747.9 W | 1.726 |
+| … | … | +236 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-CONT)) |
+- **Veredito:** crítico — sobre-declaração (ratio>1,25).
+
+### [CRÍTICO] Física — V≤0 ou I≤0
+- **Regra:** voltage<=0 ou max_current<=0.
+- **Afetados:** 48 de 954 pontos (5.0%). Exemplos: `0001PR0013.01`, `0001PR0013.02`, `0002PR0020.01`, `0002PR0020.02`, `0004PR0004.01`, `0001PR0013`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `0001PR0013.01` | `0001PR0013` |
+| `0001PR0013.02` | `0001PR0013` |
+| `0002PR0020.01` | `0002PR0020` |
+| `0002PR0020.02` | `0002PR0020` |
+| `0004PR0004.01` | `0004PR0004` |
+| `0004PR0004.02` | `0004PR0004` |
+| `0004PR0005.01` | `0004PR0005` |
+| `0004PR0005.02` | `0004PR0005` |
+| `0107PR0005.01` | `0107PR0005` |
+| `0107PR0005.02` | `0107PR0005` |
+| … | … | +38 restantes |
+- **Veredito:** crítico — V≤0 ou I≤0.
+
+### [ALTO] Localização — fora de PT
+- **Regra:** coordenadas fora dos limites PT.
+- **Afetados:** 59 de 954 pontos (6.2%). Exemplos: `0107PR0005.01`, `0107PR0005.02`, `0460PL0001.01`, `E071PL0001.01`, `E071PL0001.02`, `0107PR0005`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `0107PR0005.01` | `0107PR0005` |
+| `0107PR0005.02` | `0107PR0005` |
+| `0460PL0001.01` | `0460PL0001` |
+| `E071PL0001.01` | `E071PL0001` |
+| `E071PL0001.02` | `E071PL0001` |
+| `E071PL0002.01` | `E071PL0002` |
+| `E071PL0002.02` | `E071PL0002` |
+| `E071PL0003.01` | `E071PL0003` |
+| `E071PL0003.02` | `E071PL0003` |
+| `E071PL0004.01` | `E071PL0004` |
+| … | … | +49 restantes |
+- **Veredito:** alto — fora de PT.
+
+### [MÉDIO] Combinação formato/tomada
+- **Regra:** connector_format incompatível com charging_mode.
+- **Afetados:** 700 de 954 pontos (73.4%). Exemplos: `1004PR0002.01`, `1004PR0002.02`, `0001PR0013.01`, `0001PR0013.02`, `0001PR0029.01`, `1004PR0002`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `1004PR0002.01` | `1004PR0002` |
+| `1004PR0002.02` | `1004PR0002` |
+| `0001PR0013.01` | `0001PR0013` |
+| `0001PR0013.02` | `0001PR0013` |
+| `0001PR0029.01` | `0001PR0029` |
+| `0001PR0029.02` | `0001PR0029` |
+| `0001PR0030.01` | `0001PR0030` |
+| `0001PR0030.02` | `0001PR0030` |
+| `0001PR0031.01` | `0001PR0031` |
+| `0001PR0031.02` | `0001PR0031` |
+| … | … | +690 restantes |
+- **Veredito:** médio — Combinação formato/tomada.
+
+### [MÉDIO] Localização — CP7↔localidade
+- **Regra:** CP4 com city divergente da moda.
+- **Afetados:** 267 de 954 pontos (28.0%). Exemplos: `1004PR0002.01`, `1004PR0002.02`, `0215PR0001.01`, `0215PR0001.02`, `0215PR0002.01`, `1004PR0002`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `1004PR0002.01` | `1004PR0002` |
+| `1004PR0002.02` | `1004PR0002` |
+| `0215PR0001.01` | `0215PR0001` |
+| `0215PR0001.02` | `0215PR0001` |
+| `0215PR0002.01` | `0215PR0002` |
+| `0215PR0002.02` | `0215PR0002` |
+| `0215PR0004.01` | `0215PR0004` |
+| `0215PR0004.02` | `0215PR0004` |
+| `0255PL0001.01` | `0255PL0001` |
+| `0255PL0001.02` | `0255PL0001` |
+| … | … | +257 restantes |
+- **Veredito:** médio — CP7↔localidade.
+
+### [MÉDIO] Física/Ohm — sub-declaração (ratio<0,75)
+- **Regra:** potência declarada < 0,75 × V×I / √3×V×I.
+- **Afetados:** 234 de 954 pontos (24.5%). Exemplos: `0002PR0009.01`, `0002PR0009.03`, `0203PR0006.01`, `0203PR0006.02`, `0203PR0007.01`, `0002PR0009`.
+- **Evidência:**
+
+| ponto | site | tomada | modo | tensão / corrente / declarada / esperada | ratio |
+|---|---|---|---|---|---|
+| `0002PR0009.01` | `0002PR0009` | iec62196T2COMBO | mode4DC | 1000 V / 200 A / 120000 W / 200000.0 W | 0.6 |
+| `0002PR0009.03` | `0002PR0009` | iec62196T2COMBO | mode4DC | 1000 V / 200 A / 120000 W / 200000.0 W | 0.6 |
+| `0203PR0006.01` | `0203PR0006` | iec62196T2COMBO | mode4DC | 1000 V / 350 A / 240000 W / 350000.0 W | 0.686 |
+| `0203PR0006.02` | `0203PR0006` | iec62196T2COMBO | mode4DC | 1000 V / 350 A / 240000 W / 350000.0 W | 0.686 |
+| `0203PR0007.01` | `0203PR0007` | iec62196T2COMBO | mode4DC | 1000 V / 350 A / 240000 W / 350000.0 W | 0.686 |
+| `0203PR0007.02` | `0203PR0007` | iec62196T2COMBO | mode4DC | 1000 V / 350 A / 240000 W / 350000.0 W | 0.686 |
+| `0204PR0003.01` | `0204PR0003` | iec62196T2COMBO | mode4DC | 1000 V / 200 A / 120000 W / 200000.0 W | 0.6 |
+| `0204PR0003.03` | `0204PR0003` | iec62196T2COMBO | mode4DC | 1000 V / 200 A / 120000 W / 200000.0 W | 0.6 |
+| `0211PR0002.01` | `0211PR0002` | iec62196T2COMBO | mode4DC | 1000 V / 350 A / 120000 W / 350000.0 W | 0.343 |
+| `0211PR0002.02` | `0211PR0002` | iec62196T2COMBO | mode4DC | 1000 V / 350 A / 120000 W / 350000.0 W | 0.343 |
+| … | … | +224 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-CONT)) |
+- **Veredito:** médio — sub-declaração (ratio<0,75).
+
+### [BAIXO] Metadados — usage_type em falta
+- **Regra:** usage_type nulo/fora do enum.
+- **Afetados:** 954 de 954 pontos (100.0%). Exemplos: `1004PR0002.01`, `1004PR0002.02`, `0001PL0011.01`, `0001PL0011.02`, `0001PL0012.01`, `1004PR0002`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `1004PR0002.01` | `1004PR0002` |
+| `1004PR0002.02` | `1004PR0002` |
+| `0001PL0011.01` | `0001PL0011` |
+| `0001PL0011.02` | `0001PL0011` |
+| `0001PL0012.01` | `0001PL0012` |
+| `0001PL0012.02` | `0001PL0012` |
+| `0001PR0013.01` | `0001PR0013` |
+| `0001PR0013.02` | `0001PR0013` |
+| `0001PR0029.01` | `0001PR0029` |
+| `0001PR0029.02` | `0001PR0029` |
+| … | … | +944 restantes |
+- **Veredito:** baixo — usage_type em falta.
+
+### [BAIXO] Chaves eMI3 — código local disperso
+- **Regra:** mesmo <LOCAL> em cidades/CP4 dispersos.
+- **Afetados:** 954 de 954 pontos (100.0%). Exemplos: `1004PR0002.01`, `1004PR0002.02`, `0001PL0011.01`, `0001PL0011.02`, `0001PL0012.01`, `1004PR0002`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `1004PR0002.01` | `1004PR0002` |
+| `1004PR0002.02` | `1004PR0002` |
+| `0001PL0011.01` | `0001PL0011` |
+| `0001PL0011.02` | `0001PL0011` |
+| `0001PL0012.01` | `0001PL0012` |
+| `0001PL0012.02` | `0001PL0012` |
+| `0001PR0013.01` | `0001PR0013` |
+| `0001PR0013.02` | `0001PR0013` |
+| `0001PR0029.01` | `0001PR0029` |
+| `0001PR0029.02` | `0001PR0029` |
+| … | … | +944 restantes |
+- **Veredito:** baixo — código local disperso.
+
+### [BAIXO] Metadados — brands_accepted vazio
+- **Regra:** brands_accepted vazio.
+- **Afetados:** 954 de 954 pontos (100.0%). Exemplos: `1004PR0002.01`, `1004PR0002.02`, `0001PL0011.01`, `0001PL0011.02`, `0001PL0012.01`, `1004PR0002`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `1004PR0002.01` | `1004PR0002` |
+| `1004PR0002.02` | `1004PR0002` |
+| `0001PL0011.01` | `0001PL0011` |
+| `0001PL0011.02` | `0001PL0011` |
+| `0001PL0012.01` | `0001PL0012` |
+| `0001PL0012.02` | `0001PL0012` |
+| `0001PR0013.01` | `0001PR0013` |
+| `0001PR0013.02` | `0001PR0013` |
+| `0001PR0029.01` | `0001PR0029` |
+| `0001PR0029.02` | `0001PR0029` |
+| … | … | +944 restantes |
+- **Veredito:** baixo — brands_accepted vazio.
+
+### [BAIXO] Chaves eMI3 — códigos locais mistos
+- **Regra:** tomadas do mesmo site com <LOCAL> diferentes.
+- **Afetados:** 938 de 954 pontos (98.3%). Exemplos: `1004PR0002.01`, `1004PR0002.02`, `0001PL0011.01`, `0001PL0011.02`, `0001PL0012.01`, `1004PR0002`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `1004PR0002.01` | `1004PR0002` |
+| `1004PR0002.02` | `1004PR0002` |
+| `0001PL0011.01` | `0001PL0011` |
+| `0001PL0011.02` | `0001PL0011` |
+| `0001PL0012.01` | `0001PL0012` |
+| `0001PL0012.02` | `0001PL0012` |
+| `0001PR0013.01` | `0001PR0013` |
+| `0001PR0013.02` | `0001PR0013` |
+| `0001PR0029.01` | `0001PR0029` |
+| `0001PR0029.02` | `0001PR0029` |
+| … | … | +928 restantes |
+- **Veredito:** baixo — códigos locais mistos.
+
+### [BAIXO] Localização — postcode em falta
+- **Regra:** postcode vazio.
+- **Afetados:** 101 de 954 pontos (10.6%). Exemplos: `0107PR0005.01`, `0107PR0005.02`, `0250PR0002.01`, `0250PR0002.02`, `0250PR0002.03`, `0107PR0005`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `0107PR0005.01` | `0107PR0005` |
+| `0107PR0005.02` | `0107PR0005` |
+| `0250PR0002.01` | `0250PR0002` |
+| `0250PR0002.02` | `0250PR0002` |
+| `0250PR0002.03` | `0250PR0002` |
+| `0261PL0001.01` | `0261PL0001` |
+| `0261PL0001.02` | `0261PL0001` |
+| `0261PR0002.01` | `0261PR0002` |
+| `0261PR0002.02` | `0261PR0002` |
+| `0261PR0002.03` | `0261PR0002` |
+| … | … | +91 restantes |
+- **Veredito:** baixo — postcode em falta.
+
+### [BAIXO] Localização — formato CP7
+- **Regra:** postcode fora de NNNN-NNN.
+- **Afetados:** 101 de 954 pontos (10.6%). Exemplos: `0107PR0005.01`, `0107PR0005.02`, `0250PR0002.01`, `0250PR0002.02`, `0250PR0002.03`, `0107PR0005`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `0107PR0005.01` | `0107PR0005` |
+| `0107PR0005.02` | `0107PR0005` |
+| `0250PR0002.01` | `0250PR0002` |
+| `0250PR0002.02` | `0250PR0002` |
+| `0250PR0002.03` | `0250PR0002` |
+| `0261PL0001.01` | `0261PL0001` |
+| `0261PL0001.02` | `0261PL0001` |
+| `0261PR0002.01` | `0261PR0002` |
+| `0261PR0002.02` | `0261PR0002` |
+| `0261PR0002.03` | `0261PR0002` |
+| … | … | +91 restantes |
+- **Veredito:** baixo — formato CP7.
+
+### [BAIXO] Localização — city em falta
+- **Regra:** city vazio.
+- **Afetados:** 100 de 954 pontos (10.5%). Exemplos: `0107PR0005.01`, `0107PR0005.02`, `0213PL0001.01`, `0213PL0001.02`, `0232PL0001.01`, `0107PR0005`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `0107PR0005.01` | `0107PR0005` |
+| `0107PR0005.02` | `0107PR0005` |
+| `0213PL0001.01` | `0213PL0001` |
+| `0213PL0001.02` | `0213PL0001` |
+| `0232PL0001.01` | `0232PL0001` |
+| `0232PL0001.02` | `0232PL0001` |
+| `0232PL0002.01` | `0232PL0002` |
+| `0232PL0002.02` | `0232PL0002` |
+| `0232PR0003.01` | `0232PR0003` |
+| `0232PR0003.02` | `0232PR0003` |
+| … | … | +90 restantes |
+- **Veredito:** baixo — city em falta.
+
+[↑ índice](#indice)
+
+</details>
+
+<a id="opc-GLPP"></a>
+
+<details open>
+<summary><b>GLPP — Galp Power OPC (1603 sites, 3430 pontos)</b> · 4 CRÍTICO, 3 MÉDIO, 3 BAIXO</summary>
+
+### [CRÍTICO] Física/Ohm — sobre-declaração (ratio>1,25)
+- **Regra:** potência declarada > 1,25 × V×I (monofásico) / √3×V×I (mode3AC3p).
+- **Afetados:** 144 de 3432 pontos (4.2%). Exemplos: `LSB-80078-01`, `LSB-80078-02`, `BRG-00039-02`, `LSB-00488-01`, `ALB-90002-01`, `LSB-80078`.
+- **Evidência:**
+
+| ponto | site | tomada | modo | tensão / corrente / declarada / esperada | ratio |
+|---|---|---|---|---|---|
+| `LSB-80078-01` | `LSB-80078` | iec62196T2 | mode2AC1p | 240 V / 16 A / 7400 W / 3840.0 W | 1.927 |
+| `LSB-80078-02` | `LSB-80078` | iec62196T2 | mode2AC1p | 240 V / 16 A / 7400 W / 3840.0 W | 1.927 |
+| `BRG-00039-02` | `BRG-00039` | iec62196T2 | mode2AC1p | 400 V / 16 A / 11000 W / 6400.0 W | 1.719 |
+| `LSB-00488-01` | `LSB-00488` | iec62196T2 | mode3AC3p | 240 V / 16 A / 11000 W / 6651.1 W | 1.654 |
+| `ALB-90002-01` | `ALB-90002` | iec62196T2 | mode3AC3p | 400 V / 20 A / 20000 W / 13856.4 W | 1.443 |
+| `ALB-90002-02` | `ALB-90002` | iec62196T2 | mode3AC3p | 400 V / 20 A / 20000 W / 13856.4 W | 1.443 |
+| `PRT-00098-03` | `PRT-00098` | iec62196T2 | mode3AC3p | 400 V / 32 A / 43000 W / 22170.3 W | 1.94 |
+| `LSB-00489-01` | `LSB-00489` | iec62196T2 | mode3AC3p | 240 V / 16 A / 11000 W / 6651.1 W | 1.654 |
+| `LSB-80055-01` | `LSB-80055` | iec62196T2 | mode2AC1p | 240 V / 16 A / 7400 W / 3840.0 W | 1.927 |
+| `LSB-80055-02` | `LSB-80055` | iec62196T2 | mode2AC1p | 240 V / 16 A / 7400 W / 3840.0 W | 1.927 |
+| … | … | +134 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-GLPP)) |
+- **Veredito:** crítico — sobre-declaração (ratio>1,25).
+
+### [CRÍTICO] Combinação modo/tomada — AC em DC
+- **Regra:** tipo só-AC em mode4/ccs.
+- **Afetados:** 6 de 3432 pontos (0.2%). Exemplos: `STB-00035-03`, `ODV-00047-01`, `AMD-00110-01`, `OVR-00032-01`, `VNG-00199-03`, `STB-00035`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `STB-00035-03` | `STB-00035` |
+| `ODV-00047-01` | `ODV-00047` |
+| `AMD-00110-01` | `AMD-00110` |
+| `OVR-00032-01` | `OVR-00032` |
+| `VNG-00199-03` | `VNG-00199` |
+| `CTB-00057-01` | `CTB-00057` |
+- **Veredito:** crítico — AC em DC.
+
+### [CRÍTICO] Combinação modo/tomada — DC em AC
+- **Regra:** tipo só-DC em mode1/2/3.
+- **Afetados:** 4 de 3432 pontos (0.1%). Exemplos: `STB-00035-01`, `SSB-00009-01`, `LSB-00655-01`, `CSC-00413-01`, `STB-00035`, `SSB-00009`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `STB-00035-01` | `STB-00035` |
+| `SSB-00009-01` | `SSB-00009` |
+| `LSB-00655-01` | `LSB-00655` |
+| `CSC-00413-01` | `CSC-00413` |
+- **Veredito:** crítico — DC em AC.
+
+### [CRÍTICO] Duplicados — point_id
+- **Regra:** point_id duplicado no inventário.
+- **Afetados:** 3 de 3432 pontos (0.1%). Exemplos: `ABF-00061-01`, `ABF-00061`, `ABF-00061`, `ABF-00061`, `ABF-00061`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `ABF-00061-01` | `ABF-00061` |
+| `ABF-00061-01` | `ABF-00061` |
+| `ABF-00061-01` | `ABF-00061` |
+- **Veredito:** crítico — point_id.
+
+### [MÉDIO] Combinação formato/tomada
+- **Regra:** connector_format incompatível com charging_mode.
+- **Afetados:** 1904 de 3432 pontos (55.5%). Exemplos: `CLD-90001-01`, `CLD-90001-02`, `FEUP-00001-01`, `FEUP-00001-02`, `LSB-00019-01`, `CLD-90001`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `CLD-90001-01` | `CLD-90001` |
+| `CLD-90001-02` | `CLD-90001` |
+| `FEUP-00001-01` | `FEUP-00001` |
+| `FEUP-00001-02` | `FEUP-00001` |
+| `LSB-00019-01` | `LSB-00019` |
+| `LSB-00019-02` | `LSB-00019` |
+| `ABF-00061-01` | `ABF-00061` |
+| `ABF-00061-01` | `ABF-00061` |
+| `ABF-00061-01` | `ABF-00061` |
+| `ABF-00061-02` | `ABF-00061` |
+| … | … | +1894 restantes |
+- **Veredito:** médio — Combinação formato/tomada.
+
+### [MÉDIO] Física/Ohm — sub-declaração (ratio<0,75)
+- **Regra:** potência declarada < 0,75 × V×I / √3×V×I.
+- **Afetados:** 466 de 3432 pontos (13.6%). Exemplos: `ABF-00061-01`, `MTS-00056-01`, `MTS-00056-02`, `PVZ-00029-01`, `ABF-00061`, `MTS-00056`.
+- **Evidência:**
+
+| ponto | site | tomada | modo | tensão / corrente / declarada / esperada | ratio |
+|---|---|---|---|---|---|
+| `ABF-00061-01` | `ABF-00061` | iec62196T2COMBO | mode4DC | 950 V / 200 A / 120000 W / 190000.0 W | 0.632 |
+| `ABF-00061-01` | `ABF-00061` | iec62196T2COMBO | mode4DC | 950 V / 120 A / 60000 W / 114000.0 W | 0.526 |
+| `MTS-00056-01` | `MTS-00056` | iec62196T2 | mode3AC3p | 400 V / 32 A / 11000 W / 22170.3 W | 0.496 |
+| `MTS-00056-02` | `MTS-00056` | iec62196T2 | mode3AC3p | 400 V / 32 A / 11000 W / 22170.3 W | 0.496 |
+| `PVZ-00029-01` | `PVZ-00029` | iec62196T2COMBO | mode4DC | 1000 V / 350 A / 160000 W / 350000.0 W | 0.457 |
+| `PVZ-00029-02` | `PVZ-00029` | iec62196T2COMBO | mode4DC | 1000 V / 350 A / 160000 W / 350000.0 W | 0.457 |
+| `VFR-00065-01` | `VFR-00065` | iec62196T2 | mode3AC3p | 400 V / 32 A / 11000 W / 22170.3 W | 0.496 |
+| `VFR-00065-02` | `VFR-00065` | iec62196T2 | mode3AC3p | 400 V / 32 A / 11000 W / 22170.3 W | 0.496 |
+| `ABT-00012-01` | `ABT-00012` | iec62196T2COMBO | mode4DC | 950 V / 200 A / 120000 W / 190000.0 W | 0.632 |
+| `ABT-00012-02` | `ABT-00012` | iec62196T2COMBO | mode4DC | 950 V / 200 A / 120000 W / 190000.0 W | 0.632 |
+| … | … | +456 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-GLPP)) |
+- **Veredito:** médio — sub-declaração (ratio<0,75).
+
+### [MÉDIO] Localização — CP7↔localidade
+- **Regra:** CP4 com city divergente da moda.
+- **Afetados:** 72 de 3432 pontos (2.1%). Exemplos: `TVD-00026-01`, `TVD-00026-02`, `VFR-00064-01`, `VFR-00064-02`, `VFR-00058-01`, `TVD-00026`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `TVD-00026-01` | `TVD-00026` |
+| `TVD-00026-02` | `TVD-00026` |
+| `VFR-00064-01` | `VFR-00064` |
+| `VFR-00064-02` | `VFR-00064` |
+| `VFR-00058-01` | `VFR-00058` |
+| `VFR-00058-02` | `VFR-00058` |
+| `VFR-00065-01` | `VFR-00065` |
+| `VFR-00065-02` | `VFR-00065` |
+| `LRS-90025-01` | `LRS-90025` |
+| `LRS-90025-02` | `LRS-90025` |
+| … | … | +62 restantes |
+- **Veredito:** médio — CP7↔localidade.
+
+### [BAIXO] Chaves eMI3 — código local disperso
+- **Regra:** mesmo <LOCAL> em cidades/CP4 dispersos.
+- **Afetados:** 2925 de 3432 pontos (85.2%). Exemplos: `VNC-90001-01`, `VNC-90001-02`, `VNF-90007-01`, `VNF-90007-02`, `CLD-90001-01`, `VNC-90001`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `VNC-90001-01` | `VNC-90001` |
+| `VNC-90001-02` | `VNC-90001` |
+| `VNF-90007-01` | `VNF-90007` |
+| `VNF-90007-02` | `VNF-90007` |
+| `CLD-90001-01` | `CLD-90001` |
+| `CLD-90001-02` | `CLD-90001` |
+| `FEUP-00001-01` | `FEUP-00001` |
+| `FEUP-00001-02` | `FEUP-00001` |
+| `FEUP-00001-03` | `FEUP-00001` |
+| `LSB-00019-01` | `LSB-00019` |
+| … | … | +2915 restantes |
+- **Veredito:** baixo — código local disperso.
+
+### [BAIXO] Metadados — usage_type em falta
+- **Regra:** usage_type nulo/fora do enum.
+- **Afetados:** 66 de 3432 pontos (1.9%). Exemplos: `MTJ-00128-01`, `MTJ-00128-02`, `MTJ-00129-01`, `MTJ-00129-02`, `CSC-00571-01`, `MTJ-00128`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `MTJ-00128-01` | `MTJ-00128` |
+| `MTJ-00128-02` | `MTJ-00128` |
+| `MTJ-00129-01` | `MTJ-00129` |
+| `MTJ-00129-02` | `MTJ-00129` |
+| `CSC-00571-01` | `CSC-00571` |
+| `CSC-00571-02` | `CSC-00571` |
+| `MGR-00032-01` | `MGR-00032` |
+| `MGR-00032-02` | `MGR-00032` |
+| `MGR-00033-01` | `MGR-00033` |
+| `MGR-00033-02` | `MGR-00033` |
+| … | … | +56 restantes |
+- **Veredito:** baixo — usage_type em falta.
+
+### [BAIXO] Localização — formato CP7
+- **Regra:** postcode fora de NNNN-NNN.
+- **Afetados:** 7 de 3432 pontos (0.2%). Exemplos: `OER-00064-01`, `OER-00064-02`, `OER-00064-03`, `LNH-00037-01`, `LNH-00037-02`, `OER-00064`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `OER-00064-01` | `OER-00064` |
+| `OER-00064-02` | `OER-00064` |
+| `OER-00064-03` | `OER-00064` |
+| `LNH-00037-01` | `LNH-00037` |
+| `LNH-00037-02` | `LNH-00037` |
+| `OVR-00054-01` | `OVR-00054` |
+| `OVR-00054-02` | `OVR-00054` |
+- **Veredito:** baixo — formato CP7.
+
+[↑ índice](#indice)
+
+</details>
+
+<a id="opc-ATLA"></a>
+
+<details open>
+<summary><b>ATLA — Atlante Infra Portugal, S.A (598 sites, 1381 pontos)</b> · 4 MÉDIO, 3 BAIXO, 1 CRÍTICO</summary>
+
+### [CRÍTICO] Física/Ohm — sobre-declaração (ratio>1,25)
+- **Regra:** potência declarada > 1,25 × V×I (monofásico) / √3×V×I (mode3AC3p).
+- **Afetados:** 419 de 1381 pontos (30.3%). Exemplos: `LRS-00098-03`, `NZR-00027-01`, `NZR-00027-02`, `GDM-00039-03`, `ALM-00071-03`, `LRS-00098`.
+- **Evidência:**
+
+| ponto | site | tomada | modo | tensão / corrente / declarada / esperada | ratio |
+|---|---|---|---|---|---|
+| `LRS-00098-03` | `LRS-00098` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22000 W / 12747.9 W | 1.726 |
+| `NZR-00027-01` | `NZR-00027` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22000 W / 12747.9 W | 1.726 |
+| `NZR-00027-02` | `NZR-00027` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22000 W / 12747.9 W | 1.726 |
+| `GDM-00039-03` | `GDM-00039` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22000 W / 12747.9 W | 1.726 |
+| `ALM-00071-03` | `ALM-00071` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22000 W / 12747.9 W | 1.726 |
+| `AND-00007-03` | `AND-00007` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22000 W / 12747.9 W | 1.726 |
+| `AVV-00010-03` | `AVV-00010` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22000 W / 12747.9 W | 1.726 |
+| `CBR-00085-01` | `CBR-00085` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22000 W / 12747.9 W | 1.726 |
+| `CCH-00004-03` | `CCH-00004` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22000 W / 12747.9 W | 1.726 |
+| `CHV-00018-03` | `CHV-00018` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22000 W / 12747.9 W | 1.726 |
+| … | … | +409 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-ATLA)) |
+- **Veredito:** crítico — sobre-declaração (ratio>1,25).
+
+### [MÉDIO] Combinação formato/tomada
+- **Regra:** connector_format incompatível com charging_mode.
+- **Afetados:** 911 de 1381 pontos (66.0%). Exemplos: `AVR-00049-01`, `AVR-00049-02`, `LRS-00098-01`, `LRS-00098-02`, `CHV-00017-01`, `AVR-00049`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `AVR-00049-01` | `AVR-00049` |
+| `AVR-00049-02` | `AVR-00049` |
+| `LRS-00098-01` | `LRS-00098` |
+| `LRS-00098-02` | `LRS-00098` |
+| `CHV-00017-01` | `CHV-00017` |
+| `CHV-00017-02` | `CHV-00017` |
+| `MTJ-00038-01` | `MTJ-00038` |
+| `MTJ-00038-02` | `MTJ-00038` |
+| `NZR-00028-01` | `NZR-00028` |
+| `NZR-00028-02` | `NZR-00028` |
+| … | … | +901 restantes |
+- **Veredito:** médio — Combinação formato/tomada.
+
+### [MÉDIO] Física/Ohm — sub-declaração (ratio<0,75)
+- **Regra:** potência declarada < 0,75 × V×I / √3×V×I.
+- **Afetados:** 180 de 1381 pontos (13.0%). Exemplos: `NZR-00028-01`, `NZR-00028-02`, `RMZ-00007-01`, `RMZ-00007-02`, `SNS-00014-01`, `NZR-00028`.
+- **Evidência:**
+
+| ponto | site | tomada | modo | tensão / corrente / declarada / esperada | ratio |
+|---|---|---|---|---|---|
+| `NZR-00028-01` | `NZR-00028` | iec62196T2COMBO | mode4DC | 400 V / 150 A / 30000 W / 60000.0 W | 0.5 |
+| `NZR-00028-02` | `NZR-00028` | chademo | mode4DC | 400 V / 125 A / 30000 W / 50000.0 W | 0.6 |
+| `RMZ-00007-01` | `RMZ-00007` | iec62196T2COMBO | mode4DC | 400 V / 150 A / 30000 W / 60000.0 W | 0.5 |
+| `RMZ-00007-02` | `RMZ-00007` | chademo | mode4DC | 400 V / 125 A / 30000 W / 50000.0 W | 0.6 |
+| `SNS-00014-01` | `SNS-00014` | iec62196T2COMBO | mode4DC | 400 V / 150 A / 30000 W / 60000.0 W | 0.5 |
+| `SNS-00014-02` | `SNS-00014` | chademo | mode4DC | 400 V / 125 A / 30000 W / 50000.0 W | 0.6 |
+| `ILH-00009-01` | `ILH-00009` | chademo | mode4DC | 400 V / 125 A / 30000 W / 50000.0 W | 0.6 |
+| `ILH-00009-02` | `ILH-00009` | iec62196T2COMBO | mode4DC | 400 V / 150 A / 30000 W / 60000.0 W | 0.5 |
+| `ETZ-00023-01` | `ETZ-00023` | iec62196T2COMBO | mode4DC | 400 V / 150 A / 30000 W / 60000.0 W | 0.5 |
+| `ETZ-00023-02` | `ETZ-00023` | chademo | mode4DC | 400 V / 125 A / 30000 W / 50000.0 W | 0.6 |
+| … | … | +170 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-ATLA)) |
+- **Veredito:** médio — sub-declaração (ratio<0,75).
+
+### [MÉDIO] Localização — CP7↔localidade
+- **Regra:** CP4 com city divergente da moda.
+- **Afetados:** 20 de 1381 pontos (1.4%). Exemplos: `FIG-00024-01`, `FIG-00024-02`, `FIG-00024-03`, `VFR-00080-01`, `VFR-00080-02`, `FIG-00024`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `FIG-00024-01` | `FIG-00024` |
+| `FIG-00024-02` | `FIG-00024` |
+| `FIG-00024-03` | `FIG-00024` |
+| `VFR-00080-01` | `VFR-00080` |
+| `VFR-00080-02` | `VFR-00080` |
+| `VFR-00080-03` | `VFR-00080` |
+| `BRR-00130-01` | `BRR-00130` |
+| `BRR-00130-02` | `BRR-00130` |
+| `BRR-00130-03` | `BRR-00130` |
+| `BRR-00131-01` | `BRR-00131` |
+| … | … | +10 restantes |
+- **Veredito:** médio — CP7↔localidade.
+
+### [MÉDIO] Operador — grafias fragmentadas
+- **Regra:** mesmo operator_id com vários operator_name.
+- **Afetados:** 5 de 1381 pontos (0.4%). Exemplos: `AVR-00049-01`, `AVR-00049-02`, `LRS-00098-01`, `LRS-00098-02`, `LRS-00098-03`, `AVR-00049`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `AVR-00049-01` | `AVR-00049` |
+| `AVR-00049-02` | `AVR-00049` |
+| `LRS-00098-01` | `LRS-00098` |
+| `LRS-00098-02` | `LRS-00098` |
+| `LRS-00098-03` | `LRS-00098` |
+- **Veredito:** médio — grafias fragmentadas.
+
+### [BAIXO] Chaves eMI3 — código local disperso
+- **Regra:** mesmo <LOCAL> em cidades/CP4 dispersos.
+- **Afetados:** 1146 de 1381 pontos (83.0%). Exemplos: `AVR-00049-01`, `AVR-00049-02`, `LRS-00098-01`, `LRS-00098-02`, `LRS-00098-03`, `AVR-00049`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `AVR-00049-01` | `AVR-00049` |
+| `AVR-00049-02` | `AVR-00049` |
+| `LRS-00098-01` | `LRS-00098` |
+| `LRS-00098-02` | `LRS-00098` |
+| `LRS-00098-03` | `LRS-00098` |
+| `CHV-00017-01` | `CHV-00017` |
+| `CHV-00017-02` | `CHV-00017` |
+| `MTJ-00038-01` | `MTJ-00038` |
+| `MTJ-00038-02` | `MTJ-00038` |
+| `NZR-00027-01` | `NZR-00027` |
+| … | … | +1136 restantes |
+- **Veredito:** baixo — código local disperso.
+
+### [BAIXO] Metadados — usage_type em falta
+- **Regra:** usage_type nulo/fora do enum.
+- **Afetados:** 37 de 1381 pontos (2.7%). Exemplos: `MTS-00202-01`, `MTS-00202-02`, `MTS-00203-01`, `MTS-00203-02`, `MTS-00204-01`, `MTS-00202`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `MTS-00202-01` | `MTS-00202` |
+| `MTS-00202-02` | `MTS-00202` |
+| `MTS-00203-01` | `MTS-00203` |
+| `MTS-00203-02` | `MTS-00203` |
+| `MTS-00204-01` | `MTS-00204` |
+| `MTS-00204-02` | `MTS-00204` |
+| `MTS-00205-01` | `MTS-00205` |
+| `MTS-00205-02` | `MTS-00205` |
+| `MTS-00206-01` | `MTS-00206` |
+| `MTS-00206-02` | `MTS-00206` |
+| … | … | +27 restantes |
+- **Veredito:** baixo — usage_type em falta.
+
+### [BAIXO] Localização — formato CP7
+- **Regra:** postcode fora de NNNN-NNN.
+- **Afetados:** 1 de 1381 pontos (0.1%). Exemplos: `ALQ-00017-02`, `ALQ-00017`, `ALQ-00017`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `ALQ-00017-02` | `ALQ-00017` |
+- **Veredito:** baixo — formato CP7.
+
+[↑ índice](#indice)
+
+</details>
+
+<a id="opc-HORZ"></a>
+
+<details open>
+<summary><b>HORZ — Powerdot, S.A (786 sites, 2138 pontos)</b> · 4 BAIXO, 3 MÉDIO, 1 CRÍTICO</summary>
+
+### [CRÍTICO] Física/Ohm — sobre-declaração (ratio>1,25)
+- **Regra:** potência declarada > 1,25 × V×I (monofásico) / √3×V×I (mode3AC3p).
+- **Afetados:** 81 de 2138 pontos (3.8%). Exemplos: `ALM-90003-1`, `ALM-90003-2`, `VLG-00024-03`, `VLG-00024-04`, `VLG-00024-05`, `ALM-90003`.
+- **Evidência:**
+
+| ponto | site | tomada | modo | tensão / corrente / declarada / esperada | ratio |
+|---|---|---|---|---|---|
+| `ALM-90003-1` | `ALM-90003` | iec62196T2 | mode3AC3p | 400 V / 16 A / 22000 W / 11085.1 W | 1.985 |
+| `ALM-90003-2` | `ALM-90003` | iec62196T2 | mode3AC3p | 400 V / 16 A / 22000 W / 11085.1 W | 1.985 |
+| `VLG-00024-03` | `VLG-00024` | iec62196T2COMBO | mode4DC | 500 V / 200 A / 150000 W / 100000.0 W | 1.5 |
+| `VLG-00024-04` | `VLG-00024` | iec62196T2COMBO | mode4DC | 500 V / 200 A / 150000 W / 100000.0 W | 1.5 |
+| `VLG-00024-05` | `VLG-00024` | iec62196T2COMBO | mode4DC | 500 V / 200 A / 150000 W / 100000.0 W | 1.5 |
+| `ALM-00032-01` | `ALM-00032` | iec62196T2 | mode2AC1p | 240 V / 16 A / 7400 W / 3840.0 W | 1.927 |
+| `ALM-00032-02` | `ALM-00032` | iec62196T2 | mode2AC1p | 240 V / 16 A / 7400 W / 3840.0 W | 1.927 |
+| `CTB-00027-04` | `CTB-00027` | iec62196T2COMBO | mode4DC | 500 V / 300 A / 200000 W / 150000.0 W | 1.333 |
+| `CTB-00027-05` | `CTB-00027` | iec62196T2COMBO | mode4DC | 500 V / 300 A / 200000 W / 150000.0 W | 1.333 |
+| `LSB-90029-2` | `LSB-90029` | iec62196T2 | mode3AC3p | 400 V / 22 A / 22000 W / 15242.0 W | 1.443 |
+| … | … | +71 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-HORZ)) |
+- **Veredito:** crítico — sobre-declaração (ratio>1,25).
+
+### [MÉDIO] Combinação formato/tomada
+- **Regra:** connector_format incompatível com charging_mode.
+- **Afetados:** 1321 de 2138 pontos (61.8%). Exemplos: `CLD-90002-1`, `CLD-90002-2`, `BGC-90001-1`, `BGC-90001-2`, `BGC-90001-3`, `CLD-90002`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `CLD-90002-1` | `CLD-90002` |
+| `CLD-90002-2` | `CLD-90002` |
+| `BGC-90001-1` | `BGC-90001` |
+| `BGC-90001-2` | `BGC-90001` |
+| `BGC-90001-3` | `BGC-90001` |
+| `BGC-90001-4` | `BGC-90001` |
+| `VFX-00020-01` | `VFX-00020` |
+| `VFX-00020-02` | `VFX-00020` |
+| `VFX-00018-01` | `VFX-00018` |
+| `VFX-00018-02` | `VFX-00018` |
+| … | … | +1311 restantes |
+- **Veredito:** médio — Combinação formato/tomada.
+
+### [MÉDIO] Física/Ohm — sub-declaração (ratio<0,75)
+- **Regra:** potência declarada < 0,75 × V×I / √3×V×I.
+- **Afetados:** 418 de 2138 pontos (19.6%). Exemplos: `VFX-00020-03`, `VLG-00024-02`, `AVV-00004-01`, `AVV-00004-03`, `AVV-00004-04`, `VFX-00020`.
+- **Evidência:**
+
+| ponto | site | tomada | modo | tensão / corrente / declarada / esperada | ratio |
+|---|---|---|---|---|---|
+| `VFX-00020-03` | `VFX-00020` | iec62196T2 | mode3AC3p | 400 V / 125 A / 43000 W / 86602.5 W | 0.497 |
+| `VLG-00024-02` | `VLG-00024` | iec62196T2COMBO | mode4DC | 500 V / 300 A / 100000 W / 150000.0 W | 0.667 |
+| `AVV-00004-01` | `AVV-00004` | iec62196T2COMBO | mode4DC | 1000 V / 300 A / 180000 W / 300000.0 W | 0.6 |
+| `AVV-00004-03` | `AVV-00004` | iec62196T2COMBO | mode4DC | 1000 V / 300 A / 180000 W / 300000.0 W | 0.6 |
+| `AVV-00004-04` | `AVV-00004` | iec62196T2COMBO | mode4DC | 1000 V / 300 A / 180000 W / 300000.0 W | 0.6 |
+| `PBL-00017-01` | `PBL-00017` | iec62196T2COMBO | mode4DC | 920 V / 250 A / 50000 W / 230000.0 W | 0.217 |
+| `PBL-00017-03` | `PBL-00017` | iec62196T2COMBO | mode4DC | 920 V / 250 A / 50000 W / 230000.0 W | 0.217 |
+| `TRF-00013-03` | `TRF-00013` | iec62196T2COMBO | mode4DC | 1000 V / 125 A / 50000 W / 125000.0 W | 0.4 |
+| `ALD-00004-01` | `ALD-00004` | iec62196T2COMBO | mode4DC | 920 V / 375 A / 100000 W / 345000.0 W | 0.29 |
+| `ALD-00004-03` | `ALD-00004` | iec62196T2COMBO | mode4DC | 920 V / 375 A / 100000 W / 345000.0 W | 0.29 |
+| … | … | +408 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-HORZ)) |
+- **Veredito:** médio — sub-declaração (ratio<0,75).
+
+### [MÉDIO] Localização — CP7↔localidade
+- **Regra:** CP4 com city divergente da moda.
+- **Afetados:** 74 de 2138 pontos (3.5%). Exemplos: `AGN-90001-01`, `AGN-90001-02`, `VFX-90001-1`, `VFX-90001-2`, `BTL-90003-01`, `AGN-90001`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `AGN-90001-01` | `AGN-90001` |
+| `AGN-90001-02` | `AGN-90001` |
+| `VFX-90001-1` | `VFX-90001` |
+| `VFX-90001-2` | `VFX-90001` |
+| `BTL-90003-01` | `BTL-90003` |
+| `BTL-90003-02` | `BTL-90003` |
+| `AFE-90001-1` | `AFE-90001` |
+| `AFE-90001-2` | `AFE-90001` |
+| `MTJ-00011-01` | `MTJ-00011` |
+| `MTJ-00011-02` | `MTJ-00011` |
+| … | … | +64 restantes |
+- **Veredito:** médio — CP7↔localidade.
+
+### [BAIXO] Metadados — usage_type em falta
+- **Regra:** usage_type nulo/fora do enum.
+- **Afetados:** 63 de 2138 pontos (2.9%). Exemplos: `MLD-00052-01`, `MLD-00052-02`, `MLD-00052-03`, `MLD-00052-04`, `MLD-00052-05`, `MLD-00052`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `MLD-00052-01` | `MLD-00052` |
+| `MLD-00052-02` | `MLD-00052` |
+| `MLD-00052-03` | `MLD-00052` |
+| `MLD-00052-04` | `MLD-00052` |
+| `MLD-00052-05` | `MLD-00052` |
+| `ORM-00043-01` | `ORM-00043` |
+| `ORM-00043-02` | `ORM-00043` |
+| `ORM-00043-03` | `ORM-00043` |
+| `MAI-00110-01` | `MAI-00110` |
+| `MAI-00110-02` | `MAI-00110` |
+| … | … | +53 restantes |
+- **Veredito:** baixo — usage_type em falta.
+
+### [BAIXO] Chaves eMI3 — código local disperso
+- **Regra:** mesmo <LOCAL> em cidades/CP4 dispersos.
+- **Afetados:** 34 de 2138 pontos (1.6%). Exemplos: `CBR-00032-1`, `CBR-00032-2`, `MOBI-AVR-00011-01`, `MOBI-AVR-00011-02`, `MOBI-PNI-00003-01`, `CBR-00032`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `CBR-00032-1` | `CBR-00032` |
+| `CBR-00032-2` | `CBR-00032` |
+| `MOBI-AVR-00011-01` | `MOBI-AVR-00011` |
+| `MOBI-AVR-00011-02` | `MOBI-AVR-00011` |
+| `MOBI-PNI-00003-01` | `MOBI-PNI-00003` |
+| `MOBI-PNI-00003-02` | `MOBI-PNI-00003` |
+| `MOBI-LSB-00341-01` | `MOBI-LSB-00341` |
+| `MOBI-LSB-00341-02` | `MOBI-LSB-00341` |
+| `CBR-00041-01` | `CBR-00041` |
+| `CBR-00041-02` | `CBR-00041` |
+| … | … | +24 restantes |
+- **Veredito:** baixo — código local disperso.
+
+### [BAIXO] Metadados — auth_methods vazio
+- **Regra:** auth_methods vazio.
+- **Afetados:** 5 de 2138 pontos (0.2%). Exemplos: `NLS-00005-01`, `NLS-00005-02`, `NLS-00006-01`, `NLS-00006-02`, `NLS-00007-01`, `NLS-00005`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `NLS-00005-01` | `NLS-00005` |
+| `NLS-00005-02` | `NLS-00005` |
+| `NLS-00006-01` | `NLS-00006` |
+| `NLS-00006-02` | `NLS-00006` |
+| `NLS-00007-01` | `NLS-00007` |
+- **Veredito:** baixo — auth_methods vazio.
+
+### [BAIXO] Chaves eMI3 — códigos locais mistos
+- **Regra:** tomadas do mesmo site com <LOCAL> diferentes.
+- **Afetados:** 2 de 2138 pontos (0.1%). Exemplos: `GDM-90001-01`, `GDM-90001-02`, `GDM-90001`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `GDM-90001-01` | `GDM-90001` |
+| `GDM-90001-02` | `GDM-90001` |
+- **Veredito:** baixo — códigos locais mistos.
+
+[↑ índice](#indice)
+
+</details>
+
+<a id="opc-TSLA"></a>
+
 <details>
-<summary><b>CONT — Modelo Continente Hipermercados, S.A. (450 sites, 954 pontos)</b> · 3 MÉDIO, 2 BAIXO, 1 CRÍTICO, 1 ALTO</summary>
+<summary><b>TSLA — Tesla (9 sites, 192 pontos)</b> · 8 BAIXO, 4 MÉDIO, 3 CRÍTICO</summary>
 
-### [CRÍTICO] Potência sobre-declarada
-
-- **Regra:** `ratio = declarada / (V × I)` (monofásico AC e DC) ou `/ (√3 × V × I)` (`mode3AC3p`); `ratio > 1.25` = fisicamente impossível (capacidade excedida).
-
-- **Afetados:** 246 de 954 linhas de conector (26%). Exemplos: `0001PL0011.01`, `0001PL0011`, `0001PL0011.02`
-
+### [CRÍTICO] Duplicados — point_id
+- **Regra:** point_id duplicado no inventário.
+- **Afetados:** 32 de 208 pontos (15.4%). Exemplos: `991aebcb-011c-45f4-ba5a-ebe4cb586397`, `10681d21-e216-45ff-a4d9-54149a618967`, `82f925bc-b169-453d-a35d-60429ffc94bc`, `0cf4786b-f469-4eab-a793-fdc5b01e45a5`.
 - **Evidência:**
 
-| point_id | site | tomada | modo | V / A / P declarada / esperada (kW) | ratio |
-|---|---|---|---|---|---|
-| `0001PL0011.01` | `0001PL0011` | iec62196T2 | mode3AC3p | 230/32/22/12,75 | 1,73 |
-| `0001PL0011.02` | `0001PL0011` | iec62196T2 | mode3AC3p | 230/32/22/12,75 | 1,73 |
-| `0001PL0012.01` | `0001PL0012` | iec62196T2 | mode3AC3p | 230/32/22/12,75 | 1,73 |
-| `0001PL0012.02` | `0001PL0012` | iec62196T2 | mode3AC3p | 230/32/22/12,75 | 1,73 |
-| `0002PL0007.01` | `0002PL0007` | iec62196T2 | mode3AC3p | 230/32/22/12,75 | 1,73 |
-| `0002PL0007.02` | `0002PL0007` | iec62196T2 | mode3AC3p | 230/32/22/12,75 | 1,73 |
-| `0002PL0008.01` | `0002PL0008` | iec62196T2 | mode3AC3p | 230/32/22/12,75 | 1,73 |
-| `0002PL0008.02` | `0002PL0008` | iec62196T2 | mode3AC3p | 230/32/22/12,75 | 1,73 |
-| `0002PL0011.01` | `0002PL0011` | iec62196T2 | mode3AC3p | 230/32/22/12,75 | 1,73 |
-| `0002PL0011.02` | `0002PL0011` | iec62196T2 | mode3AC3p | 230/32/22/12,75 | 1,73 |
-| … | … | … | … | … | +236 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-CONT)) |
-
-- **Veredito:** impossível — a potência declarada excede o produto V×I; padrão recorrente de potência do posto colada na tomada ou convenção de reporte errada.
-
-### [ALTO] Coordenadas fora de Portugal
-
-- **Regra:** Continente `lon∈(-9,8;-5,5)` `lat∈(36,5;42,5)`; Açores `lon∈(-32;-24)` `lat∈(36,5;40)`; Madeira `lon∈(-17,5;-16)` `lat∈(32;33,5)`.
-
-- **Afetados:** 36 sites. Exemplos: `0107PR0005`, `0460PL0001`, `E071PL0001`, `E071PL0002`
-
-- **Evidência:**
-
-| site | lat,lon | cidade |
-|---|---|---|
-| `0107PR0005` | 18.54839,-68.35124 | — |
-| `0460PL0001` | 36.847584,10.337498 | — |
-| `E071PL0001` | 32.325184,-64.713554 | — |
-| `E071PL0002` | 40.182636,-64.713554 | — |
-| `E071PL0003` | 40.182636,-64.713554 | — |
-| `E071PL0004` | 32.325184,-64.713554 | — |
-| `E071PL0005` | 32.325184,-64.713554 | — |
-| `E071PL0006` | 32.325184,-64.713554 | — |
-| `E071PL0007` | 32.325184,-64.713554 | — |
-| `E071PL0008` | 32.325184,-64.713554 | — |
-| … | … | +26 restantes nos CSVs |
-
-- **Veredito:** suspeito — coordenada trocada ou fora do território; geocodificação errada.
-
-### [MÉDIO] Potência sub-declarada
-
-- **Regra:** `ratio < 0.75` = derating suspeito ou erro de introdução; `ratio = declarada / esperada`.
-
-- **Afetados:** 234 de 954 linhas de conector (25%). Exemplos: `1704PR0002.01`, `1704PR0002`, `1704PR0003.01`, `1704PR0003`
-
-- **Evidência:**
-
-| point_id | site | tomada | modo | V / A / P declarada / esperada (kW) | ratio |
-|---|---|---|---|---|---|
-| `1704PR0002.01` | `1704PR0002` | iec62196T2COMBO | mode4DC | 1000/133/40/133 | 0,30 |
-| `1704PR0003.01` | `1704PR0003` | iec62196T2COMBO | mode4DC | 1000/133/40/133 | 0,30 |
-| `0211PR0002.01` | `0211PR0002` | iec62196T2COMBO | mode4DC | 1000/350/120/350 | 0,34 |
-| `0211PR0002.02` | `0211PR0002` | iec62196T2COMBO | mode4DC | 1000/350/120/350 | 0,34 |
-| `0279PR0002.01` | `0279PR0002` | iec62196T2COMBO | mode4DC | 1000/350/120/350 | 0,34 |
-| `0279PR0002.02` | `0279PR0002` | iec62196T2COMBO | mode4DC | 1000/350/120/350 | 0,34 |
-| `0280PR0002.01` | `0280PR0002` | iec62196T2COMBO | mode4DC | 1000/350/120/350 | 0,34 |
-| `0280PR0002.02` | `0280PR0002` | iec62196T2COMBO | mode4DC | 1000/350/120/350 | 0,34 |
-| `0293PR0002.01` | `0293PR0002` | iec62196T2COMBO | mode4DC | 1000/350/120/350 | 0,34 |
-| `0293PR0002.02` | `0293PR0002` | iec62196T2COMBO | mode4DC | 1000/350/120/350 | 0,34 |
-| … | … | … | … | … | +224 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-CONT)) |
-
-- **Veredito:** suspeito — potência declarada muito abaixo de V×I; derating do posto partilhado ou número trocado. Rever contra a chapa do posto.
-
-### [MÉDIO] Tensão, corrente ou potência inválida
-
-- **Regra:** `voltage`/`max_current` nulos ou ≤0, ou `max_power_w` nulo/≤0; valores crus que impedem a verificação por V×I.
-
-- **Afetados:** 48 de 954 linhas de conector. Exemplos: `0001PR0013.01`, `0001PR0013`, `0001PR0013.02`
-
-- **Evidência:**
-
-| point_id | site | V | A | P (W) |
-|---|---|---|---|---|
-| `0001PR0013.01` | `0001PR0013` | 0 | 0 | 120000 |
-| `0001PR0013.02` | `0001PR0013` | 0 | 0 | 120000 |
-| `0002PR0020.01` | `0002PR0020` | 0 | 0 | 120000 |
-| `0002PR0020.02` | `0002PR0020` | 0 | 0 | 120000 |
-| `0004PR0004.01` | `0004PR0004` | 0 | 0 | 120000 |
-| `0004PR0004.02` | `0004PR0004` | 0 | 0 | 120000 |
-| `0004PR0005.01` | `0004PR0005` | 0 | 0 | 120000 |
-| `0004PR0005.02` | `0004PR0005` | 0 | 0 | 120000 |
-| `0107PR0005.01` | `0107PR0005` | 0 | 0 | 120000 |
-| `0107PR0005.02` | `0107PR0005` | 0 | 0 | 120000 |
-| … | … | … | … | +38 restantes nos CSVs |
-
-- **Veredito:** suspeito — valor não positivo ou em falta; corrigir na origem para permitir validar a potência.
-
-### [MÉDIO] Localidade divergente do CP7 (CP4→cidade modal)
-
-- **Regra:** Agrupa-se por CP4 (4 primeiros dígitos) e toma-se a `city` modal dos CP4 com ≥5 sites; par (CP4 → `city`) divergente = suspeito.
-
-- **Afetados:** 124 sites. Exemplos: `1004PR0002`, `0215PR0001`, `0215PR0002`, `0215PR0004`
-
-- **Evidência:**
-
-| site | postcode | city | cidade modal do CP4 |
-|---|---|---|---|
-| `1004PR0002` | 4465-675 | Leça do Balio | Matosinhos |
-| `0215PR0001` | 2005-181 | Santarem | Santarém |
-| `0215PR0002` | 2005-181 | Santarem | Santarém |
-| `0215PR0004` | 2005-181 | Santarem | Santarém |
-| `0255PL0001` | 2955-189 | Pinhal Novo | Palmela |
-| `0255PR0002` | 2955-189 | Pinhal Novo | Palmela |
-| `0256PL0001` | 2975-333 | Quinta do Conde | Sesimbra |
-| `0256PR0002` | 2975-333 | Quinta do Conde | Sesimbra |
-| `0256PR0003` | 2975-333 | Quinta do Conde | Sesimbra |
-| `0288PL0001` | 4410-151 | São Félix da Marinha | Vila Nova de Gaia |
-| … | … | … | +114 restantes nos CSVs |
-
-- **Veredito:** suspeito — CP trocado ou localidade errada; CTT muda códigos e há grafias variantes.
-
-### [BAIXO] Localidade ou código postal em falta/fora do formato
-
-- **Regra:** `city` vazia com `postcode` presente (ou inverso); `postcode` fora do formato CP7 `NNNN-NNN`.
-
-- **Afetados:** 107 sites. Exemplos: `0107PR0005`, `1004PR0002`, `0213PL0001`, `0001PL0011`
-
-- **Evidência:**
-
-| site | campo |
+| ponto | site |
 |---|---|
-| `0107PR0005` | city em falta |
-| `0213PL0001` | city em falta |
-| `0232PL0001` | city em falta |
-| `0232PL0002` | city em falta |
-| `0232PR0003` | city em falta |
-| `0246PR0003` | city em falta |
-| `0250PR0002` | city em falta |
-| `0261PL0001` | city em falta |
-| `0261PR0002` | city em falta |
-| `0439PR0005` | city em falta |
-| … | +97 restantes nos CSVs |
+| `991aebcb-011c-45f4-ba5a-ebe4cb586397` | `0cf4786b-f469-4eab-a793-fdc5b01e45a5` |
+| `991aebcb-011c-45f4-ba5a-ebe4cb586397` | `0cf4786b-f469-4eab-a793-fdc5b01e45a5` |
+| `10681d21-e216-45ff-a4d9-54149a618967` | `0cf4786b-f469-4eab-a793-fdc5b01e45a5` |
+| `10681d21-e216-45ff-a4d9-54149a618967` | `0cf4786b-f469-4eab-a793-fdc5b01e45a5` |
+| `82f925bc-b169-453d-a35d-60429ffc94bc` | `0cf4786b-f469-4eab-a793-fdc5b01e45a5` |
+| `82f925bc-b169-453d-a35d-60429ffc94bc` | `0cf4786b-f469-4eab-a793-fdc5b01e45a5` |
+| `ccfce8d6-5a3c-45da-ac74-f64be3f5d6d1` | `0cf4786b-f469-4eab-a793-fdc5b01e45a5` |
+| `ccfce8d6-5a3c-45da-ac74-f64be3f5d6d1` | `0cf4786b-f469-4eab-a793-fdc5b01e45a5` |
+| `05b8e450-9d32-45c9-9c55-3b041a96bb8e` | `0cf4786b-f469-4eab-a793-fdc5b01e45a5` |
+| `05b8e450-9d32-45c9-9c55-3b041a96bb8e` | `0cf4786b-f469-4eab-a793-fdc5b01e45a5` |
+| … | … | +22 restantes |
+- **Veredito:** crítico — point_id.
 
-- **Veredito:** suspeito (metadados) — normalizar a morada; não impede a localização por coordenadas.
-
-### [BAIXO] Metadados em falta
-
-- **Regra:** `usage_type`, `auth_methods` ou `brands_accepted` vazios no inventário estático.
-
-- **Afetados:** 1908 campos em falta (954 `usage_type`, 0 `auth_methods`, 954 `brands_accepted`). Exemplos: `1004PR0002.01`, `1004PR0002.02`, `1004PR0002`, `0001PL0011.01`
-
+### [CRÍTICO] Combinação modo/tomada — AC em DC
+- **Regra:** tipo só-AC em mode4/ccs.
+- **Afetados:** 16 de 208 pontos (7.7%). Exemplos: `991aebcb-011c-45f4-ba5a-ebe4cb586397`, `10681d21-e216-45ff-a4d9-54149a618967`, `82f925bc-b169-453d-a35d-60429ffc94bc`, `ccfce8d6-5a3c-45da-ac74-f64be3f5d6d1`, `05b8e450-9d32-45c9-9c55-3b041a96bb8e`, `0cf4786b-f469-4eab-a793-fdc5b01e45a5`.
 - **Evidência:**
 
-| id | campo em falta |
+| ponto | site |
 |---|---|
-| `1004PR0002.01` | usage_type |
-| `1004PR0002.02` | usage_type |
-| `0001PL0011.01` | usage_type |
-| `0001PL0011.02` | usage_type |
-| `1004PR0002.01` | brands_accepted |
-| `1004PR0002.02` | brands_accepted |
-| `0001PL0011.01` | brands_accepted |
-| … | +1901 restantes nos CSVs |
+| `991aebcb-011c-45f4-ba5a-ebe4cb586397` | `0cf4786b-f469-4eab-a793-fdc5b01e45a5` |
+| `10681d21-e216-45ff-a4d9-54149a618967` | `0cf4786b-f469-4eab-a793-fdc5b01e45a5` |
+| `82f925bc-b169-453d-a35d-60429ffc94bc` | `0cf4786b-f469-4eab-a793-fdc5b01e45a5` |
+| `ccfce8d6-5a3c-45da-ac74-f64be3f5d6d1` | `0cf4786b-f469-4eab-a793-fdc5b01e45a5` |
+| `05b8e450-9d32-45c9-9c55-3b041a96bb8e` | `0cf4786b-f469-4eab-a793-fdc5b01e45a5` |
+| `a65d0b83-d08c-4c8a-9671-59ee37ae57b3` | `0cf4786b-f469-4eab-a793-fdc5b01e45a5` |
+| `6367681a-cfe3-421f-be2e-1cd4361a7b02` | `0cf4786b-f469-4eab-a793-fdc5b01e45a5` |
+| `bb006f74-1884-4bb7-bcf7-419a43cab4fe` | `0cf4786b-f469-4eab-a793-fdc5b01e45a5` |
+| `3aaeef54-74d5-45cd-8571-5cd73bb30c74` | `fff4f058-9075-4833-96f5-e021cb263344` |
+| `3bab25ab-ac08-4895-9c94-82f2d8cc23a1` | `fff4f058-9075-4833-96f5-e021cb263344` |
+| … | … | +6 restantes |
+- **Veredito:** crítico — AC em DC.
 
-- **Veredito:** suspeito (metadados) — preencher os campos; não afecta a física do ponto.
+### [CRÍTICO] Limites por tipo de tomada
+- **Regra:** max_power_w acima do teto físico da família.
+- **Afetados:** 16 de 208 pontos (7.7%). Exemplos: `991aebcb-011c-45f4-ba5a-ebe4cb586397`, `10681d21-e216-45ff-a4d9-54149a618967`, `82f925bc-b169-453d-a35d-60429ffc94bc`, `ccfce8d6-5a3c-45da-ac74-f64be3f5d6d1`, `05b8e450-9d32-45c9-9c55-3b041a96bb8e`, `0cf4786b-f469-4eab-a793-fdc5b01e45a5`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `991aebcb-011c-45f4-ba5a-ebe4cb586397` | `0cf4786b-f469-4eab-a793-fdc5b01e45a5` |
+| `10681d21-e216-45ff-a4d9-54149a618967` | `0cf4786b-f469-4eab-a793-fdc5b01e45a5` |
+| `82f925bc-b169-453d-a35d-60429ffc94bc` | `0cf4786b-f469-4eab-a793-fdc5b01e45a5` |
+| `ccfce8d6-5a3c-45da-ac74-f64be3f5d6d1` | `0cf4786b-f469-4eab-a793-fdc5b01e45a5` |
+| `05b8e450-9d32-45c9-9c55-3b041a96bb8e` | `0cf4786b-f469-4eab-a793-fdc5b01e45a5` |
+| `a65d0b83-d08c-4c8a-9671-59ee37ae57b3` | `0cf4786b-f469-4eab-a793-fdc5b01e45a5` |
+| `6367681a-cfe3-421f-be2e-1cd4361a7b02` | `0cf4786b-f469-4eab-a793-fdc5b01e45a5` |
+| `bb006f74-1884-4bb7-bcf7-419a43cab4fe` | `0cf4786b-f469-4eab-a793-fdc5b01e45a5` |
+| `3aaeef54-74d5-45cd-8571-5cd73bb30c74` | `fff4f058-9075-4833-96f5-e021cb263344` |
+| `3bab25ab-ac08-4895-9c94-82f2d8cc23a1` | `fff4f058-9075-4833-96f5-e021cb263344` |
+| … | … | +6 restantes |
+- **Veredito:** crítico — Limites por tipo de tomada.
+
+### [MÉDIO] Combinação formato/tomada
+- **Regra:** connector_format incompatível com charging_mode.
+- **Afetados:** 208 de 208 pontos (100.0%). Exemplos: `0e3f5a8c-1d5f-4e80-a7fc-33d8e7703053`, `2a031d34-94d3-4376-88fd-12f7b982d335`, `49ad1d56-3f77-4ad6-9f12-abd626cb05d3`, `992eef84-1129-4454-a367-797376d1b085`, `6f104947-8962-4fde-903c-377ee7c47204`, `d9df0db6-7829-4f68-be57-13dbb28dbae1`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `0e3f5a8c-1d5f-4e80-a7fc-33d8e7703053` | `d9df0db6-7829-4f68-be57-13dbb28dbae1` |
+| `2a031d34-94d3-4376-88fd-12f7b982d335` | `d9df0db6-7829-4f68-be57-13dbb28dbae1` |
+| `49ad1d56-3f77-4ad6-9f12-abd626cb05d3` | `d9df0db6-7829-4f68-be57-13dbb28dbae1` |
+| `992eef84-1129-4454-a367-797376d1b085` | `d9df0db6-7829-4f68-be57-13dbb28dbae1` |
+| `6f104947-8962-4fde-903c-377ee7c47204` | `d9df0db6-7829-4f68-be57-13dbb28dbae1` |
+| `ae5916ed-9844-4da8-b281-197cd551359c` | `d9df0db6-7829-4f68-be57-13dbb28dbae1` |
+| `b50bacc7-af0b-45dc-85c0-433eb39bb68d` | `d9df0db6-7829-4f68-be57-13dbb28dbae1` |
+| `60909077-b821-4de6-b3d6-caf38fcde5eb` | `d9df0db6-7829-4f68-be57-13dbb28dbae1` |
+| `e7f7e126-f76e-4fba-af26-e450a019abed` | `d9df0db6-7829-4f68-be57-13dbb28dbae1` |
+| `6fc9b1f4-4320-41fd-88ad-59ec13797817` | `d9df0db6-7829-4f68-be57-13dbb28dbae1` |
+| … | … | +198 restantes |
+- **Veredito:** médio — Combinação formato/tomada.
+
+### [MÉDIO] Chaves eMI3 — sufixo de tomada
+- **Regra:** último segmento de point_external_id ≠ point_id (int-normalizado).
+- **Afetados:** 208 de 208 pontos (100.0%). Exemplos: `0e3f5a8c-1d5f-4e80-a7fc-33d8e7703053`, `2a031d34-94d3-4376-88fd-12f7b982d335`, `49ad1d56-3f77-4ad6-9f12-abd626cb05d3`, `992eef84-1129-4454-a367-797376d1b085`, `6f104947-8962-4fde-903c-377ee7c47204`, `d9df0db6-7829-4f68-be57-13dbb28dbae1`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `0e3f5a8c-1d5f-4e80-a7fc-33d8e7703053` | `d9df0db6-7829-4f68-be57-13dbb28dbae1` |
+| `2a031d34-94d3-4376-88fd-12f7b982d335` | `d9df0db6-7829-4f68-be57-13dbb28dbae1` |
+| `49ad1d56-3f77-4ad6-9f12-abd626cb05d3` | `d9df0db6-7829-4f68-be57-13dbb28dbae1` |
+| `992eef84-1129-4454-a367-797376d1b085` | `d9df0db6-7829-4f68-be57-13dbb28dbae1` |
+| `6f104947-8962-4fde-903c-377ee7c47204` | `d9df0db6-7829-4f68-be57-13dbb28dbae1` |
+| `ae5916ed-9844-4da8-b281-197cd551359c` | `d9df0db6-7829-4f68-be57-13dbb28dbae1` |
+| `b50bacc7-af0b-45dc-85c0-433eb39bb68d` | `d9df0db6-7829-4f68-be57-13dbb28dbae1` |
+| `60909077-b821-4de6-b3d6-caf38fcde5eb` | `d9df0db6-7829-4f68-be57-13dbb28dbae1` |
+| `e7f7e126-f76e-4fba-af26-e450a019abed` | `d9df0db6-7829-4f68-be57-13dbb28dbae1` |
+| `6fc9b1f4-4320-41fd-88ad-59ec13797817` | `d9df0db6-7829-4f68-be57-13dbb28dbae1` |
+| … | … | +198 restantes |
+- **Veredito:** médio — sufixo de tomada.
+
+### [MÉDIO] Física/Ohm — sub-declaração (ratio<0,75)
+- **Regra:** potência declarada < 0,75 × V×I / √3×V×I.
+- **Afetados:** 176 de 208 pontos (84.6%). Exemplos: `0e3f5a8c-1d5f-4e80-a7fc-33d8e7703053`, `2a031d34-94d3-4376-88fd-12f7b982d335`, `49ad1d56-3f77-4ad6-9f12-abd626cb05d3`, `992eef84-1129-4454-a367-797376d1b085`, `6f104947-8962-4fde-903c-377ee7c47204`, `d9df0db6-7829-4f68-be57-13dbb28dbae1`.
+- **Evidência:**
+
+| ponto | site | tomada | modo | tensão / corrente / declarada / esperada | ratio |
+|---|---|---|---|---|---|
+| `0e3f5a8c-1d5f-4e80-a7fc-33d8e7703053` | `d9df0db6-7829-4f68-be57-13dbb28dbae1` | iec62196T2COMBO | mode4DC | 470 V / 780 A / 250000 W / 366600.0 W | 0.682 |
+| `2a031d34-94d3-4376-88fd-12f7b982d335` | `d9df0db6-7829-4f68-be57-13dbb28dbae1` | iec62196T2COMBO | mode4DC | 470 V / 780 A / 250000 W / 366600.0 W | 0.682 |
+| `49ad1d56-3f77-4ad6-9f12-abd626cb05d3` | `d9df0db6-7829-4f68-be57-13dbb28dbae1` | iec62196T2COMBO | mode4DC | 470 V / 780 A / 250000 W / 366600.0 W | 0.682 |
+| `992eef84-1129-4454-a367-797376d1b085` | `d9df0db6-7829-4f68-be57-13dbb28dbae1` | iec62196T2COMBO | mode4DC | 470 V / 780 A / 250000 W / 366600.0 W | 0.682 |
+| `6f104947-8962-4fde-903c-377ee7c47204` | `d9df0db6-7829-4f68-be57-13dbb28dbae1` | iec62196T2COMBO | mode4DC | 470 V / 780 A / 250000 W / 366600.0 W | 0.682 |
+| `ae5916ed-9844-4da8-b281-197cd551359c` | `d9df0db6-7829-4f68-be57-13dbb28dbae1` | iec62196T2COMBO | mode4DC | 470 V / 780 A / 250000 W / 366600.0 W | 0.682 |
+| `b50bacc7-af0b-45dc-85c0-433eb39bb68d` | `d9df0db6-7829-4f68-be57-13dbb28dbae1` | iec62196T2COMBO | mode4DC | 470 V / 780 A / 250000 W / 366600.0 W | 0.682 |
+| `60909077-b821-4de6-b3d6-caf38fcde5eb` | `d9df0db6-7829-4f68-be57-13dbb28dbae1` | iec62196T2COMBO | mode4DC | 470 V / 780 A / 250000 W / 366600.0 W | 0.682 |
+| `e7f7e126-f76e-4fba-af26-e450a019abed` | `d9df0db6-7829-4f68-be57-13dbb28dbae1` | iec62196T2COMBO | mode4DC | 470 V / 1000 A / 250000 W / 470000.0 W | 0.532 |
+| `6fc9b1f4-4320-41fd-88ad-59ec13797817` | `d9df0db6-7829-4f68-be57-13dbb28dbae1` | iec62196T2COMBO | mode4DC | 470 V / 1000 A / 250000 W / 470000.0 W | 0.532 |
+| … | … | +166 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-TSLA)) |
+- **Veredito:** médio — sub-declaração (ratio<0,75).
+
+### [MÉDIO] Localização — CP7↔localidade
+- **Regra:** CP4 com city divergente da moda.
+- **Afetados:** 88 de 208 pontos (42.3%). Exemplos: `0e3f5a8c-1d5f-4e80-a7fc-33d8e7703053`, `2a031d34-94d3-4376-88fd-12f7b982d335`, `49ad1d56-3f77-4ad6-9f12-abd626cb05d3`, `992eef84-1129-4454-a367-797376d1b085`, `6f104947-8962-4fde-903c-377ee7c47204`, `d9df0db6-7829-4f68-be57-13dbb28dbae1`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `0e3f5a8c-1d5f-4e80-a7fc-33d8e7703053` | `d9df0db6-7829-4f68-be57-13dbb28dbae1` |
+| `2a031d34-94d3-4376-88fd-12f7b982d335` | `d9df0db6-7829-4f68-be57-13dbb28dbae1` |
+| `49ad1d56-3f77-4ad6-9f12-abd626cb05d3` | `d9df0db6-7829-4f68-be57-13dbb28dbae1` |
+| `992eef84-1129-4454-a367-797376d1b085` | `d9df0db6-7829-4f68-be57-13dbb28dbae1` |
+| `6f104947-8962-4fde-903c-377ee7c47204` | `d9df0db6-7829-4f68-be57-13dbb28dbae1` |
+| `ae5916ed-9844-4da8-b281-197cd551359c` | `d9df0db6-7829-4f68-be57-13dbb28dbae1` |
+| `b50bacc7-af0b-45dc-85c0-433eb39bb68d` | `d9df0db6-7829-4f68-be57-13dbb28dbae1` |
+| `60909077-b821-4de6-b3d6-caf38fcde5eb` | `d9df0db6-7829-4f68-be57-13dbb28dbae1` |
+| `e7f7e126-f76e-4fba-af26-e450a019abed` | `d9df0db6-7829-4f68-be57-13dbb28dbae1` |
+| `6fc9b1f4-4320-41fd-88ad-59ec13797817` | `d9df0db6-7829-4f68-be57-13dbb28dbae1` |
+| … | … | +78 restantes |
+- **Veredito:** médio — CP7↔localidade.
+
+### [BAIXO] Metadados — usage_type em falta
+- **Regra:** usage_type nulo/fora do enum.
+- **Afetados:** 208 de 208 pontos (100.0%). Exemplos: `0e3f5a8c-1d5f-4e80-a7fc-33d8e7703053`, `2a031d34-94d3-4376-88fd-12f7b982d335`, `49ad1d56-3f77-4ad6-9f12-abd626cb05d3`, `992eef84-1129-4454-a367-797376d1b085`, `6f104947-8962-4fde-903c-377ee7c47204`, `d9df0db6-7829-4f68-be57-13dbb28dbae1`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `0e3f5a8c-1d5f-4e80-a7fc-33d8e7703053` | `d9df0db6-7829-4f68-be57-13dbb28dbae1` |
+| `2a031d34-94d3-4376-88fd-12f7b982d335` | `d9df0db6-7829-4f68-be57-13dbb28dbae1` |
+| `49ad1d56-3f77-4ad6-9f12-abd626cb05d3` | `d9df0db6-7829-4f68-be57-13dbb28dbae1` |
+| `992eef84-1129-4454-a367-797376d1b085` | `d9df0db6-7829-4f68-be57-13dbb28dbae1` |
+| `6f104947-8962-4fde-903c-377ee7c47204` | `d9df0db6-7829-4f68-be57-13dbb28dbae1` |
+| `ae5916ed-9844-4da8-b281-197cd551359c` | `d9df0db6-7829-4f68-be57-13dbb28dbae1` |
+| `b50bacc7-af0b-45dc-85c0-433eb39bb68d` | `d9df0db6-7829-4f68-be57-13dbb28dbae1` |
+| `60909077-b821-4de6-b3d6-caf38fcde5eb` | `d9df0db6-7829-4f68-be57-13dbb28dbae1` |
+| `e7f7e126-f76e-4fba-af26-e450a019abed` | `d9df0db6-7829-4f68-be57-13dbb28dbae1` |
+| `6fc9b1f4-4320-41fd-88ad-59ec13797817` | `d9df0db6-7829-4f68-be57-13dbb28dbae1` |
+| … | … | +198 restantes |
+- **Veredito:** baixo — usage_type em falta.
+
+### [BAIXO] Chaves eMI3 — códigos locais mistos
+- **Regra:** tomadas do mesmo site com <LOCAL> diferentes.
+- **Afetados:** 208 de 208 pontos (100.0%). Exemplos: `0e3f5a8c-1d5f-4e80-a7fc-33d8e7703053`, `2a031d34-94d3-4376-88fd-12f7b982d335`, `49ad1d56-3f77-4ad6-9f12-abd626cb05d3`, `992eef84-1129-4454-a367-797376d1b085`, `6f104947-8962-4fde-903c-377ee7c47204`, `d9df0db6-7829-4f68-be57-13dbb28dbae1`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `0e3f5a8c-1d5f-4e80-a7fc-33d8e7703053` | `d9df0db6-7829-4f68-be57-13dbb28dbae1` |
+| `2a031d34-94d3-4376-88fd-12f7b982d335` | `d9df0db6-7829-4f68-be57-13dbb28dbae1` |
+| `49ad1d56-3f77-4ad6-9f12-abd626cb05d3` | `d9df0db6-7829-4f68-be57-13dbb28dbae1` |
+| `992eef84-1129-4454-a367-797376d1b085` | `d9df0db6-7829-4f68-be57-13dbb28dbae1` |
+| `6f104947-8962-4fde-903c-377ee7c47204` | `d9df0db6-7829-4f68-be57-13dbb28dbae1` |
+| `ae5916ed-9844-4da8-b281-197cd551359c` | `d9df0db6-7829-4f68-be57-13dbb28dbae1` |
+| `b50bacc7-af0b-45dc-85c0-433eb39bb68d` | `d9df0db6-7829-4f68-be57-13dbb28dbae1` |
+| `60909077-b821-4de6-b3d6-caf38fcde5eb` | `d9df0db6-7829-4f68-be57-13dbb28dbae1` |
+| `e7f7e126-f76e-4fba-af26-e450a019abed` | `d9df0db6-7829-4f68-be57-13dbb28dbae1` |
+| `6fc9b1f4-4320-41fd-88ad-59ec13797817` | `d9df0db6-7829-4f68-be57-13dbb28dbae1` |
+| … | … | +198 restantes |
+- **Veredito:** baixo — códigos locais mistos.
+
+### [BAIXO] Localização — formato CP7
+- **Regra:** postcode fora de NNNN-NNN.
+- **Afetados:** 208 de 208 pontos (100.0%). Exemplos: `0e3f5a8c-1d5f-4e80-a7fc-33d8e7703053`, `2a031d34-94d3-4376-88fd-12f7b982d335`, `49ad1d56-3f77-4ad6-9f12-abd626cb05d3`, `992eef84-1129-4454-a367-797376d1b085`, `6f104947-8962-4fde-903c-377ee7c47204`, `d9df0db6-7829-4f68-be57-13dbb28dbae1`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `0e3f5a8c-1d5f-4e80-a7fc-33d8e7703053` | `d9df0db6-7829-4f68-be57-13dbb28dbae1` |
+| `2a031d34-94d3-4376-88fd-12f7b982d335` | `d9df0db6-7829-4f68-be57-13dbb28dbae1` |
+| `49ad1d56-3f77-4ad6-9f12-abd626cb05d3` | `d9df0db6-7829-4f68-be57-13dbb28dbae1` |
+| `992eef84-1129-4454-a367-797376d1b085` | `d9df0db6-7829-4f68-be57-13dbb28dbae1` |
+| `6f104947-8962-4fde-903c-377ee7c47204` | `d9df0db6-7829-4f68-be57-13dbb28dbae1` |
+| `ae5916ed-9844-4da8-b281-197cd551359c` | `d9df0db6-7829-4f68-be57-13dbb28dbae1` |
+| `b50bacc7-af0b-45dc-85c0-433eb39bb68d` | `d9df0db6-7829-4f68-be57-13dbb28dbae1` |
+| `60909077-b821-4de6-b3d6-caf38fcde5eb` | `d9df0db6-7829-4f68-be57-13dbb28dbae1` |
+| `e7f7e126-f76e-4fba-af26-e450a019abed` | `d9df0db6-7829-4f68-be57-13dbb28dbae1` |
+| `6fc9b1f4-4320-41fd-88ad-59ec13797817` | `d9df0db6-7829-4f68-be57-13dbb28dbae1` |
+| … | … | +198 restantes |
+- **Veredito:** baixo — formato CP7.
+
+### [BAIXO] Metadados — auth_methods vazio
+- **Regra:** auth_methods vazio.
+- **Afetados:** 208 de 208 pontos (100.0%). Exemplos: `0e3f5a8c-1d5f-4e80-a7fc-33d8e7703053`, `2a031d34-94d3-4376-88fd-12f7b982d335`, `49ad1d56-3f77-4ad6-9f12-abd626cb05d3`, `992eef84-1129-4454-a367-797376d1b085`, `6f104947-8962-4fde-903c-377ee7c47204`, `d9df0db6-7829-4f68-be57-13dbb28dbae1`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `0e3f5a8c-1d5f-4e80-a7fc-33d8e7703053` | `d9df0db6-7829-4f68-be57-13dbb28dbae1` |
+| `2a031d34-94d3-4376-88fd-12f7b982d335` | `d9df0db6-7829-4f68-be57-13dbb28dbae1` |
+| `49ad1d56-3f77-4ad6-9f12-abd626cb05d3` | `d9df0db6-7829-4f68-be57-13dbb28dbae1` |
+| `992eef84-1129-4454-a367-797376d1b085` | `d9df0db6-7829-4f68-be57-13dbb28dbae1` |
+| `6f104947-8962-4fde-903c-377ee7c47204` | `d9df0db6-7829-4f68-be57-13dbb28dbae1` |
+| `ae5916ed-9844-4da8-b281-197cd551359c` | `d9df0db6-7829-4f68-be57-13dbb28dbae1` |
+| `b50bacc7-af0b-45dc-85c0-433eb39bb68d` | `d9df0db6-7829-4f68-be57-13dbb28dbae1` |
+| `60909077-b821-4de6-b3d6-caf38fcde5eb` | `d9df0db6-7829-4f68-be57-13dbb28dbae1` |
+| `e7f7e126-f76e-4fba-af26-e450a019abed` | `d9df0db6-7829-4f68-be57-13dbb28dbae1` |
+| `6fc9b1f4-4320-41fd-88ad-59ec13797817` | `d9df0db6-7829-4f68-be57-13dbb28dbae1` |
+| … | … | +198 restantes |
+- **Veredito:** baixo — auth_methods vazio.
+
+### [BAIXO] Metadados — brands_accepted vazio
+- **Regra:** brands_accepted vazio.
+- **Afetados:** 208 de 208 pontos (100.0%). Exemplos: `0e3f5a8c-1d5f-4e80-a7fc-33d8e7703053`, `2a031d34-94d3-4376-88fd-12f7b982d335`, `49ad1d56-3f77-4ad6-9f12-abd626cb05d3`, `992eef84-1129-4454-a367-797376d1b085`, `6f104947-8962-4fde-903c-377ee7c47204`, `d9df0db6-7829-4f68-be57-13dbb28dbae1`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `0e3f5a8c-1d5f-4e80-a7fc-33d8e7703053` | `d9df0db6-7829-4f68-be57-13dbb28dbae1` |
+| `2a031d34-94d3-4376-88fd-12f7b982d335` | `d9df0db6-7829-4f68-be57-13dbb28dbae1` |
+| `49ad1d56-3f77-4ad6-9f12-abd626cb05d3` | `d9df0db6-7829-4f68-be57-13dbb28dbae1` |
+| `992eef84-1129-4454-a367-797376d1b085` | `d9df0db6-7829-4f68-be57-13dbb28dbae1` |
+| `6f104947-8962-4fde-903c-377ee7c47204` | `d9df0db6-7829-4f68-be57-13dbb28dbae1` |
+| `ae5916ed-9844-4da8-b281-197cd551359c` | `d9df0db6-7829-4f68-be57-13dbb28dbae1` |
+| `b50bacc7-af0b-45dc-85c0-433eb39bb68d` | `d9df0db6-7829-4f68-be57-13dbb28dbae1` |
+| `60909077-b821-4de6-b3d6-caf38fcde5eb` | `d9df0db6-7829-4f68-be57-13dbb28dbae1` |
+| `e7f7e126-f76e-4fba-af26-e450a019abed` | `d9df0db6-7829-4f68-be57-13dbb28dbae1` |
+| `6fc9b1f4-4320-41fd-88ad-59ec13797817` | `d9df0db6-7829-4f68-be57-13dbb28dbae1` |
+| … | … | +198 restantes |
+- **Veredito:** baixo — brands_accepted vazio.
+
+### [BAIXO] Contagens — pontos extremos
+- **Regra:** site com n_points na cauda da distribuição (top 5).
+- **Afetados:** 1 de 208 pontos (0.5%). Exemplos: `f3001f1b-de79-4257-bb3c-f9e18460ef73`, `eddf8de0-ea2f-4d4a-90d4-f0e5639662a1`, `eddf8de0-ea2f-4d4a-90d4-f0e5639662a1`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `f3001f1b-de79-4257-bb3c-f9e18460ef73` | `eddf8de0-ea2f-4d4a-90d4-f0e5639662a1` |
+- **Veredito:** baixo — pontos extremos.
+
+### [BAIXO] Contagens — pontos extremos
+- **Regra:** site com n_points na cauda da distribuição (top 5).
+- **Afetados:** 1 de 208 pontos (0.5%). Exemplos: `00711859-da1d-4a63-893b-6cc8fc274e86`, `b798e614-a4b7-45ba-9a5f-8b1dfbc009b4`, `b798e614-a4b7-45ba-9a5f-8b1dfbc009b4`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `00711859-da1d-4a63-893b-6cc8fc274e86` | `b798e614-a4b7-45ba-9a5f-8b1dfbc009b4` |
+- **Veredito:** baixo — pontos extremos.
+
+### [BAIXO] Contagens — pontos extremos
+- **Regra:** site com n_points na cauda da distribuição (top 5).
+- **Afetados:** 1 de 208 pontos (0.5%). Exemplos: `18e7a509-97cc-4a8b-92ff-7567dc38989f`, `381a4acf-82a3-4799-bd23-291aa7c319a6`, `381a4acf-82a3-4799-bd23-291aa7c319a6`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `18e7a509-97cc-4a8b-92ff-7567dc38989f` | `381a4acf-82a3-4799-bd23-291aa7c319a6` |
+- **Veredito:** baixo — pontos extremos.
 
 [↑ índice](#indice)
 
@@ -1363,526 +1477,578 @@ Totais: 8 733 sites, 19 259 pontos distintos (19 376 linhas de conector), 92 OPC
 <a id="opc-EPKS"></a>
 
 <details>
-<summary><b>EPKS — Telpark (35 sites, 370 pontos)</b> · 3 MÉDIO, 1 CRÍTICO, 1 BAIXO</summary>
+<summary><b>EPKS — Telpark (36 sites, 381 pontos)</b> · 5 BAIXO, 3 MÉDIO, 2 CRÍTICO</summary>
 
-### [CRÍTICO] Potência sobre-declarada
-
-- **Regra:** `ratio = declarada / (V × I)` (monofásico AC e DC) ou `/ (√3 × V × I)` (`mode3AC3p`); `ratio > 1.25` = fisicamente impossível (capacidade excedida).
-
-- **Afetados:** 322 de 370 linhas de conector (87%). Exemplos: `1FD08045-720C-4C64-BC6A-334D7BC462DD`, `LSB-01482`, `33D21560-9A31-4E25-95B3-06EE396C5A66`, `LSB-01470`
-
+### [CRÍTICO] Física/Ohm — sobre-declaração (ratio>1,25)
+- **Regra:** potência declarada > 1,25 × V×I (monofásico) / √3×V×I (mode3AC3p).
+- **Afetados:** 333 de 381 pontos (87.4%). Exemplos: `044BDB0B-FFBA-4C02-8F73-2504699AC85F`, `29FA5C24-A4C3-47B8-853D-196766AB06BD`, `3464669A-1C87-4466-B359-D1C4B2DF1FB3`, `3C6D90D1-801C-4160-80BB-B21BB312B560`, `50D0133E-9133-4B6B-BAA7-A990F3928AED`, `PRT-00372`.
 - **Evidência:**
 
-| point_id | site | tomada | modo | V / A / P declarada / esperada (kW) | ratio |
+| ponto | site | tomada | modo | tensão / corrente / declarada / esperada | ratio |
 |---|---|---|---|---|---|
-| `1FD08045-720C-4C64-BC6A-334D7BC462DD` | `LSB-01482` | iec62196T2COMBO | mode4DC | 400/43/30/17,20 | 1,74 |
-| `33D21560-9A31-4E25-95B3-06EE396C5A66` | `LSB-01470` | iec62196T2COMBO | mode4DC | 400/43/30/17,20 | 1,74 |
-| `7952E4B9-4B3F-4B8D-B16A-0DE1988520B5` | `LSB-01470` | iec62196T2COMBO | mode4DC | 400/43/30/17,20 | 1,74 |
-| `A9D88587-778D-47AD-873F-FE54C74B11BD` | `LSB-01482` | iec62196T2COMBO | mode4DC | 400/43/30/17,20 | 1,74 |
-| `C207ED1C-47EC-4E82-BE0A-2B8E3058973E` | `LSB-01482` | iec62196T2COMBO | mode4DC | 400/43/30/17,20 | 1,74 |
-| `D27A1C94-DA6E-4DD7-A14F-3F6D06499AF6` | `LSB-01470` | iec62196T2COMBO | mode4DC | 400/43/30/17,20 | 1,74 |
-| `FB81FC9D-CC5A-477E-B885-DDB1AFC1F812` | `LSB-01482` | iec62196T2COMBO | mode4DC | 400/43/30/17,20 | 1,74 |
-| `08930350-7946-4048-AD20-A5C5770681FE` | `LSB-01482` | iec62196T2COMBO | mode4DC | 400/144/100/57,60 | 1,74 |
-| `38B59398-023C-4D04-B5CC-3F1F7BC6D5D2` | `LSB-01482` | iec62196T2COMBO | mode4DC | 400/144/100/57,60 | 1,74 |
-| `5EBE8A0A-BC75-4C9B-900D-08387AEE9892` | `LSB-01482` | iec62196T2COMBO | mode4DC | 400/144/100/57,60 | 1,74 |
-| … | … | … | … | … | +312 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-EPKS)) |
+| `044BDB0B-FFBA-4C02-8F73-2504699AC85F` | `PRT-00372` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22000 W / 12747.9 W | 1.726 |
+| `29FA5C24-A4C3-47B8-853D-196766AB06BD` | `PRT-00372` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22000 W / 12747.9 W | 1.726 |
+| `3464669A-1C87-4466-B359-D1C4B2DF1FB3` | `PRT-00372` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22000 W / 12747.9 W | 1.726 |
+| `3C6D90D1-801C-4160-80BB-B21BB312B560` | `PRT-00372` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22000 W / 12747.9 W | 1.726 |
+| `50D0133E-9133-4B6B-BAA7-A990F3928AED` | `PRT-00372` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22000 W / 12747.9 W | 1.726 |
+| `554B93E7-9AF7-40F5-9E5C-D017C20BAF78` | `PRT-00372` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22000 W / 12747.9 W | 1.726 |
+| `64016E5A-2708-4957-AD78-DC4D6EB1E40F` | `PRT-00372` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22000 W / 12747.9 W | 1.726 |
+| `69256D8B-312C-48D6-BDC1-1250B1111E05` | `PRT-00372` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22000 W / 12747.9 W | 1.726 |
+| `69AAED3D-03EE-42FD-B0F5-6103548D392A` | `PRT-00372` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22000 W / 12747.9 W | 1.726 |
+| `7B129B5F-DA2D-4C29-94A3-54FD1B537517` | `PRT-00372` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22000 W / 12747.9 W | 1.726 |
+| … | … | +323 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-EPKS)) |
+- **Veredito:** crítico — sobre-declaração (ratio>1,25).
 
-- **Veredito:** impossível — a potência declarada excede o produto V×I; padrão recorrente de potência do posto colada na tomada ou convenção de reporte errada.
-
-### [MÉDIO] Potência sub-declarada
-
-- **Regra:** `ratio < 0.75` = derating suspeito ou erro de introdução; `ratio = declarada / esperada`.
-
-- **Afetados:** 27 de 370 linhas de conector (7%). Exemplos: `0227C257-3B31-4FF1-B854-E544B02D4C7B`, `LSB-01478`, `0ED01DE2-9F42-4D83-8AA0-F7B874C87035`, `LSB-01488`
-
+### [CRÍTICO] Potência — P≤0
+- **Regra:** max_power_w<=0.
+- **Afetados:** 20 de 381 pontos (5.2%). Exemplos: `A475A301-2217-4FFD-85A4-6A2E40B58801`, `597B8EC1-9215-48DC-93ED-0DF69158BA3E`, `7DAC83CD-5D3C-495D-B986-DAF577D94EBC`, `F6E673C2-AAF6-4654-900F-650FF89509CD`, `0227C257-3B31-4FF1-B854-E544B02D4C7B`, `LSB-01469`.
 - **Evidência:**
 
-| point_id | site | tomada | modo | V / A / P declarada / esperada (kW) | ratio |
-|---|---|---|---|---|---|
-| `0227C257-3B31-4FF1-B854-E544B02D4C7B` | `LSB-01478` | iec62196T2 | mode3AC3p | 400/32/0/22,17 | 0,00 |
-| `0ED01DE2-9F42-4D83-8AA0-F7B874C87035` | `LSB-01488` | iec62196T2 | mode3AC3p | 400/32/0/22,17 | 0,00 |
-| `17ED4114-0439-42F5-A697-4C862F3D928B` | `LSB-01481` | iec62196T2 | mode3AC3p | 400/32/0/22,17 | 0,00 |
-| `21EBCBA0-648C-43EA-BAD1-5F48958A4F59` | `LSB-01487` | iec62196T2 | mode3AC3p | 400/32/0/22,17 | 0,00 |
-| `3BBD1845-7A6A-41D2-9D91-21D886D2E17A` | `LSB-01478` | iec62196T2 | mode3AC3p | 400/32/0/22,17 | 0,00 |
-| `47CEBC7A-2C40-49F9-AF64-0AC9DBE7AC39` | `LSB-01479` | iec62196T2 | mode3AC3p | 400/32/0/22,17 | 0,00 |
-| `4ADBBAF3-9CDB-4F1C-AE9E-A98F9B948F16` | `LSB-01479` | iec62196T2COMBO | mode4DC | 1000/125/0/125 | 0,00 |
-| `4DE8AB57-EF41-4D3C-AD31-8C1BB88E4BAC` | `LSB-01485` | iec62196T2 | mode3AC3p | 400/32/0/22,17 | 0,00 |
-| `560AC11F-7443-4D72-9B6D-FF637DBF5AD4` | `LSB-01485` | iec62196T2 | mode3AC3p | 400/32/0/22,17 | 0,00 |
-| `597B8EC1-9215-48DC-93ED-0DF69158BA3E` | `LSB-01476` | iec62196T2 | mode3AC3p | 400/32/0/22,17 | 0,00 |
-| … | … | … | … | … | +17 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-EPKS)) |
-
-- **Veredito:** suspeito — potência declarada muito abaixo de V×I; derating do posto partilhado ou número trocado. Rever contra a chapa do posto.
-
-### [MÉDIO] Tensão, corrente ou potência inválida
-
-- **Regra:** `voltage`/`max_current` nulos ou ≤0, ou `max_power_w` nulo/≤0; valores crus que impedem a verificação por V×I.
-
-- **Afetados:** 23 de 370 linhas de conector. Exemplos: `A475A301-2217-4FFD-85A4-6A2E40B58801`, `LSB-01469`, `597B8EC1-9215-48DC-93ED-0DF69158BA3E`, `LSB-01476`
-
-- **Evidência:**
-
-| point_id | site | V | A | P (W) |
-|---|---|---|---|---|
-| `A475A301-2217-4FFD-85A4-6A2E40B58801` | `LSB-01469` | 400 | 32 | 0 |
-| `597B8EC1-9215-48DC-93ED-0DF69158BA3E` | `LSB-01476` | 400 | 32 | 0 |
-| `7DAC83CD-5D3C-495D-B986-DAF577D94EBC` | `LSB-01477` | 400 | 32 | 0 |
-| `EA9E8427-547F-404C-9C8F-0B7724F97C1B` | `LSB-01477` | 400 | 32 | 0 |
-| `F6E673C2-AAF6-4654-900F-650FF89509CD` | `LSB-01477` | 400 | 32 | 0 |
-| `0227C257-3B31-4FF1-B854-E544B02D4C7B` | `LSB-01478` | 400 | 32 | 0 |
-| `3BBD1845-7A6A-41D2-9D91-21D886D2E17A` | `LSB-01478` | 400 | 32 | 0 |
-| `C187C88F-E6F7-4EFD-884B-6C7970344E20` | `LSB-01478` | 400 | 32 | 0 |
-| `C83B622D-EA4A-4740-8FED-B46EC4F39A4B` | `LSB-01478` | 400 | 32 | 0 |
-| `EFEE9DDA-AE27-4E0A-8342-B7DEAEDC3F4B` | `LSB-01478` | 400 | 32 | 0 |
-| … | … | … | … | +13 restantes nos CSVs |
-
-- **Veredito:** suspeito — valor não positivo ou em falta; corrigir na origem para permitir validar a potência.
-
-### [MÉDIO] Sufixo de tomada divergente no eMI3
-
-- **Regra:** Último segmento de `point_external_id` (tomada, int-normalizado e sem o `E` colado) tem de coincidir com o último segmento de `point_id`.
-
-- **Afetados:** 2 linhas. Exemplos: `A973BE85-D8D6-44C9-A003-585905270598`, `LSB-01478`, `3E3DAAB9-7664-45EA-B230-230162692046`, `LSB-01487`
-
-- **Evidência:**
-
-| point_id | point_external_id | sufixo eMI3 | sufixo point_id |
-|---|---|---|---|
-| `A973BE85-D8D6-44C9-A003-585905270598` | `PT*EPK*ELSB00884*1` | 1 | 585905270598 |
-| `3E3DAAB9-7664-45EA-B230-230162692046` | `PT*EPK*ELSB00744*1` | 1 | 230162692046 |
-
-- **Veredito:** suspeito — código de tomada trocado entre o id interno e o EVSE ID.
-
-### [BAIXO] Metadados em falta
-
-- **Regra:** `usage_type`, `auth_methods` ou `brands_accepted` vazios no inventário estático.
-
-- **Afetados:** 370 campos em falta (370 `usage_type`, 0 `auth_methods`, 0 `brands_accepted`). Exemplos: `044BDB0B-FFBA-4C02-8F73-2504699AC85F`, `29FA5C24-A4C3-47B8-853D-196766AB06BD`, `3464669A-1C87-4466-B359-D1C4B2DF1FB3`, `3C6D90D1-801C-4160-80BB-B21BB312B560`
-
-- **Evidência:**
-
-| id | campo em falta |
+| ponto | site |
 |---|---|
-| `044BDB0B-FFBA-4C02-8F73-2504699AC85F` | usage_type |
-| `29FA5C24-A4C3-47B8-853D-196766AB06BD` | usage_type |
-| `3464669A-1C87-4466-B359-D1C4B2DF1FB3` | usage_type |
-| `3C6D90D1-801C-4160-80BB-B21BB312B560` | usage_type |
-| … | +366 restantes nos CSVs |
+| `A475A301-2217-4FFD-85A4-6A2E40B58801` | `LSB-01469` |
+| `597B8EC1-9215-48DC-93ED-0DF69158BA3E` | `LSB-01476` |
+| `7DAC83CD-5D3C-495D-B986-DAF577D94EBC` | `LSB-01477` |
+| `F6E673C2-AAF6-4654-900F-650FF89509CD` | `LSB-01477` |
+| `0227C257-3B31-4FF1-B854-E544B02D4C7B` | `LSB-01478` |
+| `3BBD1845-7A6A-41D2-9D91-21D886D2E17A` | `LSB-01478` |
+| `C187C88F-E6F7-4EFD-884B-6C7970344E20` | `LSB-01478` |
+| `C83B622D-EA4A-4740-8FED-B46EC4F39A4B` | `LSB-01478` |
+| `EFEE9DDA-AE27-4E0A-8342-B7DEAEDC3F4B` | `LSB-01478` |
+| `47CEBC7A-2C40-49F9-AF64-0AC9DBE7AC39` | `LSB-01479` |
+| … | … | +10 restantes |
+- **Veredito:** crítico — P≤0.
 
-- **Veredito:** suspeito (metadados) — preencher os campos; não afecta a física do ponto.
+### [MÉDIO] Chaves eMI3 — sufixo de tomada
+- **Regra:** último segmento de point_external_id ≠ point_id (int-normalizado).
+- **Afetados:** 381 de 381 pontos (100.0%). Exemplos: `044BDB0B-FFBA-4C02-8F73-2504699AC85F`, `29FA5C24-A4C3-47B8-853D-196766AB06BD`, `3464669A-1C87-4466-B359-D1C4B2DF1FB3`, `3C6D90D1-801C-4160-80BB-B21BB312B560`, `50D0133E-9133-4B6B-BAA7-A990F3928AED`, `PRT-00372`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `044BDB0B-FFBA-4C02-8F73-2504699AC85F` | `PRT-00372` |
+| `29FA5C24-A4C3-47B8-853D-196766AB06BD` | `PRT-00372` |
+| `3464669A-1C87-4466-B359-D1C4B2DF1FB3` | `PRT-00372` |
+| `3C6D90D1-801C-4160-80BB-B21BB312B560` | `PRT-00372` |
+| `50D0133E-9133-4B6B-BAA7-A990F3928AED` | `PRT-00372` |
+| `554B93E7-9AF7-40F5-9E5C-D017C20BAF78` | `PRT-00372` |
+| `64016E5A-2708-4957-AD78-DC4D6EB1E40F` | `PRT-00372` |
+| `69256D8B-312C-48D6-BDC1-1250B1111E05` | `PRT-00372` |
+| `69AAED3D-03EE-42FD-B0F5-6103548D392A` | `PRT-00372` |
+| `7B129B5F-DA2D-4C29-94A3-54FD1B537517` | `PRT-00372` |
+| … | … | +371 restantes |
+- **Veredito:** médio — sufixo de tomada.
+
+### [MÉDIO] Combinação formato/tomada
+- **Regra:** connector_format incompatível com charging_mode.
+- **Afetados:** 45 de 381 pontos (11.8%). Exemplos: `4BEA03A0-2E2D-478C-803E-A9DC57426666`, `83CF5F97-F4A1-4FAD-AC09-8E374B559F3A`, `1E67BD51-9F31-4F89-A350-FD990F3E01BB`, `A69487F9-4606-4582-8B92-004926D71AB6`, `02C150F9-2109-4E8F-8D0A-ED5BC269E2CD`, `AVR-00111`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `4BEA03A0-2E2D-478C-803E-A9DC57426666` | `AVR-00111` |
+| `83CF5F97-F4A1-4FAD-AC09-8E374B559F3A` | `AVR-00111` |
+| `1E67BD51-9F31-4F89-A350-FD990F3E01BB` | `LSB-01456` |
+| `A69487F9-4606-4582-8B92-004926D71AB6` | `LSB-01456` |
+| `02C150F9-2109-4E8F-8D0A-ED5BC269E2CD` | `VNG-00264` |
+| `D4D10F10-E9C5-41E1-B52A-6767E0423CE9` | `VNG-00264` |
+| `A0105EC0-E663-4404-9AAB-83956A5E2E10` | `LSB-01467` |
+| `F8C6C10E-9559-42AC-A020-F20EEA4E8E59` | `LSB-01467` |
+| `33D21560-9A31-4E25-95B3-06EE396C5A66` | `LSB-01470` |
+| `7952E4B9-4B3F-4B8D-B16A-0DE1988520B5` | `LSB-01470` |
+| … | … | +35 restantes |
+- **Veredito:** médio — Combinação formato/tomada.
+
+### [MÉDIO] Física/Ohm — sub-declaração (ratio<0,75)
+- **Regra:** potência declarada < 0,75 × V×I / √3×V×I.
+- **Afetados:** 26 de 381 pontos (6.8%). Exemplos: `1E67BD51-9F31-4F89-A350-FD990F3E01BB`, `A69487F9-4606-4582-8B92-004926D71AB6`, `02C150F9-2109-4E8F-8D0A-ED5BC269E2CD`, `D4D10F10-E9C5-41E1-B52A-6767E0423CE9`, `A475A301-2217-4FFD-85A4-6A2E40B58801`, `LSB-01456`.
+- **Evidência:**
+
+| ponto | site | tomada | modo | tensão / corrente / declarada / esperada | ratio |
+|---|---|---|---|---|---|
+| `1E67BD51-9F31-4F89-A350-FD990F3E01BB` | `LSB-01456` | iec62196T2COMBO | mode4DC | 1000 V / 400 A / 172000 W / 400000.0 W | 0.43 |
+| `A69487F9-4606-4582-8B92-004926D71AB6` | `LSB-01456` | iec62196T2COMBO | mode4DC | 1000 V / 400 A / 172000 W / 400000.0 W | 0.43 |
+| `02C150F9-2109-4E8F-8D0A-ED5BC269E2CD` | `VNG-00264` | iec62196T2COMBO | mode4DC | 1000 V / 43 A / 30000 W / 43000.0 W | 0.698 |
+| `D4D10F10-E9C5-41E1-B52A-6767E0423CE9` | `VNG-00264` | iec62196T2COMBO | mode4DC | 1000 V / 43 A / 30000 W / 43000.0 W | 0.698 |
+| `A475A301-2217-4FFD-85A4-6A2E40B58801` | `LSB-01469` | iec62196T2 | mode3AC3p | 400 V / 32 A / 0 W / 22170.3 W | 0.0 |
+| `597B8EC1-9215-48DC-93ED-0DF69158BA3E` | `LSB-01476` | iec62196T2 | mode3AC3p | 400 V / 32 A / 0 W / 22170.3 W | 0.0 |
+| `7DAC83CD-5D3C-495D-B986-DAF577D94EBC` | `LSB-01477` | iec62196T2 | mode3AC3p | 400 V / 32 A / 0 W / 22170.3 W | 0.0 |
+| `F6E673C2-AAF6-4654-900F-650FF89509CD` | `LSB-01477` | iec62196T2 | mode3AC3p | 400 V / 32 A / 0 W / 22170.3 W | 0.0 |
+| `0227C257-3B31-4FF1-B854-E544B02D4C7B` | `LSB-01478` | iec62196T2 | mode3AC3p | 400 V / 32 A / 0 W / 22170.3 W | 0.0 |
+| `3BBD1845-7A6A-41D2-9D91-21D886D2E17A` | `LSB-01478` | iec62196T2 | mode3AC3p | 400 V / 32 A / 0 W / 22170.3 W | 0.0 |
+| … | … | +16 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-EPKS)) |
+- **Veredito:** médio — sub-declaração (ratio<0,75).
+
+### [BAIXO] Metadados — usage_type em falta
+- **Regra:** usage_type nulo/fora do enum.
+- **Afetados:** 381 de 381 pontos (100.0%). Exemplos: `044BDB0B-FFBA-4C02-8F73-2504699AC85F`, `29FA5C24-A4C3-47B8-853D-196766AB06BD`, `3464669A-1C87-4466-B359-D1C4B2DF1FB3`, `3C6D90D1-801C-4160-80BB-B21BB312B560`, `50D0133E-9133-4B6B-BAA7-A990F3928AED`, `PRT-00372`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `044BDB0B-FFBA-4C02-8F73-2504699AC85F` | `PRT-00372` |
+| `29FA5C24-A4C3-47B8-853D-196766AB06BD` | `PRT-00372` |
+| `3464669A-1C87-4466-B359-D1C4B2DF1FB3` | `PRT-00372` |
+| `3C6D90D1-801C-4160-80BB-B21BB312B560` | `PRT-00372` |
+| `50D0133E-9133-4B6B-BAA7-A990F3928AED` | `PRT-00372` |
+| `554B93E7-9AF7-40F5-9E5C-D017C20BAF78` | `PRT-00372` |
+| `64016E5A-2708-4957-AD78-DC4D6EB1E40F` | `PRT-00372` |
+| `69256D8B-312C-48D6-BDC1-1250B1111E05` | `PRT-00372` |
+| `69AAED3D-03EE-42FD-B0F5-6103548D392A` | `PRT-00372` |
+| `7B129B5F-DA2D-4C29-94A3-54FD1B537517` | `PRT-00372` |
+| … | … | +371 restantes |
+- **Veredito:** baixo — usage_type em falta.
+
+### [BAIXO] Chaves eMI3 — código local disperso
+- **Regra:** mesmo <LOCAL> em cidades/CP4 dispersos.
+- **Afetados:** 381 de 381 pontos (100.0%). Exemplos: `044BDB0B-FFBA-4C02-8F73-2504699AC85F`, `29FA5C24-A4C3-47B8-853D-196766AB06BD`, `3464669A-1C87-4466-B359-D1C4B2DF1FB3`, `3C6D90D1-801C-4160-80BB-B21BB312B560`, `50D0133E-9133-4B6B-BAA7-A990F3928AED`, `PRT-00372`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `044BDB0B-FFBA-4C02-8F73-2504699AC85F` | `PRT-00372` |
+| `29FA5C24-A4C3-47B8-853D-196766AB06BD` | `PRT-00372` |
+| `3464669A-1C87-4466-B359-D1C4B2DF1FB3` | `PRT-00372` |
+| `3C6D90D1-801C-4160-80BB-B21BB312B560` | `PRT-00372` |
+| `50D0133E-9133-4B6B-BAA7-A990F3928AED` | `PRT-00372` |
+| `554B93E7-9AF7-40F5-9E5C-D017C20BAF78` | `PRT-00372` |
+| `64016E5A-2708-4957-AD78-DC4D6EB1E40F` | `PRT-00372` |
+| `69256D8B-312C-48D6-BDC1-1250B1111E05` | `PRT-00372` |
+| `69AAED3D-03EE-42FD-B0F5-6103548D392A` | `PRT-00372` |
+| `7B129B5F-DA2D-4C29-94A3-54FD1B537517` | `PRT-00372` |
+| … | … | +371 restantes |
+- **Veredito:** baixo — código local disperso.
+
+### [BAIXO] Chaves eMI3 — códigos locais mistos
+- **Regra:** tomadas do mesmo site com <LOCAL> diferentes.
+- **Afetados:** 178 de 381 pontos (46.7%). Exemplos: `4ACD3BED-3D10-44FB-BFEA-9AE1FE484ACE`, `4BEA03A0-2E2D-478C-803E-A9DC57426666`, `4CF34386-E04E-4BB1-B430-93077A4B60D4`, `83CF5F97-F4A1-4FAD-AC09-8E374B559F3A`, `8DE19AC4-2EEB-4497-BB03-FE3956473060`, `AVR-00111`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `4ACD3BED-3D10-44FB-BFEA-9AE1FE484ACE` | `AVR-00111` |
+| `4BEA03A0-2E2D-478C-803E-A9DC57426666` | `AVR-00111` |
+| `4CF34386-E04E-4BB1-B430-93077A4B60D4` | `AVR-00111` |
+| `83CF5F97-F4A1-4FAD-AC09-8E374B559F3A` | `AVR-00111` |
+| `8DE19AC4-2EEB-4497-BB03-FE3956473060` | `AVR-00111` |
+| `99EC8438-8045-4FDD-8794-D5765C163FD1` | `AVR-00111` |
+| `B03C755B-2D4A-4A79-B666-66FC5630889F` | `AVR-00111` |
+| `BBB5C102-AB0B-424C-B9D6-F89A107759B2` | `AVR-00111` |
+| `CBC610F7-6056-4574-A52E-77055D731106` | `AVR-00111` |
+| `D89E10BB-03F6-4894-ACEA-DA2E225F583E` | `AVR-00111` |
+| … | … | +168 restantes |
+- **Veredito:** baixo — códigos locais mistos.
+
+### [BAIXO] Contagens — pontos extremos
+- **Regra:** site com n_points na cauda da distribuição (top 5).
+- **Afetados:** 1 de 381 pontos (0.3%). Exemplos: `4BB295D3-97E0-48BB-81C6-F07E1B60A0A6`, `LSB-01482`, `LSB-01482`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `4BB295D3-97E0-48BB-81C6-F07E1B60A0A6` | `LSB-01482` |
+- **Veredito:** baixo — pontos extremos.
+
+### [BAIXO] Contagens — pontos extremos
+- **Regra:** site com n_points na cauda da distribuição (top 5).
+- **Afetados:** 1 de 381 pontos (0.3%). Exemplos: `0227C257-3B31-4FF1-B854-E544B02D4C7B`, `LSB-01478`, `LSB-01478`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `0227C257-3B31-4FF1-B854-E544B02D4C7B` | `LSB-01478` |
+- **Veredito:** baixo — pontos extremos.
 
 [↑ índice](#indice)
 
 </details>
 
-<a id="sec-sem-operador-sites-sem-operator-id-101-sites-211-pontos"></a>
+<a id="opc-TRUE"></a>
 
 <details>
-<summary><b>(sem operador) — sites sem `operator_id` (101 sites, 211 pontos)</b> · 3 MÉDIO, 2 ALTO, 2 BAIXO, 1 CRÍTICO</summary>
+<summary><b>TRUE — WOWPLUG (760 sites, 1521 pontos)</b> · 3 MÉDIO, 2 CRÍTICO, 1 BAIXO</summary>
 
-### [CRÍTICO] Potência sobre-declarada
-
-- **Regra:** `ratio = declarada / (V × I)` (monofásico AC e DC) ou `/ (√3 × V × I)` (`mode3AC3p`); `ratio > 1.25` = fisicamente impossível (capacidade excedida).
-
-- **Afetados:** 116 de 211 linhas de conector (55%). Exemplos: `0001PL0001.01`, `0001PL0001`, `0001PL0001.02`
-
+### [CRÍTICO] Física/Ohm — sobre-declaração (ratio>1,25)
+- **Regra:** potência declarada > 1,25 × V×I (monofásico) / √3×V×I (mode3AC3p).
+- **Afetados:** 1340 de 1522 pontos (88.0%). Exemplos: `TMR-00014-01`, `TMR-00014-02`, `TMR-00013-01`, `TMR-00013-02`, `BRR-00030-01`, `TMR-00014`.
 - **Evidência:**
 
-| point_id | site | tomada | modo | V / A / P declarada / esperada (kW) | ratio |
+| ponto | site | tomada | modo | tensão / corrente / declarada / esperada | ratio |
 |---|---|---|---|---|---|
-| `0001PL0001.01` | `0001PL0001` | iec62196T2 | mode3AC3p | 230/32/22/12,75 | 1,73 |
-| `0001PL0001.02` | `0001PL0001` | iec62196T2 | mode3AC3p | 230/32/22/12,75 | 1,73 |
-| `0001PL0002.01` | `0001PL0002` | iec62196T2 | mode3AC3p | 230/32/22/12,75 | 1,73 |
-| `0001PL0002.02` | `0001PL0002` | iec62196T2 | mode3AC3p | 230/32/22/12,75 | 1,73 |
-| `0001PL0003.01` | `0001PL0003` | iec62196T2 | mode3AC3p | 230/32/22/12,75 | 1,73 |
-| `0001PL0003.02` | `0001PL0003` | iec62196T2 | mode3AC3p | 230/32/22/12,75 | 1,73 |
-| `0001PL0004.01` | `0001PL0004` | iec62196T2 | mode3AC3p | 230/32/22/12,75 | 1,73 |
-| `0001PL0004.02` | `0001PL0004` | iec62196T2 | mode3AC3p | 230/32/22/12,75 | 1,73 |
-| `0001PL0005.01` | `0001PL0005` | iec62196T2 | mode3AC3p | 230/32/22/12,75 | 1,73 |
-| `0001PL0005.02` | `0001PL0005` | iec62196T2 | mode3AC3p | 230/32/22/12,75 | 1,73 |
-| … | … | … | … | … | +106 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-)) |
+| `TMR-00014-01` | `TMR-00014` | iec62196T2 | mode2AC1p | 240 V / 63 A / 22000 W / 15120.0 W | 1.455 |
+| `TMR-00014-02` | `TMR-00014` | iec62196T2 | mode2AC1p | 240 V / 63 A / 22000 W / 15120.0 W | 1.455 |
+| `TMR-00013-01` | `TMR-00013` | iec62196T2 | mode2AC1p | 240 V / 63 A / 22000 W / 15120.0 W | 1.455 |
+| `TMR-00013-02` | `TMR-00013` | iec62196T2 | mode2AC1p | 240 V / 63 A / 22000 W / 15120.0 W | 1.455 |
+| `BRR-00030-01` | `BRR-00030` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22000 W / 12747.9 W | 1.726 |
+| `BRR-00030-02` | `BRR-00030` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22000 W / 12747.9 W | 1.726 |
+| `TMR-00011-01` | `TMR-00011` | iec62196T2 | mode2AC1p | 240 V / 63 A / 22000 W / 15120.0 W | 1.455 |
+| `TMR-00011-02` | `TMR-00011` | iec62196T2 | mode2AC1p | 240 V / 63 A / 22000 W / 15120.0 W | 1.455 |
+| `TMR-00015-01` | `TMR-00015` | iec62196T2 | mode2AC1p | 240 V / 63 A / 22000 W / 15120.0 W | 1.455 |
+| `TMR-00015-02` | `TMR-00015` | iec62196T2 | mode2AC1p | 240 V / 63 A / 22000 W / 15120.0 W | 1.455 |
+| … | … | +1330 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-TRUE)) |
+- **Veredito:** crítico — sobre-declaração (ratio>1,25).
 
-- **Veredito:** impossível — a potência declarada excede o produto V×I; padrão recorrente de potência do posto colada na tomada ou convenção de reporte errada.
-
-### [ALTO] Operador em falta
-
-- **Regra:** `operator_id` e `operator_name` nulos no site/ponto; o CPO não é identificável no inventário.
-
-- **Afetados:** 101 sites e 211 linhas de conector sem operador. Exemplos: `0001PL0001`, `0001PL0002`, `0001PL0003`, `0001PL0004`, `0001PL0005`, `0001PL0006`, `0001PL0007`, `0001PL0008`, `0001PR0009`, `0001PR0010`
-
+### [CRÍTICO] Duplicados — point_id
+- **Regra:** point_id duplicado no inventário.
+- **Afetados:** 2 de 1522 pontos (0.1%). Exemplos: `PCV-00005-01`, `PCV-00005`, `PCV-00005`, `PCV-00005`.
 - **Evidência:**
 
-| site_external_id |
-|---|
-| `0001PL0001` |
-| `0001PL0002` |
-| `0001PL0003` |
-| `0001PL0004` |
-| `0001PL0005` |
-| `0001PL0006` |
-| `0001PL0007` |
-| `0001PL0008` |
-| `0001PR0009` |
-| `0001PR0010` |
-| +91 restantes nos CSVs |
+| ponto | site |
+|---|---|
+| `PCV-00005-01` | `PCV-00005` |
+| `PCV-00005-01` | `PCV-00005` |
+- **Veredito:** crítico — point_id.
 
-- **Veredito:** suspeito (identidade) — preencher o CPO; o tracker trata a mesma classe como `missing cpo`.
-
-### [ALTO] Coordenadas fora de Portugal
-
-- **Regra:** Continente `lon∈(-9,8;-5,5)` `lat∈(36,5;42,5)`; Açores `lon∈(-32;-24)` `lat∈(36,5;40)`; Madeira `lon∈(-17,5;-16)` `lat∈(32;33,5)`.
-
-- **Afetados:** 2 sites. Exemplos: `0001PR0009`, `0001PR0010`, `0001PR0009.01`, `0001PR0009.02`
-
+### [MÉDIO] Combinação formato/tomada
+- **Regra:** connector_format incompatível com charging_mode.
+- **Afetados:** 79 de 1522 pontos (5.2%). Exemplos: `TMR-00004-01`, `TMR-00004-02`, `TMR-00014-01`, `TMR-00014-02`, `TMR-00013-01`, `TMR-00004`.
 - **Evidência:**
 
-| site | lat,lon | cidade |
-|---|---|---|
-| `0001PR0009` | 50.407738,-24.63867 | Matosinhos |
-| `0001PR0010` | 47.348747,-18.149414 | Matosinhos |
+| ponto | site |
+|---|---|
+| `TMR-00004-01` | `TMR-00004` |
+| `TMR-00004-02` | `TMR-00004` |
+| `TMR-00014-01` | `TMR-00014` |
+| `TMR-00014-02` | `TMR-00014` |
+| `TMR-00013-01` | `TMR-00013` |
+| `TMR-00013-02` | `TMR-00013` |
+| `TMR-00003-01` | `TMR-00003` |
+| `TMR-00003-02` | `TMR-00003` |
+| `TMR-00011-01` | `TMR-00011` |
+| `TMR-00011-02` | `TMR-00011` |
+| … | … | +69 restantes |
+- **Veredito:** médio — Combinação formato/tomada.
 
-- **Veredito:** suspeito — coordenada trocada ou fora do território; geocodificação errada.
-
-### [MÉDIO] Potência sub-declarada
-
-- **Regra:** `ratio < 0.75` = derating suspeito ou erro de introdução; `ratio = declarada / esperada`.
-
-- **Afetados:** 28 de 211 linhas de conector (13%). Exemplos: `0461PR0003.01`, `0461PR0003`, `0461PR0003.02`
-
+### [MÉDIO] Física/Ohm — sub-declaração (ratio<0,75)
+- **Regra:** potência declarada < 0,75 × V×I / √3×V×I.
+- **Afetados:** 68 de 1522 pontos (4.5%). Exemplos: `CMN-00014-01`, `BRR-00127-01`, `CMN-00015-01`, `TMR-00027-01`, `CMN-00018-01`, `CMN-00014`.
 - **Evidência:**
 
-| point_id | site | tomada | modo | V / A / P declarada / esperada (kW) | ratio |
+| ponto | site | tomada | modo | tensão / corrente / declarada / esperada | ratio |
 |---|---|---|---|---|---|
-| `0461PR0003.01` | `0461PR0003` | iec62196T2COMBO | mode4DC | 1000/350/120/350 | 0,34 |
-| `0461PR0003.02` | `0461PR0003` | iec62196T2COMBO | mode4DC | 1000/350/120/350 | 0,34 |
-| `0239PR0003.01` | `0239PR0003` | iec62196T2COMBO | mode4DC | 1000/200/120/200 | 0,60 |
-| `0239PR0003.03` | `0239PR0003` | iec62196T2COMBO | mode4DC | 1000/200/120/200 | 0,60 |
-| `0278PR0002.01` | `0278PR0002` | iec62196T2COMBO | mode4DC | 1000/200/120/200 | 0,60 |
-| `0278PR0002.03` | `0278PR0002` | iec62196T2COMBO | mode4DC | 1000/200/120/200 | 0,60 |
-| `0446PR0003.01` | `0446PR0003` | iec62196T2COMBO | mode4DC | 1000/200/120/200 | 0,60 |
-| `0446PR0003.03` | `0446PR0003` | iec62196T2COMBO | mode4DC | 1000/200/120/200 | 0,60 |
-| `0845PR0002.01` | `0845PR0002` | iec62196T2COMBO | mode4DC | 1000/200/120/200 | 0,60 |
-| `0845PR0002.03` | `0845PR0002` | iec62196T2COMBO | mode4DC | 1000/200/120/200 | 0,60 |
-| … | … | … | … | … | +18 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-)) |
+| `CMN-00014-01` | `CMN-00014` | iec62196T2 | mode3AC3p | 240 V / 96 A / 22000 W / 39906.5 W | 0.551 |
+| `BRR-00127-01` | `BRR-00127` | iec62196T2 | mode3AC3p | 240 V / 96 A / 22000 W / 39906.5 W | 0.551 |
+| `CMN-00015-01` | `CMN-00015` | iec62196T2 | mode3AC3p | 240 V / 96 A / 22000 W / 39906.5 W | 0.551 |
+| `TMR-00027-01` | `TMR-00027` | iec62196T2 | mode3AC3p | 240 V / 96 A / 22000 W / 39906.5 W | 0.551 |
+| `CMN-00018-01` | `CMN-00018` | iec62196T2 | mode3AC3p | 240 V / 96 A / 22000 W / 39906.5 W | 0.551 |
+| `TMR-00028-01` | `TMR-00028` | iec62196T2 | mode3AC3p | 240 V / 96 A / 22000 W / 39906.5 W | 0.551 |
+| `BRR-00126-01` | `BRR-00126` | iec62196T2 | mode3AC3p | 240 V / 96 A / 22000 W / 39906.5 W | 0.551 |
+| `CMN-00016-01` | `CMN-00016` | iec62196T2 | mode3AC3p | 240 V / 96 A / 22000 W / 39906.5 W | 0.551 |
+| `CMN-00017-01` | `CMN-00017` | iec62196T2 | mode3AC3p | 240 V / 96 A / 22000 W / 39906.5 W | 0.551 |
+| `CMN-00019-01` | `CMN-00019` | iec62196T2 | mode3AC3p | 240 V / 96 A / 22000 W / 39906.5 W | 0.551 |
+| … | … | +58 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-TRUE)) |
+- **Veredito:** médio — sub-declaração (ratio<0,75).
 
-- **Veredito:** suspeito — potência declarada muito abaixo de V×I; derating do posto partilhado ou número trocado. Rever contra a chapa do posto.
-
-### [MÉDIO] Tensão, corrente ou potência inválida
-
-- **Regra:** `voltage`/`max_current` nulos ou ≤0, ou `max_power_w` nulo/≤0; valores crus que impedem a verificação por V×I.
-
-- **Afetados:** 6 de 211 linhas de conector. Exemplos: `0281PR0002.01`, `0281PR0002`, `0281PR0002.02`
-
+### [MÉDIO] Localização — CP7↔localidade
+- **Regra:** CP4 com city divergente da moda.
+- **Afetados:** 50 de 1522 pontos (3.3%). Exemplos: `BRR-00021-01`, `BRR-00021-02`, `BRR-00022-01`, `BRR-00022-02`, `BRR-00030-01`, `BRR-00021`.
 - **Evidência:**
 
-| point_id | site | V | A | P (W) |
-|---|---|---|---|---|
-| `0281PR0002.01` | `0281PR0002` | 0 | 0 | 120000 |
-| `0281PR0002.02` | `0281PR0002` | 0 | 0 | 120000 |
-| `0289PR0003.01` | `0289PR0003` | 0 | 0 | 120000 |
-| `0289PR0003.02` | `0289PR0003` | 0 | 0 | 120000 |
-| `1057PR0003.01` | `1057PR0003` | 0 | 0 | 120000 |
-| `1057PR0003.02` | `1057PR0003` | 0 | 0 | 120000 |
-
-- **Veredito:** suspeito — valor não positivo ou em falta; corrigir na origem para permitir validar a potência.
-
-### [MÉDIO] Localidade divergente do CP7 (CP4→cidade modal)
-
-- **Regra:** Agrupa-se por CP4 (4 primeiros dígitos) e toma-se a `city` modal dos CP4 com ≥5 sites; par (CP4 → `city`) divergente = suspeito.
-
-- **Afetados:** 17 sites. Exemplos: `3466PL0001`, `6173PL0001`, `0278PL0001`, `0278PR0002`
-
-- **Evidência:**
-
-| site | postcode | city | cidade modal do CP4 |
-|---|---|---|---|
-| `3466PL0001` | 2815-894 | Sobreda | Almada |
-| `6173PL0001` | 2610-001 | Alfragide | Amadora |
-| `0278PL0001` | 2860-004 | Alhos Vedros | Moita |
-| `0278PR0002` | 2860-004 | Alhos Vedros | Moita |
-| `0289PL0001` | 2615-382 | Alverca | Vila Franca de Xira |
-| `0289PR0002` | 2615-382 | Alverca | Vila Franca de Xira |
-| `0289PR0003` | 2615-382 | Alverca | Vila Franca de Xira |
-| `0842PL0001` | 9050-299 | Cancela | Funchal |
-| `0842PR0002` | 9050-299 | Cancela | Funchal |
-| `1057PL0001` | 2715-097 | Montelavar | Sintra |
-| … | … | … | +7 restantes nos CSVs |
-
-- **Veredito:** suspeito — CP trocado ou localidade errada; CTT muda códigos e há grafias variantes.
-
-### [BAIXO] Localidade ou código postal em falta/fora do formato
-
-- **Regra:** `city` vazia com `postcode` presente (ou inverso); `postcode` fora do formato CP7 `NNNN-NNN`.
-
-- **Afetados:** 7 sites. Exemplos: `3778PL0001`, `0001PL0001`, `3778PR0002`, `0001PL0002`
-
-- **Evidência:**
-
-| site | campo |
+| ponto | site |
 |---|---|
-| `3778PL0001` | city em falta |
-| `3778PR0002` | city em falta |
-| `0446PR0003` | postcode em falta |
-| `3778PL0001` | postcode em falta |
-| `3778PR0002` | postcode em falta |
-| `4873PL0001` | postcode em falta |
-| `4873PR0002` | postcode em falta |
+| `BRR-00021-01` | `BRR-00021` |
+| `BRR-00021-02` | `BRR-00021` |
+| `BRR-00022-01` | `BRR-00022` |
+| `BRR-00022-02` | `BRR-00022` |
+| `BRR-00030-01` | `BRR-00030` |
+| `BRR-00030-02` | `BRR-00030` |
+| `BRR-00028-01` | `BRR-00028` |
+| `BRR-00028-02` | `BRR-00028` |
+| `BRR-00102-01` | `BRR-00102` |
+| `BRR-00102-02` | `BRR-00102` |
+| … | … | +40 restantes |
+- **Veredito:** médio — CP7↔localidade.
 
-- **Veredito:** suspeito (metadados) — normalizar a morada; não impede a localização por coordenadas.
-
-### [BAIXO] Metadados em falta
-
-- **Regra:** `usage_type`, `auth_methods` ou `brands_accepted` vazios no inventário estático.
-
-- **Afetados:** 422 campos em falta (211 `usage_type`, 0 `auth_methods`, 211 `brands_accepted`). Exemplos: `0001PL0001.01`, `0001PL0001.02`, `0001PL0001`, `0001PL0002.01`
-
+### [BAIXO] Metadados — usage_type em falta
+- **Regra:** usage_type nulo/fora do enum.
+- **Afetados:** 20 de 1522 pontos (1.3%). Exemplos: `CSC-00573-01`, `CSC-00573-02`, `LSB-01382-01`, `LSB-01382-02`, `LSB-01383-01`, `CSC-00573`.
 - **Evidência:**
 
-| id | campo em falta |
+| ponto | site |
 |---|---|
-| `0001PL0001.01` | usage_type |
-| `0001PL0001.02` | usage_type |
-| `0001PL0002.01` | usage_type |
-| `0001PL0002.02` | usage_type |
-| `0001PL0001.01` | brands_accepted |
-| `0001PL0001.02` | brands_accepted |
-| `0001PL0002.01` | brands_accepted |
-| … | +415 restantes nos CSVs |
-
-- **Veredito:** suspeito (metadados) — preencher os campos; não afecta a física do ponto.
+| `CSC-00573-01` | `CSC-00573` |
+| `CSC-00573-02` | `CSC-00573` |
+| `LSB-01382-01` | `LSB-01382` |
+| `LSB-01382-02` | `LSB-01382` |
+| `LSB-01383-01` | `LSB-01383` |
+| `LSB-01383-02` | `LSB-01383` |
+| `LSB-01387-01` | `LSB-01387` |
+| `LSB-01387-02` | `LSB-01387` |
+| `LSB-01395-01` | `LSB-01395` |
+| `LSB-01395-02` | `LSB-01395` |
+| … | … | +10 restantes |
+- **Veredito:** baixo — usage_type em falta.
 
 [↑ índice](#indice)
 
 </details>
 
-<a id="opc-ATLA"></a>
+<a id="opc-SEMOPC"></a>
 
 <details>
-<summary><b>ATLA — Atlante Infra Portugal, S.A (598 sites, 1381 pontos)</b> · 3 BAIXO, 2 MÉDIO, 1 CRÍTICO</summary>
+<summary><b>SEMOPC — (sem operador identificado) (104 sites, 219 pontos)</b> · 7 BAIXO, 3 MÉDIO, 2 CRÍTICO, 2 ALTO</summary>
 
-### [CRÍTICO] Potência sobre-declarada
-
-- **Regra:** `ratio = declarada / (V × I)` (monofásico AC e DC) ou `/ (√3 × V × I)` (`mode3AC3p`); `ratio > 1.25` = fisicamente impossível (capacidade excedida).
-
-- **Afetados:** 419 de 1381 linhas de conector (30%). Exemplos: `CSC-00518-01`, `CSC-00518`, `CSC-00518-02`
-
+### [CRÍTICO] Física/Ohm — sobre-declaração (ratio>1,25)
+- **Regra:** potência declarada > 1,25 × V×I (monofásico) / √3×V×I (mode3AC3p).
+- **Afetados:** 116 de 219 pontos (53.0%). Exemplos: `0001PL0002.01`, `0001PL0002.02`, `0001PL0003.01`, `0001PL0003.02`, `0001PL0004.01`, `0001PL0002`.
 - **Evidência:**
 
-| point_id | site | tomada | modo | V / A / P declarada / esperada (kW) | ratio |
+| ponto | site | tomada | modo | tensão / corrente / declarada / esperada | ratio |
 |---|---|---|---|---|---|
-| `CSC-00518-01` | `CSC-00518` | iec62196T2 | mode2AC1p | 230/10/7,40/2,30 | 3,22 |
-| `CSC-00518-02` | `CSC-00518` | iec62196T2 | mode2AC1p | 230/10/7,40/2,30 | 3,22 |
-| `ALR-80001-01` | `ALR-80001` | iec62196T2 | mode3AC3p | 230/10/8/3,98 | 2,01 |
-| `ALR-80001-02` | `ALR-80001` | iec62196T2 | mode3AC3p | 230/10/8/3,98 | 2,01 |
-| `CSC-00511-01` | `CSC-00511` | iec62196T2 | mode3AC3p | 230/10/7,40/3,98 | 1,86 |
-| `CSC-00511-02` | `CSC-00511` | iec62196T2 | mode3AC3p | 230/10/7,40/3,98 | 1,86 |
-| `CSC-00519-01` | `CSC-00519` | iec62196T2 | mode3AC3p | 230/10/7,40/3,98 | 1,86 |
-| `CSC-00519-02` | `CSC-00519` | iec62196T2 | mode3AC3p | 230/10/7,40/3,98 | 1,86 |
-| `ACB-00019-01` | `ACB-00019` | iec62196T2 | mode3AC3p | 230/32/22/12,75 | 1,73 |
-| `ACB-00019-02` | `ACB-00019` | iec62196T2 | mode3AC3p | 230/32/22/12,75 | 1,73 |
-| … | … | … | … | … | +409 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-ATLA)) |
+| `0001PL0002.01` | `0001PL0002` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22000 W / 12747.9 W | 1.726 |
+| `0001PL0002.02` | `0001PL0002` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22000 W / 12747.9 W | 1.726 |
+| `0001PL0003.01` | `0001PL0003` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22000 W / 12747.9 W | 1.726 |
+| `0001PL0003.02` | `0001PL0003` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22000 W / 12747.9 W | 1.726 |
+| `0001PL0004.01` | `0001PL0004` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22000 W / 12747.9 W | 1.726 |
+| `0001PL0004.02` | `0001PL0004` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22000 W / 12747.9 W | 1.726 |
+| `0001PL0005.01` | `0001PL0005` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22000 W / 12747.9 W | 1.726 |
+| `0001PL0005.02` | `0001PL0005` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22000 W / 12747.9 W | 1.726 |
+| `0001PL0006.01` | `0001PL0006` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22000 W / 12747.9 W | 1.726 |
+| `0001PL0006.02` | `0001PL0006` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22000 W / 12747.9 W | 1.726 |
+| … | … | +106 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-SEMOPC)) |
+- **Veredito:** crítico — sobre-declaração (ratio>1,25).
 
-- **Veredito:** impossível — a potência declarada excede o produto V×I; padrão recorrente de potência do posto colada na tomada ou convenção de reporte errada.
-
-### [MÉDIO] Potência sub-declarada
-
-- **Regra:** `ratio < 0.75` = derating suspeito ou erro de introdução; `ratio = declarada / esperada`.
-
-- **Afetados:** 180 de 1381 linhas de conector (13%). Exemplos: `ACH-00042-01`, `ACH-00042`, `ACH-00042-02`
-
+### [CRÍTICO] Física — V≤0 ou I≤0
+- **Regra:** voltage<=0 ou max_current<=0.
+- **Afetados:** 6 de 219 pontos (2.7%). Exemplos: `0281PR0002.01`, `0281PR0002.02`, `0289PR0003.01`, `0289PR0003.02`, `1057PR0003.01`, `0281PR0002`.
 - **Evidência:**
 
-| point_id | site | tomada | modo | V / A / P declarada / esperada (kW) | ratio |
-|---|---|---|---|---|---|
-| `ACH-00042-01` | `ACH-00042` | iec62196T2COMBO | mode4DC | 1000/300/40/300 | 0,13 |
-| `ACH-00042-02` | `ACH-00042` | iec62196T2COMBO | mode4DC | 1000/300/40/300 | 0,13 |
-| `OBD-00026-01` | `OBD-00026` | iec62196T2COMBO | mode4DC | 1000/300/50/300 | 0,17 |
-| `OBD-00026-02` | `OBD-00026` | iec62196T2COMBO | mode4DC | 1000/300/50/300 | 0,17 |
-| `CSC-00569-01` | `CSC-00569` | iec62196T2COMBO | mode4DC | 1000/300/55/300 | 0,18 |
-| `CSC-00569-02` | `CSC-00569` | iec62196T2COMBO | mode4DC | 1000/300/55/300 | 0,18 |
-| `CVD-00006-01` | `CVD-00006` | iec62196T2COMBO | mode4DC | 1000/300/55/300 | 0,18 |
-| `CVD-00006-02` | `CVD-00006` | iec62196T2COMBO | mode4DC | 1000/300/55/300 | 0,18 |
-| `AMT-00042-01` | `AMT-00042` | iec62196T2COMBO | mode4DC | 1000/500/100/500 | 0,20 |
-| `AMT-00042-02` | `AMT-00042` | iec62196T2COMBO | mode4DC | 1000/500/100/500 | 0,20 |
-| … | … | … | … | … | +170 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-ATLA)) |
-
-- **Veredito:** suspeito — potência declarada muito abaixo de V×I; derating do posto partilhado ou número trocado. Rever contra a chapa do posto.
-
-### [MÉDIO] Localidade divergente do CP7 (CP4→cidade modal)
-
-- **Regra:** Agrupa-se por CP4 (4 primeiros dígitos) e toma-se a `city` modal dos CP4 com ≥5 sites; par (CP4 → `city`) divergente = suspeito.
-
-- **Afetados:** 8 sites. Exemplos: `FIG-00024`, `VFR-00080`, `BRR-00130`, `BRR-00131`
-
-- **Evidência:**
-
-| site | postcode | city | cidade modal do CP4 |
-|---|---|---|---|
-| `FIG-00024` | 8200-127 | Figueira da Foz | Albufeira |
-| `VFR-00080` | 3700-534 | Santa Maria da Feira | São João da Madeira |
-| `BRR-00130` | 2835-807 | Barreiro | Moita |
-| `BRR-00131` | 2835-807 | Barreiro | Moita |
-| `LSB-00661` | 2700-312 | Lisboa | Amadora |
-| `CHV-80001` | 1800-028 | Chaves | Lisboa |
-| `SLV-80002` | 8005-194 | Silves | Faro |
-| `LRS-00239` | 2680-576 | Loures | Camarate |
-
-- **Veredito:** suspeito — CP trocado ou localidade errada; CTT muda códigos e há grafias variantes.
-
-### [BAIXO] Identificador de ponto com espaço inicial
-
-- **Regra:** `point_id` com espaço no início/fim; parte joins e chaves mesmo quando o valor é o mesmo.
-
-- **Afetados:** 2 linhas de conector. Exemplos: ` NZR-00035-01`, `NZR-00035`, ` NZR-00035-02`
-
-- **Evidência:**
-
-| point_external_id | point_id (como publicado) | site |
-|---|---|---|
-| `PT*ATL*ENZR*00035*1` | ` NZR-00035-01` | `NZR-00035` |
-| `PT*ATL*ENZR*00035*2` | ` NZR-00035-02` | `NZR-00035` |
-
-- **Veredito:** suspeito (formato) — normalizar o identificador na origem.
-
-### [BAIXO] Fragmentação do nome do operador
-
-- **Regra:** Mesmo `operator_id` com várias grafias de `operator_name`; parte a identidade em relatórios e no tracker.
-
-- **Afetados:** 7 grafias; 35 de 598 sites usam uma grafia não modal. Exemplos: `AVR-00049`, `LRS-00098`, `CHV-00017`, `MTJ-00038`
-
-- **Evidência:**
-
-| variante de nome | sites |
+| ponto | site |
 |---|---|
-| Atlante | 15 |
-| Atlante Infra Portugal S.A | 1 |
-| Atlante Infra Portugal S.A. | 15 |
-| Atlante Infra Portugal S.a | 1 |
-| Atlante Infra Portugal S.a. | 1 |
-| Atlante Infra Portugal, S.A | 563 |
-| Atlante Infra Portugal, S.A. | 2 |
-| … | +591 restantes nos CSVs |
+| `0281PR0002.01` | `0281PR0002` |
+| `0281PR0002.02` | `0281PR0002` |
+| `0289PR0003.01` | `0289PR0003` |
+| `0289PR0003.02` | `0289PR0003` |
+| `1057PR0003.01` | `1057PR0003` |
+| `1057PR0003.02` | `1057PR0003` |
+- **Veredito:** crítico — V≤0 ou I≤0.
 
-- **Veredito:** suspeito (identidade) — fixar uma grafia única por OPC; não é erro de dados do site.
-
-### [BAIXO] Metadados em falta
-
-- **Regra:** `usage_type`, `auth_methods` ou `brands_accepted` vazios no inventário estático.
-
-- **Afetados:** 37 campos em falta (37 `usage_type`, 0 `auth_methods`, 0 `brands_accepted`). Exemplos: `MTS-00202-01`, `MTS-00202-02`, `MTS-00203-01`, `MTS-00203-02`
-
+### [ALTO] Operador — operator_id/nome nulos
+- **Regra:** operator_id ou operator_name nulos.
+- **Afetados:** 219 de 219 pontos (100.0%). Exemplos: `0001PL0002.01`, `0001PL0002.02`, `0001PL0003.01`, `0001PL0003.02`, `0001PL0004.01`, `0001PL0002`.
 - **Evidência:**
 
-| id | campo em falta |
+| ponto | site |
 |---|---|
-| `MTS-00202-01` | usage_type |
-| `MTS-00202-02` | usage_type |
-| `MTS-00203-01` | usage_type |
-| `MTS-00203-02` | usage_type |
-| … | +33 restantes nos CSVs |
+| `0001PL0002.01` | `0001PL0002` |
+| `0001PL0002.02` | `0001PL0002` |
+| `0001PL0003.01` | `0001PL0003` |
+| `0001PL0003.02` | `0001PL0003` |
+| `0001PL0004.01` | `0001PL0004` |
+| `0001PL0004.02` | `0001PL0004` |
+| `0001PL0005.01` | `0001PL0005` |
+| `0001PL0005.02` | `0001PL0005` |
+| `0001PL0006.01` | `0001PL0006` |
+| `0001PL0006.02` | `0001PL0006` |
+| … | … | +209 restantes |
+- **Veredito:** alto — operator_id/nome nulos.
 
-- **Veredito:** suspeito (metadados) — preencher os campos; não afecta a física do ponto.
-
-[↑ índice](#indice)
-
-</details>
-
-<a id="opc-HORZ"></a>
-
-<details>
-<summary><b>HORZ — Powerdot, S.A (785 sites, 2135 pontos)</b> · 2 MÉDIO, 1 CRÍTICO, 1 BAIXO</summary>
-
-### [CRÍTICO] Potência sobre-declarada
-
-- **Regra:** `ratio = declarada / (V × I)` (monofásico AC e DC) ou `/ (√3 × V × I)` (`mode3AC3p`); `ratio > 1.25` = fisicamente impossível (capacidade excedida).
-
-- **Afetados:** 81 de 2135 linhas de conector (4%). Exemplos: `ALM-00062-01`, `ALM-00062`, `ALM-00062-02`
-
+### [ALTO] Localização — fora de PT
+- **Regra:** coordenadas fora dos limites PT.
+- **Afetados:** 4 de 4 pontos (100.0%). Exemplos: `0001PR0009.01`, `0001PR0009.02`, `0001PR0010.01`, `0001PR0010.02`, `0001PR0009`, `0001PR0010`.
 - **Evidência:**
 
-| point_id | site | tomada | modo | V / A / P declarada / esperada (kW) | ratio |
-|---|---|---|---|---|---|
-| `ALM-00062-01` | `ALM-00062` | iec62196T2 | mode2AC1p | 240/32/22/7,68 | 2,87 |
-| `ALM-00062-02` | `ALM-00062` | iec62196T2 | mode2AC1p | 240/32/22/7,68 | 2,87 |
-| `AVV-00006-1` | `AVV-00006` | iec62196T2 | mode2AC1p | 240/32/22/7,68 | 2,87 |
-| `GRD-00025-1` | `GRD-00025` | iec62196T2 | mode2AC1p | 240/16/11/3,84 | 2,87 |
-| `LSB-00601-01` | `LSB-00601` | iec62196T2 | mode2AC1p | 240/32/22/7,68 | 2,87 |
-| `LSB-00601-02` | `LSB-00601` | iec62196T2 | mode2AC1p | 240/32/22/7,68 | 2,87 |
-| `LSB-00602-01` | `LSB-00602` | iec62196T2 | mode2AC1p | 240/32/22/7,68 | 2,87 |
-| `LSB-00602-02` | `LSB-00602` | iec62196T2 | mode2AC1p | 240/32/22/7,68 | 2,87 |
-| `LSB-00607-01` | `LSB-00607` | iec62196T2 | mode2AC1p | 240/32/22/7,68 | 2,87 |
-| `LSB-00607-02` | `LSB-00607` | iec62196T2 | mode2AC1p | 240/32/22/7,68 | 2,87 |
-| … | … | … | … | … | +71 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-HORZ)) |
-
-- **Veredito:** impossível — a potência declarada excede o produto V×I; padrão recorrente de potência do posto colada na tomada ou convenção de reporte errada.
-
-### [MÉDIO] Potência sub-declarada
-
-- **Regra:** `ratio < 0.75` = derating suspeito ou erro de introdução; `ratio = declarada / esperada`.
-
-- **Afetados:** 416 de 2135 linhas de conector (19%). Exemplos: `MTA-00025-01`, `MTA-00025`, `MTA-00025-03`
-
-- **Evidência:**
-
-| point_id | site | tomada | modo | V / A / P declarada / esperada (kW) | ratio |
-|---|---|---|---|---|---|
-| `MTA-00025-01` | `MTA-00025` | iec62196T2COMBO | mode4DC | 920/400/50/368 | 0,14 |
-| `MTA-00025-03` | `MTA-00025` | iec62196T2COMBO | mode4DC | 920/400/50/368 | 0,14 |
-| `OFR-00009-01` | `OFR-00009` | iec62196T2COMBO | mode4DC | 920/400/60/368 | 0,16 |
-| `ORM-00043-01` | `ORM-00043` | iec62196T2COMBO | mode4DC | 920/400/60/368 | 0,16 |
-| `ORM-00043-03` | `ORM-00043` | iec62196T2COMBO | mode4DC | 920/400/60/368 | 0,16 |
-| `OFR-00009-04` | `OFR-00009` | iec62196T2COMBO | mode4DC | 800/400/60/320 | 0,19 |
-| `CSC-00139-03` | `CSC-00139` | iec62196T2COMBO | mode4DC | 920/250/50/230 | 0,22 |
-| `CSC-00162-03` | `CSC-00162` | iec62196T2COMBO | mode4DC | 920/250/50/230 | 0,22 |
-| `CTB-00030-01` | `CTB-00030` | chademo | mode4DC | 920/250/50/230 | 0,22 |
-| `GMR-00107-03` | `GMR-00107` | iec62196T2COMBO | mode4DC | 920/250/50/230 | 0,22 |
-| … | … | … | … | … | +406 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-HORZ)) |
-
-- **Veredito:** suspeito — potência declarada muito abaixo de V×I; derating do posto partilhado ou número trocado. Rever contra a chapa do posto.
-
-### [MÉDIO] Localidade divergente do CP7 (CP4→cidade modal)
-
-- **Regra:** Agrupa-se por CP4 (4 primeiros dígitos) e toma-se a `city` modal dos CP4 com ≥5 sites; par (CP4 → `city`) divergente = suspeito.
-
-- **Afetados:** 28 sites. Exemplos: `AGN-90001`, `VFX-90001`, `BTL-90003`, `AFE-90001`
-
-- **Evidência:**
-
-| site | postcode | city | cidade modal do CP4 |
-|---|---|---|---|
-| `AGN-90001` | 3300-013 | Arganil | Coimbra |
-| `VFX-90001` | 1600-233 | Vila Franca de Xira | Lisboa |
-| `BTL-90003` | 2495-032 | Batalha | Ourém |
-| `AFE-90001` | 1600-233 | Alfândega da Fé | Lisboa |
-| `MTJ-00011` | 2005-273 | Montijo | Santarém |
-| `OER-00063` | 3840-401 | Oeiras | Vagos |
-| `CBR-00073` | 3140-563 | Coimbra | Montemor-o-Velho |
-| `TMC-90001` | 2580-234 | Torre de Moncorvo | Alenquer |
-| `LRS-90032` | 2680-332 | Loures | Camarate |
-| `FAR-00028` | 8365-023 | Faro | Silves |
-| … | … | … | +18 restantes nos CSVs |
-
-- **Veredito:** suspeito — CP trocado ou localidade errada; CTT muda códigos e há grafias variantes.
-
-### [BAIXO] Metadados em falta
-
-- **Regra:** `usage_type`, `auth_methods` ou `brands_accepted` vazios no inventário estático.
-
-- **Afetados:** 66 campos em falta (63 `usage_type`, 3 `auth_methods`, 0 `brands_accepted`). Exemplos: `MLD-00052-01`, `NLS-00005`, `MLD-00052-02`, `NLS-00006`
-
-- **Evidência:**
-
-| id | campo em falta |
+| ponto | site |
 |---|---|
-| `MLD-00052-01` | usage_type |
-| `MLD-00052-02` | usage_type |
-| `MLD-00052-03` | usage_type |
-| `MLD-00052-04` | usage_type |
-| `NLS-00005` | auth_methods |
-| `NLS-00006` | auth_methods |
-| `NLS-00007` | auth_methods |
-| … | +59 restantes nos CSVs |
+| `0001PR0009.01` | `0001PR0009` |
+| `0001PR0009.02` | `0001PR0009` |
+| `0001PR0010.01` | `0001PR0010` |
+| `0001PR0010.02` | `0001PR0010` |
+- **Veredito:** alto — fora de PT.
 
-- **Veredito:** suspeito (metadados) — preencher os campos; não afecta a física do ponto.
+### [MÉDIO] Combinação formato/tomada
+- **Regra:** connector_format incompatível com charging_mode.
+- **Afetados:** 103 de 219 pontos (47.0%). Exemplos: `0001PR0009.01`, `0001PR0009.02`, `0001PR0010.01`, `0001PR0010.02`, `0002PR0001.01`, `0001PR0009`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `0001PR0009.01` | `0001PR0009` |
+| `0001PR0009.02` | `0001PR0009` |
+| `0001PR0010.01` | `0001PR0010` |
+| `0001PR0010.02` | `0001PR0010` |
+| `0002PR0001.01` | `0002PR0001` |
+| `0002PR0001.02` | `0002PR0001` |
+| `0002PR0002.01` | `0002PR0002` |
+| `0002PR0002.02` | `0002PR0002` |
+| `0207PR0003.01` | `0207PR0003` |
+| `0207PR0003.02` | `0207PR0003` |
+| … | … | +93 restantes |
+- **Veredito:** médio — Combinação formato/tomada.
+
+### [MÉDIO] Localização — CP7↔localidade
+- **Regra:** CP4 com city divergente da moda.
+- **Afetados:** 35 de 35 pontos (100.0%). Exemplos: `3466PL0001.01`, `3466PL0001.02`, `6173PL0001.01`, `6173PL0001.02`, `0278PL0001.01`, `3466PL0001`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `3466PL0001.01` | `3466PL0001` |
+| `3466PL0001.02` | `3466PL0001` |
+| `6173PL0001.01` | `6173PL0001` |
+| `6173PL0001.02` | `6173PL0001` |
+| `0278PL0001.01` | `0278PL0001` |
+| `0278PL0001.02` | `0278PL0001` |
+| `0278PR0002.01` | `0278PR0002` |
+| `0278PR0002.03` | `0278PR0002` |
+| `0289PL0001.01` | `0289PL0001` |
+| `0289PL0001.02` | `0289PL0001` |
+| … | … | +25 restantes |
+- **Veredito:** médio — CP7↔localidade.
+
+### [MÉDIO] Física/Ohm — sub-declaração (ratio<0,75)
+- **Regra:** potência declarada < 0,75 × V×I / √3×V×I.
+- **Afetados:** 32 de 219 pontos (14.6%). Exemplos: `0446PR0003.01`, `0446PR0003.03`, `0278PR0002.01`, `0278PR0002.03`, `0461PR0003.01`, `0446PR0003`.
+- **Evidência:**
+
+| ponto | site | tomada | modo | tensão / corrente / declarada / esperada | ratio |
+|---|---|---|---|---|---|
+| `0446PR0003.01` | `0446PR0003` | iec62196T2COMBO | mode4DC | 1000 V / 200 A / 120000 W / 200000.0 W | 0.6 |
+| `0446PR0003.03` | `0446PR0003` | iec62196T2COMBO | mode4DC | 1000 V / 200 A / 120000 W / 200000.0 W | 0.6 |
+| `0278PR0002.01` | `0278PR0002` | iec62196T2COMBO | mode4DC | 1000 V / 200 A / 120000 W / 200000.0 W | 0.6 |
+| `0278PR0002.03` | `0278PR0002` | iec62196T2COMBO | mode4DC | 1000 V / 200 A / 120000 W / 200000.0 W | 0.6 |
+| `0461PR0003.01` | `0461PR0003` | iec62196T2COMBO | mode4DC | 1000 V / 350 A / 120000 W / 350000.0 W | 0.343 |
+| `0461PR0003.02` | `0461PR0003` | iec62196T2COMBO | mode4DC | 1000 V / 350 A / 120000 W / 350000.0 W | 0.343 |
+| `0461PR0005.01` | `0461PR0005` | iec62196T2COMBO | mode4DC | 1000 V / 350 A / 240000 W / 350000.0 W | 0.686 |
+| `0461PR0005.02` | `0461PR0005` | iec62196T2COMBO | mode4DC | 1000 V / 350 A / 240000 W / 350000.0 W | 0.686 |
+| `0461PR0006.01` | `0461PR0006` | iec62196T2COMBO | mode4DC | 1000 V / 350 A / 240000 W / 350000.0 W | 0.686 |
+| `0461PR0006.02` | `0461PR0006` | iec62196T2COMBO | mode4DC | 1000 V / 350 A / 240000 W / 350000.0 W | 0.686 |
+| … | … | +22 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-SEMOPC)) |
+- **Veredito:** médio — sub-declaração (ratio<0,75).
+
+### [BAIXO] Metadados — usage_type em falta
+- **Regra:** usage_type nulo/fora do enum.
+- **Afetados:** 219 de 219 pontos (100.0%). Exemplos: `0001PL0002.01`, `0001PL0002.02`, `0001PL0003.01`, `0001PL0003.02`, `0001PL0004.01`, `0001PL0002`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `0001PL0002.01` | `0001PL0002` |
+| `0001PL0002.02` | `0001PL0002` |
+| `0001PL0003.01` | `0001PL0003` |
+| `0001PL0003.02` | `0001PL0003` |
+| `0001PL0004.01` | `0001PL0004` |
+| `0001PL0004.02` | `0001PL0004` |
+| `0001PL0005.01` | `0001PL0005` |
+| `0001PL0005.02` | `0001PL0005` |
+| `0001PL0006.01` | `0001PL0006` |
+| `0001PL0006.02` | `0001PL0006` |
+| … | … | +209 restantes |
+- **Veredito:** baixo — usage_type em falta.
+
+### [BAIXO] Chaves eMI3 — código local disperso
+- **Regra:** mesmo <LOCAL> em cidades/CP4 dispersos.
+- **Afetados:** 219 de 219 pontos (100.0%). Exemplos: `0001PL0002.01`, `0001PL0002.02`, `0001PL0003.01`, `0001PL0003.02`, `0001PL0004.01`, `0001PL0002`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `0001PL0002.01` | `0001PL0002` |
+| `0001PL0002.02` | `0001PL0002` |
+| `0001PL0003.01` | `0001PL0003` |
+| `0001PL0003.02` | `0001PL0003` |
+| `0001PL0004.01` | `0001PL0004` |
+| `0001PL0004.02` | `0001PL0004` |
+| `0001PL0005.01` | `0001PL0005` |
+| `0001PL0005.02` | `0001PL0005` |
+| `0001PL0006.01` | `0001PL0006` |
+| `0001PL0006.02` | `0001PL0006` |
+| … | … | +209 restantes |
+- **Veredito:** baixo — código local disperso.
+
+### [BAIXO] Chaves eMI3 — códigos locais mistos
+- **Regra:** tomadas do mesmo site com <LOCAL> diferentes.
+- **Afetados:** 219 de 219 pontos (100.0%). Exemplos: `0001PL0002.01`, `0001PL0002.02`, `0001PL0003.01`, `0001PL0003.02`, `0001PL0004.01`, `0001PL0002`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `0001PL0002.01` | `0001PL0002` |
+| `0001PL0002.02` | `0001PL0002` |
+| `0001PL0003.01` | `0001PL0003` |
+| `0001PL0003.02` | `0001PL0003` |
+| `0001PL0004.01` | `0001PL0004` |
+| `0001PL0004.02` | `0001PL0004` |
+| `0001PL0005.01` | `0001PL0005` |
+| `0001PL0005.02` | `0001PL0005` |
+| `0001PL0006.01` | `0001PL0006` |
+| `0001PL0006.02` | `0001PL0006` |
+| … | … | +209 restantes |
+- **Veredito:** baixo — códigos locais mistos.
+
+### [BAIXO] Metadados — brands_accepted vazio
+- **Regra:** brands_accepted vazio.
+- **Afetados:** 219 de 219 pontos (100.0%). Exemplos: `0001PL0002.01`, `0001PL0002.02`, `0001PL0003.01`, `0001PL0003.02`, `0001PL0004.01`, `0001PL0002`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `0001PL0002.01` | `0001PL0002` |
+| `0001PL0002.02` | `0001PL0002` |
+| `0001PL0003.01` | `0001PL0003` |
+| `0001PL0003.02` | `0001PL0003` |
+| `0001PL0004.01` | `0001PL0004` |
+| `0001PL0004.02` | `0001PL0004` |
+| `0001PL0005.01` | `0001PL0005` |
+| `0001PL0005.02` | `0001PL0005` |
+| `0001PL0006.01` | `0001PL0006` |
+| `0001PL0006.02` | `0001PL0006` |
+| … | … | +209 restantes |
+- **Veredito:** baixo — brands_accepted vazio.
+
+### [BAIXO] Localização — postcode em falta
+- **Regra:** postcode vazio.
+- **Afetados:** 12 de 12 pontos (100.0%). Exemplos: `0446PR0003.01`, `0446PR0003.02`, `0446PR0003.03`, `3778PL0001.01`, `3778PL0001.02`, `0446PR0003`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `0446PR0003.01` | `0446PR0003` |
+| `0446PR0003.02` | `0446PR0003` |
+| `0446PR0003.03` | `0446PR0003` |
+| `3778PL0001.01` | `3778PL0001` |
+| `3778PL0001.02` | `3778PL0001` |
+| `3778PR0002.01` | `3778PR0002` |
+| `3778PR0002.02` | `3778PR0002` |
+| `3778PR0002.03` | `3778PR0002` |
+| `4873PL0001.01` | `4873PL0001` |
+| `4873PL0001.02` | `4873PL0001` |
+| … | … | +2 restantes |
+- **Veredito:** baixo — postcode em falta.
+
+### [BAIXO] Localização — formato CP7
+- **Regra:** postcode fora de NNNN-NNN.
+- **Afetados:** 12 de 12 pontos (100.0%). Exemplos: `0446PR0003.01`, `0446PR0003.02`, `0446PR0003.03`, `3778PL0001.01`, `3778PL0001.02`, `0446PR0003`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `0446PR0003.01` | `0446PR0003` |
+| `0446PR0003.02` | `0446PR0003` |
+| `0446PR0003.03` | `0446PR0003` |
+| `3778PL0001.01` | `3778PL0001` |
+| `3778PL0001.02` | `3778PL0001` |
+| `3778PR0002.01` | `3778PR0002` |
+| `3778PR0002.02` | `3778PR0002` |
+| `3778PR0002.03` | `3778PR0002` |
+| `4873PL0001.01` | `4873PL0001` |
+| `4873PL0001.02` | `4873PL0001` |
+| … | … | +2 restantes |
+- **Veredito:** baixo — formato CP7.
+
+### [BAIXO] Localização — city em falta
+- **Regra:** city vazio.
+- **Afetados:** 5 de 5 pontos (100.0%). Exemplos: `3778PL0001.01`, `3778PL0001.02`, `3778PR0002.01`, `3778PR0002.02`, `3778PR0002.03`, `3778PL0001`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `3778PL0001.01` | `3778PL0001` |
+| `3778PL0001.02` | `3778PL0001` |
+| `3778PR0002.01` | `3778PR0002` |
+| `3778PR0002.02` | `3778PR0002` |
+| `3778PR0002.03` | `3778PR0002` |
+- **Veredito:** baixo — city em falta.
 
 [↑ índice](#indice)
 
@@ -1891,232 +2057,366 @@ Totais: 8 733 sites, 19 259 pontos distintos (19 376 linhas de conector), 92 OPC
 <a id="opc-FCTO"></a>
 
 <details>
-<summary><b>FCTO — Iberdrola | bp pulse (297 sites, 707 pontos)</b> · 4 MÉDIO, 2 BAIXO, 1 CRÍTICO, 1 ALTO</summary>
+<summary><b>FCTO — Iberdrola | bp pulse (304 sites, 720 pontos)</b> · 4 MÉDIO, 3 BAIXO, 2 CRÍTICO, 1 ALTO</summary>
 
-### [CRÍTICO] Chave duplicada (`point_id`)
-
-- **Regra:** `point_id` identifica a tomada; duplicado = linhas fantasma ou conectores churnados sem limpeza.
-
-- **Afetados:** 53 linhas em 51 chaves duplicadas. Exemplos: `202`, `FLG-00017`, `183`, `CSC-00184`
-
+### [CRÍTICO] Duplicados — point_id
+- **Regra:** point_id duplicado no inventário.
+- **Afetados:** 70 de 724 pontos (9.7%). Exemplos: `202`, `183`, `184`, `3`, `4`, `FLG-00017`.
 - **Evidência:**
 
-| point_id | site | ocorrências |
-|---|---|---|
-| `202` | `FAR-HOTEL-OCCIDENTAL-FARO-C01, FLG-00017` | 2 |
-| `183` | `CSC-00184, PTM-OCEANO-ATLANTICO-APT-C01` | 2 |
-| `184` | `CSC-00184, PTM-OCEANO-ATLANTICO-APT-C02` | 2 |
-| `3` | `CDN-00008, MOBI-CSC-00189` | 2 |
-| `4` | `CDN-00008, MOBI-CSC-00189` | 2 |
-| `48` | `ALD-00008, CRS-00005` | 2 |
-| `49` | `ALD-00008, CRS-00005` | 2 |
-| `50` | `ALD-00008, TBU-00012` | 2 |
-| `51` | `ALD-00009, TBU-00012` | 2 |
-| `52` | `ALD-00009, TBU-00011` | 2 |
-| … | … | +43 restantes nos CSVs |
-
-- **Veredito:** impossível (chave) — chave da tomada duplicada; linhas fantasma ou churn não limpo.
-
-### [ALTO] Ponto sem conector
-
-- **Regra:** Linha de ponto sem `connector_type`/`charging_mode`; a tomada não é utilizável nem verificável por V×I.
-
-- **Afetados:** 2 linhas de conector. Exemplos: `60`, `OVR-00033`, `65`, `OVR-00035`
-
-- **Evidência:**
-
-| point_id | site |
+| ponto | site |
 |---|---|
-| `60` | `OVR-00033` |
-| `65` | `OVR-00035` |
+| `202` | `FLG-00017` |
+| `183` | `CSC-00184` |
+| `184` | `CSC-00184` |
+| `3` | `CDN-00008` |
+| `4` | `CDN-00008` |
+| `48` | `ALD-00008` |
+| `49` | `ALD-00008` |
+| `50` | `ALD-00008` |
+| `51` | `ALD-00009` |
+| `52` | `ALD-00009` |
+| … | … | +60 restantes |
+- **Veredito:** crítico — point_id.
 
-- **Veredito:** suspeito — conector em falta no exportador; corrigir a origem.
-
-### [MÉDIO] Potência sub-declarada
-
-- **Regra:** `ratio < 0.75` = derating suspeito ou erro de introdução; `ratio = declarada / esperada`.
-
-- **Afetados:** 391 de 709 linhas de conector (55%). Exemplos: `101`, `ACB-00033`, `102`, `ACB-00034`
-
+### [CRÍTICO] Limites por tipo de tomada
+- **Regra:** max_power_w acima do teto físico da família.
+- **Afetados:** 4 de 724 pontos (0.6%). Exemplos: `465`, `466`, `467`, `468`, `SXL-00076`, `SXL-00077`.
 - **Evidência:**
 
-| point_id | site | tomada | modo | V / A / P declarada / esperada (kW) | ratio |
+| ponto | site |
+|---|---|
+| `465` | `SXL-00076` |
+| `466` | `SXL-00076` |
+| `467` | `SXL-00077` |
+| `468` | `SXL-00077` |
+- **Veredito:** crítico — Limites por tipo de tomada.
+
+### [ALTO] Física — valores crus suspeitos
+- **Regra:** V=1200/3600 V ou I=600 A.
+- **Afetados:** 4 de 724 pontos (0.6%). Exemplos: `465`, `466`, `467`, `468`, `SXL-00076`, `SXL-00077`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `465` | `SXL-00076` |
+| `466` | `SXL-00076` |
+| `467` | `SXL-00077` |
+| `468` | `SXL-00077` |
+- **Veredito:** alto — valores crus suspeitos.
+
+### [MÉDIO] Combinação formato/tomada
+- **Regra:** connector_format incompatível com charging_mode.
+- **Afetados:** 714 de 724 pontos (98.6%). Exemplos: `208`, `209`, `210`, `236`, `237`, `GDL-00017`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `208` | `GDL-00017` |
+| `209` | `GDL-00017` |
+| `210` | `GDL-00017` |
+| `236` | `LRA-00117` |
+| `237` | `LRA-00117` |
+| `238` | `LRA-00117` |
+| `139` | `BJA-00031` |
+| `140` | `BJA-00031` |
+| `141` | `BJA-00031` |
+| `200` | `FLG-00017` |
+| … | … | +704 restantes |
+- **Veredito:** médio — Combinação formato/tomada.
+
+### [MÉDIO] Física/Ohm — sub-declaração (ratio<0,75)
+- **Regra:** potência declarada < 0,75 × V×I / √3×V×I.
+- **Afetados:** 400 de 724 pontos (55.2%). Exemplos: `208`, `210`, `236`, `238`, `139`, `GDL-00017`.
+- **Evidência:**
+
+| ponto | site | tomada | modo | tensão / corrente / declarada / esperada | ratio |
 |---|---|---|---|---|---|
-| `101` | `ACB-00033` | iec62196T2COMBO | mode4DC | 1000/500/150/500 | 0,30 |
-| `102` | `ACB-00034` | iec62196T2COMBO | mode4DC | 1000/500/150/500 | 0,30 |
-| `104` | `ACB-00034` | iec62196T2COMBO | mode4DC | 1000/500/150/500 | 0,30 |
-| `105` | `ACB-00046` | iec62196T2COMBO | mode4DC | 1000/500/150/500 | 0,30 |
-| `107` | `ACB-00046` | iec62196T2COMBO | mode4DC | 1000/500/150/500 | 0,30 |
-| `108` | `ACB-00047` | iec62196T2COMBO | mode4DC | 1000/500/150/500 | 0,30 |
-| `110` | `ACB-00047` | iec62196T2COMBO | mode4DC | 1000/500/150/500 | 0,30 |
-| `111` | `ACB-00048` | iec62196T2COMBO | mode4DC | 1000/500/150/500 | 0,30 |
-| `113` | `ACB-00048` | iec62196T2COMBO | mode4DC | 1000/500/150/500 | 0,30 |
-| `114` | `ACH-00019` | iec62196T2COMBO | mode4DC | 1000/500/150/500 | 0,30 |
-| … | … | … | … | … | +381 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-FCTO)) |
+| `208` | `GDL-00017` | iec62196T2COMBO | mode4DC | 1000 V / 500 A / 150000 W / 500000.0 W | 0.3 |
+| `210` | `GDL-00017` | iec62196T2COMBO | mode4DC | 1000 V / 500 A / 150000 W / 500000.0 W | 0.3 |
+| `236` | `LRA-00117` | iec62196T2COMBO | mode4DC | 1000 V / 500 A / 150000 W / 500000.0 W | 0.3 |
+| `238` | `LRA-00117` | iec62196T2COMBO | mode4DC | 1000 V / 500 A / 150000 W / 500000.0 W | 0.3 |
+| `139` | `BJA-00031` | iec62196T2COMBO | mode4DC | 1000 V / 500 A / 150000 W / 500000.0 W | 0.3 |
+| `141` | `BJA-00031` | iec62196T2COMBO | mode4DC | 1000 V / 500 A / 150000 W / 500000.0 W | 0.3 |
+| `200` | `FLG-00017` | iec62196T2COMBO | mode4DC | 1000 V / 500 A / 150000 W / 500000.0 W | 0.3 |
+| `202` | `FLG-00017` | iec62196T2COMBO | mode4DC | 1000 V / 500 A / 150000 W / 500000.0 W | 0.3 |
+| `308` | `MOR-00002` | iec62196T2COMBO | mode4DC | 1000 V / 500 A / 150000 W / 500000.0 W | 0.3 |
+| `310` | `MOR-00002` | iec62196T2COMBO | mode4DC | 1000 V / 500 A / 150000 W / 500000.0 W | 0.3 |
+| … | … | +390 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-FCTO)) |
+- **Veredito:** médio — sub-declaração (ratio<0,75).
 
-- **Veredito:** suspeito — potência declarada muito abaixo de V×I; derating do posto partilhado ou número trocado. Rever contra a chapa do posto.
-
-### [MÉDIO] Tensão, corrente ou potência inválida
-
-- **Regra:** `voltage`/`max_current` nulos ou ≤0, ou `max_power_w` nulo/≤0; valores crus que impedem a verificação por V×I.
-
-- **Afetados:** 2 de 709 linhas de conector. Exemplos: `60`, `OVR-00033`, `65`, `OVR-00035`
-
+### [MÉDIO] Localização — CP7↔localidade
+- **Regra:** CP4 com city divergente da moda.
+- **Afetados:** 10 de 724 pontos (1.4%). Exemplos: `242`, `243`, `131`, `132`, `134`, `LRA-00127`.
 - **Evidência:**
 
-| point_id | site | V | A | P (W) |
-|---|---|---|---|---|
-| `60` | `OVR-00033` | — | — | — |
-| `65` | `OVR-00035` | — | — | — |
-
-- **Veredito:** suspeito — valor não positivo ou em falta; corrigir na origem para permitir validar a potência.
-
-### [MÉDIO] Potência acima do teto da tomada
-
-- **Regra:** Teto físico por família de tomada (Type2 ≤ 50 kW, CCS ≤ 500 kW, CHAdeMO ≤ 400 kW, AC industrial ≤ 125 kW); exceder indicia potência do posto herdada pela tomada.
-
-- **Afetados:** 4 linhas de conector. Exemplos: `465`, `SXL-00076`, `466`
-
-- **Evidência:**
-
-| point_id | site | tomada | P declarada (kW) | teto (kW) |
-|---|---|---|---|---|
-| `465` | `SXL-00076` | iec62196T2COMBO | 600 | 500 |
-| `466` | `SXL-00076` | iec62196T2COMBO | 600 | 500 |
-| `467` | `SXL-00077` | iec62196T2COMBO | 600 | 500 |
-| `468` | `SXL-00077` | iec62196T2COMBO | 600 | 500 |
-
-- **Veredito:** impossível em Type2 (>50 kW em AC); suspeito nos restantes — valor herdado do posto ou erro de introdução.
-
-### [MÉDIO] Localidade divergente do CP7 (CP4→cidade modal)
-
-- **Regra:** Agrupa-se por CP4 (4 primeiros dígitos) e toma-se a `city` modal dos CP4 com ≥5 sites; par (CP4 → `city`) divergente = suspeito.
-
-- **Afetados:** 3 sites. Exemplos: `LRA-00127`, `BRR-00150`, `BRR-00151`
-
-- **Evidência:**
-
-| site | postcode | city | cidade modal do CP4 |
-|---|---|---|---|
-| `LRA-00127` | 2495-183 | Leiria | Ourém |
-| `BRR-00150` | 2835-315 | Barreiro | Moita |
-| `BRR-00151` | 2835-315 | Barreiro | Moita |
-
-- **Veredito:** suspeito — CP trocado ou localidade errada; CTT muda códigos e há grafias variantes.
-
-### [BAIXO] Fragmentação do nome do operador
-
-- **Regra:** Mesmo `operator_id` com várias grafias de `operator_name`; parte a identidade em relatórios e no tracker.
-
-- **Afetados:** 2 grafias; 1 de 297 sites usam uma grafia não modal. Exemplos: `GDL-00017`, `LRA-00117`, `BJA-00031`, `FLG-00017`
-
-- **Evidência:**
-
-| variante de nome | sites |
+| ponto | site |
 |---|---|
-| CHARGING TOGETHER, UNIPESSOAL LDA | 1 |
-| Iberdrola \| bp pulse | 296 |
-| … | +295 restantes nos CSVs |
+| `242` | `LRA-00127` |
+| `243` | `LRA-00127` |
+| `131` | `BRR-00150` |
+| `132` | `BRR-00150` |
+| `134` | `BRR-00151` |
+| `135` | `BRR-00151` |
+| `813` | `VIS-00138` |
+| `814` | `VIS-00138` |
+| `815` | `VIS-00139` |
+| `816` | `VIS-00139` |
+- **Veredito:** médio — CP7↔localidade.
 
-- **Veredito:** suspeito (identidade) — fixar uma grafia única por OPC; não é erro de dados do site.
-
-### [BAIXO] Metadados em falta
-
-- **Regra:** `usage_type`, `auth_methods` ou `brands_accepted` vazios no inventário estático.
-
-- **Afetados:** 56 campos em falta (56 `usage_type`, 0 `auth_methods`, 0 `brands_accepted`). Exemplos: `629`, `630`, `673`, `674`
-
+### [MÉDIO] Operador — grafias fragmentadas
+- **Regra:** mesmo operator_id com vários operator_name.
+- **Afetados:** 5 de 724 pontos (0.7%). Exemplos: `208`, `209`, `210`, `236`, `237`, `GDL-00017`.
 - **Evidência:**
 
-| id | campo em falta |
+| ponto | site |
 |---|---|
-| `629` | usage_type |
-| `630` | usage_type |
-| `673` | usage_type |
-| `674` | usage_type |
-| … | +52 restantes nos CSVs |
+| `208` | `GDL-00017` |
+| `209` | `GDL-00017` |
+| `210` | `GDL-00017` |
+| `236` | `LRA-00117` |
+| `237` | `LRA-00117` |
+- **Veredito:** médio — grafias fragmentadas.
 
-- **Veredito:** suspeito (metadados) — preencher os campos; não afecta a física do ponto.
+### [BAIXO] Metadados — usage_type em falta
+- **Regra:** usage_type nulo/fora do enum.
+- **Afetados:** 70 de 724 pontos (9.7%). Exemplos: `629`, `630`, `673`, `674`, `675`, `CTB-00081`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `629` | `CTB-00081` |
+| `630` | `CTB-00081` |
+| `673` | `STB-00124` |
+| `674` | `STB-00124` |
+| `675` | `STB-00125` |
+| `676` | `STB-00125` |
+| `677` | `STB-00126` |
+| `678` | `STB-00126` |
+| `679` | `MTJ-00136` |
+| `680` | `MTJ-00136` |
+| … | … | +60 restantes |
+- **Veredito:** baixo — usage_type em falta.
+
+### [BAIXO] Chaves eMI3 — código local disperso
+- **Regra:** mesmo <LOCAL> em cidades/CP4 dispersos.
+- **Afetados:** 18 de 724 pontos (2.5%). Exemplos: `16`, `17`, `805`, `806`, `813`, `CBR-00121`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `16` | `CBR-00121` |
+| `17` | `CBR-00121` |
+| `805` | `MGL-00024` |
+| `806` | `MGL-00024` |
+| `813` | `VIS-00138` |
+| `814` | `VIS-00138` |
+| `815` | `VIS-00139` |
+| `816` | `VIS-00139` |
+| `813` | `CRS-00007` |
+| `814` | `CRS-00007` |
+| … | … | +8 restantes |
+- **Veredito:** baixo — código local disperso.
+
+### [BAIXO] Chaves eMI3 — códigos locais mistos
+- **Regra:** tomadas do mesmo site com <LOCAL> diferentes.
+- **Afetados:** 12 de 724 pontos (1.7%). Exemplos: `805`, `806`, `813`, `814`, `815`, `MGL-00024`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `805` | `MGL-00024` |
+| `806` | `MGL-00024` |
+| `813` | `VIS-00138` |
+| `814` | `VIS-00138` |
+| `815` | `VIS-00139` |
+| `816` | `VIS-00139` |
+| `826` | `STR-00080` |
+| `827` | `STR-00080` |
+| `840` | `PLM-00086` |
+| `841` | `PLM-00086` |
+| … | … | +2 restantes |
+- **Veredito:** baixo — códigos locais mistos.
 
 [↑ índice](#indice)
 
 </details>
 
-<a id="opc-PRIO"></a>
+<a id="opc-REPS"></a>
 
 <details>
-<summary><b>PRIO — Prio.E Mobility Solutions, Lda (161 sites, 292 pontos)</b> · 2 MÉDIO, 1 CRÍTICO</summary>
+<summary><b>REPS — REPSOL Portuguesa Lda (221 sites, 575 pontos)</b> · 4 MÉDIO, 3 CRÍTICO, 3 BAIXO</summary>
 
-### [CRÍTICO] Chave duplicada (`point_id`)
-
-- **Regra:** `point_id` identifica a tomada; duplicado = linhas fantasma ou conectores churnados sem limpeza.
-
-- **Afetados:** 54 linhas em 27 chaves duplicadas. Exemplos: `SNT-00050-01`, `SNT-00050`, `AMD-00045-01`, `AMD-00045`
-
+### [CRÍTICO] Física/Ohm — sobre-declaração (ratio>1,25)
+- **Regra:** potência declarada > 1,25 × V×I (monofásico) / √3×V×I (mode3AC3p).
+- **Afetados:** 179 de 575 pontos (31.1%). Exemplos: `PRT-00097-03`, `LSB-00552-01`, `MTS-00044-03`, `GRD-00012-03`, `CSC-00077-03`, `PRT-00097`.
 - **Evidência:**
 
-| point_id | site | ocorrências |
-|---|---|---|
-| `SNT-00050-01` | `SNT-00050` | 2 |
-| `AMD-00045-01` | `AMD-00045` | 2 |
-| `SNT-00072-01` | `SNT-00072` | 2 |
-| `VLG-00004-01` | `VLG-00004` | 2 |
-| `SNT-00051-01` | `SNT-00051` | 2 |
-| `VLG-00011-01` | `VLG-00011` | 2 |
-| `VFX-00003-1` | `VFX-00003` | 2 |
-| `VLC-00006-01` | `VLC-00006` | 2 |
-| `BJA-00017-01` | `BJA-00017` | 2 |
-| `BNV-00004-01` | `BNV-00004` | 2 |
-| … | … | +44 restantes nos CSVs |
-
-- **Veredito:** impossível (chave) — chave da tomada duplicada; linhas fantasma ou churn não limpo.
-
-### [MÉDIO] Potência sub-declarada
-
-- **Regra:** `ratio < 0.75` = derating suspeito ou erro de introdução; `ratio = declarada / esperada`.
-
-- **Afetados:** 124 de 319 linhas de conector (39%). Exemplos: `BRR-00159-01`, `BRR-00159`, `BRR-00159-02`
-
-- **Evidência:**
-
-| point_id | site | tomada | modo | V / A / P declarada / esperada (kW) | ratio |
+| ponto | site | tomada | modo | tensão / corrente / declarada / esperada | ratio |
 |---|---|---|---|---|---|
-| `BRR-00159-01` | `BRR-00159` | iec62196T2COMBO | mode4DC | 950/300/60/285 | 0,21 |
-| `BRR-00159-02` | `BRR-00159` | iec62196T2COMBO | mode4DC | 950/300/60/285 | 0,21 |
-| `GMR-00168-01` | `GMR-00168` | iec62196T2COMBO | mode4DC | 950/250/60/237,50 | 0,25 |
-| `GMR-00168-02` | `GMR-00168` | iec62196T2COMBO | mode4DC | 950/250/60/237,50 | 0,25 |
-| `OHP-00021-02` | `OHP-00021` | iec62196T2COMBO | mode4DC | 950/250/60/237,50 | 0,25 |
-| `PRT-00359-02` | `PRT-00359` | iec62196T2COMBO | mode4DC | 950/250/60/237,50 | 0,25 |
-| `LSB-00862-01` | `LSB-00862` | iec62196T2COMBO | mode4DC | 950/200/60/190 | 0,32 |
-| `LSB-00862-02` | `LSB-00862` | iec62196T2COMBO | mode4DC | 950/200/60/190 | 0,32 |
-| `PRT-00358-01` | `PRT-00358` | iec62196T2COMBO | mode4DC | 950/300/90/285 | 0,32 |
-| `PRT-00358-02` | `PRT-00358` | iec62196T2COMBO | mode4DC | 950/300/90/285 | 0,32 |
-| … | … | … | … | … | +114 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-PRIO)) |
+| `PRT-00097-03` | `PRT-00097` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22000 W / 12747.9 W | 1.726 |
+| `LSB-00552-01` | `LSB-00552` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22000 W / 12747.9 W | 1.726 |
+| `MTS-00044-03` | `MTS-00044` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22000 W / 12747.9 W | 1.726 |
+| `GRD-00012-03` | `GRD-00012` | iec62196T2 | mode3AC3p | 230 V / 63 A / 43000 W / 25097.4 W | 1.713 |
+| `CSC-00077-03` | `CSC-00077` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22000 W / 12747.9 W | 1.726 |
+| `PTL-00009-03` | `PTL-00009` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22000 W / 12747.9 W | 1.726 |
+| `PRG-00002-03` | `PRG-00002` | iec62196T2 | mode3AC3p | 230 V / 63 A / 43000 W / 25097.4 W | 1.713 |
+| `ABF-00035-03` | `ABF-00035` | iec62196T2 | mode3AC3p | 230 V / 63 A / 43000 W / 25097.4 W | 1.713 |
+| `LSB-00555-01` | `LSB-00555` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22000 W / 12747.9 W | 1.726 |
+| `LGA-00015-03` | `LGA-00015` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22000 W / 12747.9 W | 1.726 |
+| … | … | +169 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-REPS)) |
+- **Veredito:** crítico — sobre-declaração (ratio>1,25).
 
-- **Veredito:** suspeito — potência declarada muito abaixo de V×I; derating do posto partilhado ou número trocado. Rever contra a chapa do posto.
-
-### [MÉDIO] Localidade divergente do CP7 (CP4→cidade modal)
-
-- **Regra:** Agrupa-se por CP4 (4 primeiros dígitos) e toma-se a `city` modal dos CP4 com ≥5 sites; par (CP4 → `city`) divergente = suspeito.
-
-- **Afetados:** 10 sites. Exemplos: `OBD-00019`, `OBD-00020`, `STB-00032`, `MTJ-00019`
-
+### [CRÍTICO] Combinação modo/tomada — DC em AC
+- **Regra:** tipo só-DC em mode1/2/3.
+- **Afetados:** 1 de 575 pontos (0.2%). Exemplos: `MTS-00182-03`, `MTS-00182`, `MTS-00182`.
 - **Evidência:**
 
-| site | postcode | city | cidade modal do CP4 |
-|---|---|---|---|
-| `OBD-00019` | 2500-001 | Óbidos | Caldas da Rainha |
-| `OBD-00020` | 2500-001 | Óbidos | Caldas da Rainha |
-| `STB-00032` | 2720-167 | Setúbal | Amadora |
-| `MTJ-00019` | 2780-000 | Montijo | Oeiras |
-| `LSB-00215` | 2625-717 | Lisboa | Vila Franca de Xira |
-| `STB-00031` | 2720-167 | Setúbal | Amadora |
-| `STC-00016` | 7520-221 | Santiago do Cacém | Sines |
-| `STB-00102` | 2950-536 | Setúbal | Palmela |
-| `VFR-00099` | 3700-411 | Santa Maria da Feira | São João da Madeira |
-| `VCT-00075` | 4990-075 | Viana do Castelo | Ponte de Lima |
+| ponto | site |
+|---|---|
+| `MTS-00182-03` | `MTS-00182` |
+- **Veredito:** crítico — DC em AC.
 
-- **Veredito:** suspeito — CP trocado ou localidade errada; CTT muda códigos e há grafias variantes.
+### [CRÍTICO] Combinação modo/tomada — AC em DC
+- **Regra:** tipo só-AC em mode4/ccs.
+- **Afetados:** 1 de 575 pontos (0.2%). Exemplos: `MTS-00182-01`, `MTS-00182`, `MTS-00182`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `MTS-00182-01` | `MTS-00182` |
+- **Veredito:** crítico — AC em DC.
+
+### [MÉDIO] Combinação formato/tomada
+- **Regra:** connector_format incompatível com charging_mode.
+- **Afetados:** 397 de 575 pontos (69.0%). Exemplos: `PRT-00097-01`, `PRT-00097-02`, `LSB-00408-01`, `LSB-00408-02`, `CSC-00070-01`, `PRT-00097`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `PRT-00097-01` | `PRT-00097` |
+| `PRT-00097-02` | `PRT-00097` |
+| `LSB-00408-01` | `LSB-00408` |
+| `LSB-00408-02` | `LSB-00408` |
+| `CSC-00070-01` | `CSC-00070` |
+| `CSC-00070-02` | `CSC-00070` |
+| `MTS-00044-01` | `MTS-00044` |
+| `MTS-00044-02` | `MTS-00044` |
+| `GRD-00012-01` | `GRD-00012` |
+| `GRD-00012-02` | `GRD-00012` |
+| … | … | +387 restantes |
+- **Veredito:** médio — Combinação formato/tomada.
+
+### [MÉDIO] Física/Ohm — sub-declaração (ratio<0,75)
+- **Regra:** potência declarada < 0,75 × V×I / √3×V×I.
+- **Afetados:** 24 de 575 pontos (4.2%). Exemplos: `PRT-00140-02`, `SNT-00073-02`, `PLM-00011-02`, `GRD-00019-02`, `AVR-00038-02`, `PRT-00140`.
+- **Evidência:**
+
+| ponto | site | tomada | modo | tensão / corrente / declarada / esperada | ratio |
+|---|---|---|---|---|---|
+| `PRT-00140-02` | `PRT-00140` | iec62196T2COMBO | mode4DC | 920 V / 150 A / 60000 W / 138000.0 W | 0.435 |
+| `SNT-00073-02` | `SNT-00073` | iec62196T2COMBO | mode4DC | 920 V / 150 A / 60000 W / 138000.0 W | 0.435 |
+| `PLM-00011-02` | `PLM-00011` | iec62196T2COMBO | mode4DC | 750 V / 80 A / 30000 W / 60000.0 W | 0.5 |
+| `GRD-00019-02` | `GRD-00019` | iec62196T2COMBO | mode4DC | 750 V / 150 A / 60000 W / 112500.0 W | 0.533 |
+| `AVR-00038-02` | `AVR-00038` | iec62196T2COMBO | mode4DC | 920 V / 150 A / 60000 W / 138000.0 W | 0.435 |
+| `TNV-00008-02` | `TNV-00008` | iec62196T2COMBO | mode4DC | 750 V / 80 A / 30000 W / 60000.0 W | 0.5 |
+| `STB-00023-02` | `STB-00023` | iec62196T2COMBO | mode4DC | 920 V / 150 A / 60000 W / 138000.0 W | 0.435 |
+| `ODV-00012-02` | `ODV-00012` | iec62196T2COMBO | mode4DC | 750 V / 80 A / 30000 W / 60000.0 W | 0.5 |
+| `AVR-00046-02` | `AVR-00046` | iec62196T2COMBO | mode4DC | 750 V / 150 A / 60000 W / 112500.0 W | 0.533 |
+| `BRG-00118-02` | `BRG-00118` | iec62196T2COMBO | mode4DC | 750 V / 150 A / 60000 W / 112500.0 W | 0.533 |
+| … | … | +14 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-REPS)) |
+- **Veredito:** médio — sub-declaração (ratio<0,75).
+
+### [MÉDIO] Localização — CP7↔localidade
+- **Regra:** CP4 com city divergente da moda.
+- **Afetados:** 18 de 575 pontos (3.1%). Exemplos: `TNV-00003-01`, `TNV-00003-02`, `TNV-00003-03`, `CBR-00084-01`, `VIS-00085-01`, `TNV-00003`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `TNV-00003-01` | `TNV-00003` |
+| `TNV-00003-02` | `TNV-00003` |
+| `TNV-00003-03` | `TNV-00003` |
+| `CBR-00084-01` | `CBR-00084` |
+| `VIS-00085-01` | `VIS-00085` |
+| `VIS-00085-02` | `VIS-00085` |
+| `VIS-00085-03` | `VIS-00085` |
+| `VIS-00086-01` | `VIS-00086` |
+| `VIS-00086-02` | `VIS-00086` |
+| `VIS-00086-03` | `VIS-00086` |
+| … | … | +8 restantes |
+- **Veredito:** médio — CP7↔localidade.
+
+### [MÉDIO] Chaves eMI3 — sufixo de tomada
+- **Regra:** último segmento de point_external_id ≠ point_id (int-normalizado).
+- **Afetados:** 2 de 575 pontos (0.3%). Exemplos: `OER-00279-01`, `OER-00279-02`, `OER-00279`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `OER-00279-01` | `OER-00279` |
+| `OER-00279-02` | `OER-00279` |
+- **Veredito:** médio — sufixo de tomada.
+
+### [BAIXO] Chaves eMI3 — código local disperso
+- **Regra:** mesmo <LOCAL> em cidades/CP4 dispersos.
+- **Afetados:** 135 de 575 pontos (23.5%). Exemplos: `CBR-00072-01`, `CBR-00072-02`, `CBR-00072-03`, `CBR-00084-01`, `MTS-00182-01`, `CBR-00072`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `CBR-00072-01` | `CBR-00072` |
+| `CBR-00072-02` | `CBR-00072` |
+| `CBR-00072-03` | `CBR-00072` |
+| `CBR-00084-01` | `CBR-00084` |
+| `MTS-00182-01` | `MTS-00182` |
+| `MTS-00182-02` | `MTS-00182` |
+| `MTS-00182-03` | `MTS-00182` |
+| `LOU-00010-01` | `LOU-00010` |
+| `LOU-00010-02` | `LOU-00010` |
+| `LOU-00010-03` | `LOU-00010` |
+| … | … | +125 restantes |
+- **Veredito:** baixo — código local disperso.
+
+### [BAIXO] Chaves eMI3 — códigos locais mistos
+- **Regra:** tomadas do mesmo site com <LOCAL> diferentes.
+- **Afetados:** 129 de 575 pontos (22.4%). Exemplos: `MTS-00182-01`, `MTS-00182-02`, `MTS-00182-03`, `LOU-00010-01`, `LOU-00010-02`, `MTS-00182`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `MTS-00182-01` | `MTS-00182` |
+| `MTS-00182-02` | `MTS-00182` |
+| `MTS-00182-03` | `MTS-00182` |
+| `LOU-00010-01` | `LOU-00010` |
+| `LOU-00010-02` | `LOU-00010` |
+| `LOU-00010-03` | `LOU-00010` |
+| `MLD-00047-01` | `MLD-00047` |
+| `MLD-00047-02` | `MLD-00047` |
+| `MLD-00047-03` | `MLD-00047` |
+| `OAZ-00021-01` | `OAZ-00021` |
+| … | … | +119 restantes |
+- **Veredito:** baixo — códigos locais mistos.
+
+### [BAIXO] Metadados — usage_type em falta
+- **Regra:** usage_type nulo/fora do enum.
+- **Afetados:** 12 de 575 pontos (2.1%). Exemplos: `STR-00078-01`, `STR-00078-02`, `STR-00078-03`, `VCT-00076-01`, `VCT-00076-02`, `STR-00078`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `STR-00078-01` | `STR-00078` |
+| `STR-00078-02` | `STR-00078` |
+| `STR-00078-03` | `STR-00078` |
+| `VCT-00076-01` | `VCT-00076` |
+| `VCT-00076-02` | `VCT-00076` |
+| `VCT-00076-03` | `VCT-00076` |
+| `PT-REP-E18379-1` | `VCT-00077` |
+| `PT-REP-E18379-2` | `VCT-00077` |
+| `PT-REP-E18379-3` | `VCT-00077` |
+| `VGS-00023-01` | `VGS-00023` |
+| … | … | +2 restantes |
+- **Veredito:** baixo — usage_type em falta.
 
 [↑ índice](#indice)
 
@@ -2125,498 +2425,219 @@ Totais: 8 733 sites, 19 259 pontos distintos (19 376 linhas de conector), 92 OPC
 <a id="opc-GLPG"></a>
 
 <details>
-<summary><b>GLPG — Galpgeste (123 sites, 319 pontos)</b> · 2 MÉDIO, 1 CRÍTICO, 1 BAIXO</summary>
+<summary><b>GLPG — Galpgeste (123 sites, 319 pontos)</b> · 3 MÉDIO, 1 CRÍTICO, 1 BAIXO</summary>
 
-### [CRÍTICO] Potência sobre-declarada
-
-- **Regra:** `ratio = declarada / (V × I)` (monofásico AC e DC) ou `/ (√3 × V × I)` (`mode3AC3p`); `ratio > 1.25` = fisicamente impossível (capacidade excedida).
-
-- **Afetados:** 3 de 319 linhas de conector (1%). Exemplos: `AVR-00040-01`, `AVR-00040`, `VCT-00029-01`, `VCT-00029`
-
+### [CRÍTICO] Física/Ohm — sobre-declaração (ratio>1,25)
+- **Regra:** potência declarada > 1,25 × V×I (monofásico) / √3×V×I (mode3AC3p).
+- **Afetados:** 3 de 319 pontos (0.9%). Exemplos: `VCT-00029-01`, `AVR-00040-01`, `VCT-00030-01`, `VCT-00029`, `AVR-00040`, `VCT-00030`.
 - **Evidência:**
 
-| point_id | site | tomada | modo | V / A / P declarada / esperada (kW) | ratio |
+| ponto | site | tomada | modo | tensão / corrente / declarada / esperada | ratio |
 |---|---|---|---|---|---|
-| `AVR-00040-01` | `AVR-00040` | iec62196T2COMBO | mode4DC | 500/120/120/60 | 2,00 |
-| `VCT-00029-01` | `VCT-00029` | iec62196T2COMBO | mode4DC | 500/120/120/60 | 2,00 |
-| `VCT-00030-01` | `VCT-00030` | iec62196T2COMBO | mode4DC | 500/120/120/60 | 2,00 |
+| `VCT-00029-01` | `VCT-00029` | iec62196T2COMBO | mode4DC | 500 V / 120 A / 120000 W / 60000.0 W | 2.0 |
+| `AVR-00040-01` | `AVR-00040` | iec62196T2COMBO | mode4DC | 500 V / 120 A / 120000 W / 60000.0 W | 2.0 |
+| `VCT-00030-01` | `VCT-00030` | iec62196T2COMBO | mode4DC | 500 V / 120 A / 120000 W / 60000.0 W | 2.0 |
+- **Veredito:** crítico — sobre-declaração (ratio>1,25).
 
-- **Veredito:** impossível — a potência declarada excede o produto V×I; padrão recorrente de potência do posto colada na tomada ou convenção de reporte errada.
-
-### [MÉDIO] Potência sub-declarada
-
-- **Regra:** `ratio < 0.75` = derating suspeito ou erro de introdução; `ratio = declarada / esperada`.
-
-- **Afetados:** 68 de 319 linhas de conector (21%). Exemplos: `MTS-00092-01`, `MTS-00092`, `MAI-00034-01`, `MAI-00034`
-
+### [MÉDIO] Combinação formato/tomada
+- **Regra:** connector_format incompatível com charging_mode.
+- **Afetados:** 242 de 319 pontos (75.9%). Exemplos: `LSB-00310-01`, `LSB-00310-02`, `ODV-00006-01`, `ODV-00006-02`, `MAI-00036-01`, `LSB-00310`.
 - **Evidência:**
 
-| point_id | site | tomada | modo | V / A / P declarada / esperada (kW) | ratio |
-|---|---|---|---|---|---|
-| `MTS-00092-01` | `MTS-00092` | iec62196T2COMBO | mode4DC | 950/250/90/237,50 | 0,38 |
-| `MAI-00034-01` | `MAI-00034` | iec62196T2COMBO | mode4DC | 950/200/90/190 | 0,47 |
-| `MAI-00034-02` | `MAI-00034` | iec62196T2COMBO | mode4DC | 950/200/90/190 | 0,47 |
-| `MTS-00047-01` | `MTS-00047` | iec62196T2COMBO | mode4DC | 950/200/90/190 | 0,47 |
-| `MTS-00047-02` | `MTS-00047` | iec62196T2COMBO | mode4DC | 950/200/90/190 | 0,47 |
-| `MTS-00048-01` | `MTS-00048` | iec62196T2COMBO | mode4DC | 950/200/90/190 | 0,47 |
-| `MTS-00048-02` | `MTS-00048` | iec62196T2COMBO | mode4DC | 950/200/90/190 | 0,47 |
-| `MTS-00092-02` | `MTS-00092` | iec62196T2COMBO | mode4DC | 950/200/90/190 | 0,47 |
-| `MTS-00093-02` | `MTS-00093` | iec62196T2COMBO | mode4DC | 950/200/90/190 | 0,47 |
-| `MTS-00111-01` | `MTS-00111` | iec62196T2COMBO | mode4DC | 950/200/90/190 | 0,47 |
-| … | … | … | … | … | +58 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-GLPG)) |
-
-- **Veredito:** suspeito — potência declarada muito abaixo de V×I; derating do posto partilhado ou número trocado. Rever contra a chapa do posto.
-
-### [MÉDIO] Localidade divergente do CP7 (CP4→cidade modal)
-
-- **Regra:** Agrupa-se por CP4 (4 primeiros dígitos) e toma-se a `city` modal dos CP4 com ≥5 sites; par (CP4 → `city`) divergente = suspeito.
-
-- **Afetados:** 4 sites. Exemplos: `MAI-00036`, `SNT-00046`, `LRA-00016`, `TRF-00012`
-
-- **Evidência:**
-
-| site | postcode | city | cidade modal do CP4 |
-|---|---|---|---|
-| `MAI-00036` | 4445-000 | Maia | Valongo |
-| `SNT-00046` | 4250-152 | Sintra | Porto |
-| `LRA-00016` | 4250-152 | Leiria | Porto |
-| `TRF-00012` | 4910-430 | Trofa | Caminha |
-
-- **Veredito:** suspeito — CP trocado ou localidade errada; CTT muda códigos e há grafias variantes.
-
-### [BAIXO] Fragmentação do nome do operador
-
-- **Regra:** Mesmo `operator_id` com várias grafias de `operator_name`; parte a identidade em relatórios e no tracker.
-
-- **Afetados:** 2 grafias; 2 de 123 sites usam uma grafia não modal. Exemplos: `LSB-00310`, `ODV-00006`, `MAI-00036`, `LLE-00003`
-
-- **Evidência:**
-
-| variante de nome | sites |
+| ponto | site |
 |---|---|
-| Galp Gest | 2 |
-| Galpgeste | 121 |
-| … | +121 restantes nos CSVs |
+| `LSB-00310-01` | `LSB-00310` |
+| `LSB-00310-02` | `LSB-00310` |
+| `ODV-00006-01` | `ODV-00006` |
+| `ODV-00006-02` | `ODV-00006` |
+| `MAI-00036-01` | `MAI-00036` |
+| `MAI-00036-02` | `MAI-00036` |
+| `LLE-00003-01` | `LLE-00003` |
+| `LLE-00003-02` | `LLE-00003` |
+| `MTS-00047-01` | `MTS-00047` |
+| `MTS-00047-02` | `MTS-00047` |
+| … | … | +232 restantes |
+- **Veredito:** médio — Combinação formato/tomada.
 
-- **Veredito:** suspeito (identidade) — fixar uma grafia única por OPC; não é erro de dados do site.
+### [MÉDIO] Física/Ohm — sub-declaração (ratio<0,75)
+- **Regra:** potência declarada < 0,75 × V×I / √3×V×I.
+- **Afetados:** 69 de 319 pontos (21.6%). Exemplos: `LSB-00310-03`, `MAI-00036-01`, `MAI-00036-02`, `MTS-00047-01`, `MTS-00047-02`, `LSB-00310`.
+- **Evidência:**
+
+| ponto | site | tomada | modo | tensão / corrente / declarada / esperada | ratio |
+|---|---|---|---|---|---|
+| `LSB-00310-03` | `LSB-00310` | iec62196T2 | mode3AC3p | 400 V / 63 A / 22000 W / 43647.7 W | 0.504 |
+| `MAI-00036-01` | `MAI-00036` | iec62196T2COMBO | mode4DC | 950 V / 200 A / 120000 W / 190000.0 W | 0.632 |
+| `MAI-00036-02` | `MAI-00036` | iec62196T2COMBO | mode4DC | 950 V / 200 A / 120000 W / 190000.0 W | 0.632 |
+| `MTS-00047-01` | `MTS-00047` | iec62196T2COMBO | mode4DC | 950 V / 200 A / 90000 W / 190000.0 W | 0.474 |
+| `MTS-00047-02` | `MTS-00047` | iec62196T2COMBO | mode4DC | 950 V / 200 A / 90000 W / 190000.0 W | 0.474 |
+| `VIS-00058-01` | `VIS-00058` | iec62196T2COMBO | mode4DC | 950 V / 200 A / 120000 W / 190000.0 W | 0.632 |
+| `VIS-00058-02` | `VIS-00058` | iec62196T2COMBO | mode4DC | 950 V / 200 A / 120000 W / 190000.0 W | 0.632 |
+| `BRG-00080-02` | `BRG-00080` | iec62196T2COMBO | mode4DC | 950 V / 200 A / 120000 W / 190000.0 W | 0.632 |
+| `VNG-00115-01` | `VNG-00115` | iec62196T2COMBO | mode4DC | 950 V / 200 A / 90000 W / 190000.0 W | 0.474 |
+| `VNG-00115-02` | `VNG-00115` | iec62196T2COMBO | mode4DC | 950 V / 200 A / 90000 W / 190000.0 W | 0.474 |
+| … | … | +59 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-GLPG)) |
+- **Veredito:** médio — sub-declaração (ratio<0,75).
+
+### [MÉDIO] Localização — CP7↔localidade
+- **Regra:** CP4 com city divergente da moda.
+- **Afetados:** 11 de 319 pontos (3.4%). Exemplos: `MAI-00036-01`, `MAI-00036-02`, `SNT-00046-01`, `SNT-00046-02`, `SNT-00046-03`, `MAI-00036`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `MAI-00036-01` | `MAI-00036` |
+| `MAI-00036-02` | `MAI-00036` |
+| `SNT-00046-01` | `SNT-00046` |
+| `SNT-00046-02` | `SNT-00046` |
+| `SNT-00046-03` | `SNT-00046` |
+| `LRA-00016-01` | `LRA-00016` |
+| `LRA-00016-02` | `LRA-00016` |
+| `LRA-00016-03` | `LRA-00016` |
+| `TRF-00012-01` | `TRF-00012` |
+| `TRF-00012-02` | `TRF-00012` |
+| … | … | +1 restantes |
+- **Veredito:** médio — CP7↔localidade.
+
+### [BAIXO] Chaves eMI3 — código local disperso
+- **Regra:** mesmo <LOCAL> em cidades/CP4 dispersos.
+- **Afetados:** 319 de 319 pontos (100.0%). Exemplos: `LSB-00310-01`, `LSB-00310-02`, `LSB-00310-03`, `ODV-00006-01`, `ODV-00006-02`, `LSB-00310`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `LSB-00310-01` | `LSB-00310` |
+| `LSB-00310-02` | `LSB-00310` |
+| `LSB-00310-03` | `LSB-00310` |
+| `ODV-00006-01` | `ODV-00006` |
+| `ODV-00006-02` | `ODV-00006` |
+| `ODV-00006-03` | `ODV-00006` |
+| `MAI-00036-01` | `MAI-00036` |
+| `MAI-00036-02` | `MAI-00036` |
+| `LLE-00003-01` | `LLE-00003` |
+| `LLE-00003-02` | `LLE-00003` |
+| … | … | +309 restantes |
+- **Veredito:** baixo — código local disperso.
 
 [↑ índice](#indice)
 
 </details>
 
-<a id="opc-IBRD"></a>
+<a id="opc-PRIO"></a>
 
 <details>
-<summary><b>IBRD — Iberdrola Clientes Portugal, Unipessoal, Lda (189 sites, 371 pontos)</b> · 3 MÉDIO, 1 CRÍTICO, 1 BAIXO</summary>
+<summary><b>PRIO — Prio.E Mobility Solutions, Lda (162 sites, 294 pontos)</b> · 3 MÉDIO, 2 BAIXO, 1 CRÍTICO</summary>
 
-### [CRÍTICO] Chave duplicada (`point_id`)
-
-- **Regra:** `point_id` identifica a tomada; duplicado = linhas fantasma ou conectores churnados sem limpeza.
-
-- **Afetados:** 10 linhas em 5 chaves duplicadas. Exemplos: `AGD-00017-01`, `AGD-00017`, `AMT-00023-01`, `AMT-00023`
-
+### [CRÍTICO] Duplicados — point_id
+- **Regra:** point_id duplicado no inventário.
+- **Afetados:** 54 de 321 pontos (16.8%). Exemplos: `SNT-00050-01`, `AMD-00045-01`, `SNT-00072-01`, `SNT-00050`, `AMD-00045`, `SNT-00072`.
 - **Evidência:**
 
-| point_id | site | ocorrências |
-|---|---|---|
-| `AGD-00017-01` | `AGD-00017` | 2 |
-| `AMT-00023-01` | `AMT-00023` | 2 |
-| `AMT-00024-01` | `AMT-00024` | 2 |
-| `VLP-00004-01` | `VLP-00004` | 2 |
-| `BTL-00010-01` | `BTL-00010` | 2 |
-| … | … | +5 restantes nos CSVs |
+| ponto | site |
+|---|---|
+| `SNT-00050-01` | `SNT-00050` |
+| `SNT-00050-01` | `SNT-00050` |
+| `AMD-00045-01` | `AMD-00045` |
+| `AMD-00045-01` | `AMD-00045` |
+| `SNT-00072-01` | `SNT-00072` |
+| `SNT-00072-01` | `SNT-00072` |
+| `VLG-00004-01` | `VLG-00004` |
+| `VLG-00004-01` | `VLG-00004` |
+| `SNT-00051-01` | `SNT-00051` |
+| `SNT-00051-01` | `SNT-00051` |
+| … | … | +44 restantes |
+- **Veredito:** crítico — point_id.
 
-- **Veredito:** impossível (chave) — chave da tomada duplicada; linhas fantasma ou churn não limpo.
-
-### [MÉDIO] Potência sub-declarada
-
-- **Regra:** `ratio < 0.75` = derating suspeito ou erro de introdução; `ratio = declarada / esperada`.
-
-- **Afetados:** 13 de 376 linhas de conector (3%). Exemplos: `LMG-00027-01`, `LMG-00027`, `LMG-00027-02`
-
+### [MÉDIO] Combinação formato/tomada
+- **Regra:** connector_format incompatível com charging_mode.
+- **Afetados:** 261 de 321 pontos (81.3%). Exemplos: `SNT-00050-01`, `AMD-00045-01`, `SNT-00072-01`, `SNT-00050`, `AMD-00045`, `SNT-00072`.
 - **Evidência:**
 
-| point_id | site | tomada | modo | V / A / P declarada / esperada (kW) | ratio |
+| ponto | site |
+|---|---|
+| `SNT-00050-01` | `SNT-00050` |
+| `SNT-00050-01` | `SNT-00050` |
+| `AMD-00045-01` | `AMD-00045` |
+| `AMD-00045-01` | `AMD-00045` |
+| `SNT-00072-01` | `SNT-00072` |
+| `SNT-00072-01` | `SNT-00072` |
+| `OBD-00019-01` | `OBD-00019` |
+| `OBD-00019-02` | `OBD-00019` |
+| `OBD-00020-01` | `OBD-00020` |
+| `OBD-00020-02` | `OBD-00020` |
+| … | … | +251 restantes |
+- **Veredito:** médio — Combinação formato/tomada.
+
+### [MÉDIO] Física/Ohm — sub-declaração (ratio<0,75)
+- **Regra:** potência declarada < 0,75 × V×I / √3×V×I.
+- **Afetados:** 126 de 321 pontos (39.3%). Exemplos: `OBD-00019-01`, `OBD-00019-02`, `OBD-00020-01`, `OBD-00020-02`, `SAT-00002-01`, `OBD-00019`.
+- **Evidência:**
+
+| ponto | site | tomada | modo | tensão / corrente / declarada / esperada | ratio |
 |---|---|---|---|---|---|
-| `LMG-00027-01` | `LMG-00027` | iec62196T2COMBO | mode4DC | 1000/150/50/150 | 0,33 |
-| `LMG-00027-02` | `LMG-00027` | iec62196T2COMBO | mode4DC | 1000/150/50/150 | 0,33 |
-| `MTS-00037-01` | `MTS-00037` | chademo | mode4DC | 500/120/20/60 | 0,33 |
-| `MTS-00037-02` | `MTS-00037` | iec62196T2COMBO | mode4DC | 500/120/20/60 | 0,33 |
-| `VNG-00207-01` | `VNG-00207` | iec62196T2COMBO | mode4DC | 1000/150/50/150 | 0,33 |
-| `VNG-00207-02` | `VNG-00207` | iec62196T2COMBO | mode4DC | 1000/150/50/150 | 0,33 |
-| `VPA-00005-01` | `VPA-00005` | iec62196T2COMBO | mode4DC | 1000/150/50/150 | 0,33 |
-| `VPA-00005-02` | `VPA-00005` | iec62196T2COMBO | mode4DC | 1000/150/50/150 | 0,33 |
-| `GDL-00077-01` | `GDL-00077` | iec62196T2COMBO | mode4DC | 1000/250/100/250 | 0,40 |
-| `GDL-00077-02` | `GDL-00077` | iec62196T2COMBO | mode4DC | 1000/250/100/250 | 0,40 |
-| … | … | … | … | … | +3 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-IBRD)) |
+| `OBD-00019-01` | `OBD-00019` | iec62196T2COMBO | mode4DC | 920 V / 400 A / 150000 W / 368000.0 W | 0.408 |
+| `OBD-00019-02` | `OBD-00019` | iec62196T2COMBO | mode4DC | 900 V / 400 A / 150000 W / 360000.0 W | 0.417 |
+| `OBD-00020-01` | `OBD-00020` | iec62196T2COMBO | mode4DC | 920 V / 400 A / 150000 W / 368000.0 W | 0.408 |
+| `OBD-00020-02` | `OBD-00020` | iec62196T2COMBO | mode4DC | 920 V / 400 A / 150000 W / 368000.0 W | 0.408 |
+| `SAT-00002-01` | `SAT-00002` | chademo | mode4DC | 750 V / 150 A / 60000 W / 112500.0 W | 0.533 |
+| `SAT-00002-02` | `SAT-00002` | iec62196T2COMBO | mode4DC | 750 V / 150 A / 60000 W / 112500.0 W | 0.533 |
+| `VNP-00002-01` | `VNP-00002` | chademo | mode4DC | 750 V / 150 A / 60000 W / 112500.0 W | 0.533 |
+| `VNP-00002-02` | `VNP-00002` | iec62196T2COMBO | mode4DC | 750 V / 150 A / 60000 W / 112500.0 W | 0.533 |
+| `CBR-00061-02` | `CBR-00061` | iec62196T2COMBO | mode4DC | 920 V / 375 A / 150000 W / 345000.0 W | 0.435 |
+| `FAR-00034-01` | `FAR-00034` | iec62196T2COMBO | mode4DC | 500 V / 150 A / 50000 W / 75000.0 W | 0.667 |
+| … | … | +116 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-PRIO)) |
+- **Veredito:** médio — sub-declaração (ratio<0,75).
 
-- **Veredito:** suspeito — potência declarada muito abaixo de V×I; derating do posto partilhado ou número trocado. Rever contra a chapa do posto.
-
-### [MÉDIO] Formato de conector incompatível com o modo
-
-- **Regra:** `cableMode2` só com `mode1*`/`mode2*`; `cableMode3`/`socket` com `mode3*`; `otherCable` só com `mode4DC`/`ccs`.
-
-- **Afetados:** 4 linhas de conector. Exemplos: `MOBI-VPA-00001-01`, `MOBI-VPA-00001`, `MOBI-VPA-00001-02`
-
+### [MÉDIO] Localização — CP7↔localidade
+- **Regra:** CP4 com city divergente da moda.
+- **Afetados:** 20 de 321 pontos (6.2%). Exemplos: `OBD-00019-01`, `OBD-00019-02`, `OBD-00020-01`, `OBD-00020-02`, `STB-00032-01`, `OBD-00019`.
 - **Evidência:**
 
-| point_id | site | formato | modo |
-|---|---|---|---|
-| `MOBI-VPA-00001-01` | `MOBI-VPA-00001` | cableMode3 | mode2AC1p |
-| `MOBI-VPA-00001-02` | `MOBI-VPA-00001` | cableMode3 | mode2AC1p |
-| `GMR-00135-01` | `GMR-00135` | cableMode3 | mode2AC1p |
-| `GMR-00135-02` | `GMR-00135` | cableMode3 | mode2AC1p |
-
-- **Veredito:** suspeito — formato de cabo/tomada incoerente com o modo declarado; corrigir o par.
-
-### [MÉDIO] Localidade divergente do CP7 (CP4→cidade modal)
-
-- **Regra:** Agrupa-se por CP4 (4 primeiros dígitos) e toma-se a `city` modal dos CP4 com ≥5 sites; par (CP4 → `city`) divergente = suspeito.
-
-- **Afetados:** 5 sites. Exemplos: `GMR-00019`, `OER-00132`, `FLG-00004`, `GDM-00037`
-
-- **Evidência:**
-
-| site | postcode | city | cidade modal do CP4 |
-|---|---|---|---|
-| `GMR-00019` | 8500-308 | Guimarães | Portimão |
-| `OER-00132` | 2735-521 | Oeiras | Sintra |
-| `FLG-00004` | 4440-452 | Felgueiras | Valongo |
-| `GDM-00037` | 4850-403 | Gondomar | Vieira do Minho |
-| `OER-00257` | 2735-521 | Oeiras | Sintra |
-
-- **Veredito:** suspeito — CP trocado ou localidade errada; CTT muda códigos e há grafias variantes.
-
-### [BAIXO] Metadados em falta
-
-- **Regra:** `usage_type`, `auth_methods` ou `brands_accepted` vazios no inventário estático.
-
-- **Afetados:** 22 campos em falta (22 `usage_type`, 0 `auth_methods`, 0 `brands_accepted`). Exemplos: `BRG-00171-01`, `BRG-00171-02`, `MTA-00102-01`, `MTA-00102-02`
-
-- **Evidência:**
-
-| id | campo em falta |
+| ponto | site |
 |---|---|
-| `BRG-00171-01` | usage_type |
-| `BRG-00171-02` | usage_type |
-| `MTA-00102-01` | usage_type |
-| `MTA-00102-02` | usage_type |
-| … | +18 restantes nos CSVs |
+| `OBD-00019-01` | `OBD-00019` |
+| `OBD-00019-02` | `OBD-00019` |
+| `OBD-00020-01` | `OBD-00020` |
+| `OBD-00020-02` | `OBD-00020` |
+| `STB-00032-01` | `STB-00032` |
+| `STB-00032-02` | `STB-00032` |
+| `MTJ-00019-01` | `MTJ-00019` |
+| `MTJ-00019-01` | `MTJ-00019` |
+| `LSB-00215-1` | `LSB-00215` |
+| `LSB-00215-1` | `LSB-00215` |
+| … | … | +10 restantes |
+- **Veredito:** médio — CP7↔localidade.
 
-- **Veredito:** suspeito (metadados) — preencher os campos; não afecta a física do ponto.
-
-[↑ índice](#indice)
-
-</details>
-
-<a id="opc-ACCI"></a>
-
-<details>
-<summary><b>ACCI — ACCIONA RECARGA PORTUGAL,UNIPESSOAL LDA (14 sites, 25 pontos)</b> · 2 BAIXO, 1 CRÍTICO, 1 MÉDIO</summary>
-
-### [CRÍTICO] Chave duplicada (`point_id`)
-
-- **Regra:** `point_id` identifica a tomada; duplicado = linhas fantasma ou conectores churnados sem limpeza.
-
-- **Afetados:** 22 linhas em 22 chaves duplicadas. Exemplos: `17`, `LSB-01305`, `19`, `PRT-00361`
-
+### [BAIXO] Chaves eMI3 — código local disperso
+- **Regra:** mesmo <LOCAL> em cidades/CP4 dispersos.
+- **Afetados:** 26 de 321 pontos (8.1%). Exemplos: `CBR-00069-01`, `CBR-00069-02`, `CBR-00067-01`, `CBR-00067-02`, `CBR-00066-01`, `CBR-00069`.
 - **Evidência:**
 
-| point_id | site | ocorrências |
-|---|---|---|
-| `17` | `CBR-00121, LSB-01305` | 2 |
-| `19` | `NZR-00048, PRT-00361` | 2 |
-| `20` | `LSB-01319, NZR-00049` | 2 |
-| `29` | `NZR-00039, VRL-00061` | 2 |
-| `30` | `NZR-00039, VRL-00061` | 2 |
-| `21` | `NZR-00049, VRL-00062` | 2 |
-| `22` | `NZR-00050, VRL-00062` | 2 |
-| `27` | `NZR-00040, VRL-00063` | 2 |
-| `28` | `NZR-00040, VRL-00063` | 2 |
-| `40` | `MGL-00015, VRL-00064` | 2 |
-| … | … | +12 restantes nos CSVs |
-
-- **Veredito:** impossível (chave) — chave da tomada duplicada; linhas fantasma ou churn não limpo.
-
-### [MÉDIO] Potência sub-declarada
-
-- **Regra:** `ratio < 0.75` = derating suspeito ou erro de introdução; `ratio = declarada / esperada`.
-
-- **Afetados:** 12 de 25 linhas de conector (48%). Exemplos: `11`, `GRD-00044`, `17`, `LSB-01305`
-
-- **Evidência:**
-
-| point_id | site | tomada | modo | V / A / P declarada / esperada (kW) | ratio |
-|---|---|---|---|---|---|
-| `11` | `GRD-00044` | chademo | mode4DC | 400/250/50/100 | 0,50 |
-| `17` | `LSB-01305` | chademo | mode4DC | 400/250/50/100 | 0,50 |
-| `40` | `VRL-00064` | iec62196T2COMBO | mode4DC | 1000/400/200/400 | 0,50 |
-| `41` | `VRL-00064` | iec62196T2COMBO | mode4DC | 1000/400/200/400 | 0,50 |
-| `19` | `PRT-00361` | iec62196T2COMBO | mode4DC | 920/375/175/345 | 0,51 |
-| `20` | `LSB-01319` | iec62196T2COMBO | mode4DC | 920/375/175/345 | 0,51 |
-| `21` | `VRL-00062` | iec62196T2COMBO | mode4DC | 1000/300/200/300 | 0,67 |
-| `22` | `VRL-00062` | iec62196T2COMBO | mode4DC | 1000/300/200/300 | 0,67 |
-| `27` | `VRL-00063` | iec62196T2COMBO | mode4DC | 1000/215/150/215 | 0,70 |
-| `28` | `VRL-00063` | iec62196T2COMBO | mode4DC | 1000/215/150/215 | 0,70 |
-| … | … | … | … | … | +2 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-ACCI)) |
-
-- **Veredito:** suspeito — potência declarada muito abaixo de V×I; derating do posto partilhado ou número trocado. Rever contra a chapa do posto.
-
-### [BAIXO] Fragmentação do nome do operador
-
-- **Regra:** Mesmo `operator_id` com várias grafias de `operator_name`; parte a identidade em relatórios e no tracker.
-
-- **Afetados:** 2 grafias; 7 de 14 sites usam uma grafia não modal. Exemplos: `GRD-00044`, `LSB-01305`, `PRT-00361`, `LSB-01319`
-
-- **Evidência:**
-
-| variante de nome | sites |
+| ponto | site |
 |---|---|
-| ACCIONA RECARGA PORTUGAL,UNIPESSOAL LDA | 7 |
-| Acciona Recarga Portugal | 7 |
-| … | +12 restantes nos CSVs |
+| `CBR-00069-01` | `CBR-00069` |
+| `CBR-00069-02` | `CBR-00069` |
+| `CBR-00067-01` | `CBR-00067` |
+| `CBR-00067-02` | `CBR-00067` |
+| `CBR-00066-01` | `CBR-00066` |
+| `CBR-00066-02` | `CBR-00066` |
+| `CBR-00068-01` | `CBR-00068` |
+| `CBR-00068-02` | `CBR-00068` |
+| `CBR-00010-01` | `CBR-00010` |
+| `CBR-00010-02` | `CBR-00010` |
+| … | … | +16 restantes |
+- **Veredito:** baixo — código local disperso.
 
-- **Veredito:** suspeito (identidade) — fixar uma grafia única por OPC; não é erro de dados do site.
-
-### [BAIXO] Metadados em falta
-
-- **Regra:** `usage_type`, `auth_methods` ou `brands_accepted` vazios no inventário estático.
-
-- **Afetados:** 11 campos em falta (11 `usage_type`, 0 `auth_methods`, 0 `brands_accepted`). Exemplos: `48`, `49`, `46`, `44`
-
+### [BAIXO] Metadados — usage_type em falta
+- **Regra:** usage_type nulo/fora do enum.
+- **Afetados:** 2 de 321 pontos (0.6%). Exemplos: `VIS-00136-01`, `VIS-00136-02`, `VIS-00136`.
 - **Evidência:**
 
-| id | campo em falta |
+| ponto | site |
 |---|---|
-| `48` | usage_type |
-| `49` | usage_type |
-| `46` | usage_type |
-| `44` | usage_type |
-| … | +7 restantes nos CSVs |
-
-- **Veredito:** suspeito (metadados) — preencher os campos; não afecta a física do ponto.
-
-[↑ índice](#indice)
-
-</details>
-
-<a id="opc-HIGH"></a>
-
-<details>
-<summary><b>HIGH — High Green Power, Unipessoal Lda. (40 sites, 43 pontos)</b> · 2 BAIXO, 1 CRÍTICO, 1 MÉDIO</summary>
-
-### [CRÍTICO] Chave duplicada (`point_id`)
-
-- **Regra:** `point_id` identifica a tomada; duplicado = linhas fantasma ou conectores churnados sem limpeza.
-
-- **Afetados:** 16 linhas em 16 chaves duplicadas. Exemplos: `254`, `LRA-HOTEL-EUROSOL-C01`, `162`, `VRS-HOTEL-ROBINSON-C01`
-
-- **Evidência:**
-
-| point_id | site | ocorrências |
-|---|---|---|
-| `254` | `LLE-00227, LRA-HOTEL-EUROSOL-C01` | 2 |
-| `162` | `CLD-00044, VRS-HOTEL-ROBINSON-C01` | 2 |
-| `160` | `CLD-00043, VRS-HOTEL-ROBINSON-C02` | 2 |
-| `175` | `CNT-00030, VRS-HOTEL-MONTE-REI-C01` | 2 |
-| `176` | `CNT-00037, VRS-HOTEL-MONTE-REI-C01` | 2 |
-| `183` | `CSC-00184, PTM-OCEANO-ATLANTICO-APT-C01` | 2 |
-| `184` | `CSC-00184, PTM-OCEANO-ATLANTICO-APT-C02` | 2 |
-| `189` | `EVR-00055, MCN-HOTEL-CASAL_SILVA-C01` | 2 |
-| `190` | `EVR-00055, MCN-HOTEL-CASAL_SILVA-C02` | 2 |
-| `202` | `FAR-HOTEL-OCCIDENTAL-FARO-C01, FLG-00017` | 2 |
-| … | … | +6 restantes nos CSVs |
-
-- **Veredito:** impossível (chave) — chave da tomada duplicada; linhas fantasma ou churn não limpo.
-
-### [MÉDIO] Localidade divergente do CP7 (CP4→cidade modal)
-
-- **Regra:** Agrupa-se por CP4 (4 primeiros dígitos) e toma-se a `city` modal dos CP4 com ≥5 sites; par (CP4 → `city`) divergente = suspeito.
-
-- **Afetados:** 5 sites. Exemplos: `VRS-HOTEL-ROBINSON-C01`, `VRS-HOTEL-ROBINSON-C02`, `LLE-HOTEL-DONA-FILIPA-C01`, `LLE-HOTEL-DONA-FILIPA-C02`
-
-- **Evidência:**
-
-| site | postcode | city | cidade modal do CP4 |
-|---|---|---|---|
-| `VRS-HOTEL-ROBINSON-C01` | 8900-053 | Vila Nova de Cacela | Vila Real de Santo António |
-| `VRS-HOTEL-ROBINSON-C02` | 8900-053 | Vila Nova de Cacela | Vila Real de Santo António |
-| `LLE-HOTEL-DONA-FILIPA-C01` | 8135-034 | Almancil - Loulé | Loulé |
-| `LLE-HOTEL-DONA-FILIPA-C02` | 8135-034 | Almancil - Loulé | Loulé |
-| `LLE-HOTEL-DONA-FILIPA-C03` | 8135-034 | Almancil - Loulé | Loulé |
-
-- **Veredito:** suspeito — CP trocado ou localidade errada; CTT muda códigos e há grafias variantes.
-
-### [BAIXO] Fragmentação do nome do operador
-
-- **Regra:** Mesmo `operator_id` com várias grafias de `operator_name`; parte a identidade em relatórios e no tracker.
-
-- **Afetados:** 2 grafias; 15 de 40 sites usam uma grafia não modal. Exemplos: `LRA-00036`, `VLG-00030`, `VLG-00031`, `VNG-00129`
-
-- **Evidência:**
-
-| variante de nome | sites |
-|---|---|
-| High Green Power, Unipessoal Lda. | 25 |
-| HighGreenPower | 15 |
-| … | +38 restantes nos CSVs |
-
-- **Veredito:** suspeito (identidade) — fixar uma grafia única por OPC; não é erro de dados do site.
-
-### [BAIXO] Metadados em falta
-
-- **Regra:** `usage_type`, `auth_methods` ou `brands_accepted` vazios no inventário estático.
-
-- **Afetados:** 16 campos em falta (0 `usage_type`, 0 `auth_methods`, 16 `brands_accepted`). Exemplos: `254`, `162`, `160`, `175`
-
-- **Evidência:**
-
-| id | campo em falta |
-|---|---|
-| `254` | brands_accepted |
-| `162` | brands_accepted |
-| `160` | brands_accepted |
-| … | +13 restantes nos CSVs |
-
-- **Veredito:** suspeito (metadados) — preencher os campos; não afecta a física do ponto.
-
-[↑ índice](#indice)
-
-</details>
-
-<a id="opc-EMEL"></a>
-
-<details>
-<summary><b>EMEL — EMEL - Empresa Municipal de Mobilidade e Estacionamento de Lisboa, E.M., S.A. (83 sites, 184 pontos)</b> · 2 BAIXO, 1 CRÍTICO, 1 MÉDIO</summary>
-
-### [CRÍTICO] Potência sobre-declarada
-
-- **Regra:** `ratio = declarada / (V × I)` (monofásico AC e DC) ou `/ (√3 × V × I)` (`mode3AC3p`); `ratio > 1.25` = fisicamente impossível (capacidade excedida).
-
-- **Afetados:** 26 de 184 linhas de conector (14%). Exemplos: `LSB-00938-01`, `LSB-00938`, `LSB-00938-02`
-
-- **Evidência:**
-
-| point_id | site | tomada | modo | V / A / P declarada / esperada (kW) | ratio |
-|---|---|---|---|---|---|
-| `LSB-00938-01` | `LSB-00938` | iec62196T2 | mode3AC3p | 230/32/22/12,75 | 1,73 |
-| `LSB-00938-02` | `LSB-00938` | iec62196T2 | mode3AC3p | 230/32/22/12,75 | 1,73 |
-| `LSB-01021-01` | `LSB-01021` | iec62196T2 | mode3AC3p | 230/32/22/12,75 | 1,73 |
-| `LSB-01021-02` | `LSB-01021` | iec62196T2 | mode3AC3p | 230/32/22/12,75 | 1,73 |
-| `LSB-01022-01` | `LSB-01022` | iec62196T2 | mode3AC3p | 230/32/22/12,75 | 1,73 |
-| `LSB-01022-02` | `LSB-01022` | iec62196T2 | mode3AC3p | 230/32/22/12,75 | 1,73 |
-| `LSB-01023-01` | `LSB-01023` | iec62196T2 | mode3AC3p | 230/32/22/12,75 | 1,73 |
-| `LSB-01023-02` | `LSB-01023` | iec62196T2 | mode3AC3p | 230/32/22/12,75 | 1,73 |
-| `LSB-01032-01` | `LSB-01032` | iec62196T2 | mode3AC3p | 230/32/22/12,75 | 1,73 |
-| `LSB-01032-02` | `LSB-01032` | iec62196T2 | mode3AC3p | 230/32/22/12,75 | 1,73 |
-| … | … | … | … | … | +16 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-EMEL)) |
-
-- **Veredito:** impossível — a potência declarada excede o produto V×I; padrão recorrente de potência do posto colada na tomada ou convenção de reporte errada.
-
-### [MÉDIO] Formato de conector incompatível com o modo
-
-- **Regra:** `cableMode2` só com `mode1*`/`mode2*`; `cableMode3`/`socket` com `mode3*`; `otherCable` só com `mode4DC`/`ccs`.
-
-- **Afetados:** 10 linhas de conector. Exemplos: `LSB-00585-01`, `LSB-00585`, `LSB-00585-02`
-
-- **Evidência:**
-
-| point_id | site | formato | modo |
-|---|---|---|---|
-| `LSB-00585-01` | `LSB-00585` | cableMode3 | mode2AC1p |
-| `LSB-00585-02` | `LSB-00585` | cableMode3 | mode2AC1p |
-| `LSB-00586-01` | `LSB-00586` | cableMode3 | mode2AC1p |
-| `LSB-00586-02` | `LSB-00586` | cableMode3 | mode2AC1p |
-| `LSB-00584-01` | `LSB-00584` | cableMode3 | mode2AC1p |
-| `LSB-00584-02` | `LSB-00584` | cableMode3 | mode2AC1p |
-| `LSB-00456-01` | `LSB-00456` | cableMode3 | mode2AC1p |
-| `LSB-00456-02` | `LSB-00456` | cableMode3 | mode2AC1p |
-| `LSB-00455-01` | `LSB-00455` | cableMode3 | mode2AC1p |
-| `LSB-00455-02` | `LSB-00455` | cableMode3 | mode2AC1p |
-
-- **Veredito:** suspeito — formato de cabo/tomada incoerente com o modo declarado; corrigir o par.
-
-### [BAIXO] Fragmentação do nome do operador
-
-- **Regra:** Mesmo `operator_id` com várias grafias de `operator_name`; parte a identidade em relatórios e no tracker.
-
-- **Afetados:** 2 grafias; 3 de 83 sites usam uma grafia não modal. Exemplos: `LSB-00360`, `LSB-00361`, `LSB-00104`, `LSB-00353`
-
-- **Evidência:**
-
-| variante de nome | sites |
-|---|---|
-| EMEL | 3 |
-| EMEL - Empresa Municipal de Mobilidade e Estacionamento de Lisboa, E.M., S.A. | 80 |
-| … | +81 restantes nos CSVs |
-
-- **Veredito:** suspeito (identidade) — fixar uma grafia única por OPC; não é erro de dados do site.
-
-### [BAIXO] Metadados em falta
-
-- **Regra:** `usage_type`, `auth_methods` ou `brands_accepted` vazios no inventário estático.
-
-- **Afetados:** 4 campos em falta (4 `usage_type`, 0 `auth_methods`, 0 `brands_accepted`). Exemplos: `LSB-01446-01`, `LSB-01446-02`, `LSB-01453-01`, `LSB-01453-02`
-
-- **Evidência:**
-
-| id | campo em falta |
-|---|---|
-| `LSB-01446-01` | usage_type |
-| `LSB-01446-02` | usage_type |
-| `LSB-01453-01` | usage_type |
-| `LSB-01453-02` | usage_type |
-
-- **Veredito:** suspeito (metadados) — preencher os campos; não afecta a física do ponto.
-
-[↑ índice](#indice)
-
-</details>
-
-<a id="opc-HEXA"></a>
-
-<details>
-<summary><b>HEXA — HEXAGONAL OCEAN, LDA (38 sites, 76 pontos)</b> · 1 CRÍTICO, 1 BAIXO</summary>
-
-### [CRÍTICO] Potência sobre-declarada
-
-- **Regra:** `ratio = declarada / (V × I)` (monofásico AC e DC) ou `/ (√3 × V × I)` (`mode3AC3p`); `ratio > 1.25` = fisicamente impossível (capacidade excedida).
-
-- **Afetados:** 34 de 76 linhas de conector (45%). Exemplos: `CSC-00074-01`, `CSC-00074`, `CSC-00074-02`
-
-- **Evidência:**
-
-| point_id | site | tomada | modo | V / A / P declarada / esperada (kW) | ratio |
-|---|---|---|---|---|---|
-| `CSC-00074-01` | `CSC-00074` | iec62196T2 | mode2AC1p | 240/32/20/7,68 | 2,60 |
-| `CSC-00074-02` | `CSC-00074` | iec62196T2 | mode2AC1p | 240/32/20/7,68 | 2,60 |
-| `CSC-00075-01` | `CSC-00075` | iec62196T2 | mode2AC1p | 240/32/20/7,68 | 2,60 |
-| `CSC-00075-02` | `CSC-00075` | iec62196T2 | mode2AC1p | 240/32/20/7,68 | 2,60 |
-| `LSB-00820-01` | `LSB-00820` | iec62196T2 | mode3AC3p | 240/16/11/6,65 | 1,65 |
-| `LSB-00820-02` | `LSB-00820` | iec62196T2 | mode3AC3p | 240/16/11/6,65 | 1,65 |
-| `LSB-00821-01` | `LSB-00821` | iec62196T2 | mode3AC3p | 240/16/11/6,65 | 1,65 |
-| `LSB-00821-02` | `LSB-00821` | iec62196T2 | mode3AC3p | 240/16/11/6,65 | 1,65 |
-| `LSB-00822-01` | `LSB-00822` | iec62196T2 | mode3AC3p | 240/16/11/6,65 | 1,65 |
-| `LSB-00822-02` | `LSB-00822` | iec62196T2 | mode3AC3p | 240/16/11/6,65 | 1,65 |
-| … | … | … | … | … | +24 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-HEXA)) |
-
-- **Veredito:** impossível — a potência declarada excede o produto V×I; padrão recorrente de potência do posto colada na tomada ou convenção de reporte errada.
-
-### [BAIXO] Fragmentação do nome do operador
-
-- **Regra:** Mesmo `operator_id` com várias grafias de `operator_name`; parte a identidade em relatórios e no tracker.
-
-- **Afetados:** 2 grafias; 2 de 38 sites usam uma grafia não modal. Exemplos: `CSC-00074`, `GMR-00066`, `GMR-00057`, `GMR-00069`
-
-- **Evidência:**
-
-| variante de nome | sites |
-|---|---|
-| HEXAGONAL OCEAN, LDA | 36 |
-| Hexagonal Ocean | 2 |
-| … | +36 restantes nos CSVs |
-
-- **Veredito:** suspeito (identidade) — fixar uma grafia única por OPC; não é erro de dados do site.
+| `VIS-00136-01` | `VIS-00136` |
+| `VIS-00136-02` | `VIS-00136` |
+- **Veredito:** baixo — usage_type em falta.
 
 [↑ índice](#indice)
 
@@ -2625,134 +2646,169 @@ Totais: 8 733 sites, 19 259 pontos distintos (19 376 linhas de conector), 92 OPC
 <a id="opc-MLTR"></a>
 
 <details>
-<summary><b>MLTR — Mobiletric (108 sites, 222 pontos)</b> · 2 MÉDIO, 1 CRÍTICO, 1 BAIXO</summary>
+<summary><b>MLTR — Mobiletric (108 sites, 222 pontos)</b> · 3 MÉDIO, 1 CRÍTICO, 1 BAIXO</summary>
 
-### [CRÍTICO] Potência sobre-declarada
-
-- **Regra:** `ratio = declarada / (V × I)` (monofásico AC e DC) ou `/ (√3 × V × I)` (`mode3AC3p`); `ratio > 1.25` = fisicamente impossível (capacidade excedida).
-
-- **Afetados:** 4 de 222 linhas de conector (2%). Exemplos: `CSC-00086-01`, `CSC-00086`, `TVD-00017-01`, `TVD-00017`
-
+### [CRÍTICO] Física/Ohm — sobre-declaração (ratio>1,25)
+- **Regra:** potência declarada > 1,25 × V×I (monofásico) / √3×V×I (mode3AC3p).
+- **Afetados:** 4 de 222 pontos (1.8%). Exemplos: `TVD-00018-01`, `LSB-00296-02`, `CSC-00086-01`, `TVD-00017-01`, `TVD-00018`, `LSB-00296`.
 - **Evidência:**
 
-| point_id | site | tomada | modo | V / A / P declarada / esperada (kW) | ratio |
+| ponto | site | tomada | modo | tensão / corrente / declarada / esperada | ratio |
 |---|---|---|---|---|---|
-| `CSC-00086-01` | `CSC-00086` | iec62196T2 | mode2AC1p | 240/16/11/3,84 | 2,87 |
-| `TVD-00017-01` | `TVD-00017` | iec62196T2 | mode2AC1p | 240/32/22/7,68 | 2,87 |
-| `TVD-00018-01` | `TVD-00018` | iec62196T2 | mode2AC1p | 240/32/22/7,68 | 2,87 |
-| `LSB-00296-02` | `LSB-00296` | iec62196T2 | mode3AC3p | 400/16/22/11,09 | 1,99 |
+| `TVD-00018-01` | `TVD-00018` | iec62196T2 | mode2AC1p | 240 V / 32 A / 22000 W / 7680.0 W | 2.865 |
+| `LSB-00296-02` | `LSB-00296` | iec62196T2 | mode3AC3p | 400 V / 16 A / 22000 W / 11085.1 W | 1.985 |
+| `CSC-00086-01` | `CSC-00086` | iec62196T2 | mode2AC1p | 240 V / 16 A / 11000 W / 3840.0 W | 2.865 |
+| `TVD-00017-01` | `TVD-00017` | iec62196T2 | mode2AC1p | 240 V / 32 A / 22000 W / 7680.0 W | 2.865 |
+- **Veredito:** crítico — sobre-declaração (ratio>1,25).
 
-- **Veredito:** impossível — a potência declarada excede o produto V×I; padrão recorrente de potência do posto colada na tomada ou convenção de reporte errada.
-
-### [MÉDIO] Potência sub-declarada
-
-- **Regra:** `ratio < 0.75` = derating suspeito ou erro de introdução; `ratio = declarada / esperada`.
-
-- **Afetados:** 19 de 222 linhas de conector (9%). Exemplos: `OER-00099-01`, `OER-00099`, `OER-00099-02`
-
+### [MÉDIO] Combinação formato/tomada
+- **Regra:** connector_format incompatível com charging_mode.
+- **Afetados:** 128 de 222 pontos (57.7%). Exemplos: `PRT-00001-01`, `PRT-00001-02`, `CSC-00015-01`, `CSC-00015-02`, `PVZ-00003-01`, `PRT-00001`.
 - **Evidência:**
 
-| point_id | site | tomada | modo | V / A / P declarada / esperada (kW) | ratio |
-|---|---|---|---|---|---|
-| `OER-00099-01` | `OER-00099` | iec62196T2COMBO | mode4DC | 950/195/60/185,25 | 0,32 |
-| `OER-00099-02` | `OER-00099` | iec62196T2COMBO | mode4DC | 950/195/60/185,25 | 0,32 |
-| `MTA-00004-01` | `MTA-00004` | iec62196T2COMBO | mode4DC | 950/195/90/185,25 | 0,49 |
-| `MTA-00004-02` | `MTA-00004` | iec62196T2COMBO | mode4DC | 950/195/90/185,25 | 0,49 |
-| `MTA-00005-02` | `MTA-00005` | iec62196T2COMBO | mode4DC | 950/195/90/185,25 | 0,49 |
-| `OER-00037-02` | `OER-00037` | iec62196T2COMBO | mode4DC | 920/350/160/322 | 0,50 |
-| `OER-00038-02` | `OER-00038` | iec62196T2COMBO | mode4DC | 920/350/160/322 | 0,50 |
-| `OER-00057-02` | `OER-00057` | iec62196T2COMBO | mode4DC | 920/350/160/322 | 0,50 |
-| `TVD-00016-02` | `TVD-00016` | iec62196T2COMBO | mode4DC | 920/350/160/322 | 0,50 |
-| `OER-00088-01` | `OER-00088` | chademo | mode4DC | 500/200/50/100 | 0,50 |
-| … | … | … | … | … | +9 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-MLTR)) |
-
-- **Veredito:** suspeito — potência declarada muito abaixo de V×I; derating do posto partilhado ou número trocado. Rever contra a chapa do posto.
-
-### [MÉDIO] Formato de conector incompatível com o modo
-
-- **Regra:** `cableMode2` só com `mode1*`/`mode2*`; `cableMode3`/`socket` com `mode3*`; `otherCable` só com `mode4DC`/`ccs`.
-
-- **Afetados:** 5 linhas de conector. Exemplos: `CSC-00087-01`, `CSC-00087`, `CSC-00086-01`, `CSC-00086`
-
-- **Evidência:**
-
-| point_id | site | formato | modo |
-|---|---|---|---|
-| `CSC-00087-01` | `CSC-00087` | cableMode3 | mode2AC1p |
-| `CSC-00086-01` | `CSC-00086` | cableMode3 | mode2AC1p |
-| `CSC-00090-01` | `CSC-00090` | cableMode3 | mode2AC1p |
-| `CSC-00088-01` | `CSC-00088` | cableMode3 | mode2AC1p |
-| `CSC-00089-01` | `CSC-00089` | cableMode3 | mode2AC1p |
-
-- **Veredito:** suspeito — formato de cabo/tomada incoerente com o modo declarado; corrigir o par.
-
-### [BAIXO] Fragmentação do nome do operador
-
-- **Regra:** Mesmo `operator_id` com várias grafias de `operator_name`; parte a identidade em relatórios e no tracker.
-
-- **Afetados:** 2 grafias; 4 de 108 sites usam uma grafia não modal. Exemplos: `PRT-00001`, `CSC-00015`, `PVZ-00003`, `OER-00011`
-
-- **Evidência:**
-
-| variante de nome | sites |
+| ponto | site |
 |---|---|
-| Mobiletric | 104 |
-| Mobiletric, LDA | 4 |
-| … | +106 restantes nos CSVs |
+| `PRT-00001-01` | `PRT-00001` |
+| `PRT-00001-02` | `PRT-00001` |
+| `CSC-00015-01` | `CSC-00015` |
+| `CSC-00015-02` | `CSC-00015` |
+| `PVZ-00003-01` | `PVZ-00003` |
+| `PVZ-00003-02` | `PVZ-00003` |
+| `OER-00035-01` | `OER-00035` |
+| `OER-00035-02` | `OER-00035` |
+| `OER-00037-01` | `OER-00037` |
+| `OER-00037-02` | `OER-00037` |
+| … | … | +118 restantes |
+- **Veredito:** médio — Combinação formato/tomada.
 
-- **Veredito:** suspeito (identidade) — fixar uma grafia única por OPC; não é erro de dados do site.
+### [MÉDIO] Física/Ohm — sub-declaração (ratio<0,75)
+- **Regra:** potência declarada < 0,75 × V×I / √3×V×I.
+- **Afetados:** 19 de 222 pontos (8.6%). Exemplos: `OER-00037-02`, `OER-00038-02`, `PRT-00138-01`, `PRT-00138-02`, `PRT-00136-01`, `OER-00037`.
+- **Evidência:**
+
+| ponto | site | tomada | modo | tensão / corrente / declarada / esperada | ratio |
+|---|---|---|---|---|---|
+| `OER-00037-02` | `OER-00037` | iec62196T2COMBO | mode4DC | 920 V / 350 A / 160000 W / 322000.0 W | 0.497 |
+| `OER-00038-02` | `OER-00038` | iec62196T2COMBO | mode4DC | 920 V / 350 A / 160000 W / 322000.0 W | 0.497 |
+| `PRT-00138-01` | `PRT-00138` | iec62196T2COMBO | mode4DC | 920 V / 195 A / 120000 W / 179400.0 W | 0.669 |
+| `PRT-00138-02` | `PRT-00138` | iec62196T2COMBO | mode4DC | 920 V / 195 A / 120000 W / 179400.0 W | 0.669 |
+| `PRT-00136-01` | `PRT-00136` | iec62196T2COMBO | mode4DC | 920 V / 200 A / 120000 W / 184000.0 W | 0.652 |
+| `PRT-00136-02` | `PRT-00136` | iec62196T2COMBO | mode4DC | 920 V / 195 A / 120000 W / 179400.0 W | 0.669 |
+| `LSB-00351-02` | `LSB-00351` | chademo | mode4DC | 920 V / 200 A / 100000 W / 184000.0 W | 0.543 |
+| `OER-00057-01` | `OER-00057` | chademo | mode4DC | 500 V / 125 A / 43000 W / 62500.0 W | 0.688 |
+| `OER-00057-02` | `OER-00057` | iec62196T2COMBO | mode4DC | 920 V / 350 A / 160000 W / 322000.0 W | 0.497 |
+| `OER-00099-01` | `OER-00099` | iec62196T2COMBO | mode4DC | 950 V / 195 A / 60000 W / 185250.0 W | 0.324 |
+| … | … | +9 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-MLTR)) |
+- **Veredito:** médio — sub-declaração (ratio<0,75).
+
+### [MÉDIO] Localização — CP7↔localidade
+- **Regra:** CP4 com city divergente da moda.
+- **Afetados:** 4 de 222 pontos (1.8%). Exemplos: `MFR-00012-01`, `MFR-00012-02`, `MFR-00011-01`, `MFR-00011-02`, `MFR-00012`, `MFR-00011`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `MFR-00012-01` | `MFR-00012` |
+| `MFR-00012-02` | `MFR-00012` |
+| `MFR-00011-01` | `MFR-00011` |
+| `MFR-00011-02` | `MFR-00011` |
+- **Veredito:** médio — CP7↔localidade.
+
+### [BAIXO] Chaves eMI3 — código local disperso
+- **Regra:** mesmo <LOCAL> em cidades/CP4 dispersos.
+- **Afetados:** 218 de 222 pontos (98.2%). Exemplos: `PRT-00001-01`, `PRT-00001-02`, `PRT-00001-03`, `CSC-00015-01`, `CSC-00015-02`, `PRT-00001`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `PRT-00001-01` | `PRT-00001` |
+| `PRT-00001-02` | `PRT-00001` |
+| `PRT-00001-03` | `PRT-00001` |
+| `CSC-00015-01` | `CSC-00015` |
+| `CSC-00015-02` | `CSC-00015` |
+| `CSC-00015-03` | `CSC-00015` |
+| `PVZ-00003-01` | `PVZ-00003` |
+| `PVZ-00003-02` | `PVZ-00003` |
+| `OER-00011-01` | `OER-00011` |
+| `OER-00011-02` | `OER-00011` |
+| … | … | +208 restantes |
+- **Veredito:** baixo — código local disperso.
 
 [↑ índice](#indice)
 
 </details>
 
-<a id="opc-EVCE"></a>
+<a id="opc-EMEL"></a>
 
 <details>
-<summary><b>EVCE — EVCE POWER, LDA. / MOBISMART (51 sites, 89 pontos)</b> · 1 CRÍTICO, 1 MÉDIO</summary>
+<summary><b>EMEL — EMEL - Empresa Municipal de Mobilidade e Estacionamento de Lisboa, E.M., S.A. (83 sites, 184 pontos)</b> · 2 MÉDIO, 1 CRÍTICO, 1 BAIXO</summary>
 
-### [CRÍTICO] Potência sobre-declarada
-
-- **Regra:** `ratio = declarada / (V × I)` (monofásico AC e DC) ou `/ (√3 × V × I)` (`mode3AC3p`); `ratio > 1.25` = fisicamente impossível (capacidade excedida).
-
-- **Afetados:** 6 de 89 linhas de conector (7%). Exemplos: `BCL-00033-01`, `BCL-00033`, `BCL-00033-02`
-
+### [CRÍTICO] Física/Ohm — sobre-declaração (ratio>1,25)
+- **Regra:** potência declarada > 1,25 × V×I (monofásico) / √3×V×I (mode3AC3p).
+- **Afetados:** 26 de 184 pontos (14.1%). Exemplos: `LSB-00938-01`, `LSB-00938-02`, `LSB-01021-01`, `LSB-01021-02`, `LSB-01022-01`, `LSB-00938`.
 - **Evidência:**
 
-| point_id | site | tomada | modo | V / A / P declarada / esperada (kW) | ratio |
+| ponto | site | tomada | modo | tensão / corrente / declarada / esperada | ratio |
 |---|---|---|---|---|---|
-| `BCL-00033-01` | `BCL-00033` | iec62196T2 | mode3AC3p | 240/32/22/13,30 | 1,65 |
-| `BCL-00033-02` | `BCL-00033` | iec62196T2 | mode3AC3p | 240/32/22/13,30 | 1,65 |
-| `BRG-00133-01` | `BRG-00133` | iec62196T2 | mode3AC3p | 240/32/22/13,30 | 1,65 |
-| `BRG-00133-02` | `BRG-00133` | iec62196T2 | mode3AC3p | 240/32/22/13,30 | 1,65 |
-| `BRG-00134-01` | `BRG-00134` | iec62196T2 | mode3AC3p | 240/32/22/13,30 | 1,65 |
-| `BRG-00134-02` | `BRG-00134` | iec62196T2 | mode3AC3p | 240/32/22/13,30 | 1,65 |
+| `LSB-00938-01` | `LSB-00938` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22000 W / 12747.9 W | 1.726 |
+| `LSB-00938-02` | `LSB-00938` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22000 W / 12747.9 W | 1.726 |
+| `LSB-01021-01` | `LSB-01021` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22000 W / 12747.9 W | 1.726 |
+| `LSB-01021-02` | `LSB-01021` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22000 W / 12747.9 W | 1.726 |
+| `LSB-01022-01` | `LSB-01022` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22000 W / 12747.9 W | 1.726 |
+| `LSB-01022-02` | `LSB-01022` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22000 W / 12747.9 W | 1.726 |
+| `LSB-01023-01` | `LSB-01023` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22000 W / 12747.9 W | 1.726 |
+| `LSB-01023-02` | `LSB-01023` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22000 W / 12747.9 W | 1.726 |
+| `LSB-01032-01` | `LSB-01032` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22000 W / 12747.9 W | 1.726 |
+| `LSB-01032-02` | `LSB-01032` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22000 W / 12747.9 W | 1.726 |
+| … | … | +16 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-EMEL)) |
+- **Veredito:** crítico — sobre-declaração (ratio>1,25).
 
-- **Veredito:** impossível — a potência declarada excede o produto V×I; padrão recorrente de potência do posto colada na tomada ou convenção de reporte errada.
-
-### [MÉDIO] Potência sub-declarada
-
-- **Regra:** `ratio < 0.75` = derating suspeito ou erro de introdução; `ratio = declarada / esperada`.
-
-- **Afetados:** 17 de 89 linhas de conector (19%). Exemplos: `PVL-00005-1`, `PVL-00005`, `AVV-00003-01`, `AVV-00003`
-
+### [MÉDIO] Combinação formato/tomada
+- **Regra:** connector_format incompatível com charging_mode.
+- **Afetados:** 102 de 184 pontos (55.4%). Exemplos: `LSB-00360-01`, `LSB-00360-02`, `LSB-00361-01`, `LSB-00361-02`, `LSB-00353-01`, `LSB-00360`.
 - **Evidência:**
 
-| point_id | site | tomada | modo | V / A / P declarada / esperada (kW) | ratio |
-|---|---|---|---|---|---|
-| `PVL-00005-1` | `PVL-00005` | iec62196T2 | mode3AC3p | 400/16/3,70/11,09 | 0,33 |
-| `AVV-00003-01` | `AVV-00003` | iec62196T2COMBO | mode4DC | 1000/125/50/125 | 0,40 |
-| `AVV-00003-02` | `AVV-00003` | chademo | mode4DC | 1000/125/50/125 | 0,40 |
-| `ORM-00014-01` | `ORM-00014` | iec62196T2COMBO | mode4DC | 1000/125/50/125 | 0,40 |
-| `ORM-00014-02` | `ORM-00014` | chademo | mode4DC | 1000/125/50/125 | 0,40 |
-| `ORM-00015-01` | `ORM-00015` | iec62196T2COMBO | mode4DC | 1000/125/50/125 | 0,40 |
-| `ORM-00015-02` | `ORM-00015` | chademo | mode4DC | 1000/125/50/125 | 0,40 |
-| `GMR-00150-01` | `GMR-00150` | iec62196T2 | mode3AC3p | 440/32/11/24,39 | 0,45 |
-| `GMR-00150-02` | `GMR-00150` | iec62196T2 | mode3AC3p | 440/32/11/24,39 | 0,45 |
-| `BRG-00054-01` | `BRG-00054` | iec62196T2 | mode3AC3p | 400/32/11/22,17 | 0,50 |
-| … | … | … | … | … | +7 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-EVCE)) |
+| ponto | site |
+|---|---|
+| `LSB-00360-01` | `LSB-00360` |
+| `LSB-00360-02` | `LSB-00360` |
+| `LSB-00361-01` | `LSB-00361` |
+| `LSB-00361-02` | `LSB-00361` |
+| `LSB-00353-01` | `LSB-00353` |
+| `LSB-00353-02` | `LSB-00353` |
+| `LSB-00397-01` | `LSB-00397` |
+| `LSB-00397-02` | `LSB-00397` |
+| `LSB-00356-01` | `LSB-00356` |
+| `LSB-00356-02` | `LSB-00356` |
+| … | … | +92 restantes |
+- **Veredito:** médio — Combinação formato/tomada.
 
-- **Veredito:** suspeito — potência declarada muito abaixo de V×I; derating do posto partilhado ou número trocado. Rever contra a chapa do posto.
+### [MÉDIO] Operador — grafias fragmentadas
+- **Regra:** mesmo operator_id com vários operator_name.
+- **Afetados:** 5 de 184 pontos (2.7%). Exemplos: `LSB-00360-01`, `LSB-00360-02`, `LSB-00360-03`, `LSB-00361-01`, `LSB-00361-02`, `LSB-00360`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `LSB-00360-01` | `LSB-00360` |
+| `LSB-00360-02` | `LSB-00360` |
+| `LSB-00360-03` | `LSB-00360` |
+| `LSB-00361-01` | `LSB-00361` |
+| `LSB-00361-02` | `LSB-00361` |
+- **Veredito:** médio — grafias fragmentadas.
+
+### [BAIXO] Metadados — usage_type em falta
+- **Regra:** usage_type nulo/fora do enum.
+- **Afetados:** 4 de 184 pontos (2.2%). Exemplos: `LSB-01446-01`, `LSB-01446-02`, `LSB-01453-01`, `LSB-01453-02`, `LSB-01446`, `LSB-01453`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `LSB-01446-01` | `LSB-01446` |
+| `LSB-01446-02` | `LSB-01446` |
+| `LSB-01453-01` | `LSB-01453` |
+| `LSB-01453-02` | `LSB-01453` |
+- **Veredito:** baixo — usage_type em falta.
 
 [↑ índice](#indice)
 
@@ -2761,387 +2817,147 @@ Totais: 8 733 sites, 19 259 pontos distintos (19 376 linhas de conector), 92 OPC
 <a id="opc-VIAV"></a>
 
 <details>
-<summary><b>VIAV — Via Verde Transição Energética, S.A. (5 sites, 13 pontos)</b> · 2 MÉDIO, 1 CRÍTICO</summary>
+<summary><b>VIAV — Via Verde Transição Energética, S.A. (11 sites, 27 pontos)</b> · 3 MÉDIO, 2 BAIXO, 1 CRÍTICO, 1 ALTO</summary>
 
-### [CRÍTICO] Chave duplicada (`point_id`)
-
-- **Regra:** `point_id` identifica a tomada; duplicado = linhas fantasma ou conectores churnados sem limpeza.
-
-- **Afetados:** 9 linhas em 9 chaves duplicadas. Exemplos: `3`, `MOBI-CSC-00189`, `4`, `OER-00285`
-
+### [CRÍTICO] Duplicados — point_id
+- **Regra:** point_id duplicado no inventário.
+- **Afetados:** 23 de 27 pontos (85.2%). Exemplos: `3`, `4`, `615`, `616`, `619`, `MOBI-CSC-00189`.
 - **Evidência:**
 
-| point_id | site | ocorrências |
-|---|---|---|
-| `3` | `CDN-00008, MOBI-CSC-00189` | 2 |
-| `4` | `CDN-00008, MOBI-CSC-00189` | 2 |
-| `615` | `MTJ-00110, OER-00285` | 2 |
-| `616` | `MTJ-00110, OER-00285` | 2 |
-| `619` | `OER-00287, ORQ-00009` | 2 |
-| `620` | `OER-00287, ORQ-00009` | 2 |
-| `625` | `OER-00287, SXL-00092` | 2 |
-| `623` | `OER-00288, SXL-00091` | 2 |
-| `624` | `OER-00288, SXL-00091` | 2 |
-
-- **Veredito:** impossível (chave) — chave da tomada duplicada; linhas fantasma ou churn não limpo.
-
-### [MÉDIO] Potência sub-declarada
-
-- **Regra:** `ratio < 0.75` = derating suspeito ou erro de introdução; `ratio = declarada / esperada`.
-
-- **Afetados:** 6 de 13 linhas de conector (46%). Exemplos: `615`, `OER-00285`, `616`
-
-- **Evidência:**
-
-| point_id | site | tomada | modo | V / A / P declarada / esperada (kW) | ratio |
-|---|---|---|---|---|---|
-| `615` | `OER-00285` | iec62196T2COMBO | mode4DC | 1000/600/400/600 | 0,67 |
-| `616` | `OER-00285` | iec62196T2COMBO | mode4DC | 1000/600/400/600 | 0,67 |
-| `617` | `OER-00286` | iec62196T2COMBO | mode4DC | 1000/600/400/600 | 0,67 |
-| `618` | `OER-00286` | iec62196T2COMBO | mode4DC | 1000/600/400/600 | 0,67 |
-| `619` | `OER-00287` | iec62196T2COMBO | mode4DC | 1000/600/400/600 | 0,67 |
-| `620` | `OER-00287` | iec62196T2COMBO | mode4DC | 1000/600/400/600 | 0,67 |
-
-- **Veredito:** suspeito — potência declarada muito abaixo de V×I; derating do posto partilhado ou número trocado. Rever contra a chapa do posto.
-
-### [MÉDIO] Localidade divergente do CP7 (CP4→cidade modal)
-
-- **Regra:** Agrupa-se por CP4 (4 primeiros dígitos) e toma-se a `city` modal dos CP4 com ≥5 sites; par (CP4 → `city`) divergente = suspeito.
-
-- **Afetados:** 4 sites. Exemplos: `OER-00285`, `OER-00286`, `OER-00287`, `OER-00288`
-
-- **Evidência:**
-
-| site | postcode | city | cidade modal do CP4 |
-|---|---|---|---|
-| `OER-00285` | 2870-000 | Oeiras | Montijo |
-| `OER-00286` | 2870-000 | Oeiras | Montijo |
-| `OER-00287` | 2870-000 | Oeiras | Montijo |
-| `OER-00288` | 2870-000 | Oeiras | Montijo |
-
-- **Veredito:** suspeito — CP trocado ou localidade errada; CTT muda códigos e há grafias variantes.
-
-[↑ índice](#indice)
-
-</details>
-
-<a id="opc-EVIO"></a>
-
-<details>
-<summary><b>EVIO — EVIO - Electrical Mobility (21 sites, 35 pontos)</b> · 1 CRÍTICO, 1 MÉDIO, 1 BAIXO</summary>
-
-### [CRÍTICO] Potência sobre-declarada
-
-- **Regra:** `ratio = declarada / (V × I)` (monofásico AC e DC) ou `/ (√3 × V × I)` (`mode3AC3p`); `ratio > 1.25` = fisicamente impossível (capacidade excedida).
-
-- **Afetados:** 1 de 35 linhas de conector (3%). Exemplos: `TNV-00029-01`, `TNV-00029`, `VLG-00012-01`, `VLG-00012-02`
-
-- **Evidência:**
-
-| point_id | site | tomada | modo | V / A / P declarada / esperada (kW) | ratio |
-|---|---|---|---|---|---|
-| `TNV-00029-01` | `TNV-00029` | iec62196T2 | mode3AC3p | 230/32/22/12,75 | 1,73 |
-
-- **Veredito:** impossível — a potência declarada excede o produto V×I; padrão recorrente de potência do posto colada na tomada ou convenção de reporte errada.
-
-### [MÉDIO] Potência sub-declarada
-
-- **Regra:** `ratio < 0.75` = derating suspeito ou erro de introdução; `ratio = declarada / esperada`.
-
-- **Afetados:** 7 de 35 linhas de conector (20%). Exemplos: `ETZ-00029-01`, `ETZ-00029`, `ETZ-00029-02`
-
-- **Evidência:**
-
-| point_id | site | tomada | modo | V / A / P declarada / esperada (kW) | ratio |
-|---|---|---|---|---|---|
-| `ETZ-00029-01` | `ETZ-00029` | iec62196T2COMBO | mode4DC | 1000/250/60/250 | 0,24 |
-| `ETZ-00029-02` | `ETZ-00029` | iec62196T2COMBO | mode4DC | 1000/250/60/250 | 0,24 |
-| `ETZ-00030-01` | `ETZ-00030` | iec62196T2COMBO | mode4DC | 1000/250/60/250 | 0,24 |
-| `ETZ-00030-02` | `ETZ-00030` | iec62196T2COMBO | mode4DC | 1000/250/60/250 | 0,24 |
-| `TNV-00027-02` | `TNV-00027` | iec62196T2COMBO | mode4DC | 800/150/60/120 | 0,50 |
-| `PRT-00364-1` | `PRT-00364` | iec62196T2 | mode3AC3p | 230/32/7,40/12,75 | 0,58 |
-| `PRT-00365-1` | `PRT-00365` | iec62196T2 | mode3AC3p | 230/32/7,40/12,75 | 0,58 |
-
-- **Veredito:** suspeito — potência declarada muito abaixo de V×I; derating do posto partilhado ou número trocado. Rever contra a chapa do posto.
-
-### [BAIXO] Metadados em falta
-
-- **Regra:** `usage_type`, `auth_methods` ou `brands_accepted` vazios no inventário estático.
-
-- **Afetados:** 5 campos em falta (5 `usage_type`, 0 `auth_methods`, 0 `brands_accepted`). Exemplos: `OER-00298-1`, `OER-00299-1`, `MTS-00211-1`, `MTS-00212-1`
-
-- **Evidência:**
-
-| id | campo em falta |
+| ponto | site |
 |---|---|
-| `OER-00298-1` | usage_type |
-| `OER-00299-1` | usage_type |
-| `MTS-00211-1` | usage_type |
-| `MTS-00212-1` | usage_type |
-| … | +1 restantes nos CSVs |
+| `3` | `MOBI-CSC-00189` |
+| `4` | `MOBI-CSC-00189` |
+| `615` | `OER-00285` |
+| `616` | `OER-00285` |
+| `619` | `OER-00287` |
+| `620` | `OER-00287` |
+| `625` | `OER-00287` |
+| `623` | `OER-00288` |
+| `624` | `OER-00288` |
+| `651` | `TRF-00023` |
+| … | … | +13 restantes |
+- **Veredito:** crítico — point_id.
 
-- **Veredito:** suspeito (metadados) — preencher os campos; não afecta a física do ponto.
-
-[↑ índice](#indice)
-
-</details>
-
-<a id="opc-ALFA"></a>
-
-<details>
-<summary><b>ALFA — Alfa Energia (13 sites, 25 pontos)</b> · 1 CRÍTICO, 1 MÉDIO</summary>
-
-### [CRÍTICO] Chave duplicada (`point_id`)
-
-- **Regra:** `point_id` identifica a tomada; duplicado = linhas fantasma ou conectores churnados sem limpeza.
-
-- **Afetados:** 2 linhas em 1 chaves duplicadas. Exemplos: `FLG-00022-01`, `FLG-00022`, `MTR-00008-01`, `MTR-00008-02`
-
+### [ALTO] Física — valores crus suspeitos
+- **Regra:** V=1200/3600 V ou I=600 A.
+- **Afetados:** 18 de 27 pontos (66.7%). Exemplos: `615`, `616`, `617`, `618`, `619`, `OER-00285`.
 - **Evidência:**
 
-| point_id | site | ocorrências |
-|---|---|---|
-| `FLG-00022-01` | `FLG-00022` | 2 |
-| … | … | +1 restantes nos CSVs |
-
-- **Veredito:** impossível (chave) — chave da tomada duplicada; linhas fantasma ou churn não limpo.
-
-### [MÉDIO] Potência sub-declarada
-
-- **Regra:** `ratio < 0.75` = derating suspeito ou erro de introdução; `ratio = declarada / esperada`.
-
-- **Afetados:** 2 de 26 linhas de conector (8%). Exemplos: `AND-00014-01`, `AND-00014`, `AND-00014-02`
-
-- **Evidência:**
-
-| point_id | site | tomada | modo | V / A / P declarada / esperada (kW) | ratio |
-|---|---|---|---|---|---|
-| `AND-00014-01` | `AND-00014` | iec62196T2COMBO | mode4DC | 1000/200/40/200 | 0,20 |
-| `AND-00014-02` | `AND-00014` | iec62196T2COMBO | mode4DC | 1000/200/40/200 | 0,20 |
-
-- **Veredito:** suspeito — potência declarada muito abaixo de V×I; derating do posto partilhado ou número trocado. Rever contra a chapa do posto.
-
-[↑ índice](#indice)
-
-</details>
-
-<a id="opc-EMAC"></a>
-
-<details>
-<summary><b>EMAC — EMACOM - Telecomunicações da Madeira, Unipessoal, Lda (25 sites, 44 pontos)</b> · 1 CRÍTICO, 1 MÉDIO</summary>
-
-### [CRÍTICO] Chave duplicada (`point_id`)
-
-- **Regra:** `point_id` identifica a tomada; duplicado = linhas fantasma ou conectores churnados sem limpeza.
-
-- **Afetados:** 2 linhas em 1 chaves duplicadas. Exemplos: `FNC-00047-01`, `FNC-00047`, `FNC-00047-02`, `RAM-CML-00001-01`
-
-- **Evidência:**
-
-| point_id | site | ocorrências |
-|---|---|---|
-| `FNC-00047-01` | `FNC-00047` | 2 |
-| … | … | +1 restantes nos CSVs |
-
-- **Veredito:** impossível (chave) — chave da tomada duplicada; linhas fantasma ou churn não limpo.
-
-### [MÉDIO] Potência sub-declarada
-
-- **Regra:** `ratio < 0.75` = derating suspeito ou erro de introdução; `ratio = declarada / esperada`.
-
-- **Afetados:** 2 de 45 linhas de conector (4%). Exemplos: `SCR-00023-03`, `SCR-00023`, `MCH-00002-03`, `MCH-00002`
-
-- **Evidência:**
-
-| point_id | site | tomada | modo | V / A / P declarada / esperada (kW) | ratio |
-|---|---|---|---|---|---|
-| `SCR-00023-03` | `SCR-00023` | iec62196T2COMBO | mode4DC | 950/125/60/118,75 | 0,51 |
-| `MCH-00002-03` | `MCH-00002` | iec62196T2COMBO | mode4DC | 950/120/60/114 | 0,53 |
-
-- **Veredito:** suspeito — potência declarada muito abaixo de V×I; derating do posto partilhado ou número trocado. Rever contra a chapa do posto.
-
-[↑ índice](#indice)
-
-</details>
-
-<a id="opc-NRGS"></a>
-
-<details>
-<summary><b>NRGS — Original Sunenergy, Lda (7 sites, 16 pontos)</b> · 1 CRÍTICO, 1 MÉDIO</summary>
-
-### [CRÍTICO] Potência sobre-declarada
-
-- **Regra:** `ratio = declarada / (V × I)` (monofásico AC e DC) ou `/ (√3 × V × I)` (`mode3AC3p`); `ratio > 1.25` = fisicamente impossível (capacidade excedida).
-
-- **Afetados:** 3 de 16 linhas de conector (19%). Exemplos: `MDB-00004-03`, `MDB-00004`, `MDB-00004-04`
-
-- **Evidência:**
-
-| point_id | site | tomada | modo | V / A / P declarada / esperada (kW) | ratio |
-|---|---|---|---|---|---|
-| `MDB-00004-03` | `MDB-00004` | iec60309x2single16 | mode3AC3p | 230/32/22/12,75 | 1,73 |
-| `MDB-00004-04` | `MDB-00004` | iec60309x2single16 | mode3AC3p | 230/32/22/12,75 | 1,73 |
-| `GRD-00021-02` | `GRD-00021` | chademo | mode4DC | 500/150/100/75 | 1,33 |
-
-- **Veredito:** impossível — a potência declarada excede o produto V×I; padrão recorrente de potência do posto colada na tomada ou convenção de reporte errada.
-
-### [MÉDIO] Potência sub-declarada
-
-- **Regra:** `ratio < 0.75` = derating suspeito ou erro de introdução; `ratio = declarada / esperada`.
-
-- **Afetados:** 1 de 16 linhas de conector (6%). Exemplos: `PLM-00025-02`, `PLM-00025`, `PLM-00025-01`, `STR-00026-01`
-
-- **Evidência:**
-
-| point_id | site | tomada | modo | V / A / P declarada / esperada (kW) | ratio |
-|---|---|---|---|---|---|
-| `PLM-00025-02` | `PLM-00025` | chademo | mode4DC | 920/200/120/184 | 0,65 |
-
-- **Veredito:** suspeito — potência declarada muito abaixo de V×I; derating do posto partilhado ou número trocado. Rever contra a chapa do posto.
-
-[↑ índice](#indice)
-
-</details>
-
-<a id="opc-EVGR"></a>
-
-<details>
-<summary><b>EVGR — Green Evolut, LDA (6 sites, 10 pontos)</b> · 1 CRÍTICO</summary>
-
-### [CRÍTICO] Chave duplicada (`point_id`)
-
-- **Regra:** `point_id` identifica a tomada; duplicado = linhas fantasma ou conectores churnados sem limpeza.
-
-- **Afetados:** 2 linhas em 1 chaves duplicadas. Exemplos: `TVR-00024-01`, `TVR-00024`, `AMD-00108-01`, `AMD-00108-02`
-
-- **Evidência:**
-
-| point_id | site | ocorrências |
-|---|---|---|
-| `TVR-00024-01` | `TVR-00024` | 2 |
-| … | … | +1 restantes nos CSVs |
-
-- **Veredito:** impossível (chave) — chave da tomada duplicada; linhas fantasma ou churn não limpo.
-
-[↑ índice](#indice)
-
-</details>
-
-<a id="opc-HELX"></a>
-
-<details>
-<summary><b>HELX — Helexia II Energy Services, Lda. (234 sites, 451 pontos)</b> · 2 MÉDIO, 1 BAIXO</summary>
-
-### [MÉDIO] Potência sub-declarada
-
-- **Regra:** `ratio < 0.75` = derating suspeito ou erro de introdução; `ratio = declarada / esperada`.
-
-- **Afetados:** 162 de 451 linhas de conector (36%). Exemplos: `OBD-00010-01`, `OBD-00010`, `STR-00046-01`, `STR-00046`
-
-- **Evidência:**
-
-| point_id | site | tomada | modo | V / A / P declarada / esperada (kW) | ratio |
-|---|---|---|---|---|---|
-| `OBD-00010-01` | `OBD-00010` | iec62196T2COMBO | mode4DC | 1000/500/50/500 | 0,10 |
-| `STR-00046-01` | `STR-00046` | iec62196T2COMBO | mode4DC | 920/60/11/55,20 | 0,20 |
-| `OBD-00013-01` | `OBD-00013` | iec62196T2COMBO | mode4DC | 1000/500/100/500 | 0,20 |
-| `OBD-00016-01` | `OBD-00016` | iec62196T2COMBO | mode4DC | 1000/500/100/500 | 0,20 |
-| `TVD-00089-01` | `TVD-00089` | iec62196T2COMBO | mode4DC | 1000/250/60/250 | 0,24 |
-| `TVD-00089-02` | `TVD-00089` | iec62196T2COMBO | mode4DC | 1000/250/60/250 | 0,24 |
-| `GDL-00059-01` | `GDL-00059` | iec62196T2COMBO | mode4DC | 1000/375/100/375 | 0,27 |
-| `GDL-00059-02` | `GDL-00059` | iec62196T2COMBO | mode4DC | 1000/375/100/375 | 0,27 |
-| `GMR-00162-01` | `GMR-00162` | iec62196T2COMBO | mode4DC | 1000/375/100/375 | 0,27 |
-| `GMR-00162-02` | `GMR-00162` | iec62196T2COMBO | mode4DC | 1000/375/100/375 | 0,27 |
-| … | … | … | … | … | +152 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-HELX)) |
-
-- **Veredito:** suspeito — potência declarada muito abaixo de V×I; derating do posto partilhado ou número trocado. Rever contra a chapa do posto.
-
-### [MÉDIO] Localidade divergente do CP7 (CP4→cidade modal)
-
-- **Regra:** Agrupa-se por CP4 (4 primeiros dígitos) e toma-se a `city` modal dos CP4 com ≥5 sites; par (CP4 → `city`) divergente = suspeito.
-
-- **Afetados:** 5 sites. Exemplos: `ALB-00003`, `STB-00076`, `STB-00078`, `STB-00077`
-
-- **Evidência:**
-
-| site | postcode | city | cidade modal do CP4 |
-|---|---|---|---|
-| `ALB-00003` | 4460-841 | Albergaria-a-Velha | Matosinhos |
-| `STB-00076` | 3850-079 | Setúbal | Albergaria-a-Velha |
-| `STB-00078` | 3850-089 | Setúbal | Albergaria-a-Velha |
-| `STB-00077` | 3850-089 | Setúbal | Albergaria-a-Velha |
-| `BRG-00146` | 4400-625 | Braga | Vila Nova de Gaia |
-
-- **Veredito:** suspeito — CP trocado ou localidade errada; CTT muda códigos e há grafias variantes.
-
-### [BAIXO] Metadados em falta
-
-- **Regra:** `usage_type`, `auth_methods` ou `brands_accepted` vazios no inventário estático.
-
-- **Afetados:** 13 campos em falta (13 `usage_type`, 0 `auth_methods`, 0 `brands_accepted`). Exemplos: `NLS-00012-01`, `NLS-00012-02`, `CHV-00035-01`, `CHV-00035-02`
-
-- **Evidência:**
-
-| id | campo em falta |
+| ponto | site |
 |---|---|
-| `NLS-00012-01` | usage_type |
-| `NLS-00012-02` | usage_type |
-| `CHV-00035-01` | usage_type |
-| `CHV-00035-02` | usage_type |
-| … | +9 restantes nos CSVs |
+| `615` | `OER-00285` |
+| `616` | `OER-00285` |
+| `617` | `OER-00286` |
+| `618` | `OER-00286` |
+| `619` | `OER-00287` |
+| `620` | `OER-00287` |
+| `651` | `TRF-00023` |
+| `653` | `TRF-00023` |
+| `654` | `TRF-00024` |
+| `655` | `TRF-00024` |
+| … | … | +8 restantes |
+- **Veredito:** alto — valores crus suspeitos.
 
-- **Veredito:** suspeito (metadados) — preencher os campos; não afecta a física do ponto.
-
-[↑ índice](#indice)
-
-</details>
-
-<a id="opc-MOTA"></a>
-
-<details>
-<summary><b>MOTA — Mota-Engil Renewing (175 sites, 312 pontos)</b> · 1 MÉDIO, 1 BAIXO</summary>
-
-### [MÉDIO] Potência sub-declarada
-
-- **Regra:** `ratio < 0.75` = derating suspeito ou erro de introdução; `ratio = declarada / esperada`.
-
-- **Afetados:** 140 de 312 linhas de conector (45%). Exemplos: `CBC-00021-02`, `CBC-00021`, `GDM-00054-02`, `GDM-00054`
-
+### [MÉDIO] Combinação formato/tomada
+- **Regra:** connector_format incompatível com charging_mode.
+- **Afetados:** 25 de 27 pontos (92.6%). Exemplos: `615`, `616`, `617`, `618`, `619`, `OER-00285`.
 - **Evidência:**
 
-| point_id | site | tomada | modo | V / A / P declarada / esperada (kW) | ratio |
-|---|---|---|---|---|---|
-| `CBC-00021-02` | `CBC-00021` | iec62196T2COMBO | mode4DC | 1000/500/30/500 | 0,06 |
-| `GDM-00054-02` | `GDM-00054` | iec62196T2COMBO | mode4DC | 1000/500/50/500 | 0,10 |
-| `GMR-00142-01` | `GMR-00142` | iec62196T2COMBO | mode4DC | 1000/500/60/500 | 0,12 |
-| `GMR-00142-02` | `GMR-00142` | iec62196T2COMBO | mode4DC | 1000/500/60/500 | 0,12 |
-| `TVD-00053-02` | `TVD-00053` | iec62196T2COMBO | mode4DC | 1000/400/90/400 | 0,23 |
-| `TVD-00054-01` | `TVD-00054` | iec62196T2COMBO | mode4DC | 1000/400/90/400 | 0,23 |
-| `TVD-00054-02` | `TVD-00054` | iec62196T2COMBO | mode4DC | 1000/400/90/400 | 0,23 |
-| `TVD-00056-01` | `TVD-00056` | iec62196T2COMBO | mode4DC | 1000/400/90/400 | 0,23 |
-| `TVD-00056-02` | `TVD-00056` | iec62196T2COMBO | mode4DC | 1000/400/90/400 | 0,23 |
-| `TVD-00062-01` | `TVD-00062` | iec62196T2COMBO | mode4DC | 1000/400/90/400 | 0,23 |
-| … | … | … | … | … | +130 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-MOTA)) |
-
-- **Veredito:** suspeito — potência declarada muito abaixo de V×I; derating do posto partilhado ou número trocado. Rever contra a chapa do posto.
-
-### [BAIXO] Metadados em falta
-
-- **Regra:** `usage_type`, `auth_methods` ou `brands_accepted` vazios no inventário estático.
-
-- **Afetados:** 5 campos em falta (5 `usage_type`, 0 `auth_methods`, 0 `brands_accepted`). Exemplos: `VNG-00257-01`, `VNG-00258-01`, `VNG-00258-02`, `CBC-00021-01`
-
-- **Evidência:**
-
-| id | campo em falta |
+| ponto | site |
 |---|---|
-| `VNG-00257-01` | usage_type |
-| `VNG-00258-01` | usage_type |
-| `VNG-00258-02` | usage_type |
-| `CBC-00021-01` | usage_type |
-| … | +1 restantes nos CSVs |
+| `615` | `OER-00285` |
+| `616` | `OER-00285` |
+| `617` | `OER-00286` |
+| `618` | `OER-00286` |
+| `619` | `OER-00287` |
+| `620` | `OER-00287` |
+| `625` | `OER-00287` |
+| `621` | `OER-00288` |
+| `622` | `OER-00288` |
+| `623` | `OER-00288` |
+| … | … | +15 restantes |
+- **Veredito:** médio — Combinação formato/tomada.
 
-- **Veredito:** suspeito (metadados) — preencher os campos; não afecta a física do ponto.
+### [MÉDIO] Física/Ohm — sub-declaração (ratio<0,75)
+- **Regra:** potência declarada < 0,75 × V×I / √3×V×I.
+- **Afetados:** 18 de 27 pontos (66.7%). Exemplos: `615`, `616`, `617`, `618`, `619`, `OER-00285`.
+- **Evidência:**
+
+| ponto | site | tomada | modo | tensão / corrente / declarada / esperada | ratio |
+|---|---|---|---|---|---|
+| `615` | `OER-00285` | iec62196T2COMBO | mode4DC | 1000 V / 600 A / 400000 W / 600000.0 W | 0.667 |
+| `616` | `OER-00285` | iec62196T2COMBO | mode4DC | 1000 V / 600 A / 400000 W / 600000.0 W | 0.667 |
+| `617` | `OER-00286` | iec62196T2COMBO | mode4DC | 1000 V / 600 A / 400000 W / 600000.0 W | 0.667 |
+| `618` | `OER-00286` | iec62196T2COMBO | mode4DC | 1000 V / 600 A / 400000 W / 600000.0 W | 0.667 |
+| `619` | `OER-00287` | iec62196T2COMBO | mode4DC | 1000 V / 600 A / 400000 W / 600000.0 W | 0.667 |
+| `620` | `OER-00287` | iec62196T2COMBO | mode4DC | 1000 V / 600 A / 400000 W / 600000.0 W | 0.667 |
+| `651` | `TRF-00023` | iec62196T2COMBO | mode4DC | 1000 V / 600 A / 400000 W / 600000.0 W | 0.667 |
+| `653` | `TRF-00023` | iec62196T2COMBO | mode4DC | 1000 V / 600 A / 400000 W / 600000.0 W | 0.667 |
+| `654` | `TRF-00024` | iec62196T2COMBO | mode4DC | 1000 V / 600 A / 400000 W / 600000.0 W | 0.667 |
+| `655` | `TRF-00024` | iec62196T2COMBO | mode4DC | 1000 V / 600 A / 400000 W / 600000.0 W | 0.667 |
+| … | … | +8 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-VIAV)) |
+- **Veredito:** médio — sub-declaração (ratio<0,75).
+
+### [MÉDIO] Localização — CP7↔localidade
+- **Regra:** CP4 com city divergente da moda.
+- **Afetados:** 11 de 27 pontos (40.7%). Exemplos: `615`, `616`, `617`, `618`, `619`, `OER-00285`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `615` | `OER-00285` |
+| `616` | `OER-00285` |
+| `617` | `OER-00286` |
+| `618` | `OER-00286` |
+| `619` | `OER-00287` |
+| `620` | `OER-00287` |
+| `625` | `OER-00287` |
+| `621` | `OER-00288` |
+| `622` | `OER-00288` |
+| `623` | `OER-00288` |
+| … | … | +1 restantes |
+- **Veredito:** médio — CP7↔localidade.
+
+### [BAIXO] Chaves eMI3 — códigos locais mistos
+- **Regra:** tomadas do mesmo site com <LOCAL> diferentes.
+- **Afetados:** 27 de 27 pontos (100.0%). Exemplos: `3`, `4`, `615`, `616`, `617`, `MOBI-CSC-00189`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `3` | `MOBI-CSC-00189` |
+| `4` | `MOBI-CSC-00189` |
+| `615` | `OER-00285` |
+| `616` | `OER-00285` |
+| `617` | `OER-00286` |
+| `618` | `OER-00286` |
+| `619` | `OER-00287` |
+| `620` | `OER-00287` |
+| `625` | `OER-00287` |
+| `621` | `OER-00288` |
+| … | … | +17 restantes |
+- **Veredito:** baixo — códigos locais mistos.
+
+### [BAIXO] Metadados — usage_type em falta
+- **Regra:** usage_type nulo/fora do enum.
+- **Afetados:** 14 de 27 pontos (51.9%). Exemplos: `651`, `652`, `653`, `654`, `655`, `TRF-00023`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `651` | `TRF-00023` |
+| `652` | `TRF-00023` |
+| `653` | `TRF-00023` |
+| `654` | `TRF-00024` |
+| `655` | `TRF-00024` |
+| `656` | `TRF-00025` |
+| `657` | `TRF-00025` |
+| `658` | `TRF-00026` |
+| `659` | `TRF-00026` |
+| `660` | `TRF-00026` |
+| … | … | +4 restantes |
+- **Veredito:** baixo — usage_type em falta.
 
 [↑ índice](#indice)
 
@@ -3150,363 +2966,1280 @@ Totais: 8 733 sites, 19 259 pontos distintos (19 376 linhas de conector), 92 OPC
 <a id="opc-CEPS"></a>
 
 <details>
-<summary><b>CEPS — Cepsa Portuguesa Petroleos (34 sites, 61 pontos)</b> · 2 MÉDIO, 1 BAIXO</summary>
+<summary><b>CEPS — Cepsa Portuguesa Petroleos (35 sites, 63 pontos)</b> · 3 MÉDIO, 1 CRÍTICO, 1 BAIXO</summary>
 
-### [MÉDIO] Potência sub-declarada
-
-- **Regra:** `ratio < 0.75` = derating suspeito ou erro de introdução; `ratio = declarada / esperada`.
-
-- **Afetados:** 57 de 61 linhas de conector (93%). Exemplos: `VCT-00079-01`, `VCT-00079`, `VCT-00079-02`
-
+### [CRÍTICO] Física/Ohm — sobre-declaração (ratio>1,25)
+- **Regra:** potência declarada > 1,25 × V×I (monofásico) / √3×V×I (mode3AC3p).
+- **Afetados:** 2 de 63 pontos (3.2%). Exemplos: `MTJ-00139-01`, `MTJ-00139-02`, `MTJ-00139`.
 - **Evidência:**
 
-| point_id | site | tomada | modo | V / A / P declarada / esperada (kW) | ratio |
+| ponto | site | tomada | modo | tensão / corrente / declarada / esperada | ratio |
 |---|---|---|---|---|---|
-| `VCT-00079-01` | `VCT-00079` | iec62196T2COMBO | mode4DC | 300000/500/300/150000 | 0,00 |
-| `VCT-00079-02` | `VCT-00079` | iec62196T2COMBO | mode4DC | 300000/500/300/150000 | 0,00 |
-| `ABT-00017-01` | `ABT-00017` | iec62196T2COMBO | mode4DC | 1000/500/100/500 | 0,20 |
-| `ABT-00017-02` | `ABT-00017` | iec62196T2COMBO | mode4DC | 1000/500/100/500 | 0,20 |
-| `ABT-00018-01` | `ABT-00018` | iec62196T2COMBO | mode4DC | 1000/500/100/500 | 0,20 |
-| `ABT-00018-02` | `ABT-00018` | iec62196T2COMBO | mode4DC | 1000/500/100/500 | 0,20 |
-| `FND-00013-01` | `FND-00013` | iec62196T2COMBO | mode4DC | 1000/500/100/500 | 0,20 |
-| `FND-00013-02` | `FND-00013` | iec62196T2COMBO | mode4DC | 1000/500/100/500 | 0,20 |
-| `FND-00014-01` | `FND-00014` | iec62196T2COMBO | mode4DC | 1000/500/100/500 | 0,20 |
-| `FND-00014-02` | `FND-00014` | iec62196T2COMBO | mode4DC | 1000/500/100/500 | 0,20 |
-| … | … | … | … | … | +47 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-CEPS)) |
+| `MTJ-00139-01` | `MTJ-00139` | iec62196T2COMBO | mode4DC | 400 V / 375 A / 300000 W / 150000.0 W | 2.0 |
+| `MTJ-00139-02` | `MTJ-00139` | iec62196T2COMBO | mode4DC | 400 V / 375 A / 300000 W / 150000.0 W | 2.0 |
+- **Veredito:** crítico — sobre-declaração (ratio>1,25).
 
-- **Veredito:** suspeito — potência declarada muito abaixo de V×I; derating do posto partilhado ou número trocado. Rever contra a chapa do posto.
-
-### [MÉDIO] Localidade divergente do CP7 (CP4→cidade modal)
-
-- **Regra:** Agrupa-se por CP4 (4 primeiros dígitos) e toma-se a `city` modal dos CP4 com ≥5 sites; par (CP4 → `city`) divergente = suspeito.
-
-- **Afetados:** 3 sites. Exemplos: `FAR-00063`, `LSB-01077`, `SPS-00010`
-
+### [MÉDIO] Combinação formato/tomada
+- **Regra:** connector_format incompatível com charging_mode.
+- **Afetados:** 63 de 63 pontos (100.0%). Exemplos: `ABT-00018-01`, `ABT-00018-02`, `FND-00013-01`, `FND-00013-02`, `ABT-00017-01`, `ABT-00018`.
 - **Evidência:**
 
-| site | postcode | city | cidade modal do CP4 |
-|---|---|---|---|
-| `FAR-00063` | 8400-450 | Faro | Lagoa, Faro |
-| `LSB-01077` | 2685-252 | Lisboa | Loures |
-| `SPS-00010` | 4510-429 | São Pedro do Sul | Gondomar |
-
-- **Veredito:** suspeito — CP trocado ou localidade errada; CTT muda códigos e há grafias variantes.
-
-### [BAIXO] Metadados em falta
-
-- **Regra:** `usage_type`, `auth_methods` ou `brands_accepted` vazios no inventário estático.
-
-- **Afetados:** 4 campos em falta (4 `usage_type`, 0 `auth_methods`, 0 `brands_accepted`). Exemplos: `VCT-00079-01`, `VCT-00079-02`, `PTM-00089-01`, `PTM-00089-02`
-
-- **Evidência:**
-
-| id | campo em falta |
+| ponto | site |
 |---|---|
-| `VCT-00079-01` | usage_type |
-| `VCT-00079-02` | usage_type |
-| `PTM-00089-01` | usage_type |
-| `PTM-00089-02` | usage_type |
+| `ABT-00018-01` | `ABT-00018` |
+| `ABT-00018-02` | `ABT-00018` |
+| `FND-00013-01` | `FND-00013` |
+| `FND-00013-02` | `FND-00013` |
+| `ABT-00017-01` | `ABT-00017` |
+| `ABT-00017-02` | `ABT-00017` |
+| `FND-00014-01` | `FND-00014` |
+| `FND-00014-02` | `FND-00014` |
+| `GDM-00045-01` | `GDM-00045` |
+| `PRD-00020-01` | `PRD-00020` |
+| … | … | +53 restantes |
+- **Veredito:** médio — Combinação formato/tomada.
 
-- **Veredito:** suspeito (metadados) — preencher os campos; não afecta a física do ponto.
-
-[↑ índice](#indice)
-
-</details>
-
-<a id="opc-DTEI"></a>
-
-<details>
-<summary><b>DTEI — DTE, Instalacoes Especiais (85 sites, 200 pontos)</b> · 1 MÉDIO, 1 BAIXO</summary>
-
-### [MÉDIO] Potência sub-declarada
-
-- **Regra:** `ratio < 0.75` = derating suspeito ou erro de introdução; `ratio = declarada / esperada`.
-
-- **Afetados:** 43 de 200 linhas de conector (22%). Exemplos: `AGD-00020-01`, `AGD-00020`, `AGD-00020-02`
-
+### [MÉDIO] Física/Ohm — sub-declaração (ratio<0,75)
+- **Regra:** potência declarada < 0,75 × V×I / √3×V×I.
+- **Afetados:** 57 de 63 pontos (90.5%). Exemplos: `ABT-00018-01`, `ABT-00018-02`, `FND-00013-01`, `FND-00013-02`, `ABT-00017-01`, `ABT-00018`.
 - **Evidência:**
 
-| point_id | site | tomada | modo | V / A / P declarada / esperada (kW) | ratio |
+| ponto | site | tomada | modo | tensão / corrente / declarada / esperada | ratio |
 |---|---|---|---|---|---|
-| `AGD-00020-01` | `AGD-00020` | iec62196T2COMBO | mode4DC | 1000/150/60/150 | 0,40 |
-| `AGD-00020-02` | `AGD-00020` | iec62196T2COMBO | mode4DC | 1000/150/60/150 | 0,40 |
-| `AGD-00021-01` | `AGD-00021` | iec62196T2COMBO | mode4DC | 1000/150/60/150 | 0,40 |
-| `AGD-00021-02` | `AGD-00021` | iec62196T2COMBO | mode4DC | 1000/150/60/150 | 0,40 |
-| `AGD-00022-01` | `AGD-00022` | iec62196T2COMBO | mode4DC | 1000/150/60/150 | 0,40 |
-| `AGD-00023-01` | `AGD-00023` | iec62196T2COMBO | mode4DC | 1000/150/60/150 | 0,40 |
-| `AGD-00023-02` | `AGD-00023` | iec62196T2COMBO | mode4DC | 1000/150/60/150 | 0,40 |
-| `AGD-00026-01` | `AGD-00026` | iec62196T2COMBO | mode4DC | 1000/150/60/150 | 0,40 |
-| `AGD-00026-02` | `AGD-00026` | iec62196T2COMBO | mode4DC | 1000/150/60/150 | 0,40 |
-| `BMT-00008-02` | `BMT-00008` | iec62196T2COMBO | mode4DC | 1000/150/60/150 | 0,40 |
-| … | … | … | … | … | +33 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-DTEI)) |
+| `ABT-00018-01` | `ABT-00018` | iec62196T2COMBO | mode4DC | 1000 V / 500 A / 100000 W / 500000.0 W | 0.2 |
+| `ABT-00018-02` | `ABT-00018` | iec62196T2COMBO | mode4DC | 1000 V / 500 A / 100000 W / 500000.0 W | 0.2 |
+| `FND-00013-01` | `FND-00013` | iec62196T2COMBO | mode4DC | 1000 V / 500 A / 100000 W / 500000.0 W | 0.2 |
+| `FND-00013-02` | `FND-00013` | iec62196T2COMBO | mode4DC | 1000 V / 500 A / 100000 W / 500000.0 W | 0.2 |
+| `ABT-00017-01` | `ABT-00017` | iec62196T2COMBO | mode4DC | 1000 V / 500 A / 100000 W / 500000.0 W | 0.2 |
+| `ABT-00017-02` | `ABT-00017` | iec62196T2COMBO | mode4DC | 1000 V / 500 A / 100000 W / 500000.0 W | 0.2 |
+| `FND-00014-01` | `FND-00014` | iec62196T2COMBO | mode4DC | 1000 V / 500 A / 100000 W / 500000.0 W | 0.2 |
+| `FND-00014-02` | `FND-00014` | iec62196T2COMBO | mode4DC | 1000 V / 500 A / 100000 W / 500000.0 W | 0.2 |
+| `GDM-00045-01` | `GDM-00045` | iec62196T2COMBO | mode4DC | 1000 V / 500 A / 150000 W / 500000.0 W | 0.3 |
+| `PRD-00020-01` | `PRD-00020` | iec62196T2COMBO | mode4DC | 1000 V / 500 A / 150000 W / 500000.0 W | 0.3 |
+| … | … | +47 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-CEPS)) |
+- **Veredito:** médio — sub-declaração (ratio<0,75).
 
-- **Veredito:** suspeito — potência declarada muito abaixo de V×I; derating do posto partilhado ou número trocado. Rever contra a chapa do posto.
-
-### [BAIXO] Metadados em falta
-
-- **Regra:** `usage_type`, `auth_methods` ou `brands_accepted` vazios no inventário estático.
-
-- **Afetados:** 13 campos em falta (13 `usage_type`, 0 `auth_methods`, 0 `brands_accepted`). Exemplos: `CVL-00059-01`, `CVL-00059-02`, `CVL-00059-03`, `BMT-00006-01`
-
+### [MÉDIO] Localização — CP7↔localidade
+- **Regra:** CP4 com city divergente da moda.
+- **Afetados:** 6 de 63 pontos (9.5%). Exemplos: `FAR-00063-01`, `FAR-00063-02`, `LSB-01077-01`, `LSB-01077-02`, `SPS-00010-01`, `FAR-00063`.
 - **Evidência:**
 
-| id | campo em falta |
+| ponto | site |
 |---|---|
-| `CVL-00059-01` | usage_type |
-| `CVL-00059-02` | usage_type |
-| `CVL-00059-03` | usage_type |
-| `BMT-00006-01` | usage_type |
-| … | +9 restantes nos CSVs |
+| `FAR-00063-01` | `FAR-00063` |
+| `FAR-00063-02` | `FAR-00063` |
+| `LSB-01077-01` | `LSB-01077` |
+| `LSB-01077-02` | `LSB-01077` |
+| `SPS-00010-01` | `SPS-00010` |
+| `SPS-00010-02` | `SPS-00010` |
+- **Veredito:** médio — CP7↔localidade.
 
-- **Veredito:** suspeito (metadados) — preencher os campos; não afecta a física do ponto.
-
-[↑ índice](#indice)
-
-</details>
-
-<a id="opc-REMO"></a>
-
-<details>
-<summary><b>REMO — MOTA-ENGIL REMO CHARGING S.A (16 sites, 38 pontos)</b> · 1 MÉDIO</summary>
-
-### [MÉDIO] Potência sub-declarada
-
-- **Regra:** `ratio < 0.75` = derating suspeito ou erro de introdução; `ratio = declarada / esperada`.
-
-- **Afetados:** 38 de 38 linhas de conector (100%). Exemplos: `BCL-00050-01`, `BCL-00050`, `CNF-00009-01`, `CNF-00009`
-
+### [BAIXO] Metadados — usage_type em falta
+- **Regra:** usage_type nulo/fora do enum.
+- **Afetados:** 6 de 63 pontos (9.5%). Exemplos: `VCT-00079-01`, `VCT-00079-02`, `PTM-00089-01`, `PTM-00089-02`, `MTJ-00139-01`, `VCT-00079`.
 - **Evidência:**
 
-| point_id | site | tomada | modo | V / A / P declarada / esperada (kW) | ratio |
-|---|---|---|---|---|---|
-| `BCL-00050-01` | `BCL-00050` | iec62196T2COMBO | mode4DC | 1000/500/120/500 | 0,24 |
-| `CNF-00009-01` | `CNF-00009` | iec62196T2COMBO | mode4DC | 1000/250/60/250 | 0,24 |
-| `CNF-00009-02` | `CNF-00009` | iec62196T2COMBO | mode4DC | 1000/250/60/250 | 0,24 |
-| `CNF-00010-01` | `CNF-00010` | iec62196T2COMBO | mode4DC | 1000/400/120/400 | 0,30 |
-| `CNF-00010-02` | `CNF-00010` | iec62196T2COMBO | mode4DC | 1000/400/120/400 | 0,30 |
-| `GMR-00167-01` | `GMR-00167` | iec62196T2COMBO | mode4DC | 1000/500/150/500 | 0,30 |
-| `GMR-00167-02` | `GMR-00167` | iec62196T2COMBO | mode4DC | 1000/500/150/500 | 0,30 |
-| `MNC-00015-01` | `MNC-00015` | iec62196T2COMBO | mode4DC | 1000/500/150/500 | 0,30 |
-| `MNC-00015-02` | `MNC-00015` | iec62196T2COMBO | mode4DC | 1000/500/150/500 | 0,30 |
-| `VCT-00070-01` | `VCT-00070` | iec62196T2COMBO | mode4DC | 1000/500/150/500 | 0,30 |
-| … | … | … | … | … | +28 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-REMO)) |
-
-- **Veredito:** suspeito — potência declarada muito abaixo de V×I; derating do posto partilhado ou número trocado. Rever contra a chapa do posto.
-
-[↑ índice](#indice)
-
-</details>
-
-<a id="opc-ECOI"></a>
-
-<details>
-<summary><b>ECOI — Ecoinside - Soluções em Ecoeficiência e Sustentabilidade Lda (57 sites, 145 pontos)</b> · 2 BAIXO, 1 MÉDIO</summary>
-
-### [MÉDIO] Potência sub-declarada
-
-- **Regra:** `ratio < 0.75` = derating suspeito ou erro de introdução; `ratio = declarada / esperada`.
-
-- **Afetados:** 25 de 145 linhas de conector (17%). Exemplos: `ACN-00013-01`, `ACN-00013`, `ACN-00013-03`
-
-- **Evidência:**
-
-| point_id | site | tomada | modo | V / A / P declarada / esperada (kW) | ratio |
-|---|---|---|---|---|---|
-| `ACN-00013-01` | `ACN-00013` | iec62196T2COMBO | mode4DC | 920/250/60/230 | 0,26 |
-| `ACN-00013-03` | `ACN-00013` | iec62196T2COMBO | mode4DC | 920/250/60/230 | 0,26 |
-| `MGR-00025-01` | `MGR-00025` | iec62196T2COMBO | mode4DC | 1000/250/100/250 | 0,40 |
-| `MGR-00025-02` | `MGR-00025` | iec62196T2COMBO | mode4DC | 1000/250/100/250 | 0,40 |
-| `RMZ-00003-01` | `RMZ-00003` | iec62196T2COMBO | mode4DC | 920/150/60/138 | 0,43 |
-| `RMZ-00003-02` | `RMZ-00003` | iec62196T2COMBO | mode4DC | 920/150/60/138 | 0,43 |
-| `CLD-00025-01` | `CLD-00025` | iec62196T2COMBO | mode4DC | 920/125/60/115 | 0,52 |
-| `CLD-00025-02` | `CLD-00025` | iec62196T2COMBO | mode4DC | 920/125/60/115 | 0,52 |
-| `STB-00059-01` | `STB-00059` | iec62196T2COMBO | mode4DC | 920/125/60/115 | 0,52 |
-| `STB-00059-02` | `STB-00059` | iec62196T2COMBO | mode4DC | 920/125/60/115 | 0,52 |
-| … | … | … | … | … | +15 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-ECOI)) |
-
-- **Veredito:** suspeito — potência declarada muito abaixo de V×I; derating do posto partilhado ou número trocado. Rever contra a chapa do posto.
-
-### [BAIXO] Fragmentação do nome do operador
-
-- **Regra:** Mesmo `operator_id` com várias grafias de `operator_name`; parte a identidade em relatórios e no tracker.
-
-- **Afetados:** 2 grafias; 2 de 57 sites usam uma grafia não modal. Exemplos: `RMZ-00003`, `RMZ-00004`, `MTS-00045`, `VLR-00002`
-
-- **Evidência:**
-
-| variante de nome | sites |
+| ponto | site |
 |---|---|
-| ECOINSIDE | 2 |
-| Ecoinside - Soluções em Ecoeficiência e Sustentabilidade Lda | 55 |
-| … | +55 restantes nos CSVs |
+| `VCT-00079-01` | `VCT-00079` |
+| `VCT-00079-02` | `VCT-00079` |
+| `PTM-00089-01` | `PTM-00089` |
+| `PTM-00089-02` | `PTM-00089` |
+| `MTJ-00139-01` | `MTJ-00139` |
+| `MTJ-00139-02` | `MTJ-00139` |
+- **Veredito:** baixo — usage_type em falta.
 
-- **Veredito:** suspeito (identidade) — fixar uma grafia única por OPC; não é erro de dados do site.
+[↑ índice](#indice)
 
-### [BAIXO] Metadados em falta
+</details>
 
-- **Regra:** `usage_type`, `auth_methods` ou `brands_accepted` vazios no inventário estático.
+<a id="opc-IBRD"></a>
 
-- **Afetados:** 6 campos em falta (6 `usage_type`, 0 `auth_methods`, 0 `brands_accepted`). Exemplos: `ACN-00016-01`, `ACN-00016-02`, `ACN-00017-01`, `ACN-00017-02`
+<details>
+<summary><b>IBRD — Iberdrola Clientes Portugal, Unipessoal, Lda (189 sites, 371 pontos)</b> · 3 MÉDIO, 2 BAIXO, 1 CRÍTICO</summary>
 
+### [CRÍTICO] Duplicados — point_id
+- **Regra:** point_id duplicado no inventário.
+- **Afetados:** 10 de 376 pontos (2.7%). Exemplos: `AGD-00017-01`, `AMT-00023-01`, `AMT-00024-01`, `AGD-00017`, `AMT-00023`, `AMT-00024`.
 - **Evidência:**
 
-| id | campo em falta |
+| ponto | site |
 |---|---|
-| `ACN-00016-01` | usage_type |
-| `ACN-00016-02` | usage_type |
-| `ACN-00017-01` | usage_type |
-| `ACN-00017-02` | usage_type |
-| … | +2 restantes nos CSVs |
+| `AGD-00017-01` | `AGD-00017` |
+| `AGD-00017-01` | `AGD-00017` |
+| `AMT-00023-01` | `AMT-00023` |
+| `AMT-00023-01` | `AMT-00023` |
+| `AMT-00024-01` | `AMT-00024` |
+| `AMT-00024-01` | `AMT-00024` |
+| `VLP-00004-01` | `VLP-00004` |
+| `VLP-00004-01` | `VLP-00004` |
+| `BTL-00010-01` | `BTL-00010` |
+| `BTL-00010-01` | `BTL-00010` |
+- **Veredito:** crítico — point_id.
 
-- **Veredito:** suspeito (metadados) — preencher os campos; não afecta a física do ponto.
-
-[↑ índice](#indice)
-
-</details>
-
-<a id="opc-ZUND"></a>
-
-<details>
-<summary><b>ZUND — Grupo Easycharger, SL (14 sites, 27 pontos)</b> · 1 MÉDIO, 1 BAIXO</summary>
-
-### [MÉDIO] Potência sub-declarada
-
-- **Regra:** `ratio < 0.75` = derating suspeito ou erro de introdução; `ratio = declarada / esperada`.
-
-- **Afetados:** 2 de 27 linhas de conector (7%). Exemplos: `BRG-00085-01`, `BRG-00085`, `BRG-00085-02`
-
+### [MÉDIO] Combinação formato/tomada
+- **Regra:** connector_format incompatível com charging_mode.
+- **Afetados:** 45 de 376 pontos (12.0%). Exemplos: `MOBI-VPA-00001-01`, `MOBI-VPA-00001-02`, `VCT-00020-01`, `VCT-00020-02`, `OVR-00012-01`, `MOBI-VPA-00001`.
 - **Evidência:**
 
-| point_id | site | tomada | modo | V / A / P declarada / esperada (kW) | ratio |
-|---|---|---|---|---|---|
-| `BRG-00085-01` | `BRG-00085` | iec62196T2COMBO | mode4DC | 1000/500/23/500 | 0,05 |
-| `BRG-00085-02` | `BRG-00085` | iec62196T2COMBO | mode4DC | 1000/500/23/500 | 0,05 |
-
-- **Veredito:** suspeito — potência declarada muito abaixo de V×I; derating do posto partilhado ou número trocado. Rever contra a chapa do posto.
-
-### [BAIXO] Metadados em falta
-
-- **Regra:** `usage_type`, `auth_methods` ou `brands_accepted` vazios no inventário estático.
-
-- **Afetados:** 24 campos em falta (24 `usage_type`, 0 `auth_methods`, 0 `brands_accepted`). Exemplos: `EPS-00041-01`, `EPS-00041-02`, `EPS-00042-01`, `EPS-00042-02`
-
-- **Evidência:**
-
-| id | campo em falta |
+| ponto | site |
 |---|---|
-| `EPS-00041-01` | usage_type |
-| `EPS-00041-02` | usage_type |
-| `EPS-00042-01` | usage_type |
-| `EPS-00042-02` | usage_type |
-| … | +20 restantes nos CSVs |
+| `MOBI-VPA-00001-01` | `MOBI-VPA-00001` |
+| `MOBI-VPA-00001-02` | `MOBI-VPA-00001` |
+| `VCT-00020-01` | `VCT-00020` |
+| `VCT-00020-02` | `VCT-00020` |
+| `OVR-00012-01` | `OVR-00012` |
+| `OVR-00012-02` | `OVR-00012` |
+| `CTB-00016-01` | `CTB-00016` |
+| `CTB-00016-02` | `CTB-00016` |
+| `LRA-00018-01` | `LRA-00018` |
+| `LRA-00018-02` | `LRA-00018` |
+| … | … | +35 restantes |
+- **Veredito:** médio — Combinação formato/tomada.
 
-- **Veredito:** suspeito (metadados) — preencher os campos; não afecta a física do ponto.
-
-[↑ índice](#indice)
-
-</details>
-
-<a id="opc-ENBL"></a>
-
-<details>
-<summary><b>ENBL — Enable Mobility Solutions, S.A. (24 sites, 53 pontos)</b> · 1 MÉDIO</summary>
-
-### [MÉDIO] Potência sub-declarada
-
-- **Regra:** `ratio < 0.75` = derating suspeito ou erro de introdução; `ratio = declarada / esperada`.
-
-- **Afetados:** 24 de 53 linhas de conector (45%). Exemplos: `AVR-00101-01`, `AVR-00101`, `AVR-00101-02`
-
+### [MÉDIO] Física/Ohm — sub-declaração (ratio<0,75)
+- **Regra:** potência declarada < 0,75 × V×I / √3×V×I.
+- **Afetados:** 13 de 376 pontos (3.5%). Exemplos: `MTS-00037-01`, `MTS-00037-02`, `IDN-00004-02`, `VPA-00005-01`, `VPA-00005-02`, `MTS-00037`.
 - **Evidência:**
 
-| point_id | site | tomada | modo | V / A / P declarada / esperada (kW) | ratio |
+| ponto | site | tomada | modo | tensão / corrente / declarada / esperada | ratio |
 |---|---|---|---|---|---|
-| `AVR-00101-01` | `AVR-00101` | iec62196T2COMBO | mode4DC | 1000/375/150/375 | 0,40 |
-| `AVR-00101-02` | `AVR-00101` | iec62196T2COMBO | mode4DC | 1000/375/150/375 | 0,40 |
-| `AVR-00102-01` | `AVR-00102` | iec62196T2COMBO | mode4DC | 1000/375/150/375 | 0,40 |
-| `AVR-00102-02` | `AVR-00102` | iec62196T2COMBO | mode4DC | 1000/375/150/375 | 0,40 |
-| `AVR-00103-01` | `AVR-00103` | iec62196T2COMBO | mode4DC | 1000/375/150/375 | 0,40 |
-| `AVR-00103-02` | `AVR-00103` | iec62196T2COMBO | mode4DC | 1000/375/150/375 | 0,40 |
-| `AVR-00104-01` | `AVR-00104` | iec62196T2COMBO | mode4DC | 1000/375/150/375 | 0,40 |
-| `AVR-00104-02` | `AVR-00104` | iec62196T2COMBO | mode4DC | 1000/375/150/375 | 0,40 |
-| `ODV-00054-01` | `ODV-00054` | iec62196T2COMBO | mode4DC | 1000/350/150/350 | 0,43 |
-| `ODV-00054-02` | `ODV-00054` | iec62196T2COMBO | mode4DC | 1000/350/150/350 | 0,43 |
-| … | … | … | … | … | +14 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-ENBL)) |
+| `MTS-00037-01` | `MTS-00037` | chademo | mode4DC | 500 V / 120 A / 20000 W / 60000.0 W | 0.333 |
+| `MTS-00037-02` | `MTS-00037` | iec62196T2COMBO | mode4DC | 500 V / 120 A / 20000 W / 60000.0 W | 0.333 |
+| `IDN-00004-02` | `IDN-00004` | iec62196T2COMBO | mode4DC | 1000 V / 300 A / 180000 W / 300000.0 W | 0.6 |
+| `VPA-00005-01` | `VPA-00005` | iec62196T2COMBO | mode4DC | 1000 V / 150 A / 50000 W / 150000.0 W | 0.333 |
+| `VPA-00005-02` | `VPA-00005` | iec62196T2COMBO | mode4DC | 1000 V / 150 A / 50000 W / 150000.0 W | 0.333 |
+| `VNG-00207-01` | `VNG-00207` | iec62196T2COMBO | mode4DC | 1000 V / 150 A / 50000 W / 150000.0 W | 0.333 |
+| `VNG-00207-02` | `VNG-00207` | iec62196T2COMBO | mode4DC | 1000 V / 150 A / 50000 W / 150000.0 W | 0.333 |
+| `SNT-00207-02` | `SNT-00207` | iec62196T2COMBO | mode4DC | 1000 V / 300 A / 180000 W / 300000.0 W | 0.6 |
+| `LMG-00027-01` | `LMG-00027` | iec62196T2COMBO | mode4DC | 1000 V / 150 A / 50000 W / 150000.0 W | 0.333 |
+| `LMG-00027-02` | `LMG-00027` | iec62196T2COMBO | mode4DC | 1000 V / 150 A / 50000 W / 150000.0 W | 0.333 |
+| … | … | +3 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-IBRD)) |
+- **Veredito:** médio — sub-declaração (ratio<0,75).
 
-- **Veredito:** suspeito — potência declarada muito abaixo de V×I; derating do posto partilhado ou número trocado. Rever contra a chapa do posto.
-
-[↑ índice](#indice)
-
-</details>
-
-<a id="opc-SEGM"></a>
-
-<details>
-<summary><b>SEGM — SEGMA - Serviços de Engenharia Gestão e Manutenção Lda (73 sites, 134 pontos)</b> · 1 BAIXO</summary>
-
-### [BAIXO] Fragmentação do nome do operador
-
-- **Regra:** Mesmo `operator_id` com várias grafias de `operator_name`; parte a identidade em relatórios e no tracker.
-
-- **Afetados:** 3 grafias; 14 de 73 sites usam uma grafia não modal. Exemplos: `AGH-00003`, `PDL-00007`, `VFC-00001`, `VPT-00004`
-
+### [MÉDIO] Localização — CP7↔localidade
+- **Regra:** CP4 com city divergente da moda.
+- **Afetados:** 10 de 376 pontos (2.7%). Exemplos: `GMR-00019-01`, `GMR-00019-02`, `OER-00132-01`, `OER-00132-02`, `FLG-00004-01`, `GMR-00019`.
 - **Evidência:**
 
-| variante de nome | sites |
+| ponto | site |
 |---|---|
-| SEGMA - Serviços de Engenharia Gestão e Manutenção Lda | 59 |
-| SEGMA – Serviços de Engenharia Gestão e Manutenção Lda | 5 |
-| Segma | 9 |
-| … | +70 restantes nos CSVs |
+| `GMR-00019-01` | `GMR-00019` |
+| `GMR-00019-02` | `GMR-00019` |
+| `OER-00132-01` | `OER-00132` |
+| `OER-00132-02` | `OER-00132` |
+| `FLG-00004-01` | `FLG-00004` |
+| `FLG-00004-02` | `FLG-00004` |
+| `GDM-00037-01` | `GDM-00037` |
+| `GDM-00037-02` | `GDM-00037` |
+| `OER-00257-01` | `OER-00257` |
+| `OER-00257-02` | `OER-00257` |
+- **Veredito:** médio — CP7↔localidade.
 
-- **Veredito:** suspeito (identidade) — fixar uma grafia única por OPC; não é erro de dados do site.
+### [BAIXO] Metadados — usage_type em falta
+- **Regra:** usage_type nulo/fora do enum.
+- **Afetados:** 22 de 376 pontos (5.9%). Exemplos: `BRG-00171-01`, `BRG-00171-02`, `MTA-00102-01`, `MTA-00102-02`, `PNF-00065-01`, `BRG-00171`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `BRG-00171-01` | `BRG-00171` |
+| `BRG-00171-02` | `BRG-00171` |
+| `MTA-00102-01` | `MTA-00102` |
+| `MTA-00102-02` | `MTA-00102` |
+| `PNF-00065-01` | `PNF-00065` |
+| `PNF-00065-02` | `PNF-00065` |
+| `BCL-00051-01` | `BCL-00051` |
+| `BCL-00051-02` | `BCL-00051` |
+| `VRL-00065-01` | `VRL-00065` |
+| `VRL-00065-02` | `VRL-00065` |
+| … | … | +12 restantes |
+- **Veredito:** baixo — usage_type em falta.
+
+### [BAIXO] Chaves eMI3 — código local disperso
+- **Regra:** mesmo <LOCAL> em cidades/CP4 dispersos.
+- **Afetados:** 10 de 376 pontos (2.7%). Exemplos: `MOBI-CHV-00002-01`, `MOBI-CHV-00002-02`, `MOBI-CHV-00003-01`, `MOBI-CHV-00003-02`, `MOBI-VPA-00001-01`, `MOBI-CHV-00002`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `MOBI-CHV-00002-01` | `MOBI-CHV-00002` |
+| `MOBI-CHV-00002-02` | `MOBI-CHV-00002` |
+| `MOBI-CHV-00003-01` | `MOBI-CHV-00003` |
+| `MOBI-CHV-00003-02` | `MOBI-CHV-00003` |
+| `MOBI-VPA-00001-01` | `MOBI-VPA-00001` |
+| `MOBI-VPA-00001-02` | `MOBI-VPA-00001` |
+| `CBR-00112-01` | `CBR-00112` |
+| `CBR-00112-02` | `CBR-00112` |
+| `CBR-00117-01` | `CBR-00117` |
+| `CBR-00117-02` | `CBR-00117` |
+- **Veredito:** baixo — código local disperso.
 
 [↑ índice](#indice)
 
 </details>
 
-<a id="opc-LOGI"></a>
+<a id="opc-ACCI"></a>
 
 <details>
-<summary><b>LOGI — uCharge (26 sites, 35 pontos)</b> · 2 MÉDIO</summary>
+<summary><b>ACCI — ACCIONA RECARGA PORTUGAL,UNIPESSOAL LDA (14 sites, 25 pontos)</b> · 3 MÉDIO, 3 BAIXO, 1 CRÍTICO</summary>
 
-### [MÉDIO] Potência sub-declarada
-
-- **Regra:** `ratio < 0.75` = derating suspeito ou erro de introdução; `ratio = declarada / esperada`.
-
-- **Afetados:** 2 de 35 linhas de conector (6%). Exemplos: `CSC-00126-01`, `CSC-00126`, `CSC-00126-02`
-
+### [CRÍTICO] Duplicados — point_id
+- **Regra:** point_id duplicado no inventário.
+- **Afetados:** 22 de 25 pontos (88.0%). Exemplos: `17`, `19`, `20`, `29`, `30`, `LSB-01305`.
 - **Evidência:**
 
-| point_id | site | tomada | modo | V / A / P declarada / esperada (kW) | ratio |
+| ponto | site |
+|---|---|
+| `17` | `LSB-01305` |
+| `19` | `PRT-00361` |
+| `20` | `LSB-01319` |
+| `29` | `VRL-00061` |
+| `30` | `VRL-00061` |
+| `21` | `VRL-00062` |
+| `22` | `VRL-00062` |
+| `27` | `VRL-00063` |
+| `28` | `VRL-00063` |
+| `40` | `VRL-00064` |
+| … | … | +12 restantes |
+- **Veredito:** crítico — point_id.
+
+### [MÉDIO] Combinação formato/tomada
+- **Regra:** connector_format incompatível com charging_mode.
+- **Afetados:** 13 de 25 pontos (52.0%). Exemplos: `10`, `11`, `17`, `19`, `20`, `GRD-00044`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `10` | `GRD-00044` |
+| `11` | `GRD-00044` |
+| `17` | `LSB-01305` |
+| `19` | `PRT-00361` |
+| `20` | `LSB-01319` |
+| `29` | `VRL-00061` |
+| `30` | `VRL-00061` |
+| `21` | `VRL-00062` |
+| `22` | `VRL-00062` |
+| `27` | `VRL-00063` |
+| … | … | +3 restantes |
+- **Veredito:** médio — Combinação formato/tomada.
+
+### [MÉDIO] Física/Ohm — sub-declaração (ratio<0,75)
+- **Regra:** potência declarada < 0,75 × V×I / √3×V×I.
+- **Afetados:** 12 de 25 pontos (48.0%). Exemplos: `11`, `17`, `19`, `20`, `29`, `GRD-00044`.
+- **Evidência:**
+
+| ponto | site | tomada | modo | tensão / corrente / declarada / esperada | ratio |
 |---|---|---|---|---|---|
-| `CSC-00126-01` | `CSC-00126` | iec62196T2COMBO | mode4DC | 1000/375/150/375 | 0,40 |
-| `CSC-00126-02` | `CSC-00126` | iec62196T2COMBO | mode4DC | 1000/375/150/375 | 0,40 |
+| `11` | `GRD-00044` | chademo | mode4DC | 400 V / 250 A / 50000 W / 100000.0 W | 0.5 |
+| `17` | `LSB-01305` | chademo | mode4DC | 400 V / 250 A / 50000 W / 100000.0 W | 0.5 |
+| `19` | `PRT-00361` | iec62196T2COMBO | mode4DC | 920 V / 375 A / 175000 W / 345000.0 W | 0.507 |
+| `20` | `LSB-01319` | iec62196T2COMBO | mode4DC | 920 V / 375 A / 175000 W / 345000.0 W | 0.507 |
+| `29` | `VRL-00061` | iec62196T2COMBO | mode4DC | 1000 V / 215 A / 150000 W / 215000.0 W | 0.698 |
+| `30` | `VRL-00061` | iec62196T2COMBO | mode4DC | 1000 V / 215 A / 150000 W / 215000.0 W | 0.698 |
+| `21` | `VRL-00062` | iec62196T2COMBO | mode4DC | 1000 V / 300 A / 200000 W / 300000.0 W | 0.667 |
+| `22` | `VRL-00062` | iec62196T2COMBO | mode4DC | 1000 V / 300 A / 200000 W / 300000.0 W | 0.667 |
+| `27` | `VRL-00063` | iec62196T2COMBO | mode4DC | 1000 V / 215 A / 150000 W / 215000.0 W | 0.698 |
+| `28` | `VRL-00063` | iec62196T2COMBO | mode4DC | 1000 V / 215 A / 150000 W / 215000.0 W | 0.698 |
+| … | … | +2 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-ACCI)) |
+- **Veredito:** médio — sub-declaração (ratio<0,75).
 
-- **Veredito:** suspeito — potência declarada muito abaixo de V×I; derating do posto partilhado ou número trocado. Rever contra a chapa do posto.
-
-### [MÉDIO] Localidade divergente do CP7 (CP4→cidade modal)
-
-- **Regra:** Agrupa-se por CP4 (4 primeiros dígitos) e toma-se a `city` modal dos CP4 com ≥5 sites; par (CP4 → `city`) divergente = suspeito.
-
-- **Afetados:** 10 sites. Exemplos: `MTS-00126`, `MTS-00125`, `LSB-00613`, `OER-00180`
-
+### [MÉDIO] Operador — grafias fragmentadas
+- **Regra:** mesmo operator_id com vários operator_name.
+- **Afetados:** 5 de 25 pontos (20.0%). Exemplos: `10`, `11`, `12`, `17`, `19`, `GRD-00044`.
 - **Evidência:**
 
-| site | postcode | city | cidade modal do CP4 |
-|---|---|---|---|
-| `MTS-00126` | 7000-661 | Matosinhos | Évora |
-| `MTS-00125` | 7000-661 | Matosinhos | Évora |
-| `LSB-00613` | 7000-661 | Lisboa | Évora |
-| `OER-00180` | 7000-661 | Oeiras | Évora |
-| `PRT-00215` | 7000-661 | Porto | Évora |
-| `OER-00181` | 7000-661 | Oeiras | Évora |
-| `MTS-00127` | 7000-661 | Matosinhos | Évora |
-| `LSB-00614` | 7000-661 | Lisboa | Évora |
-| `OER-00182` | 7000-661 | Oeiras | Évora |
-| `OER-00183` | 7000-661 | Oeiras | Évora |
+| ponto | site |
+|---|---|
+| `10` | `GRD-00044` |
+| `11` | `GRD-00044` |
+| `12` | `GRD-00044` |
+| `17` | `LSB-01305` |
+| `19` | `PRT-00361` |
+- **Veredito:** médio — grafias fragmentadas.
 
-- **Veredito:** suspeito — CP trocado ou localidade errada; CTT muda códigos e há grafias variantes.
+### [BAIXO] Chaves eMI3 — códigos locais mistos
+- **Regra:** tomadas do mesmo site com <LOCAL> diferentes.
+- **Afetados:** 21 de 25 pontos (84.0%). Exemplos: `10`, `11`, `12`, `29`, `30`, `GRD-00044`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `10` | `GRD-00044` |
+| `11` | `GRD-00044` |
+| `12` | `GRD-00044` |
+| `29` | `VRL-00061` |
+| `30` | `VRL-00061` |
+| `21` | `VRL-00062` |
+| `22` | `VRL-00062` |
+| `27` | `VRL-00063` |
+| `28` | `VRL-00063` |
+| `40` | `VRL-00064` |
+| … | … | +11 restantes |
+- **Veredito:** baixo — códigos locais mistos.
+
+### [BAIXO] Metadados — usage_type em falta
+- **Regra:** usage_type nulo/fora do enum.
+- **Afetados:** 11 de 25 pontos (44.0%). Exemplos: `48`, `49`, `46`, `44`, `45`, `CRS-00005`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `48` | `CRS-00005` |
+| `49` | `CRS-00005` |
+| `46` | `SJP-00004` |
+| `44` | `SJP-00005` |
+| `45` | `SJP-00005` |
+| `42` | `CRS-00006` |
+| `43` | `CRS-00006` |
+| `52` | `TBU-00011` |
+| `53` | `TBU-00011` |
+| `50` | `TBU-00012` |
+| … | … | +1 restantes |
+- **Veredito:** baixo — usage_type em falta.
+
+### [BAIXO] Localização — formato CP7
+- **Regra:** postcode fora de NNNN-NNN.
+- **Afetados:** 4 de 25 pontos (16.0%). Exemplos: `48`, `49`, `42`, `43`, `CRS-00005`, `CRS-00006`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `48` | `CRS-00005` |
+| `49` | `CRS-00005` |
+| `42` | `CRS-00006` |
+| `43` | `CRS-00006` |
+- **Veredito:** baixo — formato CP7.
+
+[↑ índice](#indice)
+
+</details>
+
+<a id="opc-MOON"></a>
+
+<details>
+<summary><b>MOON — Siva - Sociedade de Importação de Veículos Automóveis / (sub-CEME da Iberdola) (26 sites, 49 pontos)</b> · 3 MÉDIO, 2 CRÍTICO, 1 BAIXO</summary>
+
+### [CRÍTICO] Física/Ohm — sobre-declaração (ratio>1,25)
+- **Regra:** potência declarada > 1,25 × V×I (monofásico) / √3×V×I (mode3AC3p).
+- **Afetados:** 8 de 52 pontos (15.4%). Exemplos: `AMT-00007-1`, `STC-00007-1`, `PRT-00160-01`, `MOBI-CTB-00004-01`, `MOBI-PRT-00089-01`, `AMT-00007`.
+- **Evidência:**
+
+| ponto | site | tomada | modo | tensão / corrente / declarada / esperada | ratio |
+|---|---|---|---|---|---|
+| `AMT-00007-1` | `AMT-00007` | iec62196T2COMBO | mode4DC | 400 V / 32 A / 22000 W / 12800.0 W | 1.719 |
+| `STC-00007-1` | `STC-00007` | iec62196T2COMBO | mode4DC | 500 V / 32 A / 22000 W / 16000.0 W | 1.375 |
+| `PRT-00160-01` | `PRT-00160` | iec62196T2COMBO | mode4DC | 500 V / 250 A / 180000 W / 125000.0 W | 1.44 |
+| `MOBI-CTB-00004-01` | `MOBI-CTB-00004` | iec62196T2COMBO | mode4DC | 400 V / 40 A / 24000 W / 16000.0 W | 1.5 |
+| `MOBI-PRT-00089-01` | `MOBI-PRT-00089` | iec62196T2COMBO | mode4DC | 400 V / 125 A / 75000 W / 50000.0 W | 1.5 |
+| `MOBI-PRT-00089-02` | `MOBI-PRT-00089` | chademo | mode4DC | 400 V / 125 A / 75000 W / 50000.0 W | 1.5 |
+| `AZB-00016-26510829` | `AZB-00016` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22079 W / 12747.9 W | 1.732 |
+| `AZB-00021-27398580` | `AZB-00021` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22079 W / 12747.9 W | 1.732 |
+- **Veredito:** crítico — sobre-declaração (ratio>1,25).
+
+### [CRÍTICO] Duplicados — point_id
+- **Regra:** point_id duplicado no inventário.
+- **Afetados:** 6 de 52 pontos (11.5%). Exemplos: `LSB-00704-01`, `AZB-00021-27398579`, `LRS-00152-01`, `LSB-00704`, `AZB-00021`, `LRS-00152`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `LSB-00704-01` | `LSB-00704` |
+| `LSB-00704-01` | `LSB-00704` |
+| `AZB-00021-27398579` | `AZB-00021` |
+| `AZB-00021-27398579` | `AZB-00021` |
+| `LRS-00152-01` | `LRS-00152` |
+| `LRS-00152-01` | `LRS-00152` |
+- **Veredito:** crítico — point_id.
+
+### [MÉDIO] Combinação formato/tomada
+- **Regra:** connector_format incompatível com charging_mode.
+- **Afetados:** 30 de 52 pontos (57.7%). Exemplos: `LRA-00047-01`, `LRA-00047-02`, `LRS-00060-01`, `LRS-00060-02`, `AMT-00007-1`, `LRA-00047`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `LRA-00047-01` | `LRA-00047` |
+| `LRA-00047-02` | `LRA-00047` |
+| `LRS-00060-01` | `LRS-00060` |
+| `LRS-00060-02` | `LRS-00060` |
+| `AMT-00007-1` | `AMT-00007` |
+| `STC-00007-1` | `STC-00007` |
+| `LSB-00409-01` | `LSB-00409` |
+| `LSB-00409-02` | `LSB-00409` |
+| `LRA-00046-01` | `LRA-00046` |
+| `PRT-00160-01` | `PRT-00160` |
+| … | … | +20 restantes |
+- **Veredito:** médio — Combinação formato/tomada.
+
+### [MÉDIO] Física/Ohm — sub-declaração (ratio<0,75)
+- **Regra:** potência declarada < 0,75 × V×I / √3×V×I.
+- **Afetados:** 10 de 52 pontos (19.2%). Exemplos: `LRA-00047-01`, `LRA-00047-02`, `LRA-00047-03`, `PNF-00017-02`, `PNF-00017-03`, `LRA-00047`.
+- **Evidência:**
+
+| ponto | site | tomada | modo | tensão / corrente / declarada / esperada | ratio |
+|---|---|---|---|---|---|
+| `LRA-00047-01` | `LRA-00047` | iec62196T2COMBO | mode4DC | 500 V / 250 A / 75000 W / 125000.0 W | 0.6 |
+| `LRA-00047-02` | `LRA-00047` | chademo | mode4DC | 500 V / 250 A / 75000 W / 125000.0 W | 0.6 |
+| `LRA-00047-03` | `LRA-00047` | iec62196T2 | mode3AC3p | 400 V / 63 A / 22000 W / 43647.7 W | 0.504 |
+| `PNF-00017-02` | `PNF-00017` | chademo | mode4DC | 500 V / 250 A / 75000 W / 125000.0 W | 0.6 |
+| `PNF-00017-03` | `PNF-00017` | iec62196T2 | mode3AC3p | 400 V / 63 A / 22000 W / 43647.7 W | 0.504 |
+| `SEI-00010-01` | `SEI-00010` | iec62196T2 | mode3AC3p | 400 V / 64 A / 30000 W / 44340.5 W | 0.677 |
+| `LSB-00703-01` | `LSB-00703` | iec62196T2COMBO | mode4DC | 1000 V / 350 A / 180000 W / 350000.0 W | 0.514 |
+| `LSB-00704-01` | `LSB-00704` | iec62196T2COMBO | mode4DC | 1000 V / 500 A / 75000 W / 500000.0 W | 0.15 |
+| `LSB-00704-01` | `LSB-00704` | chademo | mode4DC | 500 V / 200 A / 63000 W / 100000.0 W | 0.63 |
+| `LRS-00152-02` | `LRS-00152` | iec62196T2 | mode3AC3p | 400 V / 64 A / 22000 W / 44340.5 W | 0.496 |
+- **Veredito:** médio — sub-declaração (ratio<0,75).
+
+### [MÉDIO] Chaves eMI3 — sufixo de tomada
+- **Regra:** último segmento de point_external_id ≠ point_id (int-normalizado).
+- **Afetados:** 5 de 52 pontos (9.6%). Exemplos: `AZB-00016-26510828`, `AZB-00016-26510829`, `AZB-00021-27398579`, `AZB-00021-27398580`, `AZB-00016`, `AZB-00021`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `AZB-00016-26510828` | `AZB-00016` |
+| `AZB-00016-26510829` | `AZB-00016` |
+| `AZB-00021-27398579` | `AZB-00021` |
+| `AZB-00021-27398579` | `AZB-00021` |
+| `AZB-00021-27398580` | `AZB-00021` |
+- **Veredito:** médio — sufixo de tomada.
+
+### [BAIXO] Chaves eMI3 — código local disperso
+- **Regra:** mesmo <LOCAL> em cidades/CP4 dispersos.
+- **Afetados:** 6 de 52 pontos (11.5%). Exemplos: `CBR-00053-01`, `CBR-00053-02`, `MOBI-CTB-00004-01`, `MOBI-PRT-00089-01`, `MOBI-PRT-00089-02`, `CBR-00053`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `CBR-00053-01` | `CBR-00053` |
+| `CBR-00053-02` | `CBR-00053` |
+| `MOBI-CTB-00004-01` | `MOBI-CTB-00004` |
+| `MOBI-PRT-00089-01` | `MOBI-PRT-00089` |
+| `MOBI-PRT-00089-02` | `MOBI-PRT-00089` |
+| `MOBI-PRT-00089-03` | `MOBI-PRT-00089` |
+- **Veredito:** baixo — código local disperso.
+
+[↑ índice](#indice)
+
+</details>
+
+<a id="opc-KLCS"></a>
+
+<details>
+<summary><b>KLCS — Kilometer Low Cost II Serviços, SA (88 sites, 109 pontos)</b> · 3 CRÍTICO, 3 MÉDIO, 2 BAIXO</summary>
+
+### [CRÍTICO] Física/Ohm — sobre-declaração (ratio>1,25)
+- **Regra:** potência declarada > 1,25 × V×I (monofásico) / √3×V×I (mode3AC3p).
+- **Afetados:** 4 de 111 pontos (3.6%). Exemplos: `331`, `332`, `LSB-01461`, `LSB-01483`.
+- **Evidência:**
+
+| ponto | site | tomada | modo | tensão / corrente / declarada / esperada | ratio |
+|---|---|---|---|---|---|
+| `331` | `LSB-01461` | iec62196T2 | mode3AC3p | 230 V / 11 A / 7400 W / 4382.1 W | 1.689 |
+| `332` | `LSB-01461` | iec62196T2 | mode3AC3p | 230 V / 11 A / 7400 W / 4382.1 W | 1.689 |
+| `331` | `LSB-01483` | iec62196T2 | mode3AC3p | 230 V / 11 A / 7400 W / 4382.1 W | 1.689 |
+| `332` | `LSB-01483` | iec62196T2 | mode3AC3p | 230 V / 11 A / 7400 W / 4382.1 W | 1.689 |
+- **Veredito:** crítico — sobre-declaração (ratio>1,25).
+
+### [CRÍTICO] Duplicados — point_id
+- **Regra:** point_id duplicado no inventário.
+- **Afetados:** 4 de 111 pontos (3.6%). Exemplos: `331`, `332`, `LSB-01461`, `LSB-01483`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `331` | `LSB-01461` |
+| `332` | `LSB-01461` |
+| `331` | `LSB-01483` |
+| `332` | `LSB-01483` |
+- **Veredito:** crítico — point_id.
+
+### [CRÍTICO] Duplicados — point_external_id
+- **Regra:** mesmo point_external_id em sites diferentes.
+- **Afetados:** 4 de 111 pontos (3.6%). Exemplos: `331`, `332`, `LSB-01461`, `LSB-01483`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `331` | `LSB-01461` |
+| `332` | `LSB-01461` |
+| `331` | `LSB-01483` |
+| `332` | `LSB-01483` |
+- **Veredito:** crítico — point_external_id.
+
+### [MÉDIO] Combinação formato/tomada
+- **Regra:** connector_format incompatível com charging_mode.
+- **Afetados:** 17 de 111 pontos (15.3%). Exemplos: `CLB-00011-01`, `OER-00213-01`, `OER-00212-01`, `VCT-00043-01`, `VCT-00043-02`, `CLB-00011`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `CLB-00011-01` | `CLB-00011` |
+| `OER-00213-01` | `OER-00213` |
+| `OER-00212-01` | `OER-00212` |
+| `VCT-00043-01` | `VCT-00043` |
+| `VCT-00043-02` | `VCT-00043` |
+| `CLB-00013-01` | `CLB-00013` |
+| `CLB-00013-02` | `CLB-00013` |
+| `ILH-00011-01` | `ILH-00011` |
+| `ILH-00013-01` | `ILH-00013` |
+| `ILH-00014-01` | `ILH-00014` |
+| … | … | +7 restantes |
+- **Veredito:** médio — Combinação formato/tomada.
+
+### [MÉDIO] Física/Ohm — sub-declaração (ratio<0,75)
+- **Regra:** potência declarada < 0,75 × V×I / √3×V×I.
+- **Afetados:** 1 de 111 pontos (0.9%). Exemplos: `CLB-00010-01`, `CLB-00010`, `CLB-00010`.
+- **Evidência:**
+
+| ponto | site | tomada | modo | tensão / corrente / declarada / esperada | ratio |
+|---|---|---|---|---|---|
+| `CLB-00010-01` | `CLB-00010` | iec62196T2 | mode3AC3p | 400 V / 32 A / 7400 W / 22170.3 W | 0.334 |
+- **Veredito:** médio — sub-declaração (ratio<0,75).
+
+### [MÉDIO] Localização — CP7↔localidade
+- **Regra:** CP4 com city divergente da moda.
+- **Afetados:** 1 de 111 pontos (0.9%). Exemplos: `FAR-00100-01`, `FAR-00100`, `FAR-00100`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `FAR-00100-01` | `FAR-00100` |
+- **Veredito:** médio — CP7↔localidade.
+
+### [BAIXO] Chaves eMI3 — código local disperso
+- **Regra:** mesmo <LOCAL> em cidades/CP4 dispersos.
+- **Afetados:** 16 de 111 pontos (14.4%). Exemplos: `CBR-00093-01`, `CBR-00093-02`, `CBR-00094-01`, `CBR-00094-02`, `CBR-00096-01`, `CBR-00093`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `CBR-00093-01` | `CBR-00093` |
+| `CBR-00093-02` | `CBR-00093` |
+| `CBR-00094-01` | `CBR-00094` |
+| `CBR-00094-02` | `CBR-00094` |
+| `CBR-00096-01` | `CBR-00096` |
+| `CBR-00096-02` | `CBR-00096` |
+| `CBR-00095-01` | `CBR-00095` |
+| `CBR-00095-02` | `CBR-00095` |
+| `CBR-00097-01` | `CBR-00097` |
+| `CBR-00097-02` | `CBR-00097` |
+| … | … | +6 restantes |
+- **Veredito:** baixo — código local disperso.
+
+### [BAIXO] Metadados — usage_type em falta
+- **Regra:** usage_type nulo/fora do enum.
+- **Afetados:** 13 de 111 pontos (11.7%). Exemplos: `SRP-00009-01`, `SRP-00010-01`, `FAR-00100-01`, `LOU-00022-01`, `LOU-00023-01`, `SRP-00009`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `SRP-00009-01` | `SRP-00009` |
+| `SRP-00010-01` | `SRP-00010` |
+| `FAR-00100-01` | `FAR-00100` |
+| `LOU-00022-01` | `LOU-00022` |
+| `LOU-00023-01` | `LOU-00023` |
+| `LOU-00024-01` | `LOU-00024` |
+| `LSB-01442-01` | `LSB-01442` |
+| `CPV-00007-01` | `CPV-00007` |
+| `MTL-00005-01` | `MTL-00005` |
+| `331` | `LSB-01461` |
+| … | … | +3 restantes |
+- **Veredito:** baixo — usage_type em falta.
+
+[↑ índice](#indice)
+
+</details>
+
+<a id="opc-EVCE"></a>
+
+<details>
+<summary><b>EVCE — EVCE POWER, LDA. / MOBISMART (51 sites, 89 pontos)</b> · 3 MÉDIO, 1 CRÍTICO</summary>
+
+### [CRÍTICO] Física/Ohm — sobre-declaração (ratio>1,25)
+- **Regra:** potência declarada > 1,25 × V×I (monofásico) / √3×V×I (mode3AC3p).
+- **Afetados:** 6 de 89 pontos (6.7%). Exemplos: `BCL-00033-01`, `BCL-00033-02`, `BRG-00133-01`, `BRG-00133-02`, `BRG-00134-01`, `BCL-00033`.
+- **Evidência:**
+
+| ponto | site | tomada | modo | tensão / corrente / declarada / esperada | ratio |
+|---|---|---|---|---|---|
+| `BCL-00033-01` | `BCL-00033` | iec62196T2 | mode3AC3p | 240 V / 32 A / 22000 W / 13302.2 W | 1.654 |
+| `BCL-00033-02` | `BCL-00033` | iec62196T2 | mode3AC3p | 240 V / 32 A / 22000 W / 13302.2 W | 1.654 |
+| `BRG-00133-01` | `BRG-00133` | iec62196T2 | mode3AC3p | 240 V / 32 A / 22000 W / 13302.2 W | 1.654 |
+| `BRG-00133-02` | `BRG-00133` | iec62196T2 | mode3AC3p | 240 V / 32 A / 22000 W / 13302.2 W | 1.654 |
+| `BRG-00134-01` | `BRG-00134` | iec62196T2 | mode3AC3p | 240 V / 32 A / 22000 W / 13302.2 W | 1.654 |
+| `BRG-00134-02` | `BRG-00134` | iec62196T2 | mode3AC3p | 240 V / 32 A / 22000 W / 13302.2 W | 1.654 |
+- **Veredito:** crítico — sobre-declaração (ratio>1,25).
+
+### [MÉDIO] Combinação formato/tomada
+- **Regra:** connector_format incompatível com charging_mode.
+- **Afetados:** 23 de 89 pontos (25.8%). Exemplos: `PRT-00030-1`, `PRT-00030-2`, `ORQ-00002-1`, `ORQ-00002-2`, `BRG-00050-01`, `PRT-00030`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `PRT-00030-1` | `PRT-00030` |
+| `PRT-00030-2` | `PRT-00030` |
+| `ORQ-00002-1` | `ORQ-00002` |
+| `ORQ-00002-2` | `ORQ-00002` |
+| `BRG-00050-01` | `BRG-00050` |
+| `BRG-00050-02` | `BRG-00050` |
+| `BRG-00051-01` | `BRG-00051` |
+| `BRG-00051-02` | `BRG-00051` |
+| `BRG-00021-01` | `BRG-00021` |
+| `BRG-00021-02` | `BRG-00021` |
+| … | … | +13 restantes |
+- **Veredito:** médio — Combinação formato/tomada.
+
+### [MÉDIO] Física/Ohm — sub-declaração (ratio<0,75)
+- **Regra:** potência declarada < 0,75 × V×I / √3×V×I.
+- **Afetados:** 17 de 89 pontos (19.1%). Exemplos: `BRG-00055-01`, `BRG-00055-02`, `BRG-00054-01`, `BRG-00054-02`, `AVV-00003-01`, `BRG-00055`.
+- **Evidência:**
+
+| ponto | site | tomada | modo | tensão / corrente / declarada / esperada | ratio |
+|---|---|---|---|---|---|
+| `BRG-00055-01` | `BRG-00055` | iec62196T2 | mode3AC3p | 400 V / 32 A / 11000 W / 22170.3 W | 0.496 |
+| `BRG-00055-02` | `BRG-00055` | iec62196T2 | mode3AC3p | 400 V / 32 A / 11000 W / 22170.3 W | 0.496 |
+| `BRG-00054-01` | `BRG-00054` | iec62196T2 | mode3AC3p | 400 V / 32 A / 11000 W / 22170.3 W | 0.496 |
+| `BRG-00054-02` | `BRG-00054` | iec62196T2 | mode3AC3p | 400 V / 32 A / 11000 W / 22170.3 W | 0.496 |
+| `AVV-00003-01` | `AVV-00003` | iec62196T2COMBO | mode4DC | 1000 V / 125 A / 50000 W / 125000.0 W | 0.4 |
+| `AVV-00003-02` | `AVV-00003` | chademo | mode4DC | 1000 V / 125 A / 50000 W / 125000.0 W | 0.4 |
+| `PVL-00005-1` | `PVL-00005` | iec62196T2 | mode3AC3p | 400 V / 16 A / 3700 W / 11085.1 W | 0.334 |
+| `AVV-00011-02` | `AVV-00011` | iec62196T2 | mode3AC3p | 440 V / 32 A / 14080 W / 24387.3 W | 0.577 |
+| `ORM-00014-01` | `ORM-00014` | iec62196T2COMBO | mode4DC | 1000 V / 125 A / 50000 W / 125000.0 W | 0.4 |
+| `ORM-00014-02` | `ORM-00014` | chademo | mode4DC | 1000 V / 125 A / 50000 W / 125000.0 W | 0.4 |
+| … | … | +7 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-EVCE)) |
+- **Veredito:** médio — sub-declaração (ratio<0,75).
+
+### [MÉDIO] Localização — CP7↔localidade
+- **Regra:** CP4 com city divergente da moda.
+- **Afetados:** 2 de 89 pontos (2.2%). Exemplos: `ORQ-00002-1`, `ORQ-00002-2`, `ORQ-00002`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `ORQ-00002-1` | `ORQ-00002` |
+| `ORQ-00002-2` | `ORQ-00002` |
+- **Veredito:** médio — CP7↔localidade.
+
+[↑ índice](#indice)
+
+</details>
+
+<a id="opc-EVIO"></a>
+
+<details>
+<summary><b>EVIO — EVIO - Electrical Mobility (21 sites, 35 pontos)</b> · 2 MÉDIO, 2 BAIXO, 1 CRÍTICO</summary>
+
+### [CRÍTICO] Física/Ohm — sobre-declaração (ratio>1,25)
+- **Regra:** potência declarada > 1,25 × V×I (monofásico) / √3×V×I (mode3AC3p).
+- **Afetados:** 1 de 35 pontos (2.9%). Exemplos: `TNV-00029-01`, `TNV-00029`, `TNV-00029`.
+- **Evidência:**
+
+| ponto | site | tomada | modo | tensão / corrente / declarada / esperada | ratio |
+|---|---|---|---|---|---|
+| `TNV-00029-01` | `TNV-00029` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22000 W / 12747.9 W | 1.726 |
+- **Veredito:** crítico — sobre-declaração (ratio>1,25).
+
+### [MÉDIO] Combinação formato/tomada
+- **Regra:** connector_format incompatível com charging_mode.
+- **Afetados:** 24 de 35 pontos (68.6%). Exemplos: `GMR-00054-01`, `GMR-00054-02`, `CBC-00011-01`, `CBC-00011-02`, `LGS-00033-01`, `GMR-00054`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `GMR-00054-01` | `GMR-00054` |
+| `GMR-00054-02` | `GMR-00054` |
+| `CBC-00011-01` | `CBC-00011` |
+| `CBC-00011-02` | `CBC-00011` |
+| `LGS-00033-01` | `LGS-00033` |
+| `LGS-00033-02` | `LGS-00033` |
+| `SNT-00153-01` | `SNT-00153` |
+| `SNT-00153-02` | `SNT-00153` |
+| `SNT-00154-01` | `SNT-00154` |
+| `SNT-00154-02` | `SNT-00154` |
+| … | … | +14 restantes |
+- **Veredito:** médio — Combinação formato/tomada.
+
+### [MÉDIO] Física/Ohm — sub-declaração (ratio<0,75)
+- **Regra:** potência declarada < 0,75 × V×I / √3×V×I.
+- **Afetados:** 7 de 35 pontos (20.0%). Exemplos: `TNV-00027-02`, `ETZ-00029-01`, `ETZ-00029-02`, `ETZ-00030-01`, `ETZ-00030-02`, `TNV-00027`.
+- **Evidência:**
+
+| ponto | site | tomada | modo | tensão / corrente / declarada / esperada | ratio |
+|---|---|---|---|---|---|
+| `TNV-00027-02` | `TNV-00027` | iec62196T2COMBO | mode4DC | 800 V / 150 A / 60000 W / 120000.0 W | 0.5 |
+| `ETZ-00029-01` | `ETZ-00029` | iec62196T2COMBO | mode4DC | 1000 V / 250 A / 60000 W / 250000.0 W | 0.24 |
+| `ETZ-00029-02` | `ETZ-00029` | iec62196T2COMBO | mode4DC | 1000 V / 250 A / 60000 W / 250000.0 W | 0.24 |
+| `ETZ-00030-01` | `ETZ-00030` | iec62196T2COMBO | mode4DC | 1000 V / 250 A / 60000 W / 250000.0 W | 0.24 |
+| `ETZ-00030-02` | `ETZ-00030` | iec62196T2COMBO | mode4DC | 1000 V / 250 A / 60000 W / 250000.0 W | 0.24 |
+| `PRT-00364-1` | `PRT-00364` | iec62196T2 | mode3AC3p | 230 V / 32 A / 7400 W / 12747.9 W | 0.58 |
+| `PRT-00365-1` | `PRT-00365` | iec62196T2 | mode3AC3p | 230 V / 32 A / 7400 W / 12747.9 W | 0.58 |
+- **Veredito:** médio — sub-declaração (ratio<0,75).
+
+### [BAIXO] Metadados — usage_type em falta
+- **Regra:** usage_type nulo/fora do enum.
+- **Afetados:** 5 de 35 pontos (14.3%). Exemplos: `OER-00298-1`, `OER-00299-1`, `MTS-00211-1`, `MTS-00212-1`, `MTS-00213-1`, `OER-00298`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `OER-00298-1` | `OER-00298` |
+| `OER-00299-1` | `OER-00299` |
+| `MTS-00211-1` | `MTS-00211` |
+| `MTS-00212-1` | `MTS-00212` |
+| `MTS-00213-1` | `MTS-00213` |
+- **Veredito:** baixo — usage_type em falta.
+
+### [BAIXO] Chaves eMI3 — código local disperso
+- **Regra:** mesmo <LOCAL> em cidades/CP4 dispersos.
+- **Afetados:** 5 de 35 pontos (14.3%). Exemplos: `OER-00298-1`, `OER-00299-1`, `MTS-00211-1`, `MTS-00212-1`, `MTS-00213-1`, `OER-00298`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `OER-00298-1` | `OER-00298` |
+| `OER-00299-1` | `OER-00299` |
+| `MTS-00211-1` | `MTS-00211` |
+| `MTS-00212-1` | `MTS-00212` |
+| `MTS-00213-1` | `MTS-00213` |
+- **Veredito:** baixo — código local disperso.
+
+[↑ índice](#indice)
+
+</details>
+
+<a id="opc-HEXA"></a>
+
+<details>
+<summary><b>HEXA — HEXAGONAL OCEAN, LDA (38 sites, 76 pontos)</b> · 2 MÉDIO, 1 CRÍTICO</summary>
+
+### [CRÍTICO] Física/Ohm — sobre-declaração (ratio>1,25)
+- **Regra:** potência declarada > 1,25 × V×I (monofásico) / √3×V×I (mode3AC3p).
+- **Afetados:** 34 de 76 pontos (44.7%). Exemplos: `CSC-00074-01`, `CSC-00074-02`, `CSC-00075-01`, `CSC-00075-02`, `LSB-00820-01`, `CSC-00074`.
+- **Evidência:**
+
+| ponto | site | tomada | modo | tensão / corrente / declarada / esperada | ratio |
+|---|---|---|---|---|---|
+| `CSC-00074-01` | `CSC-00074` | iec62196T2 | mode2AC1p | 240 V / 32 A / 20000 W / 7680.0 W | 2.604 |
+| `CSC-00074-02` | `CSC-00074` | iec62196T2 | mode2AC1p | 240 V / 32 A / 20000 W / 7680.0 W | 2.604 |
+| `CSC-00075-01` | `CSC-00075` | iec62196T2 | mode2AC1p | 240 V / 32 A / 20000 W / 7680.0 W | 2.604 |
+| `CSC-00075-02` | `CSC-00075` | iec62196T2 | mode2AC1p | 240 V / 32 A / 20000 W / 7680.0 W | 2.604 |
+| `LSB-00820-01` | `LSB-00820` | iec62196T2 | mode3AC3p | 240 V / 16 A / 11000 W / 6651.1 W | 1.654 |
+| `LSB-00820-02` | `LSB-00820` | iec62196T2 | mode3AC3p | 240 V / 16 A / 11000 W / 6651.1 W | 1.654 |
+| `LSB-00821-01` | `LSB-00821` | iec62196T2 | mode3AC3p | 240 V / 16 A / 11000 W / 6651.1 W | 1.654 |
+| `LSB-00821-02` | `LSB-00821` | iec62196T2 | mode3AC3p | 240 V / 16 A / 11000 W / 6651.1 W | 1.654 |
+| `LSB-00822-01` | `LSB-00822` | iec62196T2 | mode3AC3p | 240 V / 16 A / 11000 W / 6651.1 W | 1.654 |
+| `LSB-00822-02` | `LSB-00822` | iec62196T2 | mode3AC3p | 240 V / 16 A / 11000 W / 6651.1 W | 1.654 |
+| … | … | +24 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-HEXA)) |
+- **Veredito:** crítico — sobre-declaração (ratio>1,25).
+
+### [MÉDIO] Combinação formato/tomada
+- **Regra:** connector_format incompatível com charging_mode.
+- **Afetados:** 4 de 76 pontos (5.3%). Exemplos: `CSC-00074-01`, `CSC-00074-02`, `CSC-00075-01`, `CSC-00075-02`, `CSC-00074`, `CSC-00075`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `CSC-00074-01` | `CSC-00074` |
+| `CSC-00074-02` | `CSC-00074` |
+| `CSC-00075-01` | `CSC-00075` |
+| `CSC-00075-02` | `CSC-00075` |
+- **Veredito:** médio — Combinação formato/tomada.
+
+### [MÉDIO] Localização — CP7↔localidade
+- **Regra:** CP4 com city divergente da moda.
+- **Afetados:** 2 de 76 pontos (2.6%). Exemplos: `GMR-00088-01`, `GMR-00088-02`, `GMR-00088`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `GMR-00088-01` | `GMR-00088` |
+| `GMR-00088-02` | `GMR-00088` |
+- **Veredito:** médio — CP7↔localidade.
+
+[↑ índice](#indice)
+
+</details>
+
+<a id="opc-HIGH"></a>
+
+<details>
+<summary><b>HIGH — High Green Power, Unipessoal Lda. (38 sites, 40 pontos)</b> · 3 BAIXO, 1 CRÍTICO, 1 MÉDIO</summary>
+
+### [CRÍTICO] Duplicados — point_id
+- **Regra:** point_id duplicado no inventário.
+- **Afetados:** 15 de 40 pontos (37.5%). Exemplos: `254`, `162`, `160`, `176`, `183`, `LRA-HOTEL-EUROSOL-C01`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `254` | `LRA-HOTEL-EUROSOL-C01` |
+| `162` | `VRS-HOTEL-ROBINSON-C01` |
+| `160` | `VRS-HOTEL-ROBINSON-C02` |
+| `176` | `VRS-HOTEL-MONTE-REI-C01` |
+| `183` | `PTM-OCEANO-ATLANTICO-APT-C01` |
+| `184` | `PTM-OCEANO-ATLANTICO-APT-C02` |
+| `189` | `MCN-HOTEL-CASAL_SILVA-C01` |
+| `190` | `MCN-HOTEL-CASAL_SILVA-C02` |
+| `202` | `FAR-HOTEL-OCCIDENTAL-FARO-C01` |
+| `203` | `FAR-HOTEL-OCCIDENTAL-FARO-C02` |
+| … | … | +5 restantes |
+- **Veredito:** crítico — point_id.
+
+### [MÉDIO] Combinação formato/tomada
+- **Regra:** connector_format incompatível com charging_mode.
+- **Afetados:** 7 de 40 pontos (17.5%). Exemplos: `VNG-00129-01`, `VNG-00129-02`, `VNG-00145-01`, `VNG-00146-01`, `VNG-00147-01`, `VNG-00129`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `VNG-00129-01` | `VNG-00129` |
+| `VNG-00129-02` | `VNG-00129` |
+| `VNG-00145-01` | `VNG-00145` |
+| `VNG-00146-01` | `VNG-00146` |
+| `VNG-00147-01` | `VNG-00147` |
+| `VNG-00148-01` | `VNG-00148` |
+| `VNG-00149-01` | `VNG-00149` |
+- **Veredito:** médio — Combinação formato/tomada.
+
+### [BAIXO] Metadados — brands_accepted vazio
+- **Regra:** brands_accepted vazio.
+- **Afetados:** 15 de 40 pontos (37.5%). Exemplos: `254`, `162`, `160`, `176`, `183`, `LRA-HOTEL-EUROSOL-C01`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `254` | `LRA-HOTEL-EUROSOL-C01` |
+| `162` | `VRS-HOTEL-ROBINSON-C01` |
+| `160` | `VRS-HOTEL-ROBINSON-C02` |
+| `176` | `VRS-HOTEL-MONTE-REI-C01` |
+| `183` | `PTM-OCEANO-ATLANTICO-APT-C01` |
+| `184` | `PTM-OCEANO-ATLANTICO-APT-C02` |
+| `189` | `MCN-HOTEL-CASAL_SILVA-C01` |
+| `190` | `MCN-HOTEL-CASAL_SILVA-C02` |
+| `202` | `FAR-HOTEL-OCCIDENTAL-FARO-C01` |
+| `203` | `FAR-HOTEL-OCCIDENTAL-FARO-C02` |
+| … | … | +5 restantes |
+- **Veredito:** baixo — brands_accepted vazio.
+
+### [BAIXO] Localização — postcode em falta
+- **Regra:** postcode vazio.
+- **Afetados:** 1 de 40 pontos (2.5%). Exemplos: `176`, `VRS-HOTEL-MONTE-REI-C01`, `VRS-HOTEL-MONTE-REI-C01`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `176` | `VRS-HOTEL-MONTE-REI-C01` |
+- **Veredito:** baixo — postcode em falta.
+
+### [BAIXO] Localização — formato CP7
+- **Regra:** postcode fora de NNNN-NNN.
+- **Afetados:** 1 de 40 pontos (2.5%). Exemplos: `176`, `VRS-HOTEL-MONTE-REI-C01`, `VRS-HOTEL-MONTE-REI-C01`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `176` | `VRS-HOTEL-MONTE-REI-C01` |
+- **Veredito:** baixo — formato CP7.
+
+[↑ índice](#indice)
+
+</details>
+
+<a id="opc-EMAC"></a>
+
+<details>
+<summary><b>EMAC — EMACOM - Telecomunicações da Madeira, Unipessoal, Lda (25 sites, 44 pontos)</b> · 3 MÉDIO, 1 CRÍTICO</summary>
+
+### [CRÍTICO] Duplicados — point_id
+- **Regra:** point_id duplicado no inventário.
+- **Afetados:** 2 de 45 pontos (4.4%). Exemplos: `FNC-00047-01`, `FNC-00047`, `FNC-00047`, `FNC-00047`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `FNC-00047-01` | `FNC-00047` |
+| `FNC-00047-01` | `FNC-00047` |
+- **Veredito:** crítico — point_id.
+
+### [MÉDIO] Combinação formato/tomada
+- **Regra:** connector_format incompatível com charging_mode.
+- **Afetados:** 25 de 45 pontos (55.6%). Exemplos: `RAM-CML-00001-01`, `RAM-CML-00001-02`, `SVC-00002-01`, `SVC-00002-02`, `PST-00004-01`, `RAM-CML-00001`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `RAM-CML-00001-01` | `RAM-CML-00001` |
+| `RAM-CML-00001-02` | `RAM-CML-00001` |
+| `SVC-00002-01` | `SVC-00002` |
+| `SVC-00002-02` | `SVC-00002` |
+| `PST-00004-01` | `PST-00004` |
+| `MCH-00002-01` | `MCH-00002` |
+| `MCH-00002-03` | `MCH-00002` |
+| `PST-00003-01` | `PST-00003` |
+| `FNC-00040-01` | `FNC-00040` |
+| `FNC-00040-02` | `FNC-00040` |
+| … | … | +15 restantes |
+- **Veredito:** médio — Combinação formato/tomada.
+
+### [MÉDIO] Física/Ohm — sub-declaração (ratio<0,75)
+- **Regra:** potência declarada < 0,75 × V×I / √3×V×I.
+- **Afetados:** 2 de 45 pontos (4.4%). Exemplos: `MCH-00002-03`, `SCR-00023-03`, `MCH-00002`, `SCR-00023`.
+- **Evidência:**
+
+| ponto | site | tomada | modo | tensão / corrente / declarada / esperada | ratio |
+|---|---|---|---|---|---|
+| `MCH-00002-03` | `MCH-00002` | iec62196T2COMBO | mode4DC | 950 V / 120 A / 60000 W / 114000.0 W | 0.526 |
+| `SCR-00023-03` | `SCR-00023` | iec62196T2COMBO | mode4DC | 950 V / 125 A / 60000 W / 118750.0 W | 0.505 |
+- **Veredito:** médio — sub-declaração (ratio<0,75).
+
+### [MÉDIO] Localização — CP7↔localidade
+- **Regra:** CP4 com city divergente da moda.
+- **Afetados:** 1 de 45 pontos (2.2%). Exemplos: `PST-00008-01`, `PST-00008`, `PST-00008`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `PST-00008-01` | `PST-00008` |
+- **Veredito:** médio — CP7↔localidade.
+
+[↑ índice](#indice)
+
+</details>
+
+<a id="opc-NRGS"></a>
+
+<details>
+<summary><b>NRGS — Original Sunenergy, Lda (7 sites, 16 pontos)</b> · 3 MÉDIO, 1 CRÍTICO</summary>
+
+### [CRÍTICO] Física/Ohm — sobre-declaração (ratio>1,25)
+- **Regra:** potência declarada > 1,25 × V×I (monofásico) / √3×V×I (mode3AC3p).
+- **Afetados:** 3 de 16 pontos (18.8%). Exemplos: `GRD-00021-02`, `MDB-00004-03`, `MDB-00004-04`, `GRD-00021`, `MDB-00004`.
+- **Evidência:**
+
+| ponto | site | tomada | modo | tensão / corrente / declarada / esperada | ratio |
+|---|---|---|---|---|---|
+| `GRD-00021-02` | `GRD-00021` | chademo | mode4DC | 500 V / 150 A / 100000 W / 75000.0 W | 1.333 |
+| `MDB-00004-03` | `MDB-00004` | iec60309x2single16 | mode3AC3p | 230 V / 32 A / 22000 W / 12747.9 W | 1.726 |
+| `MDB-00004-04` | `MDB-00004` | iec60309x2single16 | mode3AC3p | 230 V / 32 A / 22000 W / 12747.9 W | 1.726 |
+- **Veredito:** crítico — sobre-declaração (ratio>1,25).
+
+### [MÉDIO] Combinação formato/tomada
+- **Regra:** connector_format incompatível com charging_mode.
+- **Afetados:** 12 de 16 pontos (75.0%). Exemplos: `PLM-00025-01`, `PLM-00025-02`, `STR-00026-01`, `STR-00026-02`, `VRL-00016-01`, `PLM-00025`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `PLM-00025-01` | `PLM-00025` |
+| `PLM-00025-02` | `PLM-00025` |
+| `STR-00026-01` | `STR-00026` |
+| `STR-00026-02` | `STR-00026` |
+| `VRL-00016-01` | `VRL-00016` |
+| `VRL-00016-02` | `VRL-00016` |
+| `GRD-00021-01` | `GRD-00021` |
+| `GRD-00021-02` | `GRD-00021` |
+| `EVR-00031-01` | `EVR-00031` |
+| `EVR-00031-02` | `EVR-00031` |
+| … | … | +2 restantes |
+- **Veredito:** médio — Combinação formato/tomada.
+
+### [MÉDIO] Localização — CP7↔localidade
+- **Regra:** CP4 com city divergente da moda.
+- **Afetados:** 2 de 16 pontos (12.5%). Exemplos: `VRL-00016-01`, `VRL-00016-02`, `VRL-00016`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `VRL-00016-01` | `VRL-00016` |
+| `VRL-00016-02` | `VRL-00016` |
+- **Veredito:** médio — CP7↔localidade.
+
+### [MÉDIO] Física/Ohm — sub-declaração (ratio<0,75)
+- **Regra:** potência declarada < 0,75 × V×I / √3×V×I.
+- **Afetados:** 1 de 16 pontos (6.2%). Exemplos: `PLM-00025-02`, `PLM-00025`, `PLM-00025`.
+- **Evidência:**
+
+| ponto | site | tomada | modo | tensão / corrente / declarada / esperada | ratio |
+|---|---|---|---|---|---|
+| `PLM-00025-02` | `PLM-00025` | chademo | mode4DC | 920 V / 200 A / 120000 W / 184000.0 W | 0.652 |
+- **Veredito:** médio — sub-declaração (ratio<0,75).
+
+[↑ índice](#indice)
+
+</details>
+
+<a id="opc-EVGR"></a>
+
+<details>
+<summary><b>EVGR — Green Evolut, LDA (6 sites, 10 pontos)</b> · 1 CRÍTICO, 1 BAIXO</summary>
+
+### [CRÍTICO] Duplicados — point_id
+- **Regra:** point_id duplicado no inventário.
+- **Afetados:** 2 de 11 pontos (18.2%). Exemplos: `TVR-00024-01`, `TVR-00024`, `TVR-00024`, `TVR-00024`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `TVR-00024-01` | `TVR-00024` |
+| `TVR-00024-01` | `TVR-00024` |
+- **Veredito:** crítico — point_id.
+
+### [BAIXO] Chaves eMI3 — código local disperso
+- **Regra:** mesmo <LOCAL> em cidades/CP4 dispersos.
+- **Afetados:** 6 de 11 pontos (54.5%). Exemplos: `CBR-00154-01`, `CBR-00154-02`, `CBR-00155-01`, `CBR-00155-02`, `CBR-00156-01`, `CBR-00154`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `CBR-00154-01` | `CBR-00154` |
+| `CBR-00154-02` | `CBR-00154` |
+| `CBR-00155-01` | `CBR-00155` |
+| `CBR-00155-02` | `CBR-00155` |
+| `CBR-00156-01` | `CBR-00156` |
+| `CBR-00156-02` | `CBR-00156` |
+- **Veredito:** baixo — código local disperso.
+
+[↑ índice](#indice)
+
+</details>
+
+<a id="opc-ALFA"></a>
+
+<details>
+<summary><b>ALFA — Alfa Energia (13 sites, 25 pontos)</b> · 2 MÉDIO, 1 CRÍTICO</summary>
+
+### [CRÍTICO] Duplicados — point_id
+- **Regra:** point_id duplicado no inventário.
+- **Afetados:** 2 de 26 pontos (7.7%). Exemplos: `FLG-00022-01`, `FLG-00022`, `FLG-00022`, `FLG-00022`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `FLG-00022-01` | `FLG-00022` |
+| `FLG-00022-01` | `FLG-00022` |
+- **Veredito:** crítico — point_id.
+
+### [MÉDIO] Física/Ohm — sub-declaração (ratio<0,75)
+- **Regra:** potência declarada < 0,75 × V×I / √3×V×I.
+- **Afetados:** 2 de 26 pontos (7.7%). Exemplos: `AND-00014-01`, `AND-00014-02`, `AND-00014`.
+- **Evidência:**
+
+| ponto | site | tomada | modo | tensão / corrente / declarada / esperada | ratio |
+|---|---|---|---|---|---|
+| `AND-00014-01` | `AND-00014` | iec62196T2COMBO | mode4DC | 1000 V / 200 A / 40000 W / 200000.0 W | 0.2 |
+| `AND-00014-02` | `AND-00014` | iec62196T2COMBO | mode4DC | 1000 V / 200 A / 40000 W / 200000.0 W | 0.2 |
+- **Veredito:** médio — sub-declaração (ratio<0,75).
+
+### [MÉDIO] Combinação formato/tomada
+- **Regra:** connector_format incompatível com charging_mode.
+- **Afetados:** 2 de 26 pontos (7.7%). Exemplos: `AND-00014-01`, `AND-00014-02`, `AND-00014`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `AND-00014-01` | `AND-00014` |
+| `AND-00014-02` | `AND-00014` |
+- **Veredito:** médio — Combinação formato/tomada.
+
+[↑ índice](#indice)
+
+</details>
+
+<a id="opc-HELX"></a>
+
+<details>
+<summary><b>HELX — Helexia II Energy Services, Lda. (234 sites, 451 pontos)</b> · 3 MÉDIO, 2 BAIXO</summary>
+
+### [MÉDIO] Combinação formato/tomada
+- **Regra:** connector_format incompatível com charging_mode.
+- **Afetados:** 268 de 451 pontos (59.4%). Exemplos: `STS-00004-01`, `STS-00004-02`, `MAI-00012-01`, `MAI-00012-02`, `VFX-00007-01`, `STS-00004`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `STS-00004-01` | `STS-00004` |
+| `STS-00004-02` | `STS-00004` |
+| `MAI-00012-01` | `MAI-00012` |
+| `MAI-00012-02` | `MAI-00012` |
+| `VFX-00007-01` | `VFX-00007` |
+| `VFX-00007-02` | `VFX-00007` |
+| `SNT-00036-01` | `SNT-00036` |
+| `SNT-00036-02` | `SNT-00036` |
+| `OER-00056-01` | `OER-00056` |
+| `OER-00056-02` | `OER-00056` |
+| … | … | +258 restantes |
+- **Veredito:** médio — Combinação formato/tomada.
+
+### [MÉDIO] Física/Ohm — sub-declaração (ratio<0,75)
+- **Regra:** potência declarada < 0,75 × V×I / √3×V×I.
+- **Afetados:** 162 de 451 pontos (35.9%). Exemplos: `OBD-00013-01`, `OBD-00010-01`, `OBD-00010-02`, `OBD-00016-01`, `VCD-00020-01`, `OBD-00013`.
+- **Evidência:**
+
+| ponto | site | tomada | modo | tensão / corrente / declarada / esperada | ratio |
+|---|---|---|---|---|---|
+| `OBD-00013-01` | `OBD-00013` | iec62196T2COMBO | mode4DC | 1000 V / 500 A / 100000 W / 500000.0 W | 0.2 |
+| `OBD-00010-01` | `OBD-00010` | iec62196T2COMBO | mode4DC | 1000 V / 500 A / 50000 W / 500000.0 W | 0.1 |
+| `OBD-00010-02` | `OBD-00010` | chademo | mode4DC | 500 V / 200 A / 50000 W / 100000.0 W | 0.5 |
+| `OBD-00016-01` | `OBD-00016` | iec62196T2COMBO | mode4DC | 1000 V / 500 A / 100000 W / 500000.0 W | 0.2 |
+| `VCD-00020-01` | `VCD-00020` | iec62196T2COMBO | mode4DC | 920 V / 60 A / 24000 W / 55200.0 W | 0.435 |
+| `VCD-00019-01` | `VCD-00019` | iec62196T2COMBO | mode4DC | 920 V / 60 A / 24000 W / 55200.0 W | 0.435 |
+| `STB-00076-01` | `STB-00076` | iec62196T2COMBO | mode4DC | 950 V / 250 A / 120000 W / 237500.0 W | 0.505 |
+| `STB-00076-02` | `STB-00076` | iec62196T2COMBO | mode4DC | 950 V / 250 A / 120000 W / 237500.0 W | 0.505 |
+| `LSB-00705-01` | `LSB-00705` | iec62196T2COMBO | mode4DC | 950 V / 200 A / 120000 W / 190000.0 W | 0.632 |
+| `LSB-00705-02` | `LSB-00705` | iec62196T2COMBO | mode4DC | 950 V / 200 A / 120000 W / 190000.0 W | 0.632 |
+| … | … | +152 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-HELX)) |
+- **Veredito:** médio — sub-declaração (ratio<0,75).
+
+### [MÉDIO] Localização — CP7↔localidade
+- **Regra:** CP4 com city divergente da moda.
+- **Afetados:** 10 de 451 pontos (2.2%). Exemplos: `ALB-00003-01`, `ALB-00003-02`, `STB-00076-01`, `STB-00076-02`, `STB-00078-01`, `ALB-00003`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `ALB-00003-01` | `ALB-00003` |
+| `ALB-00003-02` | `ALB-00003` |
+| `STB-00076-01` | `STB-00076` |
+| `STB-00076-02` | `STB-00076` |
+| `STB-00078-01` | `STB-00078` |
+| `STB-00078-02` | `STB-00078` |
+| `STB-00077-01` | `STB-00077` |
+| `STB-00077-02` | `STB-00077` |
+| `BRG-00146-01` | `BRG-00146` |
+| `BRG-00146-02` | `BRG-00146` |
+- **Veredito:** médio — CP7↔localidade.
+
+### [BAIXO] Metadados — usage_type em falta
+- **Regra:** usage_type nulo/fora do enum.
+- **Afetados:** 13 de 451 pontos (2.9%). Exemplos: `NLS-00012-01`, `NLS-00012-02`, `CHV-00035-01`, `CHV-00035-02`, `BTC-00002-01`, `NLS-00012`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `NLS-00012-01` | `NLS-00012` |
+| `NLS-00012-02` | `NLS-00012` |
+| `CHV-00035-01` | `CHV-00035` |
+| `CHV-00035-02` | `CHV-00035` |
+| `BTC-00002-01` | `BTC-00002` |
+| `BTC-00002-02` | `BTC-00002` |
+| `FZZ-00006-01` | `FZZ-00006` |
+| `FZZ-00006-02` | `FZZ-00006` |
+| `OAZ-00029-01` | `OAZ-00029` |
+| `OAZ-00029-02` | `OAZ-00029` |
+| … | … | +3 restantes |
+- **Veredito:** baixo — usage_type em falta.
+
+### [BAIXO] Chaves eMI3 — código local disperso
+- **Regra:** mesmo <LOCAL> em cidades/CP4 dispersos.
+- **Afetados:** 12 de 451 pontos (2.7%). Exemplos: `CBR-00013-01`, `CBR-00013-02`, `CBR-00012-01`, `CBR-00012-02`, `CBR-00011-01`, `CBR-00013`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `CBR-00013-01` | `CBR-00013` |
+| `CBR-00013-02` | `CBR-00013` |
+| `CBR-00012-01` | `CBR-00012` |
+| `CBR-00012-02` | `CBR-00012` |
+| `CBR-00011-01` | `CBR-00011` |
+| `CBR-00011-02` | `CBR-00011` |
+| `CBR-00011-03` | `CBR-00011` |
+| `MOBI-PRT-00116-01` | `MOBI-PRT-00116` |
+| `CBR-00110-01` | `CBR-00110` |
+| `CBR-00110-02` | `CBR-00110` |
+| … | … | +2 restantes |
+- **Veredito:** baixo — código local disperso.
+
+[↑ índice](#indice)
+
+</details>
+
+<a id="opc-MOTA"></a>
+
+<details>
+<summary><b>MOTA — Mota-Engil Renewing (189 sites, 340 pontos)</b> · 2 MÉDIO, 2 BAIXO</summary>
+
+### [MÉDIO] Combinação formato/tomada
+- **Regra:** connector_format incompatível com charging_mode.
+- **Afetados:** 192 de 340 pontos (56.5%). Exemplos: `MTJ-00008-01`, `MTJ-00008-02`, `CBR-00044-01`, `CBR-00044-02`, `FUN-00025-01`, `MTJ-00008`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `MTJ-00008-01` | `MTJ-00008` |
+| `MTJ-00008-02` | `MTJ-00008` |
+| `CBR-00044-01` | `CBR-00044` |
+| `CBR-00044-02` | `CBR-00044` |
+| `FUN-00025-01` | `FUN-00025` |
+| `FUN-00025-02` | `FUN-00025` |
+| `VIS-00013-01` | `VIS-00013` |
+| `VIS-00013-02` | `VIS-00013` |
+| `CBR-00043-01` | `CBR-00043` |
+| `CBR-00043-02` | `CBR-00043` |
+| … | … | +182 restantes |
+- **Veredito:** médio — Combinação formato/tomada.
+
+### [MÉDIO] Física/Ohm — sub-declaração (ratio<0,75)
+- **Regra:** potência declarada < 0,75 × V×I / √3×V×I.
+- **Afetados:** 166 de 340 pontos (48.8%). Exemplos: `CBR-00044-01`, `FUN-00025-01`, `VIS-00013-01`, `FAR-00012-01`, `FAR-00013-01`, `CBR-00044`.
+- **Evidência:**
+
+| ponto | site | tomada | modo | tensão / corrente / declarada / esperada | ratio |
+|---|---|---|---|---|---|
+| `CBR-00044-01` | `CBR-00044` | iec62196T2COMBO | mode4DC | 920 V / 60 A / 24000 W / 55200.0 W | 0.435 |
+| `FUN-00025-01` | `FUN-00025` | iec62196T2COMBO | mode4DC | 920 V / 60 A / 24000 W / 55200.0 W | 0.435 |
+| `VIS-00013-01` | `VIS-00013` | iec62196T2COMBO | mode4DC | 920 V / 60 A / 24000 W / 55200.0 W | 0.435 |
+| `FAR-00012-01` | `FAR-00012` | iec62196T2COMBO | mode4DC | 920 V / 60 A / 24000 W / 55200.0 W | 0.435 |
+| `FAR-00013-01` | `FAR-00013` | iec62196T2COMBO | mode4DC | 920 V / 60 A / 24000 W / 55200.0 W | 0.435 |
+| `ALM-00070-01` | `ALM-00070` | iec62196T2COMBO | mode4DC | 1000 V / 300 A / 200000 W / 300000.0 W | 0.667 |
+| `ALM-00070-02` | `ALM-00070` | iec62196T2COMBO | mode4DC | 1000 V / 300 A / 200000 W / 300000.0 W | 0.667 |
+| `ALM-00070-03` | `ALM-00070` | iec62196T2COMBO | mode4DC | 1000 V / 300 A / 200000 W / 300000.0 W | 0.667 |
+| `ALM-00070-04` | `ALM-00070` | iec62196T2COMBO | mode4DC | 1000 V / 300 A / 200000 W / 300000.0 W | 0.667 |
+| `PNF-00040-01` | `PNF-00040` | iec62196T2COMBO | mode4DC | 1000 V / 200 A / 60000 W / 200000.0 W | 0.3 |
+| … | … | +156 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-MOTA)) |
+- **Veredito:** médio — sub-declaração (ratio<0,75).
+
+### [BAIXO] Metadados — usage_type em falta
+- **Regra:** usage_type nulo/fora do enum.
+- **Afetados:** 21 de 340 pontos (6.2%). Exemplos: `VNG-00257-01`, `VNG-00258-01`, `VNG-00258-02`, `CBC-00021-01`, `CBC-00021-02`, `VNG-00257`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `VNG-00257-01` | `VNG-00257` |
+| `VNG-00258-01` | `VNG-00258` |
+| `VNG-00258-02` | `VNG-00258` |
+| `CBC-00021-01` | `CBC-00021` |
+| `CBC-00021-02` | `CBC-00021` |
+| `FAR-00108-01` | `FAR-00108` |
+| `FAR-00108-02` | `FAR-00108` |
+| `FAR-00109-01` | `FAR-00109` |
+| `FAR-00109-02` | `FAR-00109` |
+| `FAR-00110-01` | `FAR-00110` |
+| … | … | +11 restantes |
+- **Veredito:** baixo — usage_type em falta.
+
+### [BAIXO] Chaves eMI3 — código local disperso
+- **Regra:** mesmo <LOCAL> em cidades/CP4 dispersos.
+- **Afetados:** 12 de 340 pontos (3.5%). Exemplos: `CBR-00050-1`, `CBR-00044-01`, `CBR-00044-02`, `CBR-00025-01`, `CBR-00025-02`, `CBR-00050`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `CBR-00050-1` | `CBR-00050` |
+| `CBR-00044-01` | `CBR-00044` |
+| `CBR-00044-02` | `CBR-00044` |
+| `CBR-00025-01` | `CBR-00025` |
+| `CBR-00025-02` | `CBR-00025` |
+| `CBR-00047-1` | `CBR-00047` |
+| `CBR-00048-1` | `CBR-00048` |
+| `CBR-00045-1` | `CBR-00045` |
+| `CBR-00043-01` | `CBR-00043` |
+| `CBR-00043-02` | `CBR-00043` |
+| … | … | +2 restantes |
+- **Veredito:** baixo — código local disperso.
 
 [↑ índice](#indice)
 
@@ -3515,336 +4248,543 @@ Totais: 8 733 sites, 19 259 pontos distintos (19 376 linhas de conector), 92 OPC
 <a id="opc-IONY"></a>
 
 <details>
-<summary><b>IONY — IONITY GmbH (20 sites, 106 pontos)</b> · 1 BAIXO</summary>
+<summary><b>IONY — IONITY GmbH (20 sites, 106 pontos)</b> · 3 MÉDIO, 2 BAIXO</summary>
 
-### [BAIXO] Localidade ou código postal em falta/fora do formato
-
-- **Regra:** `city` vazia com `postcode` presente (ou inverso); `postcode` fora do formato CP7 `NNNN-NNN`.
-
-- **Afetados:** 9 sites. Exemplos: `ADV-00017`, `ALB-00019`, `ADV-00018`
-
+### [MÉDIO] Combinação formato/tomada
+- **Regra:** connector_format incompatível com charging_mode.
+- **Afetados:** 106 de 106 pontos (100.0%). Exemplos: `ALB-00019-01`, `ALB-00019-02`, `ALB-00019-03`, `ALB-00019-04`, `ALB-00019-05`, `ALB-00019`.
 - **Evidência:**
 
-| site | campo |
+| ponto | site |
 |---|---|
-| `ADV-00017` | postcode 7700 |
-| `ADV-00018` | postcode 7700 |
-| `BCL-00027` | postcode 4750 |
-| `BCL-00028` | postcode 4750 |
-| `ETZ-00025` | postcode 7100 |
-| `ETZ-00026` | postcode 7100 |
-| `LRA-00115` | postcode 2420 |
-| `LRA-00116` | postcode 2420 |
-| `OBD-00025` | postcode 2540 |
+| `ALB-00019-01` | `ALB-00019` |
+| `ALB-00019-02` | `ALB-00019` |
+| `ALB-00019-03` | `ALB-00019` |
+| `ALB-00019-04` | `ALB-00019` |
+| `ALB-00019-05` | `ALB-00019` |
+| `ALB-00019-06` | `ALB-00019` |
+| `ADV-00017-01` | `ADV-00017` |
+| `ADV-00017-02` | `ADV-00017` |
+| `ADV-00017-03` | `ADV-00017` |
+| `ADV-00017-04` | `ADV-00017` |
+| … | … | +96 restantes |
+- **Veredito:** médio — Combinação formato/tomada.
 
-- **Veredito:** suspeito (metadados) — normalizar a morada; não impede a localização por coordenadas.
+### [MÉDIO] Chaves eMI3 — sufixo de tomada
+- **Regra:** último segmento de point_external_id ≠ point_id (int-normalizado).
+- **Afetados:** 106 de 106 pontos (100.0%). Exemplos: `ALB-00019-01`, `ALB-00019-02`, `ALB-00019-03`, `ALB-00019-04`, `ALB-00019-05`, `ALB-00019`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `ALB-00019-01` | `ALB-00019` |
+| `ALB-00019-02` | `ALB-00019` |
+| `ALB-00019-03` | `ALB-00019` |
+| `ALB-00019-04` | `ALB-00019` |
+| `ALB-00019-05` | `ALB-00019` |
+| `ALB-00019-06` | `ALB-00019` |
+| `ADV-00017-01` | `ADV-00017` |
+| `ADV-00017-02` | `ADV-00017` |
+| `ADV-00017-03` | `ADV-00017` |
+| `ADV-00017-04` | `ADV-00017` |
+| … | … | +96 restantes |
+- **Veredito:** médio — sufixo de tomada.
+
+### [MÉDIO] Localização — CP7↔localidade
+- **Regra:** CP4 com city divergente da moda.
+- **Afetados:** 6 de 106 pontos (5.7%). Exemplos: `OBD-00025-01`, `OBD-00025-02`, `OBD-00025-03`, `OBD-00025-04`, `OBD-00025-05`, `OBD-00025`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `OBD-00025-01` | `OBD-00025` |
+| `OBD-00025-02` | `OBD-00025` |
+| `OBD-00025-03` | `OBD-00025` |
+| `OBD-00025-04` | `OBD-00025` |
+| `OBD-00025-05` | `OBD-00025` |
+| `OBD-00025-06` | `OBD-00025` |
+- **Veredito:** médio — CP7↔localidade.
+
+### [BAIXO] Chaves eMI3 — códigos locais mistos
+- **Regra:** tomadas do mesmo site com <LOCAL> diferentes.
+- **Afetados:** 106 de 106 pontos (100.0%). Exemplos: `ALB-00019-01`, `ALB-00019-02`, `ALB-00019-03`, `ALB-00019-04`, `ALB-00019-05`, `ALB-00019`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `ALB-00019-01` | `ALB-00019` |
+| `ALB-00019-02` | `ALB-00019` |
+| `ALB-00019-03` | `ALB-00019` |
+| `ALB-00019-04` | `ALB-00019` |
+| `ALB-00019-05` | `ALB-00019` |
+| `ALB-00019-06` | `ALB-00019` |
+| `ADV-00017-01` | `ADV-00017` |
+| `ADV-00017-02` | `ADV-00017` |
+| `ADV-00017-03` | `ADV-00017` |
+| `ADV-00017-04` | `ADV-00017` |
+| … | … | +96 restantes |
+- **Veredito:** baixo — códigos locais mistos.
+
+### [BAIXO] Localização — formato CP7
+- **Regra:** postcode fora de NNNN-NNN.
+- **Afetados:** 38 de 106 pontos (35.8%). Exemplos: `ADV-00017-01`, `ADV-00017-02`, `ADV-00017-03`, `ADV-00017-04`, `ADV-00017-05`, `ADV-00017`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `ADV-00017-01` | `ADV-00017` |
+| `ADV-00017-02` | `ADV-00017` |
+| `ADV-00017-03` | `ADV-00017` |
+| `ADV-00017-04` | `ADV-00017` |
+| `ADV-00017-05` | `ADV-00017` |
+| `ADV-00017-06` | `ADV-00017` |
+| `ADV-00018-01` | `ADV-00018` |
+| `ADV-00018-02` | `ADV-00018` |
+| `ADV-00018-03` | `ADV-00018` |
+| `ADV-00018-04` | `ADV-00018` |
+| … | … | +28 restantes |
+- **Veredito:** baixo — formato CP7.
 
 [↑ índice](#indice)
 
 </details>
 
-<a id="opc-CIRC"></a>
+<a id="opc-DTEI"></a>
 
 <details>
-<summary><b>CIRC — Circuitos Energy Solutions, Lda. (12 sites, 22 pontos)</b> · 1 MÉDIO, 1 BAIXO</summary>
+<summary><b>DTEI — DTE, Instalacoes Especiais (85 sites, 200 pontos)</b> · 2 MÉDIO, 1 BAIXO</summary>
 
-### [MÉDIO] Potência sub-declarada
-
-- **Regra:** `ratio < 0.75` = derating suspeito ou erro de introdução; `ratio = declarada / esperada`.
-
-- **Afetados:** 4 de 22 linhas de conector (18%). Exemplos: `PRD-00007-01`, `PRD-00007`, `MDB-00003-1`, `MDB-00003`
-
+### [MÉDIO] Combinação formato/tomada
+- **Regra:** connector_format incompatível com charging_mode.
+- **Afetados:** 98 de 200 pontos (49.0%). Exemplos: `CVL-00020-01`, `CVL-00020-03`, `CVL-00021-01`, `CVL-00021-03`, `CVL-00022-01`, `CVL-00020`.
 - **Evidência:**
 
-| point_id | site | tomada | modo | V / A / P declarada / esperada (kW) | ratio |
+| ponto | site |
+|---|---|
+| `CVL-00020-01` | `CVL-00020` |
+| `CVL-00020-03` | `CVL-00020` |
+| `CVL-00021-01` | `CVL-00021` |
+| `CVL-00021-03` | `CVL-00021` |
+| `CVL-00022-01` | `CVL-00022` |
+| `CVL-00022-02` | `CVL-00022` |
+| `CVL-00023-01` | `CVL-00023` |
+| `CVL-00023-03` | `CVL-00023` |
+| `CVL-00024-01` | `CVL-00024` |
+| `CVL-00024-02` | `CVL-00024` |
+| … | … | +88 restantes |
+- **Veredito:** médio — Combinação formato/tomada.
+
+### [MÉDIO] Física/Ohm — sub-declaração (ratio<0,75)
+- **Regra:** potência declarada < 0,75 × V×I / √3×V×I.
+- **Afetados:** 43 de 200 pontos (21.5%). Exemplos: `CVL-00020-03`, `CVL-00021-03`, `CVL-00023-03`, `ILH-00018-03`, `ILH-00022-03`, `CVL-00020`.
+- **Evidência:**
+
+| ponto | site | tomada | modo | tensão / corrente / declarada / esperada | ratio |
 |---|---|---|---|---|---|
-| `PRD-00007-01` | `PRD-00007` | iec62196T2COMBO | mode4DC | 920/250/50/230 | 0,22 |
-| `MDB-00003-1` | `MDB-00003` | iec62196T2COMBO | mode4DC | 920/72/24/66,24 | 0,36 |
-| `PRD-00007-02` | `PRD-00007` | chademo | mode4DC | 500/250/50/125 | 0,40 |
-| `LSB-00273-1` | `LSB-00273` | iec62196T2 | mode3AC3p | 230/32/7,40/12,75 | 0,58 |
+| `CVL-00020-03` | `CVL-00020` | iec62196T2COMBO | mode4DC | 950 V / 150 A / 60000 W / 142500.0 W | 0.421 |
+| `CVL-00021-03` | `CVL-00021` | iec62196T2COMBO | mode4DC | 950 V / 150 A / 60000 W / 142500.0 W | 0.421 |
+| `CVL-00023-03` | `CVL-00023` | iec62196T2COMBO | mode4DC | 950 V / 150 A / 60000 W / 142500.0 W | 0.421 |
+| `ILH-00018-03` | `ILH-00018` | iec62196T2COMBO | mode4DC | 950 V / 150 A / 60000 W / 142500.0 W | 0.421 |
+| `ILH-00022-03` | `ILH-00022` | iec62196T2COMBO | mode4DC | 950 V / 125 A / 60000 W / 118750.0 W | 0.505 |
+| `ILH-00024-03` | `ILH-00024` | iec62196T2COMBO | mode4DC | 950 V / 125 A / 60000 W / 118750.0 W | 0.505 |
+| `ILH-00026-03` | `ILH-00026` | iec62196T2COMBO | mode4DC | 950 V / 125 A / 60000 W / 118750.0 W | 0.505 |
+| `ILH-00027-03` | `ILH-00027` | iec62196T2COMBO | mode4DC | 950 V / 125 A / 60000 W / 118750.0 W | 0.505 |
+| `ILH-00028-03` | `ILH-00028` | iec62196T2COMBO | mode4DC | 950 V / 125 A / 60000 W / 118750.0 W | 0.505 |
+| `CVL-00035-03` | `CVL-00035` | iec62196T2COMBO | mode4DC | 950 V / 125 A / 60000 W / 118750.0 W | 0.505 |
+| … | … | +33 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-DTEI)) |
+- **Veredito:** médio — sub-declaração (ratio<0,75).
 
-- **Veredito:** suspeito — potência declarada muito abaixo de V×I; derating do posto partilhado ou número trocado. Rever contra a chapa do posto.
-
-### [BAIXO] Fragmentação do nome do operador
-
-- **Regra:** Mesmo `operator_id` com várias grafias de `operator_name`; parte a identidade em relatórios e no tracker.
-
-- **Afetados:** 2 grafias; 4 de 12 sites usam uma grafia não modal. Exemplos: `LSB-00276`, `PRD-00005`, `PRD-00016`, `LSB-00275`
-
+### [BAIXO] Metadados — usage_type em falta
+- **Regra:** usage_type nulo/fora do enum.
+- **Afetados:** 13 de 200 pontos (6.5%). Exemplos: `CVL-00059-01`, `CVL-00059-02`, `CVL-00059-03`, `BMT-00006-01`, `BMT-00006-02`, `CVL-00059`.
 - **Evidência:**
 
-| variante de nome | sites |
+| ponto | site |
 |---|---|
-| Circuitos Energy Solutions, Lda. | 8 |
-| Circuitos de Inovação | 4 |
-| … | +10 restantes nos CSVs |
-
-- **Veredito:** suspeito (identidade) — fixar uma grafia única por OPC; não é erro de dados do site.
+| `CVL-00059-01` | `CVL-00059` |
+| `CVL-00059-02` | `CVL-00059` |
+| `CVL-00059-03` | `CVL-00059` |
+| `BMT-00006-01` | `BMT-00006` |
+| `BMT-00006-02` | `BMT-00006` |
+| `BMT-00007-01` | `BMT-00007` |
+| `BMT-00007-02` | `BMT-00007` |
+| `BMT-00008-01` | `BMT-00008` |
+| `BMT-00008-02` | `BMT-00008` |
+| `BMT-00008-03` | `BMT-00008` |
+| … | … | +3 restantes |
+- **Veredito:** baixo — usage_type em falta.
 
 [↑ índice](#indice)
 
 </details>
 
-<a id="opc-LOUL"></a>
+<a id="opc-ECOI"></a>
 
 <details>
-<summary><b>LOUL — Loulé Concelho Global, EM (33 sites, 70 pontos)</b> · 1 MÉDIO, 1 BAIXO</summary>
+<summary><b>ECOI — ECOINSIDE (57 sites, 145 pontos)</b> · 4 MÉDIO, 1 BAIXO</summary>
 
-### [MÉDIO] Potência sub-declarada
-
-- **Regra:** `ratio < 0.75` = derating suspeito ou erro de introdução; `ratio = declarada / esperada`.
-
-- **Afetados:** 3 de 70 linhas de conector (4%). Exemplos: `LLE-00196-01`, `LLE-00196`, `LLE-00058-03`, `LLE-00058`
-
+### [MÉDIO] Combinação formato/tomada
+- **Regra:** connector_format incompatível com charging_mode.
+- **Afetados:** 67 de 145 pontos (46.2%). Exemplos: `RMZ-00003-01`, `RMZ-00003-02`, `RMZ-00004-01`, `MTS-00045-01`, `MTS-00045-02`, `RMZ-00003`.
 - **Evidência:**
 
-| point_id | site | tomada | modo | V / A / P declarada / esperada (kW) | ratio |
+| ponto | site |
+|---|---|
+| `RMZ-00003-01` | `RMZ-00003` |
+| `RMZ-00003-02` | `RMZ-00003` |
+| `RMZ-00004-01` | `RMZ-00004` |
+| `MTS-00045-01` | `MTS-00045` |
+| `MTS-00045-02` | `MTS-00045` |
+| `PVZ-00030-01` | `PVZ-00030` |
+| `PVZ-00030-02` | `PVZ-00030` |
+| `PVZ-00032-01` | `PVZ-00032` |
+| `PVZ-00032-02` | `PVZ-00032` |
+| `PVZ-00031-01` | `PVZ-00031` |
+| … | … | +57 restantes |
+- **Veredito:** médio — Combinação formato/tomada.
+
+### [MÉDIO] Física/Ohm — sub-declaração (ratio<0,75)
+- **Regra:** potência declarada < 0,75 × V×I / √3×V×I.
+- **Afetados:** 25 de 145 pontos (17.2%). Exemplos: `RMZ-00003-01`, `RMZ-00003-02`, `RMZ-00004-02`, `PVZ-00030-01`, `PVZ-00030-02`, `RMZ-00003`.
+- **Evidência:**
+
+| ponto | site | tomada | modo | tensão / corrente / declarada / esperada | ratio |
 |---|---|---|---|---|---|
-| `LLE-00196-01` | `LLE-00196` | iec62196T2COMBO | mode4DC | 900/250/100/225 | 0,44 |
-| `LLE-00058-03` | `LLE-00058` | iec62196T2 | mode3AC3p | 400/125/43/86,60 | 0,50 |
-| `LLE-00196-02` | `LLE-00196` | chademo | mode4DC | 500/200/50/100 | 0,50 |
+| `RMZ-00003-01` | `RMZ-00003` | iec62196T2COMBO | mode4DC | 920 V / 150 A / 60000 W / 138000.0 W | 0.435 |
+| `RMZ-00003-02` | `RMZ-00003` | iec62196T2COMBO | mode4DC | 920 V / 150 A / 60000 W / 138000.0 W | 0.435 |
+| `RMZ-00004-02` | `RMZ-00004` | iec62196T2 | mode3AC3p | 240 V / 32 A / 7400 W / 13302.2 W | 0.556 |
+| `PVZ-00030-01` | `PVZ-00030` | iec62196T2COMBO | mode4DC | 750 V / 200 A / 100000 W / 150000.0 W | 0.667 |
+| `PVZ-00030-02` | `PVZ-00030` | iec62196T2COMBO | mode4DC | 750 V / 200 A / 100000 W / 150000.0 W | 0.667 |
+| `PVZ-00032-01` | `PVZ-00032` | iec62196T2COMBO | mode4DC | 750 V / 200 A / 100000 W / 150000.0 W | 0.667 |
+| `PVZ-00032-02` | `PVZ-00032` | iec62196T2COMBO | mode4DC | 750 V / 200 A / 100000 W / 150000.0 W | 0.667 |
+| `PVZ-00031-01` | `PVZ-00031` | iec62196T2COMBO | mode4DC | 750 V / 200 A / 100000 W / 150000.0 W | 0.667 |
+| `PVZ-00031-02` | `PVZ-00031` | iec62196T2COMBO | mode4DC | 750 V / 200 A / 100000 W / 150000.0 W | 0.667 |
+| `PVZ-00033-01` | `PVZ-00033` | iec62196T2COMBO | mode4DC | 750 V / 200 A / 100000 W / 150000.0 W | 0.667 |
+| … | … | +15 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-ECOI)) |
+- **Veredito:** médio — sub-declaração (ratio<0,75).
 
-- **Veredito:** suspeito — potência declarada muito abaixo de V×I; derating do posto partilhado ou número trocado. Rever contra a chapa do posto.
-
-### [BAIXO] Fragmentação do nome do operador
-
-- **Regra:** Mesmo `operator_id` com várias grafias de `operator_name`; parte a identidade em relatórios e no tracker.
-
-- **Afetados:** 2 grafias; 5 de 33 sites usam uma grafia não modal. Exemplos: `LLE-00068`, `LLE-00043`, `LLE-00022`, `LLE-00085`
-
+### [MÉDIO] Operador — grafias fragmentadas
+- **Regra:** mesmo operator_id com vários operator_name.
+- **Afetados:** 5 de 145 pontos (3.4%). Exemplos: `RMZ-00003-01`, `RMZ-00003-02`, `RMZ-00004-01`, `RMZ-00004-02`, `MTS-00045-01`, `RMZ-00003`.
 - **Evidência:**
 
-| variante de nome | sites |
+| ponto | site |
 |---|---|
-| Loulé Concelho Global | 5 |
-| Loulé Concelho Global, EM | 28 |
-| … | +31 restantes nos CSVs |
+| `RMZ-00003-01` | `RMZ-00003` |
+| `RMZ-00003-02` | `RMZ-00003` |
+| `RMZ-00004-01` | `RMZ-00004` |
+| `RMZ-00004-02` | `RMZ-00004` |
+| `MTS-00045-01` | `MTS-00045` |
+- **Veredito:** médio — grafias fragmentadas.
 
-- **Veredito:** suspeito (identidade) — fixar uma grafia única por OPC; não é erro de dados do site.
+### [MÉDIO] Localização — CP7↔localidade
+- **Regra:** CP4 com city divergente da moda.
+- **Afetados:** 4 de 145 pontos (2.8%). Exemplos: `BRG-00090-01`, `BRG-00090-02`, `BRG-00093-01`, `BRG-00093-02`, `BRG-00090`, `BRG-00093`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `BRG-00090-01` | `BRG-00090` |
+| `BRG-00090-02` | `BRG-00090` |
+| `BRG-00093-01` | `BRG-00093` |
+| `BRG-00093-02` | `BRG-00093` |
+- **Veredito:** médio — CP7↔localidade.
+
+### [BAIXO] Metadados — usage_type em falta
+- **Regra:** usage_type nulo/fora do enum.
+- **Afetados:** 6 de 145 pontos (4.1%). Exemplos: `ACN-00016-01`, `ACN-00016-02`, `ACN-00017-01`, `ACN-00017-02`, `ACN-00018-01`, `ACN-00016`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `ACN-00016-01` | `ACN-00016` |
+| `ACN-00016-02` | `ACN-00016` |
+| `ACN-00017-01` | `ACN-00017` |
+| `ACN-00017-02` | `ACN-00017` |
+| `ACN-00018-01` | `ACN-00018` |
+| `ACN-00018-02` | `ACN-00018` |
+- **Veredito:** baixo — usage_type em falta.
 
 [↑ índice](#indice)
 
 </details>
 
-<a id="opc-CAPW"></a>
+<a id="opc-REMO"></a>
 
 <details>
-<summary><b>CAPW — Capwatt Services (14 sites, 74 pontos)</b> · 1 BAIXO</summary>
+<summary><b>REMO — MOTA-ENGIL REMO CHARGING S.A (16 sites, 38 pontos)</b> · 3 MÉDIO</summary>
 
-### [BAIXO] Fragmentação do nome do operador
-
-- **Regra:** Mesmo `operator_id` com várias grafias de `operator_name`; parte a identidade em relatórios e no tracker.
-
-- **Afetados:** 2 grafias; 6 de 14 sites usam uma grafia não modal. Exemplos: `LSB-00380`, `PRT-00161`, `LSB-00379`, `MAI-00029`
-
+### [MÉDIO] Física/Ohm — sub-declaração (ratio<0,75)
+- **Regra:** potência declarada < 0,75 × V×I / √3×V×I.
+- **Afetados:** 38 de 38 pontos (100.0%). Exemplos: `FLG-00030-01`, `FLG-00030-02`, `MNC-00015-01`, `MNC-00015-02`, `SBG-00009-01`, `FLG-00030`.
 - **Evidência:**
 
-| variante de nome | sites |
-|---|---|
-| Capwatt Services | 8 |
-| Capwatt Services, S.A. | 6 |
-| … | +12 restantes nos CSVs |
-
-- **Veredito:** suspeito (identidade) — fixar uma grafia única por OPC; não é erro de dados do site.
-
-[↑ índice](#indice)
-
-</details>
-
-<a id="opc-LUSI"></a>
-
-<details>
-<summary><b>LUSI — LUSIADAENERGIA, S.A. (14 sites, 25 pontos)</b> · 1 MÉDIO, 1 BAIXO</summary>
-
-### [MÉDIO] Potência sub-declarada
-
-- **Regra:** `ratio < 0.75` = derating suspeito ou erro de introdução; `ratio = declarada / esperada`.
-
-- **Afetados:** 2 de 25 linhas de conector (8%). Exemplos: `LGA-00047-01`, `LGA-00047`, `LGA-00047-02`
-
-- **Evidência:**
-
-| point_id | site | tomada | modo | V / A / P declarada / esperada (kW) | ratio |
+| ponto | site | tomada | modo | tensão / corrente / declarada / esperada | ratio |
 |---|---|---|---|---|---|
-| `LGA-00047-01` | `LGA-00047` | iec62196T2COMBO | mode4DC | 1000/190/120/190 | 0,63 |
-| `LGA-00047-02` | `LGA-00047` | iec62196T2COMBO | mode4DC | 1000/190/120/190 | 0,63 |
+| `FLG-00030-01` | `FLG-00030` | iec62196T2COMBO | mode4DC | 1000 V / 500 A / 200000 W / 500000.0 W | 0.4 |
+| `FLG-00030-02` | `FLG-00030` | iec62196T2COMBO | mode4DC | 1000 V / 500 A / 200000 W / 500000.0 W | 0.4 |
+| `MNC-00015-01` | `MNC-00015` | iec62196T2COMBO | mode4DC | 1000 V / 500 A / 150000 W / 500000.0 W | 0.3 |
+| `MNC-00015-02` | `MNC-00015` | iec62196T2COMBO | mode4DC | 1000 V / 500 A / 150000 W / 500000.0 W | 0.3 |
+| `SBG-00009-01` | `SBG-00009` | iec62196T2COMBO | mode4DC | 1000 V / 500 A / 200000 W / 500000.0 W | 0.4 |
+| `SBG-00009-02` | `SBG-00009` | iec62196T2COMBO | mode4DC | 1000 V / 500 A / 200000 W / 500000.0 W | 0.4 |
+| `CNF-00009-01` | `CNF-00009` | iec62196T2COMBO | mode4DC | 1000 V / 250 A / 60000 W / 250000.0 W | 0.24 |
+| `CNF-00009-02` | `CNF-00009` | iec62196T2COMBO | mode4DC | 1000 V / 250 A / 60000 W / 250000.0 W | 0.24 |
+| `GMR-00167-01` | `GMR-00167` | iec62196T2COMBO | mode4DC | 1000 V / 500 A / 150000 W / 500000.0 W | 0.3 |
+| `GMR-00167-02` | `GMR-00167` | iec62196T2COMBO | mode4DC | 1000 V / 500 A / 150000 W / 500000.0 W | 0.3 |
+| … | … | +28 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-REMO)) |
+- **Veredito:** médio — sub-declaração (ratio<0,75).
 
-- **Veredito:** suspeito — potência declarada muito abaixo de V×I; derating do posto partilhado ou número trocado. Rever contra a chapa do posto.
-
-### [BAIXO] Metadados em falta
-
-- **Regra:** `usage_type`, `auth_methods` ou `brands_accepted` vazios no inventário estático.
-
-- **Afetados:** 3 campos em falta (3 `usage_type`, 0 `auth_methods`, 0 `brands_accepted`). Exemplos: `ABF-00194-01`, `LGA-00049-01`, `LLE-00266-01`
-
+### [MÉDIO] Combinação formato/tomada
+- **Regra:** connector_format incompatível com charging_mode.
+- **Afetados:** 38 de 38 pontos (100.0%). Exemplos: `FLG-00030-01`, `FLG-00030-02`, `MNC-00015-01`, `MNC-00015-02`, `SBG-00009-01`, `FLG-00030`.
 - **Evidência:**
 
-| id | campo em falta |
+| ponto | site |
 |---|---|
-| `ABF-00194-01` | usage_type |
-| `LGA-00049-01` | usage_type |
-| `LLE-00266-01` | usage_type |
+| `FLG-00030-01` | `FLG-00030` |
+| `FLG-00030-02` | `FLG-00030` |
+| `MNC-00015-01` | `MNC-00015` |
+| `MNC-00015-02` | `MNC-00015` |
+| `SBG-00009-01` | `SBG-00009` |
+| `SBG-00009-02` | `SBG-00009` |
+| `CNF-00009-01` | `CNF-00009` |
+| `CNF-00009-02` | `CNF-00009` |
+| `GMR-00167-01` | `GMR-00167` |
+| `GMR-00167-02` | `GMR-00167` |
+| … | … | +28 restantes |
+- **Veredito:** médio — Combinação formato/tomada.
 
-- **Veredito:** suspeito (metadados) — preencher os campos; não afecta a física do ponto.
+### [MÉDIO] Localização — CP7↔localidade
+- **Regra:** CP4 com city divergente da moda.
+- **Afetados:** 2 de 38 pontos (5.3%). Exemplos: `AMT-00043-01`, `AMT-00043-02`, `AMT-00043`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `AMT-00043-01` | `AMT-00043` |
+| `AMT-00043-02` | `AMT-00043` |
+- **Veredito:** médio — CP7↔localidade.
 
 [↑ índice](#indice)
 
 </details>
 
-<a id="opc-BBGE"></a>
+<a id="opc-ENBL"></a>
 
 <details>
-<summary><b>BBGE — BBG Energia Unipessoal, Lda (2 sites, 3 pontos)</b> · 2 BAIXO</summary>
+<summary><b>ENBL — Enable Mobility Solutions, S.A. (24 sites, 53 pontos)</b> · 2 MÉDIO, 1 BAIXO</summary>
 
-### [BAIXO] Fragmentação do nome do operador
-
-- **Regra:** Mesmo `operator_id` com várias grafias de `operator_name`; parte a identidade em relatórios e no tracker.
-
-- **Afetados:** 2 grafias; 1 de 2 sites usam uma grafia não modal. Exemplos: `VVRPUB1`, `CBRPUB1`, `VVRPUB11`, `VVRPUB12`
-
+### [MÉDIO] Combinação formato/tomada
+- **Regra:** connector_format incompatível com charging_mode.
+- **Afetados:** 48 de 53 pontos (90.6%). Exemplos: `VCT-00061-01`, `VCT-00061-02`, `FIG-00037-01`, `FIG-00037-02`, `SNT-00186-01`, `VCT-00061`.
 - **Evidência:**
 
-| variante de nome | sites |
+| ponto | site |
 |---|---|
-| BBG Energia Unipessoal, Lda | 1 |
-| Morenergy | 1 |
+| `VCT-00061-01` | `VCT-00061` |
+| `VCT-00061-02` | `VCT-00061` |
+| `FIG-00037-01` | `FIG-00037` |
+| `FIG-00037-02` | `FIG-00037` |
+| `SNT-00186-01` | `SNT-00186` |
+| `SNT-00186-02` | `SNT-00186` |
+| `SNT-00187-01` | `SNT-00187` |
+| `SNT-00187-02` | `SNT-00187` |
+| `SNT-00188-01` | `SNT-00188` |
+| `SNT-00188-02` | `SNT-00188` |
+| … | … | +38 restantes |
+- **Veredito:** médio — Combinação formato/tomada.
 
-- **Veredito:** suspeito (identidade) — fixar uma grafia única por OPC; não é erro de dados do site.
-
-### [BAIXO] Metadados em falta
-
-- **Regra:** `usage_type`, `auth_methods` ou `brands_accepted` vazios no inventário estático.
-
-- **Afetados:** 3 campos em falta (0 `usage_type`, 0 `auth_methods`, 3 `brands_accepted`). Exemplos: `VVRPUB11`, `VVRPUB12`, `CBRPUB11`
-
+### [MÉDIO] Física/Ohm — sub-declaração (ratio<0,75)
+- **Regra:** potência declarada < 0,75 × V×I / √3×V×I.
+- **Afetados:** 24 de 53 pontos (45.3%). Exemplos: `FIG-00042-01`, `FIG-00042-02`, `LSB-01114-01`, `LSB-01114-02`, `TVR-00031-01`, `FIG-00042`.
 - **Evidência:**
 
-| id | campo em falta |
-|---|---|
-| `VVRPUB11` | brands_accepted |
-| `VVRPUB12` | brands_accepted |
-| `CBRPUB11` | brands_accepted |
-
-- **Veredito:** suspeito (metadados) — preencher os campos; não afecta a física do ponto.
-
-[↑ índice](#indice)
-
-</details>
-
-<a id="opc-CMEL"></a>
-
-<details>
-<summary><b>CMEL — CME (22 sites, 23 pontos)</b> · 1 MÉDIO</summary>
-
-### [MÉDIO] Formato de conector incompatível com o modo
-
-- **Regra:** `cableMode2` só com `mode1*`/`mode2*`; `cableMode3`/`socket` com `mode3*`; `otherCable` só com `mode4DC`/`ccs`.
-
-- **Afetados:** 4 linhas de conector. Exemplos: `SNT-00211-01`, `SNT-00211`, `SNT-00212-01`, `SNT-00212`
-
-- **Evidência:**
-
-| point_id | site | formato | modo |
-|---|---|---|---|
-| `SNT-00211-01` | `SNT-00211` | cableMode3 | mode2AC1p |
-| `SNT-00212-01` | `SNT-00212` | cableMode3 | mode2AC1p |
-| `SNT-00213-01` | `SNT-00213` | cableMode3 | mode2AC1p |
-| `SNT-00214-01` | `SNT-00214` | cableMode3 | mode2AC1p |
-
-- **Veredito:** suspeito — formato de cabo/tomada incoerente com o modo declarado; corrigir o par.
-
-[↑ índice](#indice)
-
-</details>
-
-<a id="opc-FRTR"></a>
-
-<details>
-<summary><b>FRTR — FRONTROW, LDA (5 sites, 8 pontos)</b> · 1 MÉDIO</summary>
-
-### [MÉDIO] Potência sub-declarada
-
-- **Regra:** `ratio < 0.75` = derating suspeito ou erro de introdução; `ratio = declarada / esperada`.
-
-- **Afetados:** 4 de 8 linhas de conector (50%). Exemplos: `BJA-00065-01`, `BJA-00065`, `BJA-00065-02`
-
-- **Evidência:**
-
-| point_id | site | tomada | modo | V / A / P declarada / esperada (kW) | ratio |
+| ponto | site | tomada | modo | tensão / corrente / declarada / esperada | ratio |
 |---|---|---|---|---|---|
-| `BJA-00065-01` | `BJA-00065` | iec62196T2COMBO | mode4DC | 950/133/50/126,35 | 0,40 |
-| `BJA-00065-02` | `BJA-00065` | iec62196T2COMBO | mode4DC | 950/133/50/126,35 | 0,40 |
-| `CNT-00038-01` | `CNT-00038` | iec62196T2COMBO | mode4DC | 950/133/50/126,35 | 0,40 |
-| `CNT-00038-02` | `CNT-00038` | iec62196T2COMBO | mode4DC | 950/133/50/126,35 | 0,40 |
+| `FIG-00042-01` | `FIG-00042` | iec62196T2COMBO | mode4DC | 500 V / 500 A / 150000 W / 250000.0 W | 0.6 |
+| `FIG-00042-02` | `FIG-00042` | iec62196T2COMBO | mode4DC | 500 V / 500 A / 150000 W / 250000.0 W | 0.6 |
+| `LSB-01114-01` | `LSB-01114` | iec62196T2COMBO | mode4DC | 1000 V / 250 A / 120000 W / 250000.0 W | 0.48 |
+| `LSB-01114-02` | `LSB-01114` | iec62196T2COMBO | mode4DC | 1000 V / 250 A / 120000 W / 250000.0 W | 0.48 |
+| `TVR-00031-01` | `TVR-00031` | iec62196T2COMBO | mode4DC | 1000 V / 350 A / 150000 W / 350000.0 W | 0.429 |
+| `TVR-00031-02` | `TVR-00031` | iec62196T2COMBO | mode4DC | 1000 V / 350 A / 150000 W / 350000.0 W | 0.429 |
+| `TVR-00032-01` | `TVR-00032` | iec62196T2COMBO | mode4DC | 1000 V / 350 A / 150000 W / 350000.0 W | 0.429 |
+| `TVR-00032-02` | `TVR-00032` | iec62196T2COMBO | mode4DC | 1000 V / 350 A / 150000 W / 350000.0 W | 0.429 |
+| `AVR-00099-01` | `AVR-00099` | iec62196T2COMBO | mode4DC | 1000 V / 500 A / 300000 W / 500000.0 W | 0.6 |
+| `AVR-00099-02` | `AVR-00099` | iec62196T2COMBO | mode4DC | 1000 V / 500 A / 300000 W / 500000.0 W | 0.6 |
+| … | … | +14 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-ENBL)) |
+- **Veredito:** médio — sub-declaração (ratio<0,75).
 
-- **Veredito:** suspeito — potência declarada muito abaixo de V×I; derating do posto partilhado ou número trocado. Rever contra a chapa do posto.
-
-[↑ índice](#indice)
-
-</details>
-
-<a id="opc-GENJ"></a>
-
-<details>
-<summary><b>GENJ — Generation Journey Lda (21 sites, 41 pontos)</b> · 1 MÉDIO, 1 BAIXO</summary>
-
-### [MÉDIO] Potência sub-declarada
-
-- **Regra:** `ratio < 0.75` = derating suspeito ou erro de introdução; `ratio = declarada / esperada`.
-
-- **Afetados:** 3 de 41 linhas de conector (7%). Exemplos: `GMR-00103-01`, `GMR-00103`, `GMR-00103-02`
-
+### [BAIXO] Metadados — usage_type em falta
+- **Regra:** usage_type nulo/fora do enum.
+- **Afetados:** 2 de 53 pontos (3.8%). Exemplos: `SNT-00237-01`, `SNT-00237-02`, `SNT-00237`.
 - **Evidência:**
 
-| point_id | site | tomada | modo | V / A / P declarada / esperada (kW) | ratio |
-|---|---|---|---|---|---|
-| `GMR-00103-01` | `GMR-00103` | iec62196T2 | mode2AC1p | 240/50/7,40/12 | 0,62 |
-| `GMR-00103-02` | `GMR-00103` | iec62196T2 | mode2AC1p | 240/50/7,40/12 | 0,62 |
-| `GMR-00104-1` | `GMR-00104` | iec62196T2 | mode2AC1p | 240/50/7,40/12 | 0,62 |
-
-- **Veredito:** suspeito — potência declarada muito abaixo de V×I; derating do posto partilhado ou número trocado. Rever contra a chapa do posto.
-
-### [BAIXO] Fragmentação do nome do operador
-
-- **Regra:** Mesmo `operator_id` com várias grafias de `operator_name`; parte a identidade em relatórios e no tracker.
-
-- **Afetados:** 2 grafias; 1 de 21 sites usam uma grafia não modal. Exemplos: `GMR-00075`, `GMR-00077`, `GMR-00085`, `GMR-00080`
-
-- **Evidência:**
-
-| variante de nome | sites |
+| ponto | site |
 |---|---|
-| Generation Journey | 1 |
-| Generation Journey Lda | 20 |
-| … | +19 restantes nos CSVs |
-
-- **Veredito:** suspeito (identidade) — fixar uma grafia única por OPC; não é erro de dados do site.
+| `SNT-00237-01` | `SNT-00237` |
+| `SNT-00237-02` | `SNT-00237` |
+- **Veredito:** baixo — usage_type em falta.
 
 [↑ índice](#indice)
 
 </details>
 
-<a id="opc-IHOM"></a>
+<a id="opc-ZUND"></a>
 
 <details>
-<summary><b>IHOM — iHome Lda (6 sites, 10 pontos)</b> · 1 MÉDIO</summary>
+<summary><b>ZUND — Grupo Easycharger, SL (14 sites, 27 pontos)</b> · 2 MÉDIO, 1 BAIXO</summary>
 
-### [MÉDIO] Potência sub-declarada
-
-- **Regra:** `ratio < 0.75` = derating suspeito ou erro de introdução; `ratio = declarada / esperada`.
-
-- **Afetados:** 4 de 10 linhas de conector (40%). Exemplos: `ABF-00050-01`, `ABF-00050`, `ABF-00051-01`, `ABF-00051`
-
+### [MÉDIO] Combinação formato/tomada
+- **Regra:** connector_format incompatível com charging_mode.
+- **Afetados:** 26 de 27 pontos (96.3%). Exemplos: `BRG-00085-01`, `BRG-00085-02`, `EPS-00041-01`, `EPS-00041-02`, `EPS-00042-01`, `BRG-00085`.
 - **Evidência:**
 
-| point_id | site | tomada | modo | V / A / P declarada / esperada (kW) | ratio |
-|---|---|---|---|---|---|
-| `ABF-00050-01` | `ABF-00050` | iec62196T2COMBO | mode4DC | 920/375/120/345 | 0,35 |
-| `ABF-00051-01` | `ABF-00051` | iec62196T2COMBO | mode4DC | 920/200/90/184 | 0,49 |
-| `ABF-00050-02` | `ABF-00050` | chademo | mode4DC | 500/200/50/100 | 0,50 |
-| `ABF-00051-02` | `ABF-00051` | chademo | mode4DC | 500/200/50/100 | 0,50 |
+| ponto | site |
+|---|---|
+| `BRG-00085-01` | `BRG-00085` |
+| `BRG-00085-02` | `BRG-00085` |
+| `EPS-00041-01` | `EPS-00041` |
+| `EPS-00041-02` | `EPS-00041` |
+| `EPS-00042-01` | `EPS-00042` |
+| `EPS-00042-02` | `EPS-00042` |
+| `MTS-00207-01` | `MTS-00207` |
+| `MTS-00207-02` | `MTS-00207` |
+| `MTS-00208-01` | `MTS-00208` |
+| `MTS-00208-02` | `MTS-00208` |
+| … | … | +16 restantes |
+- **Veredito:** médio — Combinação formato/tomada.
 
-- **Veredito:** suspeito — potência declarada muito abaixo de V×I; derating do posto partilhado ou número trocado. Rever contra a chapa do posto.
+### [MÉDIO] Física/Ohm — sub-declaração (ratio<0,75)
+- **Regra:** potência declarada < 0,75 × V×I / √3×V×I.
+- **Afetados:** 2 de 27 pontos (7.4%). Exemplos: `BRG-00085-01`, `BRG-00085-02`, `BRG-00085`.
+- **Evidência:**
+
+| ponto | site | tomada | modo | tensão / corrente / declarada / esperada | ratio |
+|---|---|---|---|---|---|
+| `BRG-00085-01` | `BRG-00085` | iec62196T2COMBO | mode4DC | 1000 V / 500 A / 23000 W / 500000.0 W | 0.046 |
+| `BRG-00085-02` | `BRG-00085` | iec62196T2COMBO | mode4DC | 1000 V / 500 A / 23000 W / 500000.0 W | 0.046 |
+- **Veredito:** médio — sub-declaração (ratio<0,75).
+
+### [BAIXO] Metadados — usage_type em falta
+- **Regra:** usage_type nulo/fora do enum.
+- **Afetados:** 24 de 27 pontos (88.9%). Exemplos: `EPS-00041-01`, `EPS-00041-02`, `EPS-00042-01`, `EPS-00042-02`, `MTS-00207-01`, `EPS-00041`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `EPS-00041-01` | `EPS-00041` |
+| `EPS-00041-02` | `EPS-00041` |
+| `EPS-00042-01` | `EPS-00042` |
+| `EPS-00042-02` | `EPS-00042` |
+| `MTS-00207-01` | `MTS-00207` |
+| `MTS-00207-02` | `MTS-00207` |
+| `MTS-00208-01` | `MTS-00208` |
+| `MTS-00208-02` | `MTS-00208` |
+| `MTS-00209-01` | `MTS-00209` |
+| `MTS-00209-02` | `MTS-00209` |
+| … | … | +14 restantes |
+- **Veredito:** baixo — usage_type em falta.
+
+[↑ índice](#indice)
+
+</details>
+
+<a id="opc-PLUG"></a>
+
+<details>
+<summary><b>PLUG — e-Plug, Lda (31 sites, 62 pontos)</b> · 2 MÉDIO</summary>
+
+### [MÉDIO] Combinação formato/tomada
+- **Regra:** connector_format incompatível com charging_mode.
+- **Afetados:** 26 de 62 pontos (41.9%). Exemplos: `AMD-00036-01`, `AMD-00036-02`, `AMD-00035-01`, `AMD-00035-02`, `AMD-00040-01`, `AMD-00036`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `AMD-00036-01` | `AMD-00036` |
+| `AMD-00036-02` | `AMD-00036` |
+| `AMD-00035-01` | `AMD-00035` |
+| `AMD-00035-02` | `AMD-00035` |
+| `AMD-00040-01` | `AMD-00040` |
+| `AMD-00040-02` | `AMD-00040` |
+| `AMD-00033-01` | `AMD-00033` |
+| `AMD-00033-02` | `AMD-00033` |
+| `AMD-00030-01` | `AMD-00030` |
+| `AMD-00030-02` | `AMD-00030` |
+| … | … | +16 restantes |
+- **Veredito:** médio — Combinação formato/tomada.
+
+### [MÉDIO] Localização — CP7↔localidade
+- **Regra:** CP4 com city divergente da moda.
+- **Afetados:** 4 de 62 pontos (6.5%). Exemplos: `LLE-00053-01`, `LLE-00053-02`, `MTJ-00012-01`, `MTJ-00012-02`, `LLE-00053`, `MTJ-00012`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `LLE-00053-01` | `LLE-00053` |
+| `LLE-00053-02` | `LLE-00053` |
+| `MTJ-00012-01` | `MTJ-00012` |
+| `MTJ-00012-02` | `MTJ-00012` |
+- **Veredito:** médio — CP7↔localidade.
+
+[↑ índice](#indice)
+
+</details>
+
+<a id="opc-LOGI"></a>
+
+<details>
+<summary><b>LOGI — uCharge (26 sites, 35 pontos)</b> · 3 MÉDIO</summary>
+
+### [MÉDIO] Combinação formato/tomada
+- **Regra:** connector_format incompatível com charging_mode.
+- **Afetados:** 13 de 35 pontos (37.1%). Exemplos: `LSB-00203-01`, `LSB-00203-02`, `CSC-00126-01`, `CSC-00126-02`, `LSB-00202-01`, `LSB-00203`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `LSB-00203-01` | `LSB-00203` |
+| `LSB-00203-02` | `LSB-00203` |
+| `CSC-00126-01` | `CSC-00126` |
+| `CSC-00126-02` | `CSC-00126` |
+| `LSB-00202-01` | `LSB-00202` |
+| `LSB-00202-02` | `LSB-00202` |
+| `CSC-00125-01` | `CSC-00125` |
+| `CSC-00125-02` | `CSC-00125` |
+| `LSB-00476-1` | `LSB-00476` |
+| `LSB-00475-1` | `LSB-00475` |
+| … | … | +3 restantes |
+- **Veredito:** médio — Combinação formato/tomada.
+
+### [MÉDIO] Localização — CP7↔localidade
+- **Regra:** CP4 com city divergente da moda.
+- **Afetados:** 10 de 35 pontos (28.6%). Exemplos: `MTS-00126-01`, `MTS-00125-01`, `LSB-00613-01`, `OER-00180-01`, `PRT-00215-01`, `MTS-00126`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `MTS-00126-01` | `MTS-00126` |
+| `MTS-00125-01` | `MTS-00125` |
+| `LSB-00613-01` | `LSB-00613` |
+| `OER-00180-01` | `OER-00180` |
+| `PRT-00215-01` | `PRT-00215` |
+| `OER-00181-01` | `OER-00181` |
+| `MTS-00127-01` | `MTS-00127` |
+| `LSB-00614-01` | `LSB-00614` |
+| `OER-00182-01` | `OER-00182` |
+| `OER-00183-01` | `OER-00183` |
+- **Veredito:** médio — CP7↔localidade.
+
+### [MÉDIO] Física/Ohm — sub-declaração (ratio<0,75)
+- **Regra:** potência declarada < 0,75 × V×I / √3×V×I.
+- **Afetados:** 2 de 35 pontos (5.7%). Exemplos: `CSC-00126-01`, `CSC-00126-02`, `CSC-00126`.
+- **Evidência:**
+
+| ponto | site | tomada | modo | tensão / corrente / declarada / esperada | ratio |
+|---|---|---|---|---|---|
+| `CSC-00126-01` | `CSC-00126` | iec62196T2COMBO | mode4DC | 1000 V / 375 A / 150000 W / 375000.0 W | 0.4 |
+| `CSC-00126-02` | `CSC-00126` | iec62196T2COMBO | mode4DC | 1000 V / 375 A / 150000 W / 375000.0 W | 0.4 |
+- **Veredito:** médio — sub-declaração (ratio<0,75).
 
 [↑ índice](#indice)
 
@@ -3855,240 +4795,25 @@ Totais: 8 733 sites, 19 259 pontos distintos (19 376 linhas de conector), 92 OPC
 <details>
 <summary><b>EVPW — EVpower, Charging Solutions Lda (22 sites, 46 pontos)</b> · 1 MÉDIO</summary>
 
-### [MÉDIO] Formato de conector incompatível com o modo
-
-- **Regra:** `cableMode2` só com `mode1*`/`mode2*`; `cableMode3`/`socket` com `mode3*`; `otherCable` só com `mode4DC`/`ccs`.
-
-- **Afetados:** 3 linhas de conector. Exemplos: `PTM-00071-01`, `PTM-00071`, `PTM-00072-01`, `PTM-00072`
-
+### [MÉDIO] Combinação formato/tomada
+- **Regra:** connector_format incompatível com charging_mode.
+- **Afetados:** 17 de 46 pontos (37.0%). Exemplos: `FIG-00002-01`, `FIG-00002-02`, `SSB-00008-01`, `SSB-00008-02`, `SRP-00004-01`, `FIG-00002`.
 - **Evidência:**
 
-| point_id | site | formato | modo |
-|---|---|---|---|
-| `PTM-00071-01` | `PTM-00071` | cableMode3 | mode2AC1p |
-| `PTM-00072-01` | `PTM-00072` | cableMode3 | mode2AC1p |
-| `PTM-00073-01` | `PTM-00073` | cableMode3 | mode2AC1p |
-
-- **Veredito:** suspeito — formato de cabo/tomada incoerente com o modo declarado; corrigir o par.
-
-[↑ índice](#indice)
-
-</details>
-
-<a id="opc-PTER"></a>
-
-<details>
-<summary><b>PTER — PETROTERMICA ENERGIA, S.A. (2 sites, 4 pontos)</b> · 1 MÉDIO</summary>
-
-### [MÉDIO] Potência sub-declarada
-
-- **Regra:** `ratio < 0.75` = derating suspeito ou erro de introdução; `ratio = declarada / esperada`.
-
-- **Afetados:** 3 de 4 linhas de conector (75%). Exemplos: `EPS-00040-01`, `EPS-00040`, `EPS-00040-02`
-
-- **Evidência:**
-
-| point_id | site | tomada | modo | V / A / P declarada / esperada (kW) | ratio |
-|---|---|---|---|---|---|
-| `EPS-00040-01` | `EPS-00040` | iec62196T2COMBO | mode4DC | 950/120/60/114 | 0,53 |
-| `EPS-00040-02` | `EPS-00040` | iec62196T2COMBO | mode4DC | 950/120/60/114 | 0,53 |
-| `VFR-00078-02` | `VFR-00078` | iec62196T2COMBO | mode4DC | 950/120/60/114 | 0,53 |
-
-- **Veredito:** suspeito — potência declarada muito abaixo de V×I; derating do posto partilhado ou número trocado. Rever contra a chapa do posto.
-
-[↑ índice](#indice)
-
-</details>
-
-<a id="opc-BRIG"></a>
-
-<details>
-<summary><b>BRIG — Brightcity S.A. (2 sites, 4 pontos)</b> · 1 MÉDIO</summary>
-
-### [MÉDIO] Potência sub-declarada
-
-- **Regra:** `ratio < 0.75` = derating suspeito ou erro de introdução; `ratio = declarada / esperada`.
-
-- **Afetados:** 2 de 4 linhas de conector (50%). Exemplos: `MTS-00192-01`, `MTS-00192`, `MTS-00192-02`
-
-- **Evidência:**
-
-| point_id | site | tomada | modo | V / A / P declarada / esperada (kW) | ratio |
-|---|---|---|---|---|---|
-| `MTS-00192-01` | `MTS-00192` | iec62196T2COMBO | mode4DC | 1000/200/60/200 | 0,30 |
-| `MTS-00192-02` | `MTS-00192` | iec62196T2COMBO | mode4DC | 1000/200/60/200 | 0,30 |
-
-- **Veredito:** suspeito — potência declarada muito abaixo de V×I; derating do posto partilhado ou número trocado. Rever contra a chapa do posto.
-
-[↑ índice](#indice)
-
-</details>
-
-<a id="opc-CEVE"></a>
-
-<details>
-<summary><b>CEVE — CEVE - Cooperativa Eléctrica do Vale D’Este C.R.L. (4 sites, 10 pontos)</b> · 1 BAIXO</summary>
-
-### [BAIXO] Fragmentação do nome do operador
-
-- **Regra:** Mesmo `operator_id` com várias grafias de `operator_name`; parte a identidade em relatórios e no tracker.
-
-- **Afetados:** 2 grafias; 2 de 4 sites usam uma grafia não modal. Exemplos: `VNF-00013`, `VNF-00018`, `BRG-00063`, `BRG-00062`
-
-- **Evidência:**
-
-| variante de nome | sites |
+| ponto | site |
 |---|---|
-| CEVE - Cooperativa Eléctrica do Vale D’Este C.R.L. | 2 |
-| Cooperativa Elétrica de Vale d´Este | 2 |
-| … | +2 restantes nos CSVs |
-
-- **Veredito:** suspeito (identidade) — fixar uma grafia única por OPC; não é erro de dados do site.
-
-[↑ índice](#indice)
-
-</details>
-
-<a id="opc-CSCP"></a>
-
-<details>
-<summary><b>CSCP — Cascais Proxima (8 sites, 16 pontos)</b> · 1 BAIXO</summary>
-
-### [BAIXO] Fragmentação do nome do operador
-
-- **Regra:** Mesmo `operator_id` com várias grafias de `operator_name`; parte a identidade em relatórios e no tracker.
-
-- **Afetados:** 2 grafias; 2 de 8 sites usam uma grafia não modal. Exemplos: `CSC-00109`, `CSC-00106`, `CSC-00108`, `CSC-00104`
-
-- **Evidência:**
-
-| variante de nome | sites |
-|---|---|
-| Cascais Proxima | 6 |
-| Cascais Próxima | 2 |
-| … | +6 restantes nos CSVs |
-
-- **Veredito:** suspeito (identidade) — fixar uma grafia única por OPC; não é erro de dados do site.
-
-[↑ índice](#indice)
-
-</details>
-
-<a id="opc-SFAF"></a>
-
-<details>
-<summary><b>SFAF — Superfafe- supermercados,lda (2 sites, 6 pontos)</b> · 1 MÉDIO</summary>
-
-### [MÉDIO] Potência sub-declarada
-
-- **Regra:** `ratio < 0.75` = derating suspeito ou erro de introdução; `ratio = declarada / esperada`.
-
-- **Afetados:** 2 de 6 linhas de conector (33%). Exemplos: `FAF-00004-01`, `FAF-00004`, `FAF-00004-02`
-
-- **Evidência:**
-
-| point_id | site | tomada | modo | V / A / P declarada / esperada (kW) | ratio |
-|---|---|---|---|---|---|
-| `FAF-00004-01` | `FAF-00004` | iec62196T2COMBO | mode4DC | 1000/200/90/200 | 0,45 |
-| `FAF-00004-02` | `FAF-00004` | iec62196T2COMBO | mode4DC | 1000/200/90/200 | 0,45 |
-
-- **Veredito:** suspeito — potência declarada muito abaixo de V×I; derating do posto partilhado ou número trocado. Rever contra a chapa do posto.
-
-[↑ índice](#indice)
-
-</details>
-
-<a id="opc-SGMR"></a>
-
-<details>
-<summary><b>SGMR — Superguimarães - Supermercados,lda (2 sites, 6 pontos)</b> · 1 MÉDIO</summary>
-
-### [MÉDIO] Potência sub-declarada
-
-- **Regra:** `ratio < 0.75` = derating suspeito ou erro de introdução; `ratio = declarada / esperada`.
-
-- **Afetados:** 2 de 6 linhas de conector (33%). Exemplos: `GMR-00022-01`, `GMR-00022`, `GMR-00022-02`
-
-- **Evidência:**
-
-| point_id | site | tomada | modo | V / A / P declarada / esperada (kW) | ratio |
-|---|---|---|---|---|---|
-| `GMR-00022-01` | `GMR-00022` | iec62196T2COMBO | mode4DC | 1000/200/120/200 | 0,60 |
-| `GMR-00022-02` | `GMR-00022` | iec62196T2COMBO | mode4DC | 1000/200/120/200 | 0,60 |
-
-- **Veredito:** suspeito — potência declarada muito abaixo de V×I; derating do posto partilhado ou número trocado. Rever contra a chapa do posto.
-
-[↑ índice](#indice)
-
-</details>
-
-<a id="opc-WENE"></a>
-
-<details>
-<summary><b>WENE — WENEA SERVICES SPAIN S.L. (2 sites, 4 pontos)</b> · 1 MÉDIO</summary>
-
-### [MÉDIO] Potência sub-declarada
-
-- **Regra:** `ratio < 0.75` = derating suspeito ou erro de introdução; `ratio = declarada / esperada`.
-
-- **Afetados:** 2 de 4 linhas de conector (50%). Exemplos: `LSB-00611-01`, `LSB-00611`, `LSB-00611-02`
-
-- **Evidência:**
-
-| point_id | site | tomada | modo | V / A / P declarada / esperada (kW) | ratio |
-|---|---|---|---|---|---|
-| `LSB-00611-01` | `LSB-00611` | iec62196T2 | mode2AC1p | 240/63/7,40/15,12 | 0,49 |
-| `LSB-00611-02` | `LSB-00611` | iec62196T2 | mode2AC1p | 240/63/7,40/15,12 | 0,49 |
-
-- **Veredito:** suspeito — potência declarada muito abaixo de V×I; derating do posto partilhado ou número trocado. Rever contra a chapa do posto.
-
-[↑ índice](#indice)
-
-</details>
-
-<a id="opc-GREE"></a>
-
-<details>
-<summary><b>GREE — GREEN CHARGE - MOBILIDADE ELÉTRICA, LDA (16 sites, 17 pontos)</b> · 1 BAIXO</summary>
-
-### [BAIXO] Fragmentação do nome do operador
-
-- **Regra:** Mesmo `operator_id` com várias grafias de `operator_name`; parte a identidade em relatórios e no tracker.
-
-- **Afetados:** 2 grafias; 1 de 16 sites usam uma grafia não modal. Exemplos: `OER-00153`, `OER-00154`, `OER-00146`, `OER-00160`
-
-- **Evidência:**
-
-| variante de nome | sites |
-|---|---|
-| GREEN CHARGE - MOBILIDADE ELÉTRICA, LDA | 15 |
-| Green Charge - Mobilidade Eletrica | 1 |
-| … | +14 restantes nos CSVs |
-
-- **Veredito:** suspeito (identidade) — fixar uma grafia única por OPC; não é erro de dados do site.
-
-[↑ índice](#indice)
-
-</details>
-
-<a id="opc-PARI"></a>
-
-<details>
-<summary><b>PARI — Parinox Energia (6 sites, 7 pontos)</b> · 1 MÉDIO</summary>
-
-### [MÉDIO] Potência sub-declarada
-
-- **Regra:** `ratio < 0.75` = derating suspeito ou erro de introdução; `ratio = declarada / esperada`.
-
-- **Afetados:** 1 de 7 linhas de conector (14%). Exemplos: `AGD-00040-01`, `AGD-00040`, `AGD-00039-01`, `AGD-00043-01`
-
-- **Evidência:**
-
-| point_id | site | tomada | modo | V / A / P declarada / esperada (kW) | ratio |
-|---|---|---|---|---|---|
-| `AGD-00040-01` | `AGD-00040` | iec62196T2COMBO | mode4DC | 1000/50/30/50 | 0,60 |
-
-- **Veredito:** suspeito — potência declarada muito abaixo de V×I; derating do posto partilhado ou número trocado. Rever contra a chapa do posto.
+| `FIG-00002-01` | `FIG-00002` |
+| `FIG-00002-02` | `FIG-00002` |
+| `SSB-00008-01` | `SSB-00008` |
+| `SSB-00008-02` | `SSB-00008` |
+| `SRP-00004-01` | `SRP-00004` |
+| `SRP-00004-02` | `SRP-00004` |
+| `MFR-00025-01` | `MFR-00025` |
+| `MFR-00025-02` | `MFR-00025` |
+| `ARV-00012-01` | `ARV-00012` |
+| `ARV-00012-02` | `ARV-00012` |
+| … | … | +7 restantes |
+- **Veredito:** médio — Combinação formato/tomada.
 
 [↑ índice](#indice)
 
@@ -4097,21 +4822,1206 @@ Totais: 8 733 sites, 19 259 pontos distintos (19 376 linhas de conector), 92 OPC
 <a id="opc-VEIM"></a>
 
 <details>
-<summary><b>VEIM — Veimonte Lda (20 sites, 35 pontos)</b> · 1 MÉDIO</summary>
+<summary><b>VEIM — Veimonte Lda (20 sites, 35 pontos)</b> · 3 MÉDIO</summary>
 
-### [MÉDIO] Potência sub-declarada
-
-- **Regra:** `ratio < 0.75` = derating suspeito ou erro de introdução; `ratio = declarada / esperada`.
-
-- **Afetados:** 1 de 35 linhas de conector (3%). Exemplos: `MMN-00004-03`, `MMN-00004`, `MMN-00004-01`, `MMN-00004-02`
-
+### [MÉDIO] Combinação formato/tomada
+- **Regra:** connector_format incompatível com charging_mode.
+- **Afetados:** 12 de 35 pontos (34.3%). Exemplos: `VND-00005-01`, `VND-00005-02`, `MMN-00004-01`, `MMN-00004-02`, `PRT-00211-01`, `VND-00005`.
 - **Evidência:**
 
-| point_id | site | tomada | modo | V / A / P declarada / esperada (kW) | ratio |
+| ponto | site |
+|---|---|
+| `VND-00005-01` | `VND-00005` |
+| `VND-00005-02` | `VND-00005` |
+| `MMN-00004-01` | `MMN-00004` |
+| `MMN-00004-02` | `MMN-00004` |
+| `PRT-00211-01` | `PRT-00211` |
+| `PRT-00211-02` | `PRT-00211` |
+| `EPS-00005-01` | `EPS-00005` |
+| `EPS-00005-02` | `EPS-00005` |
+| `VCD-00040-01` | `VCD-00040` |
+| `VCD-00040-02` | `VCD-00040` |
+| … | … | +2 restantes |
+- **Veredito:** médio — Combinação formato/tomada.
+
+### [MÉDIO] Localização — CP7↔localidade
+- **Regra:** CP4 com city divergente da moda.
+- **Afetados:** 3 de 35 pontos (8.6%). Exemplos: `VND-00005-01`, `VND-00005-02`, `VND-00005-03`, `VND-00005`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `VND-00005-01` | `VND-00005` |
+| `VND-00005-02` | `VND-00005` |
+| `VND-00005-03` | `VND-00005` |
+- **Veredito:** médio — CP7↔localidade.
+
+### [MÉDIO] Física/Ohm — sub-declaração (ratio<0,75)
+- **Regra:** potência declarada < 0,75 × V×I / √3×V×I.
+- **Afetados:** 1 de 35 pontos (2.9%). Exemplos: `MMN-00004-03`, `MMN-00004`, `MMN-00004`.
+- **Evidência:**
+
+| ponto | site | tomada | modo | tensão / corrente / declarada / esperada | ratio |
 |---|---|---|---|---|---|
-| `MMN-00004-03` | `MMN-00004` | iec62196T2 | mode3AC3p | 400/125/43/86,60 | 0,50 |
+| `MMN-00004-03` | `MMN-00004` | iec62196T2 | mode3AC3p | 400 V / 125 A / 43000 W / 86602.5 W | 0.497 |
+- **Veredito:** médio — sub-declaração (ratio<0,75).
 
-- **Veredito:** suspeito — potência declarada muito abaixo de V×I; derating do posto partilhado ou número trocado. Rever contra a chapa do posto.
+[↑ índice](#indice)
+
+</details>
+
+<a id="opc-MAKS"></a>
+
+<details>
+<summary><b>MAKS — Maksu (49 sites, 49 pontos)</b> · 2 MÉDIO, 2 BAIXO</summary>
+
+### [MÉDIO] Combinação formato/tomada
+- **Regra:** connector_format incompatível com charging_mode.
+- **Afetados:** 4 de 49 pontos (8.2%). Exemplos: `CBR-00162-01`, `CBR-00163-01`, `LSB-01462-01`, `LSB-01463-01`, `CBR-00162`, `CBR-00163`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `CBR-00162-01` | `CBR-00162` |
+| `CBR-00163-01` | `CBR-00163` |
+| `LSB-01462-01` | `LSB-01462` |
+| `LSB-01463-01` | `LSB-01463` |
+- **Veredito:** médio — Combinação formato/tomada.
+
+### [MÉDIO] Física/Ohm — sub-declaração (ratio<0,75)
+- **Regra:** potência declarada < 0,75 × V×I / √3×V×I.
+- **Afetados:** 2 de 49 pontos (4.1%). Exemplos: `LSB-01462-01`, `LSB-01463-01`, `LSB-01462`, `LSB-01463`.
+- **Evidência:**
+
+| ponto | site | tomada | modo | tensão / corrente / declarada / esperada | ratio |
+|---|---|---|---|---|---|
+| `LSB-01462-01` | `LSB-01462` | iec62196T2COMBO | mode4DC | 1000 V / 63 A / 30000 W / 63000.0 W | 0.476 |
+| `LSB-01463-01` | `LSB-01463` | iec62196T2COMBO | mode4DC | 1000 V / 63 A / 30000 W / 63000.0 W | 0.476 |
+- **Veredito:** médio — sub-declaração (ratio<0,75).
+
+### [BAIXO] Chaves eMI3 — código local disperso
+- **Regra:** mesmo <LOCAL> em cidades/CP4 dispersos.
+- **Afetados:** 5 de 49 pontos (10.2%). Exemplos: `CBR-00144-01`, `CBR-00145-01`, `CBR-00146-01`, `CBR-00162-01`, `CBR-00163-01`, `CBR-00144`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `CBR-00144-01` | `CBR-00144` |
+| `CBR-00145-01` | `CBR-00145` |
+| `CBR-00146-01` | `CBR-00146` |
+| `CBR-00162-01` | `CBR-00162` |
+| `CBR-00163-01` | `CBR-00163` |
+- **Veredito:** baixo — código local disperso.
+
+### [BAIXO] Metadados — usage_type em falta
+- **Regra:** usage_type nulo/fora do enum.
+- **Afetados:** 4 de 49 pontos (8.2%). Exemplos: `CBR-00162-01`, `CBR-00163-01`, `LSB-01462-01`, `LSB-01463-01`, `CBR-00162`, `CBR-00163`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `CBR-00162-01` | `CBR-00162` |
+| `CBR-00163-01` | `CBR-00163` |
+| `LSB-01462-01` | `LSB-01462` |
+| `LSB-01463-01` | `LSB-01463` |
+- **Veredito:** baixo — usage_type em falta.
+
+[↑ índice](#indice)
+
+</details>
+
+<a id="opc-CIRC"></a>
+
+<details>
+<summary><b>CIRC — Circuitos Energy Solutions, Lda. (12 sites, 22 pontos)</b> · 3 MÉDIO</summary>
+
+### [MÉDIO] Combinação formato/tomada
+- **Regra:** connector_format incompatível com charging_mode.
+- **Afetados:** 5 de 22 pontos (22.7%). Exemplos: `MDB-00003-1`, `PRD-00007-01`, `PRD-00007-02`, `LSB-00272-01`, `LSB-00272-02`, `MDB-00003`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `MDB-00003-1` | `MDB-00003` |
+| `PRD-00007-01` | `PRD-00007` |
+| `PRD-00007-02` | `PRD-00007` |
+| `LSB-00272-01` | `LSB-00272` |
+| `LSB-00272-02` | `LSB-00272` |
+- **Veredito:** médio — Combinação formato/tomada.
+
+### [MÉDIO] Operador — grafias fragmentadas
+- **Regra:** mesmo operator_id com vários operator_name.
+- **Afetados:** 5 de 22 pontos (22.7%). Exemplos: `LSB-00276-1`, `LSB-00276-2`, `PRD-00005-01`, `PRD-00005-02`, `PRD-00016-01`, `LSB-00276`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `LSB-00276-1` | `LSB-00276` |
+| `LSB-00276-2` | `LSB-00276` |
+| `PRD-00005-01` | `PRD-00005` |
+| `PRD-00005-02` | `PRD-00005` |
+| `PRD-00016-01` | `PRD-00016` |
+- **Veredito:** médio — grafias fragmentadas.
+
+### [MÉDIO] Física/Ohm — sub-declaração (ratio<0,75)
+- **Regra:** potência declarada < 0,75 × V×I / √3×V×I.
+- **Afetados:** 4 de 22 pontos (18.2%). Exemplos: `MDB-00003-1`, `LSB-00273-1`, `PRD-00007-01`, `PRD-00007-02`, `MDB-00003`, `LSB-00273`.
+- **Evidência:**
+
+| ponto | site | tomada | modo | tensão / corrente / declarada / esperada | ratio |
+|---|---|---|---|---|---|
+| `MDB-00003-1` | `MDB-00003` | iec62196T2COMBO | mode4DC | 920 V / 72 A / 24000 W / 66240.0 W | 0.362 |
+| `LSB-00273-1` | `LSB-00273` | iec62196T2 | mode3AC3p | 230 V / 32 A / 7400 W / 12747.9 W | 0.58 |
+| `PRD-00007-01` | `PRD-00007` | iec62196T2COMBO | mode4DC | 920 V / 250 A / 50000 W / 230000.0 W | 0.217 |
+| `PRD-00007-02` | `PRD-00007` | chademo | mode4DC | 500 V / 250 A / 50000 W / 125000.0 W | 0.4 |
+- **Veredito:** médio — sub-declaração (ratio<0,75).
+
+[↑ índice](#indice)
+
+</details>
+
+<a id="opc-CEVE"></a>
+
+<details>
+<summary><b>CEVE — CEVE - Cooperativa Eléctrica do Vale D’Este C.R.L. (4 sites, 10 pontos)</b> · 2 MÉDIO</summary>
+
+### [MÉDIO] Combinação formato/tomada
+- **Regra:** connector_format incompatível com charging_mode.
+- **Afetados:** 6 de 10 pontos (60.0%). Exemplos: `VNF-00013-01`, `VNF-00013-02`, `VNF-00018-01`, `VNF-00018-02`, `BRG-00062-01`, `VNF-00013`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `VNF-00013-01` | `VNF-00013` |
+| `VNF-00013-02` | `VNF-00013` |
+| `VNF-00018-01` | `VNF-00018` |
+| `VNF-00018-02` | `VNF-00018` |
+| `BRG-00062-01` | `BRG-00062` |
+| `BRG-00062-02` | `BRG-00062` |
+- **Veredito:** médio — Combinação formato/tomada.
+
+### [MÉDIO] Operador — grafias fragmentadas
+- **Regra:** mesmo operator_id com vários operator_name.
+- **Afetados:** 5 de 10 pontos (50.0%). Exemplos: `VNF-00013-01`, `VNF-00013-02`, `VNF-00013-03`, `VNF-00018-01`, `VNF-00018-02`, `VNF-00013`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `VNF-00013-01` | `VNF-00013` |
+| `VNF-00013-02` | `VNF-00013` |
+| `VNF-00013-03` | `VNF-00013` |
+| `VNF-00018-01` | `VNF-00018` |
+| `VNF-00018-02` | `VNF-00018` |
+- **Veredito:** médio — grafias fragmentadas.
+
+[↑ índice](#indice)
+
+</details>
+
+<a id="opc-IHOM"></a>
+
+<details>
+<summary><b>IHOM — iHome Lda (6 sites, 10 pontos)</b> · 2 MÉDIO</summary>
+
+### [MÉDIO] Combinação formato/tomada
+- **Regra:** connector_format incompatível com charging_mode.
+- **Afetados:** 7 de 10 pontos (70.0%). Exemplos: `ABF-00051-01`, `ABF-00051-02`, `LGS-00009-1`, `LGS-00009-2`, `ABF-00050-01`, `ABF-00051`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `ABF-00051-01` | `ABF-00051` |
+| `ABF-00051-02` | `ABF-00051` |
+| `LGS-00009-1` | `LGS-00009` |
+| `LGS-00009-2` | `LGS-00009` |
+| `ABF-00050-01` | `ABF-00050` |
+| `ABF-00050-02` | `ABF-00050` |
+| `SLV-00036-02` | `SLV-00036` |
+- **Veredito:** médio — Combinação formato/tomada.
+
+### [MÉDIO] Física/Ohm — sub-declaração (ratio<0,75)
+- **Regra:** potência declarada < 0,75 × V×I / √3×V×I.
+- **Afetados:** 4 de 10 pontos (40.0%). Exemplos: `ABF-00051-01`, `ABF-00051-02`, `ABF-00050-01`, `ABF-00050-02`, `ABF-00051`, `ABF-00050`.
+- **Evidência:**
+
+| ponto | site | tomada | modo | tensão / corrente / declarada / esperada | ratio |
+|---|---|---|---|---|---|
+| `ABF-00051-01` | `ABF-00051` | iec62196T2COMBO | mode4DC | 920 V / 200 A / 90000 W / 184000.0 W | 0.489 |
+| `ABF-00051-02` | `ABF-00051` | chademo | mode4DC | 500 V / 200 A / 50000 W / 100000.0 W | 0.5 |
+| `ABF-00050-01` | `ABF-00050` | iec62196T2COMBO | mode4DC | 920 V / 375 A / 120000 W / 345000.0 W | 0.348 |
+| `ABF-00050-02` | `ABF-00050` | chademo | mode4DC | 500 V / 200 A / 50000 W / 100000.0 W | 0.5 |
+- **Veredito:** médio — sub-declaração (ratio<0,75).
+
+[↑ índice](#indice)
+
+</details>
+
+<a id="opc-LOUL"></a>
+
+<details>
+<summary><b>LOUL — Loulé Concelho Global, EM (33 sites, 70 pontos)</b> · 2 MÉDIO</summary>
+
+### [MÉDIO] Combinação formato/tomada
+- **Regra:** connector_format incompatível com charging_mode.
+- **Afetados:** 8 de 70 pontos (11.4%). Exemplos: `LLE-00043-01`, `LLE-00043-02`, `LLE-00058-01`, `LLE-00058-02`, `LLE-00049-01`, `LLE-00043`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `LLE-00043-01` | `LLE-00043` |
+| `LLE-00043-02` | `LLE-00043` |
+| `LLE-00058-01` | `LLE-00058` |
+| `LLE-00058-02` | `LLE-00058` |
+| `LLE-00049-01` | `LLE-00049` |
+| `LLE-00049-02` | `LLE-00049` |
+| `LLE-00196-01` | `LLE-00196` |
+| `LLE-00196-02` | `LLE-00196` |
+- **Veredito:** médio — Combinação formato/tomada.
+
+### [MÉDIO] Física/Ohm — sub-declaração (ratio<0,75)
+- **Regra:** potência declarada < 0,75 × V×I / √3×V×I.
+- **Afetados:** 3 de 70 pontos (4.3%). Exemplos: `LLE-00058-03`, `LLE-00196-01`, `LLE-00196-02`, `LLE-00058`, `LLE-00196`.
+- **Evidência:**
+
+| ponto | site | tomada | modo | tensão / corrente / declarada / esperada | ratio |
+|---|---|---|---|---|---|
+| `LLE-00058-03` | `LLE-00058` | iec62196T2 | mode3AC3p | 400 V / 125 A / 43000 W / 86602.5 W | 0.497 |
+| `LLE-00196-01` | `LLE-00196` | iec62196T2COMBO | mode4DC | 900 V / 250 A / 100000 W / 225000.0 W | 0.444 |
+| `LLE-00196-02` | `LLE-00196` | chademo | mode4DC | 500 V / 200 A / 50000 W / 100000.0 W | 0.5 |
+- **Veredito:** médio — sub-declaração (ratio<0,75).
+
+[↑ índice](#indice)
+
+</details>
+
+<a id="opc-FACT"></a>
+
+<details>
+<summary><b>FACT — FactorENERGIA (38 sites, 76 pontos)</b> · 2 MÉDIO</summary>
+
+### [MÉDIO] Combinação formato/tomada
+- **Regra:** connector_format incompatível com charging_mode.
+- **Afetados:** 8 de 76 pontos (10.5%). Exemplos: `MCH-00005-01`, `MCH-00005-02`, `MCH-00003-01`, `MCH-00003-02`, `CLT-00005-01`, `MCH-00005`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `MCH-00005-01` | `MCH-00005` |
+| `MCH-00005-02` | `MCH-00005` |
+| `MCH-00003-01` | `MCH-00003` |
+| `MCH-00003-02` | `MCH-00003` |
+| `CLT-00005-01` | `CLT-00005` |
+| `CLT-00005-02` | `CLT-00005` |
+| `MCH-00007-01` | `MCH-00007` |
+| `MCH-00007-02` | `MCH-00007` |
+- **Veredito:** médio — Combinação formato/tomada.
+
+### [MÉDIO] Localização — CP7↔localidade
+- **Regra:** CP4 com city divergente da moda.
+- **Afetados:** 2 de 76 pontos (2.6%). Exemplos: `PTS-00001-01`, `PTS-00001-02`, `PTS-00001`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `PTS-00001-01` | `PTS-00001` |
+| `PTS-00001-02` | `PTS-00001` |
+- **Veredito:** médio — CP7↔localidade.
+
+[↑ índice](#indice)
+
+</details>
+
+<a id="opc-FRTR"></a>
+
+<details>
+<summary><b>FRTR — FRONTROW, LDA (5 sites, 8 pontos)</b> · 3 MÉDIO</summary>
+
+### [MÉDIO] Combinação formato/tomada
+- **Regra:** connector_format incompatível com charging_mode.
+- **Afetados:** 5 de 8 pontos (62.5%). Exemplos: `MRT-00004-02`, `BJA-00065-01`, `BJA-00065-02`, `CNT-00038-01`, `CNT-00038-02`, `MRT-00004`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `MRT-00004-02` | `MRT-00004` |
+| `BJA-00065-01` | `BJA-00065` |
+| `BJA-00065-02` | `BJA-00065` |
+| `CNT-00038-01` | `CNT-00038` |
+| `CNT-00038-02` | `CNT-00038` |
+- **Veredito:** médio — Combinação formato/tomada.
+
+### [MÉDIO] Física/Ohm — sub-declaração (ratio<0,75)
+- **Regra:** potência declarada < 0,75 × V×I / √3×V×I.
+- **Afetados:** 4 de 8 pontos (50.0%). Exemplos: `BJA-00065-01`, `BJA-00065-02`, `CNT-00038-01`, `CNT-00038-02`, `BJA-00065`, `CNT-00038`.
+- **Evidência:**
+
+| ponto | site | tomada | modo | tensão / corrente / declarada / esperada | ratio |
+|---|---|---|---|---|---|
+| `BJA-00065-01` | `BJA-00065` | iec62196T2COMBO | mode4DC | 950 V / 133 A / 50000 W / 126350.0 W | 0.396 |
+| `BJA-00065-02` | `BJA-00065` | iec62196T2COMBO | mode4DC | 950 V / 133 A / 50000 W / 126350.0 W | 0.396 |
+| `CNT-00038-01` | `CNT-00038` | iec62196T2COMBO | mode4DC | 950 V / 133 A / 50000 W / 126350.0 W | 0.396 |
+| `CNT-00038-02` | `CNT-00038` | iec62196T2COMBO | mode4DC | 950 V / 133 A / 50000 W / 126350.0 W | 0.396 |
+- **Veredito:** médio — sub-declaração (ratio<0,75).
+
+### [MÉDIO] Localização — CP7↔localidade
+- **Regra:** CP4 com city divergente da moda.
+- **Afetados:** 1 de 8 pontos (12.5%). Exemplos: `AVR-00068-01`, `AVR-00068`, `AVR-00068`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `AVR-00068-01` | `AVR-00068` |
+- **Veredito:** médio — CP7↔localidade.
+
+[↑ índice](#indice)
+
+</details>
+
+<a id="opc-GENJ"></a>
+
+<details>
+<summary><b>GENJ — Generation Journey Lda (21 sites, 41 pontos)</b> · 3 MÉDIO</summary>
+
+### [MÉDIO] Localização — CP7↔localidade
+- **Regra:** CP4 com city divergente da moda.
+- **Afetados:** 4 de 41 pontos (9.8%). Exemplos: `GMR-00078-01`, `GMR-00078-02`, `GMR-00098-01`, `GMR-00098-02`, `GMR-00078`, `GMR-00098`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `GMR-00078-01` | `GMR-00078` |
+| `GMR-00078-02` | `GMR-00078` |
+| `GMR-00098-01` | `GMR-00098` |
+| `GMR-00098-02` | `GMR-00098` |
+- **Veredito:** médio — CP7↔localidade.
+
+### [MÉDIO] Física/Ohm — sub-declaração (ratio<0,75)
+- **Regra:** potência declarada < 0,75 × V×I / √3×V×I.
+- **Afetados:** 3 de 41 pontos (7.3%). Exemplos: `GMR-00104-1`, `GMR-00103-01`, `GMR-00103-02`, `GMR-00104`, `GMR-00103`.
+- **Evidência:**
+
+| ponto | site | tomada | modo | tensão / corrente / declarada / esperada | ratio |
+|---|---|---|---|---|---|
+| `GMR-00104-1` | `GMR-00104` | iec62196T2 | mode2AC1p | 240 V / 50 A / 7400 W / 12000.0 W | 0.617 |
+| `GMR-00103-01` | `GMR-00103` | iec62196T2 | mode2AC1p | 240 V / 50 A / 7400 W / 12000.0 W | 0.617 |
+| `GMR-00103-02` | `GMR-00103` | iec62196T2 | mode2AC1p | 240 V / 50 A / 7400 W / 12000.0 W | 0.617 |
+- **Veredito:** médio — sub-declaração (ratio<0,75).
+
+### [MÉDIO] Combinação formato/tomada
+- **Regra:** connector_format incompatível com charging_mode.
+- **Afetados:** 3 de 41 pontos (7.3%). Exemplos: `GMR-00104-1`, `GMR-00103-01`, `GMR-00103-02`, `GMR-00104`, `GMR-00103`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `GMR-00104-1` | `GMR-00104` |
+| `GMR-00103-01` | `GMR-00103` |
+| `GMR-00103-02` | `GMR-00103` |
+- **Veredito:** médio — Combinação formato/tomada.
+
+[↑ índice](#indice)
+
+</details>
+
+<a id="opc-LUSI"></a>
+
+<details>
+<summary><b>LUSI — LUSIADAENERGIA, S.A. (14 sites, 25 pontos)</b> · 3 MÉDIO, 1 BAIXO</summary>
+
+### [MÉDIO] Combinação formato/tomada
+- **Regra:** connector_format incompatível com charging_mode.
+- **Afetados:** 4 de 25 pontos (16.0%). Exemplos: `LLE-00072-01`, `LLE-00072-02`, `LGA-00047-01`, `LGA-00047-02`, `LLE-00072`, `LGA-00047`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `LLE-00072-01` | `LLE-00072` |
+| `LLE-00072-02` | `LLE-00072` |
+| `LGA-00047-01` | `LGA-00047` |
+| `LGA-00047-02` | `LGA-00047` |
+- **Veredito:** médio — Combinação formato/tomada.
+
+### [MÉDIO] Física/Ohm — sub-declaração (ratio<0,75)
+- **Regra:** potência declarada < 0,75 × V×I / √3×V×I.
+- **Afetados:** 2 de 25 pontos (8.0%). Exemplos: `LGA-00047-01`, `LGA-00047-02`, `LGA-00047`.
+- **Evidência:**
+
+| ponto | site | tomada | modo | tensão / corrente / declarada / esperada | ratio |
+|---|---|---|---|---|---|
+| `LGA-00047-01` | `LGA-00047` | iec62196T2COMBO | mode4DC | 1000 V / 190 A / 120000 W / 190000.0 W | 0.632 |
+| `LGA-00047-02` | `LGA-00047` | iec62196T2COMBO | mode4DC | 1000 V / 190 A / 120000 W / 190000.0 W | 0.632 |
+- **Veredito:** médio — sub-declaração (ratio<0,75).
+
+### [MÉDIO] Localização — CP7↔localidade
+- **Regra:** CP4 com city divergente da moda.
+- **Afetados:** 1 de 25 pontos (4.0%). Exemplos: `LGA-00049-01`, `LGA-00049`, `LGA-00049`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `LGA-00049-01` | `LGA-00049` |
+- **Veredito:** médio — CP7↔localidade.
+
+### [BAIXO] Metadados — usage_type em falta
+- **Regra:** usage_type nulo/fora do enum.
+- **Afetados:** 3 de 25 pontos (12.0%). Exemplos: `ABF-00194-01`, `LGA-00049-01`, `LLE-00266-01`, `ABF-00194`, `LGA-00049`, `LLE-00266`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `ABF-00194-01` | `ABF-00194` |
+| `LGA-00049-01` | `LGA-00049` |
+| `LLE-00266-01` | `LLE-00266` |
+- **Veredito:** baixo — usage_type em falta.
+
+[↑ índice](#indice)
+
+</details>
+
+<a id="opc-PTER"></a>
+
+<details>
+<summary><b>PTER — PETROTERMICA ENERGIA, S.A. (2 sites, 4 pontos)</b> · 3 MÉDIO</summary>
+
+### [MÉDIO] Combinação formato/tomada
+- **Regra:** connector_format incompatível com charging_mode.
+- **Afetados:** 4 de 4 pontos (100.0%). Exemplos: `VFR-00078-01`, `VFR-00078-02`, `EPS-00040-01`, `EPS-00040-02`, `VFR-00078`, `EPS-00040`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `VFR-00078-01` | `VFR-00078` |
+| `VFR-00078-02` | `VFR-00078` |
+| `EPS-00040-01` | `EPS-00040` |
+| `EPS-00040-02` | `EPS-00040` |
+- **Veredito:** médio — Combinação formato/tomada.
+
+### [MÉDIO] Física/Ohm — sub-declaração (ratio<0,75)
+- **Regra:** potência declarada < 0,75 × V×I / √3×V×I.
+- **Afetados:** 3 de 4 pontos (75.0%). Exemplos: `VFR-00078-02`, `EPS-00040-01`, `EPS-00040-02`, `VFR-00078`, `EPS-00040`.
+- **Evidência:**
+
+| ponto | site | tomada | modo | tensão / corrente / declarada / esperada | ratio |
+|---|---|---|---|---|---|
+| `VFR-00078-02` | `VFR-00078` | iec62196T2COMBO | mode4DC | 950 V / 120 A / 60000 W / 114000.0 W | 0.526 |
+| `EPS-00040-01` | `EPS-00040` | iec62196T2COMBO | mode4DC | 950 V / 120 A / 60000 W / 114000.0 W | 0.526 |
+| `EPS-00040-02` | `EPS-00040` | iec62196T2COMBO | mode4DC | 950 V / 120 A / 60000 W / 114000.0 W | 0.526 |
+- **Veredito:** médio — sub-declaração (ratio<0,75).
+
+### [MÉDIO] Localização — CP7↔localidade
+- **Regra:** CP4 com city divergente da moda.
+- **Afetados:** 2 de 4 pontos (50.0%). Exemplos: `VFR-00078-01`, `VFR-00078-02`, `VFR-00078`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `VFR-00078-01` | `VFR-00078` |
+| `VFR-00078-02` | `VFR-00078` |
+- **Veredito:** médio — CP7↔localidade.
+
+[↑ índice](#indice)
+
+</details>
+
+<a id="opc-SEGM"></a>
+
+<details>
+<summary><b>SEGM — SEGMA - Serviços de Engenharia Gestão e Manutenção Lda (73 sites, 134 pontos)</b> · 2 MÉDIO</summary>
+
+### [MÉDIO] Combinação formato/tomada
+- **Regra:** connector_format incompatível com charging_mode.
+- **Afetados:** 7 de 134 pontos (5.2%). Exemplos: `AGH-00003-01`, `AGH-00003-02`, `PDL-00005-01`, `PDL-00005-02`, `AGH-00004-1`, `AGH-00003`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `AGH-00003-01` | `AGH-00003` |
+| `AGH-00003-02` | `AGH-00003` |
+| `PDL-00005-01` | `PDL-00005` |
+| `PDL-00005-02` | `PDL-00005` |
+| `AGH-00004-1` | `AGH-00004` |
+| `VPV-00005-1` | `VPV-00005` |
+| `VPV-00006-1` | `VPV-00006` |
+- **Veredito:** médio — Combinação formato/tomada.
+
+### [MÉDIO] Localização — CP7↔localidade
+- **Regra:** CP4 com city divergente da moda.
+- **Afetados:** 2 de 134 pontos (1.5%). Exemplos: `RGR-00003-01`, `RGR-00003-02`, `RGR-00003`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `RGR-00003-01` | `RGR-00003` |
+| `RGR-00003-02` | `RGR-00003` |
+- **Veredito:** médio — CP7↔localidade.
+
+[↑ índice](#indice)
+
+</details>
+
+<a id="opc-BBGE"></a>
+
+<details>
+<summary><b>BBGE — BBG Energia Unipessoal, Lda (2 sites, 3 pontos)</b> · 2 BAIXO, 1 MÉDIO</summary>
+
+### [MÉDIO] Operador — grafias fragmentadas
+- **Regra:** mesmo operator_id com vários operator_name.
+- **Afetados:** 3 de 3 pontos (100.0%). Exemplos: `VVRPUB11`, `VVRPUB12`, `CBRPUB11`, `VVRPUB1`, `CBRPUB1`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `VVRPUB11` | `VVRPUB1` |
+| `VVRPUB12` | `VVRPUB1` |
+| `CBRPUB11` | `CBRPUB1` |
+- **Veredito:** médio — grafias fragmentadas.
+
+### [BAIXO] Metadados — brands_accepted vazio
+- **Regra:** brands_accepted vazio.
+- **Afetados:** 3 de 3 pontos (100.0%). Exemplos: `VVRPUB11`, `VVRPUB12`, `CBRPUB11`, `VVRPUB1`, `CBRPUB1`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `VVRPUB11` | `VVRPUB1` |
+| `VVRPUB12` | `VVRPUB1` |
+| `CBRPUB11` | `CBRPUB1` |
+- **Veredito:** baixo — brands_accepted vazio.
+
+### [BAIXO] Chaves eMI3 — códigos locais mistos
+- **Regra:** tomadas do mesmo site com <LOCAL> diferentes.
+- **Afetados:** 2 de 3 pontos (66.7%). Exemplos: `VVRPUB11`, `VVRPUB12`, `VVRPUB1`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `VVRPUB11` | `VVRPUB1` |
+| `VVRPUB12` | `VVRPUB1` |
+- **Veredito:** baixo — códigos locais mistos.
+
+[↑ índice](#indice)
+
+</details>
+
+<a id="opc-MOBI"></a>
+
+<details>
+<summary><b>MOBI — MOBIE (5 sites, 10 pontos)</b> · 1 MÉDIO, 1 BAIXO</summary>
+
+### [MÉDIO] Combinação formato/tomada
+- **Regra:** connector_format incompatível com charging_mode.
+- **Afetados:** 7 de 10 pontos (70.0%). Exemplos: `BRG-00010-01`, `BRG-00010-02`, `GMR-00016-01`, `GMR-00016-02`, `CLD-00004-1`, `BRG-00010`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `BRG-00010-01` | `BRG-00010` |
+| `BRG-00010-02` | `BRG-00010` |
+| `GMR-00016-01` | `GMR-00016` |
+| `GMR-00016-02` | `GMR-00016` |
+| `CLD-00004-1` | `CLD-00004` |
+| `CLD-00004-2` | `CLD-00004` |
+| `MOBI-LSB-01610-01` | `MOBI-LSB-01610` |
+- **Veredito:** médio — Combinação formato/tomada.
+
+### [BAIXO] Chaves eMI3 — código local disperso
+- **Regra:** mesmo <LOCAL> em cidades/CP4 dispersos.
+- **Afetados:** 1 de 10 pontos (10.0%). Exemplos: `MOBI-LSB-01610-01`, `MOBI-LSB-01610`, `MOBI-LSB-01610`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `MOBI-LSB-01610-01` | `MOBI-LSB-01610` |
+- **Veredito:** baixo — código local disperso.
+
+[↑ índice](#indice)
+
+</details>
+
+<a id="opc-CMEL"></a>
+
+<details>
+<summary><b>CMEL — CME (22 sites, 23 pontos)</b> · 1 MÉDIO, 1 BAIXO</summary>
+
+### [MÉDIO] Combinação formato/tomada
+- **Regra:** connector_format incompatível com charging_mode.
+- **Afetados:** 5 de 23 pontos (21.7%). Exemplos: `SNT-00211-01`, `SNT-00212-01`, `SNT-00213-01`, `SNT-00214-01`, `STR-00070-01`, `SNT-00211`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `SNT-00211-01` | `SNT-00211` |
+| `SNT-00212-01` | `SNT-00212` |
+| `SNT-00213-01` | `SNT-00213` |
+| `SNT-00214-01` | `SNT-00214` |
+| `STR-00070-01` | `STR-00070` |
+- **Veredito:** médio — Combinação formato/tomada.
+
+### [BAIXO] Metadados — usage_type em falta
+- **Regra:** usage_type nulo/fora do enum.
+- **Afetados:** 2 de 23 pontos (8.7%). Exemplos: `OER-00300-01`, `OER-00301-01`, `OER-00300`, `OER-00301`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `OER-00300-01` | `OER-00300` |
+| `OER-00301-01` | `OER-00301` |
+- **Veredito:** baixo — usage_type em falta.
+
+[↑ índice](#indice)
+
+</details>
+
+<a id="opc-BELM"></a>
+
+<details>
+<summary><b>BELM — Blk Mobility, LDA (7 sites, 17 pontos)</b> · 1 MÉDIO</summary>
+
+### [MÉDIO] Combinação formato/tomada
+- **Regra:** connector_format incompatível com charging_mode.
+- **Afetados:** 6 de 17 pontos (35.3%). Exemplos: `MMV-00006-01`, `MMV-00006-02`, `MMV-00010-01`, `MMV-00010-02`, `MMV-00013-01`, `MMV-00006`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `MMV-00006-01` | `MMV-00006` |
+| `MMV-00006-02` | `MMV-00006` |
+| `MMV-00010-01` | `MMV-00010` |
+| `MMV-00010-02` | `MMV-00010` |
+| `MMV-00013-01` | `MMV-00013` |
+| `MMV-00013-02` | `MMV-00013` |
+- **Veredito:** médio — Combinação formato/tomada.
+
+[↑ índice](#indice)
+
+</details>
+
+<a id="opc-BINT"></a>
+
+<details>
+<summary><b>BINT — Bluint - Engenharia e Tecnologias Integradas, Unipessoal, Lda (2 sites, 4 pontos)</b> · 1 MÉDIO, 1 BAIXO</summary>
+
+### [MÉDIO] Localização — CP7↔localidade
+- **Regra:** CP4 com city divergente da moda.
+- **Afetados:** 4 de 4 pontos (100.0%). Exemplos: `VCT-00051-01`, `VCT-00051-02`, `MOBI-VCT-00010-01`, `MOBI-VCT-00010-02`, `VCT-00051`, `MOBI-VCT-00010`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `VCT-00051-01` | `VCT-00051` |
+| `VCT-00051-02` | `VCT-00051` |
+| `MOBI-VCT-00010-01` | `MOBI-VCT-00010` |
+| `MOBI-VCT-00010-02` | `MOBI-VCT-00010` |
+- **Veredito:** médio — CP7↔localidade.
+
+### [BAIXO] Chaves eMI3 — código local disperso
+- **Regra:** mesmo <LOCAL> em cidades/CP4 dispersos.
+- **Afetados:** 2 de 4 pontos (50.0%). Exemplos: `MOBI-VCT-00010-01`, `MOBI-VCT-00010-02`, `MOBI-VCT-00010`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `MOBI-VCT-00010-01` | `MOBI-VCT-00010` |
+| `MOBI-VCT-00010-02` | `MOBI-VCT-00010` |
+- **Veredito:** baixo — código local disperso.
+
+[↑ índice](#indice)
+
+</details>
+
+<a id="opc-GASF"></a>
+
+<details>
+<summary><b>GASF — GASFOMENTO - Sistemas e Instalações de Gás, S.A. (5 sites, 16 pontos)</b> · 1 MÉDIO</summary>
+
+### [MÉDIO] Combinação formato/tomada
+- **Regra:** connector_format incompatível com charging_mode.
+- **Afetados:** 6 de 16 pontos (37.5%). Exemplos: `LSB-00840-02`, `LSB-00840-04`, `LSB-00841-02`, `LSB-00841-04`, `LSB-00842-02`, `LSB-00840`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `LSB-00840-02` | `LSB-00840` |
+| `LSB-00840-04` | `LSB-00840` |
+| `LSB-00841-02` | `LSB-00841` |
+| `LSB-00841-04` | `LSB-00841` |
+| `LSB-00842-02` | `LSB-00842` |
+| `LSB-00842-04` | `LSB-00842` |
+- **Veredito:** médio — Combinação formato/tomada.
+
+[↑ índice](#indice)
+
+</details>
+
+<a id="opc-SFAF"></a>
+
+<details>
+<summary><b>SFAF — Superfafe- supermercados,lda (2 sites, 6 pontos)</b> · 2 MÉDIO</summary>
+
+### [MÉDIO] Combinação formato/tomada
+- **Regra:** connector_format incompatível com charging_mode.
+- **Afetados:** 4 de 6 pontos (66.7%). Exemplos: `FAF-00003-01`, `FAF-00003-02`, `FAF-00004-01`, `FAF-00004-02`, `FAF-00003`, `FAF-00004`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `FAF-00003-01` | `FAF-00003` |
+| `FAF-00003-02` | `FAF-00003` |
+| `FAF-00004-01` | `FAF-00004` |
+| `FAF-00004-02` | `FAF-00004` |
+- **Veredito:** médio — Combinação formato/tomada.
+
+### [MÉDIO] Física/Ohm — sub-declaração (ratio<0,75)
+- **Regra:** potência declarada < 0,75 × V×I / √3×V×I.
+- **Afetados:** 2 de 6 pontos (33.3%). Exemplos: `FAF-00004-01`, `FAF-00004-02`, `FAF-00004`.
+- **Evidência:**
+
+| ponto | site | tomada | modo | tensão / corrente / declarada / esperada | ratio |
+|---|---|---|---|---|---|
+| `FAF-00004-01` | `FAF-00004` | iec62196T2COMBO | mode4DC | 1000 V / 200 A / 90000 W / 200000.0 W | 0.45 |
+| `FAF-00004-02` | `FAF-00004` | iec62196T2COMBO | mode4DC | 1000 V / 200 A / 90000 W / 200000.0 W | 0.45 |
+- **Veredito:** médio — sub-declaração (ratio<0,75).
+
+[↑ índice](#indice)
+
+</details>
+
+<a id="opc-SGMR"></a>
+
+<details>
+<summary><b>SGMR — Superguimarães - Supermercados,lda (2 sites, 6 pontos)</b> · 2 MÉDIO</summary>
+
+### [MÉDIO] Combinação formato/tomada
+- **Regra:** connector_format incompatível com charging_mode.
+- **Afetados:** 4 de 6 pontos (66.7%). Exemplos: `GMR-00022-01`, `GMR-00022-02`, `GMR-00021-01`, `GMR-00021-02`, `GMR-00022`, `GMR-00021`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `GMR-00022-01` | `GMR-00022` |
+| `GMR-00022-02` | `GMR-00022` |
+| `GMR-00021-01` | `GMR-00021` |
+| `GMR-00021-02` | `GMR-00021` |
+- **Veredito:** médio — Combinação formato/tomada.
+
+### [MÉDIO] Física/Ohm — sub-declaração (ratio<0,75)
+- **Regra:** potência declarada < 0,75 × V×I / √3×V×I.
+- **Afetados:** 2 de 6 pontos (33.3%). Exemplos: `GMR-00022-01`, `GMR-00022-02`, `GMR-00022`.
+- **Evidência:**
+
+| ponto | site | tomada | modo | tensão / corrente / declarada / esperada | ratio |
+|---|---|---|---|---|---|
+| `GMR-00022-01` | `GMR-00022` | iec62196T2COMBO | mode4DC | 1000 V / 200 A / 120000 W / 200000.0 W | 0.6 |
+| `GMR-00022-02` | `GMR-00022` | iec62196T2COMBO | mode4DC | 1000 V / 200 A / 120000 W / 200000.0 W | 0.6 |
+- **Veredito:** médio — sub-declaração (ratio<0,75).
+
+[↑ índice](#indice)
+
+</details>
+
+<a id="opc-WENE"></a>
+
+<details>
+<summary><b>WENE — WENEA SERVICES SPAIN S.L. (2 sites, 4 pontos)</b> · 2 MÉDIO</summary>
+
+### [MÉDIO] Combinação formato/tomada
+- **Regra:** connector_format incompatível com charging_mode.
+- **Afetados:** 4 de 4 pontos (100.0%). Exemplos: `LSB-00610-01`, `LSB-00610-02`, `LSB-00611-01`, `LSB-00611-02`, `LSB-00610`, `LSB-00611`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `LSB-00610-01` | `LSB-00610` |
+| `LSB-00610-02` | `LSB-00610` |
+| `LSB-00611-01` | `LSB-00611` |
+| `LSB-00611-02` | `LSB-00611` |
+- **Veredito:** médio — Combinação formato/tomada.
+
+### [MÉDIO] Física/Ohm — sub-declaração (ratio<0,75)
+- **Regra:** potência declarada < 0,75 × V×I / √3×V×I.
+- **Afetados:** 2 de 4 pontos (50.0%). Exemplos: `LSB-00611-01`, `LSB-00611-02`, `LSB-00611`.
+- **Evidência:**
+
+| ponto | site | tomada | modo | tensão / corrente / declarada / esperada | ratio |
+|---|---|---|---|---|---|
+| `LSB-00611-01` | `LSB-00611` | iec62196T2 | mode2AC1p | 240 V / 63 A / 7400 W / 15120.0 W | 0.489 |
+| `LSB-00611-02` | `LSB-00611` | iec62196T2 | mode2AC1p | 240 V / 63 A / 7400 W / 15120.0 W | 0.489 |
+- **Veredito:** médio — sub-declaração (ratio<0,75).
+
+[↑ índice](#indice)
+
+</details>
+
+<a id="opc-CAPW"></a>
+
+<details>
+<summary><b>CAPW — Capwatt Services, S.A. (14 sites, 74 pontos)</b> · 1 MÉDIO</summary>
+
+### [MÉDIO] Operador — grafias fragmentadas
+- **Regra:** mesmo operator_id com vários operator_name.
+- **Afetados:** 5 de 74 pontos (6.8%). Exemplos: `LSB-00380-01`, `LSB-00380-02`, `LSB-00380-03`, `LSB-00380-04`, `LSB-00380-05`, `LSB-00380`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `LSB-00380-01` | `LSB-00380` |
+| `LSB-00380-02` | `LSB-00380` |
+| `LSB-00380-03` | `LSB-00380` |
+| `LSB-00380-04` | `LSB-00380` |
+| `LSB-00380-05` | `LSB-00380` |
+- **Veredito:** médio — grafias fragmentadas.
+
+[↑ índice](#indice)
+
+</details>
+
+<a id="opc-CSCP"></a>
+
+<details>
+<summary><b>CSCP — Cascais Próxima (8 sites, 16 pontos)</b> · 1 MÉDIO</summary>
+
+### [MÉDIO] Operador — grafias fragmentadas
+- **Regra:** mesmo operator_id com vários operator_name.
+- **Afetados:** 5 de 16 pontos (31.2%). Exemplos: `CSC-00109-01`, `CSC-00109-02`, `CSC-00106-01`, `CSC-00106-02`, `CSC-00108-01`, `CSC-00109`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `CSC-00109-01` | `CSC-00109` |
+| `CSC-00109-02` | `CSC-00109` |
+| `CSC-00106-01` | `CSC-00106` |
+| `CSC-00106-02` | `CSC-00106` |
+| `CSC-00108-01` | `CSC-00108` |
+- **Veredito:** médio — grafias fragmentadas.
+
+[↑ índice](#indice)
+
+</details>
+
+<a id="opc-BRIG"></a>
+
+<details>
+<summary><b>BRIG — Brightcity S.A. (2 sites, 4 pontos)</b> · 2 MÉDIO</summary>
+
+### [MÉDIO] Física/Ohm — sub-declaração (ratio<0,75)
+- **Regra:** potência declarada < 0,75 × V×I / √3×V×I.
+- **Afetados:** 2 de 4 pontos (50.0%). Exemplos: `MTS-00192-01`, `MTS-00192-02`, `MTS-00192`.
+- **Evidência:**
+
+| ponto | site | tomada | modo | tensão / corrente / declarada / esperada | ratio |
+|---|---|---|---|---|---|
+| `MTS-00192-01` | `MTS-00192` | iec62196T2COMBO | mode4DC | 1000 V / 200 A / 60000 W / 200000.0 W | 0.3 |
+| `MTS-00192-02` | `MTS-00192` | iec62196T2COMBO | mode4DC | 1000 V / 200 A / 60000 W / 200000.0 W | 0.3 |
+- **Veredito:** médio — sub-declaração (ratio<0,75).
+
+### [MÉDIO] Combinação formato/tomada
+- **Regra:** connector_format incompatível com charging_mode.
+- **Afetados:** 2 de 4 pontos (50.0%). Exemplos: `MTS-00192-01`, `MTS-00192-02`, `MTS-00192`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `MTS-00192-01` | `MTS-00192` |
+| `MTS-00192-02` | `MTS-00192` |
+- **Veredito:** médio — Combinação formato/tomada.
+
+[↑ índice](#indice)
+
+</details>
+
+<a id="opc-EVAE"></a>
+
+<details>
+<summary><b>EVAE — EVAZ Energy, LDA (4 sites, 9 pontos)</b> · 1 MÉDIO</summary>
+
+### [MÉDIO] Combinação formato/tomada
+- **Regra:** connector_format incompatível com charging_mode.
+- **Afetados:** 4 de 9 pontos (44.4%). Exemplos: `BRG-00149-01`, `BRG-00149-02`, `BRG-00150-01`, `BRG-00150-02`, `BRG-00149`, `BRG-00150`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `BRG-00149-01` | `BRG-00149` |
+| `BRG-00149-02` | `BRG-00149` |
+| `BRG-00150-01` | `BRG-00150` |
+| `BRG-00150-02` | `BRG-00150` |
+- **Veredito:** médio — Combinação formato/tomada.
+
+[↑ índice](#indice)
+
+</details>
+
+<a id="opc-PARI"></a>
+
+<details>
+<summary><b>PARI — Parinox Energia (6 sites, 7 pontos)</b> · 2 MÉDIO</summary>
+
+### [MÉDIO] Combinação formato/tomada
+- **Regra:** connector_format incompatível com charging_mode.
+- **Afetados:** 3 de 7 pontos (42.9%). Exemplos: `AGD-00040-01`, `AGD-00044-01`, `AGD-00044-02`, `AGD-00040`, `AGD-00044`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `AGD-00040-01` | `AGD-00040` |
+| `AGD-00044-01` | `AGD-00044` |
+| `AGD-00044-02` | `AGD-00044` |
+- **Veredito:** médio — Combinação formato/tomada.
+
+### [MÉDIO] Física/Ohm — sub-declaração (ratio<0,75)
+- **Regra:** potência declarada < 0,75 × V×I / √3×V×I.
+- **Afetados:** 1 de 7 pontos (14.3%). Exemplos: `AGD-00040-01`, `AGD-00040`, `AGD-00040`.
+- **Evidência:**
+
+| ponto | site | tomada | modo | tensão / corrente / declarada / esperada | ratio |
+|---|---|---|---|---|---|
+| `AGD-00040-01` | `AGD-00040` | iec62196T2COMBO | mode4DC | 1000 V / 50 A / 30000 W / 50000.0 W | 0.6 |
+- **Veredito:** médio — sub-declaração (ratio<0,75).
+
+[↑ índice](#indice)
+
+</details>
+
+<a id="opc-PROP"></a>
+
+<details>
+<summary><b>PROP — PROPEL - PRODUTOS DE PETRÓLEO, LDA (2 sites, 6 pontos)</b> · 1 MÉDIO</summary>
+
+### [MÉDIO] Combinação formato/tomada
+- **Regra:** connector_format incompatível com charging_mode.
+- **Afetados:** 4 de 6 pontos (66.7%). Exemplos: `LRA-00089-01`, `LRA-00089-02`, `LRA-00088-01`, `LRA-00088-02`, `LRA-00089`, `LRA-00088`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `LRA-00089-01` | `LRA-00089` |
+| `LRA-00089-02` | `LRA-00089` |
+| `LRA-00088-01` | `LRA-00088` |
+| `LRA-00088-02` | `LRA-00088` |
+- **Veredito:** médio — Combinação formato/tomada.
+
+[↑ índice](#indice)
+
+</details>
+
+<a id="opc-SDBR"></a>
+
+<details>
+<summary><b>SDBR — SodiBraga - Supermercados Lda (2 sites, 6 pontos)</b> · 1 MÉDIO</summary>
+
+### [MÉDIO] Combinação formato/tomada
+- **Regra:** connector_format incompatível com charging_mode.
+- **Afetados:** 4 de 6 pontos (66.7%). Exemplos: `BRG-00081-01`, `BRG-00081-02`, `BRG-00083-01`, `BRG-00083-02`, `BRG-00081`, `BRG-00083`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `BRG-00081-01` | `BRG-00081` |
+| `BRG-00081-02` | `BRG-00081` |
+| `BRG-00083-01` | `BRG-00083` |
+| `BRG-00083-02` | `BRG-00083` |
+- **Veredito:** médio — Combinação formato/tomada.
+
+[↑ índice](#indice)
+
+</details>
+
+<a id="opc-VISA"></a>
+
+<details>
+<summary><b>VISA — VISACASA - SERVIÇOS DE ASSISTÊNCIA E MANUTENÇÃO GLOBAL S.A. (6 sites, 14 pontos)</b> · 1 MÉDIO</summary>
+
+### [MÉDIO] Combinação formato/tomada
+- **Regra:** connector_format incompatível com charging_mode.
+- **Afetados:** 4 de 14 pontos (28.6%). Exemplos: `VIS-00021-01`, `VIS-00021-02`, `VIS-00022-01`, `VIS-00022-02`, `VIS-00021`, `VIS-00022`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `VIS-00021-01` | `VIS-00021` |
+| `VIS-00021-02` | `VIS-00021` |
+| `VIS-00022-01` | `VIS-00022` |
+| `VIS-00022-02` | `VIS-00022` |
+- **Veredito:** médio — Combinação formato/tomada.
+
+[↑ índice](#indice)
+
+</details>
+
+<a id="opc-CARG"></a>
+
+<details>
+<summary><b>CARG — Cargga Inteligente (6 sites, 12 pontos)</b> · 1 MÉDIO</summary>
+
+### [MÉDIO] Localização — CP7↔localidade
+- **Regra:** CP4 com city divergente da moda.
+- **Afetados:** 2 de 12 pontos (16.7%). Exemplos: `PTL-00006-01`, `PTL-00006-02`, `PTL-00006`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `PTL-00006-01` | `PTL-00006` |
+| `PTL-00006-02` | `PTL-00006` |
+- **Veredito:** médio — CP7↔localidade.
+
+[↑ índice](#indice)
+
+</details>
+
+<a id="opc-EZUR"></a>
+
+<details>
+<summary><b>EZUR — Ezu Energia (2 sites, 4 pontos)</b> · 1 MÉDIO</summary>
+
+### [MÉDIO] Combinação formato/tomada
+- **Regra:** connector_format incompatível com charging_mode.
+- **Afetados:** 2 de 4 pontos (50.0%). Exemplos: `MLD-00013-01`, `MLD-00013-02`, `MLD-00013`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `MLD-00013-01` | `MLD-00013` |
+| `MLD-00013-02` | `MLD-00013` |
+- **Veredito:** médio — Combinação formato/tomada.
+
+[↑ índice](#indice)
+
+</details>
+
+<a id="opc-GRCA"></a>
+
+<details>
+<summary><b>GRCA — Grcapp, Unipessoal Lda (1 sites, 2 pontos)</b> · 1 MÉDIO</summary>
+
+### [MÉDIO] Combinação formato/tomada
+- **Regra:** connector_format incompatível com charging_mode.
+- **Afetados:** 2 de 2 pontos (100.0%). Exemplos: `BCL-00003-01`, `BCL-00003-02`, `BCL-00003`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `BCL-00003-01` | `BCL-00003` |
+| `BCL-00003-02` | `BCL-00003` |
+- **Veredito:** médio — Combinação formato/tomada.
+
+[↑ índice](#indice)
+
+</details>
+
+<a id="opc-INVP"></a>
+
+<details>
+<summary><b>INVP — Intervilapraia (1 sites, 3 pontos)</b> · 1 MÉDIO</summary>
+
+### [MÉDIO] Combinação formato/tomada
+- **Regra:** connector_format incompatível com charging_mode.
+- **Afetados:** 2 de 3 pontos (66.7%). Exemplos: `CMN-00022-01`, `CMN-00022-02`, `CMN-00022`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `CMN-00022-01` | `CMN-00022` |
+| `CMN-00022-02` | `CMN-00022` |
+- **Veredito:** médio — Combinação formato/tomada.
+
+[↑ índice](#indice)
+
+</details>
+
+<a id="opc-KPMS"></a>
+
+<details>
+<summary><b>KPMS — KPM Serviços de Engenheria, Unip Lda (1 sites, 3 pontos)</b> · 1 MÉDIO</summary>
+
+### [MÉDIO] Combinação formato/tomada
+- **Regra:** connector_format incompatível com charging_mode.
+- **Afetados:** 2 de 3 pontos (66.7%). Exemplos: `FLG-00024-01`, `FLG-00024-02`, `FLG-00024`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `FLG-00024-01` | `FLG-00024` |
+| `FLG-00024-02` | `FLG-00024` |
+- **Veredito:** médio — Combinação formato/tomada.
+
+[↑ índice](#indice)
+
+</details>
+
+<a id="opc-SARE"></a>
+
+<details>
+<summary><b>SARE — Superareosa Supermercados, Lda (1 sites, 3 pontos)</b> · 1 MÉDIO</summary>
+
+### [MÉDIO] Combinação formato/tomada
+- **Regra:** connector_format incompatível com charging_mode.
+- **Afetados:** 2 de 3 pontos (66.7%). Exemplos: `VCT-00042-01`, `VCT-00042-02`, `VCT-00042`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `VCT-00042-01` | `VCT-00042` |
+| `VCT-00042-02` | `VCT-00042` |
+- **Veredito:** médio — Combinação formato/tomada.
+
+[↑ índice](#indice)
+
+</details>
+
+<a id="opc-SOLX"></a>
+
+<details>
+<summary><b>SOLX — SOLX (4 sites, 8 pontos)</b> · 1 MÉDIO</summary>
+
+### [MÉDIO] Combinação formato/tomada
+- **Regra:** connector_format incompatível com charging_mode.
+- **Afetados:** 2 de 8 pontos (25.0%). Exemplos: `MLD-00022-01`, `MLD-00022-02`, `MLD-00022`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `MLD-00022-01` | `MLD-00022` |
+| `MLD-00022-02` | `MLD-00022` |
+- **Veredito:** médio — Combinação formato/tomada.
+
+[↑ índice](#indice)
+
+</details>
+
+<a id="opc-PACO"></a>
+
+<details>
+<summary><b>PACO — PACORP, LDA (1 sites, 1 pontos)</b> · 1 MÉDIO</summary>
+
+### [MÉDIO] Combinação formato/tomada
+- **Regra:** connector_format incompatível com charging_mode.
+- **Afetados:** 1 de 1 pontos (100.0%). Exemplos: `BRR-00144-01`, `BRR-00144`, `BRR-00144`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `BRR-00144-01` | `BRR-00144` |
+- **Veredito:** médio — Combinação formato/tomada.
+
+[↑ índice](#indice)
+
+</details>
+
+<a id="opc-PQTJ"></a>
+
+<details>
+<summary><b>PQTJ — Parques Tejo, E.M. (2 sites, 2 pontos)</b> · 1 BAIXO</summary>
+
+### [BAIXO] Metadados — usage_type em falta
+- **Regra:** usage_type nulo/fora do enum.
+- **Afetados:** 2 de 2 pontos (100.0%). Exemplos: `OER-00296-01`, `OER-00297-01`, `OER-00296`, `OER-00297`.
+- **Evidência:**
+
+| ponto | site |
+|---|---|
+| `OER-00296-01` | `OER-00296` |
+| `OER-00297-01` | `OER-00297` |
+- **Veredito:** baixo — usage_type em falta.
 
 [↑ índice](#indice)
 
@@ -4121,33 +6031,31 @@ Totais: 8 733 sites, 19 259 pontos distintos (19 376 linhas de conector), 92 OPC
 
 </details>
 
-## Mudanças de OPCs (desde 2026-10-18)
+## Mudanças de OPCs (desde 2026-10-19)
 
-| OPC | estado | sites (antes→agora) | pontos (antes→agora) | nota |
-|---|---|---|---|---|
-| restantes | estáveis | — | — | sem OPC novo/saído nem variação com \|Δpontos\| ≥ 20 e ≥ 20% entre o censo de 2026-10-18 e o de 2026-10-19 |
+Sem mudanças relevantes (novos/saídos/variações ≥20 e ≥20%).
 
 ## Metodologia
 
-- Ficheiros: `data/nap_static_sites.csv` (8 733 sites) + `data/nap_static_points.csv` (19 376 linhas de conector), do `evChargingInfra_latest.xml` (último `last_updated` 2026-10-19T03:00:03.925Z).
-- Pré-agregação determinística `data/agents-summary.json` (`scripts/anomalias_summary.py`) usada como cross-check independente: sites, linhas, pontos distintos, sobre/sub-declarações, fragmentação de nomes, sites fora de PT e metadados batem com este relatório.
-- Evidência exaustiva de potência `Agents-outputs/anomalias-evidence.csv` + `Agents-outputs/anomalias-details.md` (`scripts/anomalias_evidence.py`, só stdlib); o relatório resume-a em tabelas ≤10 linhas, com linha de elipse a linkar ambos quando trunca. As restantes categorias também mostram ≤10 linhas; como não têm ficheiro exaustivo próprio, a elipse diz «+N restantes nos CSVs» (fonte: `data/nap_static_points.csv` / `data/nap_static_sites.csv`) em vez de apontar para a evidência de potência.
-- Cálculo das restantes categorias: `scripts/anomalias_findings.py` (CSVs + evidência + censo → `data/anomalias-findings.json`, gitignored); gerador deste ficheiro: `scripts/anomalias_report.py` (determinístico). A camada de índice e secções dobráveis é aplicada por `scripts/format_anomalias.py`.
-- Limiares: Ohm aproximado `ratio > 1.25` (CRÍTICO) / `< 0.75` (MÉDIO), com `√3 × V × I` em `mode3AC3p`; teto global 1500 kW; tetos por tomada (`iec62196T2` ≤ 50 kW, `iec62196T2COMBO` ≤ 500 kW, `domestic*` ≤ 7,4 kW, `chademo` ≤ 400 kW); compatibilidade AC↔DC (`tesla*` dual isento); eMI3 `^PT\*[A-Z0-9]+\*.+`; CP7 `NNNN-NNN`; limites PT continente/Açores/Madeira.
-- Rotatividade: `Agents-outputs/opc-census.json` atual (2026-10-19) vs `git show HEAD:Agents-outputs/opc-census.json` (2026-10-18); limiar duplo |Δpontos| ≥ 20 e ≥ 20%.
-- Verificação: todos os ids citados existem nos CSVs; contagens de potência conferem com os ficheiros exaustivos; os pontos com `voltage`/`max_current` nulos ou `mode3AC3p` sem `max_power_w` ficam fora da evidência exaustiva e são reportados nas categorias próprias.
-- Identidade de OPC: os artefactos do tracker PCVE (`data/opc_registry_authority.csv`, `data/tracker_meta.json`) não estão presentes nesta corrida, pelo que o agrupamento usa o `operator_id` do NAP (a fragmentação de grafias de 21 ids é reportada como categoria própria); com o tracker disponível, o agrupamento passa a usar o `PartyId` e `tracker_checks.py` cobre o item 13 do `errors.md`.
+- Ficheiros: `data/nap_static_sites.csv`, `data/nap_static_points.csv` (ETL sobre `data/evChargingInfra_latest.xml`).
+- Agrupamento por `operator_id` (proxy do PartyId; ver gotchas — 21 ids com várias grafias).
+- Evidência exaustiva de potência: `scripts/anomalias_evidence.py` → `Agents-outputs/anomalias-evidence.csv` (máquina) + `Agents-outputs/anomalias-details.md` (por OPC). Tabelas de Evidência no relatório truncam a 10 linhas e terminam com elipse a linkar ambos.
+- Limiares: Ohm ratio>1,25 (CRÍTICO) / <0,75 (MÉDIO); teto global 1500 kW; tetos por tipo de tomada; enums XSD `assets/schemas/energyInfrastructure.xsd`; CP4 moda com ≥5 sites.
+- Verificação: `venv/bin/python scripts/anomalias_check.py`.
 
 ## Não-anomalias verificadas
 
-- Teto global 1500 kW: limpo (máx. 600 kW, `iec62196T2COMBO`).
-- Tensão 1200 V / 3600 V: zero ocorrências; as linhas com tensão, corrente ou potência ≤ 0 são vistas em «Tensão, corrente ou potência inválida».
-- `country` sempre PT; `nuts1` sem desacordos com as coordenadas (`PT1` continente, `PT2` Açores, `PT3` Madeira); `n_points` declarado = real (mismatch 0); sites sem pontos: zero; pontos sem site correspondente: zero; `station_ids` nunca vazio.
-- Cauda de tamanho: pontos/site média 2.21, máximo 40 (site `eddf8de0-ea2f-4d4a-90d4-f0e5639662a1`, hub legítimo); conectores por `point_id`: máximo 3 — sem valores absurdos.
-- Operador ponto↔site: sem divergências; `operator_id`/`operator_name` nulos apenas no grupo «(sem operador)».
-- `last_updated`: sem valores futuros nem anteriores a 2020 (gama 2025-02-03 a 2026-10-19); `is_green_energy` sem nulos; `applicable_vehicles` vazio em todos os sites (sistemático do exportador, sem secção por OPC).
-- `available_charging_power`: presente em 319 de 19 376 linhas; 307 desses valores estão abaixo de 1000 (7–999), coerente com kW em vez de W (ex. 44 contra um conector de 22 000 W) — incoerência sistemática de unidade, registada sem secção por OPC.
-- 2.º segmento do eMI3 ≠ `operator_id`: namespaces diferentes (mnemónica EVSE/CEME do exportador vs PartyId do OPC — ex. `PT*EZC*…` vs `EZC3`), 19 376/19 376 linhas; forma mista sistemática do exportador, sem secção por OPC.
-- `site_external_id` sem namespace único no exportador (`<LOCAL>-<NÚM>` na maioria, um segmento em 553 sites, UUID em alguns sites); `site_id`/`site_external_id` "duplicados" são granularidade conector-por-linha, não erro.
-- `connector_format` estrutural: `cableMode3` usado também em 8 178 linhas DC e `socket` em 1 697 linhas `mode2AC1p` — convenção do exportador; só os cruzamentos raros (184 linhas) são reportados por OPC.
-- NUTS só nível 1 e `brands_accepted` como lista global CEME: limitações documentadas, sem evidência nova.
+- `sites.n_points = 0`: 0 (nenhum site sem pontos declarados).
+- `n_points` declarado ≠ nº real de point_id distintos: 0.
+- Sites sem linhas de ponto: 0.
+- `available_charging_power` nulo em 19 157/19 477 linhas (campo raramente preenchido; não sinalizado por OPC).
+- `station_ids` vazio: 0 sites.
+- `nuts1` em desacordo com coordenadas: 0.
+- `country` ≠ PT: 0.
+- `is_green_energy` nulo: 0.
+- `last_updated` em falta/futuro/anterior a 2020: 0.
+- `applicable_vehicles` vazio em 100% dos sites (campo universalmente não preenchido; não atribuído por OPC).
+- Ponto vs site — divergência de operador: 0.
+- Teto global `max_power_w > 1 500 000 W`: 0 (máximo observado 600 kW).
+- Valores crus 1200 V / 3600 V: 0 ocorrências (i=600 A: 58).
+
