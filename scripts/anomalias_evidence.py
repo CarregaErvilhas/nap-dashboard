@@ -9,6 +9,14 @@ acompanham o relatório resumido `Agents-outputs/anomalias-results.md`:
   legíveis no GitHub, com âncoras `opc-<OPERATOR_ID>` compatíveis com as do
   relatório principal.
 
+Coluna `detetado_em` (AAAA-MM-DD, UTC): dia em que a anomalia apareceu pela
+primeira vez. Lê-se do CSV anterior (versionado), por isso uma anomalia que se
+mantém conserva a data original e só as novas levam a data desta execução;
+se desaparecer e voltar, conta como nova. A identidade é
+`ANOMALY_KEY` (sem `ratio`: corrigir o valor sem sair do limiar continua a ser
+a mesma anomalia). A chave não é única (o NAP repete conectores iguais no mesmo
+ponto), por isso casa-se por multiplicidade, data mais antiga primeiro.
+
 O relatório principal continua resumido (tabelas de Evidência com ≤10 linhas):
 quando trunca, termina com linha de elipse a linkar estes dois ficheiros —
 foi assim que o `CSC-00075` (HEXAGONAL OCEAN) ficou de fora da tabela apesar
@@ -36,7 +44,28 @@ OUT_MD = os.path.join(OUT_DIR, 'anomalias-details.md')
 
 CSV_COLS = ['operator_id', 'operator_name', 'point_id', 'site_external_id',
             'connector_type', 'charging_mode', 'voltage', 'max_current',
-            'max_power_w', 'expected_w', 'ratio', 'categoria', 'severidade']
+            'max_power_w', 'expected_w', 'ratio', 'categoria', 'severidade',
+            'detetado_em']
+ANOMALY_KEY = ('operator_id', 'site_external_id', 'point_id',
+               'connector_type', 'charging_mode', 'categoria')
+
+
+def previous_dates(path):
+    """chave -> datas `detetado_em` do CSV anterior, mais antiga primeiro."""
+    try:
+        f = open(path, encoding='utf-8')
+    except FileNotFoundError:
+        return {}
+    with f:
+        prev = {}
+        for r in csv.DictReader(f):
+            d = (r.get('detetado_em') or '').strip()
+            if d:
+                prev.setdefault(tuple((r.get(k) or '').strip() for k in ANOMALY_KEY),
+                                []).append(d)
+    for ds in prev.values():
+        ds.sort(reverse=True)  # pop() devolve a mais antiga
+    return prev
 
 
 def num(s):
@@ -130,13 +159,19 @@ def main():
                              -r['ratio'] if r['categoria'].startswith('sobre') else r['ratio'],
                              r['point_id']))
 
+    day = datetime.datetime.now(datetime.timezone.utc).strftime('%F')
+    prev = previous_dates(OUT_CSV)
+    for r in rows:
+        ds = prev.get(tuple(r[k] for k in ANOMALY_KEY))
+        r['detetado_em'] = ds.pop() if ds else day
+    new = sum(1 for r in rows if r['detetado_em'] == day)
+
     os.makedirs(OUT_DIR, exist_ok=True)
     with open(OUT_CSV, 'w', newline='', encoding='utf-8') as f:
         w = csv.DictWriter(f, fieldnames=CSV_COLS)
         w.writeheader()
         w.writerows(rows)
 
-    day = datetime.datetime.now(datetime.timezone.utc).strftime('%F')
     over = sum(1 for r in rows if r['categoria'].startswith('sobre'))
     under = len(rows) - over
     by_opc = {}
@@ -210,7 +245,8 @@ def main():
     with open(OUT_MD, 'w', encoding='utf-8') as f:
         f.write(text + '\n')
 
-    print(f'wrote {OUT_CSV}: {len(rows)} linhas, {len(by_opc)} OPCs')
+    print(f'wrote {OUT_CSV}: {len(rows)} linhas ({new} novas em {day}), '
+          f'{len(by_opc)} OPCs')
     print(f'wrote {OUT_MD}: {os.path.getsize(OUT_MD) / 1024:.0f} KB')
     return 0
 
