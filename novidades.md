@@ -1,7 +1,3 @@
-# Novidades da rede (2026-10-19 → 2026-10-25)
+# Novidades da rede (2026-10-25 → 2026-10-26)
 
-- **Estreias:** 25 novos locais em funcionamento (`0295PR0002` · Mangualde · ? · 120 kW; `ALM-00113` · Almada · MOTA · 150 kW; `CBR-00164` · Coimbra · GLPP · 100 kW; `CTB-00087` · Castelo Branco · FCTO · 200 kW; `FAR-00108` · Faro · MOTA · 300 kW; `FAR-00109` · Faro · MOTA · 300 kW; `FAR-00111` · Faro · MOTA · 50 kW; `FAR-00112` · Faro · MOTA · 50 kW; `FAR-00113` · Faro · MOTA · 300 kW; `FAR-00114` · Faro · MOTA · 300 kW (+15 restantes)). 440 reativados (`0001PR0009` · Matosinhos · ? · 50 kW; `0002PL0016` · Amadora · CONT · 22 kW; `0002PR0022` · Amadora · CONT · 50 kW; `0002PR0026` · Amadora · CONT · 50 kW; `0204PR0004` · Vila Real · CONT · 50 kW; `0209PR0003` · Viana do Castelo · ? · 50 kW; `0210PL0002` · São João da Madeira · ? · 22 kW; `0210PR0004` · São João da Madeira · CONT · 50 kW; `0234PR0002` · Mafra · CONT · 120 kW; `0241PR0003` · Castelo Branco · CONT · 50 kW (+430 restantes)).
-- **Saídas:** 5 locais saíram da rede ou foram desligados (`0001PL0001` · Matosinhos · ? · 22 kW; `FIG-00073` · Figueira da Foz · REPS · 120 kW; `LSB-01475` · Lisboa · FCTO · 0 kW; `STS-00030` · Santo Tirso · HIGH · 22 kW; `STS-00031` · Santo Tirso · HIGH · 22 kW).
-- **Maior estreia:** `FAR-00108` (Faro, MOTA) com 2 pontos e 600 kW no total.
-- **Cidade em alta:** Faro com 7 estreias.
-- **Balanço:** +43 locais (0,5% em módulo), +88 pontos face à semana anterior.
+- **Estreias:** 186 locais reativados (`0223PR0002` · Torres Vedras · CONT · 50 kW; `0250PR0002` · ? · CONT · 120 kW; `0270PR0002` · Almeirim · CONT · 120 kW; `0461PR0001` · Loures · ? · 50 kW; `0965PR0002` · Porto Alto · CONT · 120 kW; `1004PR0002` · Leça do Balio · CONT · 50 kW; `1415PL0001` · Lisboa · CONT · 22 kW; `4873PR0002` · Montemor-O-Velho · ? · 50 kW; `6173PL0001` · Alfragide · ? · 22 kW; `6173PR0002` · Alfragide · CONT · 120 kW (+176 restantes)).
