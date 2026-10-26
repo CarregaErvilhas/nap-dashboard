@@ -1,6 +1,6 @@
-# Anomalias — dados estáticos NAP (2026-10-25, snapshot 2026-10-25)
+# Anomalias — dados estáticos NAP (2026-10-26, snapshot 2026-10-26)
 
-Totais: 8776 sites, 19477 linhas de conector (19345 point_id distintos), 8776 site_id distintos, 92 OPCs (+ 104 sites sem operador).
+Totais: 8776 sites, 19477 linhas de conector (19345 point_id distintos), 8776 site_id distintos, 92 OPCs (+ 104 sites sem operador). Dados obtidos em 2026-10-26T12:39:59Z (`data/data-provenance.json`).
 
 ## Resumo por OPC
 
@@ -104,7 +104,16 @@ Totais: 8776 sites, 19477 linhas de conector (19345 point_id distintos), 8776 si
 
 <a id="indice"></a>
 
+<a id="indice"></a>
+
 ## Índice
+
+- [Índice](#sec-ndice) · 169 MÉDIO, 88 BAIXO, 45 CRÍTICO, 10 ALTO
+
+<a id="sec-ndice"></a>
+
+<details open>
+<summary><b>Índice</b> · 169 MÉDIO, 88 BAIXO, 45 CRÍTICO, 10 ALTO</summary>
 
 - [Índice](#sec-ndice) · 169 MÉDIO, 88 BAIXO, 45 CRÍTICO, 10 ALTO
 
@@ -758,7 +767,7 @@ Totais: 8776 sites, 19477 linhas de conector (19345 point_id distintos), 8776 si
 
 ### [CRÍTICO] Duplicados — point_id
 - **Regra:** point_id duplicado no inventário.
-- **Afetados:** 3 de 3432 pontos (0.1%). Exemplos: `ABF-00061-01`, `ABF-00061`, `ABF-00061`, `ABF-00061`, `ABF-00061`.
+- **Afetados:** 3 de 3432 pontos (0.1%). Exemplos: `ABF-00061-01`, `ABF-00061`; contexto do mesmo OPC: `ABF-00061-02`.
 - **Evidência:**
 
 | ponto | site |
@@ -975,16 +984,22 @@ Totais: 8776 sites, 19477 linhas de conector (19345 point_id distintos), 8776 si
 
 ### [MÉDIO] Operador — grafias fragmentadas
 - **Regra:** mesmo operator_id com vários operator_name.
-- **Afetados:** 5 de 1381 pontos (0.4%). Exemplos: `AVR-00049-01`, `AVR-00049-02`, `LRS-00098-01`, `LRS-00098-02`, `LRS-00098-03`, `AVR-00049`.
+- **Afetados:** 1381 de 1381 pontos (100.0%). Exemplos: `AVR-00049-01`, `AVR-00049`, `CHV-00017-01`, `CHV-00017`, `LSB-00651-01`, `LSB-00651`.
 - **Evidência:**
 
 | ponto | site |
 |---|---|
 | `AVR-00049-01` | `AVR-00049` |
+| `CHV-00017-01` | `CHV-00017` |
+| `LSB-00651-01` | `LSB-00651` |
+| `STC-00018-01` | `STC-00018` |
+| `CHV-00024-01` | `CHV-00024` |
+| `VIS-00104-01` | `VIS-00104` |
+| `AMD-00104-01` | `AMD-00104` |
 | `AVR-00049-02` | `AVR-00049` |
-| `LRS-00098-01` | `LRS-00098` |
-| `LRS-00098-02` | `LRS-00098` |
-| `LRS-00098-03` | `LRS-00098` |
+| `CHV-00017-02` | `CHV-00017` |
+| `LSB-00651-02` | `LSB-00651` |
+| … | … | +1371 restantes |
 - **Veredito:** médio — grafias fragmentadas.
 
 ### [BAIXO] Chaves eMI3 — código local disperso
@@ -1029,7 +1044,7 @@ Totais: 8776 sites, 19477 linhas de conector (19345 point_id distintos), 8776 si
 
 ### [BAIXO] Localização — formato CP7
 - **Regra:** postcode fora de NNNN-NNN.
-- **Afetados:** 1 de 1381 pontos (0.1%). Exemplos: `ALQ-00017-02`, `ALQ-00017`, `ALQ-00017`.
+- **Afetados:** 1 de 1381 pontos (0.1%). Exemplos: `ALQ-00017-02`, `ALQ-00017`; contexto do mesmo OPC: `AVR-00049-01`.
 - **Evidência:**
 
 | ponto | site |
@@ -1442,7 +1457,7 @@ Totais: 8776 sites, 19477 linhas de conector (19345 point_id distintos), 8776 si
 
 ### [BAIXO] Contagens — pontos extremos
 - **Regra:** site com n_points na cauda da distribuição (top 5).
-- **Afetados:** 1 de 208 pontos (0.5%). Exemplos: `f3001f1b-de79-4257-bb3c-f9e18460ef73`, `eddf8de0-ea2f-4d4a-90d4-f0e5639662a1`, `eddf8de0-ea2f-4d4a-90d4-f0e5639662a1`.
+- **Afetados:** 1 de 208 pontos (0.5%). Exemplos: `f3001f1b-de79-4257-bb3c-f9e18460ef73`, `eddf8de0-ea2f-4d4a-90d4-f0e5639662a1`; contexto do mesmo OPC: `3b99c0b2-e5e5-4522-8e9b-5fc33f1f0a19`.
 - **Evidência:**
 
 | ponto | site |
@@ -1452,7 +1467,7 @@ Totais: 8776 sites, 19477 linhas de conector (19345 point_id distintos), 8776 si
 
 ### [BAIXO] Contagens — pontos extremos
 - **Regra:** site com n_points na cauda da distribuição (top 5).
-- **Afetados:** 1 de 208 pontos (0.5%). Exemplos: `00711859-da1d-4a63-893b-6cc8fc274e86`, `b798e614-a4b7-45ba-9a5f-8b1dfbc009b4`, `b798e614-a4b7-45ba-9a5f-8b1dfbc009b4`.
+- **Afetados:** 1 de 208 pontos (0.5%). Exemplos: `00711859-da1d-4a63-893b-6cc8fc274e86`, `b798e614-a4b7-45ba-9a5f-8b1dfbc009b4`; contexto do mesmo OPC: `9a3c4655-f2f7-4042-9a81-33edc2f8e76d`.
 - **Evidência:**
 
 | ponto | site |
@@ -1462,7 +1477,7 @@ Totais: 8776 sites, 19477 linhas de conector (19345 point_id distintos), 8776 si
 
 ### [BAIXO] Contagens — pontos extremos
 - **Regra:** site com n_points na cauda da distribuição (top 5).
-- **Afetados:** 1 de 208 pontos (0.5%). Exemplos: `18e7a509-97cc-4a8b-92ff-7567dc38989f`, `381a4acf-82a3-4799-bd23-291aa7c319a6`, `381a4acf-82a3-4799-bd23-291aa7c319a6`.
+- **Afetados:** 1 de 208 pontos (0.5%). Exemplos: `18e7a509-97cc-4a8b-92ff-7567dc38989f`, `381a4acf-82a3-4799-bd23-291aa7c319a6`; contexto do mesmo OPC: `9fe536b4-e470-417a-ab22-fe6a11974a2d`.
 - **Evidência:**
 
 | ponto | site |
@@ -1641,7 +1656,7 @@ Totais: 8776 sites, 19477 linhas de conector (19345 point_id distintos), 8776 si
 
 ### [BAIXO] Contagens — pontos extremos
 - **Regra:** site com n_points na cauda da distribuição (top 5).
-- **Afetados:** 1 de 381 pontos (0.3%). Exemplos: `4BB295D3-97E0-48BB-81C6-F07E1B60A0A6`, `LSB-01482`, `LSB-01482`.
+- **Afetados:** 1 de 381 pontos (0.3%). Exemplos: `4BB295D3-97E0-48BB-81C6-F07E1B60A0A6`, `LSB-01482`; contexto do mesmo OPC: `8DB2E3C5-B516-4738-8383-A3CFD42105B5`.
 - **Evidência:**
 
 | ponto | site |
@@ -1651,7 +1666,7 @@ Totais: 8776 sites, 19477 linhas de conector (19345 point_id distintos), 8776 si
 
 ### [BAIXO] Contagens — pontos extremos
 - **Regra:** site com n_points na cauda da distribuição (top 5).
-- **Afetados:** 1 de 381 pontos (0.3%). Exemplos: `0227C257-3B31-4FF1-B854-E544B02D4C7B`, `LSB-01478`, `LSB-01478`.
+- **Afetados:** 1 de 381 pontos (0.3%). Exemplos: `0227C257-3B31-4FF1-B854-E544B02D4C7B`, `LSB-01478`; contexto do mesmo OPC: `0C78FE86-76B5-4DF2-889D-0C1FB23622D5`.
 - **Evidência:**
 
 | ponto | site |
@@ -1690,7 +1705,7 @@ Totais: 8776 sites, 19477 linhas de conector (19345 point_id distintos), 8776 si
 
 ### [CRÍTICO] Duplicados — point_id
 - **Regra:** point_id duplicado no inventário.
-- **Afetados:** 2 de 1522 pontos (0.1%). Exemplos: `PCV-00005-01`, `PCV-00005`, `PCV-00005`, `PCV-00005`.
+- **Afetados:** 2 de 1522 pontos (0.1%). Exemplos: `PCV-00005-01`, `PCV-00005`; contexto do mesmo OPC: `TMR-00004-01`.
 - **Evidência:**
 
 | ponto | site |
@@ -1805,7 +1820,7 @@ Totais: 8776 sites, 19477 linhas de conector (19345 point_id distintos), 8776 si
 | `0001PL0005.02` | `0001PL0005` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22000 W / 12747.9 W | 1.726 |
 | `0001PL0006.01` | `0001PL0006` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22000 W / 12747.9 W | 1.726 |
 | `0001PL0006.02` | `0001PL0006` | iec62196T2 | mode3AC3p | 230 V / 32 A / 22000 W / 12747.9 W | 1.726 |
-| … | … | +106 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-SEMOPC)) |
+| … | … | +106 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-)) |
 - **Veredito:** crítico — sobre-declaração (ratio>1,25).
 
 ### [CRÍTICO] Física — V≤0 ou I≤0
@@ -1913,7 +1928,7 @@ Totais: 8776 sites, 19477 linhas de conector (19345 point_id distintos), 8776 si
 | `0461PR0005.02` | `0461PR0005` | iec62196T2COMBO | mode4DC | 1000 V / 350 A / 240000 W / 350000.0 W | 0.686 |
 | `0461PR0006.01` | `0461PR0006` | iec62196T2COMBO | mode4DC | 1000 V / 350 A / 240000 W / 350000.0 W | 0.686 |
 | `0461PR0006.02` | `0461PR0006` | iec62196T2COMBO | mode4DC | 1000 V / 350 A / 240000 W / 350000.0 W | 0.686 |
-| … | … | +22 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-SEMOPC)) |
+| … | … | +22 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-)) |
 - **Veredito:** médio — sub-declaração (ratio<0,75).
 
 ### [BAIXO] Metadados — usage_type em falta
@@ -2166,16 +2181,22 @@ Totais: 8776 sites, 19477 linhas de conector (19345 point_id distintos), 8776 si
 
 ### [MÉDIO] Operador — grafias fragmentadas
 - **Regra:** mesmo operator_id com vários operator_name.
-- **Afetados:** 5 de 724 pontos (0.7%). Exemplos: `208`, `209`, `210`, `236`, `237`, `GDL-00017`.
+- **Afetados:** 724 de 724 pontos (100.0%). Exemplos: `208`, `GDL-00017`, `813`, `VIS-00138`, `209`, `814`.
 - **Evidência:**
 
 | ponto | site |
 |---|---|
 | `208` | `GDL-00017` |
+| `813` | `VIS-00138` |
 | `209` | `GDL-00017` |
+| `814` | `VIS-00138` |
 | `210` | `GDL-00017` |
+| `815` | `VIS-00139` |
 | `236` | `LRA-00117` |
+| `816` | `VIS-00139` |
 | `237` | `LRA-00117` |
+| `238` | `LRA-00117` |
+| … | … | +714 restantes |
 - **Veredito:** médio — grafias fragmentadas.
 
 ### [BAIXO] Metadados — usage_type em falta
@@ -2269,7 +2290,7 @@ Totais: 8776 sites, 19477 linhas de conector (19345 point_id distintos), 8776 si
 
 ### [CRÍTICO] Combinação modo/tomada — DC em AC
 - **Regra:** tipo só-DC em mode1/2/3.
-- **Afetados:** 1 de 575 pontos (0.2%). Exemplos: `MTS-00182-03`, `MTS-00182`, `MTS-00182`.
+- **Afetados:** 1 de 575 pontos (0.2%). Exemplos: `MTS-00182-03`, `MTS-00182`; contexto do mesmo OPC: `MTS-00182-01`.
 - **Evidência:**
 
 | ponto | site |
@@ -2279,7 +2300,7 @@ Totais: 8776 sites, 19477 linhas de conector (19345 point_id distintos), 8776 si
 
 ### [CRÍTICO] Combinação modo/tomada — AC em DC
 - **Regra:** tipo só-AC em mode4/ccs.
-- **Afetados:** 1 de 575 pontos (0.2%). Exemplos: `MTS-00182-01`, `MTS-00182`, `MTS-00182`.
+- **Afetados:** 1 de 575 pontos (0.2%). Exemplos: `MTS-00182-01`, `MTS-00182`; contexto do mesmo OPC: `MTS-00182-02`.
 - **Evidência:**
 
 | ponto | site |
@@ -2785,16 +2806,22 @@ Totais: 8776 sites, 19477 linhas de conector (19345 point_id distintos), 8776 si
 
 ### [MÉDIO] Operador — grafias fragmentadas
 - **Regra:** mesmo operator_id com vários operator_name.
-- **Afetados:** 5 de 184 pontos (2.7%). Exemplos: `LSB-00360-01`, `LSB-00360-02`, `LSB-00360-03`, `LSB-00361-01`, `LSB-00361-02`, `LSB-00360`.
+- **Afetados:** 184 de 184 pontos (100.0%). Exemplos: `LSB-00360-01`, `LSB-00360`, `LSB-00456-01`, `LSB-00456`, `LSB-00360-02`, `LSB-00456-02`.
 - **Evidência:**
 
 | ponto | site |
 |---|---|
 | `LSB-00360-01` | `LSB-00360` |
+| `LSB-00456-01` | `LSB-00456` |
 | `LSB-00360-02` | `LSB-00360` |
+| `LSB-00456-02` | `LSB-00456` |
 | `LSB-00360-03` | `LSB-00360` |
+| `LSB-00457-01` | `LSB-00457` |
 | `LSB-00361-01` | `LSB-00361` |
+| `LSB-00457-02` | `LSB-00457` |
 | `LSB-00361-02` | `LSB-00361` |
+| `LSB-00455-01` | `LSB-00455` |
+| … | … | +174 restantes |
 - **Veredito:** médio — grafias fragmentadas.
 
 ### [BAIXO] Metadados — usage_type em falta
@@ -3246,16 +3273,22 @@ Totais: 8776 sites, 19477 linhas de conector (19345 point_id distintos), 8776 si
 
 ### [MÉDIO] Operador — grafias fragmentadas
 - **Regra:** mesmo operator_id com vários operator_name.
-- **Afetados:** 5 de 25 pontos (20.0%). Exemplos: `10`, `11`, `12`, `17`, `19`, `GRD-00044`.
+- **Afetados:** 25 de 25 pontos (100.0%). Exemplos: `10`, `GRD-00044`, `17`, `LSB-01305`, `11`, `48`.
 - **Evidência:**
 
 | ponto | site |
 |---|---|
 | `10` | `GRD-00044` |
-| `11` | `GRD-00044` |
-| `12` | `GRD-00044` |
 | `17` | `LSB-01305` |
+| `11` | `GRD-00044` |
+| `48` | `CRS-00005` |
+| `12` | `GRD-00044` |
+| `49` | `CRS-00005` |
 | `19` | `PRT-00361` |
+| `46` | `SJP-00004` |
+| `20` | `LSB-01319` |
+| `44` | `SJP-00005` |
+| … | … | +15 restantes |
 - **Veredito:** médio — grafias fragmentadas.
 
 ### [BAIXO] Chaves eMI3 — códigos locais mistos
@@ -3490,7 +3523,7 @@ Totais: 8776 sites, 19477 linhas de conector (19345 point_id distintos), 8776 si
 
 ### [MÉDIO] Física/Ohm — sub-declaração (ratio<0,75)
 - **Regra:** potência declarada < 0,75 × V×I / √3×V×I.
-- **Afetados:** 1 de 111 pontos (0.9%). Exemplos: `CLB-00010-01`, `CLB-00010`, `CLB-00010`.
+- **Afetados:** 1 de 111 pontos (0.9%). Exemplos: `CLB-00010-01`, `CLB-00010`; contexto do mesmo OPC: `OER-00150-1`.
 - **Evidência:**
 
 | ponto | site | tomada | modo | tensão / corrente / declarada / esperada | ratio |
@@ -3500,7 +3533,7 @@ Totais: 8776 sites, 19477 linhas de conector (19345 point_id distintos), 8776 si
 
 ### [MÉDIO] Localização — CP7↔localidade
 - **Regra:** CP4 com city divergente da moda.
-- **Afetados:** 1 de 111 pontos (0.9%). Exemplos: `FAR-00100-01`, `FAR-00100`, `FAR-00100`.
+- **Afetados:** 1 de 111 pontos (0.9%). Exemplos: `FAR-00100-01`, `FAR-00100`; contexto do mesmo OPC: `OER-00150-1`.
 - **Evidência:**
 
 | ponto | site |
@@ -3634,7 +3667,7 @@ Totais: 8776 sites, 19477 linhas de conector (19345 point_id distintos), 8776 si
 
 ### [CRÍTICO] Física/Ohm — sobre-declaração (ratio>1,25)
 - **Regra:** potência declarada > 1,25 × V×I (monofásico) / √3×V×I (mode3AC3p).
-- **Afetados:** 1 de 35 pontos (2.9%). Exemplos: `TNV-00029-01`, `TNV-00029`, `TNV-00029`.
+- **Afetados:** 1 de 35 pontos (2.9%). Exemplos: `TNV-00029-01`, `TNV-00029`; contexto do mesmo OPC: `VLG-00012-01`.
 - **Evidência:**
 
 | ponto | site | tomada | modo | tensão / corrente / declarada / esperada | ratio |
@@ -3826,7 +3859,7 @@ Totais: 8776 sites, 19477 linhas de conector (19345 point_id distintos), 8776 si
 
 ### [BAIXO] Localização — postcode em falta
 - **Regra:** postcode vazio.
-- **Afetados:** 1 de 40 pontos (2.5%). Exemplos: `176`, `VRS-HOTEL-MONTE-REI-C01`, `VRS-HOTEL-MONTE-REI-C01`.
+- **Afetados:** 1 de 40 pontos (2.5%). Exemplos: `176`, `VRS-HOTEL-MONTE-REI-C01`; contexto do mesmo OPC: `LRA-00036-01`.
 - **Evidência:**
 
 | ponto | site |
@@ -3836,7 +3869,7 @@ Totais: 8776 sites, 19477 linhas de conector (19345 point_id distintos), 8776 si
 
 ### [BAIXO] Localização — formato CP7
 - **Regra:** postcode fora de NNNN-NNN.
-- **Afetados:** 1 de 40 pontos (2.5%). Exemplos: `176`, `VRS-HOTEL-MONTE-REI-C01`, `VRS-HOTEL-MONTE-REI-C01`.
+- **Afetados:** 1 de 40 pontos (2.5%). Exemplos: `176`, `VRS-HOTEL-MONTE-REI-C01`; contexto do mesmo OPC: `LRA-00036-01`.
 - **Evidência:**
 
 | ponto | site |
@@ -3855,7 +3888,7 @@ Totais: 8776 sites, 19477 linhas de conector (19345 point_id distintos), 8776 si
 
 ### [CRÍTICO] Duplicados — point_id
 - **Regra:** point_id duplicado no inventário.
-- **Afetados:** 2 de 45 pontos (4.4%). Exemplos: `FNC-00047-01`, `FNC-00047`, `FNC-00047`, `FNC-00047`.
+- **Afetados:** 2 de 45 pontos (4.4%). Exemplos: `FNC-00047-01`, `FNC-00047`; contexto do mesmo OPC: `FNC-00047-02`.
 - **Evidência:**
 
 | ponto | site |
@@ -3897,7 +3930,7 @@ Totais: 8776 sites, 19477 linhas de conector (19345 point_id distintos), 8776 si
 
 ### [MÉDIO] Localização — CP7↔localidade
 - **Regra:** CP4 com city divergente da moda.
-- **Afetados:** 1 de 45 pontos (2.2%). Exemplos: `PST-00008-01`, `PST-00008`, `PST-00008`.
+- **Afetados:** 1 de 45 pontos (2.2%). Exemplos: `PST-00008-01`, `PST-00008`; contexto do mesmo OPC: `RAM-CML-00001-01`.
 - **Evidência:**
 
 | ponto | site |
@@ -3959,7 +3992,7 @@ Totais: 8776 sites, 19477 linhas de conector (19345 point_id distintos), 8776 si
 
 ### [MÉDIO] Física/Ohm — sub-declaração (ratio<0,75)
 - **Regra:** potência declarada < 0,75 × V×I / √3×V×I.
-- **Afetados:** 1 de 16 pontos (6.2%). Exemplos: `PLM-00025-02`, `PLM-00025`, `PLM-00025`.
+- **Afetados:** 1 de 16 pontos (6.2%). Exemplos: `PLM-00025-02`, `PLM-00025`; contexto do mesmo OPC: `PLM-00025-01`.
 - **Evidência:**
 
 | ponto | site | tomada | modo | tensão / corrente / declarada / esperada | ratio |
@@ -3978,7 +4011,7 @@ Totais: 8776 sites, 19477 linhas de conector (19345 point_id distintos), 8776 si
 
 ### [CRÍTICO] Duplicados — point_id
 - **Regra:** point_id duplicado no inventário.
-- **Afetados:** 2 de 11 pontos (18.2%). Exemplos: `TVR-00024-01`, `TVR-00024`, `TVR-00024`, `TVR-00024`.
+- **Afetados:** 2 de 11 pontos (18.2%). Exemplos: `TVR-00024-01`, `TVR-00024`; contexto do mesmo OPC: `AMD-00108-01`.
 - **Evidência:**
 
 | ponto | site |
@@ -4013,7 +4046,7 @@ Totais: 8776 sites, 19477 linhas de conector (19345 point_id distintos), 8776 si
 
 ### [CRÍTICO] Duplicados — point_id
 - **Regra:** point_id duplicado no inventário.
-- **Afetados:** 2 de 26 pontos (7.7%). Exemplos: `FLG-00022-01`, `FLG-00022`, `FLG-00022`, `FLG-00022`.
+- **Afetados:** 2 de 26 pontos (7.7%). Exemplos: `FLG-00022-01`, `FLG-00022`; contexto do mesmo OPC: `MTR-00008-01`.
 - **Evidência:**
 
 | ponto | site |
@@ -4465,16 +4498,22 @@ Totais: 8776 sites, 19477 linhas de conector (19345 point_id distintos), 8776 si
 
 ### [MÉDIO] Operador — grafias fragmentadas
 - **Regra:** mesmo operator_id com vários operator_name.
-- **Afetados:** 5 de 145 pontos (3.4%). Exemplos: `RMZ-00003-01`, `RMZ-00003-02`, `RMZ-00004-01`, `RMZ-00004-02`, `MTS-00045-01`, `RMZ-00003`.
+- **Afetados:** 145 de 145 pontos (100.0%). Exemplos: `MTS-00045-01`, `MTS-00045`, `RMZ-00003-01`, `RMZ-00003`, `MTS-00045-02`, `RMZ-00003-02`.
 - **Evidência:**
 
 | ponto | site |
 |---|---|
-| `RMZ-00003-01` | `RMZ-00003` |
-| `RMZ-00003-02` | `RMZ-00003` |
-| `RMZ-00004-01` | `RMZ-00004` |
-| `RMZ-00004-02` | `RMZ-00004` |
 | `MTS-00045-01` | `MTS-00045` |
+| `RMZ-00003-01` | `RMZ-00003` |
+| `MTS-00045-02` | `MTS-00045` |
+| `RMZ-00003-02` | `RMZ-00003` |
+| `VLR-00002-1` | `VLR-00002` |
+| `RMZ-00004-01` | `RMZ-00004` |
+| `PVZ-00030-01` | `PVZ-00030` |
+| `RMZ-00004-02` | `RMZ-00004` |
+| `PVZ-00030-02` | `PVZ-00030` |
+| `PVZ-00032-01` | `PVZ-00032` |
+| … | … | +135 restantes |
 - **Veredito:** médio — grafias fragmentadas.
 
 ### [MÉDIO] Localização — CP7↔localidade
@@ -4858,7 +4897,7 @@ Totais: 8776 sites, 19477 linhas de conector (19345 point_id distintos), 8776 si
 
 ### [MÉDIO] Física/Ohm — sub-declaração (ratio<0,75)
 - **Regra:** potência declarada < 0,75 × V×I / √3×V×I.
-- **Afetados:** 1 de 35 pontos (2.9%). Exemplos: `MMN-00004-03`, `MMN-00004`, `MMN-00004`.
+- **Afetados:** 1 de 35 pontos (2.9%). Exemplos: `MMN-00004-03`, `MMN-00004`; contexto do mesmo OPC: `MMN-00004-01`.
 - **Evidência:**
 
 | ponto | site | tomada | modo | tensão / corrente / declarada / esperada | ratio |
@@ -4951,16 +4990,22 @@ Totais: 8776 sites, 19477 linhas de conector (19345 point_id distintos), 8776 si
 
 ### [MÉDIO] Operador — grafias fragmentadas
 - **Regra:** mesmo operator_id com vários operator_name.
-- **Afetados:** 5 de 22 pontos (22.7%). Exemplos: `LSB-00276-1`, `LSB-00276-2`, `PRD-00005-01`, `PRD-00005-02`, `PRD-00016-01`, `LSB-00276`.
+- **Afetados:** 22 de 22 pontos (100.0%). Exemplos: `LSB-00276-1`, `LSB-00276`, `PRD-00005-01`, `PRD-00005`, `LSB-00276-2`, `PRD-00005-02`.
 - **Evidência:**
 
 | ponto | site |
 |---|---|
 | `LSB-00276-1` | `LSB-00276` |
-| `LSB-00276-2` | `LSB-00276` |
 | `PRD-00005-01` | `PRD-00005` |
+| `LSB-00276-2` | `LSB-00276` |
 | `PRD-00005-02` | `PRD-00005` |
+| `LSB-00275-1` | `LSB-00275` |
 | `PRD-00016-01` | `PRD-00016` |
+| `LSB-00275-2` | `LSB-00275` |
+| `PRD-00016-02` | `PRD-00016` |
+| `LSB-00274-1` | `LSB-00274` |
+| `MDB-00003-1` | `MDB-00003` |
+| … | … | +12 restantes |
 - **Veredito:** médio — grafias fragmentadas.
 
 ### [MÉDIO] Física/Ohm — sub-declaração (ratio<0,75)
@@ -5002,16 +5047,21 @@ Totais: 8776 sites, 19477 linhas de conector (19345 point_id distintos), 8776 si
 
 ### [MÉDIO] Operador — grafias fragmentadas
 - **Regra:** mesmo operator_id com vários operator_name.
-- **Afetados:** 5 de 10 pontos (50.0%). Exemplos: `VNF-00013-01`, `VNF-00013-02`, `VNF-00013-03`, `VNF-00018-01`, `VNF-00018-02`, `VNF-00013`.
+- **Afetados:** 10 de 10 pontos (100.0%). Exemplos: `VNF-00013-01`, `VNF-00013`, `BRG-00063-01`, `BRG-00063`, `VNF-00013-02`, `BRG-00063-02`.
 - **Evidência:**
 
 | ponto | site |
 |---|---|
 | `VNF-00013-01` | `VNF-00013` |
+| `BRG-00063-01` | `BRG-00063` |
 | `VNF-00013-02` | `VNF-00013` |
+| `BRG-00063-02` | `BRG-00063` |
 | `VNF-00013-03` | `VNF-00013` |
+| `BRG-00062-01` | `BRG-00062` |
 | `VNF-00018-01` | `VNF-00018` |
+| `BRG-00062-02` | `BRG-00062` |
 | `VNF-00018-02` | `VNF-00018` |
+| `VNF-00018-03` | `VNF-00018` |
 - **Veredito:** médio — grafias fragmentadas.
 
 [↑ índice](#indice)
@@ -5165,7 +5215,7 @@ Totais: 8776 sites, 19477 linhas de conector (19345 point_id distintos), 8776 si
 
 ### [MÉDIO] Localização — CP7↔localidade
 - **Regra:** CP4 com city divergente da moda.
-- **Afetados:** 1 de 8 pontos (12.5%). Exemplos: `AVR-00068-01`, `AVR-00068`, `AVR-00068`.
+- **Afetados:** 1 de 8 pontos (12.5%). Exemplos: `AVR-00068-01`, `AVR-00068`; contexto do mesmo OPC: `LOU-00006-01`.
 - **Evidência:**
 
 | ponto | site |
@@ -5254,7 +5304,7 @@ Totais: 8776 sites, 19477 linhas de conector (19345 point_id distintos), 8776 si
 
 ### [MÉDIO] Localização — CP7↔localidade
 - **Regra:** CP4 com city divergente da moda.
-- **Afetados:** 1 de 25 pontos (4.0%). Exemplos: `LGA-00049-01`, `LGA-00049`, `LGA-00049`.
+- **Afetados:** 1 de 25 pontos (4.0%). Exemplos: `LGA-00049-01`, `LGA-00049`; contexto do mesmo OPC: `LLE-00072-01`.
 - **Evidência:**
 
 | ponto | site |
@@ -5366,14 +5416,14 @@ Totais: 8776 sites, 19477 linhas de conector (19345 point_id distintos), 8776 si
 
 ### [MÉDIO] Operador — grafias fragmentadas
 - **Regra:** mesmo operator_id com vários operator_name.
-- **Afetados:** 3 de 3 pontos (100.0%). Exemplos: `VVRPUB11`, `VVRPUB12`, `CBRPUB11`, `VVRPUB1`, `CBRPUB1`.
+- **Afetados:** 3 de 3 pontos (100.0%). Exemplos: `VVRPUB11`, `VVRPUB1`, `CBRPUB11`, `CBRPUB1`, `VVRPUB12`.
 - **Evidência:**
 
 | ponto | site |
 |---|---|
 | `VVRPUB11` | `VVRPUB1` |
-| `VVRPUB12` | `VVRPUB1` |
 | `CBRPUB11` | `CBRPUB1` |
+| `VVRPUB12` | `VVRPUB1` |
 - **Veredito:** médio — grafias fragmentadas.
 
 ### [BAIXO] Metadados — brands_accepted vazio
@@ -5426,7 +5476,7 @@ Totais: 8776 sites, 19477 linhas de conector (19345 point_id distintos), 8776 si
 
 ### [BAIXO] Chaves eMI3 — código local disperso
 - **Regra:** mesmo <LOCAL> em cidades/CP4 dispersos.
-- **Afetados:** 1 de 10 pontos (10.0%). Exemplos: `MOBI-LSB-01610-01`, `MOBI-LSB-01610`, `MOBI-LSB-01610`.
+- **Afetados:** 1 de 10 pontos (10.0%). Exemplos: `MOBI-LSB-01610-01`, `MOBI-LSB-01610`; contexto do mesmo OPC: `BRG-00010-01`.
 - **Evidência:**
 
 | ponto | site |
@@ -5659,16 +5709,22 @@ Totais: 8776 sites, 19477 linhas de conector (19345 point_id distintos), 8776 si
 
 ### [MÉDIO] Operador — grafias fragmentadas
 - **Regra:** mesmo operator_id com vários operator_name.
-- **Afetados:** 5 de 74 pontos (6.8%). Exemplos: `LSB-00380-01`, `LSB-00380-02`, `LSB-00380-03`, `LSB-00380-04`, `LSB-00380-05`, `LSB-00380`.
+- **Afetados:** 74 de 74 pontos (100.0%). Exemplos: `LSB-00380-01`, `LSB-00380`, `PRT-00161-01`, `PRT-00161`, `LSB-00380-02`, `PRT-00161-02`.
 - **Evidência:**
 
 | ponto | site |
 |---|---|
 | `LSB-00380-01` | `LSB-00380` |
+| `PRT-00161-01` | `PRT-00161` |
 | `LSB-00380-02` | `LSB-00380` |
+| `PRT-00161-02` | `PRT-00161` |
 | `LSB-00380-03` | `LSB-00380` |
+| `PRT-00161-03` | `PRT-00161` |
 | `LSB-00380-04` | `LSB-00380` |
+| `PRT-00161-04` | `PRT-00161` |
 | `LSB-00380-05` | `LSB-00380` |
+| `PRT-00161-05` | `PRT-00161` |
+| … | … | +64 restantes |
 - **Veredito:** médio — grafias fragmentadas.
 
 [↑ índice](#indice)
@@ -5682,16 +5738,22 @@ Totais: 8776 sites, 19477 linhas de conector (19345 point_id distintos), 8776 si
 
 ### [MÉDIO] Operador — grafias fragmentadas
 - **Regra:** mesmo operator_id com vários operator_name.
-- **Afetados:** 5 de 16 pontos (31.2%). Exemplos: `CSC-00109-01`, `CSC-00109-02`, `CSC-00106-01`, `CSC-00106-02`, `CSC-00108-01`, `CSC-00109`.
+- **Afetados:** 16 de 16 pontos (100.0%). Exemplos: `CSC-00106-01`, `CSC-00106`, `CSC-00109-01`, `CSC-00109`, `CSC-00106-02`, `CSC-00109-02`.
 - **Evidência:**
 
 | ponto | site |
 |---|---|
-| `CSC-00109-01` | `CSC-00109` |
-| `CSC-00109-02` | `CSC-00109` |
 | `CSC-00106-01` | `CSC-00106` |
+| `CSC-00109-01` | `CSC-00109` |
 | `CSC-00106-02` | `CSC-00106` |
+| `CSC-00109-02` | `CSC-00109` |
 | `CSC-00108-01` | `CSC-00108` |
+| `CSC-00110-01` | `CSC-00110` |
+| `CSC-00108-02` | `CSC-00108` |
+| `CSC-00110-02` | `CSC-00110` |
+| `CSC-00104-01` | `CSC-00104` |
+| `CSC-00104-02` | `CSC-00104` |
+| … | … | +6 restantes |
 - **Veredito:** médio — grafias fragmentadas.
 
 [↑ índice](#indice)
@@ -5770,7 +5832,7 @@ Totais: 8776 sites, 19477 linhas de conector (19345 point_id distintos), 8776 si
 
 ### [MÉDIO] Física/Ohm — sub-declaração (ratio<0,75)
 - **Regra:** potência declarada < 0,75 × V×I / √3×V×I.
-- **Afetados:** 1 de 7 pontos (14.3%). Exemplos: `AGD-00040-01`, `AGD-00040`, `AGD-00040`.
+- **Afetados:** 1 de 7 pontos (14.3%). Exemplos: `AGD-00040-01`, `AGD-00040`; contexto do mesmo OPC: `AGD-00039-01`.
 - **Evidência:**
 
 | ponto | site | tomada | modo | tensão / corrente / declarada / esperada | ratio |
@@ -5995,7 +6057,7 @@ Totais: 8776 sites, 19477 linhas de conector (19345 point_id distintos), 8776 si
 
 ### [MÉDIO] Combinação formato/tomada
 - **Regra:** connector_format incompatível com charging_mode.
-- **Afetados:** 1 de 1 pontos (100.0%). Exemplos: `BRR-00144-01`, `BRR-00144`, `BRR-00144`.
+- **Afetados:** 1 de 1 pontos (100.0%). Exemplos: `BRR-00144-01`, `BRR-00144` (único ponto do OPC); contexto de site vizinho no mesmo código local: `BRR-00143-01`.
 - **Evidência:**
 
 | ponto | site |
@@ -6031,17 +6093,21 @@ Totais: 8776 sites, 19477 linhas de conector (19345 point_id distintos), 8776 si
 
 </details>
 
-## Mudanças de OPCs (desde 2026-10-19)
+[↑ índice](#indice)
 
-Sem mudanças relevantes (novos/saídos/variações ≥20 e ≥20%).
+</details>
+
+## Mudanças de OPCs (desde 2026-10-25)
+
+Sem mudanças: o censo atual (`Agents-outputs/opc-census.json`, 2026-10-26) tem os mesmos 92 OPCs do censo commitado (2026-10-25), sem novos, saídos ou variações de sites/pontos. Não há pares para sugerir rename.
 
 ## Metodologia
 
-- Ficheiros: `data/nap_static_sites.csv`, `data/nap_static_points.csv` (ETL sobre `data/evChargingInfra_latest.xml`).
-- Agrupamento por `operator_id` (proxy do PartyId; ver gotchas — 21 ids com várias grafias).
-- Evidência exaustiva de potência: `scripts/anomalias_evidence.py` → `Agents-outputs/anomalias-evidence.csv` (máquina) + `Agents-outputs/anomalias-details.md` (por OPC). Tabelas de Evidência no relatório truncam a 10 linhas e terminam com elipse a linkar ambos.
+- Ficheiros: `data/nap_static_sites.csv`, `data/nap_static_points.csv` (ETL sobre `data/evChargingInfra_latest.xml`), com pré-agregação em `data/agents-summary.json`.
+- Agrupamento por `operator_id` do NAP. Nesta execução `data/opc_registry_authority.csv` (PartyId atual do tracker) não estava presente — os derivados do tracker são gitignored e não foram obtidos; as exceções conhecidas (BBGE, CIRC, CONT a publicar com o PartyCode/nome do adquirente) são cobertas pela categoria de fragmentação de grafias. Quando o tracker estiver disponível, o agrupamento deve passar a usar o PartyId.
+- Evidência exaustiva de potência: `scripts/anomalias_evidence.py` → `Agents-outputs/anomalias-evidence.csv` (máquina) + `Agents-outputs/anomalias-details.md` (por OPC). As tabelas de Evidência de potência (sobre/sub-declaração) truncam a 10 linhas e terminam com elipse a linkar ambos; as restantes categorias não têm ficheiro exaustivo e truncam a 10 linhas sem link.
 - Limiares: Ohm ratio>1,25 (CRÍTICO) / <0,75 (MÉDIO); teto global 1500 kW; tetos por tipo de tomada; enums XSD `assets/schemas/energyInfrastructure.xsd`; CP4 moda com ≥5 sites.
-- Verificação: `venv/bin/python scripts/anomalias_check.py`.
+- Verificação: `python3 scripts/anomalias_check.py` (ids, contagens e evidência exaustiva); `python3 scripts/anomalias_evidence.py` / `scripts/anomalias_summary.py` apenas para confirmar totais, sem regenerar a evidência.
 
 ## Não-anomalias verificadas
 

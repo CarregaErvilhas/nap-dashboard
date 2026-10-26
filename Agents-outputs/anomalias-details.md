@@ -1,4 +1,4 @@
-# Anomalias — evidência exaustiva (2026-10-25)
+# Anomalias — evidência exaustiva (2026-10-26)
 
 6861 linhas de conector anómalas (3235 sobre-declarações com `ratio > 1.25`, 3626 sub-declarações com `ratio < 0.75`) em 49 OPCs. Gerado por `scripts/anomalias_evidence.py` a partir de `data/nap_static_sites.csv` + `data/nap_static_points.csv` (regra `V × I`, `√3 × V × I` em `mode3AC3p`).
 
