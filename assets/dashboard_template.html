@@ -196,7 +196,9 @@ pt: {
   secAnom:'Anomalias — agente semanal', secChurn:'Mudanças de OPCs', secHubs:'Hubs por potência total (>300 kW)',
   statusPwTitle:'Estado × classe de potência', statusCol:'estado',
   priceComp:'Componente', priceN:'n pontos', priceMean:'média', priceMax:'máx',
-  priceEnergy:'Energia (€/kWh)', priceTime:'Tempo (€/min)', priceFlat:'Taxa fixa (€/carga)',
+  priceEnergy:'Energia (€/kWh)', priceSemCeme:'Sem CEME* (valor único NAP)', colRegime:'Regime', colNap:'Valor NAP* (€)',
+  regMobie:'MOBI.E', regSemTarifa:'MOBI.E s/ tarifa', regSemCeme:'Sem CEME',
+  priceNote:'* Postos sem CEME (brands_accepted vazio): o NAP só traz um valor único (pricePerDeliveryUnit), sem política que o qualifique. Não se sabe se é preço final, só energia ou outra coisa; não é comparável com as componentes MOBI.E acima.', priceTime:'Tempo (€/min)', priceFlat:'Taxa fixa (€/carga)',
   lgCharging:'carregando', lgAvailable:'disponível', lgOutOfOrder:'fora de serviço',
   lgRemoved:'removido', lgUnknown:'desconhecido', lgOther:'outro', lgAdhoc:'pagamento ad-hoc (OSM)',
   mapHint:'Roda para ampliar, arrasta para navegar, clica num ponto para ver detalhe. Filtros da tabela aplicam-se ao mapa.',
@@ -231,7 +233,9 @@ en: {
   secAnom:'Anomalies — weekly agent', secChurn:'OPC changes', secHubs:'Hubs by total power (>300 kW)',
   statusPwTitle:'Status × power class', statusCol:'status',
   priceComp:'Component', priceN:'n points', priceMean:'mean', priceMax:'max',
-  priceEnergy:'Energy (€/kWh)', priceTime:'Time (€/min)', priceFlat:'Flat fee (€/charge)',
+  priceEnergy:'Energy (€/kWh)', priceSemCeme:'No CEME* (single NAP value)', colRegime:'Regime', colNap:'NAP value* (€)',
+  regMobie:'MOBI.E', regSemTarifa:'MOBI.E no tariff', regSemCeme:'No CEME',
+  priceNote:'* Points without CEME (empty brands_accepted): NAP only carries one value (pricePerDeliveryUnit) with no pricing policy qualifying it. Unknown whether it is the final price, energy only or something else; not comparable with the MOBI.E components above.', priceTime:'Time (€/min)', priceFlat:'Flat fee (€/charge)',
   lgCharging:'charging', lgAvailable:'available', lgOutOfOrder:'out of service',
   lgRemoved:'removed', lgUnknown:'unknown', lgOther:'other', lgAdhoc:'ad-hoc payment (OSM)',
   mapHint:'Scroll to zoom, drag to pan, click a point for details. Table filters apply to the map.',
@@ -318,7 +322,9 @@ function renderBars(){
    `<table><tr><th>${esc(T('priceComp'))}</th><th>${esc(T('priceN'))}</th><th>${esc(T('priceMean'))}</th><th>${esc(T('priceMax'))}</th></tr>
     <tr><td class="l">${esc(T('priceEnergy'))}</td><td>${fmtInt(ps.energy.n)}</td><td>${fmt(ps.energy.mean)}</td><td>${fmt(ps.energy.max)}</td></tr>
     <tr><td class="l">${esc(T('priceTime'))}</td><td>${fmtInt(ps.time.n)}</td><td>${fmt(ps.time.mean)}</td><td>${fmt(ps.time.max)}</td></tr>
-    <tr><td class="l">${esc(T('priceFlat'))}</td><td>${fmtInt(ps.flat.n)}</td><td>${fmt(ps.flat.mean)}</td><td>${fmt(ps.flat.max)}</td></tr></table>`);
+    <tr><td class="l">${esc(T('priceFlat'))}</td><td>${fmtInt(ps.flat.n)}</td><td>${fmt(ps.flat.mean)}</td><td>${fmt(ps.flat.max)}</td></tr>
+    <tr><td class="l">${esc(T('priceSemCeme'))}</td><td>${fmtInt(ps.sem_ceme.n)}</td><td>${fmt(ps.sem_ceme.mean)}*</td><td>${fmt(ps.sem_ceme.max)}*</td></tr></table>
+    <div class="mut" style="font-size:11px;margin-top:8px">${esc(T('priceNote'))}</div>`);
 
   // status x power class table (transposed: statuses as rows, classes as columns)
   const sw = D.status_pw;
@@ -504,11 +510,12 @@ document.getElementById('mOut').addEventListener('click',()=>{mapK=Math.max(0.5,
 document.getElementById('mReset').addEventListener('click',()=>{mapK=1;mapTx=0;mapTy=0;renderMap();});
 
 // points table
+const dispRegime = (r)=>({mobie:T('regMobie'),mobie_sem_tarifa:T('regSemTarifa'),sem_ceme:T('regSemCeme')}[r]||r||'');
 let cols = [];
 function buildCols(){
   cols = [{k:'point_id',l:'ID'},{k:'city',l:T('colCity')},{k:'operator_name',l:T('colOp')},{k:'pw_class',l:T('colClass')},
           {k:'kw',l:'kW'},{k:'connectors',l:'Connectors'},{k:'status',l:T('colStatus')},{k:'pay',l:T('colPay')},{k:'opc',l:'OPC'},
-          {k:'ENERGY',l:'€/kWh'},{k:'TIME',l:'€/min'},{k:'FLAT',l:T('colFlat')}];
+          {k:'ENERGY',l:'€/kWh'},{k:'TIME',l:'€/min'},{k:'FLAT',l:T('colFlat')},{k:'nap',l:T('colNap')},{k:'regime',l:T('colRegime')}];
   document.getElementById('tblhead').innerHTML = cols.map((c,i)=>`<th class="${i<2?'l':''}" data-k="${c.k}">${esc(c.l)}</th>`).join('');
 }
 let rows = D.points, sortKey=null, sortAsc=true, page=1, per=200;
@@ -561,7 +568,8 @@ function render(){
     <td>${esc(x.pw_class??'')}</td><td>${fmt(x.kw)}</td><td>${esc(x.connectors??'')}</td>
     <td><span class="tag status-${esc(x.status??'unknown')}">${esc(dispStatus(x.status)??'')}</span></td>
     <td>${(x.pay||[]).map(p=>esc(dispPay(p))).join(', ')||'–'}</td>
-    <td>${esc(x.opc??'')}</td><td>${fmt(x.ENERGY)}</td><td>${fmt(x.TIME)}</td><td>${fmt(x.FLAT)}</td></tr>`).join('');
+    <td>${esc(x.opc??'')}</td><td>${fmt(x.ENERGY)}</td><td>${fmt(x.TIME)}</td><td>${fmt(x.FLAT)}</td>
+    <td title="${esc(T('priceNote'))}">${x.nap==null?'–':fmt(x.nap)+'*'}</td><td>${esc(dispRegime(x.regime))}</td></tr>`).join('');
   document.getElementById('tbody').querySelectorAll('tr').forEach(tr=>{
     tr.addEventListener('click',()=>{
       const site=D.sites.find(s=>s.ext===tr.dataset.site);

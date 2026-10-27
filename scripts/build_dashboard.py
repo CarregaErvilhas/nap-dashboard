@@ -96,8 +96,9 @@ site_map = S.set_index('external_id')
 pts['city'] = pts['site_external_id'].map(site_map['city'])
 pts['operator_name'] = pts['operator_id'].map(S.drop_duplicates('operator_id').set_index('operator_id')['operator_name'])
 pts['region'] = pts['site_external_id'].map(site_map['region'])
-opc_cols = OPC.set_index('point_id')[['opc_operador', 'opc_tipo_posto', 'ENERGY', 'TIME', 'FLAT']]
+opc_cols = OPC.set_index('point_id')[['opc_operador', 'opc_tipo_posto', 'ENERGY', 'TIME', 'FLAT', 'regime', 'NAP_UNICO']]
 pts = pts.merge(opc_cols, left_on='point_id', right_index=True, how='left')
+pts['NAP_UNICO'] = pd.to_numeric(pts['NAP_UNICO'], errors='coerce')
 pts['max_power_kw'] = (pts.max_power_w / 1000).round(0)
 
 # ---- site-level map data (with OSM/umap cross-ref enrichment) ----
@@ -225,6 +226,12 @@ price_stats = {
              'max': round(OPC.FLAT.astype(float).max(), 3) if OPC.FLAT.notna().any() else None},
 }
 
+_nu = pd.to_numeric(OPC.NAP_UNICO, errors='coerce').dropna()
+price_stats['sem_ceme'] = {'n': int(len(_nu)),
+                           'mean': round(float(_nu.mean()), 3) if len(_nu) else None,
+                           'max': round(float(_nu.max()), 3) if len(_nu) else None}
+price_stats['regimes'] = {k: int(v) for k, v in OPC.regime.value_counts().items()}
+
 conn_total = sum(agg_conn.values())
 conn_line = ', '.join(
     f'{html_esc.escape(str(k))} {v:,} ({v/conn_total*100:.1f}%)' for k, v in
@@ -336,6 +343,9 @@ n_unk = int(_stvc.get('unknown', 0))
 
 _en = OPC.ENERGY.dropna().apply(_num) if 'ENERGY' in OPC else pd.Series(dtype=float)
 en_mean = float(_en.mean()) if len(_en) else None
+n_reg_mobie = int((OPC.regime == 'mobie').sum())
+n_reg_semtar = int((OPC.regime == 'mobie_sem_tarifa').sum())
+n_reg_semceme = int((OPC.regime == 'sem_ceme').sum())
 en_zero_frac = float((_en == 0).mean()) if len(_en) else None
 
 n_reg = len(REG)
@@ -466,6 +476,7 @@ FACTS_HTML = f"""
 <li><b>Dispersão por operador:</b> ocupação de {pp1(occ_min_v)}% ({_nm(op_min)}) a {pp1(occ_max_v)}% ({_nm(op_max)}) — sinal de desfasamento oferta/procura por rede.</li>
 <li><b>Energia verde:</b> {pt(n_green)} pontos ({p0(ratio(n_green, n_points))}%) marcados como energia verde.</li>
 <li><b>Tarifário OPC (uso do posto, não preço da energia):</b> 3 componentes (taxa fixa + €/kWh + €/min); a componente indexada a €/kWh vale em média ≈ {pt2(en_mean)} ({p0(en_zero_frac)}% a zero), variando muito por operador. A energia em si é faturada pelo CEME do condutor — só em ad-hoc/fora MOBI.E o OPC cobra o valor final do carregamento.</li>
+<li><b>Regime por posto (brands_accepted):</b> {pt(n_reg_mobie)} pontos com CEME e tarifa MOBI.E, {pt(n_reg_semtar)} com CEME mas sem tarifa no ficheiro MOBI.E, {pt(n_reg_semceme)} sem CEME (brands_accepted vazio). Nestes últimos o NAP traz um único valor (pricePerDeliveryUnit) sem política que o qualifique: mostrado com asterisco (*), significado não declarado.</li>
 <li><b>Saúde da rede no snapshot:</b> {pt(n_removed)} pontos 'removed' ({p0(ratio(n_removed, n_points))}%), {pt(n_oof)} 'outOfOrder' ({p0(ratio(n_oof, n_points))}%), {pt(n_unk)} 'unknown' ({p0(ratio(n_unk, n_points))}%) → ≈{p0(ratio(n_removed + n_oof + n_unk, n_points))}% não utilizável nesse momento.</li>
 <li><b>Connectors:</b> {conn_line} (em declínio, só em unidades multi-connector).</li>
 <li><b>Setor público:</b> municípios operam como OPC (Cascais Próxima, EMEL, Loulé Concelho Global, Superguimarães, Santa Cruz).</li>
@@ -729,9 +740,9 @@ data = {
     'price_op': {k: round(float(v), 3) for k, v in agg_price_op.items()},
     'price_stats': price_stats,
     'points': pts[['point_id', 'site_external_id', 'city', 'operator_name', 'region', 'pw_class', 'max_power_kw',
-                   'connector_types', 'status', 'opc_operador', 'ENERGY', 'TIME', 'FLAT', 'pay']]
+                   'connector_types', 'status', 'opc_operador', 'ENERGY', 'TIME', 'FLAT', 'regime', 'NAP_UNICO', 'pay']]
         .rename(columns={'max_power_kw': 'kw', 'connector_types': 'connectors',
-                         'opc_operador': 'opc'}).to_dict('records'),
+                         'opc_operador': 'opc', 'NAP_UNICO': 'nap'}).to_dict('records'),
     'facts_html': FACTS_HTML,
     'errs_html': ERRS_HTML,
     'anom_html': ANOM_HTML,
