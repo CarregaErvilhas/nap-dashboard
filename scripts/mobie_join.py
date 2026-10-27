@@ -81,6 +81,21 @@ key = ['site_ext', 'tomada']
 mob['site_ext'] = mob['ID']
 joined = pts.merge(mob, on=key, how='left', suffixes=('', '_mobie'))
 
+# --- regime por posto (NAP) ---
+# brands_accepted vazio = posto sem CEME (fora da MOBI.E): o NAP traz um único
+# pricePerDeliveryUnit sem política que o qualifique, logo o significado do valor
+# (preço final? só energia?) não está declarado. Com brands = roaming MOBI.E:
+# o preço é a tarifa de uso do OPC (a energia vai pelo CEME do condutor).
+has_brands = joined['brands_accepted'].fillna('').str.strip() != ''
+joined['regime'] = 'sem_ceme'
+joined.loc[has_brands & joined['OPERADOR'].notna(), 'regime'] = 'mobie'
+joined.loc[has_brands & joined['OPERADOR'].isna(), 'regime'] = 'mobie_sem_tarifa'
+_dp = pd.read_csv('data/nap_dynamic_pricing.csv', dtype=str)
+_dp = _dp[_dp.pricing_policy == 'pricePerDeliveryUnit'].drop_duplicates('point_id')
+joined['NAP_UNICO'] = None
+_sc = joined['regime'] == 'sem_ceme'
+joined.loc[_sc, 'NAP_UNICO'] = joined.loc[_sc, 'point_id'].map(_dp.set_index('point_id')['min_fee'])
+
 # report
 nap_pts = len(pts)
 matched = joined['OPERADOR'].notna().sum()
@@ -94,6 +109,11 @@ report = f"""MOBI.E join report
   FLAT (per charge): {joined['FLAT'].notna().sum()}
   ENERGY (per kWh):  {joined['ENERGY'].notna().sum()}
   TIME (per min):    {joined['TIME'].notna().sum()}
+
+  Regime (brands_accepted + match MOBI.E):
+  mobie (CEME + tarifa MOBI.E):      {(joined['regime']=='mobie').sum()}
+  mobie_sem_tarifa (CEME, sem match): {(joined['regime']=='mobie_sem_tarifa').sum()}
+  sem_ceme (valor unico NAP*):       {(joined['regime']=='sem_ceme').sum()} ({joined['NAP_UNICO'].notna().sum()} com valor)
 """
 open('data/nap_opc_join_report.txt', 'w').write(report)
 print(report)
@@ -103,7 +123,7 @@ cols = ['point_id', 'point_external_id', 'site_ext', 'tomada', 'station_id', 'op
         'connector_type', 'charging_mode', 'connector_format', 'max_power_w', 'voltage', 'max_current',
         'MUNICIPIO', 'OPERADOR', 'TIPO_POSTO', 'NIVELTENSAO', 'TIPO_TARIFARIO',
         'TIPO_TOMADA', 'FORMATO_TOMADA', 'POTENCIA_TOMADA',
-        'FLAT', 'ENERGY', 'TIME', 'PARKING_TIME']
+        'FLAT', 'ENERGY', 'TIME', 'PARKING_TIME', 'regime', 'NAP_UNICO']
 out = joined[[c for c in cols if c in joined.columns]].rename(columns={
     'MUNICIPIO': 'opc_municipio', 'OPERADOR': 'opc_operador', 'TIPO_POSTO': 'opc_tipo_posto',
     'NIVELTENSAO': 'opc_nivel_tensao', 'TIPO_TARIFARIO': 'opc_tipo_tarifario',
