@@ -1,6 +1,6 @@
 {
-  "snapshot_date": "2026-10-26",
-  "generated_utc": "2026-10-26T12:41:11+00:00",
+  "snapshot_date": "2026-10-28",
+  "generated_utc": "2026-10-28T18:31:11+00:00",
   "opcs": {
     "ACCI": {
       "name": "ACCIONA RECARGA PORTUGAL,UNIPESSOAL LDA",
@@ -84,8 +84,8 @@
     },
     "CONT": {
       "name": "Modelo Continente Hipermercados, S.A.",
-      "sites": 450,
-      "points": 954
+      "sites": 449,
+      "points": 952
     },
     "CSCP": {
       "name": "Cascais Proxima",
@@ -130,7 +130,7 @@
     "EPKS": {
       "name": "Telpark",
       "sites": 36,
-      "points": 381
+      "points": 385
     },
     "EPOC": {
       "name": "EPOCH",
@@ -180,7 +180,7 @@
     "FCTO": {
       "name": "Iberdrola | bp pulse",
       "sites": 304,
-      "points": 720
+      "points": 724
     },
     "FRIO": {
       "name": "Distrifrio Supermercados, Lda",
@@ -229,7 +229,7 @@
     },
     "HELX": {
       "name": "Helexia II Energy Services, Lda.",
-      "sites": 234,
+      "sites": 235,
       "points": 451
     },
     "HEXA": {
@@ -239,13 +239,13 @@
     },
     "HIGH": {
       "name": "High Green Power, Unipessoal Lda.",
-      "sites": 38,
-      "points": 40
+      "sites": 39,
+      "points": 41
     },
     "HORZ": {
       "name": "Powerdot, S.A",
-      "sites": 786,
-      "points": 2138
+      "sites": 787,
+      "points": 2140
     },
     "IBRD": {
       "name": "Iberdrola Clientes Portugal, Unipessoal, Lda",
@@ -275,7 +275,7 @@
     "KLCS": {
       "name": "Kilometer Low Cost II Serviços, SA",
       "sites": 88,
-      "points": 109
+      "points": 111
     },
     "KPMS": {
       "name": "KPM Serviços de Engenheria, Unip Lda",
