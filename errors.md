@@ -1,13 +1,13 @@
 # Erros reportáveis (dados NAP / MOBI.E / DGEG)
 
 ## 1. Tensão / corrente / potência inconsistentes (NAP estático)
-35,3% das tomadas (6.861/19.417) têm potência declarada que não bate com V×I (&gt;25% de diferença). Destas, 3.235 (16,7%) declaram potência acima da capacidade elétrica (fisicamente impossível), ex. 1200 V × 600 A = 720 kW declarados como 200 kW. Valores suspeitos no dataset: tensões de 1200 V e 3600 V, correntes de 600 A.
+32,9% das tomadas (6.390/19.417) têm potência declarada que não bate com V×I (&gt;25% de diferença). Destas, 2.781 (14,3%) declaram potência acima da capacidade elétrica (fisicamente impossível), ex. 1200 V × 600 A = 720 kW declarados como 200 kW. Valores suspeitos no dataset: tensões de 1200 V e 3600 V, correntes de 600 A.
 
-## 2. Potência NAP vs MOBI.E em contradição (45 pontos)
-As duas fontes oficiais divergem &gt;30%. Ex.: `D4D10F10-E9C5-41E1-B52A-6767E0423CE9` (NAP 30 kW, MOBI.E 22 kW); `02C150F9-2109-4E8F-8D0A-ED5BC269E2CD` (NAP 30 kW, MOBI.E 22 kW); `7952E4B9-4B3F-4B8D-B16A-0DE1988520B5` (NAP 30 kW, MOBI.E 22 kW).
+## 2. Potência NAP vs MOBI.E em contradição (49 pontos)
+As duas fontes oficiais divergem &gt;30%. Ex.: `D4D10F10-E9C5-41E1-B52A-6767E0423CE9` (NAP 30 kW, MOBI.E 22 kW); `DEDEB28E-CD02-4B44-BBE3-07BF4BF934EB` (NAP 30 kW, MOBI.E 22 kW); `02C150F9-2109-4E8F-8D0A-ED5BC269E2CD` (NAP 30 kW, MOBI.E 22 kW).
 
 ## 3. Estado duplicado / contraditório no feed dinâmico
-46 pontos aparecem 2–3× no evActualStatus com estados diferentes (ex. `160` aparece como charging e como available). 47 linhas a mais no ficheiro.
+Nenhum ponto repetido dentro do mesmo site. Ids de ponto reutilizados entre sites: 67 ids (ex. `332`) identificam 136 pontos distintos em sites diferentes, no estático e no dinâmico. O id só é único dentro do site.
 
 ## 4. Fragmentação de nomes de operadores (NAP)
 A mesma entidade legal com múltiplas grafias (21 operadores afetados): Galp (Galp Power / Galpgeste / Galp Gest), Atlante (6 variantes), Iberdrola (3), REPSOL (maiúsculas/minúsculas). Torna a agregação por operador frágil.
@@ -16,22 +16,22 @@ A mesma entidade legal com múltiplas grafias (21 operadores afetados): Galp (Ga
 Só NUTS1 (PT1/PT2/PT3) no estático; sem NUTS2/NUTS3, que o esquema DATEX II suporta e o enquadramento AFIR/INSPIRE prevê.
 
 ## 6. usage_type em falta
-2.241 tomadas (11,6%) sem tipo de utilização.
+2.273 tomadas (11,7%) sem tipo de utilização.
 
 ## 7. UID_TOMADA MOBI.E inconsistente
-391.307 linhas com ids numéricos ('97', '98'…) fora de qualquer formato; mistura de formatos com/sem prefixo PT- e segmento de conector presente/ausente.
+409.493 linhas com ids numéricos ('97', '98'…) fora de qualquer formato; mistura de formatos com/sem prefixo PT- e segmento de conector presente/ausente.
 
 ## 8. PartyID MOBI.E desatualizado (ficheiro 2022)
 37 códigos ativos no tarifário não estão no ficheiro oficial de códigos (operadores pós-2022: ATL, ZUN, SLX, KLS, WEN…); 22 códigos do ficheiro não têm um único posto. Recomenda-se atualização do documento público.
 
 ## 9. Preços anómalos
-Taxa fixa até 2,50 €/carga; no NAP dinâmico pricePerChargingTime até 3,00 €/min (4 pontos &gt;1 €/min, provável erro de unidade €/min vs €/hora); energia a 0 €/kWh combinada com taxa fixa &gt;0 em 1.959 pontos (suspeito de dados incompletos).
+Taxa fixa até 2,50 €/carga; no NAP dinâmico pricePerChargingTime até 3,00 €/min (6 pontos &gt;1 €/min, provável erro de unidade €/min vs €/hora); energia a 0 €/kWh combinada com taxa fixa &gt;0 em 1.959 pontos (suspeito de dados incompletos).
 
 ## 10. Pontos 'removed' ainda no inventário estático
 0 pontos (0%) marcados 'removed' no dinâmico continuam listados como infraestrutura ativa no estático.
 
 ## 11. Localização: coordenadas vs concelho
-Verificação contra os limites oficiais de concelho (CAOP + spot-check Nominatim): 73 sites (0,8%) têm coordenadas fora do concelho implicado pelo código do site_id (formato operador-código-nº, código = concelho). Os códigos são de concelho, não de distrito (ex. PLM = Palmela, BRR = Barreiro). As subsecções 11a/11b abaixo são geradas por scripts/concelho_check.py.
+Verificação contra os limites oficiais de concelho (CAOP + spot-check Nominatim): 74 sites (0,8%) têm coordenadas fora do concelho implicado pelo código do site_id (formato operador-código-nº, código = concelho). Os códigos são de concelho, não de distrito (ex. PLM = Palmela, BRR = Barreiro). As subsecções 11a/11b abaixo são geradas por scripts/concelho_check.py.
 
 ## 12. Dúvidas da comunidade OSM/umap (cross-check externo)
 O mapa "Caça aos Postos de Carregamento" (umap, OSM) lista pontos onde a comunidade não confirma a existência/localização de carregadores; vários "nada no local" ficam a ≤500 m de sites listados como ativos no NAP. Lista completa e operadores divergentes no mapa OSM v2.1 em data/osm_umap_findings.md (gerado por scripts/osm_umap.py).
@@ -45,7 +45,7 @@ O mapa "Caça aos Postos de Carregamento" (umap, OSM) lista pontos onde a comuni
 | `GLP-TNV-00004` | TNV | Torres Novas (Santarém) | Torres Vedras (Lisboa) | 76 |
 | `EDP-VFX-00029` | VFX | Vila Franca de Xira (Lisboa) | Benavente (Santarém) | 9 |
 
-### 11b. Mesmo distrito, concelho trocado (69)
+### 11b. Mesmo distrito, concelho trocado (70)
 
 | site_id | código | concelho do código | coordenadas em | distância (km) |
 |---|---|---|---|---|
@@ -111,6 +111,7 @@ O mapa "Caça aos Postos de Carregamento" (umap, OSM) lista pontos onde a comuni
 | `EDP-VCT-00052` | VCT | Viana do Castelo | Caminha | 19 |
 | `INT-MOBI-VCT-00010` | VCT | Viana do Castelo | Melgaço | 60 |
 | `INT-VCT-00051` | VCT | Viana do Castelo | Melgaço | 60 |
+| `EDP-VFX-00076` | VFX | Vila Franca de Xira | Arruda dos Vinhos | 7 |
 | `EDP-VIS-00081` | VIS | Viseu | Nelas | 18 |
 | `FCT-VIS-00138` | VIS | Viseu | Carregal do Sal | 29 |
 | `FCT-VIS-00139` | VIS | Viseu | Carregal do Sal | 29 |
@@ -167,10 +168,10 @@ Operador: **1666** sites com correspondência código-a-código têm operador OS
 | sites | operador NAP | operador OSM |
 |---|---|---|
 | 748 | WOWPLUG | True Kare |
-| 294 | Iberdrola | bp pulse | Charging Together |
+| 293 | Iberdrola | bp pulse | Charging Together |
 | 176 | Mota-Engil Renewing | Mota Engil II |
 | 107 | Galpgeste | Galp Geste |
-| 79 | Kilometer Low Cost II Serviços, SA | KLC Serviços |
+| 80 | Kilometer Low Cost II Serviços, SA | KLC Serviços |
 | 38 | FactorENERGIA | Factor Energia |
 | 21 | uCharge | Logical Gravity |
 | 20 | Siva - Sociedade de Importação de Veículos Automóveis / (sub-CEME da Iberdola) | Moon |
@@ -182,12 +183,12 @@ Operador: **1666** sites com correspondência código-a-código têm operador OS
 | 11 | GREEN CHARGE - MOBILIDADE ELÉTRICA, LDA | GreenCharge |
 | 9 | Gold Energy | Goldenergy |
 
-Cobertura OSM (dump do autor do mapa v2.1): **7875 sites NAP** (89%) com código MOBI.E; 102 divergências de localização >150 m em correspondências de código único.
+Cobertura OSM (dump do autor do mapa v2.1): **7880 sites NAP** (89%) com código MOBI.E; 100 divergências de localização >150 m em correspondências de código único.
 ## 13. Tracker de erros PCVE (cross-check externo)
 
-O tracker de erros dos operadores (`pt-pcve-errors.xlsx`) é a única fonte atual da identidade dos OPC (PartyId/PartyCode) e a única lista positiva de assets que o operador declarou removidos. Sincronizado em 2026-10-26; 99 CPO, 3385 erros reportados. Gerado por `scripts/tracker_checks.py` a partir de `data/opc_registry_authority.csv`/`data/tracker_errors.csv`.
+O tracker de erros dos operadores (`pt-pcve-errors.xlsx`) é a única fonte atual da identidade dos OPC (PartyId/PartyCode) e a única lista positiva de assets que o operador declarou removidos. Sincronizado em 2026-10-28; 99 CPO, 1830 erros reportados. Gerado por `scripts/tracker_checks.py` a partir de `data/opc_registry_authority.csv`/`data/tracker_errors.csv`.
 
-### 13a. [ALTO] Assets declarados removidos pelo operador ainda no NAP (7)
+### 13a. [ALTO] Assets declarados removidos pelo operador ainda no NAP (17)
 
 | severidade | identificador | evidência |
 |---|---|---|
@@ -195,9 +196,19 @@ O tracker de erros dos operadores (`pt-pcve-errors.xlsx`) é a única fonte atua
 | ALTO | `VIS-00138` | tracker diz «remove. replaced with new asset» (status TO FIX, asset FCT) mas o NAP ainda publica VIS-00138 («CHARGING TOGETHER, UNIPESSOAL LDA») |
 | ALTO | `VIS-00139` | tracker diz «remove. replaced with new asset» (status TO FIX, asset FCT) mas o NAP ainda publica VIS-00139 («CHARGING TOGETHER, UNIPESSOAL LDA») |
 | ALTO | `ASL-00009` | tracker diz «remove. replaced with new asset» (status TO FIX, asset GLP) mas o NAP ainda publica ASL-00009 («Galp Gest») |
+| ALTO | `ASL-00009` | tracker diz «remove. replaced with new asset» (status TO FIX, asset GLP) mas o NAP ainda publica ASL-00009 («Galp Gest») |
+| ALTO | `CBR-00016` | tracker diz «remove. replaced with new asset» (status TO FIX, asset GLP) mas o NAP ainda publica CBR-00016 («Galpgeste») |
 | ALTO | `CVL-90001` | tracker diz «remove. replaced with new asset» (status TO FIX, asset GLP) mas o NAP ainda publica CVL-90001 («Galp Power OPC») |
+| ALTO | `CVL-90001` | tracker diz «remove. replaced with new asset» (status TO FIX, asset GLP) mas o NAP ainda publica CVL-90001 («Galp Power OPC») |
+| ALTO | `FUN-00023` | tracker diz «remove. replaced with new asset» (status TO FIX, asset GLP) mas o NAP ainda publica FUN-00023 («Galpgeste») |
+| ALTO | `FUN-00034` | tracker diz «remove. replaced with new asset» (status TO FIX, asset GLP) mas o NAP ainda publica FUN-00034 («Galpgeste») |
 | ALTO | `LSB-00011` | tracker diz «remove. replaced with new asset» (status TO FIX, asset GLP) mas o NAP ainda publica LSB-00011 («Galpgeste») |
+| ALTO | `LSB-00011` | tracker diz «remove. replaced with new asset» (status TO FIX, asset GLP) mas o NAP ainda publica LSB-00011 («Galpgeste») |
+| ALTO | `LSD-00002` | tracker diz «remove. replaced with new asset» (status TO FIX, asset GLP) mas o NAP ainda publica LSD-00002 («Galpgeste») |
+| ALTO | `VIS-00008` | tracker diz «remove. replaced with new asset» (status TO FIX, asset GLP) mas o NAP ainda publica VIS-00008 («Galp Gest») |
 | ALTO | `VNF-00037` | tracker diz «remove. replaced with new asset» (status TO FIX, asset GLP) mas o NAP ainda publica VNF-00037 («Galp Power») |
+| ALTO | `VNF-00037` | tracker diz «remove. replaced with new asset» (status TO FIX, asset GLP) mas o NAP ainda publica VNF-00037 («Galp Power») |
+| ALTO | `VGS-00010` | tracker diz «remove. replaced with new asset» (status TO FIX, asset REP) mas o NAP ainda publica VGS-00010 («REPSOL Portuguesa Lda») |
 
 ### 13b. [ALTO] Tensões placeholder (750 V / 600 V) em conectores DC (58)
 
@@ -252,9 +263,9 @@ _(+18 linhas em `data/tracker_findings.csv`)_
 |---|---|---|
 | MÉDIO | `BBGE` | 2 sites, nome «BBG Energia Unipessoal, Lda» não corresponde a nenhum CPO do tracker |
 | MÉDIO | `CIRC` | 12 sites, nome «Circuitos Energy Solutions, Lda.» não corresponde a nenhum CPO do tracker |
-| MÉDIO | `CONT` | 450 sites, nome «Modelo Continente Hipermercados, S.A.» não corresponde a nenhum CPO do tracker |
+| MÉDIO | `CONT` | 449 sites, nome «Modelo Continente Hipermercados, S.A.» não corresponde a nenhum CPO do tracker |
 
-### 13d. [MÉDIO] Pontos declarados trifásicos sem potência trifásica (35)
+### 13d. [MÉDIO] Pontos declarados trifásicos sem potência trifásica (36)
 
 | severidade | identificador | evidência |
 |---|---|---|
@@ -262,6 +273,7 @@ _(+18 linhas em `data/tracker_findings.csv`)_
 | MÉDIO | `LSB-80149-01` | LSB-80149 / GLPP: 7400 W a 240 V — trifásico real exige >=12 kW (classe histórica no tracker: 199 linhas) |
 | MÉDIO | `LSB-80149-02` | LSB-80149 / GLPP: 7400 W a 240 V — trifásico real exige >=12 kW (classe histórica no tracker: 199 linhas) |
 | MÉDIO | `LSB-00273-1` | LSB-00273 / CIRC: 7400 W a 230 V — trifásico real exige >=12 kW (classe histórica no tracker: 199 linhas) |
+| MÉDIO | `PVL-00005-1` | PVL-00005 / EVCE: 3700 W a 230 V — trifásico real exige >=12 kW (classe histórica no tracker: 199 linhas) |
 | MÉDIO | `SCR-00021-01` | SCR-00021 / EDPC: 7400 W a 230 V — trifásico real exige >=12 kW (classe histórica no tracker: 199 linhas) |
 | MÉDIO | `SCR-00021-02` | SCR-00021 / EDPC: 7400 W a 230 V — trifásico real exige >=12 kW (classe histórica no tracker: 199 linhas) |
 | MÉDIO | `MOBI-OER-00220-01` | MOBI-OER-00220 / GLPP: 7400 W a 240 V — trifásico real exige >=12 kW (classe histórica no tracker: 199 linhas) |
@@ -307,13 +319,13 @@ _(+18 linhas em `data/tracker_findings.csv`)_
 | BAIXO | `CSCP` | 8 sites, 2 grafias: Cascais Proxima (6) / Cascais Próxima (2) — canónico no tracker: «Cascais Proxima» |
 | BAIXO | `ECOI` | 57 sites, 2 grafias: Ecoinside - Soluções em Ecoeficiência e Sustentabilidade Lda (55) / ECOINSIDE (2) — canónico no tracker: «Ecoinside - Soluções em Ecoeficiência e Sustentabilidade Lda» |
 | BAIXO | `EMEL` | 83 sites, 2 grafias: EMEL - Empresa Municipal de Mobilidade e Estacionamento de Lisboa, E.M., S.A. (80) / EMEL (3) — canónico no tracker: «EMEL - Empresa Municipal de Mobilidade e Estacionamento de Lisboa, E.M., S.A.» |
-| BAIXO | `FCTO` | 304 sites, 2 grafias: Iberdrola \| bp pulse (302) / CHARGING TOGETHER, UNIPESSOAL LDA (2) — canónico no tracker: «Iberdrola \| bp pulse» |
+| BAIXO | `FCTO` | 304 sites, 2 grafias: Iberdrola \| bp pulse (300) / CHARGING TOGETHER, UNIPESSOAL LDA (4) — canónico no tracker: «Iberdrola \| bp pulse» |
 | BAIXO | `GENJ` | 21 sites, 2 grafias: Generation Journey Lda (20) / Generation Journey (1) — canónico no tracker: «Generation Journey Lda» |
 | BAIXO | `GLPG` | 123 sites, 2 grafias: Galpgeste (121) / Galp Gest (2) — canónico no tracker: «Galpgeste» |
 | BAIXO | `GLPP` | 1603 sites, 2 grafias: Galp Power OPC (1490) / Galp Power (113) — canónico no tracker: «Galp Power OPC» |
 | BAIXO | `GREE` | 16 sites, 2 grafias: GREEN CHARGE - MOBILIDADE ELÉTRICA, LDA (15) / Green Charge - Mobilidade Eletrica (1) — canónico no tracker: «GREEN CHARGE - MOBILIDADE ELÉTRICA, LDA» |
 | BAIXO | `HEXA` | 38 sites, 2 grafias: HEXAGONAL OCEAN, LDA (36) / Hexagonal Ocean (2) — canónico no tracker: «HEXAGONAL OCEAN, LDA» |
-| BAIXO | `HIGH` | 38 sites, 2 grafias: High Green Power, Unipessoal Lda. (23) / HighGreenPower (15) — canónico no tracker: «HighGreenPower» |
+| BAIXO | `HIGH` | 39 sites, 2 grafias: High Green Power, Unipessoal Lda. (23) / HighGreenPower (16) — canónico no tracker: «HighGreenPower» |
 | BAIXO | `KLCS` | 88 sites, 2 grafias: Kilometer Low Cost II Serviços, SA (86) / KLC (2) — canónico no tracker: «Kilometer Low Cost II Serviços, SA» |
 | BAIXO | `LOUL` | 33 sites, 2 grafias: Loulé Concelho Global, EM (28) / Loulé Concelho Global (5) — canónico no tracker: «Loulé Concelho Global, EM» |
 | BAIXO | `MLTR` | 108 sites, 2 grafias: Mobiletric (104) / Mobiletric, LDA (4) — canónico no tracker: «Mobiletric, LDA» |
@@ -326,7 +338,7 @@ _(+18 linhas em `data/tracker_findings.csv`)_
 |---|---|---|
 | BAIXO | `BBGE` | operator_id=«BBGE» é o party_code do CPO BBG («Morenergy»), cujo PartyId é BBG; nome publicado «BBG Energia Unipessoal, Lda» (2 sites) |
 | BAIXO | `CIRC` | operator_id=«CIRC» é o party_code do CPO CIR («Circuitos de Inovação»), cujo PartyId é CIR; nome publicado «Circuitos Energy Solutions, Lda.» (12 sites) |
-| BAIXO | `CONT` | operator_id=«CONT» é o party_code do CPO CNT («Continente Plug & Charge»), cujo PartyId é CNT; nome publicado «Modelo Continente Hipermercados, S.A.» (450 sites) |
+| BAIXO | `CONT` | operator_id=«CONT» é o party_code do CPO CNT («Continente Plug & Charge»), cujo PartyId é CNT; nome publicado «Modelo Continente Hipermercados, S.A.» (449 sites) |
 
 ### 13g. [BAIXO] CPO do tracker sem sites no NAP (10)
 
