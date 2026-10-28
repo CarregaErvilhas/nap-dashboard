@@ -43,7 +43,7 @@ jobs:
         run: |
           mkdir -p public/ohmigo
           gh release download ohmigo-dataset --repo "$GITHUB_REPOSITORY" -p chargers.json -D public/ohmigo \
-            || echo "::warning::sem asset ohmigo-dataset; /ohmigo/chargers.json fica de fora
+            || echo "::warning::sem asset ohmigo-dataset; /ohmigo/chargers.json fica de fora"
       - uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
         with:
           path: public
