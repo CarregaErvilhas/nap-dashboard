@@ -177,8 +177,9 @@ voltage level and the **raw** MOBI.E OPC tariffs per socket (every €/min tier 
 the `AD_HOC_PAYMENT` plan, which `data/nap_opc_points.csv` collapses to one value).
 No status and no CEME prices: ohmigo reads status live from the NAP feed and gets
 energy prices from ceme-v2. `refresh.yml` runs it after the pipeline guard and
-uploads it as the `chargers.json` asset of the `ohmigo-dataset` release (not
-committed: ~6 MB a week); `pages.yml` copies that asset to
+uploads it as the `ohmigo-dataset` Actions artifact (90-day retention; not
+committed: ~6 MB a week; not a release, because the repo's releases are
+immutable and an asset can't be replaced); `pages.yml` copies the newest one to
 `https://nap.ocarroeletrico.com/ohmigo/chargers.json`. It exits non-zero (and the
 refresh fails) below 5 000 sites or 10 000 tariffed points. `SCHEMA` in the
 script bumps on incompatible format changes.
@@ -351,5 +352,5 @@ Ao mover/renomear um ficheiro de dados, actualizar a lista `DATA_FILES` em
   is the tracker cross-check, appended from `data/tracker_findings.md`)
 - `Agents-outputs/anomalias-results.md` — output do agente `Agents/anomalias.md`
   (anomalias dos dados estáticos, agrupadas por OPC)
-- `/ohmigo/chargers.json` on Pages — the ohmigo dataset (release asset, see
+- `/ohmigo/chargers.json` on Pages — the ohmigo dataset (Actions artifact, see
   "ohmigo dataset")

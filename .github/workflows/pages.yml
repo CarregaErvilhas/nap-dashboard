@@ -16,6 +16,7 @@ on:
 
 permissions:
   contents: read
+  actions: read
   pages: write
   id-token: write
 
@@ -35,15 +36,24 @@ jobs:
           cp dashboard.html public/dashboard.html
           cp dashboard.png public/dashboard.png
           echo "nap.ocarroeletrico.com" > public/CNAME
-      # Se o asset ainda não existir (antes do primeiro refresh com o ohmigo),
+      # O dataset do ohmigo é o artifact "ohmigo-dataset" mais recente do
+      # refresh.yml (90 dias de retenção, o refresh é semanal). Se não houver,
       # o dashboard publica-se na mesma, só sem /ohmigo/.
       - name: Stage ohmigo dataset
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           mkdir -p public/ohmigo
-          gh release download ohmigo-dataset --repo "$GITHUB_REPOSITORY" -p chargers.json -D public/ohmigo \
-            || echo "::warning::sem asset ohmigo-dataset; /ohmigo/chargers.json fica de fora"
+          id=$(gh api "repos/$GITHUB_REPOSITORY/actions/artifacts?name=ohmigo-dataset&per_page=1" \
+            --jq '.artifacts[] | select(.expired | not) | .id')
+          # O zip tem um só ficheiro; -p sem nome extrai-o.
+          if [ -n "$id" ]; then
+            gh api "repos/$GITHUB_REPOSITORY/actions/artifacts/$id/zip" > "$RUNNER_TEMP/ohmigo.zip"
+            unzip -p "$RUNNER_TEMP/ohmigo.zip" > public/ohmigo/chargers.json
+            python3 -c 'import json,sys; d=json.load(open(sys.argv[1])); print("ohmigo:", len(d["sites"]), "sites, schema", d["schema"])' public/ohmigo/chargers.json
+          else
+            echo "::warning::sem artifact ohmigo-dataset; /ohmigo/chargers.json fica de fora"
+          fi
       - uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
         with:
           path: public

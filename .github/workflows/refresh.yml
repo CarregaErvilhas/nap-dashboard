@@ -108,16 +108,17 @@ jobs:
       # Fica publicado ANTES do push abaixo, que é o que dispara o pages.yml.
       - name: Build ohmigo dataset
         run: python scripts/ohmigo_dataset.py data data/ohmigo_chargers.json
-      - name: Publish ohmigo dataset (release asset)
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          gh release view ohmigo-dataset >/dev/null 2>&1 || gh release create ohmigo-dataset \
-            --title "ohmigo dataset" --prerelease --latest=false \
-            --notes "Retrato semanal da rede para o ohmigo. Gerado pelo refresh.yml (scripts/ohmigo_dataset.py); não editar à mão."
-          # O asset chama-se chargers.json (é o nome que o pages.yml publica).
-          cp data/ohmigo_chargers.json "$RUNNER_TEMP/chargers.json"
-          gh release upload ohmigo-dataset "$RUNNER_TEMP/chargers.json" --clobber
+      # Artifact, não release: o repo tem releases imutáveis, e um asset
+      # publicado nunca mais pode ser substituído. O pages.yml vai buscar o
+      # artifact mais recente com este nome (está disponível antes do commit
+      # abaixo, que é o que dispara o pages.yml).
+      - name: Publish ohmigo dataset (artifact)
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: ohmigo-dataset
+          path: data/ohmigo_chargers.json
+          retention-days: 90
+          if-no-files-found: error
       - name: Commit refreshed deliverables
         env:
           PUSH_TOKEN: ${{ secrets.PUSH_TOKEN }}
