@@ -170,6 +170,19 @@ venv/bin/python scripts/tracker_checks.py   # CSVs + NAP -> findings
   renames itself drops out until the tracker catches up; `min_fee = 0` covers
   46% of pricing rows, so zero is **not** a pricing anomaly.
 
+## ohmigo dataset
+`scripts/ohmigo_dataset.py` builds `data/ohmigo_chargers.json` for the ohmigo
+MCP server (EV charging cost answers for ChatGPT/Claude): sites, points, power,
+voltage level and the **raw** MOBI.E OPC tariffs per socket (every €/min tier and
+the `AD_HOC_PAYMENT` plan, which `data/nap_opc_points.csv` collapses to one value).
+No status and no CEME prices: ohmigo reads status live from the NAP feed and gets
+energy prices from ceme-v2. `refresh.yml` runs it after the pipeline guard and
+uploads it as the `chargers.json` asset of the `ohmigo-dataset` release (not
+committed: ~6 MB a week); `pages.yml` copies that asset to
+`https://nap.ocarroeletrico.com/ohmigo/chargers.json`. It exits non-zero (and the
+refresh fails) below 5 000 sites or 10 000 tariffed points. `SCHEMA` in the
+script bumps on incompatible format changes.
+
 ## Housekeeping: save ad-hoc analysis scripts
 When an interactive query ends up producing new analysis code (point-in-polygon,
 cross-checks, one-off joins), save it as a script in `scripts/` (or append it to
@@ -333,3 +346,5 @@ Ao mover/renomear um ficheiro de dados, actualizar a lista `DATA_FILES` em
   is the tracker cross-check, appended from `data/tracker_findings.md`)
 - `Agents-outputs/anomalias-results.md` — output do agente `Agents/anomalias.md`
   (anomalias dos dados estáticos, agrupadas por OPC)
+- `/ohmigo/chargers.json` on Pages — the ohmigo dataset (release asset, see
+  "ohmigo dataset")
