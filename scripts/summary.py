@@ -28,7 +28,7 @@ print("\ntop operators (sites):")
 print(sites.operator_name.value_counts().head(10).to_string())
 
 print('\n=== POINTS/CONNECTORS ===')
-pts = points.drop_duplicates('point_id')
+pts = points.drop_duplicates(['site_id', 'point_id'])  # ids only unique per site
 print(f"unique points: {len(pts)}, connector rows: {len(points)}")
 
 def pw_class(w):
@@ -46,7 +46,7 @@ def pw_class(w):
 
 # Fresh upstream data can carry NaN power/connector_type on some rows —
 # drop NaNs inside the aggregations instead of crashing the weekly run.
-agg = points.groupby('point_id').agg(
+agg = points.groupby(['site_id', 'point_id']).agg(
     max_power_w=('max_power_w', lambda s: max((float(x) for x in s if pd.notna(x)), default=float('nan'))),
     operator_id=('operator_id', 'first'),
     connector_types=('connector_type', lambda s: '|'.join(sorted({str(x) for x in s if pd.notna(x)}))),
@@ -75,9 +75,9 @@ print(sites.groupby('region')['n_points'].mean().round(1).to_string())
 print('\n=== STATUS (snapshot) ===')
 print(f"points with status: {len(status)}, unique statuses:")
 print(status.status.value_counts().to_string())
-st = status.set_index('point_id')['status']
+st = status.set_index(['site_id', 'point_id'])['status']
 st = st[~st.index.duplicated(keep='first')]
-merged = agg.set_index('point_id').join(st, how='inner')
+merged = agg.set_index(['site_id', 'point_id']).join(st, how='inner')
 print("\nstatus x power class:")
 print(pd.crosstab(merged['pw_class'], merged['status']).to_string())
 occ = merged[merged.status.isin(['charging','available'])].groupby('pw_class').apply(
@@ -92,8 +92,8 @@ top = op_cnt.head(15).index
 print(op_occ[top].round(1).to_string())
 
 print('\n=== PRICING ===')
-pp = pricing.drop_duplicates(['point_id','energy_mix_index'])
-print(f"points with pricing: {pp.point_id.nunique()} / {len(pts)}")
+pp = pricing.drop_duplicates(['site_id','point_id','energy_mix_index'])
+print(f"points with pricing: {len(pp.drop_duplicates(['site_id','point_id']))} / {len(pts)}")
 print(pp.groupby('pricing_policy')['min_fee'].agg(['count','mean','min','max']).round(3).to_string())
 print("\npolicy combos per point:")
 print(pd.crosstab(pp.set_index('point_id').index, pp['pricing_policy']).assign(

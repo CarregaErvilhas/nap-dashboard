@@ -63,7 +63,7 @@ def main():
         return 1
 
     check('sites', len(S), lambda v: f'{v}')
-    n_points = int(P.point_id.nunique()) if len(P) else 0
+    n_points = len(P.drop_duplicates(['site_id', 'point_id'])) if len(P) else 0
     check('points', n_points, lambda v: f'{v}')
 
     try:

@@ -71,7 +71,8 @@ mob = wide.sort_values('TIPO_TARIFARIO').drop_duplicates(['ID', 'tomada'], keep=
 
 # --- NAP points (one row per point, max power) ---
 # tomada from point_id's last segment; site from site_external_id (matches MOBIE ID)
-pts = P.drop_duplicates('point_id').copy()
+# point ids are only unique within a site (bare "19", "160"... repeat across sites)
+pts = P.drop_duplicates(['site_id', 'point_id']).copy()
 pts['tomada'] = pts['point_id'].apply(lambda x: tom_key(str(x).split('-')[-1]))
 pts['site_ext'] = pts['site_external_id']
 
@@ -91,10 +92,12 @@ joined['regime'] = 'sem_ceme'
 joined.loc[has_brands & joined['OPERADOR'].notna(), 'regime'] = 'mobie'
 joined.loc[has_brands & joined['OPERADOR'].isna(), 'regime'] = 'mobie_sem_tarifa'
 _dp = pd.read_csv('data/nap_dynamic_pricing.csv', dtype=str)
-_dp = _dp[_dp.pricing_policy == 'pricePerDeliveryUnit'].drop_duplicates('point_id')
+_dp = _dp[_dp.pricing_policy == 'pricePerDeliveryUnit'].drop_duplicates(['site_id', 'point_id'])
+_fee = _dp.set_index(['site_id', 'point_id'])['min_fee']
 joined['NAP_UNICO'] = None
 _sc = joined['regime'] == 'sem_ceme'
-joined.loc[_sc, 'NAP_UNICO'] = joined.loc[_sc, 'point_id'].map(_dp.set_index('point_id')['min_fee'])
+joined.loc[_sc, 'NAP_UNICO'] = _fee.reindex(
+    pd.MultiIndex.from_frame(joined.loc[_sc, ['site_id', 'point_id']])).values
 
 # report
 nap_pts = len(pts)
@@ -118,7 +121,7 @@ report = f"""MOBI.E join report
 open('data/nap_opc_join_report.txt', 'w').write(report)
 print(report)
 
-cols = ['point_id', 'point_external_id', 'site_ext', 'tomada', 'station_id', 'operator_id',
+cols = ['point_id', 'point_external_id', 'site_id', 'site_ext', 'tomada', 'station_id', 'operator_id',
         'usage_type', 'is_green_energy', 'brands_accepted',
         'connector_type', 'charging_mode', 'connector_format', 'max_power_w', 'voltage', 'max_current',
         'MUNICIPIO', 'OPERADOR', 'TIPO_POSTO', 'NIVELTENSAO', 'TIPO_TARIFARIO',

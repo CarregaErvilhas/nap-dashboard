@@ -62,7 +62,7 @@ def main():
     summary = json.load(open('data/agents-summary.json', encoding='utf-8'))
     print(f'sites: {len(sites)} (header excl.) | '
           f'connector_rows: {len(points)} | '
-          f'distinct point_id: {points.point_id.nunique()} | '
+          f'distinct (site_id, point_id): {len(points.drop_duplicates(["site_id", "point_id"]))} | '
           f'distinct site_id: {sites.site_id.nunique()} | '
           f'OPCs: {sites.operator_id.nunique()}')
     if len(sites) != summary['totals']['sites']:

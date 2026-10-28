@@ -86,7 +86,7 @@ def main():
     out = {'generated_utc': datetime.datetime.now(datetime.timezone.utc)
            .isoformat(timespec='seconds'),
            'totals': {'sites': len(sites), 'connector_rows': len(points),
-                      'distinct_point_ids': int(points.point_id.nunique()),
+                      'distinct_point_ids': len(points.drop_duplicates(['site_id', 'point_id'])),
                       'distinct_site_ids': int(sites.site_id.nunique())}}
 
     # 1. Physics: declared power vs V x I
@@ -259,7 +259,7 @@ def main():
         per_opc[oid] = {
             'name': name_of.get(oid),
             'connector_rows': len(grp),
-            'distinct_points': int(grp.point_id.nunique()),
+            'distinct_points': len(grp.drop_duplicates(['site_id', 'point_id'])),
             'sites': int(grp.site_id.nunique()),
             'over': len(o), 'under': len(u),
             'over_sample': samp(o, ['point_id', 'site_external_id', 'voltage',

@@ -99,8 +99,9 @@ Outputs to give the user:
 - `facilityLocation` is in the `locationReferencing` namespace, not
   `locationExtension`.
 - NUTS is level-1 only.
-- Dynamic point ids match static 100%, but 46 points appear 2–3× in the dynamic
-  feed with conflicting states — dedupe `keep='first'`, flag as error.
+- Point ids are only unique within a site (bare `19`, `160`… repeat across
+  sites): key points by `(site_id, point_id)`. Keyed that way, dynamic matches
+  static 1:1 with no conflicting states.
 - 30% of connector rows have declared power inconsistent with V×I (>25% off);
   for `mode3AC3p` the physical power is `√3×V×I`, else `V×I`.
 - MOBI.E PartyID PDF is from 2022: 38 active tariff codes missing, 22 unused.

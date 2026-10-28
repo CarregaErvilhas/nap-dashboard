@@ -162,11 +162,17 @@ def parse_dynamic(path):
     rows_status = []
     rows_pricing = []
     pub_time = None
+    site_id = None
     ctx = etree.iterparse(path, huge_tree=True, events=('end',))
     n = 0
     for event, elem in ctx:
         if elem.tag == q(C, 'publicationTime'):
             pub_time = (elem.text or '').strip()
+            continue
+        # Point ids are only unique within a site (some OPCs publish bare "19",
+        # "160"...), so carry the site: its <reference> closes before its points.
+        if elem.tag == q(F, 'reference') and elem.getparent().tag == EI_T + 'energyInfrastructureSiteStatus':
+            site_id = elem.get('id')
             continue
         if elem.tag != EI_T + 'refillPointStatus':
             continue
@@ -174,7 +180,7 @@ def parse_dynamic(path):
         ref = elem.find(q(F, 'reference'))
         pid = ref.get('id') if ref is not None else None
         status = text_of(elem, 'status', EI)
-        rows_status.append((pid, status, pub_time))
+        rows_status.append((pid, site_id, status, pub_time))
 
         for ov in elem.findall(EI_T + 'electricEnergyMixOverride'):
             idx = ov.get('energyMixIndex')
@@ -184,7 +190,7 @@ def parse_dynamic(path):
             policy = text_of(rates, 'pricingPolicy', EI)
             fee = text_of(rates, 'minimumDeliveryFee', EI)
             cur = text_of(rates, 'applicableCurrency', F)
-            rows_pricing.append((pid, idx, policy, fee, cur, pub_time))
+            rows_pricing.append((pid, site_id, idx, policy, fee, cur, pub_time))
         while elem.getprevious() is not None:
             del elem.getparent()[0]
         if n % 5000 == 0:
@@ -222,9 +228,9 @@ def main():
                'max_power_w', 'voltage', 'max_current'],
               points)
     write_csv(f'{outdir}/nap_dynamic_status.csv',
-              ['point_id', 'status', 'snapshot_time'], rows_status)
+              ['point_id', 'site_id', 'status', 'snapshot_time'], rows_status)
     write_csv(f'{outdir}/nap_dynamic_pricing.csv',
-              ['point_id', 'energy_mix_index', 'pricing_policy', 'min_fee', 'currency',
+              ['point_id', 'site_id', 'energy_mix_index', 'pricing_policy', 'min_fee', 'currency',
                'snapshot_time'], rows_pricing)
 
 

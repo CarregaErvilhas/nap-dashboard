@@ -91,11 +91,12 @@ def main():
               file=sys.stderr)
         return 2
     st_rows = load_csv(STATUS)
+    # point ids are only unique within a site: key by (site_id, point_id)
     st_map = {}
     for r in st_rows:
-        pid = (r.get('point_id') or '').strip()
-        if pid and pid not in st_map:
-            st_map[pid] = (r.get('status') or '').strip() or 'unknown'
+        k = ((r.get('site_id') or '').strip(), (r.get('point_id') or '').strip())
+        if k[1] and k not in st_map:
+            st_map[k] = (r.get('status') or '').strip() or 'unknown'
 
     # ---- estado atual ----
     per_point_max = {}
@@ -104,10 +105,11 @@ def main():
         w = num(p.get('max_power_w'))
         if not pid or w is None:
             continue
-        if pid not in per_point_max:
-            per_point_max[pid] = {'w': w, 'site': (p.get('site_external_id') or '').strip()}
+        k = ((p.get('site_id') or '').strip(), pid)
+        if k not in per_point_max:
+            per_point_max[k] = {'w': w, 'site': (p.get('site_external_id') or '').strip()}
         else:
-            per_point_max[pid]['w'] = max(per_point_max[pid]['w'], w)
+            per_point_max[k]['w'] = max(per_point_max[k]['w'], w)
 
     cur_sites = {}
     for s in sites:
@@ -120,8 +122,8 @@ def main():
             'city': (s.get('city') or '').strip(),
         }
     site_pts = {}
-    for pid, d in per_point_max.items():
-        site_pts.setdefault(d['site'], []).append(pid)
+    for k, d in per_point_max.items():
+        site_pts.setdefault(d['site'], []).append(k)
     for ext, d in cur_sites.items():
         pids = site_pts.get(ext, [])
         d['npts'] = len(pids)
@@ -142,7 +144,7 @@ def main():
     npts_top = max(cur_sites.items(), key=lambda kv: kv[1]['npts'])
     cur_records = {
         'max_connector_kw': {'kw': round(max_conn[1]['w'] / 1000, 3),
-                             'point_id': max_conn[0], 'site': max_conn[1]['site']},
+                             'point_id': max_conn[0][1], 'site': max_conn[1]['site']},
         'max_hub_kw': {'kw': hub_top[1]['hub_kw'], 'site': hub_top[0]},
         'max_site_points': {'n': npts_top[1]['npts'], 'site': npts_top[0]},
     }
