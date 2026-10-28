@@ -100,6 +100,24 @@ jobs:
       # eval de inicialização com DOM stub (apanha templates partidos).
       - name: Validate dashboard (JSON + JS + DOM-stub eval)
         run: python3 scripts/validate_dashboard.py
+      # Dataset estático do ohmigo (servidor MCP de custos de carregamento):
+      # postos, tomadas, potência e tarifas OPC num único JSON. Só corre depois
+      # do pipeline_guard, para nunca publicar dados de um upstream partido.
+      # Vai para um asset de release (não para o git: são ~6 MB por semana) e
+      # o pages.yml copia-o para https://nap.ocarroeletrico.com/ohmigo/chargers.json.
+      # Fica publicado ANTES do push abaixo, que é o que dispara o pages.yml.
+      - name: Build ohmigo dataset
+        run: python scripts/ohmigo_dataset.py data data/ohmigo_chargers.json
+      - name: Publish ohmigo dataset (release asset)
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release view ohmigo-dataset >/dev/null 2>&1 || gh release create ohmigo-dataset \
+            --title "ohmigo dataset" --prerelease --latest=false \
+            --notes "Retrato semanal da rede para o ohmigo. Gerado pelo refresh.yml (scripts/ohmigo_dataset.py); não editar à mão."
+          # O asset chama-se chargers.json (é o nome que o pages.yml publica).
+          cp data/ohmigo_chargers.json "$RUNNER_TEMP/chargers.json"
+          gh release upload ohmigo-dataset "$RUNNER_TEMP/chargers.json" --clobber
       - name: Commit refreshed deliverables
         env:
           PUSH_TOKEN: ${{ secrets.PUSH_TOKEN }}

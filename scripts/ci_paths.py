@@ -51,6 +51,7 @@ DATA_FILES = [
     'osm_umap.csv', 'osm_caca.csv', 'osm_umap_findings.md',
     'opc_registry_authority.csv', 'tracker_errors.csv', 'tracker_meta.json',
     'tracker_findings.md', 'tracker_findings.csv',
+    'ohmigo_chargers.json',
 ]
 CACHE_DIRS = ['umap_cache', 'caop_cache']
 
