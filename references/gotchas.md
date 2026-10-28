@@ -40,10 +40,12 @@
 
 ## Particularidades do dinâmico (evActualStatus)
 
-- Os identificadores de ponto do dinâmico e do estático coincidem 100%. Mas
-  **46 pontos aparecem 2–3×** no feed dinâmico com estados contraditórios (48
-  linhas a mais) — eliminar duplicados com `keep='first'` e assinalar o conflito
-  nos erros.
+- O id de ponto só é único **dentro do site**: alguns OPC publicam ids nus
+  (`19`, `160`, `332`) que se repetem noutros sites (66 ids / 134 pontos em
+  2026-10-24). A chave de ponto é `(site_id, point_id)`; o dinâmico traz o site no
+  primeiro `<reference>` de cada `energyInfrastructureSiteStatus`. Com essa chave,
+  dinâmico e estático coincidem 1:1 e nenhum ponto tem dois estados (os "46 pontos
+  com estados contraditórios" eram esta colisão).
 - `pricePerChargingTime` pode chegar a 3,00 €/min (4 pontos >1,0 €/min) —
   provavelmente um erro de unidade €/min contra €/h.
 

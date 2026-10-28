@@ -82,22 +82,26 @@ def _max_power(s):
     return max(vals) if vals else float('nan')
 
 
-conn_map = pts.groupby('point_id')['connector_type'].apply(
+# Point ids are only unique within a site (bare "19", "160"... repeat across
+# sites), so every point-level key is (site_id, point_id).
+PK = ['site_id', 'point_id']
+conn_map = pts.groupby(PK)['connector_type'].apply(
     lambda s: '|'.join(sorted({CONN_NAMES.get(t, t) for t in s if pd.notna(t)})))
-pow_map = pts.groupby('point_id')['max_power_w'].apply(_max_power)
-pts = pts.drop_duplicates('point_id')[['point_id', 'site_external_id', 'operator_id',
-                                       'is_green_energy']].copy()
-pts['connector_types'] = pts['point_id'].map(conn_map)
-pts['max_power_w'] = pts['point_id'].map(pow_map)
+pow_map = pts.groupby(PK)['max_power_w'].apply(_max_power)
+pts = pts.drop_duplicates(PK)[['point_id', 'site_id', 'site_external_id', 'operator_id',
+                               'is_green_energy']].copy()
+_pk = pd.MultiIndex.from_frame(pts[PK])
+pts['connector_types'] = conn_map.reindex(_pk).values
+pts['max_power_w'] = pow_map.reindex(_pk).values
 pts['pw_class'] = pts.max_power_w.apply(pw_class)
-st_map = ST.drop_duplicates('point_id', keep='first').set_index('point_id')['status']
-pts['status'] = pts['point_id'].map(st_map).fillna('unknown')
+st_map = ST.drop_duplicates(PK, keep='first').set_index(PK)['status']
+pts['status'] = st_map.reindex(_pk).fillna('unknown').values
 site_map = S.set_index('external_id')
 pts['city'] = pts['site_external_id'].map(site_map['city'])
 pts['operator_name'] = pts['operator_id'].map(S.drop_duplicates('operator_id').set_index('operator_id')['operator_name'])
 pts['region'] = pts['site_external_id'].map(site_map['region'])
-opc_cols = OPC.set_index('point_id')[['opc_operador', 'opc_tipo_posto', 'ENERGY', 'TIME', 'FLAT', 'regime', 'NAP_UNICO']]
-pts = pts.merge(opc_cols, left_on='point_id', right_index=True, how='left')
+opc_cols = OPC[PK + ['opc_operador', 'opc_tipo_posto', 'ENERGY', 'TIME', 'FLAT', 'regime', 'NAP_UNICO']]
+pts = pts.merge(opc_cols, on=PK, how='left')
 pts['NAP_UNICO'] = pd.to_numeric(pts['NAP_UNICO'], errors='coerce')
 pts['max_power_kw'] = (pts.max_power_w / 1000).round(0)
 
@@ -210,7 +214,8 @@ for op in pts.operator_name.value_counts().head(15).index:
                        'occ': round((act.status == 'charging').mean() * 100, 1) if len(act) else None})
 agg_energy = OPC.dropna(subset=['ENERGY']).copy()
 agg_energy['ENERGY'] = agg_energy.ENERGY.astype(float)
-agg_energy['op'] = agg_energy['point_id'].map(pts.set_index('point_id')['operator_name'])
+agg_energy = agg_energy.merge(pts[PK + ['operator_name']].rename(columns={'operator_name': 'op'}),
+                              on=PK, how='left')
 agg_price_op = (agg_energy.groupby('op')['ENERGY'].mean()
                 .sort_values(ascending=False).head(15))
 
@@ -396,21 +401,27 @@ pow_div_ex = '; '.join(
     .rename(columns={'_nap': 'nap', '_mob': 'mob'}).itertuples())
 
 # feed dinâmico: pontos com estados contraditórios
-_nst = ST.groupby('point_id')['status'].nunique()
+_nst = ST.groupby(PK)['status'].nunique()
 _conf = _nst[_nst > 1]
 n_conf = len(_conf)
 n_conf_extra = int(_conf.sum() - len(_conf))
 if n_conf:
     _conf_ids = list(_conf.index)
-    ex_pid = str(next((c for c in _conf_ids if len(str(c)) >= 6 and '-' in str(c)),
-                      _conf_ids[0]))
-    _cst = ST[ST.point_id == ex_pid]['status'].drop_duplicates().tolist()
+    ex_site, ex_pid = next((c for c in _conf_ids if len(str(c[1])) >= 6 and '-' in str(c[1])),
+                           _conf_ids[0])
+    ex_pid = str(ex_pid)
+    _cst = ST[(ST.site_id == ex_site) & (ST.point_id == ex_pid)]['status'].drop_duplicates().tolist()
     ex_s1 = str(_cst[0]) if _cst else '?'
     ex_s2 = str(_cst[1]) if len(_cst) > 1 else ex_s1
 else:
     ex_pid = ex_s1 = ex_s2 = '—'
+# ids de ponto reutilizados por sites diferentes (o mesmo reference id, pontos distintos)
+_ids_sites = P.drop_duplicates(PK).groupby('point_id')['site_id'].nunique()
+_shared = _ids_sites[_ids_sites > 1]
+n_shared_ids, n_shared_pts = len(_shared), int(_shared.sum())
+ex_shared = str(_shared.sort_values(ascending=False).index[0]) if n_shared_ids else '—'
 
-n_usage_missing = int(P.drop_duplicates('point_id').usage_type.isna().sum())
+n_usage_missing = int(P.drop_duplicates(PK).usage_type.isna().sum())
 
 _Mt = _fsafe('data/mobie_tarifas.csv', sep=';', decimal=',', dtype=str)
 n_bare_uid = (int(_Mt.UID_TOMADA.dropna().apply(lambda x: str(x).strip().isdigit()).sum())
@@ -434,7 +445,7 @@ if _pr is not None and 'min_fee' in _pr and 'pricing_policy' in _pr:
     _dyn = _dyn[_dyn['_fee'].notna()]
     if len(_dyn):
         dyn_max = round(float(_dyn['_fee'].max()), 2)
-        dyn_gt1 = int(_dyn[_dyn['_fee'] > 1].point_id.nunique())
+        dyn_gt1 = len(_dyn[_dyn['_fee'] > 1].drop_duplicates(PK))
 _both0 = OPC.dropna(subset=['ENERGY', 'FLAT'])
 n_zeroenergy = int(((_both0.ENERGY.apply(_num) == 0) & (_both0.FLAT.apply(_num) > 0)).sum()) \
     if len(_both0) else 0
@@ -456,7 +467,7 @@ _tesla = S[S['operator_id'] == 'TSLA']
 n_tesla_sites = len(_tesla)
 if n_tesla_sites:
     _tp = P[P.site_id.isin(set(_tesla.site_id))]
-    n_tesla_pts = int(_tp.point_id.nunique())
+    n_tesla_pts = len(_tp.drop_duplicates(PK))
     _tesla_max = _tp.max_power_w.apply(_num).max()
     tesla_max_kw = int(_tesla_max / 1000) if _tesla_max == _tesla_max else None
 else:
@@ -498,7 +509,7 @@ ERRS_HTML = f"""
 </li>
 <li>
   <div class="head">3. Estado duplicado / contraditório no feed dinâmico</div>
-  <div class="meta">{n_conf} pontos aparecem 2–3× no <code>evActualStatus</code> com estados diferentes{(' (ex. `' + html_esc.escape(ex_pid) + '` aparece como ' + html_esc.escape(ex_s1) + ' e como ' + html_esc.escape(ex_s2) + ')') if n_conf else ''}. {n_conf_extra} linhas a mais no ficheiro.</div>
+  <div class="meta">{(str(n_conf) + ' pontos aparecem 2–3× no <code>evActualStatus</code> com estados diferentes (ex. `' + html_esc.escape(ex_pid) + '` aparece como ' + html_esc.escape(ex_s1) + ' e como ' + html_esc.escape(ex_s2) + '). ' + str(n_conf_extra) + ' linhas a mais no ficheiro. ') if n_conf else 'Nenhum ponto repetido dentro do mesmo site. '}Ids de ponto reutilizados entre sites: {pt(n_shared_ids)} ids (ex. `{html_esc.escape(ex_shared)}`) identificam {pt(n_shared_pts)} pontos distintos em sites diferentes, no estático e no dinâmico. O id só é único dentro do site.</div>
 </li>
 <li>
   <div class="head">4. Fragmentação de nomes de operadores (NAP)</div>
@@ -591,8 +602,7 @@ except FileNotFoundError:
 HUB_MIN_KW, HUB_TOP = 300, 50
 _Pw = P.copy()
 _Pw['max_power_w'] = pd.to_numeric(_Pw.max_power_w, errors='coerce')
-_pp = _Pw.groupby('point_id').agg(site=('site_id', 'first'),
-                                  pw=('max_power_w', 'max'))
+_pp = _Pw.groupby(PK).agg(pw=('max_power_w', 'max')).reset_index().rename(columns={'site_id': 'site'})
 _st = _pp.groupby('site').agg(total_kw=('pw', lambda x: x.sum() / 1000),
                               max_kw=('pw', lambda x: x.max() / 1000),
                               npts=('pw', 'size')).reset_index()

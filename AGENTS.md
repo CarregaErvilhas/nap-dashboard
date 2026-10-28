@@ -198,8 +198,13 @@ venv/bin/python scripts/validate_dashboard.py
 - `brands_accepted` (NAP) = global CEME list per point, NOT an operator discriminator.
 - `facilityLocation` is in the `locationReferencing` namespace, not `locationExtension`.
 - NUTS in NAP is level-1 only.
-- Dynamic & static point ids match bar 3 missing rows; but 44 points appear 2–3× in dynamic
-  status with conflicting states (47 extra rows).
+- Point ids are only unique **within a site**: some OPCs (Iberdrola | bp pulse,
+  `HGP-*`, `ACC-*`) publish bare ids (`19`, `160`, `332`) that repeat on other
+  sites (66 ids / 134 points on 2026-10-24). Key every point by
+  `(site_id, point_id)`; the dynamic CSVs carry `site_id` (first `<reference>` of
+  each `energyInfrastructureSiteStatus`). Keyed that way, static and dynamic match
+  1:1 and no point has two statuses. The old "44 points appear 2–3× with
+  conflicting states" finding was this collision, not a feed error.
 - 33% of connector rows (6 948/21 056) have declared power inconsistent with
   V×I (>25% off); 2 686 declare power above physical capacity (impossible, e.g.
   1200 V × 600 A = 720 kW declared as 200 kW).
