@@ -164,7 +164,19 @@ for s in S.itertuples(index=False):
     sites[s.site_id] = {
         'id': s.site_id, 'code': s.external_id, 'lat': round(lat, 6), 'lon': round(lon, 6),
         'region': region(lat, lon), 'city': text(s.city), 'address': text(s.address_line),
-        'operator': text(s.operator_name), 'points': [],
+        'operator': text(s.operator_name),
+        # O operator_id do NAP (ex. IONY, HORZ, ATLA) é a chave estável para o
+        # ohmigo saber que operadores vendem também directamente (app,
+        # subscrição). O nome não serve: a Atlante aparece com 7 grafias.
+        'operatorId': text(s.operator_id),
+        'website': text(s.operator_website),
+        # Como se pode pagar/autenticar no local (DATEX II
+        # authenticationAndIdentificationMethods): apps, rfid, creditCard,
+        # debitCard, nfc, pinpad, website. Cartão/pinpad/nfc = dá para pagar
+        # no posto sem CEME; o ohmigo usa isto para descobrir operadores que
+        # vendem directamente e ainda não estão catalogados.
+        'payment': [m for m in str(s.auth_methods).split('|') if m and m != 'nan'],
+        'points': [],
     }
 
 for p in P.itertuples(index=False):
