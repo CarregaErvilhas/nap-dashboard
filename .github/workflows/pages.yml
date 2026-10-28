@@ -46,9 +46,10 @@ jobs:
           mkdir -p public/ohmigo
           id=$(gh api "repos/$GITHUB_REPOSITORY/actions/artifacts?name=ohmigo-dataset&per_page=1" \
             --jq '.artifacts[] | select(.expired | not) | .id')
+          # O zip tem um só ficheiro; -p sem nome extrai-o.
           if [ -n "$id" ]; then
             gh api "repos/$GITHUB_REPOSITORY/actions/artifacts/$id/zip" > "$RUNNER_TEMP/ohmigo.zip"
-            unzip -p "$RUNNER_TEMP/ohmigo.zip" ohmigo_chargers.json > public/ohmigo/chargers.json
+            unzip -p "$RUNNER_TEMP/ohmigo.zip" > public/ohmigo/chargers.json
             python3 -c 'import json,sys; d=json.load(open(sys.argv[1])); print("ohmigo:", len(d["sites"]), "sites, schema", d["schema"])' public/ohmigo/chargers.json
           else
             echo "::warning::sem artifact ohmigo-dataset; /ohmigo/chargers.json fica de fora"
