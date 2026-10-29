@@ -10,6 +10,13 @@ Este script junta essas peças num único JSON (~6 MB, ~600 KB com gzip), que o
 refresh semanal publica no Pages em https://nap.ocarroeletrico.com/ohmigo/chargers.json.
 O servidor descarrega-o quando arranca e volta a vê-lo de 6 em 6 horas.
 
+Do OpenStreetMap vem o bloco `osm` de cada local (nome, marca, horário, se é
+num parque subterrâneo...). A marca é muitas vezes o dono dos postos, não o
+OPC: os do Lidl são do Lidl e operados pela Galp, por isso o NAP diz Galp e o
+OSM diz Lidl. É o que deixa o ohmigo encontrar "o posto do Lidl
+de Coimbra" ou "o Continente de Leiria": ninguém sabe o id de um posto, e o
+NAP só tem o nome jurídico do operador e a morada.
+
 O que NÃO está aqui, de propósito:
   - o estado dos postos (livre, a carregar, avariado): muda de minuto a minuto,
     o ohmigo lê-o directamente do feed dinâmico do NAP quando alguém pergunta;
@@ -21,6 +28,8 @@ Entradas (todas produzidas por fetch_data.sh + nap_etl.py):
   data/nap_dynamic_pricing.csv  o preço que o NAP publica por ponto (só para
                                 os postos fora da MOBI.E, como último recurso)
   data/mobie_tarifas.csv        as tarifas OPC oficiais da MOBI.E
+  data/umap_cache/todos.json    o dump OSM que o osm_umap.py descarrega
+                                (opcional: sem ele os locais saem sem `osm`)
 
 Porque não usamos o data/nap_opc_points.csv do mobie_join.py: esse ficheiro
 guarda UM valor por componente (pivot com aggfunc='first'). Uma tomada com
@@ -32,8 +41,10 @@ Uso:  python scripts/ohmigo_dataset.py [pasta_de_dados] [saída.json]
       (por omissão: data  data/ohmigo_chargers.json)
 """
 import json
+import math
 import re
 import sys
+from collections import Counter
 from datetime import datetime, timezone
 
 import pandas as pd
@@ -129,6 +140,65 @@ else:
     nap_price_of = lambda site, pid: None if pid in shared else nap_price.get(pid)
 
 
+# --- OpenStreetMap ------------------------------------------------------------
+# O dump Overpass do autor do mapa "Postos de Carregamento v2.1" (ver
+# osm_umap.py, que o descarrega para data/umap_cache/). Cada estação OSM tem o
+# código MOBI.E em `ref` ("LRA-00156", às vezes "MOBI-LRA-00156" ou vários
+# separados por ";"), que é o external_id do NAP. Um local pode ter vários
+# elementos (a estação e cada carregador): por campo, fica o valor mais comum.
+# Só valem elementos a menos de 1 km do NAP: um ref trocado não pode dar a um
+# posto o nome de outro.
+OSM_DUMP = f'{DATA}/umap_cache/todos.json'
+OSM_MAX_KM = 1.0
+# tag OSM -> campo no JSON. O que ajuda a encontrar o posto (name, brand,
+# operator) e o que o condutor quer saber antes de lá ir.
+OSM_TAGS = {'name': 'name', 'brand': 'brand', 'operator': 'operator',
+            'opening_hours': 'openingHours', 'location': 'location',
+            'access': 'access', 'parking:fee': 'parkingFee', 'maxstay': 'maxstay'}
+# Nomes que são só o código ("LRA-00156") ou um código por saber ("LRA-?????").
+CODE_NAME = re.compile(r'^(?:MOBI-)?[A-Z]{3}-[\d?]{4,5}\b')
+
+
+def km(lat1, lon1, lat2, lon2):
+    p = math.pi / 180
+    a = (math.sin((lat2 - lat1) * p / 2) ** 2
+         + math.cos(lat1 * p) * math.cos(lat2 * p) * math.sin((lon2 - lon1) * p / 2) ** 2)
+    return 2 * 6371 * math.asin(math.sqrt(a))
+
+
+def osm_by_code(sites_by_code):
+    """external_id do NAP -> {campo: valor} das tags OSM desse local."""
+    try:
+        els = json.load(open(OSM_DUMP))['elements']
+    except (OSError, ValueError, KeyError) as e:
+        print(f'aviso: sem dados OSM ({OSM_DUMP}: {e}); os locais saem sem `osm`')
+        return {}
+    xy = {e['id']: (e['lat'], e['lon']) for e in els if e['type'] == 'node' and 'lat' in e}
+    votes = {}  # código -> campo -> Counter de valores
+    for e in els:
+        t = e.get('tags') or {}
+        if t.get('amenity') != 'charging_station' and t.get('man_made') != 'charge_point':
+            continue
+        if e['type'] == 'node':
+            at = (e.get('lat'), e.get('lon'))
+        else:
+            pts = [xy[n] for n in e.get('nodes', []) if n in xy]
+            at = (sum(p[0] for p in pts) / len(pts), sum(p[1] for p in pts) / len(pts)) if pts else (None, None)
+        if at[0] is None:
+            continue
+        for ref in str(t.get('ref', '')).split(';'):
+            code = ref.strip().removeprefix('MOBI-')
+            site = sites_by_code.get(code)
+            if not site or km(at[0], at[1], site['lat'], site['lon']) > OSM_MAX_KM:
+                continue
+            for tag, field in OSM_TAGS.items():
+                v = t.get(tag)
+                if not v or (tag == 'name' and CODE_NAME.match(v)):
+                    continue
+                votes.setdefault(code, {}).setdefault(field, Counter())[v] += 1
+    return {code: {f: c.most_common(1)[0][0] for f, c in fields.items()} for code, fields in votes.items()}
+
+
 def region(lat, lon):
     """CONT, MAD ou AZO: muda o IVA, o fuso e os horários de vazio no ceme-v2."""
     if lon < -24:
@@ -210,6 +280,15 @@ for p in P.itertuples(index=False):
             pt['napPrice'] = v
     site['points'].append(pt)
 
+# O código MOBI.E (external_id) é único por local no NAP; se não for, o OSM
+# desse código fica de fora em vez de ir parar ao local errado.
+by_code = {}
+for site in sites.values():
+    by_code[site['code']] = None if site['code'] in by_code else site
+osm = osm_by_code({c: s for c, s in by_code.items() if s and isinstance(c, str)})
+for code, tags in osm.items():
+    by_code[code]['osm'] = tags
+
 out = {
     'schema': SCHEMA,
     'generatedAt': datetime.now(timezone.utc).isoformat(timespec='seconds'),
@@ -220,7 +299,8 @@ with open(OUT, 'w') as f:
 
 n_pts = sum(len(s['points']) for s in out['sites'])
 n_opc = sum(1 for s in out['sites'] for p in s['points'] if 'opc' in p)
-print(f'{len(out["sites"])} locais, {n_pts} pontos, {n_opc} com tarifa OPC da MOBI.E -> {OUT}')
+n_osm = sum(1 for s in out['sites'] if 'osm' in s)
+print(f'{len(out["sites"])} locais ({n_osm} com dados OSM), {n_pts} pontos, {n_opc} com tarifa OPC da MOBI.E -> {OUT}')
 
 # Guarda: um upstream que mude de formato não pode publicar um ficheiro vazio
 # que o ohmigo depois serviria como "não há postos aqui".
