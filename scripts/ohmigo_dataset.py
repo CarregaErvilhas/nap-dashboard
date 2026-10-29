@@ -103,7 +103,19 @@ def tom_key(x):
 # A mesma chave do mobie_join.py: o ID MOBI.E do local + o número da tomada
 # (penúltimo segmento do UID_TOMADA) <-> site_external_id do NAP + o último
 # segmento do point_id.
-M['tomada'] = M.UID_TOMADA.map(lambda x: tom_key(str(x).split('-')[-2]) if len(str(x).split('-')) >= 3 else None)
+# Há operadores (FCT, EPK, VIA, ACC, HGP) que publicam o UID_TOMADA só como um
+# número ("97"). Na FCT esse número é o point_id do NAP; na HGP não é ("399" na
+# MOBI.E, "202" no NAP). Por isso o número curto entra como tomada (casa quando
+# coincide) e, para o que não casar, há o recurso por local mais abaixo.
+def tomada(x):
+    parts = str(x).split('-')
+    if len(parts) >= 3:
+        return tom_key(parts[-2])
+    return tom_key(x) if len(parts) == 1 else None
+
+
+M['tomada'] = M.UID_TOMADA.map(tomada)
+M['short_uid'] = M.UID_TOMADA.map(lambda x: '-' not in str(x))
 M['plan'] = M.TIPO_TARIFARIO.fillna('REGULAR')
 M['p'] = M.TARIFA.map(parse_tarifa)
 M = M[M.p.notna() & M.TIPO_TARIFA.isin(['FLAT', 'ENERGY', 'TIME', 'PARKING_TIME'])]
@@ -124,6 +136,17 @@ for r in M.itertuples(index=False):
         v.append(item)
     if isinstance(r.NIVELTENSAO, str) and r.NIVELTENSAO in ('BTN', 'BTE', 'MT'):
         level[k] = r.NIVELTENSAO
+
+# Recurso para os UID_TOMADA curtos que não casam com nenhum point_id: se
+# todas as tomadas desse local têm exactamente a mesma tarifa, qualquer ponto
+# do local tem essa tarifa, seja qual for a numeração. Se diferem, não há como
+# saber qual é qual e o ponto fica sem tarifa (como antes).
+site_tariff = {}
+for sid, ks in M[M.short_uid].groupby('ID').tomada:
+    plans = {json.dumps(tariffs[(sid, k)], sort_keys=True) for k in set(ks) if (sid, k) in tariffs}
+    if len(plans) == 1:
+        k0 = next(k for k in ks if (sid, k) in tariffs)
+        site_tariff[sid] = (tariffs[(sid, k0)], level.get((sid, k0)))
 
 # O preço que o NAP publica para os postos fora da MOBI.E (sem CEME). É um
 # único pricePerDeliveryUnit sem nada que diga se é o preço final: o ohmigo
@@ -258,13 +281,21 @@ for p in P.itertuples(index=False):
     has_ceme = isinstance(p.brands_accepted, str) and p.brands_accepted.strip() != ''
     k = (p.site_external_id, tom_key(str(p.point_id).split('-')[-1]))
     t = tariffs.get(k)
+    lv = level.get(k)
+    if t is None and p.site_external_id in site_tariff:
+        t, lv = site_tariff[p.site_external_id]
+    # Sem CEME, a tarifa REGULAR (a de quem carrega com um CEME) não se aplica.
+    # A MOBI.E publica-a mesmo assim em alguns destes postos, com tomadas que
+    # não existem (CCS de 400 kW num T2 de 22 kW na HGP); fica só o AD_HOC.
+    if t and not has_ceme:
+        t = {k2: v for k2, v in t.items() if k2 != 'REGULAR'} or None
     pt = {
         'id': p.point_id,
         'kw': round(kw / 1000, 1) if kw else None,
         'connector': CONNECTOR.get(str(p.connector_type), str(p.connector_type)),
         'dc': 'DC' in mode,
         'phases': 1 if mode.endswith('1p') else 3 if mode.endswith('3p') else None,
-        'level': level.get(k),
+        'level': lv,
         # mobie: aceita CEME e tem tarifa OPC no ficheiro da MOBI.E;
         # mobie_sem_tarifa: aceita CEME mas não está no ficheiro (o ohmigo usa
         #   então as taxas do feed dinâmico do NAP);
