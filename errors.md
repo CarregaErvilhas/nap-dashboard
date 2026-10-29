@@ -1,9 +1,9 @@
 # Erros reportáveis (dados NAP / MOBI.E / DGEG)
 
 ## 1. Tensão / corrente / potência inconsistentes (NAP estático)
-32,9% das tomadas (6.390/19.417) têm potência declarada que não bate com V×I (&gt;25% de diferença). Destas, 2.781 (14,3%) declaram potência acima da capacidade elétrica (fisicamente impossível), ex. 1200 V × 600 A = 720 kW declarados como 200 kW. Valores suspeitos no dataset: tensões de 1200 V e 3600 V, correntes de 600 A.
+28,1% das tomadas (5.466/19.444) têm potência declarada que não bate com V×I (&gt;25% de diferença). Destas, 1.906 (9,8%) declaram potência acima da capacidade elétrica (fisicamente impossível), ex. 1200 V × 600 A = 720 kW declarados como 200 kW. Valores suspeitos no dataset: tensões de 1200 V e 3600 V, correntes de 600 A.
 
-## 2. Potência NAP vs MOBI.E em contradição (49 pontos)
+## 2. Potência NAP vs MOBI.E em contradição (52 pontos)
 As duas fontes oficiais divergem &gt;30%. Ex.: `D4D10F10-E9C5-41E1-B52A-6767E0423CE9` (NAP 30 kW, MOBI.E 22 kW); `DEDEB28E-CD02-4B44-BBE3-07BF4BF934EB` (NAP 30 kW, MOBI.E 22 kW); `02C150F9-2109-4E8F-8D0A-ED5BC269E2CD` (NAP 30 kW, MOBI.E 22 kW).
 
 ## 3. Estado duplicado / contraditório no feed dinâmico
@@ -16,10 +16,10 @@ A mesma entidade legal com múltiplas grafias (21 operadores afetados): Galp (Ga
 Só NUTS1 (PT1/PT2/PT3) no estático; sem NUTS2/NUTS3, que o esquema DATEX II suporta e o enquadramento AFIR/INSPIRE prevê.
 
 ## 6. usage_type em falta
-2.273 tomadas (11,7%) sem tipo de utilização.
+2.289 tomadas (11,8%) sem tipo de utilização.
 
 ## 7. UID_TOMADA MOBI.E inconsistente
-409.493 linhas com ids numéricos ('97', '98'…) fora de qualquer formato; mistura de formatos com/sem prefixo PT- e segmento de conector presente/ausente.
+413.047 linhas com ids numéricos ('97', '98'…) fora de qualquer formato; mistura de formatos com/sem prefixo PT- e segmento de conector presente/ausente.
 
 ## 8. PartyID MOBI.E desatualizado (ficheiro 2022)
 37 códigos ativos no tarifário não estão no ficheiro oficial de códigos (operadores pós-2022: ATL, ZUN, SLX, KLS, WEN…); 22 códigos do ficheiro não têm um único posto. Recomenda-se atualização do documento público.
@@ -161,15 +161,15 @@ O mapa "Caça aos Postos de Carregamento" (umap, OSM) registou **152 pontos** de
 
 O mesmo mapa tem ainda **6** postos em construção/obra e **4** para verificar (lista completa em `data/osm_caca.csv`).
 
-Pagamento ad-hoc: em **197** sites o OSM indica pagamento por cartão ou sem autenticação, mas o `auth_methods` do NAP só lista app/rfid (ex. `BRR-00159`, `VFX-00136`, `ABT-00017`). Pode ser um posto novo com cartão ativo não registado, ou desatualização num dos lados.
+Pagamento ad-hoc: em **198** sites o OSM indica pagamento por cartão ou sem autenticação, mas o `auth_methods` do NAP só lista app/rfid (ex. `BRR-00159`, `VFX-00136`, `ABT-00017`). Pode ser um posto novo com cartão ativo não registado, ou desatualização num dos lados.
 
-Operador: **1666** sites com correspondência código-a-código têm operador OSM diferente do NAP. A maioria é variante de grafia ou rebranding; os pares mais frequentes:
+Operador: **1668** sites com correspondência código-a-código têm operador OSM diferente do NAP. A maioria é variante de grafia ou rebranding; os pares mais frequentes:
 
 | sites | operador NAP | operador OSM |
 |---|---|---|
 | 748 | WOWPLUG | True Kare |
-| 293 | Iberdrola | bp pulse | Charging Together |
-| 176 | Mota-Engil Renewing | Mota Engil II |
+| 294 | Iberdrola | bp pulse | Charging Together |
+| 177 | Mota-Engil Renewing | Mota Engil II |
 | 107 | Galpgeste | Galp Geste |
 | 80 | Kilometer Low Cost II Serviços, SA | KLC Serviços |
 | 38 | FactorENERGIA | Factor Energia |
@@ -183,10 +183,10 @@ Operador: **1666** sites com correspondência código-a-código têm operador OS
 | 11 | GREEN CHARGE - MOBILIDADE ELÉTRICA, LDA | GreenCharge |
 | 9 | Gold Energy | Goldenergy |
 
-Cobertura OSM (dump do autor do mapa v2.1): **7880 sites NAP** (89%) com código MOBI.E; 100 divergências de localização >150 m em correspondências de código único.
+Cobertura OSM (dump do autor do mapa v2.1): **7883 sites NAP** (89%) com código MOBI.E; 100 divergências de localização >150 m em correspondências de código único.
 ## 13. Tracker de erros PCVE (cross-check externo)
 
-O tracker de erros dos operadores (`pt-pcve-errors.xlsx`) é a única fonte atual da identidade dos OPC (PartyId/PartyCode) e a única lista positiva de assets que o operador declarou removidos. Sincronizado em 2026-10-28; 99 CPO, 1830 erros reportados. Gerado por `scripts/tracker_checks.py` a partir de `data/opc_registry_authority.csv`/`data/tracker_errors.csv`.
+O tracker de erros dos operadores (`pt-pcve-errors.xlsx`) é a única fonte atual da identidade dos OPC (PartyId/PartyCode) e a única lista positiva de assets que o operador declarou removidos. Sincronizado em 2026-10-29; 99 CPO, 1830 erros reportados. Gerado por `scripts/tracker_checks.py` a partir de `data/opc_registry_authority.csv`/`data/tracker_errors.csv`.
 
 ### 13a. [ALTO] Assets declarados removidos pelo operador ainda no NAP (17)
 
@@ -319,7 +319,7 @@ _(+18 linhas em `data/tracker_findings.csv`)_
 | BAIXO | `CSCP` | 8 sites, 2 grafias: Cascais Proxima (6) / Cascais Próxima (2) — canónico no tracker: «Cascais Proxima» |
 | BAIXO | `ECOI` | 57 sites, 2 grafias: Ecoinside - Soluções em Ecoeficiência e Sustentabilidade Lda (55) / ECOINSIDE (2) — canónico no tracker: «Ecoinside - Soluções em Ecoeficiência e Sustentabilidade Lda» |
 | BAIXO | `EMEL` | 83 sites, 2 grafias: EMEL - Empresa Municipal de Mobilidade e Estacionamento de Lisboa, E.M., S.A. (80) / EMEL (3) — canónico no tracker: «EMEL - Empresa Municipal de Mobilidade e Estacionamento de Lisboa, E.M., S.A.» |
-| BAIXO | `FCTO` | 304 sites, 2 grafias: Iberdrola \| bp pulse (300) / CHARGING TOGETHER, UNIPESSOAL LDA (4) — canónico no tracker: «Iberdrola \| bp pulse» |
+| BAIXO | `FCTO` | 305 sites, 2 grafias: Iberdrola \| bp pulse (303) / CHARGING TOGETHER, UNIPESSOAL LDA (2) — canónico no tracker: «Iberdrola \| bp pulse» |
 | BAIXO | `GENJ` | 21 sites, 2 grafias: Generation Journey Lda (20) / Generation Journey (1) — canónico no tracker: «Generation Journey Lda» |
 | BAIXO | `GLPG` | 123 sites, 2 grafias: Galpgeste (121) / Galp Gest (2) — canónico no tracker: «Galpgeste» |
 | BAIXO | `GLPP` | 1603 sites, 2 grafias: Galp Power OPC (1490) / Galp Power (113) — canónico no tracker: «Galp Power OPC» |
