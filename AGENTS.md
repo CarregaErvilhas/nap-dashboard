@@ -180,7 +180,8 @@ access, parking fee, maxstay) joined from the Overpass dump in
 `data/umap_cache/todos.json` by `ref` = NAP `external_id` (any code form, so
 Continente's `0001PL0002` joins too; ≤1 km from the NAP point). It's what lets
 ohmigo find "o posto do Lidl de Coimbra": OSM's `brand`/`operator` are often
-the shop or car park, not the CPO. Additive and optional, so no `SCHEMA` bump;
+the owner, not the CPO (Lidl owns its chargers, Galp operates them: the NAP
+says Galp, OSM says Lidl). Additive and optional, so no `SCHEMA` bump;
 without the dump (osm_umap.py not run) sites just lack `osm`. ODbL: see
 `THIRD-PARTY-NOTICES.md`.
 No status and no CEME prices: ohmigo reads status live from the NAP feed and gets

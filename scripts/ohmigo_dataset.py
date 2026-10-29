@@ -11,7 +11,9 @@ refresh semanal publica no Pages em https://nap.ocarroeletrico.com/ohmigo/charge
 O servidor descarrega-o quando arranca e volta a vê-lo de 6 em 6 horas.
 
 Do OpenStreetMap vem o bloco `osm` de cada local (nome, marca, horário, se é
-num parque subterrâneo...). É o que deixa o ohmigo encontrar "o posto do Lidl
+num parque subterrâneo...). A marca é muitas vezes o dono dos postos, não o
+OPC: os do Lidl são do Lidl e operados pela Galp, por isso o NAP diz Galp e o
+OSM diz Lidl. É o que deixa o ohmigo encontrar "o posto do Lidl
 de Coimbra" ou "o Continente de Leiria": ninguém sabe o id de um posto, e o
 NAP só tem o nome jurídico do operador e a morada.
 
