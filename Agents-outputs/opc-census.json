@@ -1,6 +1,6 @@
 {
-  "snapshot_date": "2026-10-28",
-  "generated_utc": "2026-10-28T18:31:11+00:00",
+  "snapshot_date": "2026-10-29",
+  "generated_utc": "2026-10-29T14:08:41+00:00",
   "opcs": {
     "ACCI": {
       "name": "ACCIONA RECARGA PORTUGAL,UNIPESSOAL LDA",
@@ -105,7 +105,7 @@
     "EDPC": {
       "name": "EDP Comercial",
       "sites": 1684,
-      "points": 3534
+      "points": 3533
     },
     "EMAC": {
       "name": "EMACOM - Telecomunicações da Madeira, Unipessoal, Lda",
@@ -130,7 +130,7 @@
     "EPKS": {
       "name": "Telpark",
       "sites": 36,
-      "points": 385
+      "points": 388
     },
     "EPOC": {
       "name": "EPOCH",
@@ -179,8 +179,8 @@
     },
     "FCTO": {
       "name": "Iberdrola | bp pulse",
-      "sites": 304,
-      "points": 724
+      "sites": 305,
+      "points": 727
     },
     "FRIO": {
       "name": "Distrifrio Supermercados, Lda",
@@ -229,8 +229,8 @@
     },
     "HELX": {
       "name": "Helexia II Energy Services, Lda.",
-      "sites": 235,
-      "points": 451
+      "sites": 237,
+      "points": 455
     },
     "HEXA": {
       "name": "HEXAGONAL OCEAN, LDA",
@@ -249,8 +249,8 @@
     },
     "IBRD": {
       "name": "Iberdrola Clientes Portugal, Unipessoal, Lda",
-      "sites": 189,
-      "points": 371
+      "sites": 190,
+      "points": 373
     },
     "IHOM": {
       "name": "iHome Lda",
@@ -429,8 +429,8 @@
     },
     "TRUE": {
       "name": "WOWPLUG",
-      "sites": 760,
-      "points": 1521
+      "sites": 768,
+      "points": 1537
     },
     "TSLA": {
       "name": "Tesla",
