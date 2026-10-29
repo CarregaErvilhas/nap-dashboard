@@ -174,7 +174,15 @@ venv/bin/python scripts/tracker_checks.py   # CSVs + NAP -> findings
 `scripts/ohmigo_dataset.py` builds `data/ohmigo_chargers.json` for the ohmigo
 MCP server (EV charging cost answers for ChatGPT/Claude): sites, points, power,
 voltage level and the **raw** MOBI.E OPC tariffs per socket (every €/min tier and
-the `AD_HOC_PAYMENT` plan, which `data/nap_opc_points.csv` collapses to one value).
+the `AD_HOC_PAYMENT` plan, which `data/nap_opc_points.csv` collapses to one value),
+plus a per-site `osm` block (name, brand, operator, opening hours, location,
+access, parking fee, maxstay) joined from the Overpass dump in
+`data/umap_cache/todos.json` by `ref` = NAP `external_id` (any code form, so
+Continente's `0001PL0002` joins too; ≤1 km from the NAP point). It's what lets
+ohmigo find "o posto do Lidl de Coimbra": OSM's `brand`/`operator` are often
+the shop or car park, not the CPO. Additive and optional, so no `SCHEMA` bump;
+without the dump (osm_umap.py not run) sites just lack `osm`. ODbL: see
+`THIRD-PARTY-NOTICES.md`.
 No status and no CEME prices: ohmigo reads status live from the NAP feed and gets
 energy prices from ceme-v2. `refresh.yml` runs it after the pipeline guard and
 uploads it as the `ohmigo-dataset` Actions artifact (90-day retention; not

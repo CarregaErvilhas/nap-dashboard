@@ -57,9 +57,13 @@ came from.
 
 ## ODbL share-alike — how to get the OSM-derived database
 
-`data/osm_umap.csv` / `data/osm_caca.csv` (`scripts/osm_umap.py` output, gitignored) and
-the per-site OSM fields embedded in `dashboard.html` are derived from OSM data
-and fall under ODbL. To comply:
+`data/osm_umap.csv` / `data/osm_caca.csv` (`scripts/osm_umap.py` output, gitignored),
+the per-site OSM fields embedded in `dashboard.html`, and the per-site `osm`
+blocks of the ohmigo dataset (`scripts/ohmigo_dataset.py`, published at
+`/ohmigo/chargers.json`; the ohmigo server credits OpenStreetMap whenever it
+shows them) are derived from OSM data and fall under ODbL. The `osm` blocks
+are themselves the OSM-derived database, published openly in that file. To
+comply:
 
 1. Regenerate them yourself: `bash scripts/fetch_data.sh` (needs the static
    CSVs) then `python scripts/osm_umap.py` — method + origin URLs are in the
