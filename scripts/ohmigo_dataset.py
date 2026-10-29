@@ -149,8 +149,9 @@ for sid, ks in M[M.short_uid].groupby('ID').tomada:
         site_tariff[sid] = (tariffs[(sid, k0)], level.get((sid, k0)))
 
 # O preço que o NAP publica para os postos fora da MOBI.E (sem CEME). É um
-# único pricePerDeliveryUnit sem nada que diga se é o preço final: o ohmigo
-# mostra-o sempre com asterisco. Fica aqui só como recurso para quando o feed
+# único pricePerDeliveryUnit, sem IVA como todos os preços do NAP (confirmado
+# com o NAP): o ohmigo soma-lhe o IVA da região do posto, que é mais baixo na
+# Madeira e nos Açores. Fica aqui só como recurso para quando o feed
 # dinâmico não responde. Se o CSV já trouxer site_id, a chave é (local, ponto);
 # senão, só os point_id que não se repetem entre locais.
 DPU = DP[DP.pricing_policy == 'pricePerDeliveryUnit']

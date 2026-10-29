@@ -243,6 +243,10 @@ venv/bin/python scripts/validate_dashboard.py
   needs both forms.
 - NAP `min_fee = 0` is not an anomaly (46% of pricing rows); `min_fee` currently
   ranges 0–3,0 with no absurd values since the `97,561 €/min` class was fixed.
+- Every NAP price (`min_fee`, `pricePerDeliveryUnit`, also outside MOBI.E) comes
+  **without VAT** (confirmed with the NAP). So do MOBI.E's tariff file values,
+  `AD_HOC_PAYMENT` included (its 0,51 €/kWh at IONITY × 1,23 = IONITY's own 0,63).
+  VAT depends on the site's region (lower on Madeira and the Azores); ohmigo adds it.
 - 764 MOBI.E `UID_TOMADA` values are bare numeric ids.
 - Power agreement NAP↔MOBI.E is 99.8% (only 27/16 601 diverge >30%).
 - OSM: charging sites are tagged two ways — `amenity=charging_station` (node **or**
