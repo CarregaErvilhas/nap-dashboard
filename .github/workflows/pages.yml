@@ -36,6 +36,10 @@ jobs:
           cp dashboard.html public/dashboard.html
           cp dashboard.png public/dashboard.png
           echo "nap.ocarroeletrico.com" > public/CNAME
+          # Para os motores de busca: uma página só (/dashboard.html é a
+          # mesma, com canonical para /).
+          printf 'User-agent: *\nAllow: /\n\nSitemap: https://nap.ocarroeletrico.com/sitemap.xml\n' > public/robots.txt
+          printf '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n  <url><loc>https://nap.ocarroeletrico.com/</loc><lastmod>%s</lastmod></url>\n</urlset>\n' "$(date -u +%F)" > public/sitemap.xml
       # O dataset do ohmigo é o artifact "ohmigo-dataset" mais recente do
       # refresh.yml (90 dias de retenção, o refresh é semanal). Se não houver,
       # o dashboard publica-se na mesma, só sem /ohmigo/.
