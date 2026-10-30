@@ -3,7 +3,20 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>EV NAP Portugal — Dashboard</title>
+<title>Postos de carregamento em Portugal: mapa, estado e tarifas OPC — EV NAP Portugal</title>
+<meta name="description" content="Todos os postos de carregamento públicos de Portugal (NAP/MOBI.E) num mapa: estado em tempo real, potências, operadores e tarifas OPC, atualizados todas as semanas.">
+<link rel="canonical" href="https://nap.ocarroeletrico.com/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="EV NAP Portugal">
+<meta property="og:url" content="https://nap.ocarroeletrico.com/">
+<meta property="og:title" content="Postos de carregamento em Portugal: mapa, estado e tarifas OPC">
+<meta property="og:description" content="Todos os postos de carregamento públicos de Portugal (NAP/MOBI.E): estado, potências, operadores e tarifas OPC, atualizados todas as semanas.">
+<meta property="og:locale" content="pt_PT">
+<meta property="og:image" content="https://nap.ocarroeletrico.com/dashboard.png">
+<meta property="og:image:width" content="1440">
+<meta property="og:image:height" content="900">
+<meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Dataset", "name": "Rede de carregamento de veículos elétricos em Portugal (NAP / MOBI.E)", "alternateName": "EV charging network in Portugal (NAP / MOBI.E)", "description": "Todos os postos de carregamento públicos de Portugal publicados no Ponto de Acesso Nacional (NAP, DATEX II), com estado, potências, tomadas, operadores (OPC) e tarifas OPC da MOBI.E, atualizados todas as semanas.", "url": "https://nap.ocarroeletrico.com/", "inLanguage": ["pt-PT", "en"], "spatialCoverage": {"@type": "Place", "name": "Portugal"}, "isAccessibleForFree": true, "creator": {"@type": "Organization", "name": "O Carro Elétrico", "url": "https://ocarroeletrico.com"}, "isBasedOn": "https://nap-portugal.imt-ip.pt/", "distribution": [{"@type": "DataDownload", "encodingFormat": "application/json", "contentUrl": "https://nap.ocarroeletrico.com/ohmigo/chargers.json"}]}</script>
 <style>
   :root { --bg:#0f172a; --card:#1e293b; --ink:#e2e8f0; --mut:#94a3b8; --acc:#38bdf8;
           --ok:#34d399; --warn:#fbbf24; --err:#f87171; }
@@ -82,6 +95,8 @@
   <div class="langswitch"><button id="langPt">PT</button><button id="langEn">EN</button></div>
   <h1 data-i18n="h1">Rede de carregamento de veículos elétricos — Portugal</h1>
   <div class="sub"><span data-i18n="sub1">NAP EADME (AFIR)</span> · snapshot <span id="snap"></span> · <a href="https://nap.ocarroeletrico.com/">nap.ocarroeletrico.com</a> · <a href="https://github.com/CarregaErvilhas/nap-dashboard" data-i18n="codeLink">código no GitHub</a></div>
+  <p class="sub" data-i18n="intro">Todos os postos de carregamento públicos de Portugal, a partir do Ponto de Acesso Nacional (NAP): onde estão, se estão livres, que potência e tomadas têm, quem os opera e quanto cobra o operador (tarifa OPC da MOBI.E).</p>
+  <div class="sub"><span data-i18n="sisterLbl">Também d'O Carro Elétrico:</span> <a href="https://ohmigo.ocarroeletrico.com/" data-i18n="sisterOhmigo">ohmigo, o custo de carregar em cada posto, no ChatGPT e no Claude</a> · <a href="https://ceme.ocarroeletrico.com/" data-i18n="sisterCeme">comparador de tarifários CEME</a> · <a href="https://ocarroeletrico.com/">ocarroeletrico.com</a></div>
 
   <div class="cards" id="kpis"></div>
 
@@ -181,9 +196,11 @@ const esc = s => String(s??'').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;'
 // a escolha (localStorage) e ?lang=pt|en sobrepõe-se a tudo (partilha de links).
 const STR = {
 pt: {
-  pageTitle:'Rede de carregamento VE — Portugal (NAP EADME)',
+  pageTitle:'Postos de carregamento em Portugal: mapa, estado e tarifas OPC — EV NAP Portugal',
   h1:'Rede de carregamento de veículos elétricos — Portugal',
   sub1:'NAP EADME (AFIR)', codeLink:'código no GitHub',
+  intro:'Todos os postos de carregamento públicos de Portugal, a partir do Ponto de Acesso Nacional (NAP): onde estão, se estão livres, que potência e tomadas têm, quem os opera e quanto cobra o operador (tarifa OPC da MOBI.E).',
+  sisterLbl:'Também d\'O Carro Elétrico:', sisterOhmigo:'ohmigo, o custo de carregar em cada posto, no ChatGPT e no Claude', sisterCeme:'comparador de tarifários CEME',
   secOverview:'Visão geral', secNews:'Novidades da semana', chStatus:'Pontos por estado (snapshot)', chRegion:'Locais por região',
   chPw:'Pontos por classe de potência', chConn:'Tipos de connector (tomadas)',
   secOperators:'Operadores', chOpSites:'Top 15 operadores — locais', chOpPts:'Top 15 operadores — pontos',
@@ -218,9 +235,11 @@ pt: {
   footUse:'Uso não-comercial livre', footCom:'uso comercial requer licença'
 },
 en: {
-  pageTitle:'EV charging network — Portugal (NAP EADME)',
+  pageTitle:'EV chargers in Portugal: map, status and CPO fees — EV NAP Portugal',
   h1:'Electric vehicle charging network — Portugal',
   sub1:'NAP EADME (AFIR)', codeLink:'code on GitHub',
+  intro:'Every public EV charger in Portugal, from the National Access Point (NAP): where they are, whether they are free, their power and plugs, who runs them and what the operator charges (MOBI.E CPO fee).',
+  sisterLbl:'Also from O Carro Elétrico:', sisterOhmigo:'ohmigo, the cost of charging at each charger, in ChatGPT and Claude', sisterCeme:'CEME tariff comparison',
   secOverview:'Overview', secNews:'Network news', chStatus:'Points by status (snapshot)', chRegion:'Sites by region',
   chPw:'Points by power class', chConn:'Connector types (outlets)',
   secOperators:'Operators', chOpSites:'Top 15 operators — sites', chOpPts:'Top 15 operators — points',
