@@ -47,6 +47,71 @@ def value_of(el):
     return None
 
 
+def value_pt(el):
+    """O texto em português de um multilingualString, ou o primeiro que houver.
+    A descrição do local vem às vezes em en + pt ("underground parking" +
+    "parque subterrâneo"); value_of devolveria só o primeiro."""
+    if el is None:
+        return None
+    vals = [(v.get('lang') or '', ' '.join((v.text or '').split())) for v in el.iter(q(C, 'value'))]
+    vals = [(lang, t) for lang, t in vals if t]
+    for lang, t in vals:
+        if lang.startswith('pt'):
+            return t
+    return vals[0][1] if vals else None
+
+
+OSM_DAY = {'monday': 'Mo', 'tuesday': 'Tu', 'wednesday': 'We', 'thursday': 'Th',
+           'friday': 'Fr', 'saturday': 'Sa', 'sunday': 'Su'}
+
+
+def hhmm(t):
+    """'07:30:00.000' -> '07:30'; o fim do dia (00:00 ou 23:59) passa a 24:00."""
+    t = (t or '')[:5]
+    return t if len(t) == 5 else None
+
+
+def operating_hours(el):
+    """O horário do local (DATEX II operatingHours) na sintaxe opening_hours do
+    OpenStreetMap, para o ohmigo ler um só formato nas duas fontes:
+      OpenAllHours                       -> '24/7'
+      um período por dia da semana       -> 'Mo-Fr 07:30-21:00; Sa 09:00-13:00'
+    Os dias sem período estão fechados ('off'). Um OperatingHoursSpecification
+    só com a data de início (sem validPeriod) não diz horário nenhum -> None."""
+    if el is None:
+        return None
+    xsi_type = el.get('{http://www.w3.org/2001/XMLSchema-instance}type') or ''
+    if xsi_type.endswith('OpenAllHours'):
+        return '24/7'
+    days = {}
+    for vp in el.iter(q(C, 'validPeriod')):
+        ranges = []
+        for tp in vp.iter(q(C, 'recurringTimePeriodOfDay')):
+            a, b = hhmm(text_of(tp, 'startTimeOfPeriod', C)), hhmm(text_of(tp, 'endTimeOfPeriod', C))
+            if a and b:
+                if b in ('00:00', '23:59'):
+                    b = '24:00'
+                ranges.append(f'{a}-{b}')
+        for d in all_texts(vp, 'applicableDay', C) or list(OSM_DAY):
+            if d in OSM_DAY and ranges:
+                days.setdefault(OSM_DAY[d], []).extend(ranges)
+    if not days:
+        return None
+    spec = {d: ','.join(sorted(set(days.get(d, [])))) or 'off' for d in OSM_DAY.values()}
+    if set(spec.values()) == {'00:00-24:00'}:
+        return '24/7'
+    # Dias seguidos com o mesmo horário juntam-se: Mo,Tu,We,Th,Fr -> Mo-Fr.
+    order, parts, i = list(OSM_DAY.values()), [], 0
+    while i < 7:
+        j = i
+        while j + 1 < 7 and spec[order[j + 1]] == spec[order[i]]:
+            j += 1
+        d = order[i] if i == j else f'{order[i]}-{order[j]}'
+        parts.append(f'{d} {spec[order[i]]}')
+        i = j + 1
+    return '; '.join(parts)
+
+
 def parse_static(path):
     sites = []
     points = []
@@ -63,7 +128,7 @@ def parse_static(path):
 
         # location
         loc = elem.find(q(F, 'locationReference'))
-        lat = lon = postcode = city = country = addr_line = None
+        lat = lon = postcode = city = country = addr_line = loc_desc = None
         nuts1 = nuts2 = nuts3 = None
         if loc is not None:
             coords = loc.find('.//' + q(LR, 'pointCoordinates'))
@@ -81,6 +146,8 @@ def parse_static(path):
                         if text_of(al, 'type', LE) == 'street':
                             addr_line = value_of(al)
                             break
+            # "Parque Coberto - Piso -1": onde fica o posto dentro do parque.
+            loc_desc = value_pt(loc.find('.//' + q(LR, 'locationDescription')))
             # NUTS
             for na in loc.findall('.//' + q(LR, 'namedArea')):
                 nutscode = text_of(na, 'nutsCode', LR)
@@ -101,6 +168,7 @@ def parse_static(path):
             op_web = text_of(op, 'linkToGeneralInformation', F)
             op_phone = text_of(op, 'telephoneNumber', F)
 
+        hours = operating_hours(next(elem.iter(q(F, 'operatingHours')), None))
         applicable_vehicles = all_texts(elem, 'applicableForVehicles', EI)
         auth_methods = []
         stations = elem.findall(EI_T + 'energyInfrastructureStation')
@@ -147,7 +215,7 @@ def parse_static(path):
                       op_id, op_name, op_web, op_phone,
                       '|'.join(sorted(set(auth_methods))),
                       '|'.join(sorted(set(applicable_vehicles))),
-                      n_points, '|'.join(station_ids)))
+                      n_points, '|'.join(station_ids), hours, loc_desc))
         # clear() alone keeps the element attached to the document root; detach it
         # so iterparse memory stays bounded on the 190 MB XML.
         while elem.getprevious() is not None:
@@ -219,7 +287,8 @@ def main():
               ['site_id', 'external_id', 'name', 'last_updated', 'latitude', 'longitude',
                'postcode', 'city', 'country', 'address_line', 'nuts1', 'nuts2', 'nuts3',
                'operator_id', 'operator_name', 'operator_website', 'operator_phone',
-               'auth_methods', 'applicable_vehicles', 'n_points', 'station_ids'],
+               'auth_methods', 'applicable_vehicles', 'n_points', 'station_ids',
+               'operating_hours', 'location_description'],
               sites)
     write_csv(f'{outdir}/nap_static_points.csv',
               ['point_id', 'point_external_id', 'site_id', 'site_external_id', 'station_id',
