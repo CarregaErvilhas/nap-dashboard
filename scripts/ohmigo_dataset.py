@@ -175,10 +175,88 @@ else:
 OSM_DUMP = f'{DATA}/umap_cache/todos.json'
 OSM_MAX_KM = 1.0
 # tag OSM -> campo no JSON. O que ajuda a encontrar o posto (name, brand,
-# operator) e o que o condutor quer saber antes de lá ir.
+# operator), o que o condutor quer saber antes de lá ir (horário, acesso,
+# parque pago, piso, coberto) e a quem ligar se não arrancar (phone, email:
+# no OSM é quase sempre a linha de apoio do operador). manufacturer/model
+# (Alpitronic HYC_400, Tesla V4...) dizem que carregador é.
 OSM_TAGS = {'name': 'name', 'brand': 'brand', 'operator': 'operator',
             'opening_hours': 'openingHours', 'location': 'location',
-            'access': 'access', 'parking:fee': 'parkingFee', 'maxstay': 'maxstay'}
+            'access': 'access', 'parking:fee': 'parkingFee', 'maxstay': 'maxstay',
+            'level': 'level', 'covered': 'covered', 'indoor': 'indoor',
+            'phone': 'phone', 'email': 'email',
+            'manufacturer': 'manufacturer', 'model': 'model'}
+# socket:<tipo> do OSM -> a tomada como o NAP a chama (CONNECTOR, abaixo).
+# type2_cable é um T2 com cabo preso; tesla_destination é um T2 na Europa.
+OSM_SOCKET = {'type2': 'T2', 'type2_cable': 'T2', 'tesla_destination': 'T2',
+              'type2_combo': 'CCS', 'chademo': 'CHADEMO', 'schuko': 'SCHUKO',
+              'type1': 'T1', 'type1_combo': 'CCS1', 'cee_blue': 'CEE'}
+# payment:<isto>=yes no OSM = paga-se com cartão bancário no posto.
+OSM_CARDS = {'cards', 'credit_cards', 'debit_cards', 'contactless', 'visa',
+             'mastercard', 'maestro', 'visa_electron', 'american_express'}
+RE_NUM = re.compile(r'\d+(?:[.,]\d+)?')
+
+
+def osm_num(v, unit=None):
+    """'22 kW' -> 22; '150000' (W) -> 150; '500;1000' -> 1000 (o maior: com
+    vários valores não se sabe qual é de qual tomada, e o máximo é o que o
+    carregador consegue)."""
+    nums = [float(x.replace(',', '.')) for x in RE_NUM.findall(str(v or ''))]
+    if not nums:
+        return None
+    n = max(nums)
+    if unit == 'kw' and n >= 1000:  # escrito em W
+        n /= 1000
+    return round(n, 1) if unit == 'kw' else round(n)
+
+
+def osm_sockets(tags):
+    """As tomadas que um elemento OSM descreve: [{type, count, kw, v, a}]."""
+    out = []
+    for k, n in tags.items():
+        m = re.fullmatch(r'socket:([a-z0-9_]+)', k)
+        if not m or m.group(1) not in OSM_SOCKET:
+            continue
+        pre = f'socket:{m.group(1)}'
+        out.append({'type': OSM_SOCKET[m.group(1)], 'count': osm_num(n),
+                    'kw': osm_num(tags.get(f'{pre}:output'), 'kw'),
+                    'v': osm_num(tags.get(f'{pre}:voltage')), 'a': osm_num(tags.get(f'{pre}:current'))})
+    return out
+
+
+def merge_sockets(groups, add):
+    """Junta as tomadas de vários elementos pela chave (tipo, kW, V, A).
+    add=True soma as quantidades (um charge_point por poste); add=False fica
+    com a maior (estações repetidas do mesmo local não são o dobro)."""
+    acc = {}
+    for socks in groups:
+        for x in socks:
+            key = (x['type'], x['kw'], x['v'], x['a'])
+            if key not in acc:
+                acc[key] = dict(x)
+            elif x['count'] is not None:
+                c = acc[key]['count'] or 0
+                acc[key]['count'] = c + x['count'] if add else max(c, x['count'])
+    return sorted(acc.values(), key=lambda x: (x['type'], -(x['kw'] or 0)))
+
+
+def osm_for_point(pt, sockets):
+    """kW/V/A que o OSM dá para esta tomada do NAP: entre as tomadas OSM do
+    mesmo tipo no local, a de potência mais próxima da declarada no NAP (dois
+    CCS de 50 e 150 kW no mesmo local). Um campo só vem se não houver empate
+    com valores diferentes."""
+    same = [x for x in sockets if x['type'] == pt['connector']]
+    if not same:
+        return None
+    if pt['kw'] is not None and any(x['kw'] for x in same):
+        d = lambda x: abs(x['kw'] - pt['kw']) if x['kw'] else math.inf
+        best = min(d(x) for x in same)
+        same = [x for x in same if d(x) == best]
+    out = {}
+    for f in ('kw', 'v', 'a'):
+        vals = {x[f] for x in same if x[f] is not None}
+        if len(vals) == 1:
+            out[f] = vals.pop()
+    return out or None
 # Nomes que são só o código ("LRA-00156") ou um código por saber ("LRA-?????").
 CODE_NAME = re.compile(r'^(?:MOBI-)?[A-Z]{3}-[\d?]{4,5}\b')
 
@@ -199,6 +277,9 @@ def osm_by_code(sites_by_code):
         return {}
     xy = {e['id']: (e['lat'], e['lon']) for e in els if e['type'] == 'node' and 'lat' in e}
     votes = {}  # código -> campo -> Counter de valores
+    # código -> [tomadas por elemento], separados: um man_made=charge_point é
+    # um poste (somam-se); uma amenity=charging_station é o local inteiro.
+    points_socks, station_socks, capacity = {}, {}, {}
     for e in els:
         t = e.get('tags') or {}
         if t.get('amenity') != 'charging_station' and t.get('man_made') != 'charge_point':
@@ -210,8 +291,10 @@ def osm_by_code(sites_by_code):
             at = (sum(p[0] for p in pts) / len(pts), sum(p[1] for p in pts) / len(pts)) if pts else (None, None)
         if at[0] is None:
             continue
-        for ref in str(t.get('ref', '')).split(';'):
-            code = ref.strip().removeprefix('MOBI-')
+        refs = [r.strip().removeprefix('MOBI-') for r in str(t.get('ref', '')).split(';') if r.strip()]
+        socks = osm_sockets(t)
+        is_point = t.get('man_made') == 'charge_point'
+        for code in refs:
             site = sites_by_code.get(code)
             if not site or km(at[0], at[1], site['lat'], site['lon']) > OSM_MAX_KM:
                 continue
@@ -220,7 +303,54 @@ def osm_by_code(sites_by_code):
                 if not v or (tag == 'name' and CODE_NAME.match(v)):
                     continue
                 votes.setdefault(code, {}).setdefault(field, Counter())[v] += 1
-    return {code: {f: c.most_common(1)[0][0] for f, c in fields.items()} for code, fields in votes.items()}
+            # payment:cards=yes, authentication:app=no... -> payment.cards = True.
+            for k, v in t.items():
+                grp, _, method = k.partition(':')
+                if grp in ('payment', 'authentication') and method and v in ('yes', 'no'):
+                    votes.setdefault(code, {}).setdefault(f'{grp}:{method}', Counter())[v == 'yes'] += 1
+            if socks:
+                # Um elemento com vários refs ("A;B;C") cobre vários locais:
+                # os valores servem a todos, as quantidades não são de nenhum.
+                s2 = socks if len(refs) == 1 else [{**x, 'count': None} for x in socks]
+                (points_socks if is_point else station_socks).setdefault(code, []).append(s2)
+            cap = osm_num(t.get('capacity'))
+            if cap and len(refs) == 1:
+                c = capacity.setdefault(code, {'point': 0, 'station': 0})
+                if is_point:
+                    c['point'] += cap
+                else:
+                    c['station'] = max(c['station'], cap)
+    out = {}
+    for code, fields in votes.items():
+        o, yes, cards = {}, set(), None
+        for f, c in fields.items():
+            grp, _, method = f.partition(':')
+            if grp in ('payment', 'authentication') and method:
+                v = c.most_common(1)[0][0]
+                if v:
+                    yes.add(method)
+                if method in OSM_CARDS:
+                    cards = v or bool(cards)
+            else:
+                o[f] = c.most_common(1)[0][0]
+        # Como se paga/autentica, junto (app, membership_card, cards...): só os
+        # sim. `cards` à parte, porque o "não" também interessa: true/false
+        # quando o OSM diz se há terminal de cartão bancário, ausente se não diz.
+        if yes:
+            o['payment'] = sorted(yes)
+        if cards is not None:
+            o['cards'] = cards
+        out[code] = o
+    for code in set(points_socks) | set(station_socks) | set(capacity):
+        o = out.setdefault(code, {})
+        if code in points_socks:
+            o['sockets'] = merge_sockets(points_socks[code], add=True)
+        elif code in station_socks:
+            o['sockets'] = merge_sockets(station_socks[code], add=False)
+        cap = capacity.get(code)
+        if cap and (cap['point'] or cap['station']):
+            o['capacity'] = cap['point'] or cap['station']
+    return out
 
 
 def region(lat, lon):
@@ -244,6 +374,12 @@ def fnum(x):
         return v if v == v else None
     except (TypeError, ValueError):
         return None
+
+
+def nint(x):
+    """Inteiro positivo ou None: tensão/corrente vazias, NaN ou 0 não dizem nada."""
+    v = fnum(x)
+    return round(v) if v and v > 0 else None
 
 
 def text(x):
@@ -272,6 +408,21 @@ for s in S.itertuples(index=False):
         'payment': [m for m in str(s.auth_methods).split('|') if m and m != 'nan'],
         'points': [],
     }
+    # Só quando existem (ficheiro mais pequeno). getattr: um CSV do nap_etl.py
+    # anterior não tem as duas últimas colunas.
+    extra = {
+        # O nome que o operador dá ao local ("Auchan Cascais", "Alameda
+        # Shopping"): o ohmigo pesquisa-o, como o nome do OSM.
+        'name': text(s.name),
+        # Horário na sintaxe opening_hours do OSM ('24/7', 'Mo-Su 09:00-21:00'),
+        # convertido pelo nap_etl.py.
+        'hours': text(getattr(s, 'operating_hours', None)),
+        # "Parque Coberto - Piso -1".
+        'locationDescription': text(getattr(s, 'location_description', None)),
+        # Telefone do operador: para quando o posto não arranca.
+        'phone': text(s.operator_phone),
+    }
+    sites[s.site_id].update({k: v for k, v in extra.items() if v and v != s.external_id})
 
 for p in P.itertuples(index=False):
     site = sites.get(p.site_id)
@@ -296,6 +447,16 @@ for p in P.itertuples(index=False):
         'connector': CONNECTOR.get(str(p.connector_type), str(p.connector_type)),
         'dc': 'DC' in mode,
         'phases': 1 if mode.endswith('1p') else 3 if mode.endswith('3p') else None,
+        # cableMode3 = o cabo está preso ao posto; socket = levas o teu cabo.
+        'cable': {'cableMode3': True, 'socket': False}.get(str(p.connector_format)),
+        # Tensão (V) e corrente máxima (A) do conector, tal como o operador as
+        # declara no NAP. Deixam o ohmigo responder a "postos acima de 500 V"
+        # (carros de 800 V). Não confundir com `level` (abaixo), que é o nível
+        # de tensão da *rede* (BTN/BTE/MT) e escolhe a TAR. Há valores de
+        # reserva conhecidos (750/600 V em DC, ver tracker_checks.py), por isso
+        # o ohmigo diz sempre que são valores declarados.
+        'v': nint(p.voltage),
+        'a': nint(p.max_current),
         'level': lv,
         # mobie: aceita CEME e tem tarifa OPC no ficheiro da MOBI.E;
         # mobie_sem_tarifa: aceita CEME mas não está no ficheiro (o ohmigo usa
@@ -319,7 +480,19 @@ for site in sites.values():
     by_code[site['code']] = None if site['code'] in by_code else site
 osm = osm_by_code({c: s for c, s in by_code.items() if s and isinstance(c, str)})
 for code, tags in osm.items():
-    by_code[code]['osm'] = tags
+    site = by_code[code]
+    site['osm'] = tags
+    # O que o OSM diz de cada tomada (kW, V, A), lido na chapa pela comunidade:
+    # costuma estar mais certo do que o NAP (750/600 V de reserva em DC, ou
+    # potências acima do que V×I permite). O ohmigo prefere-o à declaração.
+    # Só vão os campos em que o OSM discorda do NAP (onde concorda, o valor do
+    # NAP já é o certo), e a lista de tomadas do local fica por aqui: com ela
+    # o ficheiro crescia um terço.
+    for pt in site['points']:
+        o = {k: v for k, v in (osm_for_point(pt, tags.get('sockets', [])) or {}).items() if v != pt.get(k)}
+        if o:
+            pt['osm'] = o
+    tags.pop('sockets', None)
 
 out = {
     'schema': SCHEMA,

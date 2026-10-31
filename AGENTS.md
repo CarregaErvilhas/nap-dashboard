@@ -173,10 +173,22 @@ venv/bin/python scripts/tracker_checks.py   # CSVs + NAP -> findings
 ## ohmigo dataset
 `scripts/ohmigo_dataset.py` builds `data/ohmigo_chargers.json` for the ohmigo
 MCP server (EV charging cost answers for ChatGPT/Claude): sites, points, power,
-voltage level and the **raw** MOBI.E OPC tariffs per socket (every €/min tier and
+the connector's declared tensão (`v`, V) and max current (`a`, A), the grid
+voltage level (`level`: BTN/BTE/MT, which picks the TAR) and the **raw** MOBI.E OPC tariffs per socket (every €/min tier and
 the `AD_HOC_PAYMENT` plan, which `data/nap_opc_points.csv` collapses to one value),
+whether the cable is attached (`cable`, from `connectorFormat`), the NAP's site
+`name`, opening `hours` (converted by `nap_etl.py` from DATEX II
+`operatingHours` to OSM `opening_hours` syntax: `24/7`, `Mo-Su 09:00-21:00`),
+`locationDescription` ("Parque Coberto - Piso -1") and the operator's `phone`,
 plus a per-site `osm` block (name, brand, operator, opening hours, location,
-access, parking fee, maxstay) joined from the Overpass dump in
+access, parking fee, maxstay, level, covered, indoor, phone, email,
+manufacturer, model, capacity, `payment` = the `payment:*`/`authentication:*`
+methods tagged yes, and `cards` = true/false when OSM says whether a bank card
+works at the charger) and a per-point `osm` with the kW/V/A of the matching OSM
+`socket:*` (same plug type, nearest power), **only where it differs from the
+NAP** — read off the charger's plate by the community, it is usually more
+right than the NAP's declaration (DC placeholders 750/600 V, impossible
+powers), and ohmigo prefers it. All joined from the Overpass dump in
 `data/umap_cache/todos.json` by `ref` = NAP `external_id` (any code form, so
 Continente's `0001PL0002` joins too; ≤1 km from the NAP point). It's what lets
 ohmigo find "o posto do Lidl de Coimbra": OSM's `brand`/`operator` are often
