@@ -173,7 +173,8 @@ venv/bin/python scripts/tracker_checks.py   # CSVs + NAP -> findings
 ## ohmigo dataset
 `scripts/ohmigo_dataset.py` builds `data/ohmigo_chargers.json` for the ohmigo
 MCP server (EV charging cost answers for ChatGPT/Claude): sites, points, power,
-voltage level and the **raw** MOBI.E OPC tariffs per socket (every €/min tier and
+the connector's declared tensão (`v`, V) and max current (`a`, A), the grid
+voltage level (`level`: BTN/BTE/MT, which picks the TAR) and the **raw** MOBI.E OPC tariffs per socket (every €/min tier and
 the `AD_HOC_PAYMENT` plan, which `data/nap_opc_points.csv` collapses to one value),
 plus a per-site `osm` block (name, brand, operator, opening hours, location,
 access, parking fee, maxstay) joined from the Overpass dump in

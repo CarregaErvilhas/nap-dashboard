@@ -246,6 +246,12 @@ def fnum(x):
         return None
 
 
+def nint(x):
+    """Inteiro positivo ou None: tensão/corrente vazias, NaN ou 0 não dizem nada."""
+    v = fnum(x)
+    return round(v) if v and v > 0 else None
+
+
 def text(x):
     return x if isinstance(x, str) else None
 
@@ -296,6 +302,14 @@ for p in P.itertuples(index=False):
         'connector': CONNECTOR.get(str(p.connector_type), str(p.connector_type)),
         'dc': 'DC' in mode,
         'phases': 1 if mode.endswith('1p') else 3 if mode.endswith('3p') else None,
+        # Tensão (V) e corrente máxima (A) do conector, tal como o operador as
+        # declara no NAP. Deixam o ohmigo responder a "postos acima de 500 V"
+        # (carros de 800 V). Não confundir com `level` (abaixo), que é o nível
+        # de tensão da *rede* (BTN/BTE/MT) e escolhe a TAR. Há valores de
+        # reserva conhecidos (750/600 V em DC, ver tracker_checks.py), por isso
+        # o ohmigo diz sempre que são valores declarados.
+        'v': nint(p.voltage),
+        'a': nint(p.max_current),
         'level': lv,
         # mobie: aceita CEME e tem tarifa OPC no ficheiro da MOBI.E;
         # mobie_sem_tarifa: aceita CEME mas não está no ficheiro (o ohmigo usa
