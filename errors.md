@@ -1,13 +1,13 @@
 # Erros reportáveis (dados NAP / MOBI.E / DGEG)
 
 ## 1. Tensão / corrente / potência inconsistentes (NAP estático)
-28,1% das tomadas (5.466/19.444) têm potência declarada que não bate com V×I (&gt;25% de diferença). Destas, 1.906 (9,8%) declaram potência acima da capacidade elétrica (fisicamente impossível), ex. 1200 V × 600 A = 720 kW declarados como 200 kW. Valores suspeitos no dataset: tensões de 1200 V e 3600 V, correntes de 600 A.
+26,9% das tomadas (5.236/19.469) têm potência declarada que não bate com V×I (&gt;25% de diferença). Destas, 1.668 (8,6%) declaram potência acima da capacidade elétrica (fisicamente impossível), ex. 1200 V × 600 A = 720 kW declarados como 200 kW. Valores suspeitos no dataset: tensões de 1200 V e 3600 V, correntes de 600 A.
 
 ## 2. Potência NAP vs MOBI.E em contradição (52 pontos)
 As duas fontes oficiais divergem &gt;30%. Ex.: `D4D10F10-E9C5-41E1-B52A-6767E0423CE9` (NAP 30 kW, MOBI.E 22 kW); `DEDEB28E-CD02-4B44-BBE3-07BF4BF934EB` (NAP 30 kW, MOBI.E 22 kW); `02C150F9-2109-4E8F-8D0A-ED5BC269E2CD` (NAP 30 kW, MOBI.E 22 kW).
 
 ## 3. Estado duplicado / contraditório no feed dinâmico
-Nenhum ponto repetido dentro do mesmo site. Ids de ponto reutilizados entre sites: 67 ids (ex. `332`) identificam 136 pontos distintos em sites diferentes, no estático e no dinâmico. O id só é único dentro do site.
+Nenhum ponto repetido dentro do mesmo site. Ids de ponto reutilizados entre sites: 70 ids (ex. `332`) identificam 142 pontos distintos em sites diferentes, no estático e no dinâmico. O id só é único dentro do site.
 
 ## 4. Fragmentação de nomes de operadores (NAP)
 A mesma entidade legal com múltiplas grafias (21 operadores afetados): Galp (Galp Power / Galpgeste / Galp Gest), Atlante (6 variantes), Iberdrola (3), REPSOL (maiúsculas/minúsculas). Torna a agregação por operador frágil.
@@ -16,16 +16,16 @@ A mesma entidade legal com múltiplas grafias (21 operadores afetados): Galp (Ga
 Só NUTS1 (PT1/PT2/PT3) no estático; sem NUTS2/NUTS3, que o esquema DATEX II suporta e o enquadramento AFIR/INSPIRE prevê.
 
 ## 6. usage_type em falta
-2.289 tomadas (11,8%) sem tipo de utilização.
+2.312 tomadas (11,9%) sem tipo de utilização.
 
 ## 7. UID_TOMADA MOBI.E inconsistente
-413.047 linhas com ids numéricos ('97', '98'…) fora de qualquer formato; mistura de formatos com/sem prefixo PT- e segmento de conector presente/ausente.
+413.054 linhas com ids numéricos ('97', '98'…) fora de qualquer formato; mistura de formatos com/sem prefixo PT- e segmento de conector presente/ausente.
 
 ## 8. PartyID MOBI.E desatualizado (ficheiro 2022)
 37 códigos ativos no tarifário não estão no ficheiro oficial de códigos (operadores pós-2022: ATL, ZUN, SLX, KLS, WEN…); 22 códigos do ficheiro não têm um único posto. Recomenda-se atualização do documento público.
 
 ## 9. Preços anómalos
-Taxa fixa até 2,50 €/carga; no NAP dinâmico pricePerChargingTime até 3,00 €/min (6 pontos &gt;1 €/min, provável erro de unidade €/min vs €/hora); energia a 0 €/kWh combinada com taxa fixa &gt;0 em 1.959 pontos (suspeito de dados incompletos).
+Taxa fixa até 2,50 €/carga; no NAP dinâmico pricePerChargingTime até 3,00 €/min (6 pontos &gt;1 €/min, provável erro de unidade €/min vs €/hora); energia a 0 €/kWh combinada com taxa fixa &gt;0 em 1.963 pontos (suspeito de dados incompletos).
 
 ## 10. Pontos 'removed' ainda no inventário estático
 0 pontos (0%) marcados 'removed' no dinâmico continuam listados como infraestrutura ativa no estático.
@@ -121,7 +121,7 @@ O mapa "Caça aos Postos de Carregamento" (umap, OSM) lista pontos onde a comuni
 | `GLP-VIS-00067` | VIS | Viseu | Mortágua | 45 |
 ## 12. Dúvidas da comunidade OSM/umap perto de sites ativos do NAP
 
-O mapa "Caça aos Postos de Carregamento" (umap, OSM) registou **152 pontos** de dúvida da comunidade. Destes, **31** são "nada no local" a ≤500 m de um site que o NAP lista como infraestrutura ativa — sinal de coordenadas erradas, site inexistente ou ainda não inaugurado:
+O mapa "Caça aos Postos de Carregamento" (umap, OSM) registou **153 pontos** de dúvida da comunidade. Destes, **33** são "nada no local" a ≤500 m de um site que o NAP lista como infraestrutura ativa — sinal de coordenadas erradas, site inexistente ou ainda não inaugurado:
 
 | ponto umap | dúvida | site NAP próximo | distância |
 |---|---|---|---|
@@ -129,9 +129,11 @@ O mapa "Caça aos Postos de Carregamento" (umap, OSM) registou **152 pontos** de
 | `jWH43` | Possíveis novos postos além do PCN Galp existente, nada no local em 2026-09-19 | `ALM-00017` (Almada, GLPP) | 18 m |
 | `9AWmV` | Possível novo posto além do PCN existente da Atlante, nada no local em 2026-10-07 | `ALM-80021` (Almada, ATLA) | 21 m |
 | `3jmsI` | Possível novo Tesla Supercharger segundo o site da Tesla, nada no local em 2026-07-08 | `PTM-00032` (Portimão, EDPC) | 38 m |
+| `72jYl` | Possível novo posto no Aldi, nada no local em 2026-10-12 | `OLH-00039` (Olhão, ATLA) | 45 m |
 | `NClvg` | Possível local para futuro Tesla Supercharger, nada no local em 2026-10-24 | `STR-00080` (Santarém, FCTO) | 67 m |
 | `IsqBO` | Possível posto novo no Aldi, nada no local em 2026-07-12 | `MFR-00041` (Mafra, FCTO) | 69 m |
 | `UEdrg` | Possível local para futuro Tesla Supercharger, nada no local em 2026-08-06 | `ALB-00004` (Albergaria-a-Velha, HORZ) | 79 m |
+| `amhWW` | Possível posto novo, nada no local em 2026-10-28 | `STB-00049` (Setúbal, EDPC) | 92 m |
 | `FRilW` | Procurar novo posto, nada no local em 2026-07-05 | `OLH-00050` (Olhão, TRUE) | 100 m |
 | `YhX96` | Possível novo posto no Burger King, nada no local em 2026-10-24 | `1498PR0002` (Alcácer do Sal, CONT) | 103 m |
 | `xiUGo` | Procurar novo posto, sem ser o MTA-00082, na Rua Fernando Pessoa, nada no local em 31-Jul- | `MTA-00082` (Moita, TRUE) | 121 m |
@@ -145,8 +147,8 @@ O mapa "Caça aos Postos de Carregamento" (umap, OSM) registou **152 pontos** de
 | `FgpQJ` | Procurar novo posto, nada no local em 2026-06-27 | `OLH-00030` (Olhão, TRUE) | 193 m |
 | `e0VRy` | Possível novo posto, nada no local em 2026-10-07 | `ALM-00115` (Almada, MOTA) | 197 m |
 | `tczNY` | Possível novo posto, nada no local em 2026-08-23 | `ALM-00124` (Almada, EZC3) | 215 m |
-| `nWkHf` | Possível posto novo, nada no local em 2026-09-10 | `ALM-90004` (Almada, HORZ) | 257 m |
 | `goqF9` | Procurar novo posto, nada no local em 2026-07-05 | `OLH-00045` (Olhão, LUSI) | 257 m |
+| `nWkHf` | Possível posto novo, nada no local em 2026-09-10 | `ALM-90004` (Almada, HORZ) | 257 m |
 | `44UZz` | Possível novo posto, nada no local em 2026-10-07 | `ALM-90028` (Almada, HORZ) | 290 m |
 | `BU0LJ` | Possível novo posto rápido, , nada no local em 2026-10-07 | `6174PL0001` (nan, CONT) | 296 m |
 | `ZBJkE` | Possível posto novo, nada no local em 2026-09-10 | `ALM-90004` (Almada, HORZ) | 314 m |
@@ -161,17 +163,17 @@ O mapa "Caça aos Postos de Carregamento" (umap, OSM) registou **152 pontos** de
 
 O mesmo mapa tem ainda **6** postos em construção/obra e **4** para verificar (lista completa em `data/osm_caca.csv`).
 
-Pagamento ad-hoc: em **198** sites o OSM indica pagamento por cartão ou sem autenticação, mas o `auth_methods` do NAP só lista app/rfid (ex. `BRR-00159`, `VFX-00136`, `ABT-00017`). Pode ser um posto novo com cartão ativo não registado, ou desatualização num dos lados.
+Pagamento ad-hoc: em **205** sites o OSM indica pagamento por cartão ou sem autenticação, mas o `auth_methods` do NAP só lista app/rfid (ex. `BRR-00159`, `VFX-00136`, `ABT-00017`). Pode ser um posto novo com cartão ativo não registado, ou desatualização num dos lados.
 
-Operador: **1668** sites com correspondência código-a-código têm operador OSM diferente do NAP. A maioria é variante de grafia ou rebranding; os pares mais frequentes:
+Operador: **1669** sites com correspondência código-a-código têm operador OSM diferente do NAP. A maioria é variante de grafia ou rebranding; os pares mais frequentes:
 
 | sites | operador NAP | operador OSM |
 |---|---|---|
-| 748 | WOWPLUG | True Kare |
-| 294 | Iberdrola | bp pulse | Charging Together |
+| 753 | WOWPLUG | True Kare |
+| 295 | Iberdrola | bp pulse | Charging Together |
 | 177 | Mota-Engil Renewing | Mota Engil II |
-| 107 | Galpgeste | Galp Geste |
-| 80 | Kilometer Low Cost II Serviços, SA | KLC Serviços |
+| 104 | Galpgeste | Galp Geste |
+| 79 | Kilometer Low Cost II Serviços, SA | KLC Serviços |
 | 38 | FactorENERGIA | Factor Energia |
 | 21 | uCharge | Logical Gravity |
 | 20 | Siva - Sociedade de Importação de Veículos Automóveis / (sub-CEME da Iberdola) | Moon |
@@ -183,10 +185,10 @@ Operador: **1668** sites com correspondência código-a-código têm operador OS
 | 11 | GREEN CHARGE - MOBILIDADE ELÉTRICA, LDA | GreenCharge |
 | 9 | Gold Energy | Goldenergy |
 
-Cobertura OSM (dump do autor do mapa v2.1): **7883 sites NAP** (89%) com código MOBI.E; 100 divergências de localização >150 m em correspondências de código único.
+Cobertura OSM (dump do autor do mapa v2.1): **7885 sites NAP** (89%) com código MOBI.E; 100 divergências de localização >150 m em correspondências de código único.
 ## 13. Tracker de erros PCVE (cross-check externo)
 
-O tracker de erros dos operadores (`pt-pcve-errors.xlsx`) é a única fonte atual da identidade dos OPC (PartyId/PartyCode) e a única lista positiva de assets que o operador declarou removidos. Sincronizado em 2026-10-29; 99 CPO, 1830 erros reportados. Gerado por `scripts/tracker_checks.py` a partir de `data/opc_registry_authority.csv`/`data/tracker_errors.csv`.
+O tracker de erros dos operadores (`pt-pcve-errors.xlsx`) é a única fonte atual da identidade dos OPC (PartyId/PartyCode) e a única lista positiva de assets que o operador declarou removidos. Sincronizado em 2026-10-31; 99 CPO, 1833 erros reportados. Gerado por `scripts/tracker_checks.py` a partir de `data/opc_registry_authority.csv`/`data/tracker_errors.csv`.
 
 ### 13a. [ALTO] Assets declarados removidos pelo operador ainda no NAP (17)
 
@@ -263,7 +265,7 @@ _(+18 linhas em `data/tracker_findings.csv`)_
 |---|---|---|
 | MÉDIO | `BBGE` | 2 sites, nome «BBG Energia Unipessoal, Lda» não corresponde a nenhum CPO do tracker |
 | MÉDIO | `CIRC` | 12 sites, nome «Circuitos Energy Solutions, Lda.» não corresponde a nenhum CPO do tracker |
-| MÉDIO | `CONT` | 449 sites, nome «Modelo Continente Hipermercados, S.A.» não corresponde a nenhum CPO do tracker |
+| MÉDIO | `CONT` | 447 sites, nome «Modelo Continente Hipermercados, S.A.» não corresponde a nenhum CPO do tracker |
 
 ### 13d. [MÉDIO] Pontos declarados trifásicos sem potência trifásica (36)
 
@@ -310,7 +312,7 @@ _(+18 linhas em `data/tracker_findings.csv`)_
 
 | severidade | identificador | evidência |
 |---|---|---|
-| BAIXO | `ACCI` | 14 sites, 2 grafias: ACCIONA RECARGA PORTUGAL,UNIPESSOAL LDA (7) / Acciona Recarga Portugal (7) — canónico no tracker: «ACCIONA RECARGA PORTUGAL,UNIPESSOAL LDA» |
+| BAIXO | `ACCI` | 15 sites, 2 grafias: Acciona Recarga Portugal (8) / ACCIONA RECARGA PORTUGAL,UNIPESSOAL LDA (7) — canónico no tracker: «ACCIONA RECARGA PORTUGAL,UNIPESSOAL LDA» |
 | BAIXO | `ATLA` | 598 sites, 7 grafias: Atlante Infra Portugal, S.A (563) / Atlante (15) / Atlante Infra Portugal S.A. (15) / Atlante Infra Portugal, S.A. (2) / Atlante Infra Portugal S.a. (1) / Atlante Infra Portugal S.A (1) / Atlante Infra Portugal S.a (1) — canónico no tracker: «Atlante Infra Portugal, S.A» |
 | BAIXO | `BBGE` | 2 sites, 2 grafias: BBG Energia Unipessoal, Lda (1) / Morenergy (1) |
 | BAIXO | `CAPW` | 14 sites, 2 grafias: Capwatt Services (8) / Capwatt Services, S.A. (6) — canónico no tracker: «Capwatt Services» |
@@ -322,7 +324,7 @@ _(+18 linhas em `data/tracker_findings.csv`)_
 | BAIXO | `FCTO` | 305 sites, 2 grafias: Iberdrola \| bp pulse (303) / CHARGING TOGETHER, UNIPESSOAL LDA (2) — canónico no tracker: «Iberdrola \| bp pulse» |
 | BAIXO | `GENJ` | 21 sites, 2 grafias: Generation Journey Lda (20) / Generation Journey (1) — canónico no tracker: «Generation Journey Lda» |
 | BAIXO | `GLPG` | 123 sites, 2 grafias: Galpgeste (121) / Galp Gest (2) — canónico no tracker: «Galpgeste» |
-| BAIXO | `GLPP` | 1603 sites, 2 grafias: Galp Power OPC (1490) / Galp Power (113) — canónico no tracker: «Galp Power OPC» |
+| BAIXO | `GLPP` | 1610 sites, 2 grafias: Galp Power OPC (1497) / Galp Power (113) — canónico no tracker: «Galp Power OPC» |
 | BAIXO | `GREE` | 16 sites, 2 grafias: GREEN CHARGE - MOBILIDADE ELÉTRICA, LDA (15) / Green Charge - Mobilidade Eletrica (1) — canónico no tracker: «GREEN CHARGE - MOBILIDADE ELÉTRICA, LDA» |
 | BAIXO | `HEXA` | 38 sites, 2 grafias: HEXAGONAL OCEAN, LDA (36) / Hexagonal Ocean (2) — canónico no tracker: «HEXAGONAL OCEAN, LDA» |
 | BAIXO | `HIGH` | 39 sites, 2 grafias: High Green Power, Unipessoal Lda. (23) / HighGreenPower (16) — canónico no tracker: «HighGreenPower» |
@@ -338,7 +340,7 @@ _(+18 linhas em `data/tracker_findings.csv`)_
 |---|---|---|
 | BAIXO | `BBGE` | operator_id=«BBGE» é o party_code do CPO BBG («Morenergy»), cujo PartyId é BBG; nome publicado «BBG Energia Unipessoal, Lda» (2 sites) |
 | BAIXO | `CIRC` | operator_id=«CIRC» é o party_code do CPO CIR («Circuitos de Inovação»), cujo PartyId é CIR; nome publicado «Circuitos Energy Solutions, Lda.» (12 sites) |
-| BAIXO | `CONT` | operator_id=«CONT» é o party_code do CPO CNT («Continente Plug & Charge»), cujo PartyId é CNT; nome publicado «Modelo Continente Hipermercados, S.A.» (449 sites) |
+| BAIXO | `CONT` | operator_id=«CONT» é o party_code do CPO CNT («Continente Plug & Charge»), cujo PartyId é CNT; nome publicado «Modelo Continente Hipermercados, S.A.» (447 sites) |
 
 ### 13g. [BAIXO] CPO do tracker sem sites no NAP (10)
 

@@ -1,7 +1,7 @@
-# Novidades da rede (2026-10-28 → 2026-10-29)
+# Novidades da rede (2026-10-29 → 2026-10-31)
 
-- **Estreias:** 7 novos locais em funcionamento (`ALM-00180` · Almada · EDPC · 22 kW; `CSC-00557` · Cascais · TRUE · 22 kW; `LGS-00040` · Lagos · FCTO · 150 kW; `LSB-00973` · Lisboa · TRUE · 22 kW; `LSB-01421` · Lisboa · TRUE · 22 kW; `MTR-00013` · Montalegre · HELX · 180 kW; `RMR-00017` · Rio Maior · HELX · 22 kW). 283 reativados (`0210PL0002` · São João da Madeira · ? · 22 kW; `0223PR0002` · Torres Vedras · CONT · 50 kW; `0262PR0003` · Póvoa de Varzim · CONT · 50 kW; `0293PR0002` · Lousã · CONT · 120 kW; `1504PR0002` · Porto · CONT · 50 kW; `1902PR0002` · Lisboa · CONT · 120 kW; `3778PR0002` · ? · ? · 120 kW; `4290PL0001` · São Mamede de Infesta · CONT · 22 kW; `5743PR0002` · Canas de Senhorim · CONT · 50 kW; `5767PL0001` · Oeiras · ? · 7 kW (+273 restantes)).
-- **Saídas:** 2 locais saíram da rede ou foram desligados (`OLH-00059` · Olhão · EDPC · 120 kW; `OLH-00060` · Olhão · EDPC · 60 kW).
-- **Maior estreia:** `LGS-00040` (Lagos, FCTO) com 3 pontos e 380 kW no total.
-- **Cidade em alta:** Lisboa com 2 estreias.
-- **Balanço:** +12 locais (0,1% em módulo), +27 pontos face à semana anterior.
+- **Estreias:** 10 novos locais em funcionamento (`AMT-00038` · Amarante · EDPC · 120 kW; `CBR-00167` · Coimbra · EPKS · 120 kW; `CTX-00010` · Cartaxo · HORZ · 100 kW; `LLE-00254` · Loulé · EDPC · 120 kW; `LLE-00255` · Loulé · EDPC · 60 kW; `LRS-00237` · Loures · GLPP · 22 kW; `LRS-00238` · Loures · GLPP · 22 kW; `TVD-00112` · Torres Vedras · GLPP · 22 kW; `TVD-00113` · Torres Vedras · GLPP · 22 kW; `VPA-00010` · Vila Pouca de Aguiar · EDPC · 22 kW). 340 reativados (`0001PR0009` · Matosinhos · ? · 50 kW; `0001PR0010` · Matosinhos · ? · 50 kW; `0209PR0003` · Viana do Castelo · ? · 50 kW; `0210PR0004` · São João da Madeira · CONT · 50 kW; `0215PR0003` · Santarém · ? · 50 kW; `0232PL0002` · ? · CONT · 22 kW; `0284PR0002` · Reguengos de Monsaraz · CONT · 120 kW; `0288PL0001` · São Félix da Marinha · CONT · 22 kW; `0291PR0002` · Estremoz · CONT · 50 kW; `0379PL0001` · Mem Martins · CONT · 22 kW (+330 restantes)).
+- **Saídas:** 6 locais saíram da rede ou foram desligados (`0001PL0011` · Matosinhos · CONT · 22 kW; `0001PL0012` · Matosinhos · CONT · 22 kW; `AVR-00037` · Aveiro · HORZ · 120 kW; `GDL-00072` · Grândola · EDPC · 400 kW; `ILH-90001` · Ílhavo · EDPC · 22 kW; `PNF-00067` · Penafiel · EDPC · 400 kW).
+- **Maior estreia:** `CBR-00167` (Coimbra, EPKS) com 7 pontos e 366 kW no total.
+- **Cidade em alta:** Loulé com 2 estreias.
+- **Balanço:** +9 locais (0,1% em módulo), +25 pontos face à semana anterior.
