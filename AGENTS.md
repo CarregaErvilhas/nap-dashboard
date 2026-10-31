@@ -9,11 +9,14 @@ produces CSVs + a self-contained dashboard (`dashboard.html`, `facts.md`,
 `scripts/pipeline_guard.py`. Don't over-engineer.
 
 ## Layout
-- `scripts/` — pipeline (fetch_data.sh, nap_etl.py, mobie_join.py, dgeg_lists.py,
-  dgeg_crossref.py, partyid_crossref.py, check_quality.py, summary.py,
-  concelho_check.py, osm_umap.py, make_pt_outline.py, extract_enums.py,
-  build_dashboard.py, fetch_tracker.sh, tracker_sync.py, tracker_checks.py,
-  ci_paths.py)
+- `scripts/` — the pipeline (in the order of "Pipeline order" below, plus
+  `extract_enums.py`, `fetch_schemas.sh` and the manual `tracker_fixed.py`);
+  the checks (`validate_dashboard.py`, `pipeline_guard.py`, `ci_paths.py`);
+  the dashboard helpers (`dashboard_payload.py`, `dashboard_i18n.py`); the
+  anomalias agent's deterministic side (`anomalias_summary.py`,
+  `anomalias_evidence.py`, `anomalias_check.py`, `format_anomalias.py`,
+  `check_agents.py`); and `ohmigo_dataset.py`. One-time migrations don't stay
+  here once they've run: git keeps them.
 - `assets/` — `dashboard_template.html`, `pt_outline.json` (PT outline for the
   map), `schemas/*.xsd` (DATEX II 3.3 © CEN; ver `assets/schemas/README.md`)
 - `references/` — docs for the SKILL.md (data sources, gotchas)
@@ -135,12 +138,12 @@ venv/bin/python scripts/tracker_checks.py   # CSVs + NAP -> findings
   around it by committing a copy of the tracker.
 - `data/tracker_meta.json` carries `synced_at` + the xlsx `sha256` on every run,
   so errors.md item 13 always states which version of the tracker it came from.
-- The tracker now lives as a **native Google Sheet** (since 2026-10-24), so
-  `TRACKER_URL` can be its `…/spreadsheets/d/<id>/export?format=xlsx`;
-  `fetch_tracker.sh` takes it unchanged. The previous copy was an **Office file**
-  uploaded to Drive, which the Sheets API and `/export?format=xlsx` reject with
-  `400 failedPrecondition: must not be an Office file` — hence `uc?export=download`
-  back then. Keep the URL in the `TRACKER_URL` secret (public repo).
+- The tracker is a **native Google Sheet**, so `TRACKER_URL` can be its
+  `…/spreadsheets/d/<id>/export?format=xlsx`; `fetch_tracker.sh` takes it
+  unchanged. If it ever goes back to an **Office file** uploaded to Drive, the
+  Sheets API and `/export?format=xlsx` reject it with `400 failedPrecondition:
+  must not be an Office file`: use `uc?export=download` then. Keep the URL in
+  the `TRACKER_URL` secret (public repo).
 - `scripts/tracker_fixed.py` (run after `nap_etl.py` + `tracker_sync.py`) replaces
   the manual match: for each `TO FIX` row with a `correct_data` it finds the site
   (same `asset_variants` as `tracker_checks.py`) and compares the current NAP
@@ -199,7 +202,7 @@ without the dump (osm_umap.py not run) sites just lack `osm`. ODbL: see
 No status and no CEME prices: ohmigo reads status live from the NAP feed and gets
 energy prices from ceme-v2. `refresh.yml` runs it after the pipeline guard and
 uploads it as the `ohmigo-dataset` Actions artifact (90-day retention; not
-committed: ~6 MB a week; not a release, because the repo's releases are
+committed: ~10 MB a week; not a release, because the repo's releases are
 immutable and an asset can't be replaced); `pages.yml` copies the newest one to
 `https://nap.ocarroeletrico.com/ohmigo/chargers.json`. It exits non-zero (and the
 refresh fails) below 5 000 sites or 10 000 tariffed points. `SCHEMA` in the
@@ -299,17 +302,20 @@ venv/bin/python scripts/validate_dashboard.py
   `scripts/dashboard_i18n.py` (phrase MAP + PT→EN number conversion); template
   falls back to PT when an `_en` key is missing. New fixed PT strings in
   FACTS/ERRS/ANOM/HUBS/CHURN_HTML/NEWS_HTML **must** get a MAP entry or they render in PT
-  for EN users. `scripts/patch_dashboard_i18n.py` was the one-time backfill of
-  the 2026-09-11 snapshot (CSVs absent locally) — do NOT re-run it; weekly
-  refreshes regenerate natively via `build_dashboard.py`.
+  for EN users.
 - The `validate_dashboard.py` DOM stub must keep `navigator`/`localStorage`/
   `documentElement` (installed via `defineProperty` — node ≥21 has read-only
   natives that swallow plain assignment) or lang detection renders the wrong
   branch under eval.
-- Two runtime bugs were fixed historically: (1) a reference to non-existent
-  element id `status`, (2) `label()` using undefined `max` instead of the local
-  `m` in `bars()`. If the dashboard shows nothing below the KPIs, suspect a JS
-  runtime error — validate the script with a DOM-stub eval in node.
+- If the dashboard shows nothing below the KPIs, suspect a JS runtime error (an
+  element id that doesn't exist, a variable out of scope):
+  `validate_dashboard.py`'s DOM-stub eval catches most of them.
+- To ship a template change without the data (the CSVs aren't in a fresh
+  checkout), regenerate `dashboard.html` as `build_dashboard.py` would: the
+  new template with the committed payload in place of `/*__DATA__*/`. The
+  weekly refresh rebuilds it from scratch anyway.
+- The template has no external resources and a `data:` favicon, so it keeps
+  working from `file://`.
 - Interactive map: a self-contained SVG (`#map`) rendered from `D.sites` (per-site
   lon/lat) + `D.outline` (PT polygons). Regions live in a `REGIONS` object with
   keys `mainland`/`madeira`/`acores`; site `region` values are `azores` (with a
@@ -373,9 +379,26 @@ Ao mover/renomear um ficheiro de dados, actualizar a lista `DATA_FILES` em
 - `novidades.md` — weekly network news (new/removed sites, OPC moves, power
   records; panel above "Visão geral", EN via `dashboard_i18n.MAP`) with
   `network-census.json` (committed state for next week's diff)
-- `errors.md` — reportable data errors (13 items, for the data owners; item 13
-  is the tracker cross-check, appended from `data/tracker_findings.md`)
+- `errors.md` — reportable data errors, numbered, for the data owners; the
+  last item is the tracker cross-check, appended from `data/tracker_findings.md`
+  when the tracker was fetched (don't hard-code the total, it changes)
 - `Agents-outputs/anomalias-results.md` — output do agente `Agents/anomalias.md`
   (anomalias dos dados estáticos, agrupadas por OPC)
 - `/ohmigo/chargers.json` on Pages — the ohmigo dataset (Actions artifact, see
-  "ohmigo dataset")
+  "ohmigo dataset"). `pages.yml` also publishes `robots.txt`, `sitemap.xml`
+  and `/.well-known/security.txt` (RFC 9116; `Expires` 180 days from each
+  deploy).
+
+## Workflows and secrets
+- `PUSH_TOKEN` (the owner's PAT, which bypasses the `main` ruleset) exists in
+  two places only: the last step of `refresh.yml` (the same runner as the
+  pipeline, which runs our scripts and the pinned `requirements.txt`, no
+  model) and the `publish` job of `agents.yml`, a fresh runner that copies a
+  closed list of files from `Agents-outputs/`. The agent job (a model with a
+  shell, reading third-party data) never shares a machine with it, and code
+  an agent writes (`scripts/anomalias_check.py`) never reaches `main` on its
+  own: it's in the run's `agent-outputs` artifact, for someone to review and
+  open a PR.
+- `GITHUB_TOKEN` is read-only everywhere except `issues: write` (failure
+  issues) and what `pages.yml` needs to deploy.
+- Actions are pinned by SHA (Dependabot bumps them).

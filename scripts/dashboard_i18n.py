@@ -1,9 +1,7 @@
 """PT->EN translation for the dashboard's pre-rendered HTML blobs.
 
 Single source of truth for the English version of facts/errors/anomalias/hubs/
-churn/news panels. Used by `build_dashboard.py` (fresh builds) and by the one-time
-`patch_dashboard_i18n.py` (which backfilled EN into the checked-in
-dashboard.html without re-running the full pipeline).
+churn/news panels. Used by `build_dashboard.py`.
 
 Approach: the PT blobs are generated exactly as before; this module maps every
 fixed PT phrase to EN and converts PT number formatting (8.357 / 17,5%) to EN
@@ -245,27 +243,6 @@ def translate_html_blob(pt_html):
     if shield is not None:
         out = out.replace('\x00CONN\x00', shield)
     return out
-
-
-# Markers that must be gone from a fully-translated blob (i.e. every MAP entry
-# that fires on the current snapshot). Checked by patch_dashboard_i18n.py.
-CORE_PT_MARKERS = [
-    '<b>Escala:</b>', '<b>Concentração:</b>', '<b>Lisboa domina:</b>',
-    '<b>Potência:</b>', '<b>Ocupação instantânea:</b>', '<b>Dispersão por operador:</b>',
-    '<b>Energia verde:</b>', '<b>Tarifário OPC', '<b>Saúde da rede',
-    '<b>Setor público:</b>', '<b>Registo OPC limpo:</b>',
-    'códigos de marca na rede',
-    '<b>Validação cruzada:</b>', '<b>Tesla (novidade', '<b>Cross-check OSM',
-    'em carregamento de ', 'Forte enviesamento litoral.',
-    'Tensão / corrente / potência inconsistentes',
-    'Estado duplicado / contraditório', 'Fragmentação de nomes',
-    'NUTS apenas nível 1', 'em falta', 'UID_TOMADA MOBI.E inconsistente',
-    'PartyID MOBI.E desatualizado', 'Preços anómalos',
-    "'removed' ainda no inventário", 'coordenadas vs concelho',
-    'Dúvidas da comunidade OSM',
-    '<b>Estreias:</b>', '<b>Saídas:</b>', '<b>Recorde:</b>', '<b>Balanço:</b>',
-    '<b>Semana calma:</b>', '<b>Baseline:</b>',
-]
 
 
 def self_check():

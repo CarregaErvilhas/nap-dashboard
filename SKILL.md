@@ -30,9 +30,9 @@ stale local copy. `scripts/fetch_data.sh` downloads everything (~230 MB).
 5. **Validate** physical/schema sanity and cross-source consistency.
 6. **Build** the dashboard + facts + reportable errors.
 
-Verified numbers for the 2026-08-16 snapshot (re-run to refresh): 8 260 sites,
-20 521 points, 90 operators, 92.2% NAP↔MOBI.E tariff match, 99.8% power
-agreement, 30% of connectors with V×I/power inconsistency.
+The current numbers (sites, points, operators, tariff match, power agreement,
+V×I inconsistencies) are in `facts.md`, regenerated every week: read them
+there instead of copying them here, where they'd go stale.
 
 ## Environment
 

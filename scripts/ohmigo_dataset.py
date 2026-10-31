@@ -6,7 +6,7 @@ aqui?" e "onde é mais barato carregar perto de mim / no meu caminho?". Para
 isso precisa de saber, para cada posto: onde fica, que tomadas tem, que
 potência, e quanto o operador do posto (OPC) cobra pela utilização.
 
-Este script junta essas peças num único JSON (~6 MB, ~600 KB com gzip), que o
+Este script junta essas peças num único JSON (~10 MB, ~0,8 MB com gzip), que o
 refresh semanal publica no Pages em https://nap.ocarroeletrico.com/ohmigo/chargers.json.
 O servidor descarrega-o quando arranca e volta a vê-lo de 6 em 6 horas.
 
