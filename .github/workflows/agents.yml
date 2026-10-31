@@ -1,9 +1,19 @@
 name: Weekly anomalias agent
 
 # Corre o agente Agents/anomalias.md sobre dados frescos e faz commit do
-# relatório em Agents-outputs/anomalias-results.md (auto-commit para main).
-# O commit/push é um step à parte, com o PAT só nesse step — o agente nunca o
-# tem no ambiente.
+# relatório em Agents-outputs/ (auto-commit para main).
+#
+# Dois jobs, para o agente e o PAT nunca partilharem uma máquina:
+#   agent    o modelo, com uma shell, a ler dados de terceiros (NAP/OSM) e
+#            instalado do npm na versão `latest`. Sem PAT e com um
+#            GITHUB_TOKEN só de leitura (mais issues). Entrega o relatório
+#            como artifact.
+#   publish  num runner novo, com checkout novo (sem hooks nem config de git
+#            que o agente possa ter deixado). Copia do artifact só os
+#            ficheiros de uma lista fechada em Agents-outputs/ e faz o push
+#            com o PAT. Código que o agente escreva (scripts/) nunca entra
+#            assim: fica no artifact agent-outputs, para alguém o rever e
+#            abrir um PR.
 # Dispara quando o refresh semanal completa com sucesso + botão manual.
 # Custo $0 (free tier Zen via harness opencode2).
 on:
@@ -12,9 +22,7 @@ on:
     types: [completed]
   workflow_dispatch:
 
-permissions:
-  contents: write
-  issues: write
+permissions: {}
 
 concurrency:
   group: "agents"
@@ -25,11 +33,16 @@ jobs:
     if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
     timeout-minutes: 180
+    permissions:
+      contents: read
+      issues: write
+      # Baixar o artifact nap-static de outra run (a do refresh).
+      actions: read
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
-          # ver comentário idêntico no refresh.yml: sem isto o push com PAT é
-          # ignorado e sai como github-actions[bot] (recusado pelo ruleset).
+          # Sem credencial persistida: o GITHUB_TOKEN não fica no .git/config,
+          # ao alcance do agente.
           persist-credentials: false
       - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
         with:
@@ -143,6 +156,9 @@ jobs:
                  if m.strip()]
           MODELS = [m if "/" in m else f"opencode/{m}" for m in raw]
           GH_TOKEN = os.environ.get("GH_TOKEN", "")
+          # O opencode2 (o modelo, com uma shell) corre sem o GH_TOKEN: só este
+          # script o usa, para abrir issues.
+          AGENT_ENV = {k: v for k, v in os.environ.items() if k != "GH_TOKEN"}
 
           if not KEY:
               print("FAIL: secret OPENCODE_API_KEY vazio ou em falta.",
@@ -238,7 +254,7 @@ jobs:
               try:
                   p = sh(["opencode2", "run", "--standalone", "-m", ref,
                           "--format", "json", "--file", "data/agents-summary.json",
-                          PROMPT], timeout=PER_MODEL_TIMEOUT)
+                          PROMPT], timeout=PER_MODEL_TIMEOUT, env=AGENT_ENV)
                   out = (p.stdout + p.stderr)[-2000:]
               except subprocess.TimeoutExpired:
                   out = f"timeout {PER_MODEL_TIMEOUT}s"
@@ -267,10 +283,9 @@ jobs:
               print("FAIL: nenhum modelo produziu relatório válido", file=sys.stderr)
               sys.exit(1)
 
-          # O commit/push NÃO é feito aqui: vive num step à parte, onde o PAT
-          # existe, para que o agente (e o processo opencode2 que ele corre)
-          # nunca tenha o token no ambiente. Aqui só se deixa a worklist e os
-          # metadados do commit; o step seguinte faz o push.
+          # O commit/push NÃO é feito aqui: vive no job publish, num runner
+          # novo, onde o PAT existe. Aqui só se deixam os metadados do commit;
+          # os ficheiros a publicar são uma lista fechada (step seguinte).
           import datetime
           day = datetime.datetime.now(datetime.timezone.utc).strftime('%F')
           try:
@@ -278,11 +293,6 @@ jobs:
               src = f"dados do refresh #{prov.get('refresh_run_id', '?')}"
           except (FileNotFoundError, ValueError):
               src = "dados manuais"
-          adds = [p for p in ([REPORT, CENSUS] + EVIDENCE) if os.path.exists(p)]
-          if os.path.exists('scripts/anomalias_check.py'):
-              adds.append('scripts/anomalias_check.py')  # código reutilizável do agente
-          with open('agent-commit-files.txt', 'w', encoding='utf-8') as fh:
-              fh.write('\n'.join(adds) + ('\n' if adds else ''))
           with open('agent-commit-meta.json', 'w', encoding='utf-8') as fh:
               json.dump({'served_by': served_by, 'src': src, 'day': day,
                          'notified': notified}, fh)
@@ -290,81 +300,36 @@ jobs:
               open("agent-notified.marker", "w").write("notified\n")
           print(f"AGENT OK (servido por {served_by})")
           EOF
-      # Commit + push num step separado: o PAT só existe aqui. O agente lê
-      # dados de terceiros (NAP/OSM) e corre código gerado por um modelo —
-      # não tem ninguém que o token de escrita do repo.
-      #
-      # Autenticação pelo header HTTP (GIT_CONFIG_*), não pela URL do remote:
-      # assim o token não fica gravado no .git/config nem aparece no argv de
-      # nenhum processo (o /proc/<pid>/cmdline é legível por qualquer um).
-      - name: Commit + push do relatório (PAT isolado do agente)
-        env:
-          PUSH_TOKEN: ${{ secrets.PUSH_TOKEN }}
-          GH_TOKEN: ${{ github.token }}
+      # O que o job publish pode commitar: uma lista fechada, numa pasta com
+      # a estrutura do repo, mais os metadados do commit. Tudo o resto que o
+      # agente deixou no disco fica neste runner.
+      - name: Stage the report for publish
         run: |
-          set -uo pipefail
-          if [ -z "${PUSH_TOKEN:-}" ]; then
-            echo "FAIL: secret PUSH_TOKEN vazio ou em falta." >&2
-            exit 1
-          fi
-          if [ ! -f agent-commit-meta.json ]; then
-            echo "FAIL: o step do agente não produziu agent-commit-meta.json" >&2
-            exit 1
-          fi
-          git config user.name "github-actions[bot]" \
-            && git config user.email "41898282+github-actions[bot]@users.noreply.github.com" \
-            || { echo "FAIL: git config falhou" >&2; exit 1; }
-          mapfile -t ADDS < agent-commit-files.txt
-          if [ "${#ADDS[@]}" -gt 0 ]; then
-            git add -- "${ADDS[@]}" || { echo "FAIL: git add falhou" >&2; exit 1; }
-          fi
-          if git diff --cached --quiet; then
-            echo "sem alterações no relatório; nada a commitar"
-            exit 0
-          fi
-          SERVED_BY="$(python3 -c 'import json;print(json.load(open("agent-commit-meta.json"))["served_by"])')"
-          SRC="$(python3 -c 'import json;print(json.load(open("agent-commit-meta.json"))["src"])')"
-          DAY="$(date -u +%F)"
-          git commit -m "Weekly anomalias report: ${DAY} (${SERVED_BY}, ${SRC})" \
-            || { echo "FAIL: commit falhou" >&2; exit 1; }
-          # Push via PAT: autentica como owner, que faz bypass ao ruleset
-          # "review" (o GITHUB_TOKEN é recusado). O token só vai no header.
-          AUTH="$(printf 'x-access-token:%s' "$PUSH_TOKEN" | base64 | tr -d '\n')"
-          export GIT_CONFIG_COUNT=1
-          export GIT_CONFIG_KEY_0="http.https://github.com/.extraheader"
-          export GIT_CONFIG_VALUE_0="AUTHORIZATION: basic ${AUTH}"
-          # 1 retry via rebase, como antes.
-          if ! git push 2>push_err.log; then
-            if ! git pull --rebase 2>>push_err.log; then
-              git rebase --abort || true
-              echo "FAIL: push falhou e o rebase não aplicou" >&2
-              # Marker antes da Issue: o safety net de baixo não deve abrir
-              # uma segunda Issue para a mesma falha.
-              echo "notified" > agent-notified.marker
-              gh issue create --repo "$GITHUB_REPOSITORY" \
-                --title "Anomalias: push falhou (run ${GITHUB_RUN_ID})" \
-                --body "push falhou e o rebase não aplicou: $(tail -c 400 push_err.log). Run: ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
-              exit 1
-            fi
-            if ! git push 2>>push_err.log; then
-              echo "FAIL: push falhou" >&2
-              echo "notified" > agent-notified.marker
-              gh issue create --repo "$GITHUB_REPOSITORY" \
-                --title "Anomalias: push falhou (run ${GITHUB_RUN_ID})" \
-                --body "push falhou: $(tail -c 400 push_err.log). Run: ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
-              exit 1
-            fi
-          fi
-          echo "committed + pushed (servido por ${SERVED_BY})"
+          out="$RUNNER_TEMP/publish"
+          mkdir -p "$out/Agents-outputs"
+          for f in Agents-outputs/anomalias-results.md Agents-outputs/opc-census.json \
+                   Agents-outputs/anomalias-evidence.csv Agents-outputs/anomalias-details.md; do
+            if [ -f "$f" ]; then cp "$f" "$out/$f"; fi
+          done
+          cp agent-commit-meta.json "$out/"
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: agent-publish
+          path: ${{ runner.temp }}/publish
+          retention-days: 7
+          if-no-files-found: error
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         if: always()
         with:
           name: agent-outputs
+          # scripts/anomalias_check.py: se o agente o mudou, é aqui que a
+          # mudança se vê (não entra no main sozinha; vê o cabeçalho).
           path: |
             Agents-outputs/anomalias-results.md
             Agents-outputs/anomalias-evidence.csv
             Agents-outputs/anomalias-details.md
             data/agents-summary.json
+            scripts/anomalias_check.py
           if-no-files-found: warn
       # Safety net: só dispara se morreu antes de notificar (fetch/ETL/eval/
       # install). Sem marker → sem Issue duplicada.
@@ -376,3 +341,90 @@ jobs:
           gh issue create --repo "$GITHUB_REPOSITORY" \
             --title "Anomalias: falha de infra (run $GITHUB_RUN_ID)" \
             --body "Morreu antes do agente notificar. Run: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
+
+  # O commit, num runner novo: aqui não corre nada do agente nem do npm, e o
+  # checkout é novo. Só passam os ficheiros da lista fechada, como ficheiros
+  # normais e com um tecto de tamanho.
+  #
+  # Push via PAT: autentica como owner, que faz bypass ao ruleset "review" (o
+  # GITHUB_TOKEN é recusado). Autenticação pelo header HTTP (GIT_CONFIG_*),
+  # não pela URL do remote: o token não fica no .git/config nem no argv de
+  # nenhum processo (o /proc/<pid>/cmdline é legível por qualquer um).
+  publish:
+    needs: agent
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      issues: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          # Sem credencial persistida: o push vai com o PAT (abaixo).
+          persist-credentials: false
+      # Fora do checkout: nada do artifact entra no repo sem passar pelo step
+      # seguinte.
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: agent-publish
+          path: ${{ runner.temp }}/agent
+      - name: Commit + push do relatório
+        env:
+          PUSH_TOKEN: ${{ secrets.PUSH_TOKEN }}
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -uo pipefail
+          if [ -z "${PUSH_TOKEN:-}" ]; then
+            echo "FAIL: secret PUSH_TOKEN vazio ou em falta." >&2
+            exit 1
+          fi
+          src="$RUNNER_TEMP/agent"
+          for f in Agents-outputs/anomalias-results.md Agents-outputs/opc-census.json \
+                   Agents-outputs/anomalias-evidence.csv Agents-outputs/anomalias-details.md; do
+            [ -e "$src/$f" ] || continue
+            if [ -L "$src/$f" ] || [ ! -f "$src/$f" ]; then
+              echo "FAIL: $f não é um ficheiro normal" >&2; exit 1
+            fi
+            if [ "$(stat -c %s "$src/$f")" -gt 20000000 ]; then
+              echo "FAIL: $f tem mais de 20 MB" >&2; exit 1
+            fi
+            cp "$src/$f" "$f"
+            git add -- "$f" || { echo "FAIL: git add $f" >&2; exit 1; }
+          done
+          if git diff --cached --quiet; then
+            echo "sem alterações no relatório; nada a commitar"
+            exit 0
+          fi
+          # Os metadados vêm do runner do agente: só passam caracteres seguros.
+          meta() { python3 -c 'import json,re,sys; print(re.sub(r"[^A-Za-z0-9._:/#+ -]", "", str(json.load(open(sys.argv[1])).get(sys.argv[2], "?")))[:80])' "$src/agent-commit-meta.json" "$1"; }
+          SERVED_BY="$(meta served_by)"
+          SRC="$(meta src)"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -q -m "Weekly anomalias report: $(date -u +%F) (${SERVED_BY}, ${SRC})" \
+            || { echo "FAIL: commit falhou" >&2; exit 1; }
+          AUTH="$(printf 'x-access-token:%s' "$PUSH_TOKEN" | base64 | tr -d '\n')"
+          export GIT_CONFIG_COUNT=1
+          export GIT_CONFIG_KEY_0="http.https://github.com/.extraheader"
+          export GIT_CONFIG_VALUE_0="AUTHORIZATION: basic ${AUTH}"
+          # 1 retry via rebase (o refresh pode ter feito push entretanto).
+          if ! git push 2>push_err.log; then
+            if ! git pull --rebase 2>>push_err.log || ! git push 2>>push_err.log; then
+              git rebase --abort 2>/dev/null || true
+              echo "FAIL: push falhou" >&2
+              echo "notified" > publish-notified.marker
+              gh issue create --repo "$GITHUB_REPOSITORY" \
+                --title "Anomalias: push falhou (run ${GITHUB_RUN_ID})" \
+                --body "push falhou: $(tail -c 400 push_err.log). Run: ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
+              exit 1
+            fi
+          fi
+          echo "committed + pushed (servido por ${SERVED_BY})"
+      - name: Notify on failure
+        if: failure() && hashFiles('publish-notified.marker') == ''
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh issue create --repo "$GITHUB_REPOSITORY" \
+            --title "Anomalias: o commit do relatório falhou (run $GITHUB_RUN_ID)" \
+            --body "O agente acabou, mas o job publish falhou antes do push. Run: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"

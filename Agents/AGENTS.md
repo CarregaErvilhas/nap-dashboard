@@ -22,7 +22,7 @@ Esta pasta guarda as system prompts dos agentes automáticos do projeto `nap-das
   `description` tem de ser não-vazia (é o que o modelo vê ao escolher o agente);
   `mode` tem de ser `primary`, `subagent` ou `all` (neste projeto: `subagent`).
 - A prompt deve declarar: âmbito estrito (que ficheiros pode tocar), ambiente (`venv/bin/python`, correr da raiz, não ler os XMLs de ~190 MB com `cat`/`Read`), regras de verificação por execução e o formato exato do output.
-- Código de análise reutilizável criado pelos agentes vai para `scripts/` (ex. `scripts/anomalias_check.py`), nunca fica só no terminal ou em `/tmp`.
+- Código de análise reutilizável criado pelos agentes vai para `scripts/` (ex. `scripts/anomalias_check.py`), nunca fica só no terminal ou em `/tmp`. No CI não entra no `main` sozinho: fica no artifact `agent-outputs` da run, para alguém o rever e abrir um PR.
 - Futuros agentes (ex. dinâmico, tarifários, geografia) seguem o mesmo padrão: `Agents/<nome>.md` + relatório `Agents-outputs/<nome>-results.md`.
 - Prosa dos relatórios em PT-PT técnico: **tensão**, nunca "voltagem" (`voltage` só para identificadores de código/colunas).
 
@@ -54,8 +54,10 @@ validação do markdown (formato, secções por OPC, ids reais citados, evidênc
 existente e não-vazia) e
 auto-commit de `Agents-outputs/anomalias-results.md` para `main` (mais
 `Agents-outputs/opc-census.json`, o censo rolante que alimenta a secção de
-rotatividade de OPCs no run seguinte, e os dois ficheiros de evidência). Cada modelo
-que falha abre uma Issue; custo $0 (free tier Zen via harness).
+rotatividade de OPCs no run seguinte, e os dois ficheiros de evidência). O
+commit é feito por outro job (`publish`), num runner novo, que só copia esses
+quatro ficheiros: o agente nunca partilha a máquina com o token de escrita.
+Cada modelo que falha abre uma Issue; custo $0 (free tier Zen via harness).
 
 ## Eval
 
