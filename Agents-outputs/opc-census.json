@@ -1,11 +1,11 @@
 {
-  "snapshot_date": "2026-10-29",
-  "generated_utc": "2026-10-29T14:08:41+00:00",
+  "snapshot_date": "2026-10-31",
+  "generated_utc": "2026-10-31T07:34:50+00:00",
   "opcs": {
     "ACCI": {
-      "name": "ACCIONA RECARGA PORTUGAL,UNIPESSOAL LDA",
-      "sites": 14,
-      "points": 25
+      "name": "Acciona Recarga Portugal",
+      "sites": 15,
+      "points": 28
     },
     "ALFA": {
       "name": "Alfa Energia",
@@ -84,8 +84,8 @@
     },
     "CONT": {
       "name": "Modelo Continente Hipermercados, S.A.",
-      "sites": 449,
-      "points": 952
+      "sites": 447,
+      "points": 948
     },
     "CSCP": {
       "name": "Cascais Proxima",
@@ -104,8 +104,8 @@
     },
     "EDPC": {
       "name": "EDP Comercial",
-      "sites": 1684,
-      "points": 3533
+      "sites": 1686,
+      "points": 3555
     },
     "EMAC": {
       "name": "EMACOM - Telecomunicações da Madeira, Unipessoal, Lda",
@@ -129,8 +129,8 @@
     },
     "EPKS": {
       "name": "Telpark",
-      "sites": 36,
-      "points": 388
+      "sites": 37,
+      "points": 395
     },
     "EPOC": {
       "name": "EPOCH",
@@ -209,8 +209,8 @@
     },
     "GLPP": {
       "name": "Galp Power OPC",
-      "sites": 1603,
-      "points": 3430
+      "sites": 1610,
+      "points": 3444
     },
     "GOLD": {
       "name": "Gold Energy",
