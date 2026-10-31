@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Postos de carregamento em Portugal: mapa, estado e tarifas OPC — EV NAP Portugal</title>
 <meta name="description" content="Todos os postos de carregamento públicos de Portugal (NAP/MOBI.E) num mapa: estado em tempo real, potências, operadores e tarifas OPC, atualizados todas as semanas.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230f172a'/%3E%3Cpath d='M37 6 15 37h14l-4 21 22-31H33z' fill='%2338bdf8'/%3E%3C/svg%3E">
 <link rel="canonical" href="https://nap.ocarroeletrico.com/">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="EV NAP Portugal">
@@ -300,10 +301,20 @@ const numLocale = () => LANG==='pt' ? 'pt-PT' : 'en-GB';
 
 const fmt = n => (n==null?'–':Number(n).toLocaleString(numLocale(),{minimumFractionDigits:2,maximumFractionDigits:2}));
 const fmtInt = n => (n==null?'–':Math.round(Number(n)).toLocaleString(numLocale()));
-const label = (k,v,m)=>`<div class="bar"><div class="lab" title="${esc(k)}">${esc(k)}</div><div class="track"><div class="fill" style="width:${m?v/m*100:0}%"></div></div><div class="val">${fmt(v)}</div></div>`;
-const labelInt = (k,v,m)=>`<div class="bar"><div class="lab" title="${esc(k)}">${esc(k)}</div><div class="track"><div class="fill" style="width:${m?v/m*100:0}%"></div></div><div class="val">${fmtInt(v)}</div></div>`;
-function bars(el, obj, sort, disp){ let e=obj; if(sort){e=Object.entries(e).sort((a,b)=>b[1]-a[1]).reduce((o,[k,v])=>(o[k]=v,o),{});} const m=Math.max(...Object.values(e)); const d=disp||(x=>x); document.getElementById(el).innerHTML=Object.entries(e).map(([k,v])=>label(d(k),v,m)).join(''); }
-function barsInt(el, obj, sort, disp){ let e=obj; if(sort){e=Object.entries(e).sort((a,b)=>b[1]-a[1]).reduce((o,[k,v])=>(o[k]=v,o),{});} const m=Math.max(...Object.values(e)); const d=disp||(x=>x); document.getElementById(el).innerHTML=Object.entries(e).map(([k,v])=>labelInt(d(k),v,m)).join(''); }
+// Uma barra horizontal: o rótulo, a barra proporcional ao máximo `m` e o
+// valor formatado por `f` (fmt: duas casas decimais; fmtInt: inteiro).
+const label = (k,v,m,f=fmt)=>`<div class="bar"><div class="lab" title="${esc(k)}">${esc(k)}</div><div class="track"><div class="fill" style="width:${m?v/m*100:0}%"></div></div><div class="val">${f(v)}</div></div>`;
+// Um painel de barras a partir de {rótulo: valor}: por ordem decrescente de
+// valor se `sort`, rótulos traduzidos por `disp`, valores formatados por `f`.
+// Ordena a lista de pares, não um objeto: num objeto as chaves com cara de
+// número ("2024") iam para o início, fosse qual fosse o valor.
+function bars(el, obj, sort, disp=(x=>x), f=fmt){
+  const rows = Object.entries(obj);
+  if(sort) rows.sort((a,b)=>b[1]-a[1]);
+  const m = Math.max(...rows.map(r=>r[1]));
+  document.getElementById(el).innerHTML = rows.map(([k,v])=>label(disp(k),v,m,f)).join('');
+}
+const barsInt = (el, obj, sort, disp) => bars(el, obj, sort, disp, fmtInt);
 
 // KPIs (D.kpis_pt added by build_dashboard.py; old builds only have EN D.kpis)
 function renderKpis(){
@@ -333,16 +344,15 @@ function renderBars(){
       + `<div class="mut" style="font-size:11px;margin:-3px 0 6px 158px">${x.charging} ${esc(T('occCharging'))} / ${x.active} ${esc(T('occActive'))}</div>`;
   }).join('');
 
-  // pricing stats
+  // pricing stats: uma linha por componente (n, média, máximo); `nota` marca
+  // as que levam a nota de rodapé (priceNote).
   const ps=D.price_stats;
+  const priceRow = (key, x, nota='') => `<tr><td class="l">${esc(T(key))}</td><td>${fmtInt(x.n)}</td><td>${fmt(x.mean)}${nota}</td><td>${fmt(x.max)}${nota}</td></tr>`;
   const pp=document.getElementById('pricePanel');
   pp.querySelectorAll('table').forEach(t=>t.remove());
   pp.insertAdjacentHTML('beforeend',
    `<table><tr><th>${esc(T('priceComp'))}</th><th>${esc(T('priceN'))}</th><th>${esc(T('priceMean'))}</th><th>${esc(T('priceMax'))}</th></tr>
-    <tr><td class="l">${esc(T('priceEnergy'))}</td><td>${fmtInt(ps.energy.n)}</td><td>${fmt(ps.energy.mean)}</td><td>${fmt(ps.energy.max)}</td></tr>
-    <tr><td class="l">${esc(T('priceTime'))}</td><td>${fmtInt(ps.time.n)}</td><td>${fmt(ps.time.mean)}</td><td>${fmt(ps.time.max)}</td></tr>
-    <tr><td class="l">${esc(T('priceFlat'))}</td><td>${fmtInt(ps.flat.n)}</td><td>${fmt(ps.flat.mean)}</td><td>${fmt(ps.flat.max)}</td></tr>
-    <tr><td class="l">${esc(T('priceSemCeme'))}</td><td>${fmtInt(ps.sem_ceme.n)}</td><td>${fmt(ps.sem_ceme.mean)}*</td><td>${fmt(ps.sem_ceme.max)}*</td></tr></table>
+    ${priceRow('priceEnergy', ps.energy)}${priceRow('priceTime', ps.time)}${priceRow('priceFlat', ps.flat)}${priceRow('priceSemCeme', ps.sem_ceme, '*')}</table>
     <div class="mut" style="font-size:11px;margin-top:8px">${esc(T('priceNote'))}</div>`);
 
   // status x power class table (transposed: statuses as rows, classes as columns)
