@@ -1,9 +1,10 @@
 name: Deploy dashboard to GitHub Pages
 
-# Publica dashboard.html em
-# https://carregaErvilhas.github.io/nap-dashboard/
-# Publica também o dataset do ohmigo em /ohmigo/chargers.json (vem do asset
-# de release que o refresh.yml actualiza; ver scripts/ohmigo_dataset.py).
+# Publica dashboard.html em https://nap.ocarroeletrico.com/ (domínio próprio,
+# ficheiro CNAME abaixo), com robots.txt, sitemap.xml e
+# /.well-known/security.txt. Publica também o dataset do ohmigo em
+# /ohmigo/chargers.json (o artifact ohmigo-dataset mais recente do
+# refresh.yml; ver scripts/ohmigo_dataset.py).
 # Dispara quando o dashboard (ou o screenshot, ou este workflow) muda, ou à mão.
 on:
   workflow_dispatch:
@@ -40,6 +41,12 @@ jobs:
           # mesma, com canonical para /).
           printf 'User-agent: *\nAllow: /\n\nSitemap: https://nap.ocarroeletrico.com/sitemap.xml\n' > public/robots.txt
           printf '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n  <url><loc>https://nap.ocarroeletrico.com/</loc><lastmod>%s</lastmod></url>\n</urlset>\n' "$(date -u +%F)" > public/sitemap.xml
+          # RFC 9116: a quem escrever sobre um problema de segurança (o mesmo
+          # contacto do ohmigo e do CEME). Expires é obrigatório; conta 180
+          # dias a partir deste deploy, e o refresh semanal faz um por semana.
+          mkdir -p public/.well-known
+          printf 'Contact: mailto:info@ocarroeletrico.com\nExpires: %s\nCanonical: https://nap.ocarroeletrico.com/.well-known/security.txt\nPreferred-Languages: pt, en\n' \
+            "$(date -u -d '+180 days' +%Y-%m-%dT%H:%M:%SZ)" > public/.well-known/security.txt
       # O dataset do ohmigo é o artifact "ohmigo-dataset" mais recente do
       # refresh.yml (90 dias de retenção, o refresh é semanal). Se não houver,
       # o dashboard publica-se na mesma, só sem /ohmigo/.
@@ -61,6 +68,9 @@ jobs:
       - uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
         with:
           path: public
+          # Sem isto o .well-known/ (começa por ponto) ficava fora do site.
+          # public/ só tem o que os steps acima lá puseram.
+          include-hidden-files: true
 
   deploy:
     needs: build

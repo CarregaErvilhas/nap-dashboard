@@ -9,8 +9,11 @@ on:
     - cron: "0 6 * * 1"
   workflow_dispatch:
 
+# O GITHUB_TOKEN só abre issues: o checkout é anónimo (repo público) e o push
+# vai com o PAT (último step). Assim, nada do que corre antes (pip, os
+# parsers de XML/HTML/PDF/xlsx de terceiros) tem um token com escrita no repo.
 permissions:
-  contents: write
+  contents: read
   issues: write
 
 concurrency:
@@ -82,8 +85,9 @@ jobs:
         env:
           # Secret, not a literal: nap-dashboard is public and the data owners'
           # file should not be pointed at from it. Set it to the shareable
-          # download URL of pt-pcve-errors.xlsx. When absent, tracker_sync.py
-          # keeps the versioned snapshot (data/tracker_meta.json reports its age).
+          # download URL of pt-pcve-errors.xlsx. When the fetch fails, nothing
+          # derived from the tracker exists (none of it is versioned):
+          # tracker_sync.py skips and errors.md has no tracker item this week.
           TRACKER_URL: ${{ secrets.TRACKER_URL }}
         run: |
           bash scripts/fetch_tracker.sh
@@ -103,8 +107,8 @@ jobs:
       # Dataset estático do ohmigo (servidor MCP de custos de carregamento):
       # postos, tomadas, potência e tarifas OPC num único JSON. Só corre depois
       # do pipeline_guard, para nunca publicar dados de um upstream partido.
-      # Vai para um asset de release (não para o git: são ~6 MB por semana) e
-      # o pages.yml copia-o para https://nap.ocarroeletrico.com/ohmigo/chargers.json.
+      # Vai para um artifact (não para o git: são ~10 MB por semana) e o
+      # pages.yml copia-o para https://nap.ocarroeletrico.com/ohmigo/chargers.json.
       # Fica publicado ANTES do push abaixo, que é o que dispara o pages.yml.
       - name: Build ohmigo dataset
         run: python scripts/ohmigo_dataset.py data data/ohmigo_chargers.json
