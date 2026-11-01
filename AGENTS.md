@@ -191,7 +191,10 @@ works at the charger) and a per-point `osm` with the kW/V/A of the matching OSM
 `socket:*` (same plug type, nearest power), **only where it differs from the
 NAP** — read off the charger's plate by the community, it is usually more
 right than the NAP's declaration (DC placeholders 750/600 V, impossible
-powers), and ohmigo prefers it. All joined from the Overpass dump in
+powers), and ohmigo prefers it. Where OSM agrees with the NAP, the point
+lists those fields in `osmSame` (`["a", "v"]`), so ohmigo can tell a value
+confirmed on the charger from one only the operator declared (a DC socket's
+current decides the power a 400 V car gets). All joined from the Overpass dump in
 `data/umap_cache/todos.json` by `ref` = NAP `external_id` (any code form, so
 Continente's `0001PL0002` joins too; ≤1 km from the NAP point). It's what lets
 ohmigo find "o posto do Lidl de Coimbra": OSM's `brand`/`operator` are often

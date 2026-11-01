@@ -488,10 +488,19 @@ for code, tags in osm.items():
     # Só vão os campos em que o OSM discorda do NAP (onde concorda, o valor do
     # NAP já é o certo), e a lista de tomadas do local fica por aqui: com ela
     # o ficheiro crescia um terço.
+    # `osmSame` lista os campos em que o OSM confirma o NAP (["a", "v"]): sem
+    # ele, um valor sem `osm` tanto podia estar confirmado como não ter sido
+    # mapeado. O ohmigo usa-o para dizer se a corrente de uma tomada DC (que
+    # decide a potência que um carro de 400 V recebe) foi verificada no posto
+    # ou só declarada pelo operador.
     for pt in site['points']:
-        o = {k: v for k, v in (osm_for_point(pt, tags.get('sockets', [])) or {}).items() if v != pt.get(k)}
+        mapped = osm_for_point(pt, tags.get('sockets', [])) or {}
+        o = {k: v for k, v in mapped.items() if v != pt.get(k)}
         if o:
             pt['osm'] = o
+        same = [k for k, v in mapped.items() if v == pt.get(k)]
+        if same:
+            pt['osmSame'] = same
     tags.pop('sockets', None)
 
 out = {
@@ -505,7 +514,12 @@ with open(OUT, 'w') as f:
 n_pts = sum(len(s['points']) for s in out['sites'])
 n_opc = sum(1 for s in out['sites'] for p in s['points'] if 'opc' in p)
 n_osm = sum(1 for s in out['sites'] if 'osm' in s)
+# Tomadas DC com a corrente vista no OSM (corrigida ou confirmada).
+n_dc = sum(1 for s in out['sites'] for p in s['points'] if p.get('dc'))
+n_dc_a = sum(1 for s in out['sites'] for p in s['points']
+             if p.get('dc') and ('a' in p.get('osm', {}) or 'a' in p.get('osmSame', [])))
 print(f'{len(out["sites"])} locais ({n_osm} com dados OSM), {n_pts} pontos, {n_opc} com tarifa OPC da MOBI.E -> {OUT}')
+print(f'{n_dc_a}/{n_dc} tomadas DC com a corrente vista no OSM')
 
 # Guarda: um upstream que mude de formato não pode publicar um ficheiro vazio
 # que o ohmigo depois serviria como "não há postos aqui".
