@@ -1,7 +1,4 @@
-# Novidades da rede (2026-10-29 → 2026-10-31)
+# Novidades da rede (2026-10-31 → 2026-11-02)
 
-- **Estreias:** 10 novos locais em funcionamento (`AMT-00038` · Amarante · EDPC · 120 kW; `CBR-00167` · Coimbra · EPKS · 120 kW; `CTX-00010` · Cartaxo · HORZ · 100 kW; `LLE-00254` · Loulé · EDPC · 120 kW; `LLE-00255` · Loulé · EDPC · 60 kW; `LRS-00237` · Loures · GLPP · 22 kW; `LRS-00238` · Loures · GLPP · 22 kW; `TVD-00112` · Torres Vedras · GLPP · 22 kW; `TVD-00113` · Torres Vedras · GLPP · 22 kW; `VPA-00010` · Vila Pouca de Aguiar · EDPC · 22 kW). 340 reativados (`0001PR0009` · Matosinhos · ? · 50 kW; `0001PR0010` · Matosinhos · ? · 50 kW; `0209PR0003` · Viana do Castelo · ? · 50 kW; `0210PR0004` · São João da Madeira · CONT · 50 kW; `0215PR0003` · Santarém · ? · 50 kW; `0232PL0002` · ? · CONT · 22 kW; `0284PR0002` · Reguengos de Monsaraz · CONT · 120 kW; `0288PL0001` · São Félix da Marinha · CONT · 22 kW; `0291PR0002` · Estremoz · CONT · 50 kW; `0379PL0001` · Mem Martins · CONT · 22 kW (+330 restantes)).
-- **Saídas:** 6 locais saíram da rede ou foram desligados (`0001PL0011` · Matosinhos · CONT · 22 kW; `0001PL0012` · Matosinhos · CONT · 22 kW; `AVR-00037` · Aveiro · HORZ · 120 kW; `GDL-00072` · Grândola · EDPC · 400 kW; `ILH-90001` · Ílhavo · EDPC · 22 kW; `PNF-00067` · Penafiel · EDPC · 400 kW).
-- **Maior estreia:** `CBR-00167` (Coimbra, EPKS) com 7 pontos e 366 kW no total.
-- **Cidade em alta:** Loulé com 2 estreias.
-- **Balanço:** +9 locais (0,1% em módulo), +25 pontos face à semana anterior.
+- **Estreias:** 233 locais reativados (`0002PL0008` · Amadora · CONT · 22 kW; `0002PL0011` · Amadora · CONT · 22 kW; `0002PL0014` · Amadora · CONT · 22 kW; `0002PL0016` · Amadora · CONT · 22 kW; `0002PL0017` · Amadora · CONT · 22 kW; `0002PL0018` · Amadora · CONT · 22 kW; `0002PL0019` · Amadora · CONT · 22 kW; `0235PL0001` · Gondomar · CONT · 22 kW; `0250PR0002` · ? · CONT · 120 kW; `0258PL0001` · Lagos · CONT · 22 kW (+223 restantes)).
+- **Balanço:** +0 locais (0,0% em módulo), +1 ponto face à semana anterior.
