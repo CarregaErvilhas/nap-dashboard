@@ -63,7 +63,7 @@ from the official origins (see `scripts/fetch_data.sh` for the exact URLs).
 `scripts/nap_etl.py` → (`scripts/check_quality.py`, `scripts/summary.py`) →
 `scripts/mobie_join.py` → `scripts/dgeg_lists.py` → `scripts/dgeg_crossref.py` →
 `scripts/partyid_crossref.py` → `scripts/concelho_check.py` →
-`scripts/osm_umap.py` → `scripts/tracker_sync.py` + `scripts/tracker_checks.py` →
+`scripts/osm_umap.py` → (`scripts/osm_places.py`, ohmigo dataset only) → `scripts/tracker_sync.py` + `scripts/tracker_checks.py` →
 `scripts/make_pt_outline.py` →
 `scripts/network_news.py` (diff semanal vs `network-census.json` do HEAD →
 `novidades.md` + novo `network-census.json`; primeira corrida = baseline) →
@@ -202,6 +202,21 @@ the owner, not the CPO (Lidl owns its chargers, Galp operates them: the NAP
 says Galp, OSM says Lidl). Additive and optional, so no `SCHEMA` bump;
 without the dump (osm_umap.py not run) sites just lack `osm`. ODbL: see
 `THIRD-PARTY-NOTICES.md`.
+Also per site, `places`: the shopping centres, hospitals, universities, airports,
+stadiums, supermarkets, car parks and hotels (named, from OSM) whose outline holds
+the site or lies a few metres from it, `{name, type, osm, m}` (`m` = metres to
+the edge, 0 = inside; up to 3, inside first). OSM doesn't say which place a
+charger is at, so `scripts/osm_places.py` works it out (point in polygon, stdlib
+only) from `data/umap_cache/places.json`, which it builds with `osmium`
+(pyosmium) from Geofabrik's Portugal extract: `refresh.yml` downloads
+`portugal-latest.osm.pbf` (~400 MB) and runs
+`python scripts/osm_places.py <pbf>` (~10 s) with `continue-on-error` before
+the dataset; without the cache sites just lack `places`. Overpass was tried
+first and timed out even on half-degree tiles. The radius outside the outline
+depends on the type (a hotel or car park only counts right beside it), and a
+place whose name repeats one already kept is dropped (two OSM objects for the
+same mall, "Centro Comercial Colombo - Estacionamento Piso -1").
+It's what lets ohmigo find "os postos do Mar Shopping", which no charger is named.
 No status and no CEME prices: ohmigo reads status live from the NAP feed and gets
 energy prices from ceme-v2. `refresh.yml` runs it after the pipeline guard and
 uploads it as the `ohmigo-dataset` Actions artifact (90-day retention; not
