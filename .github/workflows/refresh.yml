@@ -10,7 +10,7 @@ on:
   workflow_dispatch:
 
 # O GITHUB_TOKEN só abre issues: o checkout é anónimo (repo público) e o push
-# vai com o PAT (último step). Assim, nada do que corre antes (pip, os
+# vai com um token da GitHub App, gerado só nos últimos steps. Assim, nada do que corre antes (pip, os
 # parsers de XML/HTML/PDF/xlsx de terceiros) tem um token com escrita no repo.
 permissions:
   contents: read
@@ -30,7 +30,7 @@ jobs:
           # sem credencial persistida: o checkout grava o GITHUB_TOKEN num
           # http.extraheader, que tem precedência sobre as credenciais do URL
           # e faria o push sair como o bot (recusado pelo ruleset) em vez de
-          # usar o remote com PAT definido no fim. Fetch é anónimo (repo público).
+          # usar o token da App definido no fim. Fetch é anónimo (repo público).
           persist-credentials: false
       - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
         with:
@@ -132,19 +132,28 @@ jobs:
           path: data/ohmigo_chargers.json
           retention-days: 90
           if-no-files-found: error
+      # Token da GitHub App "nap-dashboard push", a única no bypass "Always" do
+      # ruleset "review branch": nem o GITHUB_TOKEN nem os admins podem fazer
+      # push direto para o main (os admins só fazem bypass em PRs). Gerado só
+      # aqui, depois do pipeline, com contents:write neste repo e válido 1 h; a
+      # action revoga-o no fim do job.
+      - name: Push token (GitHub App)
+        id: push-token
+        uses: actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510 # v3.3.0
+        with:
+          client-id: ${{ vars.PUSH_APP_CLIENT_ID }}
+          private-key: ${{ secrets.PUSH_APP_PRIVATE_KEY }}
+          permission-contents: write
       - name: Commit refreshed deliverables
         env:
-          PUSH_TOKEN: ${{ secrets.PUSH_TOKEN }}
+          PUSH_TOKEN: ${{ steps.push-token.outputs.token }}
         run: |
           if [ -z "$PUSH_TOKEN" ]; then
-            echo "FAIL: secret PUSH_TOKEN vazio ou em falta." >&2
+            echo "FAIL: token da App vazio (PUSH_APP_CLIENT_ID / PUSH_APP_PRIVATE_KEY)." >&2
             exit 1
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          # push via PAT: autentica como owner, que faz bypass ao ruleset
-          # "review" (o GITHUB_TOKEN é recusado). O valor vem de secrets e é
-          # mascarado nos logs.
           #
           # Autenticação pelo header HTTP, não pela URL do remote: assim o
           # token não fica gravado no .git/config nem aparece no argv de
@@ -156,7 +165,7 @@ jobs:
           git add dashboard.html dashboard.png facts.md errors.md novidades.md network-census.json
           git diff --cached --quiet && echo "no changes to commit" || git commit -m "Weekly dashboard refresh: $(date -u +%F)"
           git push
-      # O push acima (via PAT, não GITHUB_TOKEN) dispara o pages.yml, que é a
+      # O push acima (via App, não GITHUB_TOKEN) dispara o pages.yml, que é a
       # única via de deploy — este workflow não publica no Pages diretamente
       # para não correr dois deployments em simultâneo (400 "in progress").
       # A fetch/pipeline failure leaves the dashboard silently stale (agents
