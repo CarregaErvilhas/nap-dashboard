@@ -219,9 +219,19 @@ def osm_sockets(tags):
         if not m or m.group(1) not in OSM_SOCKET:
             continue
         pre = f'socket:{m.group(1)}'
+        # type2_cable / tesla_destination = cabo preso ao posto; type2 = tomada
+        # (sem cabo). Para os outros tipos (CCS, CHAdeMO) o OSM não distingue,
+        # fica None (sem comparação com o NAP).
+        if m.group(1) in ('type2_cable', 'tesla_destination'):
+            cable = True
+        elif m.group(1) == 'type2':
+            cable = False
+        else:
+            cable = None
         out.append({'type': OSM_SOCKET[m.group(1)], 'count': osm_num(n),
                     'kw': osm_num(tags.get(f'{pre}:output'), 'kw'),
-                    'v': osm_num(tags.get(f'{pre}:voltage')), 'a': osm_num(tags.get(f'{pre}:current'))})
+                    'v': osm_num(tags.get(f'{pre}:voltage')), 'a': osm_num(tags.get(f'{pre}:current')),
+                    'cable': cable})
     return out
 
 
@@ -258,6 +268,10 @@ def osm_for_point(pt, sockets):
         vals = {x[f] for x in same if x[f] is not None}
         if len(vals) == 1:
             out[f] = vals.pop()
+    # cabo: só quando todos os candidatos concordam (como kw/v/a).
+    cables = {x.get('cable') for x in same if x.get('cable') is not None}
+    if len(cables) == 1:
+        out['cable'] = cables.pop()
     return out or None
 # Nomes que são só o código ("LRA-00156") ou um código por saber ("LRA-?????").
 CODE_NAME = re.compile(r'^(?:MOBI-)?[A-Z]{3}-[\d?]{4,5}\b')
