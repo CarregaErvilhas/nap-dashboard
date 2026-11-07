@@ -346,8 +346,9 @@ jobs:
   # checkout é novo. Só passam os ficheiros da lista fechada, como ficheiros
   # normais e com um tecto de tamanho.
   #
-  # Push via PAT: autentica como owner, que faz bypass ao ruleset "review" (o
-  # GITHUB_TOKEN é recusado). Autenticação pelo header HTTP (GIT_CONFIG_*),
+  # Push com um token da GitHub App "nap-dashboard push", a única no bypass
+  # "Always" do ruleset "review branch" (o GITHUB_TOKEN é recusado, e os admins
+  # só fazem bypass em PRs). Autenticação pelo header HTTP (GIT_CONFIG_*),
   # não pela URL do remote: o token não fica no .git/config nem no argv de
   # nenhum processo (o /proc/<pid>/cmdline é legível por qualquer um).
   publish:
@@ -360,7 +361,7 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
-          # Sem credencial persistida: o push vai com o PAT (abaixo).
+          # Sem credencial persistida: o push vai com o token da App (abaixo).
           persist-credentials: false
       # Fora do checkout: nada do artifact entra no repo sem passar pelo step
       # seguinte.
@@ -368,14 +369,21 @@ jobs:
         with:
           name: agent-publish
           path: ${{ runner.temp }}/agent
+      - name: Push token (GitHub App)
+        id: push-token
+        uses: actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510 # v3.3.0
+        with:
+          client-id: ${{ vars.PUSH_APP_CLIENT_ID }}
+          private-key: ${{ secrets.PUSH_APP_PRIVATE_KEY }}
+          permission-contents: write
       - name: Commit + push do relatório
         env:
-          PUSH_TOKEN: ${{ secrets.PUSH_TOKEN }}
+          PUSH_TOKEN: ${{ steps.push-token.outputs.token }}
           GH_TOKEN: ${{ github.token }}
         run: |
           set -uo pipefail
           if [ -z "${PUSH_TOKEN:-}" ]; then
-            echo "FAIL: secret PUSH_TOKEN vazio ou em falta." >&2
+            echo "FAIL: token da App vazio (PUSH_APP_CLIENT_ID / PUSH_APP_PRIVATE_KEY)." >&2
             exit 1
           fi
           src="$RUNNER_TEMP/agent"

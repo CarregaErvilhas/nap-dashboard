@@ -408,11 +408,19 @@ Ao mover/renomear um ficheiro de dados, actualizar a lista `DATA_FILES` em
   deploy).
 
 ## Workflows and secrets
-- `PUSH_TOKEN` (the owner's PAT, which bypasses the `main` ruleset) exists in
-  two places only: the last step of `refresh.yml` (the same runner as the
-  pipeline, which runs our scripts and the pinned `requirements.txt`, no
-  model) and the `publish` job of `agents.yml`, a fresh runner that copies a
-  closed list of files from `Agents-outputs/`. The agent job (a model with a
+- Pushes to `main` come only from the **"nap-dashboard push" GitHub App**, the
+  only actor on the `review branch` ruleset's bypass list in "Always" mode.
+  Repository admins are on it in "For pull requests only" mode, so nobody
+  (another admin, or the owner by accident) pushes straight to `main`. The
+  App has `Contents: write` on this repo and nothing else; its client id is
+  the `PUSH_APP_CLIENT_ID` variable and its key the `PUSH_APP_PRIVATE_KEY`
+  secret. `actions/create-github-app-token` mints a 1-hour token (revoked at
+  the end of the job) in two places only: just before the last step of
+  `refresh.yml` (the same runner as the pipeline, which runs our scripts and
+  the pinned `requirements.txt`, no model) and in the `publish` job of
+  `agents.yml`, a fresh runner that copies a closed list of files from
+  `Agents-outputs/`. A push with the App's token triggers `pages.yml`, which
+  one with the `GITHUB_TOKEN` wouldn't. The agent job (a model with a
   shell, reading third-party data) never shares a machine with it, and code
   an agent writes (`scripts/anomalias_check.py`) never reaches `main` on its
   own: it's in the run's `agent-outputs` artifact, for someone to review and
