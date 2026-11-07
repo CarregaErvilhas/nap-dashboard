@@ -1,0 +1,74 @@
+name: Daily ohmigo dataset refresh
+
+# Refresh apenas o dataset estático do ohmigo (postos, tomadas, potência, tarifas
+# OPC e bloco OSM) com mais frequência do que o refresh.yml semanal, para que o
+# MCP sirva dados mais frescos. Não reconstrói o dashboard nem faz commit em
+# main: só publica um novo artifact "ohmigo-dataset" (o pages.yml copia-o para
+# https://nap.ocarroeletrico.com/ohmigo/chargers.json) e dispara um deploy do Pages.
+#
+# Nota sobre cadência: o cron do GitHub é best-effort (pode atrasar horas), por
+# isso isto não alinha com o momento em que o Alexandre actualiza o Todos.json.
+# O lag típico é de ~1 dia; é o melhor que se consegue sem polling agressivo.
+on:
+  schedule:
+    # Alexandre (Todos.json) corre às 00:49 e 12:49 UTC; corremos 2h depois,
+    # às 02:49 e 14:49 UTC, para apanhar o dump já actualizado.
+    - cron: "49 2,14 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: write
+  issues: write
+
+concurrency:
+  group: "ohmigo-daily"
+  cancel-in-progress: false
+
+jobs:
+  ohmigo:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: "3.13"
+      - name: Install deps
+        run: pip install -r requirements.txt
+      - name: Fetch fresh data
+        run: bash scripts/fetch_data.sh
+      - name: ETL (static sites/points)
+        run: python scripts/nap_etl.py data/evChargingInfra_latest.xml data/evActualStatus_latest.xml data
+      - name: OSM cross-check (fetches Todos.json fresh)
+        run: python scripts/osm_umap.py
+      - name: Fetch OSM places
+        continue-on-error: true
+        run: |
+          curl -fsSL --retry 3 -o "$RUNNER_TEMP/portugal.osm.pbf" https://download.geofabrik.de/europe/portugal-latest.osm.pbf
+          python scripts/osm_places.py "$RUNNER_TEMP/portugal.osm.pbf"
+      - name: Build ohmigo dataset
+        run: python scripts/ohmigo_dataset.py data data/ohmigo_chargers.json
+      - name: Publish ohmigo dataset (artifact)
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: ohmigo-dataset
+          path: data/ohmigo_chargers.json
+          retention-days: 30
+          if-no-files-found: error
+      # Dispara o deploy do Pages para que o /ohmigo/chargers.json publicado
+      # reflita o artifact recém-criado (o pages.yml busca o mais recente).
+      - name: Trigger Pages deploy
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run pages.yml --repo "$GITHUB_REPOSITORY"
+      - name: Notify on failure
+        if: failure()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh issue create --repo "$GITHUB_REPOSITORY" \
+            --title "Daily ohmigo refresh failed (run $GITHUB_RUN_ID)" \
+            --body "Fetch/pipeline failed; ohmigo dataset stays on last good. Run: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
