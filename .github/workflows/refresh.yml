@@ -104,6 +104,15 @@ jobs:
       # eval de inicialização com DOM stub (apanha templates partidos).
       - name: Validate dashboard (JSON + JS + DOM-stub eval)
         run: python3 scripts/validate_dashboard.py
+      # Centros comerciais, hospitais, parques... do OSM, para o ohmigo saber em
+      # que local fica cada posto. Lê o extrato de Portugal do Geofabrik (~400 MB,
+      # ~10 s a processar); o Overpass dava timeout. Sem ele o dataset sai sem
+      # `places`, por isso uma falha aqui não pára o refresh.
+      - name: Fetch OSM places
+        continue-on-error: true
+        run: |
+          curl -fsSL --retry 3 -o "$RUNNER_TEMP/portugal.osm.pbf" https://download.geofabrik.de/europe/portugal-latest.osm.pbf
+          python scripts/osm_places.py "$RUNNER_TEMP/portugal.osm.pbf"
       # Dataset estático do ohmigo (servidor MCP de custos de carregamento):
       # postos, tomadas, potência e tarifas OPC num único JSON. Só corre depois
       # do pipeline_guard, para nunca publicar dados de um upstream partido.

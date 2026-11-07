@@ -49,6 +49,8 @@ from datetime import datetime, timezone
 
 import pandas as pd
 
+import osm_places
+
 # Sobe quando o formato do JSON mudar de forma incompatível; o ohmigo recusa
 # versões que não conhece em vez de ler dados errados.
 SCHEMA = 1
@@ -503,6 +505,15 @@ for code, tags in osm.items():
             pt['osmSame'] = same
     tags.pop('sockets', None)
 
+# Em que centro comercial, hospital, parque... fica o posto: o OSM não o diz
+# num posto, só o dá por geometria (ponto dentro de polígono), por isso fazemo-lo
+# aqui (osm_places.py). Deixa o ohmigo encontrar "os postos do Mar Shopping" sem
+# que nenhum posto tenha esse nome. `m` = metros ao contorno (0 = dentro).
+places = osm_places.places_for({c: s for c, s in by_code.items() if s and isinstance(c, str)},
+                               f'{DATA}/umap_cache/places.json')
+for code, found in places.items():
+    by_code[code]['places'] = found
+
 out = {
     'schema': SCHEMA,
     'generatedAt': datetime.now(timezone.utc).isoformat(timespec='seconds'),
@@ -514,11 +525,12 @@ with open(OUT, 'w') as f:
 n_pts = sum(len(s['points']) for s in out['sites'])
 n_opc = sum(1 for s in out['sites'] for p in s['points'] if 'opc' in p)
 n_osm = sum(1 for s in out['sites'] if 'osm' in s)
+n_places = sum(1 for s in out['sites'] if 'places' in s)
 # Tomadas DC com a corrente vista no OSM (corrigida ou confirmada).
 n_dc = sum(1 for s in out['sites'] for p in s['points'] if p.get('dc'))
 n_dc_a = sum(1 for s in out['sites'] for p in s['points']
              if p.get('dc') and ('a' in p.get('osm', {}) or 'a' in p.get('osmSame', [])))
-print(f'{len(out["sites"])} locais ({n_osm} com dados OSM), {n_pts} pontos, {n_opc} com tarifa OPC da MOBI.E -> {OUT}')
+print(f'{len(out["sites"])} locais ({n_osm} com dados OSM, {n_places} com locais), {n_pts} pontos, {n_opc} com tarifa OPC da MOBI.E -> {OUT}')
 print(f'{n_dc_a}/{n_dc} tomadas DC com a corrente vista no OSM')
 
 # Guarda: um upstream que mude de formato não pode publicar um ficheiro vazio
