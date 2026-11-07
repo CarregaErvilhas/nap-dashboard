@@ -226,6 +226,12 @@ immutable and an asset can't be replaced); `pages.yml` copies the newest one to
 refresh fails) below 5 000 sites or 10 000 tariffed points. `SCHEMA` in the
 script bumps on incompatible format changes.
 
+A daily refresh (`ohmigo-daily.yml`, cron `49 2,14 * * *`) re-runs only the ohmigo
+pipeline (NAP ETL + OSM dump + places + dataset) and publishes a new
+`ohmigo-dataset` artifact (30-day retention), then triggers a Pages deploy, so
+the MCP sees fresher OSM/NAP data between weekly refreshes. It does not build
+the dashboard or commit to `main`.
+
 ## Housekeeping: save ad-hoc analysis scripts
 When an interactive query ends up producing new analysis code (point-in-polygon,
 cross-checks, one-off joins), save it as a script in `scripts/` (or append it to
