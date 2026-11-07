@@ -1,11 +1,11 @@
 {
-  "snapshot_date": "2026-11-02",
-  "generated_utc": "2026-11-02T12:35:13+00:00",
+  "snapshot_date": "2026-11-07",
+  "generated_utc": "2026-11-07T22:16:09+00:00",
   "opcs": {
     "ACCI": {
-      "name": "Acciona Recarga Portugal",
-      "sites": 15,
-      "points": 28
+      "name": "ACCIONA RECARGA PORTUGAL,UNIPESSOAL LDA",
+      "sites": 14,
+      "points": 27
     },
     "ALFA": {
       "name": "Alfa Energia",
@@ -59,8 +59,8 @@
     },
     "CEPS": {
       "name": "Cepsa Portuguesa Petroleos",
-      "sites": 35,
-      "points": 63
+      "sites": 37,
+      "points": 75
     },
     "CEVE": {
       "name": "CEVE - Cooperativa Eléctrica do Vale D’Este C.R.L.",
@@ -84,8 +84,8 @@
     },
     "CONT": {
       "name": "Modelo Continente Hipermercados, S.A.",
-      "sites": 447,
-      "points": 948
+      "sites": 445,
+      "points": 944
     },
     "CSCP": {
       "name": "Cascais Proxima",
@@ -99,13 +99,13 @@
     },
     "ECOI": {
       "name": "Ecoinside - Soluções em Ecoeficiência e Sustentabilidade Lda",
-      "sites": 57,
-      "points": 145
+      "sites": 59,
+      "points": 149
     },
     "EDPC": {
       "name": "EDP Comercial",
       "sites": 1686,
-      "points": 3560
+      "points": 3552
     },
     "EMAC": {
       "name": "EMACOM - Telecomunicações da Madeira, Unipessoal, Lda",
@@ -129,8 +129,8 @@
     },
     "EPKS": {
       "name": "Telpark",
-      "sites": 37,
-      "points": 395
+      "sites": 44,
+      "points": 433
     },
     "EPOC": {
       "name": "EPOCH",
@@ -144,8 +144,8 @@
     },
     "EVCE": {
       "name": "EVCE POWER, LDA. / MOBISMART",
-      "sites": 51,
-      "points": 89
+      "sites": 53,
+      "points": 93
     },
     "EVGR": {
       "name": "Green Evolut, LDA",
@@ -179,8 +179,8 @@
     },
     "FCTO": {
       "name": "Iberdrola | bp pulse",
-      "sites": 305,
-      "points": 727
+      "sites": 307,
+      "points": 731
     },
     "FRIO": {
       "name": "Distrifrio Supermercados, Lda",
@@ -204,8 +204,8 @@
     },
     "GLPG": {
       "name": "Galpgeste",
-      "sites": 123,
-      "points": 319
+      "sites": 121,
+      "points": 313
     },
     "GLPP": {
       "name": "Galp Power OPC",
@@ -244,8 +244,8 @@
     },
     "HORZ": {
       "name": "Powerdot, S.A",
-      "sites": 787,
-      "points": 2140
+      "sites": 788,
+      "points": 2141
     },
     "IBRD": {
       "name": "Iberdrola Clientes Portugal, Unipessoal, Lda",
@@ -274,8 +274,8 @@
     },
     "KLCS": {
       "name": "Kilometer Low Cost II Serviços, SA",
-      "sites": 88,
-      "points": 111
+      "sites": 86,
+      "points": 107
     },
     "KPMS": {
       "name": "KPM Serviços de Engenheria, Unip Lda",
@@ -329,8 +329,8 @@
     },
     "MOTA": {
       "name": "Mota-Engil Renewing",
-      "sites": 189,
-      "points": 340
+      "sites": 187,
+      "points": 336
     },
     "NEUR": {
       "name": "Neureifen - Electric Mobility, Lda",
@@ -384,8 +384,8 @@
     },
     "REPS": {
       "name": "REPSOL Portuguesa Lda",
-      "sites": 221,
-      "points": 575
+      "sites": 223,
+      "points": 579
     },
     "SARE": {
       "name": "Superareosa Supermercados, Lda",
