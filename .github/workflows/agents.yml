@@ -64,6 +64,11 @@ jobs:
           github-token: ${{ github.token }}
       - name: Fetch fresh data + ETL (manual runs only)
         if: github.event_name == 'workflow_dispatch'
+        env:
+          # Repo Variables (Settings > Secrets and variables > Actions > Variables).
+          # Sem elas o fetch usa o NAP; se o arquivo falhar ou estiver velho, cai para o NAP.
+          NAP_STATUS_SOURCE: ${{ vars.NAP_STATUS_SOURCE }}
+          AMPERE_ARCHIVE_URL: ${{ vars.AMPERE_ARCHIVE_URL }}
         run: |
           bash scripts/fetch_data.sh
           python3 scripts/nap_etl.py data/evChargingInfra_latest.xml data/evActualStatus_latest.xml data
