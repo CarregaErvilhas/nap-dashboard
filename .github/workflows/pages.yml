@@ -2,7 +2,7 @@ name: Deploy dashboard to GitHub Pages
 
 # Publica dashboard.html em https://nap.ocarroeletrico.com/ (domínio próprio,
 # ficheiro CNAME abaixo), com robots.txt, sitemap.xml e
-# /.well-known/security.txt. Publica também o dataset do ohmigo em
+# /.well-known/security.txt, llms.txt e llms-full.txt. Publica também o dataset do ohmigo em
 # /ohmigo/chargers.json (o artifact ohmigo-dataset mais recente do
 # refresh.yml; ver scripts/ohmigo_dataset.py).
 # Dispara quando o dashboard (ou o screenshot, ou este workflow) muda, ou à mão.
@@ -17,6 +17,7 @@ on:
       - "assets/404.html"
       - "assets/favicon.*"
       - "assets/apple-touch-icon.png"
+      - "assets/llms.txt"
       - ".github/workflows/pages.yml"
 
 permissions:
@@ -42,6 +43,13 @@ jobs:
           cp dashboard.png public/dashboard.png
           cp assets/privacidade.html assets/404.html assets/favicon.svg assets/favicon.ico assets/apple-touch-icon.png public/
           echo "nap.ocarroeletrico.com" > public/CNAME
+          # llmstxt.org: índice curto para assistentes; llms-full.txt junta os
+          # três resumos em texto (factos, novidades, erros), que o refresh
+          # semanal regenera e dispara este deploy.
+          cp assets/llms.txt public/llms.txt
+          { printf '# NAP EADME — texto completo\n\n> Factos, novidades e erros reportáveis da rede de carregamento de VE em Portugal, como estavam neste deploy (%s). Índice: https://nap.ocarroeletrico.com/llms.txt\n\n' "$(date -u +%F)"
+            for f in facts novidades errors; do printf '\n---\n\n<!-- %s.md -->\n\n' "$f"; cat "$f.md"; done
+          } > public/llms-full.txt
           # Para os motores de busca: o dashboard (/dashboard.html é o mesmo, com
           # canonical para /) e a página de privacidade. /ohmigo/ é o dataset
           # (~10 MB), para máquinas: fora do rastreio.
