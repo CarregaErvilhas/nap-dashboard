@@ -59,6 +59,17 @@ bash scripts/fetch_data.sh
 Downloads the live NAP XMLs, MOBI.E tariff CSV, PartyID PDF and DGEG HTML pages
 from the official origins (see `scripts/fetch_data.sh` for the exact URLs).
 
+Optional: read the dynamic status (`evActualStatus`, ~40 MB) from the
+[AmpereArchive](https://github.com/CarregaErvilhas/AmpereArchive) instead of the
+NAP: `NAP_STATUS_SOURCE=archive AMPERE_ARCHIVE_URL=https://ohm-age.ocarroeletrico.com bash scripts/fetch_data.sh`
+(country via `AMPERE_ARCHIVE_COUNTRY`, default `PT`). It downloads
+`v1/PT/status.json.gz` to `data/archiveStatus_latest.json.gz`, and
+`nap_etl.py` uses it when `data/evActualStatus_latest.xml` is absent
+(`scripts/archive_status.py` converts it to the same CSVs). A missing, stale
+(> `ARCHIVE_MAX_AGE_MIN`, 180) or truncated file falls back to the NAP. Default
+stays `nap`; the static feed still comes from the NAP (the archive does
+not keep `brandsAccepted`, NUTS or contacts).
+
 ## Pipeline order
 `scripts/nap_etl.py` → (`scripts/check_quality.py`, `scripts/summary.py`) →
 `scripts/mobie_join.py` → `scripts/dgeg_lists.py` → `scripts/dgeg_crossref.py` →
