@@ -10,6 +10,8 @@ para a análise se manter atualizada.
   `https://pgm.mobie.pt/integration/nap/evChargingInfra`
 - **Estado dinâmico + preços** (por ponto, inclui `publicationTime`), ~40 MB:
   `https://pgm.mobie.pt/integration/nap/evActualStatus`
+  Alternativa opcional (`NAP_STATUS_SOURCE=archive`): `v1/<CC>/status.json.gz` do AmpereArchive,
+  um espelho de 1–2 MB do mesmo estado; ver `scripts/archive_status.py`.
 
 Ambos são XML DATEX II 3.3 com os namespaces `energyInfrastructure`,
 `facilities`, `locationReferencing`, `locationExtension`, `commonExtension` e

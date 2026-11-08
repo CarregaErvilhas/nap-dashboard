@@ -13,6 +13,18 @@ set -euo pipefail
 
 mkdir -p data
 
+# Fonte do estado dinâmico (evActualStatus, ~40 MB):
+#   NAP_STATUS_SOURCE=nap      (omissão) directo do NAP, como sempre.
+#   NAP_STATUS_SOURCE=archive  do AmpereArchive: lê $AMPERE_ARCHIVE_URL/v1/<CC>/status.json.gz
+#                              (1–2 MB). Se o arquivo falhar, estiver velho
+#                              (> ARCHIVE_MAX_AGE_MIN, 180 por omissão) ou truncado, cai para o NAP.
+# O estático (~190 MB) continua a vir do NAP: o arquivo não guarda todos os
+# campos que o dashboard usa (brandsAccepted, NUTS, contactos, ...).
+NAP_STATUS_SOURCE="${NAP_STATUS_SOURCE:-nap}"
+AMPERE_ARCHIVE_URL="${AMPERE_ARCHIVE_URL:-}"
+AMPERE_ARCHIVE_COUNTRY="${AMPERE_ARCHIVE_COUNTRY:-PT}"
+ARCHIVE_MAX_AGE_MIN="${ARCHIVE_MAX_AGE_MIN:-180}"
+
 # check_content <file> <expect>: xml | pdf | csv:TOKEN | html-table
 check_content() {
   local file="$1" expect="$2"
@@ -21,6 +33,7 @@ check_content() {
     pdf)        head -c 5 "$file" | grep -q '%PDF' ;;
     csv:*)      head -n 1 "$file" | grep -qF "${expect#csv:}" ;;
     html-table) grep -qi '<table' "$file" ;;
+    archive-status) python3 scripts/archive_status.py --check "$file" --max-age-min "$ARCHIVE_MAX_AGE_MIN" >&2 ;;
     *) echo "erro interno: expect desconhecido '$expect'" >&2; return 1 ;;
   esac
 }
@@ -45,8 +58,32 @@ fetch() {
 # NAP MOBI.E — DATEX II 3.3 static inventory of sites/points (200 MB)
 fetch "https://pgm.mobie.pt/integration/nap/evChargingInfra" data/evChargingInfra_latest.xml xml
 
-# NAP MOBI.E — DATEX II 3.3 dynamic status + prices (40 MB)
-fetch "https://pgm.mobie.pt/integration/nap/evActualStatus" data/evActualStatus_latest.xml xml
+# Estado dinâmico + preços OPC. O nap_etl.py usa data/evActualStatus_latest.xml
+# se existir, senão data/archiveStatus_latest.json.gz; só um dos dois fica no disco.
+fetch_dynamic_nap() {
+  rm -f data/archiveStatus_latest.json.gz
+  # NAP MOBI.E — DATEX II 3.3 dynamic status + prices (40 MB)
+  fetch "https://pgm.mobie.pt/integration/nap/evActualStatus" data/evActualStatus_latest.xml xml
+}
+
+case "$NAP_STATUS_SOURCE" in
+  nap) fetch_dynamic_nap ;;
+  archive)
+    if [ -z "$AMPERE_ARCHIVE_URL" ]; then
+      echo "aviso: NAP_STATUS_SOURCE=archive sem AMPERE_ARCHIVE_URL; a usar o NAP" >&2
+      fetch_dynamic_nap
+    elif [[ ! "$AMPERE_ARCHIVE_COUNTRY" =~ ^[A-Z]{2}$ ]]; then
+      echo "erro: AMPERE_ARCHIVE_COUNTRY inválido '$AMPERE_ARCHIVE_COUNTRY'" >&2
+      exit 1
+    elif fetch "${AMPERE_ARCHIVE_URL%/}/v1/${AMPERE_ARCHIVE_COUNTRY}/status.json.gz" \
+         data/archiveStatus_latest.json.gz archive-status; then
+      rm -f data/evActualStatus_latest.xml
+    else
+      echo "aviso: AmpereArchive indisponível ou desactualizado; a usar o NAP" >&2
+      fetch_dynamic_nap
+    fi ;;
+  *) echo "erro: NAP_STATUS_SOURCE='$NAP_STATUS_SOURCE' (nap|archive)" >&2; exit 1 ;;
+esac
 
 # MOBI.E OPC tariff file (CSV, semicolon-separated, decimal comma)
 # Friendly Liferay URL that always resolves to the current version.
@@ -70,5 +107,5 @@ fetch \
   data/dgeg_ceme.html html-table -A "Mozilla/5.0 (Macintosh)"
 
 echo "fetched:"
-ls -lh data/evChargingInfra_latest.xml data/evActualStatus_latest.xml data/mobie_tarifas.csv \
-      data/mobie_partyid.pdf data/dgeg_opc.html data/dgeg_ceme.html
+ls -lh data/evChargingInfra_latest.xml data/evActualStatus_latest.xml data/archiveStatus_latest.json.gz \
+      data/mobie_tarifas.csv data/mobie_partyid.pdf data/dgeg_opc.html data/dgeg_ceme.html 2>/dev/null || true

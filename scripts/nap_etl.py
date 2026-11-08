@@ -4,6 +4,7 @@ Usage:
     python nap_etl.py data/evChargingInfra_latest.xml data/evActualStatus_latest.xml [outdir]
 """
 import csv
+import os
 import sys
 from lxml import etree
 
@@ -227,6 +228,11 @@ def parse_static(path):
 
 
 def parse_dynamic(path):
+    # data/archiveStatus_latest.json.gz: estado do AmpereArchive em vez do XML do
+    # NAP (ver scripts/archive_status.py e NAP_STATUS_SOURCE em fetch_data.sh).
+    if path.endswith(('.json', '.json.gz')):
+        import archive_status
+        return archive_status.parse_dynamic(path)
     rows_status = []
     rows_pricing = []
     pub_time = None
@@ -277,6 +283,13 @@ def write_csv(path, header, rows):
 
 def main():
     static_path, dyn_path = sys.argv[1], sys.argv[2]
+    # fetch_data.sh em modo arquivo deixa o JSON em vez do XML dinâmico: se o
+    # caminho habitual não existe mas o do arquivo sim, usa-se esse. Assim os
+    # workflows continuam a passar sempre o mesmo argumento.
+    archive_path = os.path.join(os.path.dirname(dyn_path) or '.', 'archiveStatus_latest.json.gz')
+    if not os.path.exists(dyn_path) and os.path.exists(archive_path):
+        dyn_path = archive_path
+        print(f'  dinâmico: {dyn_path} (AmpereArchive)')
     outdir = sys.argv[3] if len(sys.argv) > 3 else '.'
     print('Parsing static...')
     sites, points = parse_static(static_path)
