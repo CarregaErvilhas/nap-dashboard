@@ -70,6 +70,13 @@ NAP: `NAP_STATUS_SOURCE=archive AMPERE_ARCHIVE_URL=https://ohm-age.ocarroeletric
 stays `nap`; the static feed still comes from the NAP (the archive does
 not keep `brandsAccepted`, NUTS or contacts).
 
+## Histórico (AmpereArchive, opcional)
+`scripts/archive_history.py --root <cópia local do bucket | s3://ampere-archive>`
+lê o Parquet do [AmpereArchive](https://github.com/CarregaErvilhas/AmpereArchive)
+com DuckDB e escreve `data/archive_availability.csv` (disponibilidade por OPC,
+ponderada pelo tempo) e `data/archive_site_changes.csv` (locais novos/removidos).
+Fora do pipeline semanal: precisa de `pip install duckdb` e de dados acumulados.
+
 ## Pipeline order
 `scripts/nap_etl.py` → (`scripts/check_quality.py`, `scripts/summary.py`) →
 `scripts/mobie_join.py` → `scripts/dgeg_lists.py` → `scripts/dgeg_crossref.py` →
