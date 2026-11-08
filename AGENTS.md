@@ -66,7 +66,8 @@ NAP: `NAP_STATUS_SOURCE=archive AMPERE_ARCHIVE_URL=https://ohm-age.ocarroeletric
 `v1/PT/status.json.gz` to `data/archiveStatus_latest.json.gz`, and
 `nap_etl.py` uses it when `data/evActualStatus_latest.xml` is absent
 (`scripts/archive_status.py` converts it to the same CSVs). A missing, stale
-(> `ARCHIVE_MAX_AGE_MIN`, 180) or truncated file falls back to the NAP. Default stays `nap`, and the static feed still comes from the NAP (the archive does
+(> `ARCHIVE_MAX_AGE_MIN`, 180) or truncated file falls back to the NAP. Default
+stays `nap`; the static feed still comes from the NAP (the archive does
 not keep `brandsAccepted`, NUTS or contacts).
 
 ## Pipeline order
