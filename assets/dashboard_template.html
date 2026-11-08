@@ -3,9 +3,40 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark light">
+<meta name="theme-color" content="#0f172a" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#f8fafc" media="(prefers-color-scheme: light)">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<meta name="robots" content="index,follow,max-image-preview:large">
+<!-- GitHub Pages não deixa definir cabeçalhos HTTP: a CSP vai em <meta>. A página não pede nada à rede (tudo embutido), por isso default-src 'none'. frame-ancestors/report-uri não funcionam em <meta>. -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src 'self' data:; base-uri 'none'; form-action 'none'">
+<script>
+// Aparência (tema + visão) aplicada antes do primeiro desenho, sem flash.
+// Valores validados contra uma lista fechada: o que está no localStorage pode
+// ter sido escrito por outro script/extensão ou por uma versão antiga.
+window.NAPAPP=(function(){
+  var OPT={theme:['auto','light','dark'],vision:['default','cb','hc']};
+  var KEY={theme:'nap-theme',vision:'nap-vision'};
+  var mq=null; try{ mq=matchMedia('(prefers-color-scheme: light)'); }catch(e){}
+  function get(k){ var v=null; try{ v=localStorage.getItem(KEY[k]); }catch(e){} return OPT[k].indexOf(v)>-1?v:OPT[k][0]; }
+  function apply(){
+    var d=document.documentElement, th=get('theme');
+    d.setAttribute('data-theme', th==='auto' ? (mq&&mq.matches?'light':'dark') : th);
+    d.setAttribute('data-vision', get('vision'));
+    d.setAttribute('data-theme-pref', th);
+    try{ window.dispatchEvent(new Event('napappearance')); }catch(e){}
+  }
+  function set(k,v){ if(OPT[k].indexOf(v)<0) return; try{ localStorage.setItem(KEY[k],v); }catch(e){} apply(); }
+  if(mq){ try{ mq.addEventListener('change',function(){ if(get('theme')==='auto') apply(); }); }catch(e){} }
+  apply();
+  return {get:get,set:set,OPT:OPT};
+})();
+</script>
 <title>Postos de carregamento em Portugal: mapa, estado e tarifas OPC — EV NAP Portugal</title>
 <meta name="description" content="Todos os postos de carregamento públicos de Portugal (NAP/MOBI.E) num mapa: estado em tempo real, potências, operadores e tarifas OPC, atualizados todas as semanas.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230f172a'/%3E%3Cpath d='M37 6 15 37h14l-4 21 22-31H33z' fill='%2338bdf8'/%3E%3C/svg%3E">
+<link rel="icon" href="favicon.ico" sizes="32x32">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="canonical" href="https://nap.ocarroeletrico.com/">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="EV NAP Portugal">
@@ -16,17 +47,61 @@
 <meta property="og:image" content="https://nap.ocarroeletrico.com/dashboard.png">
 <meta property="og:image:width" content="1440">
 <meta property="og:image:height" content="900">
+<meta property="og:locale:alternate" content="en_GB">
+<meta property="og:image:alt" content="Mapa de Portugal com os postos de carregamento públicos, KPIs e gráficos por estado, região e operador.">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Postos de carregamento em Portugal: mapa, estado e tarifas OPC">
+<meta name="twitter:description" content="Todos os postos de carregamento públicos de Portugal (NAP/MOBI.E): estado, potências, operadores e tarifas OPC, atualizados todas as semanas.">
+<meta name="twitter:image" content="https://nap.ocarroeletrico.com/dashboard.png">
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "Dataset", "name": "Rede de carregamento de veículos elétricos em Portugal (NAP / MOBI.E)", "alternateName": "EV charging network in Portugal (NAP / MOBI.E)", "description": "Todos os postos de carregamento públicos de Portugal publicados no Ponto de Acesso Nacional (NAP, DATEX II), com estado, potências, tomadas, operadores (OPC) e tarifas OPC da MOBI.E, atualizados todas as semanas.", "url": "https://nap.ocarroeletrico.com/", "inLanguage": ["pt-PT", "en"], "spatialCoverage": {"@type": "Place", "name": "Portugal"}, "isAccessibleForFree": true, "creator": {"@type": "Organization", "name": "O Carro Elétrico", "url": "https://ocarroeletrico.com"}, "isBasedOn": "https://nap-portugal.imt-ip.pt/", "distribution": [{"@type": "DataDownload", "encodingFormat": "application/json", "contentUrl": "https://nap.ocarroeletrico.com/ohmigo/chargers.json"}]}</script>
 <style>
-  :root { --bg:#0f172a; --card:#1e293b; --ink:#e2e8f0; --mut:#94a3b8; --acc:#38bdf8;
-          --ok:#34d399; --warn:#fbbf24; --err:#f87171; }
+  /* Paletas: tema (dark|light) x visão (default|cb|hc). cb = daltonismo (Okabe-Ito
+     + formas diferentes por estado no mapa); hc = alto contraste. */
+  :root { color-scheme:dark; --bg:#0f172a; --card:var(--card); --bg2:var(--bg2); --ink:#e2e8f0; --mut:#94a3b8; --acc:#38bdf8;
+          --ok:#34d399; --warn:#fbbf24; --err:#f87171; --line:var(--line); --line2:var(--line2); --hov:#2b3a52; --selbg:#164e63;
+          --on-acc:var(--bg2); --shadow:rgba(0,0,0,.4);
+          --s-charging:#34d399; --s-available:#38bdf8; --s-outOfOrder:#fbbf24; --s-removed:#a78bfa; --s-unknown:#94a3b8;
+          --s-inoperative:#fb923c; --s-blocked:#f472b6; --s-planned:#cbd5e1; --s-other:#f87171; }
+  html[data-theme="light"] { color-scheme:light; --bg:#f8fafc; --card:#ffffff; --bg2:#eef2f7; --ink:#0f172a; --mut:#475569; --acc:#0369a1;
+          --ok:#047857; --warn:#b45309; --err:#b91c1c; --line:#cbd5e1; --line2:#e2e8f0; --hov:#e8eef6; --selbg:#d7ecf7;
+          --on-acc:#ffffff; --shadow:rgba(15,23,42,.18);
+          --s-charging:#047857; --s-available:#0369a1; --s-outOfOrder:#b45309; --s-removed:#7c3aed; --s-unknown:#64748b;
+          --s-inoperative:#c2410c; --s-blocked:#be185d; --s-planned:#475569; --s-other:#b91c1c; }
+  html[data-vision="cb"], html[data-vision="hc"] { --s-charging:#56b4e9; --s-available:#f0e442; --s-outOfOrder:#d55e00; --s-removed:#cc79a7;
+          --s-unknown:#9ca3af; --s-inoperative:#e69f00; --s-blocked:#2dd4a7; --s-planned:#e5e7eb; --s-other:#ff7a45;
+          --ok:#56b4e9; --warn:#e69f00; --err:#ff7a45; }
+  html[data-theme="light"][data-vision="cb"], html[data-theme="light"][data-vision="hc"] { --s-charging:#0072b2; --s-available:#8a7d00; --s-outOfOrder:#d55e00;
+          --s-removed:#a64f86; --s-unknown:#4b5563; --s-inoperative:#a86a00; --s-blocked:#00755a; --s-planned:#374151; --s-other:#b33f00;
+          --ok:#0072b2; --warn:#a86a00; --err:#b33f00; }
+  html[data-vision="hc"][data-theme="dark"] { --bg:#000; --card:#000; --bg2:#000; --ink:#fff; --mut:#e8e8e8; --acc:#ffe14d; --line:#fff; --line2:#9a9a9a;
+          --hov:#262626; --selbg:#3d3400; --on-acc:#000; }
+  html[data-vision="hc"][data-theme="light"] { --bg:#fff; --card:#fff; --bg2:#fff; --ink:#000; --mut:#1a1a1a; --acc:#0033cc; --line:#000; --line2:#595959;
+          --hov:#e6e6e6; --selbg:#cfdcff; --on-acc:#fff; }
+  html[data-vision="hc"] .card, html[data-vision="hc"] .panel, html[data-vision="hc"] .mapbox, html[data-vision="hc"] .mpanel { border:1px solid var(--line); }
+  html[data-vision="hc"] a { text-decoration:underline; }
   * { box-sizing:border-box; margin:0; padding:0; }
   body { background:var(--bg); color:var(--ink); font:14px/1.45 -apple-system,Segoe UI,Roboto,sans-serif; padding:24px; }
-  h1 { font-size:22px; margin-bottom:2px; padding-right:120px; }
-  .langswitch{position:absolute;top:20px;right:24px;display:flex;gap:6px}
-  .langswitch button{background:#1e293b;color:var(--mut);border:1px solid #334155;border-radius:6px;padding:4px 12px;cursor:pointer;font-size:12px;font-weight:700}
-  .langswitch button.active{background:var(--acc);color:#0b1220;border-color:var(--acc)}
+  h1 { font-size:22px; margin-bottom:2px; }
+  .top{display:flex;flex-wrap:wrap;align-items:flex-start;justify-content:space-between;gap:10px 16px}
+  .tools{display:flex;gap:8px;align-items:flex-start;position:relative}
+  .langswitch{display:flex;gap:6px}
+  .tools button{background:var(--card);color:var(--mut);border:1px solid var(--line);border-radius:6px;padding:6px 12px;cursor:pointer;font:inherit;font-size:12px;font-weight:700;min-height:32px}
+  .tools button[aria-pressed="true"], .tools button.on{background:var(--acc);color:var(--on-acc);border-color:var(--acc)}
+  .apppanel{position:absolute;right:0;top:calc(100% + 6px);z-index:30;width:min(300px,calc(100vw - 28px));background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px 14px;box-shadow:0 8px 24px var(--shadow)}
+  .apppanel[hidden]{display:none}
+  .apppanel fieldset{border:0;margin:0 0 10px;padding:0}
+  .apppanel legend{font-size:12px;font-weight:700;color:var(--mut);margin-bottom:4px;padding:0}
+  .apppanel label{display:flex;gap:8px;align-items:center;padding:4px 0;font-size:13px;cursor:pointer}
+  .apppanel .hint{font-size:11px;color:var(--mut);margin:0}
+  .skip{position:absolute;left:12px;top:-60px;background:var(--acc);color:var(--on-acc)!important;padding:8px 14px;border-radius:6px;z-index:100;font-weight:700}
+  .skip:focus{top:8px}
+  :focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+  .mbtn{font:inherit;text-align:left}
+  th[data-k]:focus-visible, tbody tr:focus-visible{outline-offset:-2px}
+  th[aria-sort="ascending"]::after{content:" ▲";font-size:9px} th[aria-sort="descending"]::after{content:" ▼";font-size:9px}
+  noscript p{background:var(--card);border:1px solid var(--warn);border-radius:8px;padding:12px;margin:16px 0}
+  .panel{overflow-x:auto}
+  @media (prefers-reduced-motion:reduce){ *{animation:none!important;transition:none!important;scroll-behavior:auto!important} }
   .sub { color:var(--mut); margin-bottom:20px; }
   a,a:visited{color:var(--acc)}
   h2 { font-size:15px; margin:28px 0 12px; color:var(--acc); text-transform:uppercase; letter-spacing:.06em; }
@@ -35,66 +110,102 @@
   .card .t { color:var(--mut); font-size:12px; }
   .card .v { font-size:26px; font-weight:700; margin:4px 0 2px; }
   .card .s { color:var(--mut); font-size:11px; }
-  .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(340px,1fr)); gap:14px; }
+  .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(min(340px,100%),1fr)); gap:14px; }
   .panel { background:var(--card); border-radius:10px; padding:16px; }
   .panel h3 { font-size:13px; color:var(--mut); font-weight:600; margin-bottom:10px; }
   .bar { display:flex; align-items:center; gap:8px; margin:5px 0; }
   .bar .lab { width:150px; flex:none; font-size:12px; text-align:right; color:var(--ink); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
-  .bar .track { flex:1; height:14px; background:#0b1220; border-radius:7px; overflow:hidden; }
+  .bar .track { flex:1; height:14px; background:var(--bg2); border-radius:7px; overflow:hidden; }
   .bar .fill { height:100%; background:var(--acc); border-radius:7px; min-width:2px; }
   .bar .val { width:56px; flex:none; font-size:11px; color:var(--mut); text-align:right; }
   table { width:100%; border-collapse:collapse; font-size:12px; }
-  th,td { padding:5px 8px; text-align:right; border-bottom:1px solid #27334a; white-space:nowrap; }
+  th,td { padding:5px 8px; text-align:right; border-bottom:1px solid var(--line2); white-space:nowrap; }
   th { color:var(--mut); font-weight:600; cursor:pointer; user-select:none; position:sticky; top:0; background:var(--card); }
   td.l, th.l { text-align:left; }
-  tbody tr { cursor:pointer; } tbody tr:hover { background:#1e293b; }
-  tbody tr.sel { background:#164e63; outline:1px solid var(--acc); }
-  input[type=text], select { width:100%; padding:8px 10px; border-radius:8px; border:1px solid #334155; background:#0b1220; color:var(--ink); margin-bottom:10px; font-size:13px; }
+  tbody tr { cursor:pointer; } tbody tr:hover { background:var(--hov); }
+  tbody tr.sel { background:var(--selbg); outline:1px solid var(--acc); }
+  input[type=text], select { width:100%; padding:8px 10px; border-radius:8px; border:1px solid var(--line); background:var(--bg2); color:var(--ink); margin-bottom:10px; font-size:13px; }
   select { cursor:pointer; }
   .filters { display:grid; grid-template-columns:2fr repeat(4,.9fr) 1.8fr; gap:8px; margin-bottom:6px; }
   .multi{position:relative;margin-bottom:10px}
-  .mbtn{width:100%;padding:8px 10px;border-radius:8px;border:1px solid #334155;background:#0b1220;color:var(--ink);cursor:pointer;font-size:13px;display:flex;justify-content:space-between;align-items:center;gap:6px}
+  .mbtn{width:100%;padding:8px 10px;border-radius:8px;border:1px solid var(--line);background:var(--bg2);color:var(--ink);cursor:pointer;font-size:13px;display:flex;justify-content:space-between;align-items:center;gap:6px}
   .mbtn .mlab{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-  .mmenu{display:none;position:absolute;top:100%;left:0;min-width:100%;max-width:420px;z-index:20;background:#1e293b;border:1px solid #334155;border-radius:8px;margin-top:4px;padding:6px;max-height:260px;overflow:auto;box-shadow:0 8px 24px rgba(0,0,0,.4)}
+  .mmenu{display:none;position:absolute;top:100%;left:0;min-width:100%;max-width:min(420px,calc(100vw - 28px));z-index:20;background:var(--card);border:1px solid var(--line);border-radius:8px;margin-top:4px;padding:6px;max-height:260px;overflow:auto;box-shadow:0 8px 24px var(--shadow)}
   .mmenu.open{display:block}
   .mmenu label{display:block;padding:4px 6px;border-radius:6px;font-size:12px;cursor:pointer;color:var(--ink);white-space:nowrap}
-  .mmenu label:hover{background:#334155}
+  .mmenu label:hover{background:var(--hov)}
   .mmenu input{margin-right:6px}
   .pager { display:flex; align-items:center; justify-content:space-between; padding:8px 2px; font-size:12px; color:var(--mut); }
-  .pager button { background:#1e293b; color:var(--ink); border:1px solid #334155; border-radius:6px; padding:4px 12px; cursor:pointer; font-size:12px; }
+  .pager button { min-height:32px; background:var(--card); color:var(--ink); border:1px solid var(--line); border-radius:6px; padding:4px 12px; cursor:pointer; font-size:12px; }
   .pager button:disabled { opacity:.35; cursor:default; }
   .ok{color:var(--ok)} .warn{color:var(--warn)} .err{color:var(--err)} .mut{color:var(--mut)}
   .wrap { max-height:560px; overflow:auto; border-radius:8px; }
   .tag { display:inline-block; padding:1px 8px; border-radius:10px; font-size:11px; margin-right:4px; }
-  .tag.status-charging{background:#065f46;color:#a7f3d0} .tag.status-available{background:#155e75;color:#a5f3fc}
-  .tag.status-removed{background:#581c87;color:#e9d5ff} .tag.status-outOfOrder{background:#7f1d1d;color:#fecaca}
-  .tag.status-unknown{background:#52525b;color:#e4e4e7} .tag.status-inoperative{background:#78350f;color:#fde68a}
-  .tag.status-blocked{background:#701a75;color:#f0abfc} .tag.status-planned{background:#374151;color:#d1d5db}
+  .tag{border:1px solid var(--tc,var(--line)); background:color-mix(in srgb,var(--tc,var(--line)) 20%,var(--card)); color:var(--ink)}
+  .tag.status-charging{--tc:var(--s-charging)} .tag.status-available{--tc:var(--s-available)} .tag.status-removed{--tc:var(--s-removed)}
+  .tag.status-outOfOrder{--tc:var(--s-outOfOrder)} .tag.status-unknown{--tc:var(--s-unknown)} .tag.status-inoperative{--tc:var(--s-inoperative)}
+  .tag.status-blocked{--tc:var(--s-blocked)} .tag.status-planned{--tc:var(--s-planned)}
   ul { padding-left:20px; } li { margin:6px 0; }
-  .facts li b{color:var(--acc)} .errs li{list-style:none;padding:10px 0;border-bottom:1px solid #27334a}
+  .facts li b{color:var(--acc)} .errs li{list-style:none;padding:10px 0;border-bottom:1px solid var(--line2)}
   .errs li .head{font-weight:600;color:var(--err)} .errs li .meta{color:var(--mut);font-size:12px;margin-top:2px}
-  .biglink{margin-top:14px} .biglink a{display:inline-block;background:var(--acc);color:#0b1220;font-weight:700;padding:9px 16px;border-radius:6px;text-decoration:none}
-  code{background:#0b1220;padding:1px 5px;border-radius:4px;font-size:12px}
+  .biglink{margin-top:14px} .biglink a{display:inline-block;background:var(--acc);color:var(--on-acc);font-weight:700;padding:9px 16px;border-radius:6px;text-decoration:none}
+  code{background:var(--bg2);padding:1px 5px;border-radius:4px;font-size:12px}
   .mapwrap{display:grid;grid-template-columns:3fr 1fr;gap:14px;align-items:start}
   .mapbox{background:var(--card);border-radius:10px;padding:16px;position:relative}
-  .mapbox svg{width:100%;height:auto;display:block;background:#0b1220;border-radius:8px;cursor:grab}
+  .mapbox svg{width:100%;height:auto;display:block;touch-action:none;background:var(--bg2);border-radius:8px;cursor:grab}
   .mapbox svg.drag{cursor:grabbing}
   .legend{display:flex;flex-wrap:wrap;gap:10px;font-size:11px;color:var(--mut);margin-top:8px}
   .legend span{display:inline-flex;align-items:center;gap:5px}
   .dot{width:9px;height:9px;border-radius:50%;display:inline-block}
+  html:not([data-vision="default"]) .dot[data-st]{width:12px;height:12px;border-radius:0}
+  html:not([data-vision="default"]) .dot[data-st="charging"]{border-radius:50%}
+  html:not([data-vision="default"]) .dot[data-st="available"]{clip-path:polygon(50% 0,100% 50%,50% 100%,0 50%);transform:scale(.85)}
+  html:not([data-vision="default"]) .dot[data-st="outOfOrder"]{clip-path:polygon(50% 0,100% 100%,0 100%)}
+  html:not([data-vision="default"]) .dot[data-st="removed"]{clip-path:none;border-radius:2px;transform:scale(.8)}
+  html:not([data-vision="default"]) .dot[data-st="unknown"]{clip-path:polygon(0 0,100% 0,50% 100%)}
+  html:not([data-vision="default"]) .dot[data-st="other"]{clip-path:polygon(30% 0,70% 0,100% 30%,100% 70%,70% 100%,30% 100%,0 70%,0 30%)}
   .mpanel{background:var(--card);border-radius:10px;padding:16px}
   .mpanel h3{font-size:13px;color:var(--mut);font-weight:600;margin-bottom:10px}
   .mpanel table{font-size:12px}
   .mpanel td{white-space:normal}
   .mpanel .k{color:var(--mut)}
   .mapctrl{position:absolute;top:22px;right:22px;display:flex;flex-direction:column;gap:6px;z-index:5}
-  .mapctrl button{background:#1e293b;color:var(--ink);border:1px solid #334155;border-radius:6px;width:30px;height:30px;cursor:pointer;font-size:15px}
-  .mapctrl button:hover{background:#334155}
+  .mapctrl button{width:34px!important;height:34px!important;background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:6px;width:30px;height:30px;cursor:pointer;font-size:15px}
+  .mapctrl button:hover{background:var(--hov)}
+  @media (max-width:900px){
+    .mapwrap{grid-template-columns:1fr}
+    .filters{grid-template-columns:repeat(2,minmax(0,1fr))} .filters>input{grid-column:1/-1}
+  }
+  @media (max-width:560px){
+    body{padding:14px} h1{font-size:19px}
+    .bar .lab{width:96px} .bar .val{width:48px}
+    .cards{grid-template-columns:repeat(2,minmax(0,1fr))} .card .v{font-size:21px}
+    .mapctrl{top:18px;right:18px}
+  }
 </style>
 </head>
 <body>
-  <div class="langswitch"><button id="langPt">PT</button><button id="langEn">EN</button></div>
+  <a class="skip" href="#main" data-i18n="skip">Saltar para o conteúdo</a>
+  <noscript><p>O dashboard precisa de JavaScript para mostrar o mapa e as tabelas. / This dashboard needs JavaScript to show the map and tables.</p></noscript>
+  <header class="top">
   <h1 data-i18n="h1">Rede de carregamento de veículos elétricos — Portugal</h1>
+  <div class="tools">
+    <div class="langswitch" role="group" aria-label="Idioma / Language"><button id="langPt" lang="pt" aria-pressed="false">PT</button><button id="langEn" lang="en" aria-pressed="false">EN</button></div>
+    <button id="appBtn" type="button" aria-expanded="false" aria-controls="appPanel" data-i18n="appBtn">Aspeto</button>
+    <div class="apppanel" id="appPanel" role="group" aria-labelledby="appBtn" hidden>
+      <fieldset><legend data-i18n="thTheme">Tema</legend>
+        <label><input type="radio" name="napTheme" value="auto"> <span data-i18n="thAuto">Automático (sistema)</span></label>
+        <label><input type="radio" name="napTheme" value="light"> <span data-i18n="thLight">Claro</span></label>
+        <label><input type="radio" name="napTheme" value="dark"> <span data-i18n="thDark">Escuro</span></label></fieldset>
+      <fieldset><legend data-i18n="thVision">Visão</legend>
+        <label><input type="radio" name="napVision" value="default"> <span data-i18n="vsDefault">Padrão</span></label>
+        <label><input type="radio" name="napVision" value="cb"> <span data-i18n="vsCb">Daltonismo (cores seguras + formas)</span></label>
+        <label><input type="radio" name="napVision" value="hc"> <span data-i18n="vsHc">Alto contraste</span></label></fieldset>
+      <p class="hint" data-i18n="appHint">Guardado só neste navegador.</p>
+    </div>
+  </div>
+  </header>
+  <main id="main">
   <div class="sub"><span data-i18n="sub1">NAP EADME (AFIR)</span> · snapshot <span id="snap"></span> · <a href="https://nap.ocarroeletrico.com/">nap.ocarroeletrico.com</a> · <a href="https://github.com/CarregaErvilhas/nap-dashboard" data-i18n="codeLink">código no GitHub</a></div>
   <p class="sub" data-i18n="intro">Todos os postos de carregamento públicos de Portugal, a partir do Ponto de Acesso Nacional (NAP): onde estão, se estão livres, que potência e tomadas têm, quem os opera e quanto cobra o operador (tarifa OPC da MOBI.E).</p>
   <div class="sub"><span data-i18n="sisterLbl">Também d'O Carro Elétrico:</span> <a href="https://ohmigo.ocarroeletrico.com/" data-i18n="sisterOhmigo">ohmigo, o custo de carregar em cada posto, no ChatGPT e no Claude</a> · <a href="https://ceme.ocarroeletrico.com/" data-i18n="sisterCeme">comparador de tarifários CEME</a> · <a href="https://ocarroeletrico.com/">ocarroeletrico.com</a></div>
@@ -130,7 +241,8 @@
   <h2 data-i18n="secMap">Mapa de locais</h2>
   <div class="mapwrap">
     <div class="mapbox">
-      <svg id="map" viewBox="0 0 720 920" preserveAspectRatio="xMidYMid meet">
+      <svg id="map" viewBox="0 0 720 920" preserveAspectRatio="xMidYMid meet" role="img" aria-labelledby="mapDesc">
+        <title id="mapDesc">Mapa de Portugal com os locais de carregamento. A tabela abaixo tem os mesmos dados e navega-se pelo teclado.</title>
         <g id="mapWorld"></g>
       </svg>
       <div class="mapctrl">
@@ -139,18 +251,18 @@
         <button id="mReset" data-i18n-title="mReset" title="repor vista">⌂</button>
       </div>
       <div class="legend">
-        <span><i class="dot" style="background:var(--ok)"></i>&nbsp;<span data-i18n="lgCharging">carregando</span></span>
-        <span><i class="dot" style="background:var(--acc)"></i>&nbsp;<span data-i18n="lgAvailable">disponível</span></span>
-        <span><i class="dot" style="background:var(--warn)"></i>&nbsp;<span data-i18n="lgOutOfOrder">fora de serviço</span></span>
-        <span><i class="dot" style="background:#a78bfa"></i>&nbsp;<span data-i18n="lgRemoved">removido</span></span>
-        <span><i class="dot" style="background:var(--mut)"></i>&nbsp;<span data-i18n="lgUnknown">desconhecido</span></span>
-        <span><i class="dot" style="background:var(--err)"></i>&nbsp;<span data-i18n="lgOther">outro</span></span>
-        <span><i class="dot" style="border:1px dashed #fff;background:transparent"></i>&nbsp;<span data-i18n="lgAdhoc">pagamento ad-hoc (OSM)</span></span>
+        <span><i class="dot" data-st="charging" style="background:var(--s-charging)"></i>&nbsp;<span data-i18n="lgCharging">carregando</span></span>
+        <span><i class="dot" data-st="available" style="background:var(--s-available)"></i>&nbsp;<span data-i18n="lgAvailable">disponível</span></span>
+        <span><i class="dot" data-st="outOfOrder" style="background:var(--s-outOfOrder)"></i>&nbsp;<span data-i18n="lgOutOfOrder">fora de serviço</span></span>
+        <span><i class="dot" data-st="removed" style="background:var(--s-removed)"></i>&nbsp;<span data-i18n="lgRemoved">removido</span></span>
+        <span><i class="dot" data-st="unknown" style="background:var(--s-unknown)"></i>&nbsp;<span data-i18n="lgUnknown">desconhecido</span></span>
+        <span><i class="dot" data-st="other" style="background:var(--s-other)"></i>&nbsp;<span data-i18n="lgOther">outro</span></span>
+        <span><i class="dot" style="border:1px dashed var(--ink);background:transparent"></i>&nbsp;<span data-i18n="lgAdhoc">pagamento ad-hoc (OSM)</span></span>
       </div>
       <div class="mut" style="font-size:11px;margin-top:6px" data-i18n="mapHint">Roda para ampliar, arrasta para navegar, clica num ponto para ver detalhe. Filtros da tabela aplicam-se ao mapa.</div>
       <div class="mut" style="font-size:11px;margin-top:4px">Mapa: © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors (<a href="https://opendatacommons.org/licenses/odbl/">ODbL</a>) · contorno © DGT (CAOP, <a href="https://www.dgterritorio.gov.pt/dados-abertos">CC-BY 4.0</a>) · mapas comunidade de Alexandre Moleiro: <a href="https://umap.openstreetmap.fr/pt-pt/map/postos-de-carregamento-v21_690884">v2.1</a> + <a href="https://umap.openstreetmap.fr/en/map/caca-aos-postos-de-carregamento_1386222">Caça aos Postos</a>.</div>
     </div>
-    <div class="mpanel" id="mDetail">
+    <div class="mpanel" id="mDetail" aria-live="polite">
       <h3 data-i18n="detailTitle">Detalhe do local</h3>
       <div id="mDetailBody" class="mut" data-i18n="clickPoint">Clica num ponto no mapa.</div>
     </div>
@@ -158,7 +270,7 @@
 
   <h2 data-i18n="secTable">Tabela de pontos (pesquisável)</h2>
   <div class="filters">
-    <input type="text" id="q" data-i18n-ph="searchPh" placeholder="Filtrar por id, cidade, operador, OPC, status, classe...">
+    <input type="text" id="q" aria-label="Filtrar" data-i18n-aria="searchPh" data-i18n-ph="searchPh" placeholder="Filtrar por id, cidade, operador, OPC, status, classe...">
     <div id="fConn" class="multi"></div>
     <div id="fStatus" class="multi"></div>
     <div id="fRegion" class="multi"></div>
@@ -166,8 +278,8 @@
     <div id="fOp" class="multi"></div>
     <div id="fPay" class="multi"></div>
   </div>
-  <div class="wrap">
-    <div class="pager"><span id="tblmeta"></span><span><button id="pgPrev" data-i18n="prev">‹ anterior</button> <span id="pgInfo"></span> <button id="pgNext" data-i18n="next">seguinte ›</button></span></div>
+  <div class="wrap" role="region" tabindex="0" data-i18n-aria="tblRegion" aria-label="Tabela de pontos">
+    <div class="pager"><span id="tblmeta" aria-live="polite"></span><span><button id="pgPrev" data-i18n="prev">‹ anterior</button> <span id="pgInfo"></span> <button id="pgNext" data-i18n="next">seguinte ›</button></span></div>
     <table id="tbl"><thead><tr id="tblhead"></tr></thead><tbody id="tbody"></tbody></table>
   </div>
 
@@ -185,6 +297,7 @@
 
   <h2 id="hubsH" data-i18n="secHubs">Hubs por potência total (&gt;300 kW)</h2>
   <div class="panel" id="hubs"></div>
+  </main>
 
 <script>
 const D = /*__DATA__*/;
@@ -233,7 +346,11 @@ pt: {
   dAdhocNote:'OSM indica Multibanco/contactless ou acesso livre — NAP só app/RFID ⚠',
   dDoubt:'Dúvida comunidade', adhocSuffix:'pagamento ad-hoc (OSM)',
   mIn:'aproximar', mOut:'afastar', mReset:'repor vista',
-  footUse:'Uso não-comercial livre', footCom:'uso comercial requer licença'
+  footUse:'Uso não-comercial livre', footCom:'uso comercial requer licença',
+  skip:'Saltar para o conteúdo', appBtn:'Aspeto', thTheme:'Tema', thAuto:'Automático (sistema)', thLight:'Claro', thDark:'Escuro',
+  thVision:'Visão', vsDefault:'Padrão', vsCb:'Daltonismo (cores seguras + formas)', vsHc:'Alto contraste',
+  appHint:'Guardado só neste navegador.', privLink:'Privacidade', tblRegion:'Tabela de pontos',
+  mapAlt:'Mapa de Portugal com os locais de carregamento. A tabela abaixo tem os mesmos dados e navega-se pelo teclado.'
 },
 en: {
   pageTitle:'EV chargers in Portugal: map, status and CPO fees — EV NAP Portugal',
@@ -272,7 +389,11 @@ en: {
   dAdhocNote:'OSM reports card/contactless or open access — NAP app/RFID only ⚠',
   dDoubt:'Community doubt', adhocSuffix:'ad-hoc payment (OSM)',
   mIn:'zoom in', mOut:'zoom out', mReset:'reset view',
-  footUse:'Free non-commercial use', footCom:'commercial use requires a licence'
+  footUse:'Free non-commercial use', footCom:'commercial use requires a licence',
+  skip:'Skip to content', appBtn:'Appearance', thTheme:'Theme', thAuto:'Automatic (system)', thLight:'Light', thDark:'Dark',
+  thVision:'Vision', vsDefault:'Default', vsCb:'Colour-blind (safe colours + shapes)', vsHc:'High contrast',
+  appHint:'Saved in this browser only.', privLink:'Privacy', tblRegion:'Points table',
+  mapAlt:'Map of Portugal with the charging sites. The table below has the same data and works with the keyboard.'
 }};
 const STATUS_NAME = {
   pt:{charging:'a carregar',available:'disponível',removed:'removido',outOfOrder:'fora de serviço',unknown:'desconhecido',inoperative:'inoperativo',blocked:'bloqueado',planned:'planeado'},
@@ -286,7 +407,7 @@ function detectLang(){
   try{
     const q = new URLSearchParams(location.search).get('lang');
     if(q==='pt'||q==='en'){ try{localStorage.setItem('nap-lang',q);}catch(e){} return q; }
-    const saved = localStorage.getItem('nap-lang');
+    const saved = localStorage.getItem('nap-lang');   // valor validado: só pt|en
     if(saved==='pt'||saved==='en') return saved;
   }catch(e){}
   let nav = '';
@@ -373,9 +494,18 @@ function renderBars(){
 const REGIONS = {mainland: {x:230, y:10, w:480, h:880, scale:null, ox:0, oy:0, cos:0},
                  acores:   {x:10, y:10, w:200, h:300, scale:null, ox:0, oy:0, cos:0},
                  madeira:  {x:10, y:320, w:200, h:180, scale:null, ox:0, oy:0, cos:0}};
-const STATUS_COLOR = {charging:'var(--ok)', available:'var(--acc)', outOfOrder:'var(--warn)',
-                      removed:'#a78bfa', unknown:'var(--mut)', inoperative:'#fb923c',
-                      blocked:'#f472b6', planned:'#cbd5e1'};
+const STATUS_COLOR = {}; ['charging','available','outOfOrder','removed','unknown','inoperative','blocked','planned']
+  .forEach(s=>{ STATUS_COLOR[s]='var(--s-'+s+')'; });
+// Em daltonismo/alto contraste cada estado ganha também uma forma (n lados, rotação).
+const STATUS_SHAPE = {charging:[0,0], available:[4,45], outOfOrder:[3,-90], removed:[4,0], unknown:[3,90], inoperative:[5,-90], blocked:[6,0], planned:[8,22.5], other:[8,0]};
+const shapesOn = () => document.documentElement.getAttribute('data-vision')!=='default';
+function mark(status,px,py,r,fill,attrs){
+  const sh = shapesOn() ? (STATUS_SHAPE[status]||STATUS_SHAPE.other) : null;
+  if(!sh || !sh[0]) return `<circle cx="${px.toFixed(1)}" cy="${py.toFixed(1)}" r="${r}" fill="${fill}"${attrs}`;
+  const R=parseFloat(r)*1.25, pts=[];
+  for(let i=0;i<sh[0];i++){ const a=(sh[1]+i*360/sh[0])*Math.PI/180; pts.push((px+R*Math.cos(a)).toFixed(1)+','+(py+R*Math.sin(a)).toFixed(1)); }
+  return `<polygon points="${pts.join(' ')}" fill="${fill}"${attrs}`;
+}
 function prepMap(){
   // project lon/lat -> svg coords for each region
   for(const [rk,r] of Object.entries(REGIONS)){
@@ -402,7 +532,7 @@ function drawOutline(){
   for(const rk of Object.keys(REGIONS)){
     for(const ring of (D.outline[rk]||[])){
       const pts=ring.map(([lon,lat])=>proj(rk,lon,lat).map(v=>v.toFixed(1)).join(',')).join(' ');
-      s+=`<polygon points="${pts}" fill="none" stroke="#334155" stroke-width="0.6"/>`;
+      s+=`<polygon points="${pts}" fill="none" stroke="var(--line)" stroke-width="0.6"/>`;
     }
   }
   return s;
@@ -413,12 +543,13 @@ function drawDistricts(){
   for(const rk of Object.keys(REGIONS)){
     for(const [name,[lon,lat]] of Object.entries(D.districts[rk]||{})){
       const [px,py]=proj(rk,lon,lat);
-      s+=`<text x="${px.toFixed(1)}" y="${py.toFixed(1)}" font-size="${fs}" fill="#64748b"
+      s+=`<text x="${px.toFixed(1)}" y="${py.toFixed(1)}" font-size="${fs}" fill="var(--mut)"
         text-anchor="middle" dominant-baseline="middle" pointer-events="none">${esc(name)}</text>`;
     }
   }
   return s;
 }
+let REDUCED=false; try{ REDUCED=matchMedia('(prefers-reduced-motion: reduce)').matches; }catch(e){}
 let mapK=1, mapTx=0, mapTy=0, mapDrag=null, mapSel=null;
 function renderMap(){
   const world=document.getElementById('mapWorld');
@@ -440,15 +571,15 @@ function renderMap(){
     .map(x=>{
       const rk = x.region==='azores'?'acores':x.region==='madeira'?'madeira':'mainland';
       const [px,py]=proj(rk, x.lon, x.lat);
-      const col=STATUS_COLOR[x.status]||'var(--err)';
+      const col=STATUS_COLOR[x.status]||'var(--s-other)';
       const sw=(0.7/mapK).toFixed(2);
-      const ring = x.ad_hoc?` stroke="#fff" stroke-width="${sw}" stroke-dasharray="${(1.5/mapK).toFixed(2)}"`:'';
+      const ring = x.ad_hoc?` stroke="var(--ink)" stroke-width="${sw}" stroke-dasharray="${(1.5/mapK).toFixed(2)}"`:'';
       const sel = x.ext===mapSel;
       const r = sel ? (4/mapK).toFixed(2) : (2.1/mapK).toFixed(2);
-      const extra = sel ? ` stroke="#fff" stroke-width="${(1.4/mapK).toFixed(2)}"` : '';
-      return `<circle cx="${px.toFixed(1)}" cy="${py.toFixed(1)}" r="${r}" fill="${col}"${ring}${extra}
-        data-ext="${esc(x.ext)}" data-rk="${rk}" class="mpt">
-        <title>${esc(x.ext)} — ${esc(x.city)} — ${esc(dispStatus(x.status))}${x.ad_hoc?' — '+esc(T('adhocSuffix')):''}</title></circle>`;
+      const extra = sel ? ` stroke="var(--ink)" stroke-width="${(1.4/mapK).toFixed(2)}"` : '';
+      const tag = shapesOn() && STATUS_SHAPE[x.status] && STATUS_SHAPE[x.status][0] ? 'polygon' : 'circle';
+      return `${mark(x.status,px,py,r,col,ring+extra+` data-ext="${esc(x.ext)}" data-rk="${rk}" class="mpt"`)}>
+        <title>${esc(x.ext)} — ${esc(x.city)} — ${esc(dispStatus(x.status))}${x.ad_hoc?' — '+esc(T('adhocSuffix')):''}</title></${tag}>`;
     }).join('');
   // persistent pulsing marker for the selected site (visible even when filtered out)
   let marker='';
@@ -458,14 +589,14 @@ function renderMap(){
     const [px,py]=proj(rk, selSite.lon, selSite.lat);
     const mr=(5/mapK).toFixed(2), mw=(1.6/mapK).toFixed(2);
     marker=`<g>
-      <circle cx="${px.toFixed(1)}" cy="${py.toFixed(1)}" r="${mr}" fill="none" stroke="#fff" stroke-width="${mw}">
-        <animate attributeName="r" values="${mr};${(18/mapK).toFixed(2)}" dur="1.1s" repeatCount="indefinite"/>
-        <animate attributeName="opacity" values="0.9;0" dur="1.1s" repeatCount="indefinite"/>
+      <circle cx="${px.toFixed(1)}" cy="${py.toFixed(1)}" r="${mr}" fill="none" stroke="var(--ink)" stroke-width="${mw}">
+        ${REDUCED?'':`<animate attributeName="r" values="${mr};${(18/mapK).toFixed(2)}" dur="1.1s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values="0.9;0" dur="1.1s" repeatCount="indefinite"/>`}
       </circle>
-      <circle cx="${px.toFixed(1)}" cy="${py.toFixed(1)}" r="${mr}" fill="var(--err)" stroke="#fff" stroke-width="${mw}"/>
+      <circle cx="${px.toFixed(1)}" cy="${py.toFixed(1)}" r="${mr}" fill="var(--err)" stroke="var(--ink)" stroke-width="${mw}"/>
       <text x="${px.toFixed(1)}" y="${(py-12/mapK).toFixed(1)}" font-size="${(10/mapK).toFixed(1)}"
-        fill="#fff" text-anchor="middle" dominant-baseline="middle" font-weight="bold"
-        paint-order="stroke" stroke="#000" stroke-width="${(2.5/mapK).toFixed(1)}">${esc(selSite.ext)}</text>
+        fill="var(--ink)" text-anchor="middle" dominant-baseline="middle" font-weight="bold"
+        paint-order="stroke" stroke="var(--bg)" stroke-width="${(2.5/mapK).toFixed(1)}">${esc(selSite.ext)}</text>
     </g>`;
   }
   world.innerHTML = `<g transform="translate(${mapTx},${mapTy}) scale(${mapK})">${drawOutline()}${mapK<6?drawDistricts():''}${dots}${marker}</g>`;
@@ -545,13 +676,13 @@ function buildCols(){
   cols = [{k:'point_id',l:'ID'},{k:'city',l:T('colCity')},{k:'operator_name',l:T('colOp')},{k:'pw_class',l:T('colClass')},
           {k:'kw',l:'kW'},{k:'connectors',l:'Connectors'},{k:'status',l:T('colStatus')},{k:'pay',l:T('colPay')},{k:'opc',l:'OPC'},
           {k:'ENERGY',l:'€/kWh'},{k:'TIME',l:'€/min'},{k:'FLAT',l:T('colFlat')},{k:'nap',l:T('colNap')},{k:'regime',l:T('colRegime')}];
-  document.getElementById('tblhead').innerHTML = cols.map((c,i)=>`<th class="${i<2?'l':''}" data-k="${c.k}">${esc(c.l)}</th>`).join('');
+  document.getElementById('tblhead').innerHTML = cols.map((c,i)=>`<th class="${i<2?'l':''}" data-k="${c.k}" tabindex="0" role="columnheader" aria-sort="none">${esc(c.l)}</th>`).join('');
 }
 let rows = D.points, sortKey=null, sortAsc=true, page=1, per=200;
 const uni = (k)=>[...new Set(rows.map(x=>x[k]).filter(Boolean))].sort();
 function multiSel(id,labelKey,vals,disp){ const el=document.getElementById(id), sel=new Set();
   const d=disp||(x=>x);
-  el.innerHTML = `<div class="mbtn"><span class="mlab"></span><span class="mcaret">▾</span></div><div class="mmenu"></div>`;
+  el.innerHTML = `<button type="button" class="mbtn" aria-haspopup="true" aria-expanded="false"><span class="mlab"></span><span class="mcaret" aria-hidden="true">▾</span></button><div class="mmenu" role="group"></div>`;
   const btn=el.querySelector('.mbtn'), menu=el.querySelector('.mmenu');
   const refresh=()=>{ el.querySelector('.mlab').textContent =
     sel.size?`${T(labelKey)}: ${[...sel].sort().map(v=>d(v)).join(', ')}`:`${T(labelKey)}: ${T('all')}`;
@@ -561,8 +692,10 @@ function multiSel(id,labelKey,vals,disp){ const el=document.getElementById(id), 
     if(cb.checked) sel.add(cb.value); else sel.delete(cb.value);
     refresh(); page=1; render();
   }));
-  btn.addEventListener('click',e=>{ e.stopPropagation(); menu.classList.toggle('open'); });
-  document.addEventListener('click',e=>{ if(!el.contains(e.target)) menu.classList.remove('open'); });
+  const setOpen=o=>{ menu.classList.toggle('open',o); btn.setAttribute('aria-expanded',String(o)); };
+  btn.addEventListener('click',e=>{ e.stopPropagation(); setOpen(!menu.classList.contains('open')); });
+  el.addEventListener('keydown',e=>{ if(e.key==='Escape'){ setOpen(false); btn.focus(); } });
+  document.addEventListener('click',e=>{ if(!el.contains(e.target)) setOpen(false); });
   refresh();
   return { has:()=>sel.size>0, get:()=>sel,
     relabel:()=>{ menu.innerHTML = vals.map(v=>`<label><input type="checkbox" value="${esc(v)}"${sel.has(v)?' checked':''}> ${esc(d(v))}</label>`).join('');
@@ -592,7 +725,7 @@ function render(){
   const pages=Math.max(1,Math.ceil(r.length/per));
   if(page>pages) page=pages;
   const slice=r.slice((page-1)*per,page*per);
-  document.getElementById('tbody').innerHTML = slice.map(x=>`<tr data-site="${esc(x.site_external_id)}">
+  document.getElementById('tbody').innerHTML = slice.map(x=>`<tr data-site="${esc(x.site_external_id)}" tabindex="0">
     <td class="l">${esc(x.point_id)}</td><td class="l">${esc(x.city??'')}</td><td class="l">${esc(x.operator_name??'')}</td>
     <td>${esc(x.pw_class??'')}</td><td>${fmt(x.kw)}</td><td>${esc(x.connectors??'')}</td>
     <td><span class="tag status-${esc(x.status??'unknown')}">${esc(dispStatus(x.status)??'')}</span></td>
@@ -600,23 +733,27 @@ function render(){
     <td>${esc(x.opc??'')}</td><td>${fmt(x.ENERGY)}</td><td>${fmt(x.TIME)}</td><td>${fmt(x.FLAT)}</td>
     <td title="${esc(T('priceNote'))}">${x.nap==null?'–':fmt(x.nap)+'*'}</td><td>${esc(dispRegime(x.regime))}</td></tr>`).join('');
   document.getElementById('tbody').querySelectorAll('tr').forEach(tr=>{
+    tr.addEventListener('keydown',e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); tr.click(); } });
     tr.addEventListener('click',()=>{
       const site=D.sites.find(s=>s.ext===tr.dataset.site);
       if(!site) return;
       focusSite(site.ext);
       document.querySelectorAll('#tbody tr.sel').forEach(x=>x.classList.remove('sel'));
       tr.classList.add('sel');
-      document.getElementById('map').scrollIntoView({behavior:'smooth', block:'center'});
+      document.getElementById('map').scrollIntoView({behavior:REDUCED?'auto':'smooth', block:'center'});
     });
   });
+  document.querySelectorAll('#tblhead th').forEach(th=>th.setAttribute('aria-sort', th.dataset.k===sortKey?(sortAsc?'ascending':'descending'):'none'));
   document.getElementById('tblmeta').textContent = `${r.length} ${T('pointsWord')} (${T('showing')} ${Math.min(per,r.length-(page-1)*per)} ${T('onPage')})`;
   document.getElementById('pgInfo').textContent = `${T('page')} ${page}/${pages}`;
   document.getElementById('pgPrev').disabled = page<=1;
   document.getElementById('pgNext').disabled = page>=pages;
   renderMap();
 }
-document.getElementById('tblhead').addEventListener('click',e=>{const k=e.target.dataset.k; if(!k)return;
-  if(sortKey===k)sortAsc=!sortAsc; else{sortKey=k;sortAsc=true;} page=1; render();});
+function sortBy(th){ const k=th&&th.dataset.k; if(!k)return;
+  if(sortKey===k)sortAsc=!sortAsc; else{sortKey=k;sortAsc=true;} page=1; render(); }
+document.getElementById('tblhead').addEventListener('click',e=>sortBy(e.target.closest('th')));
+document.getElementById('tblhead').addEventListener('keydown',e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); sortBy(e.target.closest('th')); } });
 document.getElementById('q').addEventListener('input',()=>{page=1;render();});
 document.getElementById('pgPrev').addEventListener('click',()=>{if(page>1){page--;render();}});
 document.getElementById('pgNext').addEventListener('click',()=>{page++;render();});
@@ -648,9 +785,11 @@ function applyStatic(){
   document.getElementById('snap').textContent = D.snapshot;
   document.querySelectorAll('[data-i18n]').forEach(el=>{ el.textContent = T(el.getAttribute('data-i18n')); });
   document.querySelectorAll('[data-i18n-ph]').forEach(el=>{ el.setAttribute('placeholder', T(el.getAttribute('data-i18n-ph'))); });
-  document.querySelectorAll('[data-i18n-title]').forEach(el=>{ el.setAttribute('title', T(el.getAttribute('data-i18n-title'))); });
-  document.getElementById('langPt').classList.toggle('active', LANG==='pt');
-  document.getElementById('langEn').classList.toggle('active', LANG==='en');
+  document.querySelectorAll('[data-i18n-title]').forEach(el=>{ const s=T(el.getAttribute('data-i18n-title')); el.setAttribute('title', s); el.setAttribute('aria-label', s); });
+  document.querySelectorAll('[data-i18n-aria]').forEach(el=>{ el.setAttribute('aria-label', T(el.getAttribute('data-i18n-aria'))); });
+  const md=document.getElementById('mapDesc'); if(md) md.textContent=T('mapAlt');
+  document.getElementById('langPt').setAttribute('aria-pressed', String(LANG==='pt'));
+  document.getElementById('langEn').setAttribute('aria-pressed', String(LANG==='en'));
 }
 
 function setLang(l){
@@ -666,10 +805,26 @@ function setLang(l){
   renderTexts();
   render();
 }
+// ---------- aparência: tema + visão (estado em window.NAPAPP, definido no <head>) ----------
+(function(){
+  const APP = window.NAPAPP || {get:k=>k==='theme'?'auto':'default', set(){}};   // sem o <head> (stub de testes)
+  const btn=document.getElementById('appBtn'), panel=document.getElementById('appPanel');
+  const sync=()=>{ ['theme','vision'].forEach(k=>{ const v=APP.get(k);
+    document.querySelectorAll('input[name="nap'+(k==='theme'?'Theme':'Vision')+'"]').forEach(r=>{ r.checked=(r.value===v); }); }); };
+  const setOpen=o=>{ panel.hidden=!o; btn.setAttribute('aria-expanded',String(o)); btn.classList.toggle('on',o); };
+  btn.addEventListener('click',e=>{ e.stopPropagation(); setOpen(panel.hidden); });
+  document.addEventListener('click',e=>{ if(!panel.hidden && !panel.contains(e.target)) setOpen(false); });
+  panel.addEventListener('keydown',e=>{ if(e.key==='Escape'){ setOpen(false); btn.focus(); } });
+  document.querySelectorAll('input[name="napTheme"]').forEach(r=>r.addEventListener('change',()=>APP.set('theme',r.value)));
+  document.querySelectorAll('input[name="napVision"]').forEach(r=>r.addEventListener('change',()=>APP.set('vision',r.value)));
+  window.addEventListener('napappearance',()=>{ sync(); if(typeof renderMap==='function'&&typeof D!=='undefined'&&window.__ready) renderMap(); });
+  sync();
+})();
 document.getElementById('langPt').addEventListener('click',()=>setLang('pt'));
 document.getElementById('langEn').addEventListener('click',()=>setLang('en'));
 setLang(detectLang());
+window.__ready=true;
 </script>
-<footer class="mut" style="font-size:11px;margin-top:28px;padding-top:12px;border-top:1px solid #27334a">© 2026 O Carro Elétrico / Fernando Miguel · <a href="https://nap.ocarroeletrico.com/">nap.ocarroeletrico.com</a> · <span data-i18n="footUse">Uso não-comercial livre</span> (<a href="https://github.com/CarregaErvilhas/nap-dashboard/blob/main/LICENSE">PolyForm Noncommercial 1.0.0</a>, só código próprio — ver <a href="https://github.com/CarregaErvilhas/nap-dashboard/blob/main/THIRD-PARTY-NOTICES.md">THIRD-PARTY-NOTICES.md</a>); <span data-i18n="footCom">uso comercial requer licença</span> — <a href="mailto:info@ocarroeletrico.com">info@ocarroeletrico.com</a> · <a href="https://m.me/OCarroEletricoDotCom">Messenger</a>.<br>Fontes: NAP EADME (MOBI.E, via NAP-IMT) + tarifas MOBI.E (<a href="https://www.mobie.pt/">mobie.pt</a>) · listas DGEG (<a href="https://www.dgeg.gov.pt/">dgeg.gov.pt</a>) — uso livre com menção de fonte, sem fins lucrativos · classes de potência AFIR (<a href="https://eur-lex.europa.eu/eli/reg/2023/1804/oj">Reg. (UE) 2023/1804, Anexo III</a>) · © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors (<a href="https://opendatacommons.org/licenses/odbl/">ODbL</a>) · contorno © DGT (CAOP, <a href="https://www.dgterritorio.gov.pt/dados-abertos">CC-BY 4.0</a>) · esquemas DATEX II © CEN (<a href="https://datex2.eu/">datex2.eu</a>) · mapas comunidade <a href="https://umap.openstreetmap.fr/pt-pt/map/postos-de-carregamento-v21_690884">Postos de Carregamento v2.1</a> + <a href="https://umap.openstreetmap.fr/en/map/caca-aos-postos-de-carregamento_1386222">Caça aos Postos</a> (Alexandre Moleiro).</footer>
+<footer class="mut" style="font-size:11px;margin-top:28px;padding-top:12px;border-top:1px solid var(--line2)">© 2026 O Carro Elétrico / Fernando Miguel · <a href="https://nap.ocarroeletrico.com/">nap.ocarroeletrico.com</a> · <span data-i18n="footUse">Uso não-comercial livre</span> (<a href="https://github.com/CarregaErvilhas/nap-dashboard/blob/main/LICENSE">PolyForm Noncommercial 1.0.0</a>, só código próprio — ver <a href="https://github.com/CarregaErvilhas/nap-dashboard/blob/main/THIRD-PARTY-NOTICES.md">THIRD-PARTY-NOTICES.md</a>); <span data-i18n="footCom">uso comercial requer licença</span> — <a href="mailto:info@ocarroeletrico.com">info@ocarroeletrico.com</a> · <a href="https://m.me/OCarroEletricoDotCom">Messenger</a> · <a href="privacidade.html" data-i18n="privLink">Privacidade</a>.<br>Fontes: NAP EADME (MOBI.E, via NAP-IMT) + tarifas MOBI.E (<a href="https://www.mobie.pt/">mobie.pt</a>) · listas DGEG (<a href="https://www.dgeg.gov.pt/">dgeg.gov.pt</a>) — uso livre com menção de fonte, sem fins lucrativos · classes de potência AFIR (<a href="https://eur-lex.europa.eu/eli/reg/2023/1804/oj">Reg. (UE) 2023/1804, Anexo III</a>) · © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors (<a href="https://opendatacommons.org/licenses/odbl/">ODbL</a>) · contorno © DGT (CAOP, <a href="https://www.dgterritorio.gov.pt/dados-abertos">CC-BY 4.0</a>) · esquemas DATEX II © CEN (<a href="https://datex2.eu/">datex2.eu</a>) · mapas comunidade <a href="https://umap.openstreetmap.fr/pt-pt/map/postos-de-carregamento-v21_690884">Postos de Carregamento v2.1</a> + <a href="https://umap.openstreetmap.fr/en/map/caca-aos-postos-de-carregamento_1386222">Caça aos Postos</a> (Alexandre Moleiro).</footer>
 </body>
 </html>

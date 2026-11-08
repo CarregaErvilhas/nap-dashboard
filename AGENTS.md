@@ -355,6 +355,15 @@ venv/bin/python scripts/validate_dashboard.py
   payment methods: App/Cartão/Cartão de membro/Sem autenticação/Dinheiro) joined
   per-site onto every point row.
 
+- Aparência: tema (auto/claro/escuro) e visão (padrão/daltonismo/alto contraste)
+  são `data-theme`/`data-vision` no `<html>`, definidos por `window.NAPAPP` num
+  `<script>` do `<head>` (valida contra lista fechada o que lê de
+  `nap-theme`/`nap-vision`; `nap-lang` idem). Cores só por variáveis CSS
+  (`--s-<estado>` para os estados); em cb/hc o mapa usa uma forma por estado.
+  A CSP vai em `<meta>` (o Pages não deixa definir cabeçalhos): a página não
+  pode pedir nada à rede. `assets/privacidade.html`, `404.html` e os ícones
+  são copiados para o site pelo `pages.yml`.
+
 ## Convenções de escrita (PT-PT técnico)
 - **tensão**, nunca "voltagem". Unidades abreviam-se `V`/`A`/`kW` normalmente.
 - `voltage`/`max_current` mantêm-se em inglês só quando referem identificadores
