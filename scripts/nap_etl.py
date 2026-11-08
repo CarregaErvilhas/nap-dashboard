@@ -286,7 +286,7 @@ def main():
     # fetch_data.sh em modo arquivo deixa o JSON em vez do XML dinâmico: se o
     # caminho habitual não existe mas o do arquivo sim, usa-se esse. Assim os
     # workflows continuam a passar sempre o mesmo argumento.
-    archive_path = os.path.join(os.path.dirname(dyn_path) or '.', 'archiveStatus_latest.json.gz')
+    archive_path = 'data/archiveStatus_latest.json.gz'
     if not os.path.exists(dyn_path) and os.path.exists(archive_path):
         dyn_path = archive_path
         print(f'  dinâmico: {dyn_path} (AmpereArchive)')
