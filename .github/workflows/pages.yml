@@ -13,6 +13,10 @@ on:
     paths:
       - "dashboard.html"
       - "dashboard.png"
+      - "assets/privacidade.html"
+      - "assets/404.html"
+      - "assets/favicon.*"
+      - "assets/apple-touch-icon.png"
       - ".github/workflows/pages.yml"
 
 permissions:
@@ -36,11 +40,13 @@ jobs:
           cp dashboard.html public/index.html
           cp dashboard.html public/dashboard.html
           cp dashboard.png public/dashboard.png
+          cp assets/privacidade.html assets/404.html assets/favicon.svg assets/favicon.ico assets/apple-touch-icon.png public/
           echo "nap.ocarroeletrico.com" > public/CNAME
-          # Para os motores de busca: uma página só (/dashboard.html é a
-          # mesma, com canonical para /).
-          printf 'User-agent: *\nAllow: /\n\nSitemap: https://nap.ocarroeletrico.com/sitemap.xml\n' > public/robots.txt
-          printf '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n  <url><loc>https://nap.ocarroeletrico.com/</loc><lastmod>%s</lastmod></url>\n</urlset>\n' "$(date -u +%F)" > public/sitemap.xml
+          # Para os motores de busca: o dashboard (/dashboard.html é o mesmo, com
+          # canonical para /) e a página de privacidade. /ohmigo/ é o dataset
+          # (~10 MB), para máquinas: fora do rastreio.
+          printf 'User-agent: *\nAllow: /\nDisallow: /ohmigo/\n\nSitemap: https://nap.ocarroeletrico.com/sitemap.xml\n' > public/robots.txt
+          printf '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n  <url><loc>https://nap.ocarroeletrico.com/</loc><lastmod>%s</lastmod></url>\n  <url><loc>https://nap.ocarroeletrico.com/privacidade.html</loc><lastmod>%s</lastmod></url>\n</urlset>\n' "$(date -u +%F)" "$(date -u +%F)" > public/sitemap.xml
           # RFC 9116: a quem escrever sobre um problema de segurança (o mesmo
           # contacto do ohmigo e do CEME). Expires é obrigatório; conta 180
           # dias a partir deste deploy, e o refresh semanal faz um por semana.

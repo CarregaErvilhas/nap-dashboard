@@ -49,9 +49,12 @@ globalThis.document = {
   // `el.querySelector('.mbtn').innerHTML = ...` — null rebentaria)
   querySelector: () => mkEl(null), querySelectorAll: () => [],
   addEventListener: nop, removeEventListener: nop, createElement: mkEl, body: mkEl('body'),
-  documentElement: { lang: '' },
+  // documentElement guarda atributos (data-theme/data-vision, lidos pelo mapa).
+  documentElement: { lang: '', _a: {}, setAttribute(k, v) { this._a[k] = String(v); },
+                     getAttribute(k) { return k in this._a ? this._a[k] : null; } },
 };
 globalThis.window = globalThis;
+globalThis.addEventListener = nop; globalThis.dispatchEvent = nop;
 globalThis.location = { href: 'file:///dashboard.html', search: '' };
 // NB: node >=21 tem navigator/localStorage nativos (só-leitura); a atribuição
 // direta falha em silêncio, por isso instalam-se como propriedades próprias.
