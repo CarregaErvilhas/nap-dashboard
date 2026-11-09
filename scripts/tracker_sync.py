@@ -3,26 +3,27 @@
 
 Run from the repo root:  venv/bin/python scripts/tracker_sync.py
 
-The tracker is the data owners' error list. Two products are derived from it and
-versioned in git, so the weekly CI (which has no Drive access) keeps working:
+The tracker is the data owners' error list. Three files are derived from it on
+every run. None of them is versioned: they are a third party's data with no
+reuse licence and this repo is public, so CI re-extracts them from the xlsx that
+scripts/fetch_tracker.sh downloads.
 
   data/opc_registry_authority.csv  the authoritative OPC table read from the `CPO`
-                              tab: PartyId -> PartyCode -> official name. This
-                              is the only *current* source of OPC identity; the
-                              MOBI.E PartyID PDF (scripts/partyid_crossref.py)
-                              is from 2022 and the script says so.
+                              tab: PartyId -> PartyCode -> official name. The
+                              only current source of OPC identity.
   data/tracker_errors.csv          the normalised `Error List` (one row per reported
                               defect) with a bucketed notes_class. This is the
                               pipeline's only labelled/ground-truth set: real
                               defects with the value the owner considers correct.
-  data/tracker_meta.json           provenance + freshness: source file id, sha256 of
-                              the xlsx, row counts and synced_at. tracker_checks.py
+  data/tracker_meta.json           provenance + freshness: sha256 of the xlsx,
+                              row counts and synced_at. tracker_checks.py
                               warns when it gets old, so a stale registry is
                               visible instead of silently wrong.
 
-Re-running with a newer tracker overwrites all three — the CSVs are never edited
-by hand. Without the xlsx (CI, or a machine with no Drive access) this exits 0
-and leaves the versioned files untouched.
+Re-running with a newer tracker overwrites all three; they are never edited by
+hand. Without the xlsx (the fetch failed, or a machine with no Drive access)
+this exits 0 and writes nothing, so tracker_checks.py skips and errors.md has no
+item 13 for that run.
 """
 import argparse
 import csv
@@ -40,8 +41,8 @@ REGISTRY_CSV = 'data/opc_registry_authority.csv'
 ERRORS_CSV = 'data/tracker_errors.csv'
 META_JSON = 'data/tracker_meta.json'
 # Provenance is the sha256 + date, deliberately not the Drive file id: this repo
-# is public and meta is versioned, so a hardcoded/recorded id would publish a
-# permanent pointer to the data owners' file.
+# is public and errors.md item 13 quotes the meta, so a recorded id would publish
+# a permanent pointer to the data owners' file.
 
 # Error List layout (1-based Excel columns B..K), verified against 2026-10.
 COL_CPO, COL_PARTYID, COL_ASSET, COL_STATUS, COL_ERRTYPE = 1, 2, 3, 4, 5

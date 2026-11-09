@@ -15,6 +15,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__))))
 import dashboard_i18n as i18n
 import dashboard_payload
 import archive_panel
+import nap_static_checks
 
 S = pd.read_csv('data/nap_static_sites.csv', dtype=str)
 P = pd.read_csv('data/nap_static_points.csv', dtype=str)
@@ -427,13 +428,9 @@ n_usage_missing = int(P.drop_duplicates(PK).usage_type.isna().sum())
 _Mt = _fsafe('data/mobie_tarifas.csv', sep=';', decimal=',', dtype=str)
 n_bare_uid = (int(_Mt.UID_TOMADA.dropna().apply(lambda x: str(x).strip().isdigit()).sum())
               if _Mt is not None and 'UID_TOMADA' in _Mt else None)
-_pidf = _fsafe('data/mobie_partyid.csv', dtype=str)
-if _pidf is not None and opc_codes:
-    _pid_codes = set(_pidf.code.dropna())
-    n_pid_missing = len(opc_codes - _pid_codes)
-    n_pid_unused = len(_pid_codes - opc_codes)
-else:
-    n_pid_missing = n_pid_unused = None
+_static_f = nap_static_checks.findings(P)
+n_placeholder_v = sum(1 for r in _static_f if r['check'] == 'tensao_placeholder')
+n_fake_3p = sum(1 for r in _static_f if r['check'] == 'trifasico_sem_3p')
 
 _fl = OPC.FLAT.dropna().apply(_num)
 _fl = _fl[_fl.apply(lambda x: x == x)]  # descarta NaN de parse: senão .max() = nan e o painel mostra "nan €/carga"
@@ -492,7 +489,7 @@ FACTS_HTML = f"""
 <li><b>Saúde da rede no snapshot:</b> {pt(n_removed)} pontos 'removed' ({p0(ratio(n_removed, n_points))}%), {pt(n_oof)} 'outOfOrder' ({p0(ratio(n_oof, n_points))}%), {pt(n_unk)} 'unknown' ({p0(ratio(n_unk, n_points))}%) → ≈{p0(ratio(n_removed + n_oof + n_unk, n_points))}% não utilizável nesse momento.</li>
 <li><b>Connectors:</b> {conn_line} (em declínio, só em unidades multi-connector).</li>
 <li><b>Setor público:</b> municípios operam como OPC (Cascais Próxima, EMEL, Loulé Concelho Global, Superguimarães, Santa Cruz).</li>
-<li><b>Registo OPC limpo:</b> os {n_codes_matched} códigos ativos resolvem para uma entidade (PartyID MOBI.E + DGEG); {n_reg_matched}/{n_reg} combos código/operador com reconhecimento DGEG.</li>
+<li><b>Registo OPC limpo:</b> os {n_codes_matched} códigos ativos resolvem para uma entidade (DGEG); {n_reg_matched}/{n_reg} combos código/operador com reconhecimento DGEG.</li>
 <li><b>CEMEs:</b> {pt(n_brands)} códigos de marca na rede vs {pt(n_dgeg_ceme)} registados DGEG; {n_both} códigos são simultaneamente OPC e CEME (espaço de código partilhado).</li>
 <li><b>Validação cruzada:</b> potência NAP vs MOBI.E concorda em {p1(ratio(n_pow_checked - n_pow_div, n_pow_checked))}% dos pontos (só {n_pow_div} divergem &gt;30%) — boa notícia para a fiabilidade geral.</li>
 <li><b>Tesla (novidade no NAP):</b> {n_tesla_sites} sites / {n_tesla_pts} pontos Supercharger (CCS Combo2, até {tesla_max_kw if tesla_max_kw is not None else '?'} kW), com estado dinâmico mas ainda sem tarifário OPC na MOBI.E.</li>
@@ -529,8 +526,8 @@ ERRS_HTML = f"""
   <div class="meta">{pt(n_bare_uid)} linhas com ids numéricos ('97', '98'…) fora de qualquer formato; mistura de formatos com/sem prefixo PT- e segmento de conector presente/ausente.</div>
 </li>
 <li>
-  <div class="head">8. PartyID MOBI.E desatualizado (ficheiro 2022)</div>
-  <div class="meta">{pt(n_pid_missing)} códigos ativos no tarifário não estão no ficheiro oficial de códigos (operadores pós-2022: ATL, ZUN, SLX, KLS, WEN…); {pt(n_pid_unused)} códigos do ficheiro não têm um único posto. Recomenda-se atualização do documento público.</div>
+  <div class="head">8. Tensões placeholder e falso trifásico (NAP estático)</div>
+  <div class="meta">{pt(n_placeholder_v)} tomadas DC declaram 750 V ou 600 V, valores de reserva da era CHAdeMO; {pt(n_fake_3p)} tomadas declaradas <code>mode3AC3p</code> têm tensão monofásica e menos de 11 kW, quando um trifásico real tem pelo menos 12 kW. Os próprios operadores já assinalaram ambas as classes como erro no tracker PCVE (171 e 199 linhas). Lista por tomada em errors.md, secções 8a/8b.</div>
 </li>
 <li>
   <div class="head">9. Preços anómalos</div>
@@ -708,6 +705,9 @@ with open('errors.md', 'w') as fh:
     fh.write('# Erros reportáveis (dados NAP / MOBI.E / DGEG)\n\n')
     for m in re.findall(r'<div class="head">(.*?)</div>\s*<div class="meta">(.*?)</div>', ERRS_HTML, re.S):
         fh.write(f'## {re.sub(r"<[^>]+>", "", m[0])}\n{re.sub(r"<[^>]+>", "", m[1]).strip()}\n\n')
+    if os.path.exists('data/nap_static_findings.md'):
+        with open('data/nap_static_findings.md') as frag:
+            fh.write(frag.read())
     if os.path.exists('data/concelho_mismatches.md'):
         with open('data/concelho_mismatches.md') as frag:
             fh.write(frag.read())

@@ -81,9 +81,9 @@ jobs:
           python scripts/mobie_join.py
           python scripts/dgeg_lists.py
           python scripts/dgeg_crossref.py
-          python scripts/partyid_crossref.py
-      - name: Geo + OSM cross-checks
+      - name: NAP static, geo + OSM cross-checks
         run: |
+          python scripts/nap_static_checks.py
           python scripts/concelho_check.py
           python scripts/osm_umap.py
       - name: PCVE tracker cross-check

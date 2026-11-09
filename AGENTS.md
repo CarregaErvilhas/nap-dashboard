@@ -26,10 +26,10 @@ produces CSVs + a self-contained dashboard (`dashboard.html`, `facts.md`,
 - `Agents-outputs/` — relatórios gerados pelos agentes (ex.
   `Agents-outputs/anomalias-results.md`).
 - `data/` — everything fetched from a source or derived by the pipeline: raw XMLs,
-  the MOBI.E tariff CSV + PartyID PDF, the DGEG HTML/CSV, all intermediate CSVs,
+  the MOBI.E tariff CSV, the DGEG HTML/CSV, all intermediate CSVs,
   the tracker's `data/pt_pcve_errors.xlsx`, and the `data/umap_cache/` (umap maps/OSM
   dump) + `data/caop_cache/` (CAOP concelho polygons) caches. All gitignored
-  (`data/*`, with `data/.gitkeep` kept) except the three tracker artifacts below.
+  (`data/*`, with `data/.gitkeep` kept), tracker derivatives included (below).
   Still run every script from the repo root — paths are `data/…` relative to it.
 - **Nothing derived from the tracker is versioned.** `data/tracker_errors.csv`,
   `data/opc_registry_authority.csv` and `data/tracker_meta.json` are
@@ -41,11 +41,11 @@ produces CSVs + a self-contained dashboard (`dashboard.html`, `facts.md`,
 
 ## Environment
 - Create and use a local venv — never rely on the system Python (it may be a
-  recent version where pip is blocked by PEP 668). It just needs `pandas`, `lxml`
-  and `pdfplumber`:
+  recent version where pip is blocked by PEP 668). The core pipeline needs
+  `pandas` and `lxml` (`requirements.txt` pins the full CI set):
   ```bash
   python3 -m venv venv
-  venv/bin/pip install pandas lxml pdfplumber
+  venv/bin/pip install pandas lxml
   ```
 - Reference the venv interpreter as `venv/bin/python` in commands; do not
   hardcode absolute paths to this machine's venv.
@@ -56,7 +56,7 @@ produces CSVs + a self-contained dashboard (`dashboard.html`, `facts.md`,
 ```bash
 bash scripts/fetch_data.sh
 ```
-Downloads the live NAP XMLs, MOBI.E tariff CSV, PartyID PDF and DGEG HTML pages
+Downloads the live NAP XMLs, MOBI.E tariff CSV and DGEG HTML pages
 from the official origins (see `scripts/fetch_data.sh` for the exact URLs).
 
 Optional: read the dynamic status (`evActualStatus`, ~40 MB) from the
@@ -109,7 +109,7 @@ venv/bin/python -m unittest discover -s tests
 ## Pipeline order
 `scripts/nap_etl.py` → (`scripts/check_quality.py`, `scripts/summary.py`) →
 `scripts/mobie_join.py` → `scripts/dgeg_lists.py` → `scripts/dgeg_crossref.py` →
-`scripts/partyid_crossref.py` → `scripts/concelho_check.py` →
+`scripts/nap_static_checks.py` → `scripts/concelho_check.py` →
 `scripts/osm_umap.py` → (`scripts/osm_places.py`, ohmigo dataset only) → `scripts/tracker_sync.py` + `scripts/tracker_checks.py` →
 `scripts/make_pt_outline.py` →
 `scripts/network_news.py` (diff semanal vs `network-census.json` do HEAD →
@@ -118,6 +118,7 @@ venv/bin/python -m unittest discover -s tests
 `scripts/build_dashboard.py` reads the intermediate CSVs +
 `data/osm_umap.csv`/`data/osm_caca.csv`/`assets/pt_outline.json` and writes
 `dashboard.html`, `facts.md`, `errors.md`; it appends
+`data/nap_static_findings.md` (written by `scripts/nap_static_checks.py`),
 `data/concelho_mismatches.md` (written by `concelho_check.py`),
 `data/osm_umap_findings.md` (written by `scripts/osm_umap.py`) and
 `data/tracker_findings.md` (written by `scripts/tracker_checks.py`) to `errors.md`
@@ -135,6 +136,15 @@ inicialização tem de correr sem exceção numa eval com DOM stub.
 pipeline produzir dados absurdos sem rebentar (limiares mínimos para
 sites/pontos/join/DGEG/registo) — falha o job e o dashboard online fica no
 último bom.
+
+`scripts/nap_static_checks.py` runs the rules on the static NAP alone that
+were mined from the tracker's classes: 750/600 V on a DC connector (legacy
+placeholder; tracker: 171 rows of 750 → 500 V) and `mode3AC3p` with
+single-phase voltage and < 11 kW (tracker: 199 rows of `mode3AC3p` →
+`mode2AC1p`). They live outside `tracker_checks.py` so they still run when the
+tracker fetch fails. Writes `data/nap_static_findings.csv` + `.md` (errors.md
+item 8, subsections 8a/8b); `build_dashboard.py` imports `findings()` for the
+item-8 counts.
 
 `scripts/concelho_check.py` locates every site inside official CAOP concelho
 polygons (downloaded on first run into `data/caop_cache/`, gitignored) and flags the
@@ -176,21 +186,17 @@ venv/bin/python scripts/tracker_checks.py   # CSVs + NAP -> findings
   is a **public** repo, so keep that URL in the `TRACKER_URL` repo secret, never
   as a literal in the workflow — otherwise the repo publishes a permanent pointer
   to the data owners' file. Set the secret to the shareable download URL of the xlsx.
-- **Google may block the runners' IP range.** The first CI run of the anonymous
-  fetch failed in ~0.1 s with no diagnostic. `fetch_tracker.sh` now reports the
-  HTTP status so this is visible (`HTTP 403`/`429` = blocked or rate-limited,
-  `200` + non-ZIP = Drive interstitial). If it turns out to be an IP block, the
-  fallback is a Google service account (JSON key as a secret) with the file
-  shared to its address — the Drive API then works from any IP. Do not work
-  around it by committing a copy of the tracker.
+- **Google blocks other endpoints from the runners.** The tracker is an
+  **xlsx (Office file) hosted on Google Drive**, not a native Google Sheet, and
+  `TRACKER_URL` is Drive's export download endpoint (`…export=download…`): that
+  is what gets past the block on GitHub-hosted runners. The Sheets API and
+  `/spreadsheets/…/export?format=xlsx` reject an Office file with `400
+  failedPrecondition: must not be an Office file`. `fetch_tracker.sh` reports
+  the HTTP status when a fetch fails (`HTTP 403`/`429` = blocked or
+  rate-limited, `200` + non-ZIP = Drive interstitial). Do not work around a
+  failure by committing a copy of the tracker.
 - `data/tracker_meta.json` carries `synced_at` + the xlsx `sha256` on every run,
   so errors.md item 13 always states which version of the tracker it came from.
-- The tracker is a **native Google Sheet**, so `TRACKER_URL` can be its
-  `…/spreadsheets/d/<id>/export?format=xlsx`; `fetch_tracker.sh` takes it
-  unchanged. If it ever goes back to an **Office file** uploaded to Drive, the
-  Sheets API and `/export?format=xlsx` reject it with `400 failedPrecondition:
-  must not be an Office file`: use `uc?export=download` then. Keep the URL in
-  the `TRACKER_URL` secret (public repo).
 - `scripts/tracker_fixed.py` (run after `nap_etl.py` + `tracker_sync.py`) replaces
   the manual match: for each `TO FIX` row with a `correct_data` it finds the site
   (same `asset_variants` as `tracker_checks.py`) and compares the current NAP
@@ -205,15 +211,16 @@ venv/bin/python scripts/tracker_checks.py   # CSVs + NAP -> findings
   (`MISTO` 131/184), so only `FIXED_CANDIDATA` is trustworthy there. These are
   *candidates* for the owners to flip to `FIXED`, never an automatic status change.
 - Products: `data/opc_registry_authority.csv` (the only *current* OPC identity table —
-  `PartyId | PartyCode | name`, 99 CPO — versus the 2022 MOBI.E PartyID PDF) and
+  `PartyId | PartyCode | name`, 99 CPO) and
   `data/tracker_errors.csv` (the project's only labelled/ground-truth set: 3153 real
   defects with the value the owner considers correct, plus `notes_class`).
 - `tracker_checks.py` writes `data/tracker_findings.md`/`.csv` (errors.md item 13).
   Rules and the snapshot they were validated on (2026-10-18): OPC sem PartyId
   resolúvel (3), PartyCode em vez de PartyId (3: BBGE, CIRC, CONT), nomes
-  fragmentados (21 ids / 3448 sites), CPO do tracker sem sites (10), tensão
-  placeholder 750/600 V em conector DC (58), `mode3AC3p` sem potência trifásica
-  (35 linhas / 24 sites), assets declarados removidos ainda publicados (5).
+  fragmentados (21 ids / 3448 sites), assets declarados removidos ainda
+  publicados (5). The NAP-only rules mined from the tracker (placeholder DC
+  voltages, 58; `mode3AC3p` without three-phase power, 35 rows / 24 sites) are
+  in `scripts/nap_static_checks.py`, errors.md item 8.
   The rules are mined from the tracker's own classes (171 rows of 750→500 V,
   199 of `mode3AC3p`→`mode2AC1p`), which is what makes them non-speculative.
 - Known limits: OPC identity resolves by `operator_name`, so an operator that
@@ -317,7 +324,6 @@ venv/bin/python scripts/validate_dashboard.py
 - 33% of connector rows (6 948/21 056) have declared power inconsistent with
   V×I (>25% off); 2 686 declare power above physical capacity (impossible, e.g.
   1200 V × 600 A = 720 kW declared as 200 kW).
-- MOBI.E PartyID is a 2022 PDF: 37 active tariff codes missing, 22 unused codes.
 - NAP `operator_id` is not a reliable OPC key: 21 ids carry more than one
   `operator_name` (3448 sites; ATLA alone has 7 spellings over 598 sites) and 3
   operators publish under the PartyCode instead of the PartyId (`BBGE`, `CIRC`,

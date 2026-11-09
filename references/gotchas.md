@@ -59,9 +59,6 @@
   é `V × I`.
 - A concordância de potência NAP↔MOBI.E é de 99,8% — apenas 29/18 923 pontos
   divergem mais de 30%.
-- MOBI.E PartyID (2022): faltam 38 códigos de tarifa ativos no PDF e há 22
-  códigos no PDF sem uso. Os operadores posteriores a 2022 (ATL, ZUN, SLX, KLS,
-  WEN, …) não constam.
 - 227 pontos (1%) não têm `usage_type`.
 - 3013 pontos (15%) marcados como `removed` no feed dinâmico continuam listados no
   inventário estático.
@@ -102,15 +99,14 @@
   Recarga Portugal" contra "ACCIONA RECARGA PORTUGAL,UNIPESSOAL LDA") — logo um
   operador que se renomeie deixa de resolver até o tracker acompanhar. É uma
   limitação da fonte, não um defeito a tapar com correspondência difusa.
-- O PDF PartyID do MOBI.E (`scripts/partyid_crossref.py`) é de **2022**; o
-  tracker é a única fonte atual.
 
 ## Tracker de erros PCVE (`pt-pcve-errors.xlsx`)
 
-- É um ficheiro **Office, não uma Google Sheet nativa**: tanto a API Sheets como
-  o `/export?format=xlsx` falham com
-  `400 failedPrecondition: must not be an Office file`. Usar
-  `drive.google.com/uc?export=download&id=…`.
+- É um ficheiro **xlsx (Office) alojado no Google Drive, não uma Google Sheet
+  nativa**: tanto a API Sheets como o `/spreadsheets/…/export?format=xlsx`
+  falham com `400 failedPrecondition: must not be an Office file`. O
+  `TRACKER_URL` usa o endpoint de export do Drive (`…export=download…`), que
+  passa o bloqueio às runners do GitHub Actions.
 - `Error List`: cabeçalho na **linha 15**, dados a partir da **linha 16**,
   colunas **B..K**. A coluna B (`CPO`) é um `VLOOKUP` à aba `CPO`, por isso uma
   reescrita com openpyxl mantém a fórmula mas perde o valor em cache — o
@@ -125,7 +121,8 @@
   considera correto. É isso que torna uma regra de anomalia fundamentada em vez
   de especulativa — por exemplo, 171 linhas de `750 V → 500 V` justificam a
   verificação das tensões placeholder, e 199 linhas de
-  `mode3AC3p → mode2AC1p` justificam a verificação do trifásico.
+  `mode3AC3p → mode2AC1p` justificam a verificação do trifásico (ambas em
+  `scripts/nap_static_checks.py`, que corre mesmo sem o tracker).
 - O que refuta: **os preços não são uma boa fonte de outliers**. O `min_fee` vai
   de 0 a 3,0 sem valores absurdos desde que a classe dos `97,561 €/min` foi
   corrigida, pelo que uma banda global dá zero achados e uma banda por operador

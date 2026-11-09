@@ -18,7 +18,6 @@ public data sources. The goal:
 | NAP MOBI.E (DATEX II 3.3) | Static inventory of sites/points | `data/evChargingInfra_latest.xml` |
 | NAP MOBI.E (DATEX II 3.3) | Dynamic status (state, prices) | `data/evActualStatus_latest.xml` |
 | MOBI.E OPC tariff | Per-point tariffs (€/kWh, €/min, flat fee) | `data/mobie_tarifas.csv` |
-| MOBI.E PartyID (PDF) | Official operator/CEME codes | `data/mobie_partyid.pdf` |
 | DGEG | Recognized OPC and CEME lists | `data/dgeg_opc.csv`, `data/dgeg_ceme.csv` |
 | OSM/umap (community) | Overpass dump of the "Postos de Carregamento v2.1" map + "Caça aos Postos" umap | `data/umap_cache/`, `data/osm_umap.csv` |
 | PCVE error tracker | Defects reported by the data owners, per operator/asset | `data/pt_pcve_errors.xlsx` (see note below) |
@@ -44,12 +43,11 @@ Mondays 06:00 UTC).
 
 ## Running
 
-Requires Python 3.11+ with `pandas` and `lxml` (plus `pdfplumber` for the PartyID
-PDF). On machines where system pip is blocked (e.g. PEP 668), use a venv:
+Requires Python 3.11+ with `pandas` and `lxml`. On machines where system pip is blocked (e.g. PEP 668), use a venv:
 
 ```bash
 python3 -m venv venv
-venv/bin/pip install pandas lxml pdfplumber
+venv/bin/pip install pandas lxml
 ```
 
 Pipeline (in dependency order):
@@ -62,7 +60,7 @@ venv/bin/python scripts/summary.py         # numeric summary
 venv/bin/python scripts/mobie_join.py      # join NAP + MOBI.E tariff -> data/nap_opc_points.csv
 venv/bin/python scripts/dgeg_lists.py      # DGEG OPC/CEME from the web pages
 venv/bin/python scripts/dgeg_crossref.py   # resolve OPC codes -> DGEG entities
-venv/bin/python scripts/partyid_crossref.py # cross-reference with the PartyID PDF
+venv/bin/python scripts/nap_static_checks.py # placeholder voltages + fake three-phase -> errors.md item 8
 venv/bin/python scripts/concelho_check.py    # validate coordinates vs CAOP concelho
 venv/bin/python scripts/osm_umap.py          # cross-reference NAP with OSM/umap (community)
 venv/bin/python scripts/make_pt_outline.py   # generate assets/pt_outline.json (map)
@@ -103,12 +101,12 @@ python3 scripts/check_agents.py
 | `scripts/nap_etl.py` | NAP XML parser (static + dynamic) to CSV |
 | `scripts/mobie_join.py` | NAP↔MOBI.E join by `site_external_id` + plug |
 | `scripts/dgeg_crossref.py` | OPC code → entity resolution (fuzzy match) |
-| `scripts/partyid_crossref.py` | Enrichment with the official PartyID |
+| `scripts/nap_static_checks.py` | Rules on the static NAP alone -> `errors.md` item 8 (placeholder voltages, fake three-phase) |
 | `scripts/concelho_check.py` | Coordinate validation vs CAOP concelho boundaries |
 | `scripts/osm_umap.py` | Community OSM/umap cross-check (operators, payment, doubts) |
 | `scripts/fetch_tracker.sh` | Downloads the PCVE error tracker (no CI credentials; URL kept in a secret) |
 | `scripts/tracker_sync.py` | Tracker xlsx -> authoritative OPC registry + labelled defect set |
-| `scripts/tracker_checks.py` | Tracker + NAP cross-check -> `errors.md` item 13 (OPC identity, removed assets, placeholder voltages) |
+| `scripts/tracker_checks.py` | Tracker + NAP cross-check -> `errors.md` item 13 (OPC identity, removed assets) |
 | `scripts/make_pt_outline.py` | Portugal outline for the SVG map (from CAOP) |
 | `scripts/check_quality.py` | Physical/schema sanity checks |
 | `scripts/build_dashboard.py` | Generates the standalone dashboard + facts/errors |
@@ -123,7 +121,7 @@ Everything fetched or derived lives in `data/`, which is gitignored without
 exceptions. The repo root holds only code, docs and deliverables.
 
 `sites`, `points`, `status`, `pricing` (NAP output), `nap_opc_points` (NAP
-+tariffs), `nap_opc_registry` (OPC code→entity), `mobie_tarifas`, `dgeg_*`, `mobie_partyid`.
++tariffs), `nap_opc_registry` (OPC code→entity), `mobie_tarifas`, `dgeg_*`.
 
 From the PCVE error tracker: `opc_registry_authority` (PartyId/PartyCode/name, 99
 CPOs), `tracker_errors` (3153 labelled defects) and `tracker_meta` (date+sha256).
@@ -164,7 +162,7 @@ Own code (`scripts/`, template, docs, analysis): `PolyForm-Noncommercial-1.0.0` 
 
 **Third-party data and schemas are NOT covered by PolyForm** — see
 `THIRD-PARTY-NOTICES.md`: NAP/MOBI.E (free use with attribution, no commercial
-use; tariff/PartyID © MOBI.E), DGEG lists (same), CAOP outline © DGT (CC-BY
+use; tariff © MOBI.E), DGEG lists (same), CAOP outline © DGT (CC-BY
 4.0), OSM data © OpenStreetMap contributors (ODbL 1.0, share-alike) +
 v2.1/Caça community maps, DATEX II schemas © CEN. `dashboard.html` is a
 collective work: our code is PolyForm, embedded data keeps its original

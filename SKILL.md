@@ -2,8 +2,8 @@
 name: nap-mobie-portugal-ev
 description: >-
   Analyse Portugal's public EV charging network from official open data: NAP MOBI.E
-  (DATEX II 3.3 static + dynamic), MOBI.E OPC tariffs, MOBI.E PartyID and DGEG
-  operator registries. Produces a self-contained local dashboard (dashboard.html),
+  (DATEX II 3.3 static + dynamic), MOBI.E OPC tariffs, DGEG operator registries
+  and the PCVE error tracker. Produces a self-contained local dashboard (dashboard.html),
   a facts list and a reportable-errors list. Use when the user asks to analyse,
   aggregate, join, map, visualise, audit data quality of, or build a dashboard for
   the Portuguese EV charging network / "rede de carregamento" / NAP MOBI.E / OPC
@@ -23,10 +23,10 @@ stale local copy. `scripts/fetch_data.sh` downloads everything (~230 MB).
 
 ## What this skill does
 
-1. **Fetch** fresh NAP XMLs, MOBI.E tariff CSV, PartyID PDF and DGEG pages.
+1. **Fetch** fresh NAP XMLs, MOBI.E tariff CSV and DGEG pages.
 2. **ETL** the two DATEX II XMLs (streaming) into clean CSVs.
 3. **Join** NAP points ↔ MOBI.E OPC tariffs (the non-obvious part — see Gotchas).
-4. **Resolve** OPC/CEME codes → entities via DGEG registries + PartyID.
+4. **Resolve** OPC/CEME codes → entities via DGEG registries (OPC identity: the PCVE tracker's PartyId).
 5. **Validate** physical/schema sanity and cross-source consistency.
 6. **Build** the dashboard + facts + reportable errors.
 
@@ -36,10 +36,10 @@ there instead of copying them here, where they'd go stale.
 
 ## Environment
 
-- venv with `pandas`, `lxml`, `pdfplumber`:
+- venv with `pandas`, `lxml`:
   ```bash
   python3 -m venv venv
-  venv/bin/pip install pandas lxml pdfplumber
+  venv/bin/pip install pandas lxml
   ```
 - Always run scripts from the repo root — data paths are `data/…` **relative to
   it** (`venv/bin/python scripts/nap_etl.py … data`, not from inside `scripts/`).
@@ -57,7 +57,7 @@ venv/bin/python scripts/summary.py            # numeric overview
 venv/bin/python scripts/mobie_join.py         # NAP ↔ MOBI.E tariffs -> data/nap_opc_points.csv
 venv/bin/python scripts/dgeg_lists.py         # DGEG pages -> data/dgeg_opc.csv, data/dgeg_ceme.csv
 venv/bin/python scripts/dgeg_crossref.py      # OPC codes -> entities -> data/nap_opc_registry.csv
-venv/bin/python scripts/partyid_crossref.py   # enrich with PartyID
+venv/bin/python scripts/nap_static_checks.py  # NAP-only rules -> data/nap_static_findings.md (errors.md item 8)
 venv/bin/python scripts/tracker_sync.py       # PCVE tracker xlsx -> derived CSVs (never versioned)
 venv/bin/python scripts/tracker_checks.py     # tracker + NAP -> data/tracker_findings.md (errors.md item 13)
 venv/bin/python scripts/build_dashboard.py    # -> dashboard.html, facts.md, errors.md
@@ -81,7 +81,6 @@ Outputs to give the user:
 - **NAP static**: `https://pgm.mobie.pt/integration/nap/evChargingInfra`
 - **NAP dynamic**: `https://pgm.mobie.pt/integration/nap/evActualStatus`
 - **OPC tariff**: `https://www.mobie.pt/documents/42032/106470/Tarifas` (CSV)
-- **PartyID**: MOBI.E documents PDF (2022, outdated — see Gotchas)
 - **DGEG**: OPC-com-reconhecimento-previo and CEME-registados pages
 - **PCVE error tracker**: `pt-pcve-errors.xlsx`, the data owners' own error list
   per operator/asset. Not public API — fetched by `scripts/fetch_tracker.sh`
@@ -104,7 +103,6 @@ Outputs to give the user:
   static 1:1 with no conflicting states.
 - 30% of connector rows have declared power inconsistent with V×I (>25% off);
   for `mode3AC3p` the physical power is `√3×V×I`, else `V×I`.
-- MOBI.E PartyID PDF is from 2022: 38 active tariff codes missing, 22 unused.
 - **Dashboard JSON**: sanitize NaN/Inf → null and dump with `allow_nan=False`,
   otherwise the browser's `JSON.parse` fails (historical bug).
 

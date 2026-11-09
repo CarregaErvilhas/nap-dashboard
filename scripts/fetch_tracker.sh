@@ -7,13 +7,14 @@
 # (TO FIX / FIXED / DOUBT) and the dates requested/fixed. Two products come out
 # of it (scripts/tracker_sync.py):
 #
-#   * the authoritative OPC table (`CPO` tab): PartyId -> PartyCode -> name.
-#     Only *current* source of OPC identity — the MOBI.E PartyID PDF is 2022;
+#   * the authoritative OPC table (`CPO` tab): PartyId -> PartyCode -> name,
+#     the only current source of OPC identity;
 #   * the declared-dead assets ("Remove. Replaced with new asset"), i.e. a
 #     positive list of assets that should no longer be published.
 #
-# Three fetch strategies, tried in order; none of them may fail the pipeline
-# (the versioned snapshot in git is the fallback, and its age is reported):
+# Two fetch strategies, tried in order; neither may fail the pipeline. Nothing
+# derived from the tracker is versioned, so if both fail errors.md simply has no
+# item 13 for that run:
 #
 #   1. TRACKER_URL set  -> anonymous download. This is what CI uses: the file is
 #      shared by its owner as "anyone with the link", so no credentials are
@@ -22,13 +23,12 @@
 #      owners' file should not be published there.
 #   2. `gog` available  -> authenticated Drive download, for when link sharing is
 #      off. Needs local Drive credentials, so it never works in CI.
-#   3. neither          -> warn and keep the versioned snapshot.
 #
-# TRACKER_URL may be either endpoint. The original copy was an Office file, NOT
-# a native Google Sheet, so the Sheets API and /export?format=xlsx rejected it
-# with `400 failedPrecondition: must not be an Office file` and
-# `drive.google.com/uc?export=download` was needed. The current copy is a native
-# Sheet (2026-10-24), where `…/export?format=xlsx` works.
+# The tracker is an xlsx (an Office file) hosted on Google Drive, not a native
+# Google Sheet. TRACKER_URL is Drive's export download endpoint
+# (`…export=download…`), which is what gets past the block on GitHub-hosted
+# runners. The Sheets API and `/spreadsheets/…/export?format=xlsx` reject an
+# Office file with `400 failedPrecondition: must not be an Office file`.
 #
 # Escape hatches: SKIP_TRACKER=1 to skip entirely, TRACKER_FILE to change the
 # destination name.
@@ -83,10 +83,10 @@ try_anonymous() {
 if [ -n "${TRACKER_URL:-}" ]; then
   tried="TRACKER_URL"
   echo "-> ${DEST} (anónimo, TRACKER_URL)"
-  # O Drive respondeu HTTP 400 ao IP das runners do GitHub (não 403), por isso
-  # a hipótese de bloqueio de IP não está confirmada. Tentamos primeiro o curl
-  # simples; se falhar, com um User-Agent de browser e com confirm=t, que é o
-  # que o Drive usa quando o download passa pelo interstitial de virus scan.
+  # O TRACKER_URL é o endpoint de export do Drive, o que passa o bloqueio às
+  # runners do GitHub. Tentamos primeiro o curl simples; se falhar, com um
+  # User-Agent de browser e com confirm=t, que é o que o Drive usa quando o
+  # download passa pelo interstitial de virus scan.
   UA_BROWSER='Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36'
   if try_anonymous "$TRACKER_URL"; then
     mv "$TMP" "$DEST"; fetched=1

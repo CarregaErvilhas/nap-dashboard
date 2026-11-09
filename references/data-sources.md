@@ -44,15 +44,6 @@ de EADME do NAP ao abrigo do DL 93/2025; decorre um regime transitório até
   redistribuição não é clara (ver `THIRD-PARTY-NOTICES.md`). Se o MOBI.E se
   opuser, remover ou censurar a pedido.
 
-## MOBI.E PartyID
-
-- PDF (de ~2022 — **desatualizado**, usar apenas como referência; faltam-lhe 38
-  códigos de tarifa ativos e tem 22 códigos sem uso):
-  `https://www.mobie.pt/documents/42032/223588/PartyID_MOBIE.pdf/3f0f61d7-a579-ca1c-4804-a39d4f2df8bc?t=1646652329843`
-  Colunas: `Código OCPI_Party_ID Nome Entidade CEME(eMSP) OPC(CPO)`.
-  A coluna `Código` é o código MOBI.E de 4 letras (`ACOR`, `BLUE`, …); a coluna
-  `OPC_Party_ID` é o identificador OCPI de 3 caracteres (`ACR`, `BLU`, …).
-
 ## DGEG — operadores registados
 
 - **Lista de OPC** (tabela HTML `Nº | Entidade | Validade | Morada | NIF | Site`):
@@ -78,8 +69,7 @@ asset, com o valor que cada dono considera correto, o estado
 saem daqui (`scripts/tracker_sync.py`):
 
 - `data/opc_registry_authority.csv` — a aba `CPO` (`PartyId | PartyCode |
-  nome`). A única fonte **atual** de identidade de OPC; o PDF PartyID do MOBI.E
-  acima é de 2022, como o próprio `scripts/partyid_crossref.py` assinala.
+  nome`). A única fonte **atual** de identidade de OPC.
 - `data/tracker_errors.csv` — a `Error List` normalizada, com uma
   `notes_class` agrupada. O único conjunto rotulado do projeto: um defeito real
   *e* o valor correto, que é o que torna uma nova regra de anomalia
@@ -94,12 +84,11 @@ derivados é versionado; são sempre re-extraídos do xls de origem.
 
 Armadilhas (verificadas):
 
-- A cópia original era um ficheiro **Office, não uma Google Sheet nativa**: a API
-  Sheets e o `/export?format=xlsx` rejeitavam-no com
-  `400 failedPrecondition: must not be an Office file` (usava-se
-  `drive.google.com/uc?export=download&id=…`). Desde 2026-10-24 existe uma
-  Google Sheet nativa, onde `/export?format=xlsx` funciona; é essa que
-  `TRACKER_URL` deve apontar.
+- É um ficheiro **xlsx (Office) alojado no Google Drive, não uma Google Sheet
+  nativa**. O `TRACKER_URL` usa o endpoint de export do Drive
+  (`…export=download…`), que é o que passa o bloqueio às runners do GitHub
+  Actions. A API Sheets e o `/spreadsheets/…/export?format=xlsx` rejeitam um
+  ficheiro Office com `400 failedPrecondition: must not be an Office file`.
 - O cabeçalho da `Error List` está na linha 15, os dados começam na linha 16;
   colunas B..K. A coluna B (`CPO`) é um `VLOOKUP` à aba `CPO`, pelo que depois
   de uma reescrita a leitura com `data_only` devolve vazios até o Excel/Sheets

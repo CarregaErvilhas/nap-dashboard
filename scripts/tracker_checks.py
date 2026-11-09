@@ -3,12 +3,11 @@
 
 Run from the repo root:  venv/bin/python scripts/tracker_checks.py
 
-Inputs (all gitignored except the first two):
+Inputs (all gitignored, none versioned):
   data/opc_registry_authority.csv  from scripts/tracker_sync.py (the `CPO` tab)
   data/tracker_errors.csv          from scripts/tracker_sync.py (the `Error List` tab)
   data/tracker_meta.json           provenance/freshness of the two above
   data/nap_static_sites.csv        from scripts/nap_etl.py
-  data/nap_static_points.csv       from scripts/nap_etl.py
 
 Outputs:
   data/tracker_findings.csv        one row per finding (machine)
@@ -30,17 +29,14 @@ the class is real and not a one-off):
                          its code rather than its id (BBGE, CIRC, CONT).
   opc_nome_fragmentado   one operator_id, several operator_names (21 ids / 3448
                          sites). The registry supplies the canonical spelling.
-  partyid_sem_sites      registry PartyIds with no site at all in the NAP.
-  tensao_placeholder     750 V / 600 V on a DC connector — legacy CHAdeMO-era
-                         placeholder values. The tracker has 171 rows of this
-                         class (750 -> 500 V) already adjudicated.
-  trifasico_sem_3p       charging_mode mode3AC3p with single-phase voltage and
-                         < 11 kW declared — a real three-phase point is >= 12 kW
-                         (230 V x 32 A x sqrt3). Tracker: 199 rows of this class.
   asset_removido         assets the operator declared "Remove. Replaced with new
                          asset" that are still published. Complements errors.md
                          item 10, which only looks at points the *dynamic* feed
                          marks 'removed'.
+
+The rules mined from the tracker's classes but run on the NAP alone (placeholder
+DC voltages, mode3AC3p without three-phase power) live in nap_static_checks.py,
+so they still run when the tracker cannot be fetched.
 """
 import argparse
 import csv
@@ -60,21 +56,9 @@ OUT_CSV = 'data/tracker_findings.csv'
 OUT_MD = 'data/tracker_findings.md'
 ERRORS_ITEM = 13  # errors.md item number
 
-# NB: kept lowercase — `is_dc()` lowercases the value before startswith(), and
-# a mixed-case tuple silently matches nothing (e.g. 'iec62196T2COMBO').
-DC_CONNECTORS = ('chademo', 'iec62196t1combo', 'iec62196t2combo',
-                 'pantographtopdown', 'pantographbottomup')
-PLACEHOLDER_VOLTAGES = (750, 600)
-LEGACY_CLASS_ROWS = 171   # tracker history: 750 -> 500 V
-MODE3_CLASS_ROWS = 199    # tracker history: mode3AC3p -> mode2AC1p
-
 
 def norm(s):
     return re.sub(r'[^a-z0-9]', '', str(s).lower())
-
-
-def is_dc(connector_type):
-    return str(connector_type).lower().startswith(DC_CONNECTORS)
 
 
 def asset_variants(asset, party_id):
@@ -168,7 +152,6 @@ def main():
             return 0
     meta = json.load(open(META_JSON, encoding='utf-8')) if os.path.exists(META_JSON) else {}
     sites = pd.read_csv('data/nap_static_sites.csv', dtype=str)
-    points = pd.read_csv('data/nap_static_points.csv')
     with open(REGISTRY_CSV, encoding='utf-8', newline='') as fh:
         reg = [(r['party_id'], r['party_code'], r['cpo_name'])
                for r in csv.DictReader(fh)]
@@ -181,7 +164,6 @@ def main():
 
     # --- identity ---------------------------------------------------------
     resolved = resolve_opcs(reg, sites)
-    seen_pids = {v['party_id'] for v in resolved.values() if v['party_id']}
 
     for op_id, v in sorted(resolved.items()):
         if not v['party_id']:
@@ -207,32 +189,6 @@ def main():
                  op_id, f"{v['n_sites']} sites, {len(v['names'])} grafias: "
                  + ' / '.join(f'{n} ({c})' for n, c in v['names'].most_common())
                  + (f" — canónico no tracker: «{canon}»" if canon else ''))
-
-    for pid, code, cname in reg:
-        if pid not in seen_pids:
-            F.add('partyid_sem_sites', 'BAIXO', 'CPO do tracker sem sites no NAP',
-                 pid, f"«{cname}» (PartyCode {code or 'vazio'}) não aparece no NAP")
-
-    # --- static point rules ----------------------------------------------
-    p = points.copy()
-    p['V'] = pd.to_numeric(p.voltage, errors='coerce')
-    p['W'] = pd.to_numeric(p.max_power_w, errors='coerce')
-
-    m = p.V.isin(PLACEHOLDER_VOLTAGES) & p.connector_type.map(is_dc)
-    for _, r in p[m].iterrows():
-        F.add('tensao_placeholder', 'ALTO',
-              f'Tensão placeholder {int(r.V)} V em conector DC', str(r.point_id),
-              f"{r.site_external_id} / {r.connector_type}: {int(r.V)} V "
-              f"(classe histórica no tracker: {LEGACY_CLASS_ROWS} linhas 750→500 V)")
-
-    m = ((p.charging_mode == 'mode3AC3p') & p.V.isin([230, 240])
-         & p.W.between(1, 10_999))
-    for _, r in p[m].iterrows():
-        F.add('trifasico_sem_3p', 'MÉDIO',
-              'mode3AC3p sem potência trifásica', str(r.point_id),
-              f"{r.site_external_id} / {r.operator_id}: {int(r.W)} W a "
-              f"{int(r.V)} V — trifásico real exige >=12 kW "
-              f"(classe histórica no tracker: {MODE3_CLASS_ROWS} linhas)")
 
     # --- operator-declared removals --------------------------------------
     index = {e: n for e, n in zip(sites.external_id, sites.operator_name)}
@@ -276,17 +232,13 @@ def main():
         f"Gerado por `scripts/tracker_checks.py` a partir de "
         f"`{REGISTRY_CSV}`/`{ERRORS_CSV}`.\n")
 
-    order = ['asset_removido', 'tensao_placeholder', 'opc_sem_partyid',
-             'trifasico_sem_3p', 'opc_nome_fragmentado', 'opc_usa_partycode',
-             'partyid_sem_sites']
+    order = ['asset_removido', 'opc_sem_partyid', 'opc_nome_fragmentado',
+             'opc_usa_partycode']
     titles = {
         'opc_usa_partycode': 'NAP publica com o PartyCode em vez do PartyId',
         'asset_removido': 'Assets declarados removidos pelo operador ainda no NAP',
-        'tensao_placeholder': 'Tensões placeholder (750 V / 600 V) em conectores DC',
         'opc_sem_partyid': 'Operadores NAP sem PartyId no tracker',
-        'trifasico_sem_3p': 'Pontos declarados trifásicos sem potência trifásica',
         'opc_nome_fragmentado': 'operator_id com vários nomes',
-        'partyid_sem_sites': 'CPO do tracker sem sites no NAP',
     }
     sub = 'abcdefgh'
     i = 0

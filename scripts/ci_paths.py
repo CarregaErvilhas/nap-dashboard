@@ -40,11 +40,12 @@ DATA_FILES = [
     # fontes
     'evChargingInfra_latest.xml', 'evActualStatus_latest.xml',
     'archiveStatus_latest.json.gz', 'archive_stats.json',
-    'mobie_tarifas.csv', 'mobie_partyid.pdf', 'mobie_partyid.csv',
+    'mobie_tarifas.csv',
     'dgeg_opc.html', 'dgeg_ceme.html', 'dgeg_opc.csv', 'dgeg_ceme.csv',
     'pt_pcve_errors.xlsx',
     # derivados
     'nap_static_sites.csv', 'nap_static_points.csv',
+    'nap_static_findings.csv', 'nap_static_findings.md',
     'nap_dynamic_status.csv', 'nap_dynamic_pricing.csv',
     'nap_opc_registry.csv', 'nap_opc_points.csv', 'nap_opc_join_report.txt',
     'agents-summary.json', 'data-provenance.json',
