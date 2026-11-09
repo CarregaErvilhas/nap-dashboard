@@ -470,7 +470,7 @@ for p in P.itertuples(index=False):
         # declara no NAP. Deixam o ohmigo responder a "postos acima de 500 V"
         # (carros de 800 V). Não confundir com `level` (abaixo), que é o nível
         # de tensão da *rede* (BTN/BTE/MT) e escolhe a TAR. Há valores de
-        # reserva conhecidos (750/600 V em DC, ver tracker_checks.py), por isso
+        # reserva conhecidos (750/600 V em DC, ver nap_static_checks.py), por isso
         # o ohmigo diz sempre que são valores declarados.
         'v': nint(p.voltage),
         'a': nint(p.max_current),

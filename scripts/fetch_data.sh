@@ -25,12 +25,11 @@ AMPERE_ARCHIVE_URL="${AMPERE_ARCHIVE_URL:-}"
 AMPERE_ARCHIVE_COUNTRY="${AMPERE_ARCHIVE_COUNTRY:-PT}"
 ARCHIVE_MAX_AGE_MIN="${ARCHIVE_MAX_AGE_MIN:-180}"
 
-# check_content <file> <expect>: xml | pdf | csv:TOKEN | html-table
+# check_content <file> <expect>: xml | csv:TOKEN | html-table | archive-status
 check_content() {
   local file="$1" expect="$2"
   case "$expect" in
     xml)        head -c 100 "$file" | grep -q '<?xml' ;;
-    pdf)        head -c 5 "$file" | grep -q '%PDF' ;;
     csv:*)      head -n 1 "$file" | grep -qF "${expect#csv:}" ;;
     html-table) grep -qi '<table' "$file" ;;
     archive-status) python3 scripts/archive_status.py --check "$file" --max-age-min "$ARCHIVE_MAX_AGE_MIN" >&2 ;;
@@ -89,10 +88,6 @@ esac
 # Friendly Liferay URL that always resolves to the current version.
 fetch "https://www.mobie.pt/documents/42032/106470/Tarifas" data/mobie_tarifas.csv csv:UID_TOMADA
 
-# MOBI.E PartyID (official operator/CEME codes). PDF from 2022 — outdated:
-# use as reference only; many active tariff codes are missing from it.
-fetch "https://www.mobie.pt/documents/42032/223588/PartyID_MOBIE.pdf/3f0f61d7-a579-ca1c-4804-a39d4f2df8bc?t=1646652329843" data/mobie_partyid.pdf pdf
-
 # DGEG — registered OPC list (HTML table)
 # 2026-10: DGEG restructured the site under DL 93/2025
 # (operacao-e-comercializacao/); the old operacao-de-pontos-de-carregamento/
@@ -108,4 +103,4 @@ fetch \
 
 echo "fetched:"
 ls -lh data/evChargingInfra_latest.xml data/evActualStatus_latest.xml data/archiveStatus_latest.json.gz \
-      data/mobie_tarifas.csv data/mobie_partyid.pdf data/dgeg_opc.html data/dgeg_ceme.html 2>/dev/null || true
+      data/mobie_tarifas.csv data/dgeg_opc.html data/dgeg_ceme.html 2>/dev/null || true

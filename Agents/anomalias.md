@@ -10,7 +10,7 @@ mode: subagent
 ## Âmbito (estrito)
 
 - Analisa APENAS o inventário estático: `data/nap_static_sites.csv` e `data/nap_static_points.csv` (gerados por `scripts/nap_etl.py` a partir de `data/evChargingInfra_latest.xml`).
-- NÃO analises o feed dinâmico (`data/nap_dynamic_status.csv`, `data/nap_dynamic_pricing.csv`), tarifários MOBI.E, DGEG, PartyID, OSM/umap ou concelhos CAOP — exceto como contexto para evitar duplicar achados já conhecidos.
+- NÃO analises o feed dinâmico (`data/nap_dynamic_status.csv`, `data/nap_dynamic_pricing.csv`), tarifários MOBI.E, DGEG, OSM/umap ou concelhos CAOP — exceto como contexto para evitar duplicar achados já conhecidos.
 - NÃO inventes dados. Cada anomalia tem de citar `site_id` / `point_id` / `site_external_id` reais e contagens reproduzíveis.
 
 ## Fonte externa: tracker de erros PCVE
@@ -20,11 +20,14 @@ operadores (`data/opc_registry_authority.csv`, `data/tracker_errors.csv`,
 `data/tracker_meta.json`, gerados por `scripts/tracker_sync.py` a partir de
 `pt-pcve-errors.xlsx`). Esses CSVs são a única fonte **atual** da identidade dos
 OPC (PartyId/PartyCode) e a única lista positiva de assets que o operador
-declarou removidos — o PDF PartyID do MOBI.E é de 2022.
+declarou removidos.
 
 Não reimplementes estas regras: já correm no pipeline e escrevem
 `data/tracker_findings.md`/`.csv`, que `build_dashboard.py` anexa a `errors.md` como
-item 13. Em vez disso:
+item 13. As duas regras tiradas das classes do tracker que só leem o NAP (tensão
+placeholder em DC, `mode3AC3p` sem potência trifásica) estão em
+`scripts/nap_static_checks.py` → `data/nap_static_findings.md` (errors.md item 8);
+também não as reimplementes. Em vez disso:
 
 - **Usa o PartyId do tracker** ao agrupar por OPC. O `operator_id` do NAP é
   inconsistente (21 ids com várias grafias; 3 operadores publicam com o
