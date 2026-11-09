@@ -425,9 +425,17 @@ ex_shared = str(_shared.sort_values(ascending=False).index[0]) if n_shared_ids e
 
 n_usage_missing = int(P.drop_duplicates(PK).usage_type.isna().sum())
 
-_Mt = _fsafe('data/mobie_tarifas.csv', sep=';', decimal=',', dtype=str)
-n_bare_uid = (int(_Mt.UID_TOMADA.dropna().apply(lambda x: str(x).strip().isdigit()).sum())
-              if _Mt is not None and 'UID_TOMADA' in _Mt else None)
+# Ids de tomada (EVSE) tal como o MOBI.Data os publica. O data/mobie_tarifas.csv
+# já não serve: desde 2026-11-09 é reconstruído por scripts/mobie_tariffs.py e o
+# UID_TOMADA é sintético.
+n_bare_uid = None
+if os.path.exists('data/mobie_stations.json'):
+    with open('data/mobie_stations.json', encoding='utf-8') as _fh:
+        _evse = [str(_so.get('evse') or '').strip()
+                 for _st in json.load(_fh).get('stations', [])
+                 for _so in _st.get('sockets') or []]
+    _evse = [e for e in _evse if e]
+    n_bare_uid = sum(e.isdigit() for e in _evse)
 _static_f = nap_static_checks.findings(P)
 n_placeholder_v = sum(1 for r in _static_f if r['check'] == 'tensao_placeholder')
 n_fake_3p = sum(1 for r in _static_f if r['check'] == 'trifasico_sem_3p')
@@ -491,7 +499,7 @@ FACTS_HTML = f"""
 <li><b>Setor público:</b> municípios operam como OPC (Cascais Próxima, EMEL, Loulé Concelho Global, Superguimarães, Santa Cruz).</li>
 <li><b>Registo OPC limpo:</b> os {n_codes_matched} códigos ativos resolvem para uma entidade (DGEG); {n_reg_matched}/{n_reg} combos código/operador com reconhecimento DGEG.</li>
 <li><b>CEMEs:</b> {pt(n_brands)} códigos de marca na rede vs {pt(n_dgeg_ceme)} registados DGEG; {n_both} códigos são simultaneamente OPC e CEME (espaço de código partilhado).</li>
-<li><b>Validação cruzada:</b> potência NAP vs MOBI.E concorda em {p1(ratio(n_pow_checked - n_pow_div, n_pow_checked))}% dos pontos (só {n_pow_div} divergem &gt;30%) — boa notícia para a fiabilidade geral.</li>
+{f'<li><b>Validação cruzada:</b> potência NAP vs MOBI.E concorda em {p1(ratio(n_pow_checked - n_pow_div, n_pow_checked))}% dos pontos (só {n_pow_div} divergem &gt;30%) — boa notícia para a fiabilidade geral.</li>' if n_pow_checked else ''}
 <li><b>Tesla (novidade no NAP):</b> {n_tesla_sites} sites / {n_tesla_pts} pontos Supercharger (CCS Combo2, até {tesla_max_kw if tesla_max_kw is not None else '?'} kW), com estado dinâmico mas ainda sem tarifário OPC na MOBI.E.</li>
 <li><b>Cross-check OSM (comunidade):</b> o dump Overpass do autor do mapa "Postos de Carregamento v2.1" cobre {pt(n_osm_cov)} sites NAP (~{p0(ratio(n_osm_cov, n_sites))}%); {n_osm_adhoc if n_osm_adhoc is not None else 0} têm pagamento ad-hoc por cartão no OSM não refletido no `auth_methods` do NAP.</li>
 </ul>"""
@@ -502,8 +510,8 @@ ERRS_HTML = f"""
   <div class="meta">{p1(ratio(n_vi_bad, n_vi_rows))}% das tomadas ({pt(n_vi_bad)}/{pt(n_vi_rows)}) têm potência declarada que não bate com V×I (&gt;25% de diferença). Destas, {pt(n_vi_over)} ({p1(ratio(n_vi_over, n_vi_rows))}%) declaram potência <b>acima</b> da capacidade elétrica (fisicamente impossível), ex. 1200 V × 600 A = 720 kW declarados como 200 kW. Valores suspeitos no dataset: tensões de 1200 V e 3600 V, correntes de 600 A.</div>
 </li>
 <li>
-  <div class="head">2. Potência NAP vs MOBI.E em contradição ({n_pow_div} pontos)</div>
-  <div class="meta">As duas fontes oficiais divergem &gt;30%.{' Ex.: ' + pow_div_ex + '.' if pow_div_ex else ''}</div>
+  <div class="head">2. Potência NAP vs MOBI.E em contradição ({f'{n_pow_div} pontos' if n_pow_checked else 'sem dados'})</div>
+  <div class="meta">{('As duas fontes oficiais divergem &gt;30%.' + (' Ex.: ' + pow_div_ex + '.' if pow_div_ex else '')) if n_pow_checked else 'O MOBI.Data publica a potência máxima do posto repetida em todas as tomadas, por isso deixou de haver uma potência por tomada para comparar com o NAP.'}</div>
 </li>
 <li>
   <div class="head">3. Estado duplicado / contraditório no feed dinâmico</div>
@@ -522,8 +530,8 @@ ERRS_HTML = f"""
   <div class="meta">{pt(n_usage_missing)} tomadas ({p1(ratio(n_usage_missing, n_points))}%) sem tipo de utilização.</div>
 </li>
 <li>
-  <div class="head">7. UID_TOMADA MOBI.E inconsistente</div>
-  <div class="meta">{pt(n_bare_uid)} linhas com ids numéricos ('97', '98'…) fora de qualquer formato; mistura de formatos com/sem prefixo PT- e segmento de conector presente/ausente.</div>
+  <div class="head">7. Ids de tomada (EVSE) MOBI.E inconsistentes</div>
+  <div class="meta">{pt(n_bare_uid)} tomadas com ids só numéricos ('97', '98'…), fora de qualquer formato; mistura de formatos com e sem prefixo PT-/operador e com e sem zero à esquerda no número da tomada.</div>
 </li>
 <li>
   <div class="head">8. Tensões placeholder e falso trifásico (NAP estático)</div>

@@ -80,7 +80,7 @@ Outputs to give the user:
 `references/data-sources.md` has the exact URLs and license notes. Summary:
 - **NAP static**: `https://pgm.mobie.pt/integration/nap/evChargingInfra`
 - **NAP dynamic**: `https://pgm.mobie.pt/integration/nap/evActualStatus`
-- **OPC tariff**: `https://www.mobie.pt/documents/42032/106470/Tarifas` (CSV)
+- **OPC tariff**: `https://data.mobie.pt/data/tariffs.json` + `https://data.mobie.pt/data/stations.json` (MOBI.Data JSON, converted to the old CSV layout by `scripts/mobie_tariffs.py`)
 - **DGEG**: OPC-com-reconhecimento-previo and CEME-registados pages
 - **PCVE error tracker**: `pt-pcve-errors.xlsx`, the data owners' own error list
   per operator/asset. Not public API — fetched by `scripts/fetch_tracker.sh`

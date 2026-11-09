@@ -56,8 +56,12 @@ produces CSVs + a self-contained dashboard (`dashboard.html`, `facts.md`,
 ```bash
 bash scripts/fetch_data.sh
 ```
-Downloads the live NAP XMLs, MOBI.E tariff CSV and DGEG HTML pages
-from the official origins (see `scripts/fetch_data.sh` for the exact URLs).
+Downloads the live NAP XMLs, the MOBI.Data tariff/station JSON and the DGEG
+HTML pages from the official origins (see `scripts/fetch_data.sh` for the exact
+URLs), then `scripts/mobie_tariffs.py` rebuilds `data/mobie_tarifas.csv` in the
+old MOBI.E layout from the two JSON files. Since 2026-11-09 mobie.pt no longer
+serves the tariff CSV; see `references/data-sources.md` for what the new source
+lacks (grid level, parking time, per-socket power, ~500 sites).
 
 Optional: read the dynamic status (`evActualStatus`, ~40 MB) from the
 [AmpereArchive](https://github.com/CarregaErvilhas/AmpereArchive) instead of the
@@ -231,7 +235,8 @@ venv/bin/python scripts/tracker_checks.py   # CSVs + NAP -> findings
 `scripts/ohmigo_dataset.py` builds `data/ohmigo_chargers.json` for the ohmigo
 MCP server (EV charging cost answers for ChatGPT/Claude): sites, points, power,
 the connector's declared tensão (`v`, V) and max current (`a`, A), the grid
-voltage level (`level`: BTN/BTE/MT, which picks the TAR) and the **raw** MOBI.E OPC tariffs per socket (every €/min tier and
+voltage level (`level`: BTN/BTE/MT, which picks the TAR; **always `null` since
+2026-11-09**, because neither MOBI.Data nor the NAP publishes it) and the **raw** MOBI.E OPC tariffs per socket (every €/min tier and
 the `AD_HOC_PAYMENT` plan, which `data/nap_opc_points.csv` collapses to one value),
 whether the cable is attached (`cable`, from `connectorFormat`), the NAP's site
 `name`, opening `hours` (converted by `nap_etl.py` from DATEX II
@@ -339,8 +344,13 @@ venv/bin/python scripts/validate_dashboard.py
   **without VAT** (confirmed with the NAP). So do MOBI.E's tariff file values,
   `AD_HOC_PAYMENT` included (its 0,51 €/kWh at IONITY × 1,23 = IONITY's own 0,63).
   VAT depends on the site's region (lower on Madeira and the Azores); ohmigo adds it.
-- 764 MOBI.E `UID_TOMADA` values are bare numeric ids.
-- Power agreement NAP↔MOBI.E is 99.8% (only 27/16 601 diverge >30%).
+- 808 MOBI.Data EVSE ids are bare numbers (FCT, ACC, HGP, VIA). The
+  `UID_TOMADA` in `data/mobie_tarifas.csv` is synthetic (`<ID>-<socket>-1`)
+  except for those, which keep the bare id so ohmigo's per-site fallback still
+  sees them.
+- MOBI.Data's per-socket `kw` is the station maximum repeated on every socket,
+  so there is no NAP↔MOBI.E power comparison any more (errors.md item 2 says
+  "sem dados"). With the old CSV the agreement was 99.8%.
 - OSM: charging sites are tagged two ways — `amenity=charging_station` (node **or**
   way; the way form is the whole site) and `man_made=charge_point` (node only,
   usually one per post/pole). **A site's `ref` can appear under either tag, and

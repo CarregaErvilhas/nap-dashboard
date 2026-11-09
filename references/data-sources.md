@@ -28,21 +28,38 @@ de EADME do NAP ao abrigo do DL 93/2025; decorre um regime transitório até
 
 ## Tarifário OPC do MOBI.E
 
-- CSV, separado por pontos e vírgulas, com vírgula decimal. Uma linha por
-  (posto, tomada, tipo de tarifa). URL amigável que resolve sempre para a
-  versão atual:
-  `https://www.mobie.pt/documents/42032/106470/Tarifas`
+- Desde 2026-11-09 vem do portal **MOBI.Data**, em dois JSON (os mesmos que o
+  botão "Exportar CSV" do mapa junta no browser):
+  - `https://data.mobie.pt/data/tariffs.json` — `sets` (listas de componentes
+    `{plan: regular|adhoc, price, unit: charge|kWh|min, after, until}`, com
+    `after`/`until` em minutos) e `stations` (`{"ABF-00011": {"1": <índice do
+    set>, …}}`). Atualizado diariamente (`source.fetchedAt`).
+  - `https://data.mobie.pt/data/stations.json` — postos com nome, morada,
+    município, `partyId`, `powerClass` e tomadas (`evse`, `connector`, `kw`,
+    `status`).
 
-  Colunas: `ID;UID_TOMADA;TIPO_POSTO;MUNICIPIO;MORADA;OPERADOR;MOBICHARGER;
-  NIVELTENSAO;TIPO_TARIFARIO;TIPO_TARIFA;TARIFA;TIPO_TOMADA;FORMATO_TOMADA;
-  POTENCIA_TOMADA`. `TARIFA` é um texto como `€ 0.261 /charge`, `€ 0.1 /kWh`,
-  `€ 0.02 /min` — parsear com uma expressão regular; `TIPO_TARIFA` é um de
-  `FLAT | ENERGY | TIME | PARKING_TIME`.
+  `scripts/mobie_tariffs.py` junta-os e escreve `data/mobie_tarifas.csv` no
+  formato antigo (`;`, uma linha por componente, `TARIFA` como
+  `€ 0.15 /min após 0 min até 45 min`), por isso `mobie_join.py` e
+  `ohmigo_dataset.py` não mudaram. O `UID_TOMADA` é sintético
+  (`<ID>-<tomada>-1`), exceto os ids só numéricos (FCT, ACC, HGP, VIA), que
+  ficam como o MOBI.E os publica.
 
-  Licença: `© MOBI.E, all rights reserved` — não foi encontrada licença explícita
-  de reutilização em mobie.pt. Tratar como referência factual; a base de
-  redistribuição não é clara (ver `THIRD-PARTY-NOTICES.md`). Se o MOBI.E se
-  opuser, remover ou censurar a pedido.
+  **O que se perdeu face ao CSV antigo** (`mobie.pt/documents/42032/106470/Tarifas`,
+  que o site novo redireciona para uma página HTML):
+  - `NIVELTENSAO` (BTN/BTE/MT): não existe em lado nenhum, nem no NAP. O
+    `level` do ohmigo fica `null`.
+  - `PARKING_TIME`: não há unidade de estacionamento nos `sets`.
+  - Potência por tomada: o `kw` do `stations.json` é o máximo do posto repetido
+    em todas as tomadas (os 1 455 postos AC+DC têm o mesmo valor em todas), por
+    isso `POTENCIA_TOMADA` fica vazio e o item 2 de `errors.md` diz "sem dados".
+  - Cobertura: em 2026-11-09, 497 locais que o CSV de 2026-10-24 tarifava não têm
+    entrada no `tariffs.json` (Repsol, EPK, EDP, EML, IONITY…) e nenhum posto FCT
+    ou Continente tem tarifa. O join NAP↔MOBI.E desceu de 88,3% para 81,2%.
+
+  Licença: o MOBI.Data apresenta-se como "dados abertos", mas não foi encontrada
+  licença explícita. Tratar como referência factual (ver
+  `THIRD-PARTY-NOTICES.md`). Se o MOBI.E se opuser, remover ou censurar a pedido.
 
 ## DGEG — operadores registados
 

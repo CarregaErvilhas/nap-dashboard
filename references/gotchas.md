@@ -9,10 +9,12 @@
   pouco fiável: a parte da região tem por vezes o prefixo `E` colado (`ELSB`
   contra `LSB` do MOBI.E) e o número de segmentos varia (3–7). Analisar
   diretamente o `site_external_id`.
-- O `UID_TOMADA` do MOBI.E aparece em vários formatos (`PT-EDP-EABF-00009-1-1`,
-  `PT-*…`, só números). `mobie_join.py` pega no penúltimo segmento separado por
-  `-` e normaliza como inteiro. Há 733 valores de `UID_TOMADA` que são só
-  identificadores numéricos (`97`, `98`).
+- Os ids de tomada (EVSE) do MOBI.Data aparecem em vários formatos
+  (`ABF-00011-01`, `PT-EDP-EABF-00008-1`, `ALM-90003-1`, só números): 808 são
+  só números (`97`, `98`) em 2026-11-09. O `UID_TOMADA` do
+  `data/mobie_tarifas.csv` é reconstruído pelo `mobie_tariffs.py` como
+  `<ID>-<tomada>-1`; `mobie_join.py` pega no penúltimo segmento e normaliza como
+  inteiro.
 - A tarifa tem várias linhas por (posto, tomada): manter o tipo de tarifa
   `REGULAR` quando exista, senão qualquer uma; rodar
   `FLAT/ENERGY/TIME/PARKING_TIME` para largo.
@@ -57,8 +59,9 @@
   600 A = 720 kW declarados como 200 kW). Valores crus suspeitos: 1200 V,
   3600 V, 600 A. Para `mode3AC3p` a potência física é `√3 × V × I`; a monofásica
   é `V × I`.
-- A concordância de potência NAP↔MOBI.E é de 99,8% — apenas 29/18 923 pontos
-  divergem mais de 30%.
+- Já não há potência por tomada do lado do MOBI.E: o `kw` do MOBI.Data é o
+  máximo do posto em todas as tomadas. (Com o CSV antigo, a concordância
+  NAP↔MOBI.E era de 99,8%.)
 - 227 pontos (1%) não têm `usage_type`.
 - 3013 pontos (15%) marcados como `removed` no feed dinâmico continuam listados no
   inventário estático.
