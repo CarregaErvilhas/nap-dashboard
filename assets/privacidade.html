@@ -43,7 +43,7 @@ d.setAttribute('data-theme',light?'light':'dark');d.setAttribute('data-vision',v
 
 <section lang="pt">
 <h1>Privacidade</h1>
-<p>Este site é uma página estática. Não tem contas, formulários, cookies nem análise de tráfego, e não faz pedidos a servidores de terceiros: os dados, o mapa e os gráficos vêm todos dentro da própria página.</p>
+<p>Este site é uma página estática. Não tem contas, formulários, cookies nem análise de tráfego. Os dados, o mapa e os gráficos vêm dentro da própria página, com uma exceção: o estado ao vivo dos postos.</p>
 <h2>O que fica guardado no teu navegador</h2>
 <p>Só preferências de apresentação, no <code>localStorage</code> do teu navegador. Não são enviadas a ninguém e apagam-se limpando os dados do site:</p>
 <ul>
@@ -53,6 +53,8 @@ d.setAttribute('data-theme',light?'light':'dark');d.setAttribute('data-vision',v
 </ul>
 <h2>O que o alojamento vê</h2>
 <p>O site é servido pelo GitHub Pages. Como em qualquer alojamento web, o GitHub recebe o teu endereço IP e os dados normais do pedido (navegador, página pedida) e trata-os segundo a sua <a href="https://docs.github.com/pt/site-policy/privacy-policies/github-general-privacy-statement">declaração de privacidade</a>. Nós não temos acesso a esses registos nem os usamos.</p>
+<h2>O estado ao vivo</h2>
+<p>Ao abrir o dashboard, o teu navegador pede o estado atual de cada posto a <code>ohm-age.ocarroeletrico.com</code>, o arquivo <a href="https://github.com/CarregaErvilhas/AmpereArchive">AmpereArchive</a> (nosso, servido pela Cloudflare). O pedido não leva cookies nem a página de onde vens; a Cloudflare recebe o teu endereço IP e os dados normais do pedido e trata-os segundo a sua <a href="https://www.cloudflare.com/privacypolicy/">política de privacidade</a>. Do nosso lado, a Cloudflare só mostra estatísticas agregadas (número de pedidos, por exemplo), que não permitem seguir um visitante nem uma sessão. Se o pedido falhar ou o bloqueares, o dashboard mostra o estado da última atualização semanal.</p>
 <h2>Os dados dos postos</h2>
 <p>Vêm de fontes públicas (NAP/MOBI.E, DGEG, OpenStreetMap) e descrevem equipamentos e operadores, não pessoas. Se encontrares aqui um dado pessoal que não devia estar, escreve-nos e removemo-lo.</p>
 <h2>Ligações externas</h2>
@@ -63,7 +65,7 @@ d.setAttribute('data-theme',light?'light':'dark');d.setAttribute('data-vision',v
 
 <section lang="en">
 <h1>Privacy</h1>
-<p>This site is a static page. It has no accounts, forms, cookies or analytics, and it makes no requests to third-party servers: the data, the map and the charts all ship inside the page itself.</p>
+<p>This site is a static page. It has no accounts, forms, cookies or analytics. The data, the map and the charts ship inside the page itself, with one exception: the live status of the chargers.</p>
 <h2>What is stored in your browser</h2>
 <p>Only display preferences, in your browser's <code>localStorage</code>. They are never sent anywhere and go away when you clear the site's data:</p>
 <ul>
@@ -73,6 +75,8 @@ d.setAttribute('data-theme',light?'light':'dark');d.setAttribute('data-vision',v
 </ul>
 <h2>What the host sees</h2>
 <p>The site is served by GitHub Pages. As with any web host, GitHub receives your IP address and the usual request data (browser, requested page) and handles it under its <a href="https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement">privacy statement</a>. We have no access to those logs and do not use them.</p>
+<h2>Live status</h2>
+<p>When you open the dashboard, your browser asks <code>ohm-age.ocarroeletrico.com</code> for the current status of each charger. That is the <a href="https://github.com/CarregaErvilhas/AmpereArchive">AmpereArchive</a> (ours, served by Cloudflare). The request carries no cookies and not the page you came from; Cloudflare receives your IP address and the usual request data and handles them under its <a href="https://www.cloudflare.com/privacypolicy/">privacy policy</a>. On our side, Cloudflare only shows aggregate statistics (such as the number of requests), which cannot follow a visitor or a session. If it fails or you block it, the dashboard shows the status from the last weekly refresh.</p>
 <h2>Charger data</h2>
 <p>It comes from public sources (NAP/MOBI.E, DGEG, OpenStreetMap) and describes equipment and operators, not people. If you find personal data here that should not be, write to us and we will remove it.</p>
 <h2>External links</h2>

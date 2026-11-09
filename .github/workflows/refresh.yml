@@ -120,6 +120,9 @@ jobs:
           fi
           python scripts/archive_history.py --days 28
       - name: Build dashboard
+        env:
+          # Origem do estado ao vivo (CSP + LIVE_URL); vazia = a do template.
+          AMPERE_ARCHIVE_URL: ${{ vars.AMPERE_ARCHIVE_URL }}
         run: python scripts/build_dashboard.py
       # Guard: se um upstream mudou o formato e o pipeline produziu dados
       # absurdos sem rebentar (join 0%, DGEG vazio), não commita nem publica —

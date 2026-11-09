@@ -17,6 +17,7 @@ não é JSON — daí um módulo só, importado pelo build e pelo validador, par
 os dois não possam divergir.
 """
 import json
+import re
 
 # Sequências que fecham o elemento <script> ou que o levam ao estado
 # "script data escaped" (onde um `</script>` posterior deixa de fechar o
@@ -42,6 +43,29 @@ def dump_payload(data):
     for ch in _JS_LINE_TERMINATORS:
         raw = raw.replace(ch, '\\u%04x' % ord(ch))
     return raw
+
+
+# Origem do AmpereArchive escrita no template (CSP connect-src + LIVE_URL do
+# estado ao vivo). O build troca-a pela de AMPERE_ARCHIVE_URL quando definida,
+# para o host viver num só sítio (a variável do repo); sem ela fica esta.
+ARCHIVE_ORIGIN_DEFAULT = 'https://ohm-age.ocarroeletrico.com'
+_ORIGIN_RE = re.compile(r'https://[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)+(:[0-9]{1,5})?')
+
+
+def apply_archive_origin(tmpl, url):
+    """Troca a origem do arquivo no template pela de `url` (só https://host[:porta]).
+
+    O valor vai parar a uma CSP e a uma string JS: qualquer coisa que não seja
+    uma origem limpa é recusada (ValueError) em vez de escrita na página.
+    """
+    if not url:
+        return tmpl
+    origin = url.strip().rstrip('/').lower()
+    if not _ORIGIN_RE.fullmatch(origin):
+        raise ValueError(f'AMPERE_ARCHIVE_URL não é uma origem https://host: {url!r}')
+    if ARCHIVE_ORIGIN_DEFAULT not in tmpl:
+        raise ValueError('template sem a origem do arquivo (CSP/LIVE_URL)')
+    return tmpl.replace(ARCHIVE_ORIGIN_DEFAULT, origin)
 
 
 def unsafe_sequences(text):

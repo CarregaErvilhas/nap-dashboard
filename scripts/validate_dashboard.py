@@ -56,6 +56,8 @@ globalThis.document = {
 globalThis.window = globalThis;
 globalThis.addEventListener = nop; globalThis.dispatchEvent = nop;
 globalThis.location = { href: 'file:///dashboard.html', search: '' };
+// Sem rede na validação: o estado ao vivo testa-se com dados sintéticos (passo 5).
+globalThis.NAP_NO_LIVE = true;
 // NB: node >=21 tem navigator/localStorage nativos (só-leitura); a atribuição
 // direta falha em silêncio, por isso instalam-se como propriedades próprias.
 const stubNavigator = { language: 'pt-PT', languages: ['pt-PT', 'pt'] };
@@ -199,6 +201,38 @@ def main():
                   file=sys.stderr)
             return 1
     print('DOM-stub eval OK (inicialização não rebentou)')
+
+    # 5. estado ao vivo com dados sintéticos: aplica, recalcula sem rebentar,
+    #    recusa estados fora da lista (iriam para innerHTML/classes) e ignora
+    #    um ficheiro velho.
+    main_js = next((s for s in scripts if 'const D = ' in s), None)
+    if main_js and '__napApplyLive' in main_js:
+        probe = r'''
+const live = globalThis.__napApplyLive;
+const ps = D.points.slice(0, 50);
+const P = {};
+ps.forEach((p, i) => { P['XX-' + p.site_external_id + '/' + p.point_id] = {s: i === 0 ? '<img src=x>' : 'charging'}; });
+const now = Date.parse('2026-11-09T10:00:00Z');
+const r = live({publishedAt: '2026-11-09T09:55:00Z', points: P}, now);
+if (!r || r.stale || r.n < 1) throw new Error('nada aplicado: ' + JSON.stringify(r));
+if (D.points.some(p => p.status === '<img src=x>')) throw new Error('estado hostil aceite');
+if (!(D.status.charging >= r.n)) throw new Error('D.status não recalculado');
+const old = live({publishedAt: '2026-11-08T00:00:00Z', points: P}, now);
+if (!old || !old.stale) throw new Error('ficheiro velho não marcado como desatualizado');
+if (live({points: P}, now) !== null || live(null, now) !== null) throw new Error('lixo aceite');
+setLang('en'); setLang('pt');
+'''
+        with tempfile.NamedTemporaryFile('w', suffix='.js', delete=False) as fh:
+            fh.write(STUB + '\n' + main_js + '\n' + probe)
+            path = fh.name
+        try:
+            r = run_node([path])
+        finally:
+            os.unlink(path)
+        if r.returncode != 0:
+            print(f'FAIL: estado ao vivo — {r.stderr[-600:]}', file=sys.stderr)
+            return 1
+        print('estado ao vivo OK (aplica, recalcula, recusa lixo e ficheiros velhos)')
     return 0
 
 

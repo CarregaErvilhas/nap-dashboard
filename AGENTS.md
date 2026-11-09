@@ -360,7 +360,7 @@ venv/bin/python scripts/validate_dashboard.py
   `\u003c`/`\u003e`/`\u0026`; o `JSON.parse` reconstrói os caracteres originais,
   por isso o valor em runtime é idêntico. `validate_dashboard.py` chumba
   qualquer payload com `<`, `>` ou `&` crus.
-- No external libs, pure CSS/JS, must open via `file://`.
+- No external libs, pure CSS/JS, must open via `file://` (the live status fetch works there too: the archive sends `access-control-allow-origin: *`).
 - Bilingual PT/EN (single file): `detectLang()` shows PT for `pt*` browsers,
   EN otherwise; PT|EN toggle persists to `localStorage`, `?lang=pt|en` overrides.
   Static chrome lives in the JS `STR` table (`data-i18n`/`data-i18n-ph`/
@@ -407,9 +407,27 @@ venv/bin/python scripts/validate_dashboard.py
   `<script>` do `<head>` (valida contra lista fechada o que lê de
   `nap-theme`/`nap-vision`; `nap-lang` idem). Cores só por variáveis CSS
   (`--s-<estado>` para os estados); em cb/hc o mapa usa uma forma por estado.
-  A CSP vai em `<meta>` (o Pages não deixa definir cabeçalhos): a página não
-  pode pedir nada à rede. `assets/privacidade.html`, `404.html` e os ícones
-  são copiados para o site pelo `pages.yml`.
+  A CSP vai em `<meta>` (o Pages não deixa definir cabeçalhos): o único
+  pedido à rede permitido é `connect-src https://ohm-age.ocarroeletrico.com`
+  (estado ao vivo, abaixo). `assets/privacidade.html`, `404.html` e os ícones
+  são copiados para o site pelo `pages.yml`; a página de privacidade descreve
+  esse pedido (PT e EN), por isso qualquer pedido novo tem de entrar lá também.
+- Estado ao vivo: ao abrir, a página lê `v1/PT/status.json.gz` do
+  AmpereArchive (sem cookies nem referrer; se vier ainda em gzip, descomprime
+  com `DecompressionStream`) e refaz o que depende do estado: gráficos de
+  estado e ocupação, KPI de ocupação, cores do mapa, tabela e filtro de
+  estado. Factos, erros e novidades continuam da semana. Casa cada ponto pelo
+  `point_id` e por `site_id` == `site_external_id` ou a acabar em
+  `-<site_external_id>` (o arquivo usa o `site_id` do NAP, `EZC-AMD-00051`;
+  2026-11-09: 19 534/19 537, 0 ambíguos); ambíguo fica como estava. Só aceita
+  estados da lista DATEX II e ignora ficheiros com mais de 180 min. Sem rede,
+  bloqueado ou desatualizado, mostra o estado da semana e diz-o no cabeçalho.
+  `validate_dashboard.py` desliga o fetch (`NAP_NO_LIVE`) e testa
+  `applyLive` com dados sintéticos. O host está no template
+  (`dashboard_payload.ARCHIVE_ORIGIN_DEFAULT`) e o build troca-o, na CSP e
+  no `LIVE_URL`, pela origem de `AMPERE_ARCHIVE_URL` (variável do repo, passada
+  ao passo "Build dashboard"); só aceita `https://host[:porta]`, senão avisa e
+  fica o do template.
 
 ## Convenções de escrita (PT-PT técnico)
 - **tensão**, nunca "voltagem". Unidades abreviam-se `V`/`A`/`kW` normalmente.

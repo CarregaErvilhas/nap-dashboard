@@ -8,8 +8,8 @@
 <meta name="theme-color" content="#f8fafc" media="(prefers-color-scheme: light)">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="robots" content="index,follow,max-image-preview:large">
-<!-- GitHub Pages não deixa definir cabeçalhos HTTP: a CSP vai em <meta>. A página não pede nada à rede (tudo embutido), por isso default-src 'none'. frame-ancestors/report-uri não funcionam em <meta>. -->
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src 'self' data:; base-uri 'none'; form-action 'none'">
+<!-- GitHub Pages não deixa definir cabeçalhos HTTP: a CSP vai em <meta>. Tudo vem embutido na página; o único pedido à rede é o estado ao vivo do AmpereArchive (connect-src), e sem ele a página mostra o estado da semana. frame-ancestors/report-uri não funcionam em <meta>. -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src 'self' data:; connect-src https://ohm-age.ocarroeletrico.com; base-uri 'none'; form-action 'none'">
 <script>
 // Aparência (tema + visão) aplicada antes do primeiro desenho, sem flash.
 // Valores validados contra uma lista fechada: o que está no localStorage pode
@@ -208,7 +208,7 @@ window.NAPAPP=(function(){
   </div>
   </header>
   <main id="main">
-  <div class="sub"><span data-i18n="sub1">NAP EADME (AFIR)</span> · snapshot <span id="snap"></span> · <a href="https://nap.ocarroeletrico.com/">nap.ocarroeletrico.com</a> · <a href="https://github.com/CarregaErvilhas/nap-dashboard" data-i18n="codeLink">código no GitHub</a></div>
+  <div class="sub"><span data-i18n="sub1">NAP EADME (AFIR)</span> · snapshot <span id="snap"></span> <span id="live" aria-live="polite"></span> · <a href="https://nap.ocarroeletrico.com/">nap.ocarroeletrico.com</a> · <a href="https://github.com/CarregaErvilhas/nap-dashboard" data-i18n="codeLink">código no GitHub</a></div>
   <p class="sub" data-i18n="intro">Todos os postos de carregamento públicos de Portugal, a partir do Ponto de Acesso Nacional (NAP): onde estão, se estão livres, que potência e tomadas têm, quem os opera e quanto cobra o operador (tarifa OPC da MOBI.E).</p>
   <div class="sub"><span data-i18n="sisterLbl">Também d'O Carro Elétrico:</span> <a href="https://ohmigo.ocarroeletrico.com/" data-i18n="sisterOhmigo">ohmigo, o custo de carregar em cada posto, no ChatGPT e no Claude</a> · <a href="https://ceme.ocarroeletrico.com/" data-i18n="sisterCeme">comparador de tarifários CEME</a> · <a href="https://ocarroeletrico.com/">ocarroeletrico.com</a></div>
 
@@ -320,7 +320,7 @@ pt: {
   sub1:'NAP EADME (AFIR)', codeLink:'código no GitHub',
   intro:'Todos os postos de carregamento públicos de Portugal, a partir do Ponto de Acesso Nacional (NAP): onde estão, se estão livres, que potência e tomadas têm, quem os opera e quanto cobra o operador (tarifa OPC da MOBI.E).',
   sisterLbl:'Também d\'O Carro Elétrico:', sisterOhmigo:'ohmigo, o custo de carregar em cada posto, no ChatGPT e no Claude', sisterCeme:'comparador de tarifários CEME',
-  secOverview:'Visão geral', secNews:'Novidades da semana', chStatus:'Pontos por estado (snapshot)', chRegion:'Locais por região',
+  secOverview:'Visão geral', secNews:'Novidades da semana', chStatus:'Pontos por estado', chRegion:'Locais por região',
   chPw:'Pontos por classe de potência', chConn:'Tipos de connector (tomadas)',
   secOperators:'Operadores', chOpSites:'Top 15 operadores — locais', chOpPts:'Top 15 operadores — pontos',
   chOpOcc:'Ocupação instantânea por operador (top 15)', chPriceOp:'Tarifa OPC média — componente €/kWh, por operador',
@@ -331,6 +331,9 @@ pt: {
   secFacts:'Factos interessantes', secErrors:'Erros reportáveis',
   secAnom:'Anomalias — agente semanal', secChurn:'Mudanças de OPCs', secHist:'Histórico (AmpereArchive)', secHubs:'Hubs por potência total (>300 kW)',
   statusPwTitle:'Estado × classe de potência', statusCol:'estado',
+  liveLoading:'· a carregar o estado ao vivo…', liveOk:'· estado ao vivo de {t} ({n} de {m} pontos; AmpereArchive, não oficial)',
+  liveStale:'· estado ao vivo desatualizado ({t}): gráficos e mapa com o estado da semana',
+  liveFail:'· estado ao vivo indisponível: gráficos e mapa com o estado da semana', kpiOccLive:'Ocupação (ao vivo)',
   priceComp:'Componente', priceN:'n pontos', priceMean:'média', priceMax:'máx',
   priceEnergy:'Energia (€/kWh)', priceSemCeme:'Sem CEME* (valor único NAP)', colRegime:'Regime', colNap:'Valor NAP* (€)',
   regMobie:'MOBI.E', regSemTarifa:'MOBI.E s/ tarifa', regSemCeme:'Sem CEME',
@@ -363,7 +366,7 @@ en: {
   sub1:'NAP EADME (AFIR)', codeLink:'code on GitHub',
   intro:'Every public EV charger in Portugal, from the National Access Point (NAP): where they are, whether they are free, their power and plugs, who runs them and what the operator charges (MOBI.E CPO fee).',
   sisterLbl:'Also from O Carro Elétrico:', sisterOhmigo:'ohmigo, the cost of charging at each charger, in ChatGPT and Claude', sisterCeme:'CEME tariff comparison',
-  secOverview:'Overview', secNews:'Network news', chStatus:'Points by status (snapshot)', chRegion:'Sites by region',
+  secOverview:'Overview', secNews:'Network news', chStatus:'Points by status', chRegion:'Sites by region',
   chPw:'Points by power class', chConn:'Connector types (outlets)',
   secOperators:'Operators', chOpSites:'Top 15 operators — sites', chOpPts:'Top 15 operators — points',
   chOpOcc:'Instant occupancy by operator (top 15)', chPriceOp:'Average OPC tariff — €/kWh component, by operator',
@@ -374,6 +377,9 @@ en: {
   secFacts:'Interesting facts', secErrors:'Reportable errors',
   secAnom:'Anomalies — weekly agent', secChurn:'OPC changes', secHist:'History (AmpereArchive)', secHubs:'Hubs by total power (>300 kW)',
   statusPwTitle:'Status × power class', statusCol:'status',
+  liveLoading:'· loading live status…', liveOk:'· live status as of {t} ({n} of {m} points; AmpereArchive, unofficial)',
+  liveStale:'· live status out of date ({t}): charts and map show the weekly status',
+  liveFail:'· live status unavailable: charts and map show the weekly status', kpiOccLive:'Occupancy (live)',
   priceComp:'Component', priceN:'n points', priceMean:'mean', priceMax:'max',
   priceEnergy:'Energy (€/kWh)', priceSemCeme:'No CEME* (single NAP value)', colRegime:'Regime', colNap:'NAP value* (€)',
   regMobie:'MOBI.E', regSemTarifa:'MOBI.E no tariff', regSemCeme:'No CEME',
@@ -702,7 +708,7 @@ function multiSel(id,labelKey,vals,disp){ const el=document.getElementById(id), 
   el.addEventListener('keydown',e=>{ if(e.key==='Escape'){ setOpen(false); btn.focus(); } });
   document.addEventListener('click',e=>{ if(!el.contains(e.target)) setOpen(false); });
   refresh();
-  return { has:()=>sel.size>0, get:()=>sel,
+  return { has:()=>sel.size>0, get:()=>sel, setVals:v=>{ vals=v; },
     relabel:()=>{ menu.innerHTML = vals.map(v=>`<label><input type="checkbox" value="${esc(v)}"${sel.has(v)?' checked':''}> ${esc(d(v))}</label>`).join('');
       menu.querySelectorAll('input').forEach(cb=>cb.addEventListener('change',()=>{
         if(cb.checked) sel.add(cb.value); else sel.delete(cb.value);
@@ -791,6 +797,7 @@ function applyStatic(){
   document.documentElement.lang = LANG;
   document.title = T('pageTitle');
   document.getElementById('snap').textContent = D.snapshot;
+  renderLive();
   document.querySelectorAll('[data-i18n]').forEach(el=>{ el.textContent = T(el.getAttribute('data-i18n')); });
   document.querySelectorAll('[data-i18n-ph]').forEach(el=>{ el.setAttribute('placeholder', T(el.getAttribute('data-i18n-ph'))); });
   document.querySelectorAll('[data-i18n-title]').forEach(el=>{ const s=T(el.getAttribute('data-i18n-title')); el.setAttribute('title', s); el.setAttribute('aria-label', s); });
@@ -832,6 +839,97 @@ document.getElementById('langPt').addEventListener('click',()=>setLang('pt'));
 document.getElementById('langEn').addEventListener('click',()=>setLang('en'));
 setLang(detectLang());
 window.__ready=true;
+
+// ---------- estado ao vivo (AmpereArchive) ----------
+// O dashboard é reconstruído uma vez por semana; o AmpereArchive reescreve o
+// estado de cada tomada sempre que o NAP publica (~5 min). Na visita lemos esse
+// ficheiro e refazemos o que depende do estado: gráficos de estado e ocupação,
+// KPI de ocupação, cores do mapa, tabela. Factos e erros continuam da semana.
+// Sem rede, bloqueado ou desatualizado: fica tudo como veio no payload.
+const LIVE_URL = 'https://ohm-age.ocarroeletrico.com/v1/PT/status.json.gz';
+const LIVE_MAX_AGE_MIN = 180;   // o mesmo limite que o fetch_data.sh usa para o arquivo
+const LIVE_STATUSES = new Set(['charging','available','outOfOrder','inoperative','blocked','planned','unknown','other','removed']);
+var LIVE = {state:null};   // var: renderLive() corre no 1.º setLang(), antes desta linha
+function renderLive(){
+  const el = document.getElementById('live'); if(!el) return;
+  if(!LIVE || !LIVE.state){ el.textContent=''; return; }
+  const t = LIVE.t ? new Date(LIVE.t).toLocaleString(numLocale(),{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'}) : '';
+  el.textContent = T('live'+LIVE.state[0].toUpperCase()+LIVE.state.slice(1))
+    .replace('{t}',t).replace('{n}',fmtInt(LIVE.n)).replace('{m}',fmtInt(LIVE.m));
+}
+// O arquivo chave as tomadas pelo site_id do NAP ("EZC-AMD-00051/AMD-00051-1");
+// o payload tem o external_id do local ("AMD-00051"). Casa pelo point_id e por
+// site_id == external_id ou a terminar em "-<external_id>"; ambíguo = não mexe.
+function applyLive(obj, now){
+  if(!obj || typeof obj!=='object' || !obj.points || typeof obj.points!=='object') return null;
+  const pub = Date.parse(obj.publishedAt);
+  if(!isFinite(pub)) return null;
+  if(((now||Date.now()) - pub) > LIVE_MAX_AGE_MIN*60000) return {stale:true, t:pub};
+  const idx = new Map();
+  for(const k of Object.keys(obj.points)){
+    const i = k.indexOf('/'); if(i<1) continue;
+    const pt = k.slice(i+1); if(!idx.has(pt)) idx.set(pt, []); idx.get(pt).push(k.slice(0,i));
+  }
+  let n = 0;
+  for(const p of D.points){
+    const c = (idx.get(p.point_id)||[]).filter(s=>s===p.site_external_id || s.endsWith('-'+p.site_external_id));
+    if(c.length!==1) continue;
+    const v = obj.points[c[0]+'/'+p.point_id], st = v && v.s;
+    if(typeof st==='string' && LIVE_STATUSES.has(st)){ p.status = st; n++; }
+  }
+  if(!n) return null;
+  // As mesmas agregações do build_dashboard.py, sobre o estado novo.
+  const isAct = s => s==='charging' || s==='available';
+  const occ = a => { const act=a.filter(p=>isAct(p.status)); return act.length ? Math.round(1000*act.filter(p=>p.status==='charging').length/act.length)/10 : null; };
+  D.status = {}; D.points.forEach(p=>{ D.status[p.status]=(D.status[p.status]||0)+1; });
+  const sw = {};
+  Object.keys(D.status_pw||{}).forEach(c=>{ sw[c]={}; });
+  D.points.forEach(p=>{ if(p.pw_class && sw[p.pw_class]) sw[p.pw_class][p.status]=(sw[p.pw_class][p.status]||0)+1; });
+  D.status_pw = sw;
+  D.occ_pw = D.occ_pw.map(x=>{ const a=D.points.filter(p=>p.pw_class===x.c);
+    return {c:x.c, occ:occ(a), charging:a.filter(p=>p.status==='charging').length, active:a.filter(p=>isAct(p.status)).length}; });
+  D.occ_op = D.occ_op.map(x=>({op:x.op, pts:x.pts, occ:occ(D.points.filter(p=>p.operator_name===x.op))}));
+  const bySite = new Map();
+  D.points.forEach(p=>{ const m=bySite.get(p.site_external_id)||{}; m[p.status]=(m[p.status]||0)+1; bySite.set(p.site_external_id,m); });
+  D.sites.forEach(s=>{ const m=bySite.get(s.ext); if(!m) return;
+    let best=null; for(const k in m){ if(best===null || m[k]>m[best]) best=k; } s.status=best; });
+  const o = occ(D.points);
+  const setK = (arr, re, label, v) => (arr||[]).forEach(k=>{ if(re.test(k.t)){ k.t=label; k.v=v; } });
+  if(o!=null){
+    setK(D.kpis, /^Occupancy/, 'Occupancy (live)', o.toFixed(1)+'%');
+    setK(D.kpis_pt, /^Ocupação/, 'Ocupação (ao vivo)', o.toFixed(1).replace('.',',')+'%');
+  }
+  statusFilter.setVals([...new Set(D.points.map(p=>p.status))].sort());
+  return {stale:false, t:pub, n:n, m:D.points.length};
+}
+window.__napApplyLive = applyLive;
+(function loadLive(){
+  if(window.NAP_NO_LIVE || typeof fetch!=='function') return;
+  LIVE = {state:'loading'}; renderLive();
+  const ctl = (typeof AbortController==='function') ? new AbortController() : null;
+  const tm = ctl ? setTimeout(()=>ctl.abort(), 15000) : null;
+  fetch(LIVE_URL, {signal: ctl ? ctl.signal : undefined, credentials:'omit', referrerPolicy:'no-referrer', cache:'no-cache'})
+    .then(r=>{ if(!r.ok) throw new Error('HTTP '+r.status); return r.arrayBuffer(); })
+    .then(buf=>{
+      // O R2 guarda o ficheiro em gzip e a Cloudflare só manda Content-Encoding
+      // para alguns Accept-Encoding: se ainda vier comprimido (1f 8b), descomprime aqui.
+      const b = new Uint8Array(buf);
+      if(b[0]===0x1f && b[1]===0x8b){
+        if(typeof DecompressionStream!=='function') throw new Error('sem DecompressionStream');
+        return new Response(new Blob([buf]).stream().pipeThrough(new DecompressionStream('gzip'))).json();
+      }
+      return JSON.parse(new TextDecoder().decode(b));
+    })
+    .then(obj=>{
+      const res = applyLive(obj);
+      if(!res){ LIVE = {state:'fail'}; renderLive(); return; }
+      if(res.stale){ LIVE = {state:'stale', t:res.t}; renderLive(); return; }
+      LIVE = {state:'ok', t:res.t, n:res.n, m:res.m};
+      setLang(LANG);   // volta a desenhar tudo o que depende do estado
+    })
+    .catch(()=>{ LIVE = {state:'fail'}; renderLive(); })
+    .finally(()=>{ if(tm) clearTimeout(tm); });
+})();
 </script>
 <footer class="mut" style="font-size:11px;margin-top:28px;padding-top:12px;border-top:1px solid var(--line2)">© 2026 O Carro Elétrico / Fernando Miguel · <a href="https://nap.ocarroeletrico.com/">nap.ocarroeletrico.com</a> · <span data-i18n="footUse">Uso não-comercial livre</span> (<a href="https://github.com/CarregaErvilhas/nap-dashboard/blob/main/LICENSE">PolyForm Noncommercial 1.0.0</a>, só código próprio — ver <a href="https://github.com/CarregaErvilhas/nap-dashboard/blob/main/THIRD-PARTY-NOTICES.md">THIRD-PARTY-NOTICES.md</a>); <span data-i18n="footCom">uso comercial requer licença</span> — <a href="mailto:info@ocarroeletrico.com">info@ocarroeletrico.com</a> · <a href="https://m.me/OCarroEletricoDotCom">Messenger</a> · <a href="privacidade.html" data-i18n="privLink">Privacidade</a>.<br>Fontes: NAP EADME (MOBI.E, via NAP-IMT) + tarifas MOBI.E (<a href="https://www.mobie.pt/">mobie.pt</a>) · listas DGEG (<a href="https://www.dgeg.gov.pt/">dgeg.gov.pt</a>) — uso livre com menção de fonte, sem fins lucrativos · classes de potência AFIR (<a href="https://eur-lex.europa.eu/eli/reg/2023/1804/oj">Reg. (UE) 2023/1804, Anexo III</a>) · © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors (<a href="https://opendatacommons.org/licenses/odbl/">ODbL</a>) · contorno © DGT (CAOP, <a href="https://www.dgterritorio.gov.pt/dados-abertos">CC-BY 4.0</a>) · esquemas DATEX II © CEN (<a href="https://datex2.eu/">datex2.eu</a>) · mapas comunidade <a href="https://umap.openstreetmap.fr/pt-pt/map/postos-de-carregamento-v21_690884">Postos de Carregamento v2.1</a> + <a href="https://umap.openstreetmap.fr/en/map/caca-aos-postos-de-carregamento_1386222">Caça aos Postos</a> (Alexandre Moleiro).</footer>
 </body>
