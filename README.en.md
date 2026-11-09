@@ -17,7 +17,7 @@ public data sources. The goal:
 |-------|-----------|----------|
 | NAP MOBI.E (DATEX II 3.3) | Static inventory of sites/points | `data/evChargingInfra_latest.xml` |
 | NAP MOBI.E (DATEX II 3.3) | Dynamic status (state, prices) | `data/evActualStatus_latest.xml` |
-| MOBI.E OPC tariff | Per-point tariffs (€/kWh, €/min, flat fee) | `data/mobie_tarifas.csv` |
+| MOBI.Data OPC tariff | Per-point tariffs (€/kWh, €/min, flat fee) | `data/mobie_tariffs.json` + `data/mobie_stations.json` → `data/mobie_tarifas.csv` |
 | DGEG | Recognized OPC and CEME lists | `data/dgeg_opc.csv`, `data/dgeg_ceme.csv` |
 | OSM/umap (community) | Overpass dump of the "Postos de Carregamento v2.1" map + "Caça aos Postos" umap | `data/umap_cache/`, `data/osm_umap.csv` |
 | PCVE error tracker | Defects reported by the data owners, per operator/asset | `data/pt_pcve_errors.xlsx` (see note below) |

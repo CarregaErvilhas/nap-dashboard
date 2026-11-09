@@ -7,8 +7,9 @@
 # Each download goes to <dest>.download first and is only renamed on success,
 # so a failed/interrupted run never leaves a truncated file pretending to be
 # the real one. Empty downloads fail loudly, and every file passes a content
-# ("magic") check — a 200 carrying an HTML error page (ex. Liferay a devolver
-# HTML em vez do CSV) tem tamanho >0 e passava no teste anterior.
+# ("magic") check — a 200 carrying an HTML error page (ex. o mobie.pt a
+# redireccionar um ficheiro para uma página HTML) tem tamanho >0 e passava no
+# teste anterior.
 set -euo pipefail
 
 mkdir -p data
@@ -25,12 +26,13 @@ AMPERE_ARCHIVE_URL="${AMPERE_ARCHIVE_URL:-}"
 AMPERE_ARCHIVE_COUNTRY="${AMPERE_ARCHIVE_COUNTRY:-PT}"
 ARCHIVE_MAX_AGE_MIN="${ARCHIVE_MAX_AGE_MIN:-180}"
 
-# check_content <file> <expect>: xml | csv:TOKEN | html-table | archive-status
+# check_content <file> <expect>: xml | csv:TOKEN | json:KEY | html-table | archive-status
 check_content() {
   local file="$1" expect="$2"
   case "$expect" in
     xml)        head -c 100 "$file" | grep -q '<?xml' ;;
     csv:*)      head -n 1 "$file" | grep -qF "${expect#csv:}" ;;
+    json:*)     python3 -c 'import json,sys; sys.exit(0 if sys.argv[2] in json.load(open(sys.argv[1])) else 1)' "$file" "${expect#json:}" 2>/dev/null ;;
     html-table) grep -qi '<table' "$file" ;;
     archive-status) python3 scripts/archive_status.py --check "$file" --max-age-min "$ARCHIVE_MAX_AGE_MIN" >&2 ;;
     *) echo "erro interno: expect desconhecido '$expect'" >&2; return 1 ;;
@@ -84,9 +86,15 @@ case "$NAP_STATUS_SOURCE" in
   *) echo "erro: NAP_STATUS_SOURCE='$NAP_STATUS_SOURCE' (nap|archive)" >&2; exit 1 ;;
 esac
 
-# MOBI.E OPC tariff file (CSV, semicolon-separated, decimal comma)
-# Friendly Liferay URL that always resolves to the current version.
-fetch "https://www.mobie.pt/documents/42032/106470/Tarifas" data/mobie_tarifas.csv csv:UID_TOMADA
+# MOBI.E OPC tariffs. Until 2026-11-09 a CSV on mobie.pt
+# (documents/42032/106470/Tarifas); the new site dropped it and now redirects
+# that URL to an HTML page. The MOBI.Data portal publishes the same data as two
+# JSON files (its map's "Exportar CSV" joins them in the browser);
+# mobie_tariffs.py rebuilds data/mobie_tarifas.csv in the old layout from them.
+# Not in the new source: NIVELTENSAO (BTN/BTE/MT) and PARKING_TIME.
+fetch "https://data.mobie.pt/data/tariffs.json" data/mobie_tariffs.json json:sets
+fetch "https://data.mobie.pt/data/stations.json" data/mobie_stations.json json:stations
+python3 scripts/mobie_tariffs.py
 
 # DGEG — registered OPC list (HTML table)
 # 2026-10: DGEG restructured the site under DL 93/2025
@@ -103,4 +111,4 @@ fetch \
 
 echo "fetched:"
 ls -lh data/evChargingInfra_latest.xml data/evActualStatus_latest.xml data/archiveStatus_latest.json.gz \
-      data/mobie_tarifas.csv data/dgeg_opc.html data/dgeg_ceme.html 2>/dev/null || true
+      data/mobie_tariffs.json data/mobie_stations.json data/mobie_tarifas.csv data/dgeg_opc.html data/dgeg_ceme.html 2>/dev/null || true

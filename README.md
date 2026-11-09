@@ -16,7 +16,7 @@ elétricos em Portugal, a partir de fontes públicas oficiais. O objetivo é:
 |-------|-----------|----------|
 | NAP MOBI.E (DATEX II 3.3) | Inventário estático de locais/pontos | `data/evChargingInfra_latest.xml` |
 | NAP MOBI.E (DATEX II 3.3) | Estado dinâmico (status, preços) | `data/evActualStatus_latest.xml` |
-| MOBI.E tarifário OPC | Tarifas por ponto (€/kWh, €/min, taxa fixa) | `data/mobie_tarifas.csv` |
+| MOBI.Data tarifário OPC | Tarifas por ponto (€/kWh, €/min, taxa fixa) | `data/mobie_tariffs.json` + `data/mobie_stations.json` → `data/mobie_tarifas.csv` |
 | DGEG | Listas de OPC e CEME reconhecidos | `data/dgeg_opc.csv`, `data/dgeg_ceme.csv` |
 | OSM/umap (comunidade) | Dump Overpass do mapa "Postos de Carregamento v2.1" + umap "Caça aos Postos" | `data/umap_cache/`, `data/osm_umap.csv` |
 | Tracker de erros PCVE | Erros reportados pelos donos dos dados, por operador/asset | `data/pt_pcve_errors.xlsx` (ver nota abaixo) |
