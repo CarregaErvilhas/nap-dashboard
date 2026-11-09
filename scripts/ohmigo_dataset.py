@@ -460,7 +460,8 @@ for p in P.itertuples(index=False):
     pt = {
         'id': p.point_id,
         'kw': round(kw / 1000, 1) if kw else None,
-        'connector': CONNECTOR.get(str(p.connector_type), str(p.connector_type)),
+        # Ficha em branco no NAP: None, não o texto "nan" que str(NaN) daria.
+        'connector': CONNECTOR.get(text(p.connector_type), text(p.connector_type)),
         'dc': 'DC' in mode,
         'phases': 1 if mode.endswith('1p') else 3 if mode.endswith('3p') else None,
         # cableMode3 = o cabo está preso ao posto; socket = levas o teu cabo.
