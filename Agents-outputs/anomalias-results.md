@@ -1,6 +1,6 @@
-# Anomalias — dados estáticos NAP (2026-11-09, snapshot 2026-11-09 (fetch 2026-11-09T12:43:56+00:00))
+# Anomalias — dados estáticos NAP (2026-11-09, snapshot 2026-11-09 (fetch 2026-11-09T15:50:29+00:00))
 
-Análise do inventário estático do NAP/MOBI.E (DATEX II 3.3): **8,811 sites**, **19,601 linhas de conector** e **19,537 pontos** distintos por `(site_id, point_id)`, de **92 `operator_id`** mais um grupo de 107 sites `CNT-*` sem operador publicado (identificado adiante como `SEMID`). Snapshot lido dos CSVs gerados pelo ETL (`last_updated` máximo `2026-11-09T03:00:03.651Z`; fetch `2026-11-09T12:43:56+00:00`). Sem rede nesta execução.
+Análise do inventário estático do NAP/MOBI.E (DATEX II 3.3): **8,811 sites**, **19,601 linhas de conector** e **19,537 pontos** distintos por `(site_id, point_id)`, de **92 `operator_id`** mais um grupo de 107 sites `CNT-*` sem operador publicado (identificado adiante como `SEMID`). Snapshot lido dos CSVs gerados pelo ETL (`last_updated` máximo `2026-11-09T03:00:03.651Z`; fetch `2026-11-09T15:50:29+00:00`). Sem rede nesta execução.
 
 Dois avisos de leitura, porque mudam a interpretação das contagens:
 
@@ -16,7 +16,7 @@ Dois avisos de leitura, porque mudam a interpretação das contagens:
 | GLPP — Galp Power OPC | 1,610 | 3,444 | 10 | 2,297 | sobre ≤3×, sub-declaração, DC em AC, AC em DC, formato, grafias, CP7 formato, CP7 localidade, usage_type |
 | SEMID — sites sem operator_id publicado | 107 | 224 | 6 | 331 | sobre ≤3×, sub-declaração, tensão/corrente 0, OPC em falta, localização, CP7 localidade, CP7 em falta, usage_type, brands |
 | REPS — REPSOL Portuguesa Lda | 223 | 579 | 4 | 434 | sobre >3×, sobre ≤3×, sub-declaração, formato, sufixo eMI3, grafias, CP7 localidade, usage_type |
-| EDPC — EDP Comercial | 1,686 | 3,552 | 3 | 839 | sobre ≤3×, sub-declaração, corrente 600 A, formato, linha duplicada, CP7 localidade, usage_type |
+| EDPC — EDP Comercial | 1,686 | 3,552 | 3 | 858 | sobre ≤3×, sub-declaração, conector sem tipo/modo, corrente 600 A, formato, linha duplicada, CP7 localidade, usage_type |
 | ATLA — Atlante Infra Portugal, S.A | 598 | 1,381 | 2 | 1,191 | sobre >3×, sobre ≤3×, sub-declaração, formato, grafias, CP7 formato, CP7 localidade, usage_type |
 | ALFA — Alfa Energia | 13 | 25 | 1 | 2 | sub-declaração, linha duplicada |
 | EVGR — Green Evolut, LDA | 6 | 10 | 1 | 0 | linha duplicada |
@@ -109,23 +109,14 @@ Dois avisos de leitura, porque mudam a interpretação das contagens:
 
 <a id="indice"></a>
 
-<a id="indice"></a>
-
 ## Índice
-
-- [Índice](#sec-ndice) · 137 MÉDIO, 47 BAIXO, 11 CRÍTICO, 3 ALTO
-
-<a id="sec-ndice"></a>
-
-<details open>
-<summary><b>Índice</b> · 137 MÉDIO, 47 BAIXO, 11 CRÍTICO, 3 ALTO</summary>
 
 - [CONT — Modelo Continente Hipermercados, S.A. (445 sites, 944 pontos)](#opc-CONT) · 3 MÉDIO, 3 BAIXO, 1 CRÍTICO, 1 ALTO
 - [TSLA — Tesla (9 sites, 192 pontos)](#opc-TSLA) · 4 BAIXO, 2 MÉDIO, 2 CRÍTICO
 - [GLPP — Galp Power OPC (1,610 sites, 3,444 pontos)](#opc-GLPP) · 5 MÉDIO, 2 CRÍTICO, 2 BAIXO
 - [SEMID — sites sem operator_id publicado (107 sites, 224 pontos)](#opc-SEMID) · 3 MÉDIO, 3 BAIXO, 2 ALTO, 1 CRÍTICO
 - [REPS — REPSOL Portuguesa Lda (223 sites, 579 pontos)](#opc-REPS) · 6 MÉDIO, 1 CRÍTICO, 1 BAIXO
-- [EDPC — EDP Comercial (1,686 sites, 3,552 pontos)](#opc-EDPC) · 4 MÉDIO, 2 BAIXO, 1 CRÍTICO
+- [EDPC — EDP Comercial (1,686 sites, 3,552 pontos)](#opc-EDPC) · 4 MÉDIO, 2 BAIXO, 1 ALTO, 1 CRÍTICO
 - [ATLA — Atlante Infra Portugal, S.A (598 sites, 1,381 pontos)](#opc-ATLA) · 5 MÉDIO, 2 BAIXO, 1 CRÍTICO
 - [ALFA — Alfa Energia (13 sites, 25 pontos)](#opc-ALFA) · 1 MÉDIO, 1 CRÍTICO
 - [EVGR — Green Evolut, LDA (6 sites, 10 pontos)](#opc-EVGR) · 1 CRÍTICO
@@ -763,7 +754,7 @@ Dois avisos de leitura, porque mudam a interpretação das contagens:
 
 ### [ALTO] Coordenadas fora dos limites de Portugal
 - **Regra:** Continente `lon ∈ (-9,8, -5,5)` e `lat ∈ (36,5, 42,5)`; Açores `lon ∈ (-32, -24)` e `lat ∈ (36,5, 40)`; Madeira `lon ∈ (-17,5, -16)` e `lat ∈ (32, 33,5)`.
-- **Afetados:** 2 de 107 sites (1.9%). Exemplos: `0001PR0009`, `CNT-0001PR0009`, `0001PR0010`, `CNT-0001PR0010`, `CNT-0001PL0002`.
+- **Afetados:** 2 de 107 sites (1.9%). Exemplos: `0001PR0009`, `0001PR0009.01`, `0001PR0010`, `0001PR0010.01`, `CNT-0001PR0009`.
 - **Evidência:**
 
 | site | cidade | lat, lon | site_id |
@@ -995,9 +986,9 @@ Dois avisos de leitura, porque mudam a interpretação das contagens:
 <a id="opc-EDPC"></a>
 
 <details>
-<summary><b>EDPC — EDP Comercial (1,686 sites, 3,552 pontos)</b> · 4 MÉDIO, 2 BAIXO, 1 CRÍTICO</summary>
+<summary><b>EDPC — EDP Comercial (1,686 sites, 3,552 pontos)</b> · 4 MÉDIO, 2 BAIXO, 1 ALTO, 1 CRÍTICO</summary>
 
-1,686 sites, 3,552 pontos e 3,559 linhas de conector; 3 entidades em categorias críticas e 839 em suspeitas.
+1,686 sites, 3,552 pontos e 3,559 linhas de conector; 3 entidades em categorias críticas e 858 em suspeitas.
 
 ### [MÉDIO] Sobre-declaração dentro de `3 × V × I` (leitura trifásica)
 - **Regra:** `ratio > 1,25` na fórmula da prompt mas `P <= 3 × V × I` — a potência é alcançável se a tensão for lida fase-neutro e a corrente por fase.
@@ -1038,6 +1029,26 @@ Dois avisos de leitura, porque mudam a interpretação das contagens:
 | `PT-EDP-ELRA-00189-2` | `LRA-00189` | iec62196T2COMBO · mode4DC | 1000 V / 200 A / 60 kW | 200 kW | 0,30 |
 | … | … | … | … | … | +735 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-EDPC)) |
 - **Veredito:** suspeito — em DC é quase sempre a tensão/corrente nominal do standard (1000 V, 500 A) com a potência real do carregador; em AC é uma corrente de tomada acima do plausível para o tipo.
+
+### [ALTO] Conector sem tipo, modo, formato ou potência
+- **Regra:** `connector_type`, `charging_mode`, `connector_format`, `max_power_w`, `voltage` e `max_current` nulos — os três primeiros fora dos enums `ConnectorTypeEnum`/`ChargingModeEnum`/`ConnectorFormatTypeEnum` e os restantes sem valor, o que impede qualquer verificação de física ou compatibilidade.
+- **Afetados:** 19 de 3,559 linhas (0.5%). Exemplos: `SXL-00017-01`, `SXL-00017`, `CNT-00010-03`, `VNG-00072-01`, `VNG-00072`.
+- **Evidência:**
+
+| ponto | site | tomada · modo · formato | V / A / P |
+|---|---|---|---|
+| `SXL-00017-01` | `SXL-00017` | — · — · — | — / — / — |
+| `SXL-00017-02` | `SXL-00017` | — · — · — | — / — / — |
+| `SXL-00017-03` | `SXL-00017` | — · — · — | — / — / — |
+| `CNT-00010-03` | `CNT-00010` | — · — · — | — / — / — |
+| `VNG-00072-01` | `VNG-00072` | — · — · — | — / — / — |
+| `VNG-00072-02` | `VNG-00072` | — · — · — | — / — / — |
+| `VNG-00072-03` | `VNG-00072` | — · — · — | — / — / — |
+| `MOBI-BRG-00047-01` | `MOBI-BRG-00047` | — · — · — | — / — / — |
+| `ETR-00018-01` | `ETR-00018` | — · — · — | — / — / — |
+| `ETR-00019-01` | `ETR-00019` | — · — · — | — / — / — |
+| … | … | … | +9 restantes ([CSV](./anomalias-evidence.csv) · [detalhe](./anomalias-details.md#opc-EDPC)) |
+- **Veredito:** suspeito (ALTO) — o registo existe mas não descreve a tomada; não é fisicamente impossível, é schema/enum em falta e tira o ponto de todas as análises de potência e compatibilidade.
 
 ### [BAIXO] Corrente máxima de 600 A
 - **Regra:** `max_current = 600 A` — valor no limite dos cabos HPC atuais; verificar se é corrente nominal do conector ou do posto.
@@ -3917,17 +3928,13 @@ Dois avisos de leitura, porque mudam a interpretação das contagens:
 
 </details>
 
-[↑ índice](#indice)
+## Mudanças de OPCs (desde 2026-11-09)
 
-</details>
-
-## Mudanças de OPCs (desde 2026-11-07)
-
-Sem OPCs novos, sem OPCs saídos e sem variações de pontos que cumpram `|Δpontos| ≥ 20` **e** `≥ 20%` face ao censo commitado em `Agents-outputs/opc-census.json` (snapshot de 2026-11-07). A tabela de mudanças fica vazia por ausência de alterações.
+Sem OPCs novos, sem OPCs saídos e sem variações de pontos que cumpram `|Δpontos| ≥ 20` **e** `≥ 20%` face ao censo commitado em `Agents-outputs/opc-census.json` (snapshot de 2026-11-09). A tabela de mudanças fica vazia por ausência de alterações.
 
 ## Metodologia
 
-- **Ficheiros:** `data/nap_static_sites.csv` e `data/nap_static_points.csv` (ETL `scripts/nap_etl.py`; fetch `2026-11-09T12:43:56+00:00`, run `42619249738`). Sem rede nesta execução.
+- **Ficheiros:** `data/nap_static_sites.csv` e `data/nap_static_points.csv` (ETL `scripts/nap_etl.py`; fetch `2026-11-09T15:50:29+00:00`, run `42648435375`). Sem rede nesta execução.
 - **Scripts:** a evidência exaustiva de potência foi gerada por `scripts/anomalias_evidence.py` em `Agents-outputs/anomalias-evidence.csv` (uma linha por conector) e `Agents-outputs/anomalias-details.md` (leitura no GitHub, por OPC); este relatório resume e linka ambos. A pré-agregação determinística está em `data/agents-summary.json` (`scripts/anomalias_summary.py`).
 - **Limiares:** `ratio = P / (V × I)`, `√3 × V × I` em `mode3AC3p`; `ratio > 1,25` = sobre-declaração, `> 3 × V × I` = impossível; `ratio < 0,75` = sub-declaração. Teto global `1 500 kW` (nenhum caso). Tetos por tomada: `iec62196T2` 50 kW, `iec62196T2COMBO` 500 kW, `chademo` 400 kW, `iec62196T1`/`yazaki` 20 kW, `iec60309x2*` 125 kW. Compatibilidade AC/DC pela lista de tipos só-AC e só-DC da prompt.
 - **Chaves:** `(site_id, point_id)` é a chave do ponto; linhas repetidas com a mesma assinatura de conector são duplicados, mas várias linhas com tomadas diferentes no mesmo ponto são normais (um EVSE com CCS + Type 2) e não contam como chave partida. `point_external_id` é validado contra o formato eMI3 e o prefixo do operador; o `E` colado e os esquemas de id bare/UUID são limitações conhecidas, não erros.
@@ -3935,11 +3942,11 @@ Sem OPCs novos, sem OPCs saídos e sem variações de pontos que cumpram `|Δpon
 
 ## Não-anomalias verificadas
 
-- **Teto global de potência:** nenhuma linha acima de `1 500 kW`; o máximo observado é `600 kW` (`SXL-00076`/`SXL-00077`, FCTO), dentro do teto e já reportado no teto CCS de 500 kW.
+- **Teto global de potência:** nenhuma linha de conector acima de `1 500 kW`; o máximo observado é `600 kW` (`SXL-00076`/`SXL-00077`, FCTO), dentro do teto e já reportado no teto CCS de 500 kW.
+- **`available_charging_power`:** 329 valores não nulos; o máximo é `400 000` (400 kW em W), nenhum acima de `1 500 kW`. O campo vem em unidades mistas — a maioria em kW (`22` = 22 kW) e 18 linhas em W (`7 400`, `22 000`, `44 000`, `400 000`) —, mas nenhuma linha representa uma potência fisicamente impossível; a incoerência é de unidade, não de capacidade, e não é contada como categoria por OPC.
 - **Contagens:** `n_points = 0` em 0 sites; `n_points` declarado ≠ pontos reais em 0 sites; 0 sites sem linhas de ponto; o máximo é 40 pontos num site (Tesla, `eddf8de0-…`), plausível para um hub Tesla e não um valor extremo isolado.
 - **Ponto↔site:** 0 divergências de `operator_id` entre ponto e site; 0 pontos sem site correspondente.
 - **Localização:** 0 sites com `nuts1` em desacordo com as coordenadas; 0 sites com `country` diferente de `PT`; 0 coordenadas em falta.
 - **Metadados:** `is_green_energy` nulo em 0 linhas; `last_updated` em falta, no futuro ou anterior a 2020 em 0 sites; `applicable_vehicles` vazio em todos os 8 811 sites — é uma omissão global do feed, não um erro por OPC, e não é contada nas secções.
 - **Formato do conector:** `cableMode3` é usado neste feed como "cabo ligado" também em DC (o `ohmigo_dataset.py` mapeia-o para `cable: true`) e `socket` em AC; essas duas convenções (`cableMode3`+`mode4DC`, `socket`+`mode2AC1p`) são excluídas da regra de `connector_format`, que reporta os restantes 186 casos (`cableMode3`+`mode2AC1p`, `socket`+`mode4DC`).
 - **Preços:** fora do âmbito deste agente (feed estático); `min_fee = 0` não é sinal, como documentado no `AGENTS.md`.
-
