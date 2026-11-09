@@ -1,3 +1,3 @@
-# Novidades da rede (2026-11-07 → 2026-11-09)
+# Novidades da rede (2026-11-09 → 2026-11-09)
 
-- **Estreias:** 894 locais reativados (`0002PR0027` · Amadora · CONT · 50 kW; `0241PR0003` · Castelo Branco · CONT · 50 kW; `0279PR0002` · Fundão · CONT · 120 kW; `0379PL0001` · Mem Martins · CONT · 22 kW; `0965PL0001` · ? · CONT · 22 kW; `0965PR0002` · Porto Alto · CONT · 120 kW; `1415PL0001` · Lisboa · CONT · 22 kW; `3776PL0001` · Vila Nova de Famalicão · CONT · 22 kW; `6173PL0001` · Alfragide · ? · 22 kW; `6173PR0002` · Alfragide · CONT · 120 kW (+884 restantes)).
+- **Estreias:** 184 locais reativados (`0002PL0016` · Amadora · CONT · 22 kW; `0002PL0017` · Amadora · CONT · 22 kW; `0002PR0001` · Amadora · ? · 50 kW; `0002PR0030` · Amadora · CONT · 350 kW; `0203PR0004` · Viseu · CONT · 50 kW; `0207PL0002` · Beja · ? · 22 kW; `0230PL0001` · Guarda · CONT · 7 kW; `0230PR0003` · Guarda · CONT · 120 kW; `0232PR0003` · ? · CONT · 120 kW; `0235PR0002` · Gondomar · CONT · 120 kW (+174 restantes)).
