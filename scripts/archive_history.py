@@ -54,9 +54,9 @@ def _get(url, timeout=60):
         with urllib.request.urlopen(req, timeout=timeout) as r:
             return r.read()
     except urllib.error.HTTPError as e:
-        if e.code in (403, 404):  # R2 público responde 404 (às vezes 403) a um objeto que não existe
+        if e.code == 404:  # hora sem linhas: o ficheiro não existe
             return None
-        raise
+        raise  # 403 & c. = bloqueio ou erro, nunca "não existe" (não pode ir para .missing)
 
 
 def rel_path(country, table, day, hour):
@@ -113,7 +113,10 @@ def sync(base, country, cache, first_day, now=None, workers=8, get=_get):
 
     def fetch(item):
         p, end = item
-        body = get(f'{base}/{p}')
+        try:
+            body = get(f'{base}/{p}')
+        except (urllib.error.URLError, OSError) as e:
+            return p, end, e
         if body is None:
             return p, end, False
         dst = os.path.join(cache, p)
@@ -124,9 +127,12 @@ def sync(base, country, cache, first_day, now=None, workers=8, get=_get):
         return p, end, True
 
     new = absent = 0
+    errors = []
     with concurrent.futures.ThreadPoolExecutor(workers) as ex:
         for p, end, ok in ex.map(fetch, todo):
-            if ok:
+            if isinstance(ok, Exception):
+                errors.append((p, ok))
+            elif ok:
                 new += 1
             else:
                 absent += 1
@@ -134,6 +140,12 @@ def sync(base, country, cache, first_day, now=None, workers=8, get=_get):
                     known_missing.add(p)
     with open(miss_file, 'w', encoding='utf-8') as fh:
         fh.write('\n'.join(sorted(known_missing)))
+    if errors:
+        print(f'archive_history: {len(errors)} pedidos falharam (ex. {errors[0][0]}: {errors[0][1]})',
+              file=sys.stderr)
+        if not new and not absent:
+            # Tudo a falhar (ex. 403 de um WAF aos IPs do runner): não calcular stats em cima de nada.
+            raise RuntimeError(f'arquivo inacessível: {errors[0][1]}')
     return new, len(cands) - len(todo), absent
 
 
@@ -180,7 +192,11 @@ def main(argv=None):
     root = a.root
     if a.url:
         # Um dia antes do início: o snapshot desse dia dá o estado à entrada da janela.
-        new, cached, absent = sync(a.url, a.country, a.cache, (start - datetime.timedelta(days=1)).date())
+        try:
+            new, cached, absent = sync(a.url, a.country, a.cache, (start - datetime.timedelta(days=1)).date())
+        except RuntimeError as e:
+            print(f'archive_history: {e}', file=sys.stderr)
+            return 2
         print(f'archive_history: {new} ficheiros novos, {cached} já conhecidos (em cache ou sem linhas), {absent} sem ficheiro')
         root = a.cache
     con = connect(a.s3_endpoint)

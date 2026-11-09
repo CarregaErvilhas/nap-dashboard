@@ -253,6 +253,19 @@ class SyncTest(unittest.TestCase):
             self.assertEqual(len(asked), 4)   # só as horas 02, que não ficaram como ausentes
             self.assertEqual((new, known, absent), (0, 8, 4))
 
+    def test_403_is_an_error_not_a_missing_file(self):
+        import urllib.error
+        now = dt.datetime(2026, 11, 8, 3, 5, tzinfo=UTC)
+
+        def get(url):
+            raise urllib.error.HTTPError(url, 403, 'Forbidden', None, None)
+
+        with tempfile.TemporaryDirectory() as cache:
+            with self.assertRaises(RuntimeError):
+                archive_history.sync('https://x', 'PT', cache, dt.date(2026, 11, 8), now=now, get=get)
+            with open(os.path.join(cache, '.missing')) as fh:
+                self.assertEqual(fh.read().split(), [])
+
     def test_manifest_paths_are_extracted_from_any_json(self):
         p = archive_history.rel_path('PT', 'polls', dt.date(2026, 11, 8), 5)
         self.assertEqual(archive_history.PATH_RE.findall('{"x": ["%s"]}' % p)[0][1], 'polls')
