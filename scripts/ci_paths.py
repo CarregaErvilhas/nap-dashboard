@@ -39,7 +39,7 @@ import sys
 DATA_FILES = [
     # fontes
     'evChargingInfra_latest.xml', 'evActualStatus_latest.xml',
-    'archiveStatus_latest.json.gz',
+    'archiveStatus_latest.json.gz', 'archive_stats.json',
     'mobie_tarifas.csv', 'mobie_partyid.pdf', 'mobie_partyid.csv',
     'dgeg_opc.html', 'dgeg_ceme.html', 'dgeg_opc.csv', 'dgeg_ceme.csv',
     'pt_pcve_errors.xlsx',

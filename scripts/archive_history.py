@@ -1,46 +1,144 @@
 #!/usr/bin/env python3
-"""Histórico a partir do Parquet do AmpereArchive (DuckDB).
+"""Histórico a partir do Parquet do AmpereArchive (DuckDB) → data/archive_stats.json.
 
-Lê as tabelas `status_events` e `static_versions` do arquivo
-(`<root>/v1/country=<CC>/table=<t>/date=<D>/part-*.parquet`) e escreve:
+Cinco stats (cálculos em `scripts/archive_stats.py`):
+1. fiabilidade por OPC (% do tempo outOfOrder/inoperative, sem as lacunas de recolha);
+2. tempo até reparar (mediana dos episódios fechados, por OPC);
+3. ocupação por dia da semana × hora local, DC vs AC;
+4. telemetria suspeita (tomadas paradas há N dias; tomadas que oscilam com `unknown`);
+5. crescimento da rede por semana (locais, tomadas e kW).
 
-- `data/archive_availability.csv` — por OPC, % do tempo disponível, em carga,
-  fora de serviço e outro, na janela pedida, ponderado pelo tempo;
-- `data/archive_site_changes.csv` — locais novos/removidos/alterados na janela.
+Fontes (uma das duas):
+- `--url https://<archive-host>` (omissão: $AMPERE_ARCHIVE_URL): descarrega os
+  ficheiros horários para `--cache` (data/archive_cache). Não há listagem: tenta
+  primeiro `v1/<CC>/manifest.json` e, sem ele, gera os nomes
+  (`table=<t>/date=<D>/part-<HH>.parquet`) e aceita 404 (hora sem linhas). Um
+  ficheiro horário nunca muda depois de publicado, por isso fica em cache; um
+  404 de uma hora fechada há mais de MISSING_AFTER fica registado em `.missing`.
+- `--root DIR | s3://bucket`: cópia local do bucket, ou o R2 com credenciais S3
+  (AWS_ACCESS_KEY_ID / AWS_SECRET_ACCESS_KEY e `--s3-endpoint`).
 
-Uso (da raiz do repo; precisa de `duckdb`, que não faz parte do pipeline semanal):
-    python3 scripts/archive_history.py --root DIR_OU_s3://bucket [--country PT] [--days 28]
-                                       [--min-points 5] [--out data]
+Uso (da raiz do repo; precisa de `duckdb`):
+    python3 scripts/archive_history.py [--url URL | --root DIR] [--days 28] [--output data/archive_stats.json]
 
-`--root` é uma cópia local do bucket (ex. `rclone sync`) ou `s3://ampere-archive`
-(DuckDB lê do R2 com as credenciais S3 no ambiente: AWS_ACCESS_KEY_ID /
-AWS_SECRET_ACCESS_KEY e `--s3-endpoint <conta>.r2.cloudflarestorage.com`). O
-domínio público não serve listagens, por isso não serve de `--root`.
-
-Limites conhecidos (os mesmos que o arquivo declara):
-- Uma lacuna de recolha conta como "o estado anterior continuou". O arquivo
-  regista as lacunas em `polls`; descontá-las fica para quando houver dados.
-- O estado `removed` (tomada fora do feed) não conta para o tempo observado.
-- O 1.º dia de recolha tem todos os locais como `added`: sai de
-  `archive_site_changes.csv` (é o baseline, não uma novidade).
+Os estados são os que os operadores declaram ao NAP, não medições. Dados NAP
+(IMT / MOBI.E) via AmpereArchive (não oficial): citar a fonte, sem fins lucrativos.
 """
 import argparse
-import csv
+import concurrent.futures
 import datetime
+import json
 import os
 import re
 import sys
+import urllib.error
+import urllib.request
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import archive_stats  # noqa: E402
 
 COUNTRY_RE = re.compile(r'^[A-Z]{2}$')
+# 1.º dia do arquivo: antes disto não há ficheiros.
+ARCHIVE_EPOCH = datetime.date(2026, 11, 8)
+# fee_events não entra em nenhuma das stats.
+FETCH_TABLES = ('status_events', 'snapshots', 'polls', 'static_versions')
+# static_versions guarda só mudanças: as stats precisam de todas desde o início.
+FULL_HISTORY = ('static_versions',)
+MISSING_AFTER = datetime.timedelta(minutes=15)
+UA = 'nap-dashboard-archive-history (+https://github.com/CarregaErvilhas/nap-dashboard)'
 
 
-def glob(root, country, table):
-    return f"{root.rstrip('/')}/v1/country={country}/table={table}/*/*.parquet"
+def _get(url, timeout=60):
+    req = urllib.request.Request(url, headers={'User-Agent': UA})
+    try:
+        with urllib.request.urlopen(req, timeout=timeout) as r:
+            return r.read()
+    except urllib.error.HTTPError as e:
+        if e.code in (403, 404):  # R2 público responde 404 (às vezes 403) a um objeto que não existe
+            return None
+        raise
+
+
+def rel_path(country, table, day, hour):
+    return f'v1/country={country}/table={table}/date={day.isoformat()}/part-{hour:02d}.parquet'
+
+
+PATH_RE = re.compile(r'v1/country=([A-Z]{2})/table=(\w+)/date=(\d{4}-\d\d-\d\d)/part-(\d\d)\.parquet')
+
+
+def from_manifest(base, country):
+    """Caminhos listados no manifest, se existir. O formato ainda não está
+    definido: aceita qualquer JSON e apanha as strings com o padrão dos ficheiros."""
+    raw = _get(f'{base}/v1/{country}/manifest.json')
+    if raw is None:
+        return None
+    try:
+        text = json.dumps(json.loads(raw))
+    except ValueError:
+        return None
+    return sorted({m.group(0) for m in PATH_RE.finditer(text) if m.group(1) == country})
+
+
+def wanted(country, first_day, now):
+    """Todos os ficheiros horários possíveis, das horas já fechadas."""
+    out = []
+    for table in FETCH_TABLES:
+        day = ARCHIVE_EPOCH if table in FULL_HISTORY else max(first_day, ARCHIVE_EPOCH)
+        while day <= now.date():
+            for h in range(24):
+                start = datetime.datetime.combine(day, datetime.time(h), datetime.timezone.utc)
+                if start + datetime.timedelta(hours=1) <= now:
+                    out.append((rel_path(country, table, day, h), start + datetime.timedelta(hours=1)))
+            day += datetime.timedelta(days=1)
+    return out
+
+
+def sync(base, country, cache, first_day, now=None, workers=8, get=_get):
+    """Descarrega para `cache` o que falta. Devolve (novos, em cache, ausentes)."""
+    now = now or datetime.datetime.now(datetime.timezone.utc)
+    base = base.rstrip('/')
+    os.makedirs(cache, exist_ok=True)
+    miss_file = os.path.join(cache, '.missing')
+    try:
+        with open(miss_file, encoding='utf-8') as fh:
+            known_missing = set(fh.read().split())
+    except FileNotFoundError:
+        known_missing = set()
+    listed = from_manifest(base, country) if get is _get else None
+    cands = wanted(country, first_day, now)
+    if listed is not None:
+        cands = [(p, end) for p, end in cands if p in set(listed)]
+    todo = [(p, end) for p, end in cands
+            if p not in known_missing and not os.path.exists(os.path.join(cache, p))]
+
+    def fetch(item):
+        p, end = item
+        body = get(f'{base}/{p}')
+        if body is None:
+            return p, end, False
+        dst = os.path.join(cache, p)
+        os.makedirs(os.path.dirname(dst), exist_ok=True)
+        with open(dst + '.part', 'wb') as fh:
+            fh.write(body)
+        os.replace(dst + '.part', dst)
+        return p, end, True
+
+    new = absent = 0
+    with concurrent.futures.ThreadPoolExecutor(workers) as ex:
+        for p, end, ok in ex.map(fetch, todo):
+            if ok:
+                new += 1
+            else:
+                absent += 1
+                if now - end >= MISSING_AFTER:
+                    known_missing.add(p)
+    with open(miss_file, 'w', encoding='utf-8') as fh:
+        fh.write('\n'.join(sorted(known_missing)))
+    return new, len(cands) - len(todo), absent
 
 
 def connect(s3_endpoint=None):
-    import duckdb
-    con = duckdb.connect()
+    con = archive_stats.connect()
     if s3_endpoint:
         con.execute('INSTALL httpfs; LOAD httpfs;')
         con.execute("SET s3_endpoint=?", [s3_endpoint])
@@ -53,111 +151,54 @@ def connect(s3_endpoint=None):
     return con
 
 
-AVAILABILITY_SQL = """
-WITH ev AS (
-  SELECT site_id, point_id, ts, status
-  FROM read_parquet(?)
-  WHERE country = ? AND ts < ?::TIMESTAMPTZ
-),
-iv AS (
-  SELECT site_id, point_id, status,
-         greatest(ts, ?::TIMESTAMPTZ) AS t0,
-         least(coalesce(lead(ts) OVER (PARTITION BY site_id, point_id ORDER BY ts), ?::TIMESTAMPTZ),
-               ?::TIMESTAMPTZ) AS t1
-  FROM ev
-),
-cur_site AS (  -- última versão de cada local: o OPC de hoje
-  SELECT key AS site_id, json_extract_string(attrs, '$.operatorId') AS operator
-  FROM read_parquet(?)
-  WHERE country = ? AND kind = 'site' AND op <> 'removed'
-  QUALIFY row_number() OVER (PARTITION BY key ORDER BY valid_from DESC) = 1
-)
-SELECT coalesce(c.operator, '(sem OPC)') AS operator,
-       count(DISTINCT iv.site_id || '/' || iv.point_id) AS points,
-       sum(epoch(t1 - t0)) AS secs,
-       sum(CASE WHEN status = 'available' THEN epoch(t1 - t0) END) AS s_available,
-       sum(CASE WHEN status = 'charging' THEN epoch(t1 - t0) END) AS s_charging,
-       sum(CASE WHEN status IN ('outOfOrder','inoperative','blocked') THEN epoch(t1 - t0) END) AS s_down
-FROM iv LEFT JOIN cur_site c USING (site_id)
-WHERE t1 > t0 AND status <> 'removed'
-GROUP BY 1
-"""
-
-
-def availability(con, root, country, start, end, min_points=5):
-    rows = con.execute(AVAILABILITY_SQL, [
-        glob(root, country, 'status_events'), country, end,
-        start, end, end,
-        glob(root, country, 'static_versions'), country]).fetchall()
-    out = []
-    for op, pts, secs, sa, sc, sd in rows:
-        if pts < min_points or not secs:
-            continue
-        sa, sc, sd = sa or 0, sc or 0, sd or 0
-        pct = lambda x: round(100 * x / secs, 2)
-        out.append({'operator': op, 'points': pts,
-                    'observed_hours': round(secs / 3600 / pts, 1),
-                    'pct_available': pct(sa), 'pct_charging': pct(sc), 'pct_down': pct(sd),
-                    'pct_other': pct(max(secs - sa - sc - sd, 0))})
-    return sorted(out, key=lambda r: (-r['pct_down'], r['operator']))
-
-
-def site_changes(con, root, country, start, end):
-    path = glob(root, country, 'static_versions')
-    first = con.execute("SELECT epoch(min(valid_from)) FROM read_parquet(?) WHERE country = ?",
-                        [path, country]).fetchone()[0]
-    rows = con.execute("""
-        SELECT epoch(valid_from), op, key, json_extract_string(attrs, '$.name'),
-               json_extract_string(attrs, '$.operatorId')
-        FROM read_parquet(?)
-        WHERE country = ? AND kind = 'site'
-          AND valid_from >= ?::TIMESTAMPTZ AND valid_from < ?::TIMESTAMPTZ
-        ORDER BY valid_from, key""", [path, country, start, end]).fetchall()
-    # O baseline: tudo o que entrou na primeira leitura estática (< 1 h do mínimo).
-    # (epoch em vez de timestamptz: o driver pediria pytz para o converter)
-    utc = datetime.timezone.utc
-    cut = first + 3600 if first is not None else None
-    return [{'valid_from': datetime.datetime.fromtimestamp(t, utc).isoformat(), 'op': op, 'site_id': key, 'name': name, 'operator': oper}
-            for t, op, key, name, oper in rows if not (op == 'added' and cut and t < cut)]
-
-
-def write_csv(path, rows, header):
-    with open(path, 'w', newline='', encoding='utf-8') as fh:
-        w = csv.DictWriter(fh, fieldnames=header)
-        w.writeheader()
-        w.writerows(rows)
-    print(f'  wrote {path}: {len(rows)} rows')
-
-
 def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__.split('\n')[0])
-    ap.add_argument('--root', required=True)
-    ap.add_argument('--country', default='PT')
-    ap.add_argument('--days', type=int, default=28)
-    ap.add_argument('--end', help='fim da janela (UTC, ISO); omissão: agora')
+    src = ap.add_mutually_exclusive_group()
+    src.add_argument('--url', default=os.environ.get('AMPERE_ARCHIVE_URL'))
+    src.add_argument('--root')
+    ap.add_argument('--cache', default='data/archive_cache')
+    ap.add_argument('--country', default=os.environ.get('AMPERE_ARCHIVE_COUNTRY', 'PT'))
+    ap.add_argument('--days', type=int, default=28, help='janela, em dias até --end')
+    ap.add_argument('--end', help='fim da janela (UTC, ISO); omissão: última leitura do arquivo')
     ap.add_argument('--min-points', type=int, default=5)
-    ap.add_argument('--out', default='data')
+    ap.add_argument('--stale-days', type=int, default=7)
+    ap.add_argument('--flips-per-day', type=int, default=4)
+    ap.add_argument('--output', default='data/archive_stats.json')
     ap.add_argument('--s3-endpoint')
     a = ap.parse_args(argv)
     if not COUNTRY_RE.match(a.country):
         ap.error(f'país inválido: {a.country}')
-    end = (datetime.datetime.fromisoformat(a.end.replace('Z', '+00:00')) if a.end
-           else datetime.datetime.now(datetime.timezone.utc))
-    if end.tzinfo is None:
-        end = end.replace(tzinfo=datetime.timezone.utc)
-    start = end - datetime.timedelta(days=a.days)
+    if not a.url and not a.root:
+        ap.error('falta --url (ou AMPERE_ARCHIVE_URL) ou --root')
+    end = None
+    if a.end:
+        end = datetime.datetime.fromisoformat(a.end.replace('Z', '+00:00'))
+        if end.tzinfo is None:
+            end = end.replace(tzinfo=datetime.timezone.utc)
+    ref = end or datetime.datetime.now(datetime.timezone.utc)
+    start = ref - datetime.timedelta(days=a.days)
+    root = a.root
+    if a.url:
+        # Um dia antes do início: o snapshot desse dia dá o estado à entrada da janela.
+        new, cached, absent = sync(a.url, a.country, a.cache, (start - datetime.timedelta(days=1)).date())
+        print(f'archive_history: {new} ficheiros novos, {cached} já conhecidos (em cache ou sem linhas), {absent} sem ficheiro')
+        root = a.cache
     con = connect(a.s3_endpoint)
-    os.makedirs(a.out, exist_ok=True)
-    av = availability(con, a.root, a.country, start, end, a.min_points)
-    if not av:
+    archive_stats.load_views(con, root, a.country)
+    res = archive_stats.compute(con, start_cap=start, end_cap=end, min_points=a.min_points,
+                                stale_days=a.stale_days, flips_per_day=a.flips_per_day)
+    if res is None:
         print('archive_history: sem dados de estado na janela', file=sys.stderr)
         return 1
-    write_csv(os.path.join(a.out, 'archive_availability.csv'), av,
-              ['operator', 'points', 'observed_hours', 'pct_available', 'pct_charging',
-               'pct_down', 'pct_other'])
-    write_csv(os.path.join(a.out, 'archive_site_changes.csv'),
-              site_changes(con, a.root, a.country, start, end),
-              ['valid_from', 'op', 'site_id', 'name', 'operator'])
+    res['country'] = a.country
+    res['source'] = 'NAP (IMT / MOBI.E) via AmpereArchive (não oficial)'
+    path = a.output
+    os.makedirs(os.path.dirname(path) or '.', exist_ok=True)
+    with open(path, 'w', encoding='utf-8') as fh:
+        json.dump(res, fh, ensure_ascii=False, indent=1)
+    c = res['coverage']
+    print(f"  wrote {path}: {c['start']} → {c['end']} ({c['observed_hours']} h observadas, "
+          f"{c['gaps']} lacunas, {c['anchor_mismatch']}/{c['anchor_checked']} discrepâncias no snapshot)")
     return 0
 
 

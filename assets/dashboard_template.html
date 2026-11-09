@@ -167,6 +167,8 @@ window.NAPAPP=(function(){
   .mpanel{background:var(--card);border-radius:10px;padding:16px}
   .mpanel h3{font-size:13px;color:var(--mut);font-weight:600;margin-bottom:10px}
   .mpanel table{font-size:12px}
+  table.hist{font-size:12px;margin:6px 0 14px} table.hist td:first-child,table.hist th:first-child{text-align:left} table.hist.heat td{text-align:center;padding:2px 3px;min-width:22px}
+  #hist h3{margin-top:18px} #hist h4{margin:8px 0 2px}
   .mpanel td{white-space:normal}
   .mpanel .k{color:var(--mut)}
   .mapctrl{position:absolute;top:22px;right:22px;display:flex;flex-direction:column;gap:6px;z-index:5}
@@ -295,6 +297,9 @@ window.NAPAPP=(function(){
   <h2 id="churnH" data-i18n="secChurn">Mudanças de OPCs</h2>
   <div class="panel" id="churn"></div>
 
+  <h2 id="histH" data-i18n="secHist">Histórico (AmpereArchive)</h2>
+  <div class="panel" id="hist"></div>
+
   <h2 id="hubsH" data-i18n="secHubs">Hubs por potência total (&gt;300 kW)</h2>
   <div class="panel" id="hubs"></div>
   </main>
@@ -324,7 +329,7 @@ pt: {
   priceHint:'Tarifário do operador do posto (ficheiro MOBI.E) — sem a energia, que é faturada pelo CEME do condutor. Pontos do NAP sem match na MOBI.E mostram – e ficam fora das médias.',
   secMap:'Mapa de locais', secTable:'Tabela de pontos (pesquisável)',
   secFacts:'Factos interessantes', secErrors:'Erros reportáveis',
-  secAnom:'Anomalias — agente semanal', secChurn:'Mudanças de OPCs', secHubs:'Hubs por potência total (>300 kW)',
+  secAnom:'Anomalias — agente semanal', secChurn:'Mudanças de OPCs', secHist:'Histórico (AmpereArchive)', secHubs:'Hubs por potência total (>300 kW)',
   statusPwTitle:'Estado × classe de potência', statusCol:'estado',
   priceComp:'Componente', priceN:'n pontos', priceMean:'média', priceMax:'máx',
   priceEnergy:'Energia (€/kWh)', priceSemCeme:'Sem CEME* (valor único NAP)', colRegime:'Regime', colNap:'Valor NAP* (€)',
@@ -367,7 +372,7 @@ en: {
   priceHint:'Charge-point operator tariff (MOBI.E file) — excluding energy, which is billed by the driver\u2019s CEME. NAP points with no MOBI.E match show – and are excluded from averages.',
   secMap:'Site map', secTable:'Points table (searchable)',
   secFacts:'Interesting facts', secErrors:'Reportable errors',
-  secAnom:'Anomalies — weekly agent', secChurn:'OPC changes', secHubs:'Hubs by total power (>300 kW)',
+  secAnom:'Anomalies — weekly agent', secChurn:'OPC changes', secHist:'History (AmpereArchive)', secHubs:'Hubs by total power (>300 kW)',
   statusPwTitle:'Status × power class', statusCol:'status',
   priceComp:'Component', priceN:'n points', priceMean:'mean', priceMax:'max',
   priceEnergy:'Energy (€/kWh)', priceSemCeme:'No CEME* (single NAP value)', colRegime:'Regime', colNap:'NAP value* (€)',
@@ -773,6 +778,9 @@ function renderTexts(){
   else{document.getElementById('hubs').style.display='none';document.getElementById('hubsH').style.display='none';}
   if(churn){document.getElementById('churn').innerHTML = churn;document.getElementById('churn').style.display='';document.getElementById('churnH').style.display='';}
   else{document.getElementById('churn').style.display='none';document.getElementById('churnH').style.display='none';}
+  const hist = pickHtml('hist_html');
+  if(hist){document.getElementById('hist').innerHTML = hist;document.getElementById('hist').style.display='';document.getElementById('histH').style.display='';}
+  else{document.getElementById('hist').style.display='none';document.getElementById('histH').style.display='none';}
   const news = pickHtml('news_html');
   if(news){document.getElementById('news').innerHTML = news;document.getElementById('news').style.display='';document.getElementById('newsH').style.display='';}
   else{document.getElementById('news').style.display='none';document.getElementById('newsH').style.display='none';}

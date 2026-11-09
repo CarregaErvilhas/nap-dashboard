@@ -71,11 +71,38 @@ stays `nap`; the static feed still comes from the NAP (the archive does
 not keep `brandsAccepted`, NUTS or contacts).
 
 ## Histórico (AmpereArchive, opcional)
-`scripts/archive_history.py --root <cópia local do bucket | s3://ampere-archive>`
-lê o Parquet do [AmpereArchive](https://github.com/CarregaErvilhas/AmpereArchive)
-com DuckDB e escreve `data/archive_availability.csv` (disponibilidade por OPC,
-ponderada pelo tempo) e `data/archive_site_changes.csv` (locais novos/removidos).
-Fora do pipeline semanal: precisa de `pip install duckdb` e de dados acumulados.
+`scripts/archive_history.py` lê o Parquet do
+[AmpereArchive](https://github.com/CarregaErvilhas/AmpereArchive) com DuckDB e
+escreve `data/archive_stats.json`; o `build_dashboard.py` mostra-o no painel
+"Histórico" (`scripts/archive_panel.py`, PT+EN) e esconde-o quando o ficheiro
+não existe. Cálculos em `scripts/archive_stats.py`, testes em `tests/`:
+```bash
+venv/bin/pip install duckdb
+venv/bin/python scripts/archive_history.py --url https://ohm-age.ocarroeletrico.com   # ou AMPERE_ARCHIVE_URL
+venv/bin/python -m unittest discover -s tests
+```
+- Fonte: `--url` descarrega os ficheiros horários para `data/archive_cache/`
+  (não há listagem: gera os nomes e aceita 404; usa `v1/<CC>/manifest.json` se
+  um dia existir). `--root DIR | s3://bucket` lê uma cópia local ou o R2.
+  Janela `--days 28`; `static_versions` vem sempre desde o 1.º dia.
+- Modelo: o snapshot diário é o ponto de partida (instante = `publication_time`
+  da 1.ª leitura de estado do dia depois do retrato estático); os eventos
+  aplicam-se por cima e cada snapshot seguinte corrige o estado. A
+  `coverage.anchor_mismatch` tem de ficar a 0 (1.º evento depois do snapshot
+  com `prev_status` ≠ estado do snapshot). As lacunas de recolha (`polls`,
+  leituras boas separadas por > 5 min) saem do tempo observado.
+- Stats: (1) % do tempo `outOfOrder`/`inoperative` por OPC; (2) episódios
+  `outOfOrder`/`inoperative` → `available` (mediana dos fechados; saídas para
+  `charging`/outro, abertos e censurados contados à parte); (3) ocupação
+  dia × hora local (Lisboa/Açores/Madeira pelas coordenadas), DC vs AC pelo
+  `mode` dos conectores; (4) tomadas paradas e tomadas que oscilam com
+  `unknown`; (5) locais/tomadas/kW por semana desde o retrato inicial.
+- Cada stat diz quantos dias tem por trás e fica "preliminar" abaixo de
+  `NEEDS_DAYS` (ocupação e reparação: 14 dias). Os estados são declarados
+  pelos operadores, não medidos; dados NAP, uso não comercial.
+- Fora do pipeline semanal: `duckdb` não está em `requirements.txt` nem no
+  `refresh.yml`, por isso o dashboard publicado não tem o painel enquanto
+  isso não for decidido.
 
 ## Pipeline order
 `scripts/nap_etl.py` → (`scripts/check_quality.py`, `scripts/summary.py`) →
