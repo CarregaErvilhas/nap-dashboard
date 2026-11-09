@@ -100,9 +100,11 @@ venv/bin/python -m unittest discover -s tests
 - Cada stat diz quantos dias tem por trás e fica "preliminar" abaixo de
   `NEEDS_DAYS` (ocupação e reparação: 14 dias). Os estados são declarados
   pelos operadores, não medidos; dados NAP, uso não comercial.
-- Fora do pipeline semanal: `duckdb` não está em `requirements.txt` nem no
-  `refresh.yml`, por isso o dashboard publicado não tem o painel enquanto
-  isso não for decidido.
+- No `refresh.yml`: passo `continue-on-error` antes do `build_dashboard.py`
+  (precisa de `vars.AMPERE_ARCHIVE_URL`; sem ela, ou se falhar, o dashboard
+  sai sem o painel). `data/archive_cache/` fica em `actions/cache` entre
+  corridas; o sync apaga os dias fora da janela (menos `static_versions`).
+  Um 403 conta como erro, nunca como "hora sem ficheiro".
 
 ## Pipeline order
 `scripts/nap_etl.py` → (`scripts/check_quality.py`, `scripts/summary.py`) →

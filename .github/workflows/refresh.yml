@@ -98,6 +98,27 @@ jobs:
           bash scripts/fetch_tracker.sh
           python scripts/tracker_sync.py
           python scripts/tracker_checks.py
+      # Painel "Histórico" (scripts/archive_history.py, Parquet do AmpereArchive).
+      # Opcional: se o arquivo falhar, o build sai sem o painel (sem
+      # data/archive_stats.json a secção fica escondida). Os ficheiros horários
+      # nunca mudam depois de publicados, por isso ficam em cache entre corridas
+      # e cada refresh só descarrega as horas novas (o sync apaga o que sai da janela).
+      - name: Restore AmpereArchive cache
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: data/archive_cache
+          key: archive-cache-${{ github.run_id }}
+          restore-keys: archive-cache-
+      - name: Archive history stats
+        continue-on-error: true
+        env:
+          AMPERE_ARCHIVE_URL: ${{ vars.AMPERE_ARCHIVE_URL }}
+        run: |
+          if [ -z "$AMPERE_ARCHIVE_URL" ]; then
+            echo "::notice::AMPERE_ARCHIVE_URL vazio: dashboard sem painel histórico"
+            exit 0
+          fi
+          python scripts/archive_history.py --days 28
       - name: Build dashboard
         run: python scripts/build_dashboard.py
       # Guard: se um upstream mudou o formato e o pipeline produziu dados

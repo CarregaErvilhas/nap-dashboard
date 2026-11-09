@@ -253,6 +253,19 @@ class SyncTest(unittest.TestCase):
             self.assertEqual(len(asked), 4)   # só as horas 02, que não ficaram como ausentes
             self.assertEqual((new, known, absent), (0, 8, 4))
 
+    def test_prunes_days_outside_window_but_keeps_static(self):
+        now = dt.datetime(2026, 11, 20, 0, 30, tzinfo=UTC)
+        old_poll = archive_history.rel_path('PT', 'polls', dt.date(2026, 11, 8), 0)
+        old_static = archive_history.rel_path('PT', 'static_versions', dt.date(2026, 11, 8), 21)
+        with tempfile.TemporaryDirectory() as cache:
+            for p in (old_poll, old_static):
+                os.makedirs(os.path.dirname(os.path.join(cache, p)), exist_ok=True)
+                open(os.path.join(cache, p), 'wb').close()
+            archive_history.sync('https://x', 'PT', cache, dt.date(2026, 11, 19), now=now,
+                                 get=lambda url: None)
+            self.assertFalse(os.path.exists(os.path.join(cache, old_poll)))
+            self.assertTrue(os.path.exists(os.path.join(cache, old_static)))
+
     def test_403_is_an_error_not_a_missing_file(self):
         import urllib.error
         now = dt.datetime(2026, 11, 8, 3, 5, tzinfo=UTC)

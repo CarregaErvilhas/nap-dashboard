@@ -138,6 +138,18 @@ def sync(base, country, cache, first_day, now=None, workers=8, get=_get):
                 absent += 1
                 if now - end >= MISSING_AFTER:
                     known_missing.add(p)
+    # O que saiu da janela já não serve (salvo static_versions): sem isto a
+    # cache do CI crescia para sempre.
+    old = re.compile(r'table=(\w+)/date=(\d{4}-\d\d-\d\d)/')
+    def stale(p):
+        m = old.search(p)
+        return bool(m) and m.group(1) not in FULL_HISTORY and m.group(2) < first_day.isoformat()
+    known_missing = {p for p in known_missing if not stale(p)}
+    for dirpath, _, files in os.walk(cache):
+        for f in files:
+            full = os.path.join(dirpath, f)
+            if stale(os.path.relpath(full, cache).replace(os.sep, '/')):
+                os.remove(full)
     with open(miss_file, 'w', encoding='utf-8') as fh:
         fh.write('\n'.join(sorted(known_missing)))
     if errors:
