@@ -423,7 +423,11 @@ venv/bin/python scripts/validate_dashboard.py
   estados da lista DATEX II e ignora ficheiros com mais de 180 min. Sem rede,
   bloqueado ou desatualizado, mostra o estado da semana e diz-o no cabeçalho.
   `validate_dashboard.py` desliga o fetch (`NAP_NO_LIVE`) e testa
-  `applyLive` com dados sintéticos.
+  `applyLive` com dados sintéticos. O host está no template
+  (`dashboard_payload.ARCHIVE_ORIGIN_DEFAULT`) e o build troca-o, na CSP e
+  no `LIVE_URL`, pela origem de `AMPERE_ARCHIVE_URL` (variável do repo, passada
+  ao passo "Build dashboard"); só aceita `https://host[:porta]`, senão avisa e
+  fica o do template.
 
 ## Convenções de escrita (PT-PT técnico)
 - **tensão**, nunca "voltagem". Unidades abreviam-se `V`/`A`/`kW` normalmente.

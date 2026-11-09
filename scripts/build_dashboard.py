@@ -792,6 +792,10 @@ def clean(o):
     return o
 
 tmpl = open('assets/dashboard_template.html').read()
+try:  # host do estado ao vivo; uma variável mal escrita não pode partir o refresh
+    tmpl = dashboard_payload.apply_archive_origin(tmpl, os.environ.get('AMPERE_ARCHIVE_URL'))
+except ValueError as e:
+    print(f'::warning::{e}; fica {dashboard_payload.ARCHIVE_ORIGIN_DEFAULT}')
 # O payload vai para dentro de um <script>: tem de estar escapado para esse
 # contexto (dashboard_payload.dump_payload escapa <, >, & — sem isso um
 # "</script>" num dado do OSM/umap fechava o elemento e executava JS
