@@ -14,6 +14,7 @@ import pandas as pd
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__))))
 import dashboard_i18n as i18n
 import dashboard_payload
+import archive_panel
 
 S = pd.read_csv('data/nap_static_sites.csv', dtype=str)
 P = pd.read_csv('data/nap_static_points.csv', dtype=str)
@@ -718,6 +719,14 @@ with open('errors.md', 'w') as fh:
             fh.write(frag.read())
 print('facts.md and errors.md written')
 
+# Histórico do AmpereArchive (opcional): scripts/archive_history.py escreve o JSON.
+try:
+    with open('data/archive_stats.json', encoding='utf-8') as fh:
+        _hist = json.load(fh)
+except (FileNotFoundError, ValueError):
+    _hist = None
+HIST_HTML, HIST_HTML_EN = archive_panel.render(_hist, 'pt'), archive_panel.render(_hist, 'en')
+
 data = {
     'snapshot': snapshot,
     'kpis': [
@@ -759,6 +768,8 @@ data = {
     'hubs_html': HUBS_HTML,
     'churn_html': CHURN_HTML,
     'news_html': NEWS_HTML,
+    'hist_html': HIST_HTML,
+    'hist_html_en': HIST_HTML_EN,
     # EN mirrors (dashboard_i18n.MAP); template picks per browser language.
     'facts_html_en': i18n.translate_html_blob(FACTS_HTML),
     'errs_html_en': i18n.translate_html_blob(ERRS_HTML),
