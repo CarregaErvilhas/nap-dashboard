@@ -280,7 +280,10 @@ energy prices from ceme-v2. `refresh.yml` runs it after the pipeline guard and
 uploads it as the `ohmigo-dataset` Actions artifact (90-day retention; not
 committed: ~10 MB a week; not a release, because the repo's releases are
 immutable and an asset can't be replaced); `pages.yml` copies the newest one to
-`https://nap.ocarroeletrico.com/ohmigo/chargers.json`. It exits non-zero (and the
+`https://nap.ocarroeletrico.com/ohmigo/chargers.json`, accepting only artifacts
+from a `refresh.yml` or `ohmigo-daily.yml` run on `main` of this repo, triggered
+by `schedule` or `workflow_dispatch`, not already failed (fork PRs can upload an
+artifact with the same name). It exits non-zero (and the
 refresh fails) below 5 000 sites or 10 000 tariffed points. `SCHEMA` in the
 script bumps on incompatible format changes.
 
@@ -510,11 +513,11 @@ Ao mover/renomear um ficheiro de dados, actualizar a lista `DATA_FILES` em
   App has `Contents: write` on this repo and nothing else; its client id is
   the `PUSH_APP_CLIENT_ID` variable and its key the `PUSH_APP_PRIVATE_KEY`
   secret. `actions/create-github-app-token` mints a 1-hour token (revoked at
-  the end of the job) in two places only: just before the last step of
-  `refresh.yml` (the same runner as the pipeline, which runs our scripts and
-  the pinned `requirements.txt`, no model) and in the `publish` job of
-  `agents.yml`, a fresh runner that copies a closed list of files from
-  `Agents-outputs/`. A push with the App's token triggers `pages.yml`, which
+  the end of the job) in two places only: the `publish` job of `refresh.yml`
+  (a fresh runner: no pip, no repo script on third-party data; it downloads
+  the `refresh-publish` artifact, checks each file is a regular file under
+  20 MB, then commits) and the `publish` job of `agents.yml`, same pattern
+  for a closed list of files from `Agents-outputs/`. A push with the App's token triggers `pages.yml`, which
   one with the `GITHUB_TOKEN` wouldn't. The agent job (a model with a
   shell, reading third-party data) never shares a machine with it, and code
   an agent writes (`scripts/anomalias_check.py`) never reaches `main` on its
