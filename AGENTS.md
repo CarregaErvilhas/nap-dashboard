@@ -280,7 +280,10 @@ energy prices from ceme-v2. `refresh.yml` runs it after the pipeline guard and
 uploads it as the `ohmigo-dataset` Actions artifact (90-day retention; not
 committed: ~10 MB a week; not a release, because the repo's releases are
 immutable and an asset can't be replaced); `pages.yml` copies the newest one to
-`https://nap.ocarroeletrico.com/ohmigo/chargers.json`. It exits non-zero (and the
+`https://nap.ocarroeletrico.com/ohmigo/chargers.json`, accepting only artifacts
+from a `refresh.yml` or `ohmigo-daily.yml` run on `main` of this repo, triggered
+by `schedule` or `workflow_dispatch`, not already failed (fork PRs can upload an
+artifact with the same name). It exits non-zero (and the
 refresh fails) below 5 000 sites or 10 000 tariffed points. `SCHEMA` in the
 script bumps on incompatible format changes.
 
