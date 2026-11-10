@@ -9,12 +9,16 @@ on:
     - cron: "0 6 * * 1"
   workflow_dispatch:
 
-# O GITHUB_TOKEN só abre issues: o checkout é anónimo (repo público) e o push
-# vai com um token da GitHub App, gerado só nos últimos steps. Assim, nada do que corre antes (pip, os
-# parsers de XML/HTML/PDF/xlsx de terceiros) tem um token com escrita no repo.
-permissions:
-  contents: read
-  issues: write
+# Dois jobs, para os parsers de terceiros e o token de escrita nunca
+# partilharem uma máquina (mesmo padrão do agents.yml):
+#   refresh  pip, fetch, parsers de XML/HTML/PDF/xlsx/OSM de terceiros e build.
+#            Só GITHUB_TOKEN de leitura (mais issues); o checkout é anónimo.
+#            Entrega os deliverables como artifact.
+#   publish  runner novo, checkout novo (sem hooks nem config de git que o
+#            refresh possa ter deixado), sem pip nem scripts do repo sobre
+#            dados de terceiros. Valida os ficheiros, gera o token da App e
+#            faz o commit + push.
+permissions: {}
 
 concurrency:
   group: "refresh"
@@ -24,6 +28,9 @@ jobs:
   refresh:
     runs-on: ubuntu-latest
     timeout-minutes: 180
+    permissions:
+      contents: read
+      issues: write
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -147,13 +154,13 @@ jobs:
       # do pipeline_guard, para nunca publicar dados de um upstream partido.
       # Vai para um artifact (não para o git: são ~10 MB por semana) e o
       # pages.yml copia-o para https://nap.ocarroeletrico.com/ohmigo/chargers.json.
-      # Fica publicado ANTES do push abaixo, que é o que dispara o pages.yml.
+      # Fica publicado ANTES do push (job publish), que é o que dispara o pages.yml.
       - name: Build ohmigo dataset
         run: python scripts/ohmigo_dataset.py data data/ohmigo_chargers.json
       # Artifact, não release: o repo tem releases imutáveis, e um asset
       # publicado nunca mais pode ser substituído. O pages.yml vai buscar o
       # artifact mais recente com este nome (está disponível antes do commit
-      # abaixo, que é o que dispara o pages.yml).
+      # do job publish, que é o que dispara o pages.yml).
       - name: Publish ohmigo dataset (artifact)
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
@@ -161,42 +168,23 @@ jobs:
           path: data/ohmigo_chargers.json
           retention-days: 90
           if-no-files-found: error
-      # Token da GitHub App "nap-dashboard push", a única no bypass "Always" do
-      # ruleset "review branch": nem o GITHUB_TOKEN nem os admins podem fazer
-      # push direto para o main (os admins só fazem bypass em PRs). Gerado só
-      # aqui, depois do pipeline, com contents:write neste repo e válido 1 h; a
-      # action revoga-o no fim do job.
-      - name: Push token (GitHub App)
-        id: push-token
-        uses: actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510 # v3.3.0
-        with:
-          client-id: ${{ vars.PUSH_APP_CLIENT_ID }}
-          private-key: ${{ secrets.PUSH_APP_PRIVATE_KEY }}
-          permission-contents: write
-      - name: Commit refreshed deliverables
-        env:
-          PUSH_TOKEN: ${{ steps.push-token.outputs.token }}
+      # Lista fechada do que o job publish pode commitar, numa pasta plana.
+      # Tudo o resto que o pipeline deixou no disco fica neste runner.
+      # dashboard.png é opcional (o build só avisa se não houver Chrome).
+      - name: Stage deliverables for publish
         run: |
-          if [ -z "$PUSH_TOKEN" ]; then
-            echo "FAIL: token da App vazio (PUSH_APP_CLIENT_ID / PUSH_APP_PRIVATE_KEY)." >&2
-            exit 1
-          fi
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          #
-          # Autenticação pelo header HTTP, não pela URL do remote: assim o
-          # token não fica gravado no .git/config nem aparece no argv de
-          # nenhum processo (o /proc/<pid>/cmdline é legível por qualquer um).
-          AUTH="$(printf 'x-access-token:%s' "$PUSH_TOKEN" | base64 | tr -d '\n')"
-          export GIT_CONFIG_COUNT=1
-          export GIT_CONFIG_KEY_0="http.https://github.com/.extraheader"
-          export GIT_CONFIG_VALUE_0="AUTHORIZATION: basic ${AUTH}"
-          git add dashboard.html dashboard.png facts.md errors.md novidades.md network-census.json
-          git diff --cached --quiet && echo "no changes to commit" || git commit -m "Weekly dashboard refresh: $(date -u +%F)"
-          git push
-      # O push acima (via App, não GITHUB_TOKEN) dispara o pages.yml, que é a
-      # única via de deploy — este workflow não publica no Pages diretamente
-      # para não correr dois deployments em simultâneo (400 "in progress").
+          out="$RUNNER_TEMP/publish"
+          mkdir -p "$out"
+          for f in dashboard.html facts.md errors.md novidades.md network-census.json; do
+            cp -- "$f" "$out/$f"
+          done
+          if [ -f dashboard.png ]; then cp dashboard.png "$out/dashboard.png"; fi
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: refresh-publish
+          path: ${{ runner.temp }}/publish
+          retention-days: 7
+          if-no-files-found: error
       # A fetch/pipeline failure leaves the dashboard silently stale (agents
       # skips, Pages doesn't deploy). Open an issue so the next Monday isn't
       # discovered a week later — same pattern as agents.yml.
@@ -208,3 +196,90 @@ jobs:
           gh issue create --repo "$GITHUB_REPOSITORY" \
             --title "Weekly refresh failed (run $GITHUB_RUN_ID)" \
             --body "Fetch/pipeline failed; dashboard stays on last good. Run: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
+
+  # O commit, num runner novo: aqui não corre pip nem nenhum script do repo
+  # sobre dados de terceiros, e o checkout é novo. Só passam os ficheiros da
+  # lista fechada, como ficheiros normais e com um tecto de tamanho.
+  #
+  # Token da GitHub App "nap-dashboard push", a única no bypass "Always" do
+  # ruleset "review branch": nem o GITHUB_TOKEN nem os admins podem fazer
+  # push direto para o main (os admins só fazem bypass em PRs). Gerado só
+  # aqui, com contents:write neste repo e válido 1 h; a action revoga-o no fim
+  # do job. O push (via App, não GITHUB_TOKEN) dispara o pages.yml, que é a
+  # única via de deploy: este workflow não publica no Pages diretamente para
+  # não correr dois deployments em simultâneo (400 "in progress").
+  publish:
+    needs: refresh
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      issues: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          # Sem credencial persistida: o push vai com o token da App (abaixo).
+          persist-credentials: false
+      # Fora do checkout: nada do artifact entra no repo sem passar pelo step
+      # seguinte.
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: refresh-publish
+          path: ${{ runner.temp }}/refresh
+      - name: Push token (GitHub App)
+        id: push-token
+        uses: actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510 # v3.3.0
+        with:
+          client-id: ${{ vars.PUSH_APP_CLIENT_ID }}
+          private-key: ${{ secrets.PUSH_APP_PRIVATE_KEY }}
+          permission-contents: write
+      - name: Commit refreshed deliverables
+        env:
+          PUSH_TOKEN: ${{ steps.push-token.outputs.token }}
+        run: |
+          set -uo pipefail
+          if [ -z "${PUSH_TOKEN:-}" ]; then
+            echo "FAIL: token da App vazio (PUSH_APP_CLIENT_ID / PUSH_APP_PRIVATE_KEY)." >&2
+            exit 1
+          fi
+          src="$RUNNER_TEMP/refresh"
+          for f in dashboard.html dashboard.png facts.md errors.md novidades.md network-census.json; do
+            if [ ! -e "$src/$f" ] && [ ! -L "$src/$f" ]; then
+              # só o PNG pode faltar (build sem Chrome); fica o do repo
+              [ "$f" = "dashboard.png" ] && continue
+              echo "FAIL: $f em falta no artifact" >&2; exit 1
+            fi
+            if [ -L "$src/$f" ] || [ ! -f "$src/$f" ]; then
+              echo "FAIL: $f não é um ficheiro normal" >&2; exit 1
+            fi
+            if [ "$(stat -c %s "$src/$f")" -gt 20000000 ]; then
+              echo "FAIL: $f tem mais de 20 MB" >&2; exit 1
+            fi
+            cp "$src/$f" "$f"
+            git add -- "$f" || { echo "FAIL: git add $f" >&2; exit 1; }
+          done
+          if git diff --cached --quiet; then
+            echo "no changes to commit"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -q -m "Weekly dashboard refresh: $(date -u +%F)" \
+            || { echo "FAIL: commit falhou" >&2; exit 1; }
+          #
+          # Autenticação pelo header HTTP, não pela URL do remote: assim o
+          # token não fica gravado no .git/config nem aparece no argv de
+          # nenhum processo (o /proc/<pid>/cmdline é legível por qualquer um).
+          AUTH="$(printf 'x-access-token:%s' "$PUSH_TOKEN" | base64 | tr -d '\n')"
+          export GIT_CONFIG_COUNT=1
+          export GIT_CONFIG_KEY_0="http.https://github.com/.extraheader"
+          export GIT_CONFIG_VALUE_0="AUTHORIZATION: basic ${AUTH}"
+          git push
+      - name: Notify on failure
+        if: failure()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh issue create --repo "$GITHUB_REPOSITORY" \
+            --title "Weekly refresh: o commit falhou (run $GITHUB_RUN_ID)" \
+            --body "O pipeline acabou, mas o job publish falhou antes do push. Run: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
