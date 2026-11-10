@@ -1,4 +1,4 @@
-# Fontes de dados (verificado em 2026-08-16)
+# Fontes de dados
 
 Todas as fontes são públicas e de livre acesso. Descarregar tudo com
 `scripts/fetch_data.sh`. Preferir sempre estas origens a qualquer cópia local,
@@ -28,7 +28,7 @@ de EADME do NAP ao abrigo do DL 93/2025; decorre um regime transitório até
 
 ## Tarifário OPC do MOBI.E
 
-- Desde 2026-11-09 vem do portal **MOBI.Data**, em dois JSON (os mesmos que o
+- Vem do portal **MOBI.Data**, em dois JSON (os mesmos que o
   botão "Exportar CSV" do mapa junta no browser):
   - `https://data.mobie.pt/data/tariffs.json` — `sets` (listas de componentes
     `{plan: regular|adhoc, price, unit: charge|kWh|min, after, until}`, com
@@ -38,24 +38,24 @@ de EADME do NAP ao abrigo do DL 93/2025; decorre um regime transitório até
     município, `partyId`, `powerClass` e tomadas (`evse`, `connector`, `kw`,
     `status`).
 
-  `scripts/mobie_tariffs.py` junta-os e escreve `data/mobie_tarifas.csv` no
-  formato antigo (`;`, uma linha por componente, `TARIFA` como
-  `€ 0.15 /min após 0 min até 45 min`), por isso `mobie_join.py` e
-  `ohmigo_dataset.py` não mudaram. O `UID_TOMADA` é sintético
+  `scripts/mobie_tariffs.py` junta-os e escreve `data/mobie_tarifas.csv`
+  (`;`, uma linha por componente, `TARIFA` como
+  `€ 0.15 /min após 0 min até 45 min`), que é o formato que `mobie_join.py` e
+  `ohmigo_dataset.py` lêem. O `UID_TOMADA` é sintético
   (`<ID>-<tomada>-1`), exceto os ids só numéricos (FCT, ACC, HGP, VIA), que
   ficam como o MOBI.E os publica.
 
-  **O que se perdeu face ao CSV antigo** (`mobie.pt/documents/42032/106470/Tarifas`,
-  que o site novo redireciona para uma página HTML):
+  **O que o MOBI.Data não traz** (o `mobie.pt/documents/42032/106470/Tarifas`
+  responde com uma página HTML, não com um CSV):
   - `NIVELTENSAO` (BTN/BTE/MT): não existe em lado nenhum, nem no NAP. O
     `level` do ohmigo fica `null`.
   - `PARKING_TIME`: não há unidade de estacionamento nos `sets`.
   - Potência por tomada: o `kw` do `stations.json` é o máximo do posto repetido
     em todas as tomadas (os 1 455 postos AC+DC têm o mesmo valor em todas), por
     isso `POTENCIA_TOMADA` fica vazio e o item 2 de `errors.md` diz "sem dados".
-  - Cobertura: em 2026-11-09, 497 locais que o CSV de 2026-10-24 tarifava não têm
-    entrada no `tariffs.json` (Repsol, EPK, EDP, EML, IONITY…) e nenhum posto FCT
-    ou Continente tem tarifa. O join NAP↔MOBI.E desceu de 88,3% para 81,2%.
+  - Cobertura: há centenas de locais sem entrada no `tariffs.json` (Repsol,
+    EPK, EDP, EML, IONITY…) e nenhum posto FCT ou Continente tem tarifa. O join
+    NAP↔MOBI.E fica por volta dos 80%.
 
   Licença: o MOBI.Data apresenta-se como "dados abertos", mas não foi encontrada
   licença explícita. Tratar como referência factual (ver
@@ -141,8 +141,7 @@ Armadilhas (verificadas):
   | Cat. 2 (DC) | ultrarrápida nível 1 | 150 ≤ P < 350 kW |
   | Cat. 2 (DC) | ultrarrápida nível 2 | P ≥ 350 kW |
 
-  A antiga classe de topo `DC ultra (>150kW)` agrupava os dois níveis de
-  ultrarrápida; passou a estar dividida em `DC ultra 150-350kW` (L1) e
+  A ultrarrápida está dividida em `DC ultra 150-350kW` (L1) e
   `DC ultra (>=350kW)` (L2, que cobre os HPC de 350/400/600 kW e o futuro MCS).
 
 ## XSD do DATEX II

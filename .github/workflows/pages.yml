@@ -3,8 +3,8 @@ name: Deploy dashboard to GitHub Pages
 # Publica dashboard.html em https://nap.ocarroeletrico.com/ (domínio próprio,
 # ficheiro CNAME abaixo), com robots.txt, sitemap.xml e
 # /.well-known/security.txt, llms.txt e llms-full.txt. Publica também o dataset do ohmigo em
-# /ohmigo/chargers.json (o artifact ohmigo-dataset mais recente do
-# refresh.yml; ver scripts/ohmigo_dataset.py).
+# /ohmigo/chargers.json (o artifact ohmigo-dataset mais recente de uma corrida
+# do ohmigo-daily.yml ou refresh.yml na main; ver scripts/ohmigo_dataset.py).
 # Dispara quando o dashboard (ou o screenshot, ou este workflow) muda, ou à mão.
 on:
   workflow_dispatch:
@@ -61,16 +61,36 @@ jobs:
           mkdir -p public/.well-known
           printf 'Contact: mailto:info@ocarroeletrico.com\nExpires: %s\nCanonical: https://nap.ocarroeletrico.com/.well-known/security.txt\nPreferred-Languages: pt, en\n' \
             "$(date -u -d '+180 days' +%Y-%m-%dT%H:%M:%SZ)" > public/.well-known/security.txt
-      # O dataset do ohmigo é o artifact "ohmigo-dataset" mais recente do
-      # refresh.yml (90 dias de retenção, o refresh é semanal). Se não houver,
-      # o dashboard publica-se na mesma, só sem /ohmigo/.
+      # O dataset do ohmigo é o artifact "ohmigo-dataset" mais recente de uma
+      # corrida de confiança: ohmigo-daily.yml ou refresh.yml, na main deste
+      # repo, disparada por schedule ou workflow_dispatch. A pesquisa de
+      # artifacts por nome é do repo todo, e um pull_request de um fork pode
+      # carregar um artifact com o mesmo nome; daí o filtro. Não se exige
+      # conclusion == success: a corrida que o produz ainda está a correr
+      # quando dispara este deploy, mas aceita-se só sem falha já declarada.
+      # Se nenhum servir, o dashboard publica-se na mesma, só sem /ohmigo/.
       - name: Stage ohmigo dataset
         env:
           GH_TOKEN: ${{ github.token }}
+          REPO_ID: ${{ github.repository_id }}
         run: |
           mkdir -p public/ohmigo
-          id=$(gh api "repos/$GITHUB_REPOSITORY/actions/artifacts?name=ohmigo-dataset&per_page=1" \
-            --jq '.artifacts[] | select(.expired | not) | .id')
+          id=""
+          cands=$(gh api "repos/$GITHUB_REPOSITORY/actions/artifacts?name=ohmigo-dataset&per_page=50" \
+            --jq "[.artifacts[] | select((.expired | not)
+                    and .workflow_run.head_branch == \"main\"
+                    and (.workflow_run.head_repository_id | tostring) == \"$REPO_ID\")]
+                  | sort_by(.created_at) | reverse | .[] | \"\(.id) \(.workflow_run.id)\"")
+          while read -r aid rid; do
+            [ -n "$aid" ] || continue
+            ok=$(gh api "repos/$GITHUB_REPOSITORY/actions/runs/$rid" --jq \
+              "(.path == \".github/workflows/ohmigo-daily.yml\" or .path == \".github/workflows/refresh.yml\")
+               and (.event == \"schedule\" or .event == \"workflow_dispatch\")
+               and .head_branch == \"main\"
+               and (.head_repository.id | tostring) == \"$REPO_ID\"
+               and (.conclusion == null or .conclusion == \"success\")")
+            if [ "$ok" = "true" ]; then id=$aid; echo "ohmigo: artifact $aid da corrida $rid"; break; fi
+          done <<< "$cands"
           # O zip tem um só ficheiro; -p sem nome extrai-o.
           if [ -n "$id" ]; then
             gh api "repos/$GITHUB_REPOSITORY/actions/artifacts/$id/zip" > "$RUNNER_TEMP/ohmigo.zip"
