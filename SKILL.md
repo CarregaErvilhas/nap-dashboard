@@ -80,7 +80,7 @@ Outputs to give the user:
 `references/data-sources.md` has the exact URLs and license notes. Summary:
 - **NAP static**: `https://pgm.mobie.pt/integration/nap/evChargingInfra`
 - **NAP dynamic**: `https://pgm.mobie.pt/integration/nap/evActualStatus`
-- **OPC tariff**: `https://data.mobie.pt/data/tariffs.json` + `https://data.mobie.pt/data/stations.json` (MOBI.Data JSON, converted to the old CSV layout by `scripts/mobie_tariffs.py`)
+- **OPC tariff**: `https://data.mobie.pt/data/tariffs.json` + `https://data.mobie.pt/data/stations.json` (MOBI.Data JSON, converted to `data/mobie_tarifas.csv` by `scripts/mobie_tariffs.py`)
 - **DGEG**: OPC-com-reconhecimento-previo and CEME-registados pages
 - **PCVE error tracker**: `pt-pcve-errors.xlsx`, the data owners' own error list
   per operator/asset. Not public API — fetched by `scripts/fetch_tracker.sh`
@@ -104,7 +104,7 @@ Outputs to give the user:
 - 30% of connector rows have declared power inconsistent with V×I (>25% off);
   for `mode3AC3p` the physical power is `√3×V×I`, else `V×I`.
 - **Dashboard JSON**: sanitize NaN/Inf → null and dump with `allow_nan=False`,
-  otherwise the browser's `JSON.parse` fails (historical bug).
+  otherwise the browser's `JSON.parse` fails.
 
 ## Dashboard validation (always do this after a rebuild)
 
@@ -115,7 +115,7 @@ node --check /tmp/dash_check.js
 ```
 
 If the dashboard renders nothing below the KPIs, it's a JS runtime error — see
-the historical bugs in `references/gotchas.md`.
+`references/gotchas.md`.
 
 ## PR checks
 

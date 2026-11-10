@@ -1,4 +1,4 @@
-# Armadilhas (todas verificadas no snapshot de 2026-08-16)
+# Armadilhas
 
 ## Junção NAP ↔ MOBI.E
 
@@ -10,8 +10,8 @@
   contra `LSB` do MOBI.E) e o número de segmentos varia (3–7). Analisar
   diretamente o `site_external_id`.
 - Os ids de tomada (EVSE) do MOBI.Data aparecem em vários formatos
-  (`ABF-00011-01`, `PT-EDP-EABF-00008-1`, `ALM-90003-1`, só números): 808 são
-  só números (`97`, `98`) em 2026-11-09. O `UID_TOMADA` do
+  (`ABF-00011-01`, `PT-EDP-EABF-00008-1`, `ALM-90003-1`, só números): várias
+  centenas são só números (`97`, `98`). O `UID_TOMADA` do
   `data/mobie_tarifas.csv` é reconstruído pelo `mobie_tariffs.py` como
   `<ID>-<tomada>-1`; `mobie_join.py` pega no penúltimo segmento e normaliza como
   inteiro.
@@ -43,11 +43,10 @@
 ## Particularidades do dinâmico (evActualStatus)
 
 - O id de ponto só é único **dentro do site**: alguns OPC publicam ids nus
-  (`19`, `160`, `332`) que se repetem noutros sites (66 ids / 134 pontos em
-  2026-10-24). A chave de ponto é `(site_id, point_id)`; o dinâmico traz o site no
+  (`19`, `160`, `332`) que se repetem noutros sites. A chave de ponto é `(site_id, point_id)`; o dinâmico traz o site no
   primeiro `<reference>` de cada `energyInfrastructureSiteStatus`. Com essa chave,
-  dinâmico e estático coincidem 1:1 e nenhum ponto tem dois estados (os "46 pontos
-  com estados contraditórios" eram esta colisão).
+  dinâmico e estático coincidem 1:1 e nenhum ponto tem dois estados (pontos
+  com estados contraditórios são esta colisão).
 - `pricePerChargingTime` pode chegar a 3,00 €/min (4 pontos >1,0 €/min) —
   provavelmente um erro de unidade €/min contra €/h.
 
@@ -59,9 +58,8 @@
   600 A = 720 kW declarados como 200 kW). Valores crus suspeitos: 1200 V,
   3600 V, 600 A. Para `mode3AC3p` a potência física é `√3 × V × I`; a monofásica
   é `V × I`.
-- Já não há potência por tomada do lado do MOBI.E: o `kw` do MOBI.Data é o
-  máximo do posto em todas as tomadas. (Com o CSV antigo, a concordância
-  NAP↔MOBI.E era de 99,8%.)
+- Não há potência por tomada do lado do MOBI.E: o `kw` do MOBI.Data é o
+  máximo do posto em todas as tomadas.
 - 227 pontos (1%) não têm `usage_type`.
 - 3013 pontos (15%) marcados como `removed` no feed dinâmico continuam listados no
   inventário estático.

@@ -78,11 +78,10 @@ jobs:
         run: python3 scripts/anomalias_summary.py
       - name: Exhaustive power evidence (deterministic)
         run: python3 scripts/anomalias_evidence.py
-      # Instalação "latest" sem o instalador upstream (curl|bash, sem pin):
-      # esse partiu-se a 2026-09-11 quando o scope npm migrou @opencode-ai ->
-      # @opencode e o tarball passou a trazer bin/opencode2 em vez de
-      # bin/opencode (na v2 final voltou a bin/opencode — o script abaixo é
-      # agnóstico ao nome e instala sempre como opencode2). Em vez disso:
+      # Instalação "latest" sem o instalador upstream (curl|bash, sem pin),
+      # que depende do nome do scope npm e do binário dentro do tarball
+      # (bin/opencode ou bin/opencode2). O script abaixo é agnóstico ao nome
+      # e instala sempre como opencode2:
       # resolve a tag `latest` direto no registry npm (o tarball existe por
       # construção — sem a race do API de versões), saca o tarball imutável e
       # liga o binário que lá estiver dentro, seja qual for o nome.

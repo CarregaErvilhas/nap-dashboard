@@ -58,10 +58,10 @@ bash scripts/fetch_data.sh
 ```
 Downloads the live NAP XMLs, the MOBI.Data tariff/station JSON and the DGEG
 HTML pages from the official origins (see `scripts/fetch_data.sh` for the exact
-URLs), then `scripts/mobie_tariffs.py` rebuilds `data/mobie_tarifas.csv` in the
-old MOBI.E layout from the two JSON files. Since 2026-11-09 mobie.pt no longer
-serves the tariff CSV; see `references/data-sources.md` for what the new source
-lacks (grid level, parking time, per-socket power, ~500 sites).
+URLs), then `scripts/mobie_tariffs.py` builds `data/mobie_tarifas.csv` (the layout
+`mobie_join.py` and `ohmigo_dataset.py` read) from the two JSON files. mobie.pt
+does not serve a tariff CSV; see `references/data-sources.md` for what MOBI.Data
+lacks (grid level, parking time, per-socket power, some sites).
 
 Optional: read the dynamic status (`evActualStatus`, ~40 MB) from the
 [AmpereArchive](https://github.com/CarregaErvilhas/AmpereArchive) instead of the
@@ -210,19 +210,18 @@ venv/bin/python scripts/tracker_checks.py   # CSVs + NAP -> findings
   `NAO_VERIFICAVEL` (Register/Payment info/Cable/Tariff have no static NAP
   field). Covers Voltage, Amperage, Power, Charge mode, Plug type, Location
   (≤25 m of the correct coordinates). Writes `data/tracker_fixed.csv` + `.md`
-  (gitignored). Backtest on the 1000 already-`FIXED` rows (2026-10-24): Location
-  373/397, Amperage 75/85, Charge mode 29/30 are recovered; Voltage is weak
-  (`MISTO` 131/184), so only `FIXED_CANDIDATA` is trustworthy there. These are
+  (gitignored). Backtested on the tracker's already-`FIXED` rows: Location,
+  Amperage and Charge mode are recovered almost always; Voltage is weak (many
+  `MISTO`), so only `FIXED_CANDIDATA` is trustworthy there. These are
   *candidates* for the owners to flip to `FIXED`, never an automatic status change.
 - Products: `data/opc_registry_authority.csv` (the only *current* OPC identity table —
   `PartyId | PartyCode | name`, 99 CPO) and
   `data/tracker_errors.csv` (the project's only labelled/ground-truth set: 3153 real
   defects with the value the owner considers correct, plus `notes_class`).
 - `tracker_checks.py` writes `data/tracker_findings.md`/`.csv` (errors.md item 13).
-  Rules and the snapshot they were validated on (2026-10-18): OPC sem PartyId
-  resolúvel (3), PartyCode em vez de PartyId (3: BBGE, CIRC, CONT), nomes
-  fragmentados (21 ids / 3448 sites), assets declarados removidos ainda
-  publicados (5). The NAP-only rules mined from the tracker (placeholder DC
+  Rules: OPC sem PartyId resolúvel, PartyCode em vez de PartyId (e.g. BBGE,
+  CIRC, CONT), nomes fragmentados, assets declarados removidos ainda
+  publicados; the counts are in the generated file. The NAP-only rules mined from the tracker (placeholder DC
   voltages, 58; `mode3AC3p` without three-phase power, 35 rows / 24 sites) are
   in `scripts/nap_static_checks.py`, errors.md item 8.
   The rules are mined from the tracker's own classes (171 rows of 750→500 V,
@@ -235,8 +234,8 @@ venv/bin/python scripts/tracker_checks.py   # CSVs + NAP -> findings
 `scripts/ohmigo_dataset.py` builds `data/ohmigo_chargers.json` for the ohmigo
 MCP server (EV charging cost answers for ChatGPT/Claude): sites, points, power,
 the connector's declared tensão (`v`, V) and max current (`a`, A), the grid
-voltage level (`level`: BTN/BTE/MT, which picks the TAR; **always `null` since
-2026-11-09**, because neither MOBI.Data nor the NAP publishes it) and the **raw** MOBI.E OPC tariffs per socket (every €/min tier and
+voltage level (`level`: BTN/BTE/MT, which picks the TAR; **always `null`**,
+because neither MOBI.Data nor the NAP publishes it) and the **raw** MOBI.E OPC tariffs per socket (every €/min tier and
 the `AD_HOC_PAYMENT` plan, which `data/nap_opc_points.csv` collapses to one value),
 whether the cable is attached (`cable`, from `connectorFormat`), the NAP's site
 `name`, opening `hours` (converted by `nap_etl.py` from DATEX II
@@ -321,11 +320,11 @@ venv/bin/python scripts/validate_dashboard.py
 - NUTS in NAP is level-1 only.
 - Point ids are only unique **within a site**: some OPCs (Iberdrola | bp pulse,
   `HGP-*`, `ACC-*`) publish bare ids (`19`, `160`, `332`) that repeat on other
-  sites (66 ids / 134 points on 2026-10-24). Key every point by
+  sites. Key every point by
   `(site_id, point_id)`; the dynamic CSVs carry `site_id` (first `<reference>` of
   each `energyInfrastructureSiteStatus`). Keyed that way, static and dynamic match
-  1:1 and no point has two statuses. The old "44 points appear 2–3× with
-  conflicting states" finding was this collision, not a feed error.
+  1:1 and no point has two statuses. A point that seems to appear 2–3× with
+  conflicting states is this collision, not a feed error.
 - 33% of connector rows (6 948/21 056) have declared power inconsistent with
   V×I (>25% off); 2 686 declare power above physical capacity (impossible, e.g.
   1200 V × 600 A = 720 kW declared as 200 kW).
@@ -349,8 +348,8 @@ venv/bin/python scripts/validate_dashboard.py
   except for those, which keep the bare id so ohmigo's per-site fallback still
   sees them.
 - MOBI.Data's per-socket `kw` is the station maximum repeated on every socket,
-  so there is no NAP↔MOBI.E power comparison any more (errors.md item 2 says
-  "sem dados"). With the old CSV the agreement was 99.8%.
+  so there is no NAP↔MOBI.E power comparison (errors.md item 2 says
+  "sem dados").
 - OSM: charging sites are tagged two ways — `amenity=charging_station` (node **or**
   way; the way form is the whole site) and `man_made=charge_point` (node only,
   usually one per post/pole). **A site's `ref` can appear under either tag, and
@@ -435,7 +434,7 @@ venv/bin/python scripts/validate_dashboard.py
   estado. Factos, erros e novidades continuam da semana. Casa cada ponto pelo
   `point_id` e por `site_id` == `site_external_id` ou a acabar em
   `-<site_external_id>` (o arquivo usa o `site_id` do NAP, `EZC-AMD-00051`;
-  2026-11-09: 19 534/19 537, 0 ambíguos); ambíguo fica como estava. Só aceita
+  casa quase todos, sem ambíguos); ambíguo fica como estava. Só aceita
   estados da lista DATEX II e ignora ficheiros com mais de 180 min. Sem rede,
   bloqueado ou desatualizado, mostra o estado da semana e diz-o no cabeçalho.
   `validate_dashboard.py` desliga o fetch (`NAP_NO_LIVE`) e testa
