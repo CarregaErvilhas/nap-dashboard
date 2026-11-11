@@ -1,6 +1,6 @@
 {
   "snapshot_date": "2026-11-11",
-  "generated_utc": "2026-11-11T09:45:23+00:00",
+  "generated_utc": "2026-11-11T15:31:14+00:00",
   "opcs": {
     "ACCI": {
       "name": "ACCIONA RECARGA PORTUGAL,UNIPESSOAL LDA",
@@ -104,13 +104,13 @@
     },
     "EDPC": {
       "name": "EDP Comercial",
-      "sites": 1686,
-      "points": 3552
+      "sites": 1685,
+      "points": 3543
     },
     "EMAC": {
       "name": "EMACOM - Telecomunicações da Madeira, Unipessoal, Lda",
       "sites": 25,
-      "points": 44
+      "points": 45
     },
     "EMEL": {
       "name": "EMEL - Empresa Municipal de Mobilidade e Estacionamento de Lisboa, E.M., S.A.",
@@ -179,8 +179,8 @@
     },
     "FCTO": {
       "name": "Iberdrola | bp pulse",
-      "sites": 307,
-      "points": 731
+      "sites": 304,
+      "points": 725
     },
     "FRIO": {
       "name": "Distrifrio Supermercados, Lda",
@@ -209,8 +209,8 @@
     },
     "GLPP": {
       "name": "Galp Power OPC",
-      "sites": 1610,
-      "points": 3444
+      "sites": 1612,
+      "points": 3448
     },
     "GOLD": {
       "name": "Gold Energy",
@@ -250,7 +250,7 @@
     "IBRD": {
       "name": "Iberdrola Clientes Portugal, Unipessoal, Lda",
       "sites": 190,
-      "points": 373
+      "points": 378
     },
     "IHOM": {
       "name": "iHome Lda",
@@ -319,8 +319,8 @@
     },
     "MOBI": {
       "name": "MOBIE",
-      "sites": 5,
-      "points": 10
+      "sites": 6,
+      "points": 11
     },
     "MOON": {
       "name": "Siva - Sociedade de Importação de Veículos Automóveis / (sub-CEME da Iberdola)",
@@ -435,7 +435,7 @@
     "TSLA": {
       "name": "Tesla",
       "sites": 9,
-      "points": 192
+      "points": 184
     },
     "VEIM": {
       "name": "Veimonte Lda",
