@@ -4,8 +4,8 @@
 Corre no refresh.yml depois do build, antes do commit (e antes do deploy). Se um
 upstream (NAP, MOBI.E, DGEG) mudar o formato e o pipeline não rebentar mas
 produzir dados absurdos (ex. join a 0%, DGEG vazio), o guard falha o job → nada
-é commitado nem publicado e o dashboard online fica no último bom até o upstream
-ser corrigido.
+é commitado nem publicado e o site online fica no último bom até o upstream
+ser corrigido. Só lê os CSVs de data/ (nunca o site gerado).
 
 Limiares são folgados face aos valores saudáveis atuais (sites ~8.4k, join 90%,
 DGEG OPC 154/CEME 46, match registo 97%) — pegam quedas do tipo "formato mudou",

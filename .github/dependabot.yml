@@ -9,7 +9,7 @@ updates:
       actions:
         patterns: ["*"]
   # Pipeline Python deps (requirements.txt). Nota: subir major de pandas/lxml
-  # pode mudar outputs numéricos — rever o diff do dashboard antes de merge.
+  # pode mudar outputs numéricos — correr build_dashboard.py + validate_site.py e rever o diff de site/data antes de merge.
   - package-ecosystem: "pip"
     directory: "/"
     schedule:

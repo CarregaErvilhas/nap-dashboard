@@ -4,11 +4,9 @@ Análise de dados da rede de carregamento de veículos
 elétricos em Portugal, a partir de fontes públicas oficiais. O objetivo é:
 
 - Extrair e cruzar dados de várias fontes (NAP MOBI.E, tarifário OPC, registos DGEG, OSM/umap)
-- Construir um **dashboard local autónomo** (`dashboard.html`) para explorar a rede
+- Construir um **site estático** (`site/`) para procurar postos e explorar a rede
 - Produzir uma **lista de factos interessantes** e uma **lista de erros reportáveis**
   aos donos dos dados
-
-![Dashboard NAP MOBI.E](dashboard.png)
 
 ## Fontes de dados
 
@@ -25,16 +23,25 @@ elétricos em Portugal, a partir de fontes públicas oficiais. O objetivo é:
 
 **Demo online:** <https://nap.ocarroeletrico.com/> (domínio próprio via CNAME;
 publicado automaticamente por `.github/workflows/pages.yml` a cada `push` que
-altere o `dashboard.html`; regenerado semanalmente por
+altere o `site/`; regenerado semanalmente por
 `.github/workflows/refresh.yml`, segundas 06:00 UTC).
 
-- **`dashboard.html`** — dashboard autónomo (10.4 MB), sem libs externas, abre por
-  `file://`. **Bilingue PT/EN**: mostra português a browsers em português e inglês
+- **`site/`** — site estático de três páginas, sem libs externas, com os dados em
+  `site/data/*.json` (pré-visualização local: `python3 -m http.server --directory site`;
+  `file://` não funciona porque as páginas pedem o JSON). **Bilingue PT/EN**: mostra português a browsers em português e inglês
   aos restantes (botão PT|EN no canto superior direito grava a escolha; `?lang=pt|en`
-  força uma língua). Contém KPIs, gráficos de barras, **mapa SVG interativo** de 8 357
-  locais (continente + Madeira/Açores, zoom/pan, clique no ponto para detalhe com
-  cruzamento OSM), tabela de 20 932 pontos com pesquisa, filtros multi-select
-  (estado/região/classe/operador/tomada/pagamento), ordenação e paginação.
+  força uma língua); tema automático/claro/escuro e opções de visão (daltonismo,
+  alto contraste).
+  - **Procurar** (`index.html`): para quem carrega. Pesquisa por localidade, operador
+    ou código, «Perto de mim» (geolocalização só no dispositivo), filtros rápidos,
+    cartão por local com uma marca de estado por tomada, detalhe com tomadas, tarifas
+    do operador, pagamento e ligações «Como chegar» (Google Maps, OpenStreetMap), e
+    um mapa em canvas.
+  - **Rede** (`rede.html`): estatísticas da comunidade (KPIs, novidades, gráficos de
+    barras como tabelas, histórico, hubs, factos).
+  - **Operadores** (`operadores.html`): para os OPC. Relatório semanal de anomalias
+    por operador (de `Agents-outputs/anomalias-results.md`), entradas e saídas de OPC
+    e erros reportáveis.
 - **`facts.md`** — factos interessantes da rede.
 - **`errors.md`** — erros reportáveis aos donos dos dados (inclui dúvidas da
   comunidade OSM/umap e divergências de operador/pagamento).
@@ -65,13 +72,14 @@ venv/bin/python scripts/osm_umap.py          # cruza NAP com OSM/umap (comunidad
 venv/bin/python scripts/make_pt_outline.py   # gera assets/pt_outline.json (mapa)
 venv/bin/python scripts/tracker_sync.py  # tracker PCVE -> registo OPC + erros rotulados
 venv/bin/python scripts/tracker_checks.py # tracker + NAP -> errors.md item 13
-venv/bin/python scripts/build_dashboard.py # gera dashboard.html, facts.md, errors.md
+venv/bin/python scripts/build_dashboard.py # gera site/, facts.md, errors.md
 ```
 
-O `build_dashboard.py` lê todos os CSVs intermédios e injeta os dados no template
-`assets/dashboard_template.html`, substituindo o marcador `/*__DATA__*/`. Também
-regenera `dashboard.png` (screenshot headless via Chrome) para este README; se não
-encontrar Chrome, omite o screenshot com um aviso.
+O `build_dashboard.py` lê todos os CSVs intermédios, grava os dados em
+`site/data/*.json` e renderiza as páginas de `assets/site/` para `site/` (via
+`scripts/site_data.py` e `scripts/build_site.py`). Para voltar a renderizar as páginas
+sem os CSVs, a partir do `site/data` commitado: `python3 scripts/build_site.py`.
+`scripts/validate_site.py` valida o resultado.
 
 ## Agentes automáticos
 
@@ -108,8 +116,10 @@ python3 scripts/check_agents.py
 | `scripts/tracker_checks.py` | Cruza tracker + NAP -> `errors.md` item 13 (identidade de OPC, assets removidos) |
 | `scripts/make_pt_outline.py` | Contorno de Portugal para o mapa SVG (a partir do CAOP) |
 | `scripts/check_quality.py` | Validações de sanidade física e de schema |
-| `scripts/build_dashboard.py` | Gera o dashboard autónomo + factos/erros |
-| `assets/dashboard_template.html` | Template HTML/JS do dashboard (marcador `/*__DATA__*/`) |
+| `scripts/build_dashboard.py` | Calcula os dados e gera `site/` + factos/erros |
+| `scripts/site_data.py`, `scripts/build_site.py` | Partem os dados em `site/data/*.json` e renderizam as páginas |
+| `scripts/validate_site.py` | Valida o `site/` (JSON, esquema, JS, CSP, sem `innerHTML`) |
+| `assets/site/` | Fonte do site: páginas, parciais, CSS, JS, fonte Nunito |
 | `assets/pt_outline.json` | Polígonos do contorno PT + etiquetas de distrito/ilha para o mapa (143 KB) |
 | `assets/schemas/*.xsd` | Esquemas DATEX II 3.3 © CEN (fonte de enums; ver `assets/schemas/README.md`, re-fetch `scripts/fetch_schemas.sh`) |
 | `SKILL.md` | Skill reutilizável com todo o conhecimento e o pipeline |
@@ -139,7 +149,7 @@ buscado, o item 13 de `errors.md` simplesmente não é escrito. Ver
   discriminador de operador.
 - `facilityLocation` vive no namespace `locationReferencing`, não em `locationExtension`.
 - Os CSVs estáticos são lidos com `dtype=str` para não perder zeros à esquerda.
-- JSON incorporado no dashboard: usar `allow_nan=False` + limpeza de NaN/Inf,
+- JSON do site: usar `allow_nan=False` + limpeza de NaN/Inf,
   senão o `JSON.parse` do browser falha (bug já resolvido).
 - OSM/umap: o dump do autor do mapa v2.1 (`Todos.json`) cobre ~96% dos sites NAP
   (8 011/8 357) por código MOBI.E; os pontos `man_made=charge_point` trazem tags
@@ -164,5 +174,5 @@ Código próprio (`scripts/`, template, docs, análise): `PolyForm-Noncommercial
 lucrativos; tarifário © MOBI.E), listas DGEG (idem), contorno CAOP ©
 DGT (CC-BY 4.0), dados OSM © OpenStreetMap contributors (ODbL 1.0,
 share-alike) + mapas comunidade v2.1/Caça aos Postos, esquemas DATEX II © CEN.
-O `dashboard.html` é obra coletiva: o nosso código é PolyForm, os dados
-embutidos mantêm as licenças originais (atribuição no footer + mapa).
+O `site/` é obra coletiva: o nosso código é PolyForm, os dados
+publicados mantêm as licenças originais (atribuição no footer + mapa).

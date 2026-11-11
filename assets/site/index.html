@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<!--CHROME:head-->
+<title>Postos de carregamento em Portugal: onde estão e se estão livres</title>
+<meta name="description" content="Procura postos de carregamento de veículos elétricos em Portugal: se estão livres agora, potência, tomadas, formas de pagamento e taxa do operador. Dados oficiais do Ponto de Acesso Nacional.">
+<link rel="canonical" href="https://nap.ocarroeletrico.com/">
+</head>
+<body>
+<!--CHROME:header-->
+<main id="main" class="wrap">
+  <div class="hero">
+    <h1 data-i18n="findH1">Onde carregar, e se está livre agora</h1>
+    <p data-i18n="findLead">Todos os postos públicos de Portugal, com o estado que o operador declara, a potência, as tomadas e como se paga.</p>
+  </div>
+  <form id="search" role="search" class="card" autocomplete="off">
+    <div class="searchrow">
+      <label class="field" for="q"><span data-i18n="qLabel">Localidade, operador, nome ou código do posto</span>
+        <input type="search" id="q" name="q" enterkeyhint="search" data-i18n-ph="qPh" placeholder="Ex.: Coimbra, Ionity, LSB-00123"></label>
+      <button class="btn primary" type="button" id="near" data-i18n="near">Perto de mim</button>
+    </div>
+    <ul class="chips" aria-label="Filtros rápidos" data-i18n-label="quick">
+      <li><button class="btn sm" type="button" aria-pressed="false" data-f="free" data-i18n="fFree">Livre agora</button></li>
+      <li><button class="btn sm" type="button" aria-pressed="false" data-f="fast" data-i18n="fFast">Rápido (50 kW ou mais)</button></li>
+      <li><button class="btn sm" type="button" aria-pressed="false" data-f="ultra" data-i18n="fUltra">Ultra (150 kW ou mais)</button></li>
+      <li><button class="btn sm" type="button" aria-pressed="false" data-f="card" data-i18n="fCard">Paga com cartão bancário</button></li>
+      <li><button class="btn sm" type="button" aria-pressed="false" data-f="wc" data-i18n="fWc" data-i18n-title="fWcTitle" title="Só os postos que o operador ou a comunidade confirmaram. A maioria não tem esta informação, o que não quer dizer que não seja acessível.">Acessível em cadeira de rodas</button></li>
+    </ul>
+    <p class="small muted" id="wcHelp" hidden data-i18n="fWcTitle">Só os postos que o operador ou a comunidade confirmaram. A maioria não tem esta informação, o que não quer dizer que não seja acessível.</p>
+    <details class="morefilters">
+      <summary data-i18n="more">Mais filtros</summary>
+      <div class="grid three">
+        <div class="field"><details class="ms" id="fConn"><summary><span data-i18n="conn">Tomada</span> <small class="msn"></small></summary><div class="msbody"></div></details></div>
+        <div class="field"><details class="ms" id="fOp"><summary><span data-i18n="op">Operador</span> <small class="msn"></small></summary><div class="msbody"></div></details></div>
+        <div class="field"><details class="ms" id="fRegion"><summary><span data-i18n="region">Região</span> <small class="msn"></small></summary><div class="msbody"></div></details></div>
+        <div class="field"><details class="ms" id="fDcv"><summary><span data-i18n="dcv">Tensão DC</span> <small class="msn"></small></summary><div class="msbody"></div></details></div>
+        <div class="field"><details class="ms" id="fLife"><summary><span data-i18n="life">Estado do posto</span> <small class="msn"></small></summary><div class="msbody"></div></details></div>
+      </div>
+      <p class="small muted" data-i18n="dcvHelp">Tensão máxima declarada nos conectores DC do posto. Acima de 500 V é onde um carro de 800 V carrega à potência máxima; um carro de 400 V carrega em qualquer um.</p>
+      <p class="small muted" data-i18n="lifeHelp">Por omissão só aparecem postos em funcionamento. Os postos em construção ou planeados vêm do OpenStreetMap: ainda não estão no NAP, por isso não têm estado, tomadas nem preços.</p>
+      <button class="btn sm" type="button" id="reset" data-i18n="reset">Limpar filtros</button>
+    </details>
+  </form>
+  <p class="note" id="live" role="status" data-i18n="loading">A carregar…</p>
+
+  <div class="viewswitch" role="group" aria-label="Vista" data-i18n-label="view">
+    <button class="btn sm" type="button" id="vList" aria-pressed="true" data-i18n="vList">Lista</button>
+    <button class="btn sm" type="button" id="vMap" aria-pressed="false" data-i18n="vMap">Mapa</button>
+  </div>
+  <div class="findlayout">
+    <section class="results" id="results" aria-labelledby="count">
+      <h2 class="count" id="count" aria-live="polite" data-i18n="loading">A carregar…</h2>
+      <button class="btn sm" type="button" id="allRes" hidden data-i18n="allRes">Mostrar todos os resultados</button>
+      <ul class="sites" id="sites"></ul>
+      <button class="btn more" type="button" id="moreBtn" hidden data-i18n="showMore">Mostrar mais</button>
+    </section>
+    <section class="mapbox" id="mapbox" hidden aria-labelledby="mapH">
+      <h2 class="sr" id="mapH" data-i18n="mapH">Mapa dos postos</h2>
+      <div class="maptools">
+        <button class="btn sm" type="button" data-region="mainland" data-i18n="rg_mainland">Continente</button>
+        <button class="btn sm" type="button" data-region="madeira" data-i18n="rg_madeira">Madeira</button>
+        <button class="btn sm" type="button" data-region="azores" data-i18n="rg_azores">Açores</button>
+        <button class="btn sm" type="button" id="zIn" aria-label="Aproximar" data-i18n-label="zIn">+</button>
+        <button class="btn sm" type="button" id="zOut" aria-label="Afastar" data-i18n-label="zOut">−</button>
+      </div>
+      <canvas id="map" width="880" height="1173" role="img" aria-describedby="mapDesc"></canvas>
+      <p class="small muted" id="mapDesc" data-i18n="mapDesc">O mapa mostra os mesmos postos da lista. Toca num ponto para o abrir na lista; a lista tem toda a informação.</p>
+      <ul class="legend" id="legend"></ul>
+    </section>
+  </div>
+  <noscript><p class="note">Esta página precisa de JavaScript para procurar postos. / This page needs JavaScript to search chargers.</p></noscript>
+</main>
+<!--CHROME:footer-->
+<script src="find.js"></script>
+</body>
+</html>

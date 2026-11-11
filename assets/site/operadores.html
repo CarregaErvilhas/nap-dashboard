@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<!--CHROME:head-->
+<title>Para operadores (OPC): anomalias nos dados publicados no NAP</title>
+<meta name="description" content="Relatório semanal de anomalias nos dados que cada operador de postos de carregamento (OPC) publica no Ponto de Acesso Nacional: potências impossíveis, moradas, tensões e erros reportáveis.">
+<link rel="canonical" href="https://nap.ocarroeletrico.com/operadores.html">
+</head>
+<body>
+<!--CHROME:header-->
+<main id="main" class="wrap">
+  <div class="hero">
+    <h1 data-i18n="opsH1">O que os teus dados dizem no NAP</h1>
+    <p data-i18n="opsLead">Escolhe o operador para ver as anomalias encontradas esta semana nos dados que publica, com a regra de cada uma e o que afeta.</p>
+  </div>
+  <section class="block" id="escolher" aria-labelledby="hPick"><h2 id="hPick" data-i18n="hPick">Anomalias por operador</h2>
+    <p class="note" id="repNote" data-i18n="loading">A carregar…</p>
+    <div class="card" style="margin-top:12px">
+      <label class="field" for="opSel"><span data-i18n="pickLabel">Operador (código e nome)</span>
+        <select id="opSel"><option value="" data-i18n="pickAll">Todos: ver a tabela resumo</option></select></label>
+    </div>
+    <div id="opView" tabindex="-1" style="margin-top:16px"></div>
+  </section>
+  <section class="block panel" id="mudancas" data-panel="churn" aria-labelledby="hChurn"><h2 id="hChurn" data-i18n="hChurn">Entradas, saídas e mudanças de operadores</h2><!--PANEL:churn--></section>
+  <section class="block panel" id="erros" data-panel="errs" aria-labelledby="hErrs"><h2 id="hErrs" data-i18n="hErrs">Erros reportáveis nos dados oficiais</h2>
+    <p class="muted" data-i18n="errsNote">Problemas de toda a rede, para quem gere os dados (NAP, MOBI.E, DGEG). A lista completa por tomada está no errors.md.</p>
+    <ol><!--PANEL:errs--></ol>
+    <p><a href="https://github.com/CarregaErvilhas/nap-dashboard/blob/main/errors.md" data-i18n="errsLink">Ler o errors.md completo no GitHub</a></p></section>
+</main>
+<!--CHROME:footer-->
+<script src="operadores.js"></script>
+</body>
+</html>

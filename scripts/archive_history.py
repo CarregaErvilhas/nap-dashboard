@@ -10,10 +10,12 @@ Cinco stats (cálculos em `scripts/archive_stats.py`):
 
 Fontes (uma das duas):
 - `--url https://<archive-host>` (omissão: $AMPERE_ARCHIVE_URL): descarrega os
-  ficheiros horários para `--cache` (data/archive_cache). Não há listagem: tenta
-  primeiro `v1/<CC>/manifest.json` e, sem ele, gera os nomes
-  (`table=<t>/date=<D>/part-<HH>.parquet`) e aceita 404 (hora sem linhas). Um
-  ficheiro horário nunca muda depois de publicado, por isso fica em cache; um
+  ficheiros para `--cache` (data/archive_cache). O endereço não lista: a lista
+  vem de `v1/<CC>/manifest.json`, que o coletor reescreve depois de cada hora e
+  que inclui o histórico de antes dele (`part-backfill`, `part-ocpi`). Sem
+  manifest, gera os nomes das horas (`table=<t>/date=<D>/part-<HH>.parquet`)
+  desde ARCHIVE_EPOCH e aceita 404 (hora sem linhas); assim o backfill não
+  entra. Um ficheiro nunca muda depois de publicado, por isso fica em cache; um
   404 de uma hora fechada há mais de MISSING_AFTER fica registado em `.missing`.
 - `--root DIR | s3://bucket`: cópia local do bucket, ou o R2 com credenciais S3
   (AWS_ACCESS_KEY_ID / AWS_SECRET_ACCESS_KEY e `--s3-endpoint`).
@@ -38,7 +40,8 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import archive_stats  # noqa: E402
 
 COUNTRY_RE = re.compile(r'^[A-Z]{2}$')
-# 1.º dia do arquivo: antes disto não há ficheiros.
+# 1.º dia do coletor ao vivo. Só serve para adivinhar nomes quando não há
+# manifest: o backfill (antes disto) só se encontra pelo manifest.
 ARCHIVE_EPOCH = datetime.date(2026, 11, 8)
 # fee_events não entra em nenhuma das stats.
 FETCH_TABLES = ('status_events', 'snapshots', 'polls', 'static_versions')
@@ -63,13 +66,18 @@ def rel_path(country, table, day, hour):
     return f'v1/country={country}/table={table}/date={day.isoformat()}/part-{hour:02d}.parquet'
 
 
-PATH_RE = re.compile(r'v1/country=([A-Z]{2})/table=(\w+)/date=(\d{4}-\d\d-\d\d)/part-(\d\d)\.parquet')
+# `part-<HH>` do coletor, `part-backfill`/`part-ocpi` das reposições de histórico.
+PATH_RE = re.compile(r'v1/country=([A-Z]{2})/table=(\w+)/date=(\d{4}-\d\d-\d\d)/part-([\w-]+)\.parquet')
 
 
-def from_manifest(base, country):
-    """Caminhos listados no manifest, se existir. O formato ainda não está
-    definido: aceita qualquer JSON e apanha as strings com o padrão dos ficheiros."""
-    raw = _get(f'{base}/v1/{country}/manifest.json')
+def from_manifest(base, country, get=_get):
+    """Caminhos listados no manifest, ou None sem ele (404, ilegível, inacessível).
+    Apanha as strings com o padrão dos ficheiros em qualquer JSON, em vez de
+    depender da forma exata (`{"files": [...]}` hoje)."""
+    try:
+        raw = get(f'{base}/v1/{country}/manifest.json')
+    except (urllib.error.URLError, OSError):
+        return None   # sem manifest adivinha os nomes; se o arquivo todo falhar, os ficheiros também falham
     if raw is None:
         return None
     try:
@@ -77,6 +85,21 @@ def from_manifest(base, country):
     except ValueError:
         return None
     return sorted({m.group(0) for m in PATH_RE.finditer(text) if m.group(1) == country})
+
+
+def listed_wanted(paths, first_day, now):
+    """Do manifest, os ficheiros das tabelas usadas e dentro da janela
+    (static_versions desde o início). Estão publicados, por isso um 404 não
+    vai para `.missing`: fica `end = now` e volta a ser pedido."""
+    out = []
+    for p in paths:
+        m = PATH_RE.fullmatch(p)
+        if not m or m.group(2) not in FETCH_TABLES:
+            continue
+        if m.group(2) not in FULL_HISTORY and m.group(3) < first_day.isoformat():
+            continue
+        out.append((p, now))
+    return out
 
 
 def wanted(country, first_day, now):
@@ -104,10 +127,8 @@ def sync(base, country, cache, first_day, now=None, workers=8, get=_get):
             known_missing = set(fh.read().split())
     except FileNotFoundError:
         known_missing = set()
-    listed = from_manifest(base, country) if get is _get else None
-    cands = wanted(country, first_day, now)
-    if listed is not None:
-        cands = [(p, end) for p, end in cands if p in set(listed)]
+    listed = from_manifest(base, country, get)
+    cands = wanted(country, first_day, now) if listed is None else listed_wanted(listed, first_day, now)
     todo = [(p, end) for p, end in cands
             if p not in known_missing and not os.path.exists(os.path.join(cache, p))]
 
