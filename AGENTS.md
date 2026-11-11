@@ -9,7 +9,8 @@ validated by `scripts/validate_site.py` + `scripts/pipeline_guard.py`. Don't ove
 
 ## Layout
 - `scripts/` — the pipeline (in the order of "Pipeline order" below, plus
-  `extract_enums.py`, `fetch_schemas.sh` and the manual `tracker_fixed.py`);
+  `extract_enums.py` and `fetch_schemas.sh`; the tracker verdicts live in the private
+  `pt-pcve-errors`, not here);
   the checks (`validate_site.py`, `pipeline_guard.py`, `ci_paths.py`);
   the site helpers (`site_data.py`, `build_site.py`, `dashboard_payload.py`,
   `dashboard_i18n.py`); the
@@ -228,19 +229,15 @@ venv/bin/python scripts/tracker_checks.py   # CSVs + NAP -> findings
   failure by committing a copy of the tracker.
 - `data/tracker_meta.json` carries `synced_at` + the xlsx `sha256` on every run,
   so errors.md item 13 always states which version of the tracker it came from.
-- `scripts/tracker_fixed.py` (run after `nap_etl.py` + `tracker_sync.py`) replaces
-  the manual match: for each `TO FIX` row with a `correct_data` it finds the site
-  (same `asset_variants` as `tracker_checks.py`) and compares the current NAP
-  value with the wrong and the correct one. Verdicts: `FIXED_CANDIDATA`,
-  `AINDA_ERRADO`, `MISTO` (wrong and correct coexist on the site — several
-  connectors, review by hand), `ALTERADO_OUTRO`, `SITE_NAO_ENCONTRADO`,
-  `NAO_VERIFICAVEL` (Register/Payment info/Cable/Tariff have no static NAP
-  field). Covers Voltage, Amperage, Power, Charge mode, Plug type, Location
-  (≤25 m of the correct coordinates). Writes `data/tracker_fixed.csv` + `.md`
-  (gitignored). Backtested on the tracker's already-`FIXED` rows: Location,
-  Amperage and Charge mode are recovered almost always; Voltage is weak (many
-  `MISTO`), so only `FIXED_CANDIDATA` is trustworthy there. These are
-  *candidates* for the owners to flip to `FIXED`, never an automatic status change.
+- Deciding which `TO FIX` rows are now fixed in the NAP is **not done here**: it
+  lives in the private repo `Cocofreee/pt-pcve-errors`
+  (`scripts/cross_errors_sources.py`, which uses this repo's `scripts/nap_etl.py`
+  at a pinned commit). It covers Voltage, Amperage, Power, Charge mode, Plug type,
+  Location (≤10 m FIXED / ≤30 m POSSIBLE), Payment info and Register, and its
+  verdicts are only *candidates* for the owners to flip to `FIXED`. The old
+  `tracker_fixed.py` was removed to avoid two copies of the same cross-check.
+  **Never republish its output (or any per-row tracker data) in this public repo**:
+  the tracker has no reuse licence.
 - Products: `data/opc_registry_authority.csv` (the only *current* OPC identity table —
   `PartyId | PartyCode | name`, 99 CPO) and
   `data/tracker_errors.csv` (the project's only labelled/ground-truth set: 3153 real
