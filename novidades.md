@@ -1,3 +1,7 @@
-# Novidades da rede (2026-11-09 → 2026-11-11)
+# Novidades da rede (2026-11-11 → 2026-11-11)
 
-- **Estreias:** 313 locais reativados (`0203PR0005` · Viseu · CONT · 50 kW; `0232PL0002` · ? · CONT · 22 kW; `0241PR0003` · Castelo Branco · CONT · 50 kW; `0460PR0003` · Vila Nova de Gaia · CONT · 50 kW; `0464PR0003` · Telheiras · CONT · 120 kW; `1393PR0002` · Barcelos · ? · 50 kW; `1498PR0002` · Alcácer do Sal · CONT · 120 kW; `1978PR0003` · Portimão · ? · 50 kW; `1981PL0001` · Cacém · CONT · 22 kW; `2864PR0006` · Lisboa · CONT · 50 kW (+303 restantes)).
+- **Estreias:** 1 novo local em funcionamento (`MOBI-LSB-02327` · Lisboa · MOBI · 7,4 kW). 143 reativados (`0002PL0018` · Amadora · CONT · 22 kW; `0004PR0004` · Vila Nova de Gaia · CONT · 120 kW; `0004PR0005` · Vila Nova de Gaia · CONT · 120 kW; `0004PR0006` · Vila Nova de Gaia · ? · 50 kW; `0004PR0007` · Vila Nova de Gaia · ? · 50 kW; `0004PR0008` · Vila Nova de Gaia · ? · 50 kW; `0004PR0009` · Vila Nova de Gaia · ? · 50 kW; `0004PR0010` · Vila Nova de Gaia · ? · 50 kW; `0205PL0001` · Caldas da Rainha · ? · 22 kW; `0205PR0003` · Caldas da Rainha · CONT · 120 kW (+133 restantes)).
+- **Saídas:** 4 locais saíram da rede ou foram desligados (`PLM-00089` · Palmela · FCTO · 400 kW; `VIS-00138` · Viseu · FCTO · 50 kW; `VIS-00139` · Viseu · FCTO · 200 kW; `VNG-00072` · Vila Nova de Gaia · EDPC · 120 kW).
+- **Maior estreia:** `MOBI-LSB-02327` (Lisboa, MOBI) com 1 ponto e 7,4 kW no total.
+- **Cidade em alta:** Lisboa com 1 estreia.
+- **Balanço:** +16 locais (0,2% em módulo), +30 pontos face à semana anterior.

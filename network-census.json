@@ -1,10 +1,10 @@
 {
  "snapshot_date": "2026-11-11",
- "generated_utc": "2026-11-11T09:41:52+00:00",
+ "generated_utc": "2026-11-11T15:26:52+00:00",
  "totals": {
-  "sites": 8811,
-  "points": 19518,
-  "connector_rows": 19601
+  "sites": 8827,
+  "points": 19548,
+  "connector_rows": 19619
  },
  "opcs": {
   "EZC3": {
@@ -114,13 +114,13 @@
   },
   "EDPC": {
    "name": "EDP Comercial",
-   "sites": 1686,
-   "points": 3533
+   "sites": 1685,
+   "points": 3530
   },
   "GLPP": {
    "name": "Galp Power OPC",
-   "sites": 1610,
-   "points": 3444
+   "sites": 1612,
+   "points": 3448
   },
   "MOTA": {
    "name": "Mota-Engil Renewing",
@@ -160,7 +160,7 @@
   "IBRD": {
    "name": "Iberdrola Clientes Portugal, Unipessoal, Lda",
    "sites": 190,
-   "points": 373
+   "points": 378
   },
   "BLUE": {
    "name": "Bluecharge, Lda",
@@ -199,8 +199,8 @@
   },
   "MOBI": {
    "name": "MOBIE",
-   "sites": 5,
-   "points": 10
+   "sites": 6,
+   "points": 11
   },
   "EVCE": {
    "name": "EVCE POWER, LDA. / MOBISMART",
@@ -220,7 +220,7 @@
   "EMAC": {
    "name": "EMACOM - Telecomunicações da Madeira, Unipessoal, Lda",
    "sites": 25,
-   "points": 44
+   "points": 45
   },
   "IMAG": {
    "name": "Image4all - Eficiência Energética, Comunicação e Imagem",
@@ -334,8 +334,8 @@
   },
   "FCTO": {
    "name": "Iberdrola | bp pulse",
-   "sites": 307,
-   "points": 731
+   "sites": 304,
+   "points": 725
   },
   "IONY": {
    "name": "IONITY GmbH",
@@ -460,7 +460,7 @@
   "TSLA": {
    "name": "Tesla",
    "sites": 9,
-   "points": 192
+   "points": 184
   },
   "CONT": {
    "name": "Modelo Continente Hipermercados, S.A.",
@@ -469,8 +469,8 @@
   },
   "": {
    "name": "",
-   "sites": 107,
-   "points": 224
+   "sites": 124,
+   "points": 260
   }
  },
  "records": {
@@ -553,7 +553,7 @@
    "npts": 6,
    "kw": 22.0,
    "hub_kw": 132.0,
-   "status": "charging"
+   "status": "unknown"
   },
   "LSB-00379": {
    "op": "CAPW",
@@ -571,7 +571,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "GMR-00077": {
    "op": "GENJ",
@@ -697,7 +697,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "CVL-00009": {
    "op": "CAPW",
@@ -742,7 +742,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "unknown"
   },
   "FND-00013": {
    "op": "CEPS",
@@ -769,7 +769,7 @@
    "npts": 2,
    "kw": 11.0,
    "hub_kw": 22.0,
-   "status": "charging"
+   "status": "available"
   },
   "GMR-00080": {
    "op": "GENJ",
@@ -787,7 +787,7 @@
    "npts": 2,
    "kw": 90.0,
    "hub_kw": 140.0,
-   "status": "available"
+   "status": "outOfOrder"
   },
   "TMR-00014": {
    "op": "TRUE",
@@ -868,7 +868,7 @@
    "npts": 2,
    "kw": 11.0,
    "hub_kw": 22.0,
-   "status": "available"
+   "status": "charging"
   },
   "VNF-00013": {
    "op": "CEVE",
@@ -931,7 +931,7 @@
    "npts": 4,
    "kw": 22.0,
    "hub_kw": 88.0,
-   "status": "available"
+   "status": "charging"
   },
   "BRR-00019": {
    "op": "TRUE",
@@ -940,7 +940,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "ABT-00017": {
    "op": "CEPS",
@@ -1030,7 +1030,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "BJA-00016": {
    "op": "LUSI",
@@ -1066,7 +1066,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "TVR-00014": {
    "op": "LUSI",
@@ -1201,7 +1201,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "VIS-00024": {
    "op": "VISA",
@@ -1309,7 +1309,7 @@
    "npts": 2,
    "kw": 11.0,
    "hub_kw": 22.0,
-   "status": "available"
+   "status": "charging"
   },
   "GMR-00082": {
    "op": "GENJ",
@@ -1408,7 +1408,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "GMR-00059": {
    "op": "HEXA",
@@ -1417,7 +1417,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "GMR-00055": {
    "op": "HEXA",
@@ -1480,7 +1480,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "CBR-00050": {
    "op": "MOTA",
@@ -1516,7 +1516,7 @@
    "npts": 3,
    "kw": 50.0,
    "hub_kw": 143.0,
-   "status": "available"
+   "status": "outOfOrder"
   },
   "ALM-90003": {
    "op": "HORZ",
@@ -1543,7 +1543,7 @@
    "npts": 3,
    "kw": 50.0,
    "hub_kw": 143.0,
-   "status": "outOfOrder"
+   "status": "available"
   },
   "OER-00126": {
    "op": "HORZ",
@@ -1597,7 +1597,7 @@
    "npts": 3,
    "kw": 50.0,
    "hub_kw": 122.0,
-   "status": "available"
+   "status": "outOfOrder"
   },
   "FUN-00029": {
    "op": "HORZ",
@@ -1615,7 +1615,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "LSB-00019": {
    "op": "GLPP",
@@ -1705,7 +1705,7 @@
    "npts": 2,
    "kw": 3.7,
    "hub_kw": 7.4,
-   "status": "charging"
+   "status": "available"
   },
   "BGC-90001": {
    "op": "HORZ",
@@ -1732,7 +1732,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "ACN-00006": {
    "op": "EDPC",
@@ -1822,7 +1822,7 @@
    "npts": 2,
    "kw": 120.0,
    "hub_kw": 240.0,
-   "status": "available"
+   "status": "charging"
   },
   "MAI-00036": {
    "op": "GLPG",
@@ -1849,7 +1849,7 @@
    "npts": 2,
    "kw": 11.0,
    "hub_kw": 22.0,
-   "status": "available"
+   "status": "charging"
   },
   "OVR-00006": {
    "op": "EDPC",
@@ -1930,7 +1930,7 @@
    "npts": 1,
    "kw": 22.0,
    "hub_kw": 22.0,
-   "status": "available"
+   "status": "charging"
   },
   "SNS-00008": {
    "op": "EDPC",
@@ -2146,7 +2146,7 @@
    "npts": 4,
    "kw": 3.7,
    "hub_kw": 14.8,
-   "status": "charging"
+   "status": "available"
   },
   "GMR-90007": {
    "op": "GLPP",
@@ -2182,7 +2182,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "LSB-90039": {
    "op": "GLPP",
@@ -2200,7 +2200,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "NZR-00017": {
    "op": "EDPC",
@@ -2263,7 +2263,7 @@
    "npts": 1,
    "kw": 3.7,
    "hub_kw": 3.7,
-   "status": "available"
+   "status": "charging"
   },
   "MOBI-CHV-00003": {
    "op": "IBRD",
@@ -2290,7 +2290,7 @@
    "npts": 6,
    "kw": 3.7,
    "hub_kw": 22.2,
-   "status": "unknown"
+   "status": "available"
   },
   "MTS-00044": {
    "op": "REPS",
@@ -2326,7 +2326,7 @@
    "npts": 2,
    "kw": 50.0,
    "hub_kw": 100.0,
-   "status": "outOfOrder"
+   "status": "available"
   },
   "VFR-00060": {
    "op": "GLPP",
@@ -2335,7 +2335,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "VFR-00062": {
    "op": "GLPP",
@@ -2389,7 +2389,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "SMP-90001": {
    "op": "GLPP",
@@ -2398,7 +2398,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "unknown"
   },
   "PRT-00022": {
    "op": "HORZ",
@@ -2443,7 +2443,7 @@
    "npts": 6,
    "kw": 3.7,
    "hub_kw": 22.2,
-   "status": "charging"
+   "status": "available"
   },
   "GRD-00012": {
    "op": "REPS",
@@ -2659,7 +2659,7 @@
    "npts": 2,
    "kw": 7.4,
    "hub_kw": 14.8,
-   "status": "available"
+   "status": "charging"
   },
   "LLE-00052": {
    "op": "PLUG",
@@ -2704,7 +2704,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "GVA-00004": {
    "op": "EDPC",
@@ -2776,7 +2776,7 @@
    "npts": 3,
    "kw": 50.0,
    "hub_kw": 143.0,
-   "status": "outOfOrder"
+   "status": "available"
   },
   "VFX-00035": {
    "op": "EDPC",
@@ -3154,7 +3154,7 @@
    "npts": 1,
    "kw": 22.0,
    "hub_kw": 22.0,
-   "status": "available"
+   "status": "charging"
   },
   "LRS-90002": {
    "op": "GLPP",
@@ -3388,7 +3388,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "VNG-00115": {
    "op": "GLPG",
@@ -3514,7 +3514,7 @@
    "npts": 3,
    "kw": 50.0,
    "hub_kw": 143.0,
-   "status": "charging"
+   "status": "available"
   },
   "LRS-90023": {
    "op": "GLPP",
@@ -3577,7 +3577,7 @@
    "npts": 1,
    "kw": 50.0,
    "hub_kw": 50.0,
-   "status": "charging"
+   "status": "available"
   },
   "PNF-00015": {
    "op": "EDPC",
@@ -3595,7 +3595,7 @@
    "npts": 2,
    "kw": 120.0,
    "hub_kw": 240.0,
-   "status": "charging"
+   "status": "available"
   },
   "PRT-00140": {
    "op": "REPS",
@@ -3703,7 +3703,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "CBR-00037": {
    "op": "GLPP",
@@ -3712,7 +3712,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "PRT-00109": {
    "op": "GLPP",
@@ -3811,7 +3811,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "VNG-90007": {
    "op": "GLPP",
@@ -3973,15 +3973,15 @@
    "npts": 3,
    "kw": 50.0,
    "hub_kw": 143.0,
-   "status": "available"
+   "status": "charging"
   },
   "ALM-00061": {
    "op": "HORZ",
    "opname": "Powerdot, S.A",
    "city": "Almada",
    "npts": 6,
-   "kw": 180.0,
-   "hub_kw": 760.0,
+   "kw": 150.0,
+   "hub_kw": 700.0,
    "status": "available"
   },
   "LSB-90041": {
@@ -4151,8 +4151,8 @@
    "opname": "Powerdot, S.A",
    "city": "Almada",
    "npts": 6,
-   "kw": 180.0,
-   "hub_kw": 710.0,
+   "kw": 150.0,
+   "hub_kw": 650.0,
    "status": "available"
   },
   "LRS-90004": {
@@ -4333,7 +4333,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "CSC-00129": {
    "op": "HORZ",
@@ -4378,7 +4378,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "AND-00003": {
    "op": "HORZ",
@@ -4396,7 +4396,7 @@
    "npts": 3,
    "kw": 50.0,
    "hub_kw": 122.0,
-   "status": "outOfOrder"
+   "status": "available"
   },
   "LRS-00094": {
    "op": "REPS",
@@ -4423,7 +4423,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "unknown"
   },
   "VLG-00009": {
    "op": "HORZ",
@@ -4459,7 +4459,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "BRR-00083": {
    "op": "TRUE",
@@ -4531,7 +4531,7 @@
    "npts": 1,
    "kw": 11.0,
    "hub_kw": 11.0,
-   "status": "available"
+   "status": "charging"
   },
   "PRT-00193": {
    "op": "HORZ",
@@ -4549,7 +4549,7 @@
    "npts": 2,
    "kw": 3.7,
    "hub_kw": 7.4,
-   "status": "available"
+   "status": "charging"
   },
   "SNT-00011": {
    "op": "MLTR",
@@ -4648,7 +4648,7 @@
    "npts": 2,
    "kw": 20.0,
    "hub_kw": 40.0,
-   "status": "charging"
+   "status": "available"
   },
   "LSB-91100": {
    "op": "GLPP",
@@ -4684,7 +4684,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "BGC-00007": {
    "op": "REPS",
@@ -4729,7 +4729,7 @@
    "npts": 1,
    "kw": 7.4,
    "hub_kw": 7.4,
-   "status": "charging"
+   "status": "available"
   },
   "PRT-00133": {
    "op": "REPS",
@@ -4738,7 +4738,7 @@
    "npts": 3,
    "kw": 45.0,
    "hub_kw": 112.0,
-   "status": "blocked"
+   "status": "available"
   },
   "PNF-00005": {
    "op": "MLTR",
@@ -4801,7 +4801,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "BRG-00024": {
    "op": "HORZ",
@@ -4810,7 +4810,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "PRT-90085": {
    "op": "HORZ",
@@ -4891,7 +4891,7 @@
    "npts": 3,
    "kw": 50.0,
    "hub_kw": 143.0,
-   "status": "available"
+   "status": "outOfOrder"
   },
   "CSC-00076": {
    "op": "REPS",
@@ -4972,7 +4972,7 @@
    "npts": 2,
    "kw": 24.0,
    "hub_kw": 48.0,
-   "status": "available"
+   "status": "charging"
   },
   "AVR-90005": {
    "op": "HORZ",
@@ -4999,7 +4999,7 @@
    "npts": 2,
    "kw": 11.0,
    "hub_kw": 22.0,
-   "status": "available"
+   "status": "charging"
   },
   "BRR-00079": {
    "op": "TRUE",
@@ -5035,7 +5035,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "BRR-00096": {
    "op": "TRUE",
@@ -5071,7 +5071,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "unknown"
   },
   "LSB-00356": {
    "op": "EMEL",
@@ -5314,7 +5314,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "outOfOrder"
   },
   "LLE-00119": {
    "op": "GLPP",
@@ -5341,7 +5341,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "STB-90004": {
    "op": "HORZ",
@@ -5368,7 +5368,7 @@
    "npts": 1,
    "kw": 7.4,
    "hub_kw": 7.4,
-   "status": "charging"
+   "status": "available"
   },
   "MOBI-PNI-00003": {
    "op": "HORZ",
@@ -5422,7 +5422,7 @@
    "npts": 2,
    "kw": 11.0,
    "hub_kw": 22.0,
-   "status": "charging"
+   "status": "available"
   },
   "BRR-00080": {
    "op": "TRUE",
@@ -5611,7 +5611,7 @@
    "npts": 3,
    "kw": 50.0,
    "hub_kw": 143.0,
-   "status": "outOfOrder"
+   "status": "charging"
   },
   "VRL-00007": {
    "op": "EDPC",
@@ -5674,7 +5674,7 @@
    "npts": 6,
    "kw": 3.7,
    "hub_kw": 22.2,
-   "status": "charging"
+   "status": "available"
   },
   "LSB-90036": {
    "op": "HORZ",
@@ -5746,7 +5746,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "BRG-00048": {
    "op": "EVCE",
@@ -5863,7 +5863,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "ALB-00003": {
    "op": "HELX",
@@ -6007,7 +6007,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "VNF-00015": {
    "op": "HELX",
@@ -6169,7 +6169,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "TNV-00011": {
    "op": "EDPC",
@@ -6232,7 +6232,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "PDL-00001": {
    "op": "MLTR",
@@ -6259,7 +6259,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "SCG-00002": {
    "op": "SEGM",
@@ -6349,7 +6349,7 @@
    "npts": 1,
    "kw": 11.0,
    "hub_kw": 11.0,
-   "status": "unknown"
+   "status": "available"
   },
   "TBR-00003": {
    "op": "EDPC",
@@ -6385,7 +6385,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "LGS-00018": {
    "op": "GLPP",
@@ -6565,7 +6565,7 @@
    "npts": 2,
    "kw": 3.7,
    "hub_kw": 7.4,
-   "status": "charging"
+   "status": "available"
   },
   "LRA-00092": {
    "op": "EDPC",
@@ -6628,7 +6628,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "PNI-00010": {
    "op": "EDPC",
@@ -6682,7 +6682,7 @@
    "npts": 3,
    "kw": 30.0,
    "hub_kw": 82.0,
-   "status": "blocked"
+   "status": "available"
   },
   "VNG-90008": {
    "op": "HORZ",
@@ -6727,7 +6727,7 @@
    "npts": 2,
    "kw": 7.4,
    "hub_kw": 14.8,
-   "status": "available"
+   "status": "charging"
   },
   "BRG-00036": {
    "op": "EDPC",
@@ -6754,7 +6754,7 @@
    "npts": 3,
    "kw": 50.0,
    "hub_kw": 143.0,
-   "status": "available"
+   "status": "outOfOrder"
   },
   "AVV-90001": {
    "op": "GLPP",
@@ -6772,7 +6772,7 @@
    "npts": 2,
    "kw": 7.4,
    "hub_kw": 14.8,
-   "status": "available"
+   "status": "charging"
   },
   "STB-00014": {
    "op": "HELX",
@@ -6808,7 +6808,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "AMM-00002": {
    "op": "EDPC",
@@ -6862,7 +6862,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "unknown"
   },
   "MCH-00001": {
    "op": "FACT",
@@ -7006,7 +7006,7 @@
    "npts": 1,
    "kw": 7.4,
    "hub_kw": 7.4,
-   "status": "available"
+   "status": "outOfOrder"
   },
   "OER-00021": {
    "op": "GLPP",
@@ -7168,7 +7168,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "unknown"
+   "status": "outOfOrder"
   },
   "VCT-00039": {
    "op": "EDPC",
@@ -7330,7 +7330,7 @@
    "npts": 1,
    "kw": 50.0,
    "hub_kw": 50.0,
-   "status": "outOfOrder"
+   "status": "available"
   },
   "VFX-00003": {
    "op": "PRIO",
@@ -7366,7 +7366,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "SXL-00034": {
    "op": "GLPP",
@@ -7393,7 +7393,7 @@
    "npts": 1,
    "kw": 11.0,
    "hub_kw": 11.0,
-   "status": "unknown"
+   "status": "available"
   },
   "VPA-00002": {
    "op": "HORZ",
@@ -7600,7 +7600,7 @@
    "npts": 2,
    "kw": 3.7,
    "hub_kw": 7.4,
-   "status": "charging"
+   "status": "available"
   },
   "VRL-90005": {
    "op": "HORZ",
@@ -7735,7 +7735,7 @@
    "npts": 4,
    "kw": 3.7,
    "hub_kw": 14.8,
-   "status": "charging"
+   "status": "available"
   },
   "MNC-00005": {
    "op": "HORZ",
@@ -8005,7 +8005,7 @@
    "npts": 2,
    "kw": 7.4,
    "hub_kw": 14.8,
-   "status": "available"
+   "status": "charging"
   },
   "PRT-90081": {
    "op": "GLPP",
@@ -8014,7 +8014,7 @@
    "npts": 4,
    "kw": 3.7,
    "hub_kw": 14.8,
-   "status": "charging"
+   "status": "unknown"
   },
   "STB-90008": {
    "op": "GLPP",
@@ -8050,7 +8050,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "VNG-00038": {
    "op": "GLPP",
@@ -8059,7 +8059,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "LGF-00001": {
    "op": "GLPG",
@@ -8176,7 +8176,7 @@
    "npts": 1,
    "kw": 7.4,
    "hub_kw": 7.4,
-   "status": "charging"
+   "status": "available"
   },
   "ADV-90001": {
    "op": "HORZ",
@@ -8203,7 +8203,7 @@
    "npts": 3,
    "kw": 50.0,
    "hub_kw": 122.0,
-   "status": "available"
+   "status": "outOfOrder"
   },
   "VIS-90036": {
    "op": "EDPC",
@@ -8212,7 +8212,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "LSB-90060": {
    "op": "HORZ",
@@ -8257,7 +8257,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "BRG-90003": {
    "op": "GLPP",
@@ -8266,7 +8266,7 @@
    "npts": 2,
    "kw": 3.7,
    "hub_kw": 7.4,
-   "status": "available"
+   "status": "unknown"
   },
   "TMR-00006": {
    "op": "PLUG",
@@ -8374,7 +8374,7 @@
    "npts": 2,
    "kw": 7.4,
    "hub_kw": 14.8,
-   "status": "charging"
+   "status": "available"
   },
   "ALM-90028": {
    "op": "HORZ",
@@ -8419,7 +8419,7 @@
    "npts": 3,
    "kw": 50.0,
    "hub_kw": 143.0,
-   "status": "available"
+   "status": "outOfOrder"
   },
   "OER-00041": {
    "op": "HELX",
@@ -8518,7 +8518,7 @@
    "npts": 3,
    "kw": 50.0,
    "hub_kw": 143.0,
-   "status": "available"
+   "status": "outOfOrder"
   },
   "TMR-00007": {
    "op": "PLUG",
@@ -8680,7 +8680,7 @@
    "npts": 3,
    "kw": 50.0,
    "hub_kw": 143.0,
-   "status": "outOfOrder"
+   "status": "available"
   },
   "VND-00008": {
    "op": "EDPC",
@@ -8707,7 +8707,7 @@
    "npts": 3,
    "kw": 50.0,
    "hub_kw": 143.0,
-   "status": "available"
+   "status": "outOfOrder"
   },
   "GDM-00027": {
    "op": "EDPC",
@@ -8725,7 +8725,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "CBR-00011": {
    "op": "HELX",
@@ -8770,7 +8770,7 @@
    "npts": 3,
    "kw": 60.0,
    "hub_kw": 132.0,
-   "status": "blocked"
+   "status": "available"
   },
   "LSB-00275": {
    "op": "CIRC",
@@ -8788,7 +8788,7 @@
    "npts": 2,
    "kw": 7.4,
    "hub_kw": 14.8,
-   "status": "charging"
+   "status": "available"
   },
   "LLE-00059": {
    "op": "LOUL",
@@ -8860,7 +8860,7 @@
    "npts": 2,
    "kw": 3.7,
    "hub_kw": 7.4,
-   "status": "available"
+   "status": "unknown"
   },
   "VFR-00008": {
    "op": "HORZ",
@@ -8869,7 +8869,7 @@
    "npts": 3,
    "kw": 50.0,
    "hub_kw": 143.0,
-   "status": "available"
+   "status": "outOfOrder"
   },
   "BJA-00010": {
    "op": "EDPC",
@@ -8896,7 +8896,7 @@
    "npts": 1,
    "kw": 22.0,
    "hub_kw": 22.0,
-   "status": "outOfOrder"
+   "status": "available"
   },
   "TVD-90001": {
    "op": "EDPC",
@@ -8932,7 +8932,7 @@
    "npts": 2,
    "kw": 7.4,
    "hub_kw": 14.8,
-   "status": "unknown"
+   "status": "available"
   },
   "STB-00051": {
    "op": "EDPC",
@@ -9031,7 +9031,7 @@
    "npts": 3,
    "kw": 50.0,
    "hub_kw": 143.0,
-   "status": "available"
+   "status": "outOfOrder"
   },
   "CRS-90001": {
    "op": "HORZ",
@@ -9247,7 +9247,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "LSB-00515": {
    "op": "GLPP",
@@ -9364,7 +9364,7 @@
    "npts": 1,
    "kw": 11.0,
    "hub_kw": 11.0,
-   "status": "charging"
+   "status": "available"
   },
   "SNT-00046": {
    "op": "GLPG",
@@ -9418,7 +9418,7 @@
    "npts": 3,
    "kw": 50.0,
    "hub_kw": 143.0,
-   "status": "outOfOrder"
+   "status": "available"
   },
   "ABF-00009": {
    "op": "EDPC",
@@ -9481,7 +9481,7 @@
    "npts": 2,
    "kw": 3.7,
    "hub_kw": 7.4,
-   "status": "charging"
+   "status": "available"
   },
   "OER-00073": {
    "op": "GLPP",
@@ -9517,7 +9517,7 @@
    "npts": 3,
    "kw": 50.0,
    "hub_kw": 143.0,
-   "status": "available"
+   "status": "outOfOrder"
   },
   "GMR-00024": {
    "op": "HELX",
@@ -9535,7 +9535,7 @@
    "npts": 4,
    "kw": 3.7,
    "hub_kw": 14.8,
-   "status": "available"
+   "status": "charging"
   },
   "PTM-00034": {
    "op": "EDPC",
@@ -9551,8 +9551,8 @@
    "opname": "Powerdot, S.A",
    "city": "Castelo Branco",
    "npts": 5,
-   "kw": 200.0,
-   "hub_kw": 582.0,
+   "kw": 150.0,
+   "hub_kw": 482.0,
    "status": "available"
   },
   "MTS-00098": {
@@ -9562,7 +9562,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "CHV-00004": {
    "op": "IBRD",
@@ -9580,7 +9580,7 @@
    "npts": 3,
    "kw": 50.0,
    "hub_kw": 143.0,
-   "status": "available"
+   "status": "unknown"
   },
   "LSB-00355": {
    "op": "EMEL",
@@ -9589,7 +9589,7 @@
    "npts": 3,
    "kw": 50.0,
    "hub_kw": 143.0,
-   "status": "available"
+   "status": "outOfOrder"
   },
   "LSB-00386": {
    "op": "GLPP",
@@ -9823,7 +9823,7 @@
    "npts": 2,
    "kw": 13.8,
    "hub_kw": 27.6,
-   "status": "charging"
+   "status": "available"
   },
   "GMR-00065": {
    "op": "HEXA",
@@ -9850,7 +9850,7 @@
    "npts": 2,
    "kw": 3.7,
    "hub_kw": 7.4,
-   "status": "available"
+   "status": "charging"
   },
   "MTS-00077": {
    "op": "GLPP",
@@ -9859,7 +9859,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "VFR-00037": {
    "op": "GLPP",
@@ -9868,7 +9868,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "MAI-00007": {
    "op": "EDPC",
@@ -9949,7 +9949,7 @@
    "npts": 3,
    "kw": 50.0,
    "hub_kw": 143.0,
-   "status": "outOfOrder"
+   "status": "available"
   },
   "BRR-00059": {
    "op": "TRUE",
@@ -10174,7 +10174,7 @@
    "npts": 2,
    "kw": 60.0,
    "hub_kw": 110.0,
-   "status": "available"
+   "status": "outOfOrder"
   },
   "VNG-00087": {
    "op": "EDPC",
@@ -10210,7 +10210,7 @@
    "npts": 2,
    "kw": 120.0,
    "hub_kw": 240.0,
-   "status": "available"
+   "status": "charging"
   },
   "ALM-00031": {
    "op": "GLPP",
@@ -10219,7 +10219,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "CSC-00126": {
    "op": "LOGI",
@@ -10309,7 +10309,7 @@
    "npts": 2,
    "kw": 50.0,
    "hub_kw": 100.0,
-   "status": "outOfOrder"
+   "status": "available"
   },
   "VNG-90011": {
    "op": "EDPC",
@@ -10354,7 +10354,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "CSC-00110": {
    "op": "CSCP",
@@ -10372,7 +10372,7 @@
    "npts": 3,
    "kw": 50.0,
    "hub_kw": 122.0,
-   "status": "available"
+   "status": "charging"
   },
   "FAR-00025": {
    "op": "GLPP",
@@ -10480,7 +10480,7 @@
    "npts": 2,
    "kw": 11.0,
    "hub_kw": 22.0,
-   "status": "charging"
+   "status": "available"
   },
   "BRG-00021": {
    "op": "EVCE",
@@ -10516,7 +10516,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "GMR-00093": {
    "op": "EDPC",
@@ -10741,7 +10741,7 @@
    "npts": 2,
    "kw": 3.7,
    "hub_kw": 7.4,
-   "status": "available"
+   "status": "unknown"
   },
   "OER-00020": {
    "op": "GLPP",
@@ -10759,7 +10759,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "unknown"
+   "status": "available"
   },
   "GRD-00007": {
    "op": "GLPG",
@@ -10795,7 +10795,7 @@
    "npts": 1,
    "kw": 11.0,
    "hub_kw": 11.0,
-   "status": "available"
+   "status": "charging"
   },
   "VPT-00003": {
    "op": "SEGM",
@@ -10876,7 +10876,7 @@
    "npts": 1,
    "kw": 50.0,
    "hub_kw": 50.0,
-   "status": "available"
+   "status": "charging"
   },
   "LSB-00536": {
    "op": "GLPP",
@@ -10912,7 +10912,7 @@
    "npts": 3,
    "kw": 50.0,
    "hub_kw": 122.0,
-   "status": "available"
+   "status": "unknown"
   },
   "MTS-00058": {
    "op": "GLPP",
@@ -10957,7 +10957,7 @@
    "npts": 2,
    "kw": 3.7,
    "hub_kw": 7.4,
-   "status": "available"
+   "status": "unknown"
   },
   "GDM-00017": {
    "op": "EDPC",
@@ -11074,7 +11074,7 @@
    "npts": 2,
    "kw": 7.4,
    "hub_kw": 14.8,
-   "status": "available"
+   "status": "charging"
   },
   "BRR-00057": {
    "op": "TRUE",
@@ -11137,7 +11137,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "PBL-00011": {
    "op": "REPS",
@@ -11270,8 +11270,8 @@
    "opname": "Powerdot, S.A",
    "city": "Figueira da Foz",
    "npts": 3,
-   "kw": 50.0,
-   "hub_kw": 143.0,
+   "kw": 49.0,
+   "hub_kw": 141.0,
    "status": "available"
   },
   "PRT-00052": {
@@ -11290,7 +11290,7 @@
    "npts": 2,
    "kw": 3.7,
    "hub_kw": 7.4,
-   "status": "available"
+   "status": "charging"
   },
   "CBR-00043": {
    "op": "MOTA",
@@ -11299,7 +11299,7 @@
    "npts": 2,
    "kw": 50.0,
    "hub_kw": 100.0,
-   "status": "unknown"
+   "status": "charging"
   },
   "LSB-90500": {
    "op": "EDPC",
@@ -11308,7 +11308,7 @@
    "npts": 6,
    "kw": 3.7,
    "hub_kw": 22.2,
-   "status": "charging"
+   "status": "available"
   },
   "PDL-00009": {
    "op": "SEGM",
@@ -11317,7 +11317,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "outOfOrder"
+   "status": "charging"
   },
   "PTM-00026": {
    "op": "MOON",
@@ -11362,7 +11362,7 @@
    "npts": 3,
    "kw": 50.0,
    "hub_kw": 143.0,
-   "status": "unknown"
+   "status": "available"
   },
   "PRT-00084": {
    "op": "EDPC",
@@ -11371,7 +11371,7 @@
    "npts": 3,
    "kw": 50.0,
    "hub_kw": 143.0,
-   "status": "outOfOrder"
+   "status": "available"
   },
   "LRS-00056": {
    "op": "EDPC",
@@ -11425,7 +11425,7 @@
    "npts": 2,
    "kw": 3.7,
    "hub_kw": 7.4,
-   "status": "charging"
+   "status": "unknown"
   },
   "CCH-90001": {
    "op": "EDPC",
@@ -11596,7 +11596,7 @@
    "npts": 2,
    "kw": 60.0,
    "hub_kw": 120.0,
-   "status": "available"
+   "status": "charging"
   },
   "PST-00002": {
    "op": "EMAC",
@@ -11605,7 +11605,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "SXL-00017": {
    "op": "EDPC",
@@ -11740,7 +11740,7 @@
    "npts": 2,
    "kw": 120.0,
    "hub_kw": 240.0,
-   "status": "charging"
+   "status": "available"
   },
   "LSB-00201": {
    "op": "MLTR",
@@ -11758,7 +11758,7 @@
    "npts": 1,
    "kw": 11.0,
    "hub_kw": 11.0,
-   "status": "charging"
+   "status": "available"
   },
   "MAI-00021": {
    "op": "EDPC",
@@ -11794,7 +11794,7 @@
    "npts": 2,
    "kw": 11.0,
    "hub_kw": 22.0,
-   "status": "charging"
+   "status": "available"
   },
   "LSB-00323": {
    "op": "GLPP",
@@ -11821,7 +11821,7 @@
    "npts": 3,
    "kw": 45.0,
    "hub_kw": 112.0,
-   "status": "blocked"
+   "status": "available"
   },
   "MFR-00003": {
    "op": "MLTR",
@@ -11965,7 +11965,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "VFR-00018": {
    "op": "GLPP",
@@ -12208,7 +12208,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "outOfOrder"
+   "status": "available"
   },
   "AZB-90003": {
    "op": "GLPP",
@@ -12217,7 +12217,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "GMR-00040": {
    "op": "REPS",
@@ -12253,7 +12253,7 @@
    "npts": 1,
    "kw": 7.4,
    "hub_kw": 7.4,
-   "status": "available"
+   "status": "charging"
   },
   "BRG-00041": {
    "op": "GLPP",
@@ -12270,7 +12270,7 @@
    "city": "Santa Maria da Feira",
    "npts": 3,
    "kw": 120.0,
-   "hub_kw": 192.0,
+   "hub_kw": 262.0,
    "status": "available"
   },
   "LSB-80062": {
@@ -12307,7 +12307,7 @@
    "npts": 2,
    "kw": 50.0,
    "hub_kw": 100.0,
-   "status": "outOfOrder"
+   "status": "available"
   },
   "MAD-00001": {
    "op": "GLPG",
@@ -12478,7 +12478,7 @@
    "npts": 2,
    "kw": 7.4,
    "hub_kw": 14.8,
-   "status": "charging"
+   "status": "available"
   },
   "BRR-00011": {
    "op": "MAKS",
@@ -12577,7 +12577,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "BRR-00039": {
    "op": "TRUE",
@@ -12694,7 +12694,7 @@
    "npts": 2,
    "kw": 3.7,
    "hub_kw": 7.4,
-   "status": "available"
+   "status": "unknown"
   },
   "LSB-00436": {
    "op": "MAKS",
@@ -12757,7 +12757,7 @@
    "npts": 1,
    "kw": 7.4,
    "hub_kw": 7.4,
-   "status": "available"
+   "status": "charging"
   },
   "CTB-90001": {
    "op": "GLPP",
@@ -12766,7 +12766,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "unknown"
   },
   "LRS-90011": {
    "op": "GLPP",
@@ -12820,7 +12820,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "TVR-00002": {
    "op": "EDPC",
@@ -13045,7 +13045,7 @@
    "npts": 2,
    "kw": 24.0,
    "hub_kw": 48.0,
-   "status": "available"
+   "status": "outOfOrder"
   },
   "FAR-00013": {
    "op": "MOTA",
@@ -13054,7 +13054,7 @@
    "npts": 2,
    "kw": 24.0,
    "hub_kw": 48.0,
-   "status": "charging"
+   "status": "available"
   },
   "LSB-90118": {
    "op": "EDPC",
@@ -13072,7 +13072,7 @@
    "npts": 1,
    "kw": 7.4,
    "hub_kw": 7.4,
-   "status": "charging"
+   "status": "available"
   },
   "MTS-00092": {
    "op": "GLPG",
@@ -13189,7 +13189,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "ETZ-00015": {
    "op": "TRUE",
@@ -13198,7 +13198,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "ETZ-00016": {
    "op": "TRUE",
@@ -13216,7 +13216,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "CVL-00007": {
    "op": "GLPP",
@@ -13261,7 +13261,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "BRR-00035": {
    "op": "TRUE",
@@ -13369,7 +13369,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "LSB-00254": {
    "op": "GLPP",
@@ -13511,8 +13511,8 @@
    "opname": "Powerdot, S.A",
    "city": "Viseu",
    "npts": 3,
-   "kw": 50.0,
-   "hub_kw": 122.0,
+   "kw": 49.0,
+   "hub_kw": 120.0,
    "status": "available"
   },
   "LLE-00074": {
@@ -13603,7 +13603,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "TMR-00008": {
    "op": "PLUG",
@@ -13655,8 +13655,8 @@
    "opname": "EDP Comercial",
    "city": "São João da Madeira",
    "npts": 3,
-   "kw": 90.0,
-   "hub_kw": 172.0,
+   "kw": 120.0,
+   "hub_kw": 262.0,
    "status": "available"
   },
   "BRR-00038": {
@@ -13846,7 +13846,7 @@
    "npts": 2,
    "kw": 43.0,
    "hub_kw": 86.0,
-   "status": "available"
+   "status": "outOfOrder"
   },
   "VIS-00048": {
    "op": "HORZ",
@@ -14044,7 +14044,7 @@
    "npts": 1,
    "kw": 11.0,
    "hub_kw": 11.0,
-   "status": "available"
+   "status": "charging"
   },
   "PNV-00002": {
    "op": "EDPC",
@@ -14152,7 +14152,7 @@
    "npts": 2,
    "kw": 3.7,
    "hub_kw": 7.4,
-   "status": "unknown"
+   "status": "available"
   },
   "FIG-00019": {
    "op": "GLPG",
@@ -14431,7 +14431,7 @@
    "npts": 3,
    "kw": 50.0,
    "hub_kw": 143.0,
-   "status": "available"
+   "status": "outOfOrder"
   },
   "VNG-00091": {
    "op": "EDPC",
@@ -14440,7 +14440,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "unknown"
+   "status": "available"
   },
   "SSL-90001": {
    "op": "HORZ",
@@ -14503,7 +14503,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "TND-00007": {
    "op": "PRIO",
@@ -14566,7 +14566,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "outOfOrder"
   },
   "VFR-00019": {
    "op": "GLPP",
@@ -14647,7 +14647,7 @@
    "npts": 1,
    "kw": 22.0,
    "hub_kw": 22.0,
-   "status": "available"
+   "status": "charging"
   },
   "LSB-90002": {
    "op": "EDPC",
@@ -14683,7 +14683,7 @@
    "npts": 2,
    "kw": 7.4,
    "hub_kw": 14.8,
-   "status": "available"
+   "status": "unknown"
   },
   "VFR-00043": {
    "op": "GLPP",
@@ -14854,7 +14854,7 @@
    "npts": 1,
    "kw": 7.4,
    "hub_kw": 7.4,
-   "status": "available"
+   "status": "charging"
   },
   "MTS-00048": {
    "op": "GLPG",
@@ -15304,7 +15304,7 @@
    "npts": 4,
    "kw": 200.0,
    "hub_kw": 550.0,
-   "status": "available"
+   "status": "outOfOrder"
   },
   "CBR-00072": {
    "op": "REPS",
@@ -15438,7 +15438,7 @@
    "city": "Braga",
    "npts": 4,
    "kw": 190.0,
-   "hub_kw": 540.0,
+   "hub_kw": 580.0,
    "status": "available"
   },
   "MMN-00006": {
@@ -15565,7 +15565,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "outOfOrder"
+   "status": "available"
   },
   "PRT-00090": {
    "op": "EDPC",
@@ -15574,7 +15574,7 @@
    "npts": 3,
    "kw": 50.0,
    "hub_kw": 143.0,
-   "status": "available"
+   "status": "charging"
   },
   "TVD-00030": {
    "op": "GLPP",
@@ -15709,7 +15709,7 @@
    "npts": 1,
    "kw": 22.0,
    "hub_kw": 22.0,
-   "status": "available"
+   "status": "charging"
   },
   "FLG-00009": {
    "op": "HORZ",
@@ -15718,7 +15718,7 @@
    "npts": 4,
    "kw": 100.0,
    "hub_kw": 272.0,
-   "status": "available"
+   "status": "unknown"
   },
   "OER-00031": {
    "op": "MLTR",
@@ -15727,7 +15727,7 @@
    "npts": 3,
    "kw": 50.0,
    "hub_kw": 143.0,
-   "status": "outOfOrder"
+   "status": "unknown"
   },
   "PRT-00092": {
    "op": "GLPP",
@@ -15889,7 +15889,7 @@
    "npts": 1,
    "kw": 50.0,
    "hub_kw": 50.0,
-   "status": "available"
+   "status": "charging"
   },
   "SNT-00082": {
    "op": "EDPC",
@@ -16024,7 +16024,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "MTS-00018": {
    "op": "MLTR",
@@ -16033,7 +16033,7 @@
    "npts": 1,
    "kw": 11.0,
    "hub_kw": 11.0,
-   "status": "available"
+   "status": "charging"
   },
   "CSC-00101": {
    "op": "EDPC",
@@ -16123,7 +16123,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "outOfOrder"
+   "status": "available"
   },
   "MFR-90002": {
    "op": "GLPP",
@@ -16177,7 +16177,7 @@
    "npts": 2,
    "kw": 50.0,
    "hub_kw": 100.0,
-   "status": "outOfOrder"
+   "status": "available"
   },
   "PRD-00008": {
    "op": "REPS",
@@ -16222,7 +16222,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "unknown"
+   "status": "available"
   },
   "ALT-00002": {
    "op": "EDPC",
@@ -16348,7 +16348,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "CLD-00023": {
    "op": "EDPC",
@@ -16420,7 +16420,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "unknown"
   },
   "LSB-00423": {
    "op": "EMEL",
@@ -16483,7 +16483,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "MMV-90001": {
    "op": "HORZ",
@@ -16492,7 +16492,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "LRS-00072": {
    "op": "EDPC",
@@ -16582,7 +16582,7 @@
    "npts": 2,
    "kw": 180.0,
    "hub_kw": 360.0,
-   "status": "available"
+   "status": "charging"
   },
   "CSC-00078": {
    "op": "REPS",
@@ -16627,7 +16627,7 @@
    "npts": 3,
    "kw": 50.0,
    "hub_kw": 143.0,
-   "status": "available"
+   "status": "outOfOrder"
   },
   "LLE-00108": {
    "op": "GLPP",
@@ -16672,7 +16672,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "AMD-00069": {
    "op": "GLPP",
@@ -16807,7 +16807,7 @@
    "npts": 1,
    "kw": 22.0,
    "hub_kw": 22.0,
-   "status": "charging"
+   "status": "available"
   },
   "VLG-00014": {
    "op": "REPS",
@@ -16816,7 +16816,7 @@
    "npts": 3,
    "kw": 30.0,
    "hub_kw": 82.0,
-   "status": "available"
+   "status": "blocked"
   },
   "VNF-00017": {
    "op": "HORZ",
@@ -16843,7 +16843,7 @@
    "npts": 3,
    "kw": 120.0,
    "hub_kw": 202.0,
-   "status": "unknown"
+   "status": "available"
   },
   "PVC-00003": {
    "op": "SEGM",
@@ -16960,7 +16960,7 @@
    "npts": 2,
    "kw": 50.0,
    "hub_kw": 100.0,
-   "status": "charging"
+   "status": "available"
   },
   "FAR-00019": {
    "op": "MOTA",
@@ -16969,7 +16969,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "LSB-00212": {
    "op": "HORZ",
@@ -16996,7 +16996,7 @@
    "npts": 3,
    "kw": 60.0,
    "hub_kw": 153.0,
-   "status": "available"
+   "status": "inoperative"
   },
   "PNI-00005": {
    "op": "GLPP",
@@ -17032,7 +17032,7 @@
    "npts": 1,
    "kw": 22.0,
    "hub_kw": 22.0,
-   "status": "available"
+   "status": "unknown"
   },
   "LSB-80149": {
    "op": "GLPP",
@@ -17104,7 +17104,7 @@
    "npts": 2,
    "kw": 7.4,
    "hub_kw": 14.8,
-   "status": "available"
+   "status": "charging"
   },
   "AMD-00055": {
    "op": "GLPP",
@@ -17185,7 +17185,7 @@
    "npts": 3,
    "kw": 60.0,
    "hub_kw": 132.0,
-   "status": "available"
+   "status": "charging"
   },
   "LSB-00160": {
    "op": "EDPC",
@@ -17239,7 +17239,7 @@
    "npts": 1,
    "kw": 22.0,
    "hub_kw": 22.0,
-   "status": "available"
+   "status": "charging"
   },
   "VNG-90010": {
    "op": "GLPP",
@@ -17257,7 +17257,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "LSB-00259": {
    "op": "EMEL",
@@ -17293,7 +17293,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "unknown"
   },
   "LSB-00339": {
    "op": "GLPP",
@@ -17410,7 +17410,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "GLG-90001": {
    "op": "HORZ",
@@ -17482,7 +17482,7 @@
    "npts": 2,
    "kw": 3.7,
    "hub_kw": 7.4,
-   "status": "charging"
+   "status": "available"
   },
   "LSB-00508": {
    "op": "GLPP",
@@ -17527,7 +17527,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "unknown"
+   "status": "available"
   },
   "OBD-90005": {
    "op": "HORZ",
@@ -17581,7 +17581,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "OER-00016": {
    "op": "EDPC",
@@ -17734,7 +17734,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "OVR-00007": {
    "op": "HORZ",
@@ -17761,7 +17761,7 @@
    "npts": 3,
    "kw": 50.0,
    "hub_kw": 143.0,
-   "status": "available"
+   "status": "outOfOrder"
   },
   "ALM-90022": {
    "op": "EDPC",
@@ -17932,7 +17932,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "STB-00020": {
    "op": "EDPC",
@@ -17968,7 +17968,7 @@
    "npts": 3,
    "kw": 50.0,
    "hub_kw": 143.0,
-   "status": "available"
+   "status": "charging"
   },
   "AVR-00033": {
    "op": "EDPC",
@@ -18040,7 +18040,7 @@
    "npts": 3,
    "kw": 50.0,
    "hub_kw": 143.0,
-   "status": "available"
+   "status": "outOfOrder"
   },
   "MTJ-00010": {
    "op": "HORZ",
@@ -18103,7 +18103,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "CSC-00127": {
    "op": "EDPC",
@@ -18166,7 +18166,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "SNT-00027": {
    "op": "EDPC",
@@ -18274,7 +18274,7 @@
    "npts": 3,
    "kw": 50.0,
    "hub_kw": 122.0,
-   "status": "available"
+   "status": "outOfOrder"
   },
   "PCT-90001": {
    "op": "HORZ",
@@ -18319,7 +18319,7 @@
    "npts": 3,
    "kw": 50.0,
    "hub_kw": 143.0,
-   "status": "available"
+   "status": "outOfOrder"
   },
   "VFC-00004": {
    "op": "EDPC",
@@ -18391,7 +18391,7 @@
    "npts": 2,
    "kw": 3.7,
    "hub_kw": 7.4,
-   "status": "available"
+   "status": "charging"
   },
   "LRS-90028": {
    "op": "EDPC",
@@ -18400,7 +18400,7 @@
    "npts": 2,
    "kw": 3.7,
    "hub_kw": 7.4,
-   "status": "charging"
+   "status": "available"
   },
   "VGS-90001": {
    "op": "EDPC",
@@ -18436,7 +18436,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "VCT-90006": {
    "op": "HORZ",
@@ -18499,7 +18499,7 @@
    "npts": 2,
    "kw": 3.7,
    "hub_kw": 7.4,
-   "status": "available"
+   "status": "unknown"
   },
   "BRG-00072": {
    "op": "HORZ",
@@ -18508,7 +18508,7 @@
    "npts": 2,
    "kw": 100.0,
    "hub_kw": 200.0,
-   "status": "available"
+   "status": "charging"
   },
   "VFX-00008": {
    "op": "HELX",
@@ -18544,7 +18544,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "LLE-00111": {
    "op": "GLPP",
@@ -18643,7 +18643,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "LRS-00053": {
    "op": "HORZ",
@@ -18706,7 +18706,7 @@
    "npts": 3,
    "kw": 50.0,
    "hub_kw": 122.0,
-   "status": "outOfOrder"
+   "status": "available"
   },
   "LRS-00034": {
    "op": "MLTR",
@@ -18715,7 +18715,7 @@
    "npts": 3,
    "kw": 50.0,
    "hub_kw": 143.0,
-   "status": "available"
+   "status": "outOfOrder"
   },
   "PRT-00043": {
    "op": "EDPC",
@@ -18724,7 +18724,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "VNG-00016": {
    "op": "MLTR",
@@ -18751,7 +18751,7 @@
    "npts": 1,
    "kw": 7.4,
    "hub_kw": 7.4,
-   "status": "available"
+   "status": "charging"
   },
   "PRT-00024": {
    "op": "HORZ",
@@ -18760,7 +18760,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "LRA-00082": {
    "op": "EDPC",
@@ -18814,7 +18814,7 @@
    "npts": 1,
    "kw": 7.4,
    "hub_kw": 7.4,
-   "status": "available"
+   "status": "charging"
   },
   "LSB-90035": {
    "op": "HORZ",
@@ -18832,7 +18832,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "LSB-90520": {
    "op": "GLPP",
@@ -18841,7 +18841,7 @@
    "npts": 6,
    "kw": 3.7,
    "hub_kw": 22.2,
-   "status": "unknown"
+   "status": "available"
   },
   "FUN-00003": {
    "op": "EMAC",
@@ -18850,7 +18850,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "LSB-00390": {
    "op": "EMEL",
@@ -18904,7 +18904,7 @@
    "npts": 3,
    "kw": 50.0,
    "hub_kw": 143.0,
-   "status": "outOfOrder"
+   "status": "charging"
   },
   "LSB-90179": {
    "op": "EDPC",
@@ -18949,7 +18949,7 @@
    "npts": 1,
    "kw": 7.4,
    "hub_kw": 7.4,
-   "status": "outOfOrder"
+   "status": "unknown"
   },
   "LRS-00075": {
    "op": "EDPC",
@@ -18976,7 +18976,7 @@
    "npts": 4,
    "kw": 100.0,
    "hub_kw": 360.0,
-   "status": "available"
+   "status": "charging"
   },
   "ABF-00039": {
    "op": "GLPP",
@@ -19012,7 +19012,7 @@
    "npts": 2,
    "kw": 43.0,
    "hub_kw": 86.0,
-   "status": "outOfOrder"
+   "status": "available"
   },
   "LLE-00121": {
    "op": "GLPP",
@@ -19021,7 +19021,7 @@
    "npts": 2,
    "kw": 100.0,
    "hub_kw": 200.0,
-   "status": "available"
+   "status": "outOfOrder"
   },
   "LLE-00002": {
    "op": "GLPG",
@@ -19111,7 +19111,7 @@
    "npts": 2,
    "kw": 3.7,
    "hub_kw": 7.4,
-   "status": "charging"
+   "status": "available"
   },
   "OER-00076": {
    "op": "GLPP",
@@ -19264,7 +19264,7 @@
    "npts": 2,
    "kw": 7.4,
    "hub_kw": 14.8,
-   "status": "available"
+   "status": "charging"
   },
   "LLE-00114": {
    "op": "GLPP",
@@ -19300,7 +19300,7 @@
    "npts": 1,
    "kw": 7.4,
    "hub_kw": 7.4,
-   "status": "available"
+   "status": "charging"
   },
   "LSB-00272": {
    "op": "CIRC",
@@ -19309,7 +19309,7 @@
    "npts": 3,
    "kw": 50.0,
    "hub_kw": 143.0,
-   "status": "charging"
+   "status": "available"
   },
   "MTS-00046": {
    "op": "EDPC",
@@ -19453,7 +19453,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "MAI-00017": {
    "op": "HORZ",
@@ -19561,7 +19561,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "MTS-00024": {
    "op": "GLPG",
@@ -19597,7 +19597,7 @@
    "npts": 3,
    "kw": 50.0,
    "hub_kw": 143.0,
-   "status": "charging"
+   "status": "available"
   },
   "CDR-90001": {
    "op": "GLPP",
@@ -19624,7 +19624,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "unknown"
+   "status": "available"
   },
   "PFR-00005": {
    "op": "GLPP",
@@ -19651,7 +19651,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "unknown"
   },
   "PLM-00004": {
    "op": "GLPP",
@@ -19714,7 +19714,7 @@
    "npts": 3,
    "kw": 50.0,
    "hub_kw": 143.0,
-   "status": "available"
+   "status": "outOfOrder"
   },
   "MTS-00094": {
    "op": "GLPG",
@@ -19759,7 +19759,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "PTG-90001": {
    "op": "GLPP",
@@ -19867,7 +19867,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "PTM-00015": {
    "op": "EDPC",
@@ -19948,7 +19948,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "FUN-00026": {
    "op": "MOTA",
@@ -20074,7 +20074,7 @@
    "npts": 2,
    "kw": 7.4,
    "hub_kw": 14.8,
-   "status": "charging"
+   "status": "available"
   },
   "STB-90010": {
    "op": "HORZ",
@@ -20110,15 +20110,6 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
-  },
-  "VNG-00072": {
-   "op": "EDPC",
-   "opname": "EDP Comercial",
-   "city": "Vila Nova de Gaia",
-   "npts": 3,
-   "kw": 120.0,
-   "hub_kw": 202.0,
    "status": "unknown"
   },
   "VFX-00029": {
@@ -20146,7 +20137,7 @@
    "npts": 1,
    "kw": 7.4,
    "hub_kw": 7.4,
-   "status": "charging"
+   "status": "available"
   },
   "TBU-90002": {
    "op": "EDPC",
@@ -20353,7 +20344,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "CSC-00051": {
    "op": "EDPC",
@@ -20614,7 +20605,7 @@
    "npts": 2,
    "kw": 180.0,
    "hub_kw": 360.0,
-   "status": "available"
+   "status": "charging"
   },
   "PMS-00003": {
    "op": "HORZ",
@@ -20695,7 +20686,7 @@
    "npts": 3,
    "kw": 30.0,
    "hub_kw": 82.0,
-   "status": "available"
+   "status": "blocked"
   },
   "ODV-00011": {
    "op": "REPS",
@@ -20740,7 +20731,7 @@
    "npts": 2,
    "kw": 60.0,
    "hub_kw": 110.0,
-   "status": "available"
+   "status": "outOfOrder"
   },
   "PRD-90002": {
    "op": "HORZ",
@@ -20848,7 +20839,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "LLE-00106": {
    "op": "GLPP",
@@ -20866,7 +20857,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "LSB-00492": {
    "op": "HORZ",
@@ -20893,7 +20884,7 @@
    "npts": 1,
    "kw": 7.4,
    "hub_kw": 7.4,
-   "status": "charging"
+   "status": "available"
   },
   "MTS-00074": {
    "op": "GLPP",
@@ -20902,7 +20893,7 @@
    "npts": 2,
    "kw": 60.0,
    "hub_kw": 120.0,
-   "status": "charging"
+   "status": "available"
   },
   "LSB-00410": {
    "op": "GLPP",
@@ -21064,7 +21055,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "PNI-00006": {
    "op": "GLPP",
@@ -21109,7 +21100,7 @@
    "npts": 3,
    "kw": 50.0,
    "hub_kw": 143.0,
-   "status": "available"
+   "status": "outOfOrder"
   },
   "BRG-00066": {
    "op": "GLPP",
@@ -21181,7 +21172,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "unknown"
+   "status": "available"
   },
   "MTS-00001": {
    "op": "MLTR",
@@ -21262,7 +21253,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "PRT-00116": {
    "op": "GLPP",
@@ -21271,7 +21262,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "PRT-00123": {
    "op": "GLPP",
@@ -21298,7 +21289,7 @@
    "npts": 2,
    "kw": 7.4,
    "hub_kw": 14.8,
-   "status": "charging"
+   "status": "available"
   },
   "ESP-00004": {
    "op": "EDPC",
@@ -21352,7 +21343,7 @@
    "npts": 1,
    "kw": 22.0,
    "hub_kw": 22.0,
-   "status": "charging"
+   "status": "available"
   },
   "ALQ-00004": {
    "op": "GLPP",
@@ -21379,7 +21370,7 @@
    "npts": 1,
    "kw": 22.0,
    "hub_kw": 22.0,
-   "status": "available"
+   "status": "unknown"
   },
   "CMR-90001": {
    "op": "HORZ",
@@ -21505,7 +21496,7 @@
    "npts": 2,
    "kw": 100.0,
    "hub_kw": 200.0,
-   "status": "outOfOrder"
+   "status": "available"
   },
   "FAL-90001": {
    "op": "EDPC",
@@ -21658,7 +21649,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "CSC-00040": {
    "op": "EDPC",
@@ -21730,7 +21721,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "TNV-00007": {
    "op": "REPS",
@@ -21892,7 +21883,7 @@
    "npts": 1,
    "kw": 3.7,
    "hub_kw": 3.7,
-   "status": "unknown"
+   "status": "outOfOrder"
   },
   "CLD-90003": {
    "op": "EDPC",
@@ -21955,7 +21946,7 @@
    "npts": 1,
    "kw": 50.0,
    "hub_kw": 50.0,
-   "status": "available"
+   "status": "outOfOrder"
   },
   "MOBI-LSB-00098": {
    "op": "GLPP",
@@ -22000,7 +21991,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "outOfOrder"
+   "status": "available"
   },
   "SNT-00084": {
    "op": "GLPP",
@@ -22090,7 +22081,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "unknown"
   },
   "AMD-00047": {
    "op": "MLTR",
@@ -22099,7 +22090,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "OLH-00004": {
    "op": "HORZ",
@@ -22126,7 +22117,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "TBR-90001": {
    "op": "GLPP",
@@ -22351,7 +22342,7 @@
    "npts": 2,
    "kw": 11.0,
    "hub_kw": 22.0,
-   "status": "charging"
+   "status": "available"
   },
   "VIS-00018": {
    "op": "IBRD",
@@ -22495,7 +22486,7 @@
    "npts": 2,
    "kw": 180.0,
    "hub_kw": 360.0,
-   "status": "available"
+   "status": "charging"
   },
   "ALM-00036": {
    "op": "MOTA",
@@ -22594,7 +22585,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "MTS-00049": {
    "op": "HORZ",
@@ -22648,7 +22639,7 @@
    "npts": 6,
    "kw": 3.7,
    "hub_kw": 22.2,
-   "status": "available"
+   "status": "outOfOrder"
   },
   "AMD-00065": {
    "op": "GLPP",
@@ -22747,7 +22738,7 @@
    "npts": 2,
    "kw": 60.0,
    "hub_kw": 120.0,
-   "status": "charging"
+   "status": "available"
   },
   "MOBI-LSB-00112": {
    "op": "GLPP",
@@ -22862,8 +22853,8 @@
    "opname": "EDP Comercial",
    "city": "Abrantes",
    "npts": 3,
-   "kw": 90.0,
-   "hub_kw": 172.0,
+   "kw": 120.0,
+   "hub_kw": 262.0,
    "status": "available"
   },
   "RGR-00006": {
@@ -23026,7 +23017,7 @@
    "npts": 2,
    "kw": 100.0,
    "hub_kw": 200.0,
-   "status": "charging"
+   "status": "available"
   },
   "LSB-00393": {
    "op": "EMEL",
@@ -23089,7 +23080,7 @@
    "npts": 3,
    "kw": 50.0,
    "hub_kw": 143.0,
-   "status": "available"
+   "status": "outOfOrder"
   },
   "SXL-00030": {
    "op": "GLPP",
@@ -23179,7 +23170,7 @@
    "npts": 2,
    "kw": 7.4,
    "hub_kw": 14.8,
-   "status": "charging"
+   "status": "available"
   },
   "MTS-00067": {
    "op": "GLPP",
@@ -23197,7 +23188,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "PRT-00152": {
    "op": "REPS",
@@ -23206,7 +23197,7 @@
    "npts": 3,
    "kw": 30.0,
    "hub_kw": 82.0,
-   "status": "available"
+   "status": "blocked"
   },
   "MTS-00061": {
    "op": "GLPP",
@@ -23431,7 +23422,7 @@
    "npts": 2,
    "kw": 50.0,
    "hub_kw": 100.0,
-   "status": "available"
+   "status": "charging"
   },
   "ODM-00005": {
    "op": "REPS",
@@ -23449,7 +23440,7 @@
    "npts": 1,
    "kw": 7.4,
    "hub_kw": 7.4,
-   "status": "charging"
+   "status": "available"
   },
   "FLG-00005": {
    "op": "REPS",
@@ -23458,7 +23449,7 @@
    "npts": 3,
    "kw": 45.0,
    "hub_kw": 112.0,
-   "status": "available"
+   "status": "blocked"
   },
   "LLE-00087": {
    "op": "EDPC",
@@ -23503,7 +23494,7 @@
    "npts": 2,
    "kw": 60.0,
    "hub_kw": 120.0,
-   "status": "charging"
+   "status": "available"
   },
   "AGH-00007": {
    "op": "SEGM",
@@ -23638,7 +23629,7 @@
    "npts": 2,
    "kw": 60.0,
    "hub_kw": 110.0,
-   "status": "outOfOrder"
+   "status": "available"
   },
   "PRT-00178": {
    "op": "EDPC",
@@ -23800,7 +23791,7 @@
    "npts": 2,
    "kw": 60.0,
    "hub_kw": 120.0,
-   "status": "charging"
+   "status": "available"
   },
   "MFR-00025": {
    "op": "EVPW",
@@ -23845,7 +23836,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "unknown"
+   "status": "available"
   },
   "MTS-00068": {
    "op": "GLPP",
@@ -23917,7 +23908,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "GAV-90001": {
    "op": "HORZ",
@@ -24096,7 +24087,7 @@
    "city": "Cascais",
    "npts": 6,
    "kw": 150.0,
-   "hub_kw": 600.0,
+   "hub_kw": 547.5,
    "status": "available"
   },
   "MTJ-00027": {
@@ -24106,7 +24097,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "CMN-00004": {
    "op": "GLPP",
@@ -24205,7 +24196,7 @@
    "npts": 1,
    "kw": 7.4,
    "hub_kw": 7.4,
-   "status": "charging"
+   "status": "available"
   },
   "AGH-00008": {
    "op": "SEGM",
@@ -24484,7 +24475,7 @@
    "npts": 2,
    "kw": 100.0,
    "hub_kw": 200.0,
-   "status": "outOfOrder"
+   "status": "available"
   },
   "LLE-00130": {
    "op": "GLPP",
@@ -24545,8 +24536,8 @@
    "opname": "Powerdot, S.A",
    "city": "Lisboa",
    "npts": 5,
-   "kw": 100.0,
-   "hub_kw": 382.0,
+   "kw": 62.5,
+   "hub_kw": 269.5,
    "status": "available"
   },
   "VIS-00016": {
@@ -24817,7 +24808,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "LSB-00271": {
    "op": "CIRC",
@@ -24826,7 +24817,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "LSB-00458": {
    "op": "HORZ",
@@ -24898,7 +24889,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "VNC-00006": {
    "op": "EDPC",
@@ -25015,7 +25006,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "SNT-00114": {
    "op": "EDPC",
@@ -25087,15 +25078,15 @@
    "npts": 1,
    "kw": 22.0,
    "hub_kw": 22.0,
-   "status": "available"
+   "status": "unknown"
   },
   "STC-00009": {
    "op": "HORZ",
    "opname": "Powerdot, S.A",
    "city": "Santiago do Cacém",
    "npts": 6,
-   "kw": 150.0,
-   "hub_kw": 660.0,
+   "kw": 100.0,
+   "hub_kw": 560.0,
    "status": "available"
   },
   "AVV-00007": {
@@ -25213,7 +25204,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "BRR-00107": {
    "op": "TRUE",
@@ -25348,7 +25339,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "ASL-00011": {
    "op": "IBRD",
@@ -25393,7 +25384,7 @@
    "npts": 2,
    "kw": 120.0,
    "hub_kw": 240.0,
-   "status": "charging"
+   "status": "available"
   },
   "VNP-00003": {
    "op": "EDPC",
@@ -25465,7 +25456,7 @@
    "npts": 1,
    "kw": 7.4,
    "hub_kw": 7.4,
-   "status": "available"
+   "status": "charging"
   },
   "GMR-00103": {
    "op": "GENJ",
@@ -25501,7 +25492,7 @@
    "npts": 1,
    "kw": 11.0,
    "hub_kw": 11.0,
-   "status": "available"
+   "status": "charging"
   },
   "ALM-00064": {
    "op": "MOTA",
@@ -25510,7 +25501,7 @@
    "npts": 1,
    "kw": 11.0,
    "hub_kw": 11.0,
-   "status": "available"
+   "status": "charging"
   },
   "ALM-00068": {
    "op": "MOTA",
@@ -25519,7 +25510,7 @@
    "npts": 1,
    "kw": 11.0,
    "hub_kw": 11.0,
-   "status": "charging"
+   "status": "available"
   },
   "ALM-00065": {
    "op": "MOTA",
@@ -25537,7 +25528,7 @@
    "npts": 1,
    "kw": 11.0,
    "hub_kw": 11.0,
-   "status": "available"
+   "status": "charging"
   },
   "LLE-00147": {
    "op": "REPS",
@@ -25546,7 +25537,7 @@
    "npts": 1,
    "kw": 22.0,
    "hub_kw": 22.0,
-   "status": "charging"
+   "status": "available"
   },
   "PNH-00002": {
    "op": "EDPC",
@@ -25573,7 +25564,7 @@
    "npts": 4,
    "kw": 200.0,
    "hub_kw": 800.0,
-   "status": "available"
+   "status": "charging"
   },
   "CCH-00003": {
    "op": "REPS",
@@ -25726,7 +25717,7 @@
    "npts": 2,
    "kw": 120.0,
    "hub_kw": 240.0,
-   "status": "available"
+   "status": "charging"
   },
   "GRD-00024": {
    "op": "HORZ",
@@ -25861,7 +25852,7 @@
    "npts": 1,
    "kw": 11.0,
    "hub_kw": 11.0,
-   "status": "charging"
+   "status": "available"
   },
   "MOBI-LSB-00367": {
    "op": "GLPP",
@@ -26266,7 +26257,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "GDM-00037": {
    "op": "IBRD",
@@ -26284,7 +26275,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "MCV-00003": {
    "op": "EDPC",
@@ -26410,7 +26401,7 @@
    "npts": 1,
    "kw": 22.0,
    "hub_kw": 22.0,
-   "status": "available"
+   "status": "charging"
   },
   "PTM-00047": {
    "op": "EVPW",
@@ -26428,7 +26419,7 @@
    "npts": 2,
    "kw": 180.0,
    "hub_kw": 360.0,
-   "status": "charging"
+   "status": "available"
   },
   "MOBI-ALM-00016": {
    "op": "HORZ",
@@ -26437,7 +26428,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "unknown"
   },
   "PLM-00027": {
    "op": "GLPP",
@@ -26482,7 +26473,7 @@
    "npts": 2,
    "kw": 170.0,
    "hub_kw": 340.0,
-   "status": "available"
+   "status": "charging"
   },
   "BRG-00083": {
    "op": "SDBR",
@@ -26500,7 +26491,7 @@
    "npts": 1,
    "kw": 11.0,
    "hub_kw": 11.0,
-   "status": "available"
+   "status": "charging"
   },
   "ILH-00006": {
    "op": "GLPP",
@@ -26563,7 +26554,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "MFR-00029": {
    "op": "EDPC",
@@ -26599,7 +26590,7 @@
    "npts": 2,
    "kw": 170.0,
    "hub_kw": 340.0,
-   "status": "available"
+   "status": "charging"
   },
   "NZR-00025": {
    "op": "HORZ",
@@ -26662,7 +26653,7 @@
    "npts": 1,
    "kw": 22.0,
    "hub_kw": 22.0,
-   "status": "charging"
+   "status": "available"
   },
   "GDM-90001": {
    "op": "HORZ",
@@ -26752,7 +26743,7 @@
    "npts": 3,
    "kw": 60.0,
    "hub_kw": 132.0,
-   "status": "available"
+   "status": "blocked"
   },
   "AVV-00008": {
    "op": "EDPC",
@@ -27094,7 +27085,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "BRG-00085": {
    "op": "ZUND",
@@ -27184,7 +27175,7 @@
    "npts": 2,
    "kw": 100.0,
    "hub_kw": 200.0,
-   "status": "available"
+   "status": "outOfOrder"
   },
   "PVZ-00033": {
    "op": "ECOI",
@@ -27490,7 +27481,7 @@
    "npts": 1,
    "kw": 11.0,
    "hub_kw": 11.0,
-   "status": "charging"
+   "status": "available"
   },
   "MTS-00127": {
    "op": "LOGI",
@@ -27580,7 +27571,7 @@
    "npts": 1,
    "kw": 22.0,
    "hub_kw": 22.0,
-   "status": "available"
+   "status": "charging"
   },
   "VIS-00075": {
    "op": "GLPP",
@@ -27814,7 +27805,7 @@
    "npts": 1,
    "kw": 11.0,
    "hub_kw": 11.0,
-   "status": "charging"
+   "status": "available"
   },
   "ACB-00013": {
    "op": "GLPP",
@@ -27868,7 +27859,7 @@
    "npts": 2,
    "kw": 7.4,
    "hub_kw": 14.8,
-   "status": "charging"
+   "status": "available"
   },
   "LSB-00617": {
    "op": "EMEL",
@@ -27976,7 +27967,7 @@
    "npts": 2,
    "kw": 7.4,
    "hub_kw": 14.8,
-   "status": "available"
+   "status": "charging"
   },
   "AVV-00009": {
    "op": "EDPC",
@@ -28003,7 +27994,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "FAF-00007": {
    "op": "EDPC",
@@ -28138,7 +28129,7 @@
    "npts": 5,
    "kw": 200.0,
    "hub_kw": 742.0,
-   "status": "charging"
+   "status": "available"
   },
   "CSC-00139": {
    "op": "HORZ",
@@ -28282,7 +28273,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "unknown"
+   "status": "available"
   },
   "OLH-00020": {
    "op": "TRUE",
@@ -28354,7 +28345,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "TMR-00031": {
    "op": "TRUE",
@@ -28372,7 +28363,7 @@
    "npts": 2,
    "kw": 7.4,
    "hub_kw": 14.8,
-   "status": "available"
+   "status": "charging"
   },
   "OLH-00019": {
    "op": "TRUE",
@@ -28561,7 +28552,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "CSC-00141": {
    "op": "EDPC",
@@ -28570,7 +28561,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "CSC-00143": {
    "op": "EDPC",
@@ -28606,7 +28597,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "outOfOrder"
+   "status": "unknown"
   },
   "CSC-00142": {
    "op": "EDPC",
@@ -28777,7 +28768,7 @@
    "npts": 2,
    "kw": 7.4,
    "hub_kw": 14.8,
-   "status": "outOfOrder"
+   "status": "available"
   },
   "OLH-00036": {
    "op": "TRUE",
@@ -28804,7 +28795,7 @@
    "npts": 2,
    "kw": 50.0,
    "hub_kw": 100.0,
-   "status": "charging"
+   "status": "available"
   },
   "VIS-00082": {
    "op": "EDPC",
@@ -28930,7 +28921,7 @@
    "npts": 1,
    "kw": 7.4,
    "hub_kw": 7.4,
-   "status": "available"
+   "status": "charging"
   },
   "OER-00185": {
    "op": "GREE",
@@ -29146,7 +29137,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "PRD-00018": {
    "op": "EDPC",
@@ -29173,7 +29164,7 @@
    "npts": 1,
    "kw": 11.0,
    "hub_kw": 11.0,
-   "status": "charging"
+   "status": "available"
   },
   "LSB-00633": {
    "op": "MOTA",
@@ -29191,7 +29182,7 @@
    "npts": 1,
    "kw": 11.0,
    "hub_kw": 11.0,
-   "status": "charging"
+   "status": "available"
   },
   "VFR-00078": {
    "op": "PTER",
@@ -29263,7 +29254,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "NZR-00028": {
    "op": "ATLA",
@@ -29272,7 +29263,7 @@
    "npts": 2,
    "kw": 30.0,
    "hub_kw": 60.0,
-   "status": "available"
+   "status": "charging"
   },
   "VLC-00011": {
    "op": "ATLA",
@@ -29380,7 +29371,7 @@
    "npts": 2,
    "kw": 60.0,
    "hub_kw": 110.0,
-   "status": "available"
+   "status": "inoperative"
   },
   "PDL-00011": {
    "op": "EDPC",
@@ -29425,7 +29416,7 @@
    "npts": 3,
    "kw": 60.0,
    "hub_kw": 132.0,
-   "status": "inoperative"
+   "status": "available"
   },
   "SRE-00005": {
    "op": "ATLA",
@@ -29497,7 +29488,7 @@
    "npts": 3,
    "kw": 60.0,
    "hub_kw": 132.0,
-   "status": "available"
+   "status": "inoperative"
   },
   "VFX-00038": {
    "op": "ATLA",
@@ -29533,7 +29524,7 @@
    "npts": 2,
    "kw": 3.7,
    "hub_kw": 7.4,
-   "status": "charging"
+   "status": "available"
   },
   "CSC-80015": {
    "op": "EDPC",
@@ -29668,7 +29659,7 @@
    "npts": 2,
    "kw": 120.0,
    "hub_kw": 180.0,
-   "status": "charging"
+   "status": "available"
   },
   "CSC-00146": {
    "op": "EDPC",
@@ -29677,7 +29668,7 @@
    "npts": 2,
    "kw": 120.0,
    "hub_kw": 182.5,
-   "status": "available"
+   "status": "charging"
   },
   "VFX-00040": {
    "op": "EDPC",
@@ -29722,7 +29713,7 @@
    "npts": 2,
    "kw": 150.0,
    "hub_kw": 300.0,
-   "status": "available"
+   "status": "charging"
   },
   "STS-00021": {
    "op": "EDPC",
@@ -29740,7 +29731,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "CNT-00016": {
    "op": "EDPC",
@@ -29812,7 +29803,7 @@
    "npts": 2,
    "kw": 11.0,
    "hub_kw": 22.0,
-   "status": "charging"
+   "status": "available"
   },
   "PLM-00031": {
    "op": "HORZ",
@@ -30064,7 +30055,7 @@
    "npts": 2,
    "kw": 60.0,
    "hub_kw": 120.0,
-   "status": "charging"
+   "status": "available"
   },
   "BRG-00102": {
    "op": "EDPC",
@@ -30199,7 +30190,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "BAO-00005": {
    "op": "EDPC",
@@ -30289,7 +30280,7 @@
    "npts": 3,
    "kw": 60.0,
    "hub_kw": 132.0,
-   "status": "blocked"
+   "status": "available"
   },
   "RSD-00002": {
    "op": "EDPC",
@@ -30343,7 +30334,7 @@
    "npts": 3,
    "kw": 60.0,
    "hub_kw": 132.0,
-   "status": "available"
+   "status": "inoperative"
   },
   "SXL-00048": {
    "op": "ATLA",
@@ -30478,7 +30469,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "STB-00064": {
    "op": "HORZ",
@@ -30613,7 +30604,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "VCD-00028": {
    "op": "EDPC",
@@ -30622,7 +30613,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "VCD-00029": {
    "op": "EDPC",
@@ -30892,7 +30883,7 @@
    "npts": 3,
    "kw": 50.0,
    "hub_kw": 122.0,
-   "status": "available"
+   "status": "unknown"
   },
   "EVR-00037": {
    "op": "ATLA",
@@ -30928,7 +30919,7 @@
    "npts": 3,
    "kw": 50.0,
    "hub_kw": 122.0,
-   "status": "inoperative"
+   "status": "available"
   },
   "FND-00018": {
    "op": "ATLA",
@@ -31000,7 +30991,7 @@
    "npts": 2,
    "kw": 60.0,
    "hub_kw": 110.0,
-   "status": "unknown"
+   "status": "available"
   },
   "LSB-00646": {
    "op": "ATLA",
@@ -31171,7 +31162,7 @@
    "npts": 2,
    "kw": 30.0,
    "hub_kw": 60.0,
-   "status": "available"
+   "status": "charging"
   },
   "PRT-00218": {
    "op": "ATLA",
@@ -31225,7 +31216,7 @@
    "npts": 3,
    "kw": 50.0,
    "hub_kw": 122.0,
-   "status": "unknown"
+   "status": "available"
   },
   "SNT-00126": {
    "op": "ATLA",
@@ -31234,7 +31225,7 @@
    "npts": 2,
    "kw": 50.0,
    "hub_kw": 100.0,
-   "status": "available"
+   "status": "charging"
   },
   "SNT-00127": {
    "op": "ATLA",
@@ -31315,7 +31306,7 @@
    "npts": 3,
    "kw": 50.0,
    "hub_kw": 122.0,
-   "status": "available"
+   "status": "outOfOrder"
   },
   "VNG-00136": {
    "op": "ATLA",
@@ -31324,7 +31315,7 @@
    "npts": 3,
    "kw": 50.0,
    "hub_kw": 122.0,
-   "status": "inoperative"
+   "status": "available"
   },
   "STR-00034": {
    "op": "GLPP",
@@ -31369,7 +31360,7 @@
    "npts": 2,
    "kw": 30.0,
    "hub_kw": 60.0,
-   "status": "available"
+   "status": "unknown"
   },
   "STB-00066": {
    "op": "EDPC",
@@ -31459,7 +31450,7 @@
    "npts": 2,
    "kw": 7.4,
    "hub_kw": 14.8,
-   "status": "outOfOrder"
+   "status": "available"
   },
   "ORM-00013": {
    "op": "EVCE",
@@ -31522,7 +31513,7 @@
    "npts": 3,
    "kw": 60.0,
    "hub_kw": 132.0,
-   "status": "inoperative"
+   "status": "available"
   },
   "VNG-00139": {
    "op": "ATLA",
@@ -31558,7 +31549,7 @@
    "npts": 2,
    "kw": 60.0,
    "hub_kw": 110.0,
-   "status": "inoperative"
+   "status": "available"
   },
   "ALQ-00017": {
    "op": "ATLA",
@@ -31612,7 +31603,7 @@
    "npts": 3,
    "kw": 60.0,
    "hub_kw": 132.0,
-   "status": "available"
+   "status": "unknown"
   },
   "VIS-00087": {
    "op": "ATLA",
@@ -31630,7 +31621,7 @@
    "npts": 3,
    "kw": 60.0,
    "hub_kw": 132.0,
-   "status": "available"
+   "status": "inoperative"
   },
   "CTB-00034": {
    "op": "ATLA",
@@ -31657,7 +31648,7 @@
    "npts": 3,
    "kw": 60.0,
    "hub_kw": 132.0,
-   "status": "available"
+   "status": "inoperative"
   },
   "BRR-00131": {
    "op": "ATLA",
@@ -31711,7 +31702,7 @@
    "npts": 1,
    "kw": 22.0,
    "hub_kw": 22.0,
-   "status": "charging"
+   "status": "available"
   },
   "LSB-00660": {
    "op": "ATLA",
@@ -31720,7 +31711,7 @@
    "npts": 1,
    "kw": 22.0,
    "hub_kw": 22.0,
-   "status": "charging"
+   "status": "available"
   },
   "TVD-00041": {
    "op": "ATLA",
@@ -31774,7 +31765,7 @@
    "npts": 2,
    "kw": 60.0,
    "hub_kw": 110.0,
-   "status": "inoperative"
+   "status": "available"
   },
   "VIS-00092": {
    "op": "ATLA",
@@ -31900,7 +31891,7 @@
    "npts": 3,
    "kw": 60.0,
    "hub_kw": 132.0,
-   "status": "unknown"
+   "status": "available"
   },
   "AVR-00052": {
    "op": "ATLA",
@@ -31936,7 +31927,7 @@
    "npts": 3,
    "kw": 60.0,
    "hub_kw": 132.0,
-   "status": "inoperative"
+   "status": "blocked"
   },
   "BRG-00110": {
    "op": "ATLA",
@@ -31945,7 +31936,7 @@
    "npts": 3,
    "kw": 50.0,
    "hub_kw": 122.0,
-   "status": "inoperative"
+   "status": "blocked"
   },
   "BRG-00111": {
    "op": "ATLA",
@@ -31981,7 +31972,7 @@
    "npts": 3,
    "kw": 60.0,
    "hub_kw": 121.0,
-   "status": "available"
+   "status": "inoperative"
   },
   "CBR-00092": {
    "op": "ATLA",
@@ -31990,7 +31981,7 @@
    "npts": 3,
    "kw": 60.0,
    "hub_kw": 132.0,
-   "status": "available"
+   "status": "inoperative"
   },
   "CHM-00005": {
    "op": "ATLA",
@@ -32035,7 +32026,7 @@
    "npts": 2,
    "kw": 60.0,
    "hub_kw": 110.0,
-   "status": "available"
+   "status": "unknown"
   },
   "GMR-00109": {
    "op": "ATLA",
@@ -32089,7 +32080,7 @@
    "npts": 3,
    "kw": 60.0,
    "hub_kw": 132.0,
-   "status": "unknown"
+   "status": "available"
   },
   "LSB-00668": {
    "op": "ATLA",
@@ -32116,7 +32107,7 @@
    "npts": 3,
    "kw": 60.0,
    "hub_kw": 132.0,
-   "status": "inoperative"
+   "status": "available"
   },
   "MGR-00013": {
    "op": "ATLA",
@@ -32242,7 +32233,7 @@
    "npts": 3,
    "kw": 50.0,
    "hub_kw": 122.0,
-   "status": "charging"
+   "status": "available"
   },
   "PRT-00227": {
    "op": "ATLA",
@@ -32260,7 +32251,7 @@
    "npts": 3,
    "kw": 60.0,
    "hub_kw": 132.0,
-   "status": "outOfOrder"
+   "status": "available"
   },
   "PRT-00229": {
    "op": "ATLA",
@@ -32296,7 +32287,7 @@
    "npts": 3,
    "kw": 60.0,
    "hub_kw": 132.0,
-   "status": "inoperative"
+   "status": "available"
   },
   "STB-00069": {
    "op": "ATLA",
@@ -32323,7 +32314,7 @@
    "npts": 3,
    "kw": 60.0,
    "hub_kw": 132.0,
-   "status": "available"
+   "status": "inoperative"
   },
   "STS-00023": {
    "op": "ATLA",
@@ -32350,7 +32341,7 @@
    "npts": 2,
    "kw": 60.0,
    "hub_kw": 82.0,
-   "status": "available"
+   "status": "charging"
   },
   "TND-00009": {
    "op": "ATLA",
@@ -32386,7 +32377,7 @@
    "npts": 3,
    "kw": 50.0,
    "hub_kw": 143.0,
-   "status": "available"
+   "status": "inoperative"
   },
   "TVR-00021": {
    "op": "ATLA",
@@ -32449,7 +32440,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "VNG-00144": {
    "op": "ATLA",
@@ -32458,7 +32449,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "VRS-00007": {
    "op": "ATLA",
@@ -32485,7 +32476,7 @@
    "npts": 3,
    "kw": 50.0,
    "hub_kw": 143.0,
-   "status": "charging"
+   "status": "inoperative"
   },
   "LSB-00671": {
    "op": "GLPP",
@@ -32584,7 +32575,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "MLD-00012": {
    "op": "EZUR",
@@ -32746,7 +32737,7 @@
    "npts": 1,
    "kw": 22.0,
    "hub_kw": 22.0,
-   "status": "charging"
+   "status": "available"
   },
   "OER-00201": {
    "op": "KLCS",
@@ -33232,7 +33223,7 @@
    "npts": 1,
    "kw": 50.0,
    "hub_kw": 50.0,
-   "status": "available"
+   "status": "charging"
   },
   "TBC-00004": {
    "op": "KLCS",
@@ -33295,7 +33286,7 @@
    "npts": 1,
    "kw": 150.0,
    "hub_kw": 150.0,
-   "status": "charging"
+   "status": "available"
   },
   "PTG-00023": {
    "op": "CEPS",
@@ -33304,7 +33295,7 @@
    "npts": 1,
    "kw": 150.0,
    "hub_kw": 150.0,
-   "status": "charging"
+   "status": "available"
   },
   "FZZ-00003": {
    "op": "CEPS",
@@ -33358,7 +33349,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "ACT-00004": {
    "op": "GLPP",
@@ -33502,7 +33493,7 @@
    "npts": 2,
    "kw": 180.0,
    "hub_kw": 360.0,
-   "status": "outOfOrder"
+   "status": "available"
   },
   "EPS-00009": {
    "op": "GLPP",
@@ -33547,7 +33538,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "EPS-00016": {
    "op": "GLPP",
@@ -33718,7 +33709,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "outOfOrder"
+   "status": "available"
   },
   "CDN-00003": {
    "op": "ATLA",
@@ -33763,7 +33754,7 @@
    "npts": 2,
    "kw": 3.7,
    "hub_kw": 7.4,
-   "status": "available"
+   "status": "charging"
   },
   "VRL-80001": {
    "op": "ATLA",
@@ -33781,7 +33772,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "VVD-80001": {
    "op": "ATLA",
@@ -33871,7 +33862,7 @@
    "npts": 2,
    "kw": 3.7,
    "hub_kw": 7.4,
-   "status": "available"
+   "status": "charging"
   },
   "ALM-80021": {
    "op": "ATLA",
@@ -33880,7 +33871,7 @@
    "npts": 2,
    "kw": 3.7,
    "hub_kw": 7.4,
-   "status": "charging"
+   "status": "available"
   },
   "ALM-80024": {
    "op": "ATLA",
@@ -33934,7 +33925,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "ASL-80003": {
    "op": "ATLA",
@@ -33943,7 +33934,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "unknown"
   },
   "AVZ-80001": {
    "op": "ATLA",
@@ -33952,7 +33943,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "BBR-80001": {
    "op": "ATLA",
@@ -33979,7 +33970,7 @@
    "npts": 2,
    "kw": 3.7,
    "hub_kw": 7.4,
-   "status": "available"
+   "status": "charging"
   },
   "BRG-80007": {
    "op": "ATLA",
@@ -34177,7 +34168,7 @@
    "npts": 2,
    "kw": 7.4,
    "hub_kw": 14.8,
-   "status": "charging"
+   "status": "available"
   },
   "LRA-80011": {
    "op": "ATLA",
@@ -34204,7 +34195,7 @@
    "npts": 2,
    "kw": 7.4,
    "hub_kw": 14.8,
-   "status": "charging"
+   "status": "available"
   },
   "LRS-80010": {
    "op": "ATLA",
@@ -34294,7 +34285,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "LSB-80049": {
    "op": "ATLA",
@@ -34339,7 +34330,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "LSB-80116": {
    "op": "ATLA",
@@ -34357,7 +34348,7 @@
    "npts": 2,
    "kw": 3.7,
    "hub_kw": 7.4,
-   "status": "unknown"
+   "status": "charging"
   },
   "LSB-80138": {
    "op": "ATLA",
@@ -34438,7 +34429,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "PFR-80001": {
    "op": "ATLA",
@@ -34447,7 +34438,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "PGR-80001": {
    "op": "ATLA",
@@ -34465,7 +34456,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "unknown"
   },
   "PRG-80001": {
    "op": "ATLA",
@@ -34591,7 +34582,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "outOfOrder"
+   "status": "available"
   },
   "TNV-80002": {
    "op": "ATLA",
@@ -34609,7 +34600,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "TVD-80002": {
    "op": "ATLA",
@@ -34663,7 +34654,7 @@
    "npts": 2,
    "kw": 3.7,
    "hub_kw": 7.4,
-   "status": "charging"
+   "status": "available"
   },
   "VLP-80002": {
    "op": "ATLA",
@@ -34708,7 +34699,7 @@
    "npts": 4,
    "kw": 3.7,
    "hub_kw": 14.8,
-   "status": "available"
+   "status": "charging"
   },
   "LSB-80112": {
    "op": "ATLA",
@@ -34717,7 +34708,7 @@
    "npts": 4,
    "kw": 3.7,
    "hub_kw": 14.8,
-   "status": "charging"
+   "status": "available"
   },
   "FVN-00003": {
    "op": "EDPC",
@@ -34843,7 +34834,7 @@
    "npts": 1,
    "kw": 7.4,
    "hub_kw": 7.4,
-   "status": "available"
+   "status": "charging"
   },
   "ILH-00013": {
    "op": "KLCS",
@@ -34852,7 +34843,7 @@
    "npts": 1,
    "kw": 7.4,
    "hub_kw": 7.4,
-   "status": "charging"
+   "status": "available"
   },
   "ILH-00014": {
    "op": "KLCS",
@@ -34870,7 +34861,7 @@
    "npts": 1,
    "kw": 7.4,
    "hub_kw": 7.4,
-   "status": "charging"
+   "status": "available"
   },
   "ILH-00012": {
    "op": "KLCS",
@@ -34906,7 +34897,7 @@
    "npts": 1,
    "kw": 22.0,
    "hub_kw": 22.0,
-   "status": "unknown"
+   "status": "available"
   },
   "FAR-00043": {
    "op": "HORZ",
@@ -34915,7 +34906,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "FAR-00044": {
    "op": "HORZ",
@@ -35257,7 +35248,7 @@
    "npts": 2,
    "kw": 120.0,
    "hub_kw": 182.5,
-   "status": "available"
+   "status": "charging"
   },
   "LSB-00684": {
    "op": "TRUE",
@@ -35383,7 +35374,7 @@
    "npts": 2,
    "kw": 7.4,
    "hub_kw": 14.8,
-   "status": "charging"
+   "status": "available"
   },
   "STB-00077": {
    "op": "HELX",
@@ -35392,7 +35383,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "outOfOrder"
+   "status": "available"
   },
   "VFX-00051": {
    "op": "GLPP",
@@ -35464,7 +35455,7 @@
    "npts": 3,
    "kw": 60.0,
    "hub_kw": 132.0,
-   "status": "blocked"
+   "status": "available"
   },
   "PFR-00013": {
    "op": "REPS",
@@ -35572,7 +35563,7 @@
    "npts": 4,
    "kw": 350.0,
    "hub_kw": 1400.0,
-   "status": "available"
+   "status": "charging"
   },
   "CTB-00038": {
    "op": "IONY",
@@ -35725,7 +35716,7 @@
    "npts": 2,
    "kw": 50.0,
    "hub_kw": 100.0,
-   "status": "inoperative"
+   "status": "blocked"
   },
   "BRG-00120": {
    "op": "ATLA",
@@ -35761,7 +35752,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "MTS-00147": {
    "op": "ATLA",
@@ -35770,7 +35761,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "MTS-00148": {
    "op": "ATLA",
@@ -35887,7 +35878,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "outOfOrder"
   },
   "GMR-00115": {
    "op": "ATLA",
@@ -35896,7 +35887,7 @@
    "npts": 2,
    "kw": 60.0,
    "hub_kw": 110.0,
-   "status": "inoperative"
+   "status": "available"
   },
   "GMR-00117": {
    "op": "ATLA",
@@ -36004,7 +35995,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "unknown"
   },
   "LLE-00173": {
    "op": "ATLA",
@@ -36022,7 +36013,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "outOfOrder"
+   "status": "available"
   },
   "LLE-00170": {
    "op": "ATLA",
@@ -36139,7 +36130,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "LLE-00179": {
    "op": "ATLA",
@@ -36202,7 +36193,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "VVR-00004": {
    "op": "ATLA",
@@ -36265,7 +36256,7 @@
    "npts": 2,
    "kw": 120.0,
    "hub_kw": 240.0,
-   "status": "charging"
+   "status": "available"
   },
   "VLG-00039": {
    "op": "EDPC",
@@ -36436,7 +36427,7 @@
    "npts": 2,
    "kw": 120.0,
    "hub_kw": 180.0,
-   "status": "available"
+   "status": "charging"
   },
   "TMR-00038": {
    "op": "EDPC",
@@ -36553,7 +36544,7 @@
    "npts": 2,
    "kw": 120.0,
    "hub_kw": 182.5,
-   "status": "available"
+   "status": "unknown"
   },
   "MTJ-00043": {
    "op": "EDPC",
@@ -36688,7 +36679,7 @@
    "npts": 1,
    "kw": 7.4,
    "hub_kw": 7.4,
-   "status": "charging"
+   "status": "available"
   },
   "TMR-00041": {
    "op": "EDPC",
@@ -36751,7 +36742,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "SNT-80003": {
    "op": "GLPP",
@@ -36823,7 +36814,7 @@
    "npts": 2,
    "kw": 3.7,
    "hub_kw": 7.4,
-   "status": "charging"
+   "status": "available"
   },
   "LOU-00006": {
    "op": "FRTR",
@@ -36841,7 +36832,7 @@
    "npts": 2,
    "kw": 3.7,
    "hub_kw": 7.4,
-   "status": "charging"
+   "status": "available"
   },
   "LSB-80533": {
    "op": "GLPP",
@@ -37129,7 +37120,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "LRS-00118": {
    "op": "GLPP",
@@ -37201,7 +37192,7 @@
    "npts": 2,
    "kw": 150.0,
    "hub_kw": 300.0,
-   "status": "available"
+   "status": "charging"
   },
   "PST-00006": {
    "op": "FCTO",
@@ -37210,7 +37201,7 @@
    "npts": 3,
    "kw": 150.0,
    "hub_kw": 380.0,
-   "status": "available"
+   "status": "charging"
   },
   "MCH-00010": {
    "op": "FCTO",
@@ -37237,7 +37228,7 @@
    "npts": 2,
    "kw": 150.0,
    "hub_kw": 300.0,
-   "status": "available"
+   "status": "charging"
   },
   "CLD-00033": {
    "op": "FCTO",
@@ -37297,9 +37288,9 @@
    "op": "IBRD",
    "opname": "Iberdrola Clientes Portugal, Unipessoal, Lda",
    "city": "Águeda",
-   "npts": 1,
+   "npts": 2,
    "kw": 50.0,
-   "hub_kw": 50.0,
+   "hub_kw": 100.0,
    "status": "available"
   },
   "VVD-00016": {
@@ -37345,7 +37336,7 @@
    "npts": 4,
    "kw": 200.0,
    "hub_kw": 800.0,
-   "status": "charging"
+   "status": "available"
   },
   "RMR-00010": {
    "op": "EDPC",
@@ -37415,8 +37406,8 @@
    "opname": "EDP Comercial",
    "city": "Vila Real",
    "npts": 2,
-   "kw": 120.0,
-   "hub_kw": 240.0,
+   "kw": 150.0,
+   "hub_kw": 300.0,
    "status": "available"
   },
   "FAR-00059": {
@@ -37462,7 +37453,7 @@
    "npts": 2,
    "kw": 7.4,
    "hub_kw": 14.8,
-   "status": "available"
+   "status": "charging"
   },
   "LLE-00186": {
    "op": "LOUL",
@@ -37678,7 +37669,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "unknown"
   },
   "BJA-00047": {
    "op": "TRUE",
@@ -37768,7 +37759,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "MTJ-00046": {
    "op": "TRUE",
@@ -37777,7 +37768,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "MTJ-00047": {
    "op": "TRUE",
@@ -37840,7 +37831,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "MTJ-00054": {
    "op": "TRUE",
@@ -38011,7 +38002,7 @@
    "npts": 2,
    "kw": 75.0,
    "hub_kw": 97.0,
-   "status": "available"
+   "status": "charging"
   },
   "CBR-00104": {
    "op": "EDPC",
@@ -38020,7 +38011,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "CBR-00105": {
    "op": "EDPC",
@@ -38047,7 +38038,7 @@
    "npts": 2,
    "kw": 160.0,
    "hub_kw": 320.0,
-   "status": "available"
+   "status": "charging"
   },
   "ACB-00021": {
    "op": "HORZ",
@@ -38098,18 +38089,18 @@
    "op": "IBRD",
    "opname": "Iberdrola Clientes Portugal, Unipessoal, Lda",
    "city": "Amarante",
-   "npts": 1,
+   "npts": 2,
    "kw": 50.0,
-   "hub_kw": 50.0,
+   "hub_kw": 100.0,
    "status": "available"
   },
   "AMT-00024": {
    "op": "IBRD",
    "opname": "Iberdrola Clientes Portugal, Unipessoal, Lda",
    "city": "Amarante",
-   "npts": 1,
+   "npts": 2,
    "kw": 50.0,
-   "hub_kw": 50.0,
+   "hub_kw": 100.0,
    "status": "available"
   },
   "BAO-00006": {
@@ -38128,7 +38119,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "AJZ-00006": {
    "op": "IBRD",
@@ -38191,7 +38182,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "LSB-00705": {
    "op": "HELX",
@@ -38209,7 +38200,7 @@
    "npts": 1,
    "kw": 22.0,
    "hub_kw": 22.0,
-   "status": "charging"
+   "status": "available"
   },
   "LSB-00707": {
    "op": "HELX",
@@ -38308,7 +38299,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "AGH-00012": {
    "op": "SEGM",
@@ -38614,7 +38605,7 @@
    "npts": 1,
    "kw": 22.0,
    "hub_kw": 22.0,
-   "status": "charging"
+   "status": "available"
   },
   "LSB-00715": {
    "op": "HELX",
@@ -38665,9 +38656,9 @@
    "op": "IBRD",
    "opname": "Iberdrola Clientes Portugal, Unipessoal, Lda",
    "city": "Valpaços",
-   "npts": 1,
+   "npts": 2,
    "kw": 50.0,
-   "hub_kw": 50.0,
+   "hub_kw": 100.0,
    "status": "available"
   },
   "PTG-00025": {
@@ -38758,7 +38749,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "OAZ-00009": {
    "op": "EDPC",
@@ -38776,7 +38767,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "RMR-00011": {
    "op": "HORZ",
@@ -38893,7 +38884,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "GMR-00128": {
    "op": "EDPC",
@@ -39073,7 +39064,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "unknown"
+   "status": "available"
   },
   "CBC-00016": {
    "op": "TRUE",
@@ -39100,7 +39091,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "MTJ-00069": {
    "op": "TRUE",
@@ -39118,7 +39109,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "MTJ-00071": {
    "op": "TRUE",
@@ -39199,7 +39190,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "MTJ-00080": {
    "op": "TRUE",
@@ -39208,7 +39199,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "MTJ-00081": {
    "op": "TRUE",
@@ -39235,7 +39226,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "MTJ-00084": {
    "op": "TRUE",
@@ -39253,7 +39244,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "MTJ-00086": {
    "op": "TRUE",
@@ -39262,7 +39253,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "MTJ-00087": {
    "op": "TRUE",
@@ -39451,7 +39442,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "LGA-00025": {
    "op": "EDPC",
@@ -39523,7 +39514,7 @@
    "npts": 2,
    "kw": 150.0,
    "hub_kw": 300.0,
-   "status": "available"
+   "status": "charging"
   },
   "CSC-00185": {
    "op": "FCTO",
@@ -39883,7 +39874,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "LSB-00791": {
    "op": "EDPC",
@@ -39991,7 +39982,7 @@
    "npts": 2,
    "kw": 85.0,
    "hub_kw": 170.0,
-   "status": "available"
+   "status": "charging"
   },
   "BMT-00003": {
    "op": "EDPC",
@@ -40135,7 +40126,7 @@
    "npts": 2,
    "kw": 7.4,
    "hub_kw": 14.8,
-   "status": "charging"
+   "status": "available"
   },
   "SNT-00146": {
    "op": "EDPC",
@@ -40189,7 +40180,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "VIS-00106": {
    "op": "EDPC",
@@ -40351,7 +40342,7 @@
    "npts": 3,
    "kw": 60.0,
    "hub_kw": 132.0,
-   "status": "available"
+   "status": "inoperative"
   },
   "VCT-00053": {
    "op": "ATLA",
@@ -40459,7 +40450,7 @@
    "npts": 2,
    "kw": 11.0,
    "hub_kw": 22.0,
-   "status": "available"
+   "status": "charging"
   },
   "LSB-00802": {
    "op": "EDPC",
@@ -40486,7 +40477,7 @@
    "npts": 2,
    "kw": 11.0,
    "hub_kw": 22.0,
-   "status": "available"
+   "status": "charging"
   },
   "LSB-00805": {
    "op": "EDPC",
@@ -40639,7 +40630,7 @@
    "npts": 2,
    "kw": 150.0,
    "hub_kw": 300.0,
-   "status": "charging"
+   "status": "available"
   },
   "CVL-00029": {
    "op": "DTEI",
@@ -40792,7 +40783,7 @@
    "npts": 2,
    "kw": 180.0,
    "hub_kw": 360.0,
-   "status": "charging"
+   "status": "available"
   },
   "PNI-00017": {
    "op": "EDPC",
@@ -40891,7 +40882,7 @@
    "npts": 2,
    "kw": 150.0,
    "hub_kw": 300.0,
-   "status": "available"
+   "status": "charging"
   },
   "FAR-00063": {
    "op": "CEPS",
@@ -41059,10 +41050,10 @@
    "op": "EMAC",
    "opname": "EMACOM - Telecomunicações da Madeira, Unipessoal, Lda",
    "city": "Funchal",
-   "npts": 2,
+   "npts": 3,
    "kw": 50.0,
-   "hub_kw": 72.0,
-   "status": "outOfOrder"
+   "hub_kw": 122.0,
+   "status": "unknown"
   },
   "VNG-00166": {
    "op": "IBRD",
@@ -41095,9 +41086,9 @@
    "op": "IBRD",
    "opname": "Iberdrola Clientes Portugal, Unipessoal, Lda",
    "city": "Batalha",
-   "npts": 1,
+   "npts": 2,
    "kw": 49.0,
-   "hub_kw": 49.0,
+   "hub_kw": 98.0,
    "status": "charging"
   },
   "GMR-00131": {
@@ -41116,7 +41107,7 @@
    "npts": 2,
    "kw": 100.0,
    "hub_kw": 200.0,
-   "status": "available"
+   "status": "charging"
   },
   "VNG-00168": {
    "op": "ATLA",
@@ -41260,7 +41251,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "outOfOrder"
   },
   "SLV-00020": {
    "op": "GLPP",
@@ -41467,7 +41458,7 @@
    "npts": 2,
    "kw": 120.0,
    "hub_kw": 240.0,
-   "status": "outOfOrder"
+   "status": "available"
   },
   "EPS-00032": {
    "op": "GLPP",
@@ -41512,7 +41503,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "ALB-00023": {
    "op": "GLPP",
@@ -41566,7 +41557,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "unknown"
+   "status": "available"
   },
   "VCT-00054": {
    "op": "GLPP",
@@ -41629,7 +41620,7 @@
    "npts": 2,
    "kw": 120.0,
    "hub_kw": 240.0,
-   "status": "charging"
+   "status": "available"
   },
   "SNT-00154": {
    "op": "EVIO",
@@ -41809,7 +41800,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "unknown"
   },
   "SSL-00002": {
    "op": "TRUE",
@@ -41827,7 +41818,7 @@
    "npts": 1,
    "kw": 50.0,
    "hub_kw": 50.0,
-   "status": "available"
+   "status": "charging"
   },
   "ODV-00038": {
    "op": "PRIO",
@@ -41863,7 +41854,7 @@
    "npts": 3,
    "kw": 150.0,
    "hub_kw": 380.0,
-   "status": "charging"
+   "status": "available"
   },
   "BCL-00038": {
    "op": "EVCE",
@@ -41971,7 +41962,7 @@
    "npts": 2,
    "kw": 300.0,
    "hub_kw": 600.0,
-   "status": "charging"
+   "status": "available"
   },
   "ETR-00018": {
    "op": "EDPC",
@@ -41998,7 +41989,7 @@
    "npts": 2,
    "kw": 300.0,
    "hub_kw": 600.0,
-   "status": "charging"
+   "status": "available"
   },
   "ETR-00021": {
    "op": "EDPC",
@@ -42151,7 +42142,7 @@
    "npts": 2,
    "kw": 11.0,
    "hub_kw": 22.0,
-   "status": "available"
+   "status": "charging"
   },
   "LSB-00821": {
    "op": "HEXA",
@@ -42187,7 +42178,7 @@
    "npts": 2,
    "kw": 11.0,
    "hub_kw": 22.0,
-   "status": "charging"
+   "status": "available"
   },
   "LSB-00825": {
    "op": "HEXA",
@@ -42286,7 +42277,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "LRS-00126": {
    "op": "TRUE",
@@ -42304,7 +42295,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "PRG-00004": {
    "op": "HORZ",
@@ -42320,8 +42311,8 @@
    "opname": "Powerdot, S.A",
    "city": "Évora",
    "npts": 6,
-   "kw": 200.0,
-   "hub_kw": 750.0,
+   "kw": 187.0,
+   "hub_kw": 724.0,
    "status": "available"
   },
   "EVR-00050": {
@@ -42520,7 +42511,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "LSA-00010": {
    "op": "TRUE",
@@ -42718,7 +42709,7 @@
    "npts": 1,
    "kw": 22.0,
    "hub_kw": 22.0,
-   "status": "charging"
+   "status": "available"
   },
   "PRT-00256": {
    "op": "HELX",
@@ -42761,8 +42752,8 @@
    "opname": "Powerdot, S.A",
    "city": "Sintra",
    "npts": 5,
-   "kw": 200.0,
-   "hub_kw": 572.0,
+   "kw": 187.0,
+   "hub_kw": 546.0,
    "status": "available"
   },
   "CSC-00188": {
@@ -42898,7 +42889,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "unknown"
+   "status": "available"
   },
   "CBR-00116": {
    "op": "ATLA",
@@ -43015,7 +43006,7 @@
    "npts": 3,
    "kw": 150.0,
    "hub_kw": 380.0,
-   "status": "available"
+   "status": "unknown"
   },
   "BNV-00014": {
    "op": "FCTO",
@@ -43024,7 +43015,7 @@
    "npts": 3,
    "kw": 150.0,
    "hub_kw": 380.0,
-   "status": "available"
+   "status": "unknown"
   },
   "VCD-00051": {
    "op": "EDPC",
@@ -43213,7 +43204,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "LNH-00017": {
    "op": "EDPC",
@@ -43258,7 +43249,7 @@
    "npts": 3,
    "kw": 150.0,
    "hub_kw": 380.0,
-   "status": "charging"
+   "status": "available"
   },
   "MTJ-00102": {
    "op": "EDPC",
@@ -43483,7 +43474,7 @@
    "npts": 2,
    "kw": 200.0,
    "hub_kw": 400.0,
-   "status": "available"
+   "status": "charging"
   },
   "SXL-00061": {
    "op": "GLPP",
@@ -43510,7 +43501,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "unknown"
+   "status": "available"
   },
   "AGD-00018": {
    "op": "FCTO",
@@ -43564,7 +43555,7 @@
    "npts": 3,
    "kw": 150.0,
    "hub_kw": 380.0,
-   "status": "available"
+   "status": "outOfOrder"
   },
   "SMG-00013": {
    "op": "FCTO",
@@ -43600,7 +43591,7 @@
    "npts": 2,
    "kw": 150.0,
    "hub_kw": 300.0,
-   "status": "charging"
+   "status": "available"
   },
   "SNT-00160": {
    "op": "FCTO",
@@ -43726,7 +43717,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "SCR-00022": {
    "op": "FACT",
@@ -44212,7 +44203,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "SNT-00161": {
    "op": "IBRD",
@@ -44365,7 +44356,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "FNC-00055": {
    "op": "ECOI",
@@ -44572,7 +44563,7 @@
    "npts": 2,
    "kw": 150.0,
    "hub_kw": 300.0,
-   "status": "charging"
+   "status": "available"
   },
   "OER-00237": {
    "op": "EDPC",
@@ -44950,7 +44941,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "SJM-00045": {
    "op": "TRUE",
@@ -44959,7 +44950,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "unknown"
+   "status": "available"
   },
   "SJM-00046": {
    "op": "TRUE",
@@ -44977,7 +44968,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "OVR-00024": {
    "op": "GLPP",
@@ -45049,7 +45040,7 @@
    "npts": 2,
    "kw": 50.0,
    "hub_kw": 100.0,
-   "status": "unknown"
+   "status": "outOfOrder"
   },
   "MGR-00020": {
    "op": "FCTO",
@@ -45139,7 +45130,7 @@
    "npts": 2,
    "kw": 50.0,
    "hub_kw": 100.0,
-   "status": "charging"
+   "status": "available"
   },
   "SNS-00018": {
    "op": "FCTO",
@@ -45562,7 +45553,7 @@
    "npts": 1,
    "kw": 22.0,
    "hub_kw": 22.0,
-   "status": "charging"
+   "status": "available"
   },
   "VFX-00081": {
    "op": "MOTA",
@@ -45580,7 +45571,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "VFX-00083": {
    "op": "MOTA",
@@ -45616,7 +45607,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "VFX-00087": {
    "op": "MOTA",
@@ -45661,7 +45652,7 @@
    "npts": 1,
    "kw": 22.0,
    "hub_kw": 22.0,
-   "status": "available"
+   "status": "charging"
   },
   "VFX-00092": {
    "op": "MOTA",
@@ -45859,7 +45850,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "CSC-00209": {
    "op": "TRUE",
@@ -45904,7 +45895,7 @@
    "npts": 3,
    "kw": 60.0,
    "hub_kw": 142.0,
-   "status": "outOfOrder"
+   "status": "available"
   },
   "ORQ-00006": {
    "op": "FCTO",
@@ -45922,7 +45913,7 @@
    "npts": 3,
    "kw": 60.0,
    "hub_kw": 142.0,
-   "status": "charging"
+   "status": "available"
   },
   "OBR-00012": {
    "op": "GLPP",
@@ -45931,7 +45922,7 @@
    "npts": 3,
    "kw": 60.0,
    "hub_kw": 142.0,
-   "status": "unknown"
+   "status": "available"
   },
   "PFR-00017": {
    "op": "FCTO",
@@ -46192,7 +46183,7 @@
    "npts": 2,
    "kw": 120.1,
    "hub_kw": 240.2,
-   "status": "available"
+   "status": "charging"
   },
   "MLD-00026": {
    "op": "ECOI",
@@ -46417,7 +46408,7 @@
    "npts": 2,
    "kw": 120.0,
    "hub_kw": 240.0,
-   "status": "charging"
+   "status": "available"
   },
   "BRR-00148": {
    "op": "ATLA",
@@ -46561,7 +46552,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "SBA-00008": {
    "op": "EDPC",
@@ -46678,7 +46669,7 @@
    "npts": 2,
    "kw": 60.0,
    "hub_kw": 120.0,
-   "status": "charging"
+   "status": "available"
   },
   "STS-00029": {
    "op": "PRIO",
@@ -46723,7 +46714,7 @@
    "npts": 2,
    "kw": 100.0,
    "hub_kw": 200.0,
-   "status": "available"
+   "status": "charging"
   },
   "PNF-00047": {
    "op": "HELX",
@@ -46768,7 +46759,7 @@
    "npts": 4,
    "kw": 200.0,
    "hub_kw": 650.0,
-   "status": "charging"
+   "status": "available"
   },
   "BRG-00131": {
    "op": "PRIO",
@@ -46984,7 +46975,7 @@
    "npts": 2,
    "kw": 120.0,
    "hub_kw": 240.0,
-   "status": "available"
+   "status": "charging"
   },
   "ALQ-00023": {
    "op": "GLPP",
@@ -47137,7 +47128,7 @@
    "npts": 2,
    "kw": 300.0,
    "hub_kw": 600.0,
-   "status": "available"
+   "status": "unknown"
   },
   "LSB-00855": {
    "op": "REPS",
@@ -47245,7 +47236,7 @@
    "npts": 2,
    "kw": 120.0,
    "hub_kw": 240.0,
-   "status": "available"
+   "status": "charging"
   },
   "LGA-00039": {
    "op": "EDPC",
@@ -47524,7 +47515,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "AND-00015": {
    "op": "EDPC",
@@ -47569,7 +47560,7 @@
    "npts": 2,
    "kw": 50.0,
    "hub_kw": 100.0,
-   "status": "available"
+   "status": "unknown"
   },
   "ODV-00043": {
    "op": "ATLA",
@@ -47614,7 +47605,7 @@
    "npts": 2,
    "kw": 120.0,
    "hub_kw": 240.0,
-   "status": "charging"
+   "status": "available"
   },
   "LSB-00860": {
    "op": "EDPC",
@@ -47695,7 +47686,7 @@
    "npts": 2,
    "kw": 11.0,
    "hub_kw": 22.0,
-   "status": "charging"
+   "status": "available"
   },
   "VNG-00183": {
    "op": "EDPC",
@@ -47740,7 +47731,7 @@
    "npts": 2,
    "kw": 120.0,
    "hub_kw": 240.0,
-   "status": "available"
+   "status": "charging"
   },
   "MLD-00035": {
    "op": "EDPC",
@@ -47830,7 +47821,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "VFC-00007": {
    "op": "SEGM",
@@ -47902,7 +47893,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "unknown"
   },
   "CSC-00231": {
    "op": "TRUE",
@@ -48001,7 +47992,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "STR-00059": {
    "op": "GLPP",
@@ -48082,7 +48073,7 @@
    "npts": 2,
    "kw": 76.0,
    "hub_kw": 98.079,
-   "status": "charging"
+   "status": "available"
   },
   "CTB-00050": {
    "op": "EZC3",
@@ -48127,7 +48118,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "EVR-00059": {
    "op": "MOTA",
@@ -48388,7 +48379,7 @@
    "npts": 2,
    "kw": 400.0,
    "hub_kw": 800.0,
-   "status": "charging"
+   "status": "available"
   },
   "SNT-00176": {
    "op": "FCTO",
@@ -48577,7 +48568,7 @@
    "npts": 3,
    "kw": 150.0,
    "hub_kw": 380.0,
-   "status": "unknown"
+   "status": "available"
   },
   "MGL-00014": {
    "op": "FCTO",
@@ -48919,7 +48910,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "CSC-00247": {
    "op": "TRUE",
@@ -48982,7 +48973,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "CTB-00054": {
    "op": "FCTO",
@@ -49063,7 +49054,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "CSC-00260": {
    "op": "TRUE",
@@ -49171,7 +49162,7 @@
    "npts": 2,
    "kw": 100.0,
    "hub_kw": 200.0,
-   "status": "charging"
+   "status": "available"
   },
   "VVD-00022": {
    "op": "HELX",
@@ -49180,7 +49171,7 @@
    "npts": 2,
    "kw": 100.0,
    "hub_kw": 200.0,
-   "status": "charging"
+   "status": "available"
   },
   "ACH-00030": {
    "op": "ATLA",
@@ -49333,7 +49324,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "unknown"
+   "status": "available"
   },
   "TBR-00010": {
    "op": "GLPP",
@@ -49369,7 +49360,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "unknown"
+   "status": "available"
   },
   "MCH-00014": {
    "op": "GLPP",
@@ -49513,7 +49504,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "SCD-00007": {
    "op": "HORZ",
@@ -49711,7 +49702,7 @@
    "npts": 2,
    "kw": 90.0,
    "hub_kw": 180.0,
-   "status": "available"
+   "status": "charging"
   },
   "AND-00023": {
    "op": "ALFA",
@@ -49900,7 +49891,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "STS-00044": {
    "op": "TRUE",
@@ -49999,7 +49990,7 @@
    "npts": 3,
    "kw": 150.0,
    "hub_kw": 380.0,
-   "status": "unknown"
+   "status": "available"
   },
   "RMR-00013": {
    "op": "FCTO",
@@ -50089,7 +50080,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "CSC-00271": {
    "op": "TRUE",
@@ -50116,7 +50107,7 @@
    "npts": 2,
    "kw": 7.4,
    "hub_kw": 14.8,
-   "status": "available"
+   "status": "charging"
   },
   "BRG-00138": {
    "op": "GLPP",
@@ -50125,7 +50116,7 @@
    "npts": 2,
    "kw": 7.4,
    "hub_kw": 14.8,
-   "status": "available"
+   "status": "charging"
   },
   "PRT-00293": {
    "op": "ATLA",
@@ -50170,7 +50161,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "PRT-00296": {
    "op": "ATLA",
@@ -50188,7 +50179,7 @@
    "npts": 1,
    "kw": 22.0,
    "hub_kw": 22.0,
-   "status": "unknown"
+   "status": "available"
   },
   "STR-00060": {
    "op": "EDPC",
@@ -50251,7 +50242,7 @@
    "npts": 2,
    "kw": 180.0,
    "hub_kw": 360.0,
-   "status": "available"
+   "status": "charging"
   },
   "PSR-00015": {
    "op": "PRIO",
@@ -50323,7 +50314,7 @@
    "npts": 1,
    "kw": 22.0,
    "hub_kw": 22.0,
-   "status": "unknown"
+   "status": "available"
   },
   "GDL-00051": {
    "op": "HELX",
@@ -50467,7 +50458,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "outOfOrder"
+   "status": "charging"
   },
   "FNC-00068": {
    "op": "FACT",
@@ -50548,7 +50539,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "LSB-00935": {
    "op": "GLPP",
@@ -50557,7 +50548,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "ALQ-00027": {
    "op": "GLPP",
@@ -50584,7 +50575,7 @@
    "npts": 2,
    "kw": 120.0,
    "hub_kw": 240.0,
-   "status": "charging"
+   "status": "available"
   },
   "VNG-00193": {
    "op": "ATLA",
@@ -50656,7 +50647,7 @@
    "npts": 2,
    "kw": 90.0,
    "hub_kw": 180.0,
-   "status": "unknown"
+   "status": "available"
   },
   "STB-00096": {
    "op": "GLPP",
@@ -50719,7 +50710,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "CSC-00287": {
    "op": "TRUE",
@@ -50998,7 +50989,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "CSC-00301": {
    "op": "TRUE",
@@ -51061,7 +51052,7 @@
    "npts": 2,
    "kw": 7.4,
    "hub_kw": 14.8,
-   "status": "charging"
+   "status": "available"
   },
   "LSB-00949": {
    "op": "EMEL",
@@ -51169,7 +51160,7 @@
    "npts": 2,
    "kw": 11.0,
    "hub_kw": 22.0,
-   "status": "charging"
+   "status": "available"
   },
   "MMV-00010": {
    "op": "BELM",
@@ -51304,7 +51295,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "CSC-00308": {
    "op": "TRUE",
@@ -51421,7 +51412,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "CSC-00321": {
    "op": "TRUE",
@@ -51538,7 +51529,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "CSC-00335": {
    "op": "TRUE",
@@ -51592,7 +51583,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "ILH-00017": {
    "op": "DTEI",
@@ -51844,7 +51835,7 @@
    "npts": 2,
    "kw": 120.0,
    "hub_kw": 240.0,
-   "status": "charging"
+   "status": "available"
   },
   "CSC-00339": {
    "op": "TRUE",
@@ -51889,7 +51880,7 @@
    "npts": 2,
    "kw": 11.0,
    "hub_kw": 22.0,
-   "status": "charging"
+   "status": "available"
   },
   "ALM-00095": {
    "op": "HORZ",
@@ -51898,7 +51889,7 @@
    "npts": 2,
    "kw": 11.0,
    "hub_kw": 22.0,
-   "status": "charging"
+   "status": "available"
   },
   "ALM-00096": {
    "op": "HORZ",
@@ -51907,7 +51898,7 @@
    "npts": 2,
    "kw": 11.0,
    "hub_kw": 22.0,
-   "status": "charging"
+   "status": "available"
   },
   "LRS-00140": {
    "op": "HORZ",
@@ -51916,7 +51907,7 @@
    "npts": 2,
    "kw": 11.0,
    "hub_kw": 22.0,
-   "status": "charging"
+   "status": "available"
   },
   "LRS-00141": {
    "op": "HORZ",
@@ -52051,7 +52042,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "CSC-00358": {
    "op": "TRUE",
@@ -52114,7 +52105,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "CSC-00367": {
    "op": "TRUE",
@@ -52150,7 +52141,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "CSC-00371": {
    "op": "TRUE",
@@ -52186,7 +52177,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "CSC-00375": {
    "op": "TRUE",
@@ -52204,7 +52195,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "CSC-00377": {
    "op": "TRUE",
@@ -52213,7 +52204,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "CSC-00378": {
    "op": "TRUE",
@@ -52222,7 +52213,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "CSC-00379": {
    "op": "TRUE",
@@ -52267,7 +52258,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "CSC-00384": {
    "op": "TRUE",
@@ -52285,7 +52276,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "unknown"
   },
   "CSC-00386": {
    "op": "TRUE",
@@ -52303,7 +52294,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "CSC-00388": {
    "op": "TRUE",
@@ -52375,7 +52366,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "CSC-00397": {
    "op": "TRUE",
@@ -52429,7 +52420,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "CSC-00403": {
    "op": "TRUE",
@@ -52465,7 +52456,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "MTJ-00112": {
    "op": "TRUE",
@@ -52582,7 +52573,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "OLH-00053": {
    "op": "TRUE",
@@ -52681,7 +52672,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "LSB-00968": {
    "op": "TRUE",
@@ -52717,7 +52708,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "LSB-00972": {
    "op": "TRUE",
@@ -52726,7 +52717,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "LSB-00973": {
    "op": "TRUE",
@@ -53059,7 +53050,7 @@
    "npts": 4,
    "kw": 300.0,
    "hub_kw": 1200.0,
-   "status": "charging"
+   "status": "available"
   },
   "SXL-00067": {
    "op": "HORZ",
@@ -53068,7 +53059,7 @@
    "npts": 4,
    "kw": 200.0,
    "hub_kw": 720.0,
-   "status": "charging"
+   "status": "available"
   },
   "CSC-00410": {
    "op": "HORZ",
@@ -53077,7 +53068,7 @@
    "npts": 2,
    "kw": 100.0,
    "hub_kw": 200.0,
-   "status": "outOfOrder"
+   "status": "available"
   },
   "SNT-00184": {
    "op": "HORZ",
@@ -53104,7 +53095,7 @@
    "npts": 4,
    "kw": 150.0,
    "hub_kw": 600.0,
-   "status": "charging"
+   "status": "available"
   },
   "CRZ-00003": {
    "op": "EDPC",
@@ -53248,7 +53239,7 @@
    "npts": 2,
    "kw": 120.0,
    "hub_kw": 240.0,
-   "status": "unknown"
+   "status": "outOfOrder"
   },
   "TVD-00078": {
    "op": "MOTA",
@@ -53347,7 +53338,7 @@
    "npts": 2,
    "kw": 50.0,
    "hub_kw": 100.0,
-   "status": "available"
+   "status": "charging"
   },
   "PDL-00019": {
    "op": "HELX",
@@ -53392,7 +53383,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "OER-00248": {
    "op": "MOTA",
@@ -53428,7 +53419,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "OER-00252": {
    "op": "MOTA",
@@ -53653,7 +53644,7 @@
    "npts": 3,
    "kw": 50.0,
    "hub_kw": 122.0,
-   "status": "outOfOrder"
+   "status": "unknown"
   },
   "ODV-00047": {
    "op": "GLPP",
@@ -53680,7 +53671,7 @@
    "npts": 3,
    "kw": 50.0,
    "hub_kw": 122.0,
-   "status": "outOfOrder"
+   "status": "available"
   },
   "AMD-00109": {
    "op": "GLPP",
@@ -53689,7 +53680,7 @@
    "npts": 3,
    "kw": 50.0,
    "hub_kw": 122.0,
-   "status": "available"
+   "status": "charging"
   },
   "LSB-00976": {
    "op": "GLPP",
@@ -53770,7 +53761,7 @@
    "npts": 3,
    "kw": 50.0,
    "hub_kw": 122.0,
-   "status": "charging"
+   "status": "available"
   },
   "ALM-00101": {
    "op": "GLPP",
@@ -53860,7 +53851,7 @@
    "npts": 3,
    "kw": 50.0,
    "hub_kw": 122.0,
-   "status": "available"
+   "status": "outOfOrder"
   },
   "CNT-00031": {
    "op": "GLPP",
@@ -53869,7 +53860,7 @@
    "npts": 3,
    "kw": 50.0,
    "hub_kw": 122.0,
-   "status": "available"
+   "status": "outOfOrder"
   },
   "CSC-00411": {
    "op": "GLPP",
@@ -53878,7 +53869,7 @@
    "npts": 3,
    "kw": 50.0,
    "hub_kw": 122.0,
-   "status": "available"
+   "status": "outOfOrder"
   },
   "CTX-00007": {
    "op": "GLPP",
@@ -53905,7 +53896,7 @@
    "npts": 3,
    "kw": 50.0,
    "hub_kw": 143.0,
-   "status": "available"
+   "status": "outOfOrder"
   },
   "OER-00255": {
    "op": "GLPP",
@@ -53923,7 +53914,7 @@
    "npts": 3,
    "kw": 50.0,
    "hub_kw": 143.0,
-   "status": "outOfOrder"
+   "status": "unknown"
   },
   "AGN-00007": {
    "op": "GLPP",
@@ -53950,7 +53941,7 @@
    "npts": 3,
    "kw": 50.0,
    "hub_kw": 143.0,
-   "status": "available"
+   "status": "outOfOrder"
   },
   "VRS-00010": {
    "op": "GLPP",
@@ -53968,7 +53959,7 @@
    "npts": 3,
    "kw": 50.0,
    "hub_kw": 143.0,
-   "status": "charging"
+   "status": "outOfOrder"
   },
   "LGS-00041": {
    "op": "GLPP",
@@ -53986,7 +53977,7 @@
    "npts": 3,
    "kw": 50.0,
    "hub_kw": 143.0,
-   "status": "unknown"
+   "status": "available"
   },
   "VFX-00095": {
    "op": "GLPP",
@@ -54004,7 +53995,7 @@
    "npts": 3,
    "kw": 50.0,
    "hub_kw": 143.0,
-   "status": "available"
+   "status": "outOfOrder"
   },
   "AMD-00111": {
    "op": "GLPP",
@@ -54040,7 +54031,7 @@
    "npts": 3,
    "kw": 50.0,
    "hub_kw": 143.0,
-   "status": "outOfOrder"
+   "status": "available"
   },
   "LRS-00143": {
    "op": "GLPP",
@@ -54058,7 +54049,7 @@
    "npts": 3,
    "kw": 50.0,
    "hub_kw": 143.0,
-   "status": "available"
+   "status": "outOfOrder"
   },
   "PRT-00310": {
    "op": "GLPP",
@@ -54103,7 +54094,7 @@
    "npts": 3,
    "kw": 50.0,
    "hub_kw": 143.0,
-   "status": "outOfOrder"
+   "status": "available"
   },
   "VNG-00194": {
    "op": "GLPP",
@@ -54112,7 +54103,7 @@
    "npts": 3,
    "kw": 50.0,
    "hub_kw": 143.0,
-   "status": "outOfOrder"
+   "status": "available"
   },
   "SEI-00017": {
    "op": "GLPP",
@@ -54130,7 +54121,7 @@
    "npts": 3,
    "kw": 50.0,
    "hub_kw": 143.0,
-   "status": "outOfOrder"
+   "status": "available"
   },
   "FLG-00025": {
    "op": "GLPP",
@@ -54148,7 +54139,7 @@
    "npts": 3,
    "kw": 50.0,
    "hub_kw": 143.0,
-   "status": "available"
+   "status": "outOfOrder"
   },
   "PTL-00027": {
    "op": "GLPP",
@@ -54184,7 +54175,7 @@
    "npts": 3,
    "kw": 50.0,
    "hub_kw": 143.0,
-   "status": "outOfOrder"
+   "status": "available"
   },
   "LRS-00144": {
    "op": "GLPP",
@@ -54193,7 +54184,7 @@
    "npts": 3,
    "kw": 50.0,
    "hub_kw": 143.0,
-   "status": "available"
+   "status": "charging"
   },
   "MTJ-00116": {
    "op": "GLPP",
@@ -54229,7 +54220,7 @@
    "npts": 3,
    "kw": 50.0,
    "hub_kw": 143.0,
-   "status": "charging"
+   "status": "available"
   },
   "MAI-00073": {
    "op": "GLPP",
@@ -54256,7 +54247,7 @@
    "npts": 3,
    "kw": 50.0,
    "hub_kw": 143.0,
-   "status": "available"
+   "status": "outOfOrder"
   },
   "SLV-00032": {
    "op": "GLPP",
@@ -54274,7 +54265,7 @@
    "npts": 3,
    "kw": 50.0,
    "hub_kw": 143.0,
-   "status": "outOfOrder"
+   "status": "available"
   },
   "AVR-00092": {
    "op": "GLPP",
@@ -54319,7 +54310,7 @@
    "npts": 3,
    "kw": 50.0,
    "hub_kw": 143.0,
-   "status": "available"
+   "status": "outOfOrder"
   },
   "GRD-00042": {
    "op": "GLPP",
@@ -54337,7 +54328,7 @@
    "npts": 3,
    "kw": 50.0,
    "hub_kw": 143.0,
-   "status": "available"
+   "status": "outOfOrder"
   },
   "ESP-00016": {
    "op": "GLPP",
@@ -54355,7 +54346,7 @@
    "npts": 3,
    "kw": 50.0,
    "hub_kw": 143.0,
-   "status": "available"
+   "status": "outOfOrder"
   },
   "VGS-00018": {
    "op": "GLPP",
@@ -54364,7 +54355,7 @@
    "npts": 3,
    "kw": 50.0,
    "hub_kw": 143.0,
-   "status": "available"
+   "status": "charging"
   },
   "ALR-00011": {
    "op": "GLPP",
@@ -54427,7 +54418,7 @@
    "npts": 3,
    "kw": 50.0,
    "hub_kw": 143.0,
-   "status": "outOfOrder"
+   "status": "available"
   },
   "LRA-00155": {
    "op": "GLPP",
@@ -54454,7 +54445,7 @@
    "npts": 3,
    "kw": 50.0,
    "hub_kw": 143.0,
-   "status": "available"
+   "status": "charging"
   },
   "MTS-00185": {
    "op": "GLPP",
@@ -54508,7 +54499,7 @@
    "npts": 3,
    "kw": 50.0,
    "hub_kw": 143.0,
-   "status": "available"
+   "status": "outOfOrder"
   },
   "PRT-00312": {
    "op": "GLPP",
@@ -54634,7 +54625,7 @@
    "npts": 3,
    "kw": 50.0,
    "hub_kw": 122.0,
-   "status": "available"
+   "status": "charging"
   },
   "PLM-00049": {
    "op": "GLPP",
@@ -54688,7 +54679,7 @@
    "npts": 3,
    "kw": 50.0,
    "hub_kw": 122.0,
-   "status": "available"
+   "status": "unknown"
   },
   "LRA-00156": {
    "op": "GLPP",
@@ -54859,7 +54850,7 @@
    "npts": 3,
    "kw": 50.0,
    "hub_kw": 122.0,
-   "status": "available"
+   "status": "outOfOrder"
   },
   "VVD-00023": {
    "op": "GLPP",
@@ -54931,7 +54922,7 @@
    "npts": 3,
    "kw": 50.0,
    "hub_kw": 122.0,
-   "status": "unknown"
+   "status": "available"
   },
   "GDM-00060": {
    "op": "GLPP",
@@ -54958,7 +54949,7 @@
    "npts": 3,
    "kw": 50.0,
    "hub_kw": 122.0,
-   "status": "outOfOrder"
+   "status": "available"
   },
   "TVR-00028": {
    "op": "EDPC",
@@ -55012,7 +55003,7 @@
    "npts": 3,
    "kw": 50.0,
    "hub_kw": 143.0,
-   "status": "charging"
+   "status": "available"
   },
   "VNF-00054": {
    "op": "GLPP",
@@ -55093,7 +55084,7 @@
    "npts": 3,
    "kw": 50.0,
    "hub_kw": 143.0,
-   "status": "available"
+   "status": "outOfOrder"
   },
   "STC-00019": {
    "op": "GLPP",
@@ -55102,7 +55093,7 @@
    "npts": 3,
    "kw": 50.0,
    "hub_kw": 143.0,
-   "status": "available"
+   "status": "outOfOrder"
   },
   "GMR-00148": {
    "op": "GLPP",
@@ -55147,7 +55138,7 @@
    "npts": 3,
    "kw": 50.0,
    "hub_kw": 143.0,
-   "status": "outOfOrder"
+   "status": "charging"
   },
   "LNH-00038": {
    "op": "GLPP",
@@ -55174,7 +55165,7 @@
    "npts": 3,
    "kw": 50.0,
    "hub_kw": 122.0,
-   "status": "outOfOrder"
+   "status": "available"
   },
   "STB-00098": {
    "op": "GLPP",
@@ -55246,7 +55237,7 @@
    "npts": 3,
    "kw": 50.0,
    "hub_kw": 122.0,
-   "status": "available"
+   "status": "outOfOrder"
   },
   "ACB-00039": {
    "op": "GLPP",
@@ -55273,7 +55264,7 @@
    "npts": 3,
    "kw": 50.0,
    "hub_kw": 122.0,
-   "status": "available"
+   "status": "outOfOrder"
   },
   "SCD-00012": {
    "op": "GLPP",
@@ -55336,7 +55327,7 @@
    "npts": 3,
    "kw": 50.0,
    "hub_kw": 122.0,
-   "status": "available"
+   "status": "unknown"
   },
   "NZR-00038": {
    "op": "GLPP",
@@ -55354,7 +55345,7 @@
    "npts": 3,
    "kw": 50.0,
    "hub_kw": 122.0,
-   "status": "available"
+   "status": "charging"
   },
   "FLG-00026": {
    "op": "GLPP",
@@ -55417,7 +55408,7 @@
    "npts": 3,
    "kw": 50.0,
    "hub_kw": 122.0,
-   "status": "charging"
+   "status": "available"
   },
   "MTS-00187": {
    "op": "GLPP",
@@ -55462,7 +55453,7 @@
    "npts": 3,
    "kw": 50.0,
    "hub_kw": 122.0,
-   "status": "available"
+   "status": "charging"
   },
   "LSA-00011": {
    "op": "GLPP",
@@ -55561,7 +55552,7 @@
    "npts": 3,
    "kw": 50.0,
    "hub_kw": 122.0,
-   "status": "charging"
+   "status": "available"
   },
   "VNG-00200": {
    "op": "GLPP",
@@ -55597,7 +55588,7 @@
    "npts": 3,
    "kw": 50.0,
    "hub_kw": 122.0,
-   "status": "outOfOrder"
+   "status": "available"
   },
   "LMG-00017": {
    "op": "GLPP",
@@ -55678,7 +55669,7 @@
    "npts": 3,
    "kw": 50.0,
    "hub_kw": 122.0,
-   "status": "charging"
+   "status": "available"
   },
   "LLE-00237": {
    "op": "GLPP",
@@ -55687,7 +55678,7 @@
    "npts": 3,
    "kw": 50.0,
    "hub_kw": 122.0,
-   "status": "outOfOrder"
+   "status": "charging"
   },
   "VBP-00019": {
    "op": "GLPP",
@@ -55786,7 +55777,7 @@
    "npts": 3,
    "kw": 50.0,
    "hub_kw": 122.0,
-   "status": "available"
+   "status": "charging"
   },
   "LLE-00238": {
    "op": "GLPP",
@@ -55867,7 +55858,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "NLS-00010": {
    "op": "EDPC",
@@ -56218,7 +56209,7 @@
    "npts": 2,
    "kw": 400.0,
    "hub_kw": 800.0,
-   "status": "available"
+   "status": "charging"
   },
   "SNT-00203": {
    "op": "ENBL",
@@ -56245,7 +56236,7 @@
    "npts": 2,
    "kw": 120.0,
    "hub_kw": 240.0,
-   "status": "available"
+   "status": "charging"
   },
   "AZB-00020": {
    "op": "EDPC",
@@ -56335,7 +56326,7 @@
    "npts": 3,
    "kw": 50.0,
    "hub_kw": 143.0,
-   "status": "outOfOrder"
+   "status": "available"
   },
   "PLM-00051": {
    "op": "GLPP",
@@ -56389,7 +56380,7 @@
    "npts": 3,
    "kw": 50.0,
    "hub_kw": 122.0,
-   "status": "charging"
+   "status": "available"
   },
   "PRG-00017": {
    "op": "GLPP",
@@ -56479,7 +56470,7 @@
    "npts": 2,
    "kw": 60.0,
    "hub_kw": 120.0,
-   "status": "available"
+   "status": "charging"
   },
   "FIG-00041": {
    "op": "PRIO",
@@ -56614,7 +56605,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "PNF-00055": {
    "op": "HELX",
@@ -56641,7 +56632,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "VNG-00206": {
    "op": "IBRD",
@@ -56650,7 +56641,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "OER-00257": {
    "op": "IBRD",
@@ -56686,7 +56677,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "AVR-00095": {
    "op": "IBRD",
@@ -56713,7 +56704,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "LSB-00991": {
    "op": "EDPC",
@@ -56767,7 +56758,7 @@
    "npts": 2,
    "kw": 40.0,
    "hub_kw": 80.0,
-   "status": "charging"
+   "status": "available"
   },
   "PRT-00317": {
    "op": "GLPP",
@@ -56776,7 +56767,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "PRT-00318": {
    "op": "GLPP",
@@ -56812,7 +56803,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "outOfOrder"
+   "status": "available"
   },
   "ALM-00106": {
    "op": "GLPP",
@@ -56830,7 +56821,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "unknown"
   },
   "VLF-00006": {
    "op": "EDPC",
@@ -56938,7 +56929,7 @@
    "npts": 2,
    "kw": 120.0,
    "hub_kw": 240.0,
-   "status": "available"
+   "status": "charging"
   },
   "OHP-00025": {
    "op": "GLPP",
@@ -56983,7 +56974,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "PRD-00040": {
    "op": "GLPP",
@@ -57019,7 +57010,7 @@
    "npts": 2,
    "kw": 50.0,
    "hub_kw": 100.0,
-   "status": "available"
+   "status": "charging"
   },
   "PRT-00319": {
    "op": "EDPC",
@@ -57028,7 +57019,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "PRT-00320": {
    "op": "EDPC",
@@ -57082,7 +57073,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "SNT-00207": {
    "op": "IBRD",
@@ -57109,7 +57100,7 @@
    "npts": 2,
    "kw": 100.0,
    "hub_kw": 200.0,
-   "status": "charging"
+   "status": "available"
   },
   "MOBI-LSB-01376": {
    "op": "GLPP",
@@ -57352,7 +57343,7 @@
    "npts": 2,
    "kw": 90.0,
    "hub_kw": 180.0,
-   "status": "available"
+   "status": "charging"
   },
   "PRT-00323": {
    "op": "HORZ",
@@ -57541,7 +57532,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "CBR-00130": {
    "op": "GLPP",
@@ -57550,7 +57541,7 @@
    "npts": 1,
    "kw": 3.7,
    "hub_kw": 3.7,
-   "status": "charging"
+   "status": "available"
   },
   "CBR-00131": {
    "op": "GLPP",
@@ -57559,7 +57550,7 @@
    "npts": 1,
    "kw": 3.7,
    "hub_kw": 3.7,
-   "status": "available"
+   "status": "charging"
   },
   "GMR-00151": {
    "op": "EDPC",
@@ -57802,7 +57793,7 @@
    "npts": 1,
    "kw": 11.0,
    "hub_kw": 11.0,
-   "status": "charging"
+   "status": "available"
   },
   "PVL-00008": {
    "op": "EDPC",
@@ -57928,7 +57919,7 @@
    "npts": 1,
    "kw": 7.4,
    "hub_kw": 7.4,
-   "status": "available"
+   "status": "unknown"
   },
   "SNT-00213": {
    "op": "CMEL",
@@ -57982,7 +57973,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "OER-00259": {
    "op": "GLPP",
@@ -58009,7 +58000,7 @@
    "npts": 3,
    "kw": 50.0,
    "hub_kw": 122.0,
-   "status": "outOfOrder"
+   "status": "available"
   },
   "LRA-00166": {
    "op": "GLPP",
@@ -58261,7 +58252,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "LSB-01017": {
    "op": "MOBA",
@@ -58504,7 +58495,7 @@
    "npts": 2,
    "kw": 400.0,
    "hub_kw": 800.0,
-   "status": "available"
+   "status": "charging"
   },
   "MAI-00085": {
    "op": "FCTO",
@@ -59053,7 +59044,7 @@
    "npts": 2,
    "kw": 60.0,
    "hub_kw": 120.0,
-   "status": "charging"
+   "status": "available"
   },
   "AGD-00022": {
    "op": "DTEI",
@@ -59413,7 +59404,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "unknown"
+   "status": "available"
   },
   "OVR-00042": {
    "op": "GLPP",
@@ -59440,7 +59431,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "OVR-00045": {
    "op": "GLPP",
@@ -59539,7 +59530,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "unknown"
+   "status": "available"
   },
   "OVR-00056": {
    "op": "GLPP",
@@ -59935,7 +59926,7 @@
    "npts": 2,
    "kw": 100.0,
    "hub_kw": 200.0,
-   "status": "available"
+   "status": "charging"
   },
   "OER-00262": {
    "op": "HELX",
@@ -59962,7 +59953,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "outOfOrder"
+   "status": "available"
   },
   "OER-00264": {
    "op": "HELX",
@@ -60007,7 +59998,7 @@
    "npts": 2,
    "kw": 90.0,
    "hub_kw": 180.0,
-   "status": "charging"
+   "status": "available"
   },
   "VCT-90002": {
    "op": "GLPP",
@@ -60016,7 +60007,7 @@
    "npts": 2,
    "kw": 7.4,
    "hub_kw": 14.8,
-   "status": "available"
+   "status": "unknown"
   },
   "PLM-00060": {
    "op": "EDPC",
@@ -60070,7 +60061,7 @@
    "npts": 2,
    "kw": 60.0,
    "hub_kw": 110.0,
-   "status": "charging"
+   "status": "available"
   },
   "LOU-00012": {
    "op": "ATLA",
@@ -60196,7 +60187,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "PRT-00333": {
    "op": "REPS",
@@ -60250,7 +60241,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "LSB-01020": {
    "op": "GLPP",
@@ -60331,7 +60322,7 @@
    "npts": 3,
    "kw": 90.0,
    "hub_kw": 162.0,
-   "status": "unknown"
+   "status": "outOfOrder"
   },
   "AVR-00096": {
    "op": "EVAE",
@@ -60592,7 +60583,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "CSC-00457": {
    "op": "TRUE",
@@ -60646,7 +60637,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "CSC-00463": {
    "op": "TRUE",
@@ -60682,7 +60673,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "CSC-00467": {
    "op": "TRUE",
@@ -60799,7 +60790,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "CSC-00480": {
    "op": "TRUE",
@@ -60826,7 +60817,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "CSC-00484": {
    "op": "TRUE",
@@ -60880,7 +60871,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "CSC-00490": {
    "op": "TRUE",
@@ -60961,7 +60952,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "CSC-00500": {
    "op": "TRUE",
@@ -61069,7 +61060,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "LSB-01023": {
    "op": "EMEL",
@@ -61114,7 +61105,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "LSB-01027": {
    "op": "FCTO",
@@ -61204,7 +61195,7 @@
    "npts": 1,
    "kw": 11.0,
    "hub_kw": 11.0,
-   "status": "charging"
+   "status": "available"
   },
   "ALM-00122": {
    "op": "EZC3",
@@ -61285,7 +61276,7 @@
    "npts": 1,
    "kw": 11.0,
    "hub_kw": 11.0,
-   "status": "charging"
+   "status": "available"
   },
   "ALM-00131": {
    "op": "EZC3",
@@ -61303,7 +61294,7 @@
    "npts": 1,
    "kw": 11.0,
    "hub_kw": 11.0,
-   "status": "charging"
+   "status": "available"
   },
   "EVR-00065": {
    "op": "MOTA",
@@ -61429,7 +61420,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "unknown"
   },
   "CSC-00510": {
    "op": "HORZ",
@@ -61456,7 +61447,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "VFX-00124": {
    "op": "GLPP",
@@ -61510,7 +61501,7 @@
    "npts": 3,
    "kw": 50.0,
    "hub_kw": 122.0,
-   "status": "available"
+   "status": "charging"
   },
   "PTM-00077": {
    "op": "ATLA",
@@ -61528,7 +61519,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "RMR-00015": {
    "op": "ATLA",
@@ -61627,7 +61618,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "ABF-00160": {
    "op": "EDPC",
@@ -61645,7 +61636,7 @@
    "npts": 3,
    "kw": 100.0,
    "hub_kw": 222.0,
-   "status": "available"
+   "status": "outOfOrder"
   },
   "TMR-00050": {
    "op": "HORZ",
@@ -61780,7 +61771,7 @@
    "npts": 2,
    "kw": 50.0,
    "hub_kw": 100.0,
-   "status": "available"
+   "status": "charging"
   },
   "EPS-00040": {
    "op": "PTER",
@@ -61834,7 +61825,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "LSB-01057": {
    "op": "EDPC",
@@ -62176,7 +62167,7 @@
    "npts": 2,
    "kw": 120.0,
    "hub_kw": 240.0,
-   "status": "charging"
+   "status": "available"
   },
   "VIS-00121": {
    "op": "HORZ",
@@ -62212,7 +62203,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "CTM-00011": {
    "op": "EDPC",
@@ -62302,7 +62293,7 @@
    "npts": 2,
    "kw": 50.0,
    "hub_kw": 100.0,
-   "status": "charging"
+   "status": "available"
   },
   "PRT-00338": {
    "op": "GLPP",
@@ -62392,7 +62383,7 @@
    "npts": 2,
    "kw": 11.0,
    "hub_kw": 22.0,
-   "status": "unknown"
+   "status": "charging"
   },
   "LRS-00153": {
    "op": "HORZ",
@@ -62410,7 +62401,7 @@
    "npts": 2,
    "kw": 160.0,
    "hub_kw": 320.0,
-   "status": "available"
+   "status": "outOfOrder"
   },
   "VNG-00221": {
    "op": "HORZ",
@@ -62419,7 +62410,7 @@
    "npts": 2,
    "kw": 160.0,
    "hub_kw": 320.0,
-   "status": "available"
+   "status": "outOfOrder"
   },
   "VNG-00222": {
    "op": "HORZ",
@@ -62428,7 +62419,7 @@
    "npts": 2,
    "kw": 160.0,
    "hub_kw": 320.0,
-   "status": "available"
+   "status": "outOfOrder"
   },
   "VNG-00223": {
    "op": "HORZ",
@@ -62437,7 +62428,7 @@
    "npts": 2,
    "kw": 160.0,
    "hub_kw": 320.0,
-   "status": "charging"
+   "status": "available"
   },
   "VNG-00224": {
    "op": "HORZ",
@@ -62491,7 +62482,7 @@
    "npts": 2,
    "kw": 100.0,
    "hub_kw": 200.0,
-   "status": "outOfOrder"
+   "status": "available"
   },
   "LSB-01087": {
    "op": "HORZ",
@@ -62734,7 +62725,7 @@
    "npts": 2,
    "kw": 50.0,
    "hub_kw": 100.0,
-   "status": "available"
+   "status": "charging"
   },
   "MMV-00013": {
    "op": "BELM",
@@ -62788,7 +62779,7 @@
    "npts": 2,
    "kw": 120.0,
    "hub_kw": 240.0,
-   "status": "charging"
+   "status": "available"
   },
   "VNG-00228": {
    "op": "HORZ",
@@ -62797,7 +62788,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "CSC-00512": {
    "op": "EDPC",
@@ -62986,7 +62977,7 @@
    "npts": 2,
    "kw": 120.0,
    "hub_kw": 240.0,
-   "status": "available"
+   "status": "charging"
   },
   "CBR-00148": {
    "op": "EDPC",
@@ -63058,7 +63049,7 @@
    "npts": 2,
    "kw": 400.0,
    "hub_kw": 800.0,
-   "status": "available"
+   "status": "charging"
   },
   "PBL-00036": {
    "op": "GLPP",
@@ -63625,7 +63616,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "MLG-00014": {
    "op": "IBRD",
@@ -63895,7 +63886,7 @@
    "npts": 2,
    "kw": 120.0,
    "hub_kw": 240.0,
-   "status": "available"
+   "status": "charging"
   },
   "LGS-00043": {
    "op": "EDPC",
@@ -64030,7 +64021,7 @@
    "npts": 2,
    "kw": 11.0,
    "hub_kw": 22.0,
-   "status": "charging"
+   "status": "available"
   },
   "FLG-00031": {
    "op": "HORZ",
@@ -64111,7 +64102,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "ABF-00170": {
    "op": "EDPC",
@@ -64120,7 +64111,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "VCD-00079": {
    "op": "EDPC",
@@ -64237,7 +64228,7 @@
    "npts": 2,
    "kw": 50.0,
    "hub_kw": 72.0,
-   "status": "charging"
+   "status": "outOfOrder"
   },
   "MAI-00091": {
    "op": "EDPC",
@@ -64291,7 +64282,7 @@
    "npts": 2,
    "kw": 60.0,
    "hub_kw": 120.0,
-   "status": "charging"
+   "status": "available"
   },
   "CSC-00516": {
    "op": "GLPP",
@@ -64327,7 +64318,7 @@
    "npts": 2,
    "kw": 50.0,
    "hub_kw": 100.0,
-   "status": "charging"
+   "status": "available"
   },
   "LSB-01125": {
    "op": "MAKS",
@@ -64372,7 +64363,7 @@
    "npts": 2,
    "kw": 120.0,
    "hub_kw": 240.0,
-   "status": "unknown"
+   "status": "available"
   },
   "FNC-00078": {
    "op": "REPS",
@@ -64399,7 +64390,7 @@
    "npts": 2,
    "kw": 90.0,
    "hub_kw": 180.0,
-   "status": "available"
+   "status": "charging"
   },
   "SRT-00007": {
    "op": "GLPP",
@@ -64417,7 +64408,7 @@
    "npts": 2,
    "kw": 120.0,
    "hub_kw": 170.0,
-   "status": "charging"
+   "status": "available"
   },
   "ABF-00177": {
    "op": "EDPC",
@@ -64543,7 +64534,7 @@
    "npts": 1,
    "kw": 22.0,
    "hub_kw": 22.0,
-   "status": "charging"
+   "status": "available"
   },
   "GMR-00167": {
    "op": "REMO",
@@ -64579,7 +64570,7 @@
    "npts": 2,
    "kw": 100.0,
    "hub_kw": 200.0,
-   "status": "available"
+   "status": "charging"
   },
   "VCT-00069": {
    "op": "CEPS",
@@ -64588,7 +64579,7 @@
    "npts": 2,
    "kw": 300.0,
    "hub_kw": 600.0,
-   "status": "charging"
+   "status": "available"
   },
   "VNF-00065": {
    "op": "REMO",
@@ -64642,7 +64633,7 @@
    "npts": 2,
    "kw": 400.0,
    "hub_kw": 800.0,
-   "status": "available"
+   "status": "charging"
   },
   "CLD-00045": {
    "op": "FCTO",
@@ -65182,7 +65173,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "MTA-00075": {
    "op": "TRUE",
@@ -65191,7 +65182,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "MTA-00076": {
    "op": "TRUE",
@@ -65218,7 +65209,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "MTA-00080": {
    "op": "TRUE",
@@ -65245,7 +65236,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "MTA-00083": {
    "op": "TRUE",
@@ -65263,7 +65254,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "MTA-00085": {
    "op": "TRUE",
@@ -65290,7 +65281,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "unknown"
+   "status": "available"
   },
   "MTA-00088": {
    "op": "TRUE",
@@ -65335,7 +65326,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "MTA-00093": {
    "op": "TRUE",
@@ -65371,7 +65362,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "unknown"
   },
   "MTA-00097": {
    "op": "TRUE",
@@ -65443,7 +65434,7 @@
    "npts": 2,
    "kw": 150.0,
    "hub_kw": 300.0,
-   "status": "available"
+   "status": "charging"
   },
   "AVR-00102": {
    "op": "ENBL",
@@ -65479,7 +65470,7 @@
    "npts": 3,
    "kw": 50.0,
    "hub_kw": 122.0,
-   "status": "available"
+   "status": "unknown"
   },
   "LLE-00254": {
    "op": "EDPC",
@@ -65560,7 +65551,7 @@
    "npts": 1,
    "kw": 22.0,
    "hub_kw": 22.0,
-   "status": "available"
+   "status": "charging"
   },
   "PRT-00348": {
    "op": "HORZ",
@@ -65578,7 +65569,7 @@
    "npts": 1,
    "kw": 22.0,
    "hub_kw": 22.0,
-   "status": "available"
+   "status": "charging"
   },
   "PRT-00350": {
    "op": "HORZ",
@@ -65587,7 +65578,7 @@
    "npts": 1,
    "kw": 22.0,
    "hub_kw": 22.0,
-   "status": "charging"
+   "status": "available"
   },
   "PRT-00351": {
    "op": "HORZ",
@@ -65605,7 +65596,7 @@
    "npts": 1,
    "kw": 22.0,
    "hub_kw": 22.0,
-   "status": "available"
+   "status": "charging"
   },
   "PRT-00353": {
    "op": "HORZ",
@@ -65668,7 +65659,7 @@
    "npts": 3,
    "kw": 50.0,
    "hub_kw": 122.0,
-   "status": "available"
+   "status": "outOfOrder"
   },
   "ACB-00046": {
    "op": "FCTO",
@@ -65812,7 +65803,7 @@
    "npts": 2,
    "kw": 90.0,
    "hub_kw": 180.0,
-   "status": "charging"
+   "status": "available"
   },
   "PRT-00359": {
    "op": "PRIO",
@@ -65884,7 +65875,7 @@
    "npts": 2,
    "kw": 120.0,
    "hub_kw": 240.0,
-   "status": "charging"
+   "status": "available"
   },
   "MGR-00028": {
    "op": "CONM",
@@ -65956,7 +65947,7 @@
    "npts": 2,
    "kw": 150.0,
    "hub_kw": 300.0,
-   "status": "charging"
+   "status": "available"
   },
   "SSB-00030": {
    "op": "ATLA",
@@ -65965,7 +65956,7 @@
    "npts": 2,
    "kw": 60.0,
    "hub_kw": 120.0,
-   "status": "available"
+   "status": "inoperative"
   },
   "SMG-00015": {
    "op": "REPS",
@@ -66235,7 +66226,7 @@
    "npts": 2,
    "kw": 90.0,
    "hub_kw": 180.0,
-   "status": "charging"
+   "status": "available"
   },
   "CTX-00009": {
    "op": "PRIO",
@@ -66280,7 +66271,7 @@
    "npts": 2,
    "kw": 200.0,
    "hub_kw": 400.0,
-   "status": "available"
+   "status": "charging"
   },
   "FAR-00086": {
    "op": "REPS",
@@ -66361,7 +66352,7 @@
    "npts": 3,
    "kw": 100.0,
    "hub_kw": 222.0,
-   "status": "available"
+   "status": "outOfOrder"
   },
   "VND-00016": {
    "op": "EDPC",
@@ -66883,7 +66874,7 @@
    "npts": 2,
    "kw": 120.0,
    "hub_kw": 240.0,
-   "status": "charging"
+   "status": "available"
   },
   "VNG-00232": {
    "op": "EDPC",
@@ -66892,7 +66883,7 @@
    "npts": 3,
    "kw": 60.0,
    "hub_kw": 142.0,
-   "status": "unknown"
+   "status": "outOfOrder"
   },
   "LSB-01180": {
    "op": "EMEL",
@@ -67180,7 +67171,7 @@
    "npts": 2,
    "kw": 120.0,
    "hub_kw": 240.0,
-   "status": "outOfOrder"
+   "status": "available"
   },
   "SNT-00232": {
    "op": "HORZ",
@@ -67333,7 +67324,7 @@
    "npts": 2,
    "kw": 180.0,
    "hub_kw": 360.0,
-   "status": "available"
+   "status": "charging"
   },
   "OER-00283": {
    "op": "GLPP",
@@ -67504,7 +67495,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "CSC-00534": {
    "op": "TRUE",
@@ -67864,7 +67855,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "unknown"
+   "status": "available"
   },
   "FIG-00060": {
    "op": "TRUE",
@@ -67936,7 +67927,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "LSB-01190": {
    "op": "TRUE",
@@ -67945,7 +67936,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "LSB-01192": {
    "op": "TRUE",
@@ -68008,7 +67999,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "LSB-01199": {
    "op": "TRUE",
@@ -68017,7 +68008,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "LSB-01200": {
    "op": "TRUE",
@@ -68044,7 +68035,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "LSB-01203": {
    "op": "TRUE",
@@ -68161,7 +68152,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "LSB-01217": {
    "op": "TRUE",
@@ -68197,7 +68188,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "LSB-01220": {
    "op": "TRUE",
@@ -68206,7 +68197,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "SLV-00040": {
    "op": "FCTO",
@@ -68242,7 +68233,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "SXL-00087": {
    "op": "IBRD",
@@ -68386,7 +68377,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "ALM-00168": {
    "op": "EDPC",
@@ -68404,7 +68395,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "VRL-00054": {
    "op": "HORZ",
@@ -68422,7 +68413,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "VRL-00056": {
    "op": "HORZ",
@@ -68485,7 +68476,7 @@
    "npts": 2,
    "kw": 150.0,
    "hub_kw": 300.0,
-   "status": "charging"
+   "status": "available"
   },
   "CSC-00568": {
    "op": "CEPS",
@@ -68557,7 +68548,7 @@
    "npts": 3,
    "kw": 50.0,
    "hub_kw": 122.0,
-   "status": "unknown"
+   "status": "available"
   },
   "NLS-00011": {
    "op": "FCTO",
@@ -68845,7 +68836,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "BRG-00155": {
    "op": "HORZ",
@@ -68863,7 +68854,7 @@
    "npts": 2,
    "kw": 120.0,
    "hub_kw": 240.0,
-   "status": "available"
+   "status": "charging"
   },
   "VLN-00010": {
    "op": "EDPC",
@@ -68944,7 +68935,7 @@
    "npts": 2,
    "kw": 120.0,
    "hub_kw": 240.0,
-   "status": "available"
+   "status": "outOfOrder"
   },
   "PRT-00361": {
    "op": "ACCI",
@@ -69106,7 +69097,7 @@
    "npts": 1,
    "kw": 22.0,
    "hub_kw": 22.0,
-   "status": "available"
+   "status": "unknown"
   },
   "LSB-01310": {
    "op": "KLCS",
@@ -69160,7 +69151,7 @@
    "npts": 2,
    "kw": 70.0,
    "hub_kw": 140.0,
-   "status": "charging"
+   "status": "available"
   },
   "ABF-00186": {
    "op": "ATLA",
@@ -69376,7 +69367,7 @@
    "npts": 2,
    "kw": 400.0,
    "hub_kw": 800.0,
-   "status": "charging"
+   "status": "available"
   },
   "BRG-00169": {
    "op": "FCTO",
@@ -69421,7 +69412,7 @@
    "npts": 2,
    "kw": 160.0,
    "hub_kw": 320.0,
-   "status": "charging"
+   "status": "available"
   },
   "EVR-00081": {
    "op": "HORZ",
@@ -69565,7 +69556,7 @@
    "npts": 2,
    "kw": 400.0,
    "hub_kw": 800.0,
-   "status": "available"
+   "status": "charging"
   },
   "SXL-00091": {
    "op": "FCTO",
@@ -69637,7 +69628,7 @@
    "npts": 2,
    "kw": 200.0,
    "hub_kw": 400.0,
-   "status": "available"
+   "status": "unknown"
   },
   "ORQ-00010": {
    "op": "FCTO",
@@ -69646,7 +69637,7 @@
    "npts": 2,
    "kw": 50.0,
    "hub_kw": 100.0,
-   "status": "available"
+   "status": "unknown"
   },
   "LSB-01320": {
    "op": "GLPP",
@@ -69835,7 +69826,7 @@
    "npts": 2,
    "kw": 90.0,
    "hub_kw": 180.0,
-   "status": "available"
+   "status": "charging"
   },
   "LSB-01323": {
    "op": "GLPP",
@@ -69844,7 +69835,7 @@
    "npts": 2,
    "kw": 60.0,
    "hub_kw": 120.0,
-   "status": "charging"
+   "status": "outOfOrder"
   },
   "LSB-01324": {
    "op": "GLPP",
@@ -69853,7 +69844,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "VFR-00104": {
    "op": "GLPP",
@@ -70159,7 +70150,7 @@
    "npts": 2,
    "kw": 150.0,
    "hub_kw": 200.0,
-   "status": "available"
+   "status": "unknown"
   },
   "STS-00060": {
    "op": "IBRD",
@@ -70204,7 +70195,7 @@
    "npts": 2,
    "kw": 150.0,
    "hub_kw": 210.0,
-   "status": "charging"
+   "status": "available"
   },
   "CLD-00048": {
    "op": "HORZ",
@@ -70375,7 +70366,7 @@
    "npts": 2,
    "kw": 85.0,
    "hub_kw": 170.0,
-   "status": "available"
+   "status": "charging"
   },
   "LSB-01325": {
    "op": "CEPS",
@@ -70384,7 +70375,7 @@
    "npts": 1,
    "kw": 150.0,
    "hub_kw": 150.0,
-   "status": "charging"
+   "status": "available"
   },
   "VRL-00061": {
    "op": "ACCI",
@@ -70402,7 +70393,7 @@
    "npts": 2,
    "kw": 200.0,
    "hub_kw": 400.0,
-   "status": "available"
+   "status": "charging"
   },
   "VRL-00063": {
    "op": "ACCI",
@@ -70537,7 +70528,7 @@
    "npts": 2,
    "kw": 120.0,
    "hub_kw": 240.0,
-   "status": "available"
+   "status": "charging"
   },
   "VFX-00149": {
    "op": "GLPP",
@@ -70627,7 +70618,7 @@
    "npts": 2,
    "kw": 100.0,
    "hub_kw": 200.0,
-   "status": "available"
+   "status": "outOfOrder"
   },
   "CTM-00014": {
    "op": "GLPP",
@@ -70725,7 +70716,7 @@
    "city": "Figueira da Foz",
    "npts": 2,
    "kw": 120.0,
-   "hub_kw": 170.0,
+   "hub_kw": 240.0,
    "status": "available"
   },
   "STR-00074": {
@@ -70942,7 +70933,7 @@
    "npts": 2,
    "kw": 6.9,
    "hub_kw": 13.8,
-   "status": "charging"
+   "status": "available"
   },
   "ANS-00005": {
    "op": "HORZ",
@@ -71131,7 +71122,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "GDM-00073": {
    "op": "IBRD",
@@ -71203,7 +71194,7 @@
    "npts": 2,
    "kw": 20.7,
    "hub_kw": 41.4,
-   "status": "available"
+   "status": "charging"
   },
   "MTS-00201": {
    "op": "REPS",
@@ -71347,7 +71338,7 @@
    "npts": 2,
    "kw": 3.7,
    "hub_kw": 7.4,
-   "status": "available"
+   "status": "unknown"
   },
   "STS-00062": {
    "op": "REPS",
@@ -71374,7 +71365,7 @@
    "npts": 3,
    "kw": 150.0,
    "hub_kw": 380.0,
-   "status": "available"
+   "status": "outOfOrder"
   },
   "FNC-00083": {
    "op": "HORZ",
@@ -71392,7 +71383,7 @@
    "npts": 3,
    "kw": 100.0,
    "hub_kw": 222.0,
-   "status": "available"
+   "status": "charging"
   },
   "LSB-01333": {
    "op": "EMEL",
@@ -71509,7 +71500,7 @@
    "npts": 2,
    "kw": 120.0,
    "hub_kw": 240.0,
-   "status": "available"
+   "status": "unknown"
   },
   "CHV-00033": {
    "op": "HORZ",
@@ -71725,7 +71716,7 @@
    "npts": 2,
    "kw": 100.0,
    "hub_kw": 200.0,
-   "status": "available"
+   "status": "charging"
   },
   "MTS-00206": {
    "op": "ATLA",
@@ -71779,7 +71770,7 @@
    "npts": 2,
    "kw": 100.0,
    "hub_kw": 200.0,
-   "status": "available"
+   "status": "charging"
   },
   "AMD-00123": {
    "op": "ATLA",
@@ -71797,7 +71788,7 @@
    "npts": 2,
    "kw": 100.0,
    "hub_kw": 200.0,
-   "status": "available"
+   "status": "unknown"
   },
   "VFX-00150": {
    "op": "ATLA",
@@ -71824,7 +71815,7 @@
    "npts": 2,
    "kw": 100.0,
    "hub_kw": 200.0,
-   "status": "available"
+   "status": "charging"
   },
   "SEI-00019": {
    "op": "ATLA",
@@ -71896,7 +71887,7 @@
    "npts": 2,
    "kw": 400.0,
    "hub_kw": 800.0,
-   "status": "charging"
+   "status": "available"
   },
   "GDL-00069": {
    "op": "EDPC",
@@ -71914,7 +71905,7 @@
    "npts": 3,
    "kw": 50.0,
    "hub_kw": 122.0,
-   "status": "outOfOrder"
+   "status": "available"
   },
   "SRT-00008": {
    "op": "GLPP",
@@ -72013,7 +72004,7 @@
    "npts": 2,
    "kw": 400.0,
    "hub_kw": 800.0,
-   "status": "unknown"
+   "status": "available"
   },
   "GDL-00073": {
    "op": "EDPC",
@@ -72049,7 +72040,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "MTA-00102": {
    "op": "IBRD",
@@ -72571,7 +72562,7 @@
    "npts": 1,
    "kw": 22.0,
    "hub_kw": 22.0,
-   "status": "available"
+   "status": "unknown"
   },
   "LOU-00022": {
    "op": "KLCS",
@@ -72616,7 +72607,7 @@
    "npts": 2,
    "kw": 400.0,
    "hub_kw": 800.0,
-   "status": "charging"
+   "status": "available"
   },
   "MTS-00208": {
    "op": "ZUND",
@@ -72634,7 +72625,7 @@
    "npts": 2,
    "kw": 400.0,
    "hub_kw": 800.0,
-   "status": "outOfOrder"
+   "status": "available"
   },
   "MTS-00210": {
    "op": "ZUND",
@@ -72769,7 +72760,7 @@
    "npts": 1,
    "kw": 11.0,
    "hub_kw": 11.0,
-   "status": "available"
+   "status": "charging"
   },
   "OER-00299": {
    "op": "EVIO",
@@ -72796,7 +72787,7 @@
    "npts": 1,
    "kw": 22.0,
    "hub_kw": 22.0,
-   "status": "available"
+   "status": "charging"
   },
   "AGD-00044": {
    "op": "PARI",
@@ -72814,7 +72805,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "STB-00124": {
    "op": "FCTO",
@@ -72904,7 +72895,7 @@
    "npts": 2,
    "kw": 400.0,
    "hub_kw": 800.0,
-   "status": "available"
+   "status": "charging"
   },
   "MIR-00009": {
    "op": "GLPP",
@@ -72913,7 +72904,7 @@
    "npts": 3,
    "kw": 50.0,
    "hub_kw": 122.0,
-   "status": "available"
+   "status": "charging"
   },
   "CPV-00007": {
    "op": "KLCS",
@@ -73264,7 +73255,7 @@
    "npts": 2,
    "kw": 100.0,
    "hub_kw": 200.0,
-   "status": "available"
+   "status": "unknown"
   },
   "ACN-00016": {
    "op": "ECOI",
@@ -73561,7 +73552,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "unknown"
+   "status": "available"
   },
   "MTS-00211": {
    "op": "EVIO",
@@ -73630,9 +73621,9 @@
    "op": "TSLA",
    "opname": "Tesla",
    "city": "Almancil",
-   "npts": 24,
+   "npts": 16,
    "kw": 250.0,
-   "hub_kw": 6000.0,
+   "hub_kw": 4000.0,
    "status": "available"
   },
   "eddf8de0-ea2f-4d4a-90d4-f0e5639662a1": {
@@ -73696,7 +73687,7 @@
    "npts": 20,
    "kw": 250.0,
    "hub_kw": 5000.0,
-   "status": "charging"
+   "status": "available"
   },
   "fff4f058-9075-4833-96f5-e021cb263344": {
    "op": "TSLA",
@@ -73732,7 +73723,7 @@
    "npts": 6,
    "kw": 22.0,
    "hub_kw": 132.0,
-   "status": "charging"
+   "status": "available"
   },
   "VNG-00264": {
    "op": "EPKS",
@@ -73993,7 +73984,16 @@
    "npts": 2,
    "kw": 100.0,
    "hub_kw": 200.0,
-   "status": "charging"
+   "status": "available"
+  },
+  "AMD-00124": {
+   "op": "GLPP",
+   "opname": "Galp Power OPC",
+   "city": "Amadora",
+   "npts": 2,
+   "kw": 90.0,
+   "hub_kw": 180.0,
+   "status": "outOfOrder"
   },
   "VIS-00137": {
    "op": "GLPP",
@@ -74038,7 +74038,16 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
+  },
+  "SNT-00241": {
+   "op": "GLPP",
+   "opname": "Galp Power OPC",
+   "city": "Sintra",
+   "npts": 2,
+   "kw": 90.0,
+   "hub_kw": 180.0,
+   "status": "unknown"
   },
   "MTR-00013": {
    "op": "HELX",
@@ -74173,7 +74182,7 @@
    "npts": 3,
    "kw": 100.0,
    "hub_kw": 222.0,
-   "status": "charging"
+   "status": "available"
   },
   "TMR-00051": {
    "op": "ATLA",
@@ -74434,7 +74443,7 @@
    "npts": 2,
    "kw": 50.0,
    "hub_kw": 100.0,
-   "status": "available"
+   "status": "inoperative"
   },
   "0001PR0010": {
    "op": "",
@@ -74443,7 +74452,7 @@
    "npts": 2,
    "kw": 50.0,
    "hub_kw": 100.0,
-   "status": "inoperative"
+   "status": "unknown"
   },
   "0001PR0013": {
    "op": "CONT",
@@ -74515,7 +74524,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "0002PL0007": {
    "op": "CONT",
@@ -74542,7 +74551,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "0002PL0012": {
    "op": "CONT",
@@ -74560,7 +74569,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "0002PL0014": {
    "op": "CONT",
@@ -74578,7 +74587,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "0002PL0016": {
    "op": "CONT",
@@ -74596,7 +74605,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "0002PL0018": {
    "op": "CONT",
@@ -74605,7 +74614,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "blocked"
+   "status": "available"
   },
   "0002PL0019": {
    "op": "CONT",
@@ -74668,7 +74677,7 @@
    "npts": 2,
    "kw": 50.0,
    "hub_kw": 100.0,
-   "status": "available"
+   "status": "charging"
   },
   "0002PR0023": {
    "op": "CONT",
@@ -74677,7 +74686,7 @@
    "npts": 2,
    "kw": 50.0,
    "hub_kw": 100.0,
-   "status": "charging"
+   "status": "available"
   },
   "0002PR0024": {
    "op": "CONT",
@@ -74686,7 +74695,7 @@
    "npts": 2,
    "kw": 50.0,
    "hub_kw": 100.0,
-   "status": "charging"
+   "status": "available"
   },
   "0002PR0025": {
    "op": "CONT",
@@ -74695,7 +74704,7 @@
    "npts": 2,
    "kw": 50.0,
    "hub_kw": 100.0,
-   "status": "charging"
+   "status": "available"
   },
   "0002PR0026": {
    "op": "CONT",
@@ -74713,7 +74722,7 @@
    "npts": 2,
    "kw": 50.0,
    "hub_kw": 100.0,
-   "status": "charging"
+   "status": "available"
   },
   "0002PR0028": {
    "op": "CONT",
@@ -74722,7 +74731,7 @@
    "npts": 2,
    "kw": 350.0,
    "hub_kw": 700.0,
-   "status": "charging"
+   "status": "available"
   },
   "0002PR0029": {
    "op": "CONT",
@@ -74740,7 +74749,7 @@
    "npts": 2,
    "kw": 350.0,
    "hub_kw": 700.0,
-   "status": "charging"
+   "status": "available"
   },
   "0002PR0031": {
    "op": "CONT",
@@ -74758,7 +74767,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "0004PR0004": {
    "op": "CONT",
@@ -74767,7 +74776,7 @@
    "npts": 2,
    "kw": 120.0,
    "hub_kw": 240.0,
-   "status": "unknown"
+   "status": "available"
   },
   "0004PR0005": {
    "op": "CONT",
@@ -74776,7 +74785,7 @@
    "npts": 2,
    "kw": 120.0,
    "hub_kw": 240.0,
-   "status": "unknown"
+   "status": "available"
   },
   "0107PR0005": {
    "op": "CONT",
@@ -74812,7 +74821,7 @@
    "npts": 2,
    "kw": 240.0,
    "hub_kw": 480.0,
-   "status": "available"
+   "status": "charging"
   },
   "0203PR0007": {
    "op": "CONT",
@@ -74821,7 +74830,7 @@
    "npts": 2,
    "kw": 240.0,
    "hub_kw": 480.0,
-   "status": "available"
+   "status": "unknown"
   },
   "0204PL0001": {
    "op": "CONT",
@@ -74839,7 +74848,7 @@
    "npts": 3,
    "kw": 120.0,
    "hub_kw": 290.0,
-   "status": "available"
+   "status": "charging"
   },
   "0204PR0004": {
    "op": "CONT",
@@ -74857,7 +74866,7 @@
    "npts": 2,
    "kw": 120.0,
    "hub_kw": 240.0,
-   "status": "unknown"
+   "status": "available"
   },
   "0207PL0001": {
    "op": "",
@@ -74893,7 +74902,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "0209PL0002": {
    "op": "",
@@ -74920,7 +74929,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "0210PL0002": {
    "op": "",
@@ -74929,7 +74938,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "0210PR0003": {
    "op": "",
@@ -75010,7 +75019,7 @@
    "npts": 2,
    "kw": 240.0,
    "hub_kw": 480.0,
-   "status": "charging"
+   "status": "available"
   },
   "0215PR0002": {
    "op": "CONT",
@@ -75028,7 +75037,7 @@
    "npts": 2,
    "kw": 50.0,
    "hub_kw": 100.0,
-   "status": "inoperative"
+   "status": "outOfOrder"
   },
   "0215PR0004": {
    "op": "CONT",
@@ -75055,7 +75064,7 @@
    "npts": 2,
    "kw": 50.0,
    "hub_kw": 100.0,
-   "status": "charging"
+   "status": "available"
   },
   "0230PL0001": {
    "op": "CONT",
@@ -75091,7 +75100,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "outOfOrder"
   },
   "0232PL0002": {
    "op": "CONT",
@@ -75100,7 +75109,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "0232PR0003": {
    "op": "CONT",
@@ -75109,7 +75118,7 @@
    "npts": 2,
    "kw": 120.0,
    "hub_kw": 240.0,
-   "status": "available"
+   "status": "charging"
   },
   "0234PL0001": {
    "op": "CONT",
@@ -75118,7 +75127,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "blocked"
+   "status": "available"
   },
   "0234PR0002": {
    "op": "CONT",
@@ -75136,7 +75145,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "0235PR0002": {
    "op": "CONT",
@@ -75145,7 +75154,7 @@
    "npts": 3,
    "kw": 120.0,
    "hub_kw": 290.0,
-   "status": "charging"
+   "status": "available"
   },
   "0240PL0001": {
    "op": "CONT",
@@ -75172,7 +75181,7 @@
    "npts": 2,
    "kw": 50.0,
    "hub_kw": 100.0,
-   "status": "available"
+   "status": "inoperative"
   },
   "0242PL0001": {
    "op": "CONT",
@@ -75199,7 +75208,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "0244PR0002": {
    "op": "CONT",
@@ -75208,7 +75217,7 @@
    "npts": 3,
    "kw": 120.0,
    "hub_kw": 290.0,
-   "status": "charging"
+   "status": "available"
   },
   "0246PL0001": {
    "op": "CONT",
@@ -75217,7 +75226,7 @@
    "npts": 2,
    "kw": 7.0,
    "hub_kw": 14.0,
-   "status": "charging"
+   "status": "available"
   },
   "0246PL0002": {
    "op": "CONT",
@@ -75235,7 +75244,7 @@
    "npts": 2,
    "kw": 50.0,
    "hub_kw": 100.0,
-   "status": "charging"
+   "status": "available"
   },
   "0246PR0004": {
    "op": "CONT",
@@ -75262,7 +75271,7 @@
    "npts": 2,
    "kw": 50.0,
    "hub_kw": 100.0,
-   "status": "available"
+   "status": "charging"
   },
   "0247PR0003": {
    "op": "CONT",
@@ -75271,7 +75280,7 @@
    "npts": 3,
    "kw": 120.0,
    "hub_kw": 290.0,
-   "status": "available"
+   "status": "charging"
   },
   "0250PL0001": {
    "op": "CONT",
@@ -75280,7 +75289,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "0250PR0002": {
    "op": "CONT",
@@ -75361,7 +75370,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "0261PR0002": {
    "op": "CONT",
@@ -75442,7 +75451,7 @@
    "npts": 2,
    "kw": 50.0,
    "hub_kw": 100.0,
-   "status": "charging"
+   "status": "available"
   },
   "0277PL0001": {
    "op": "CONT",
@@ -75496,7 +75505,7 @@
    "npts": 2,
    "kw": 120.0,
    "hub_kw": 240.0,
-   "status": "charging"
+   "status": "available"
   },
   "0284PL0001": {
    "op": "CONT",
@@ -75532,7 +75541,7 @@
    "npts": 3,
    "kw": 120.0,
    "hub_kw": 290.0,
-   "status": "available"
+   "status": "charging"
   },
   "0291PL0001": {
    "op": "CONT",
@@ -75586,7 +75595,7 @@
    "npts": 2,
    "kw": 120.0,
    "hub_kw": 240.0,
-   "status": "available"
+   "status": "charging"
   },
   "0294PR0003": {
    "op": "CONT",
@@ -75649,7 +75658,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "0299PR0002": {
    "op": "CONT",
@@ -75685,7 +75694,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "0323PR0002": {
    "op": "CONT",
@@ -75703,7 +75712,7 @@
    "npts": 2,
    "kw": 7.0,
    "hub_kw": 14.0,
-   "status": "available"
+   "status": "charging"
   },
   "0331PR0002": {
    "op": "CONT",
@@ -75748,7 +75757,7 @@
    "npts": 2,
    "kw": 50.0,
    "hub_kw": 100.0,
-   "status": "available"
+   "status": "charging"
   },
   "0333PR0004": {
    "op": "CONT",
@@ -75775,7 +75784,7 @@
    "npts": 2,
    "kw": 120.0,
    "hub_kw": 240.0,
-   "status": "available"
+   "status": "charging"
   },
   "0375PR0002": {
    "op": "CONT",
@@ -75784,7 +75793,7 @@
    "npts": 3,
    "kw": 120.0,
    "hub_kw": 290.0,
-   "status": "unknown"
+   "status": "available"
   },
   "0379PL0001": {
    "op": "CONT",
@@ -75802,7 +75811,7 @@
    "npts": 3,
    "kw": 120.0,
    "hub_kw": 290.0,
-   "status": "available"
+   "status": "charging"
   },
   "0379PR0003": {
    "op": "CONT",
@@ -75847,7 +75856,7 @@
    "npts": 2,
    "kw": 7.0,
    "hub_kw": 14.0,
-   "status": "charging"
+   "status": "available"
   },
   "0439PR0002": {
    "op": "CONT",
@@ -75892,7 +75901,7 @@
    "npts": 2,
    "kw": 240.0,
    "hub_kw": 480.0,
-   "status": "charging"
+   "status": "available"
   },
   "0446PL0001": {
    "op": "",
@@ -75928,7 +75937,7 @@
    "npts": 2,
    "kw": 50.0,
    "hub_kw": 100.0,
-   "status": "available"
+   "status": "charging"
   },
   "0459PR0002": {
    "op": "CONT",
@@ -75937,7 +75946,7 @@
    "npts": 2,
    "kw": 50.0,
    "hub_kw": 100.0,
-   "status": "available"
+   "status": "charging"
   },
   "0459PR0003": {
    "op": "CONT",
@@ -75946,7 +75955,7 @@
    "npts": 3,
    "kw": 120.0,
    "hub_kw": 290.0,
-   "status": "available"
+   "status": "charging"
   },
   "0459PR0004": {
    "op": "CONT",
@@ -76009,7 +76018,7 @@
    "npts": 2,
    "kw": 120.0,
    "hub_kw": 240.0,
-   "status": "available"
+   "status": "charging"
   },
   "0460PR0005": {
    "op": "CONT",
@@ -76036,7 +76045,7 @@
    "npts": 2,
    "kw": 240.0,
    "hub_kw": 480.0,
-   "status": "charging"
+   "status": "available"
   },
   "0464PR0001": {
    "op": "CONT",
@@ -76045,7 +76054,7 @@
    "npts": 2,
    "kw": 50.0,
    "hub_kw": 100.0,
-   "status": "charging"
+   "status": "available"
   },
   "0464PR0002": {
    "op": "CONT",
@@ -76063,7 +76072,7 @@
    "npts": 2,
    "kw": 120.0,
    "hub_kw": 240.0,
-   "status": "charging"
+   "status": "available"
   },
   "0464PR0004": {
    "op": "CONT",
@@ -76072,7 +76081,7 @@
    "npts": 2,
    "kw": 120.0,
    "hub_kw": 240.0,
-   "status": "charging"
+   "status": "available"
   },
   "0464PR0005": {
    "op": "CONT",
@@ -76081,7 +76090,7 @@
    "npts": 2,
    "kw": 240.0,
    "hub_kw": 480.0,
-   "status": "available"
+   "status": "charging"
   },
   "0464PR0006": {
    "op": "CONT",
@@ -76180,7 +76189,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "0927PL0002": {
    "op": "CONT",
@@ -76198,7 +76207,7 @@
    "npts": 2,
    "kw": 120.0,
    "hub_kw": 240.0,
-   "status": "charging"
+   "status": "available"
   },
   "0927PR0004": {
    "op": "CONT",
@@ -76216,7 +76225,7 @@
    "npts": 3,
    "kw": 120.0,
    "hub_kw": 290.0,
-   "status": "charging"
+   "status": "available"
   },
   "0940PR0003": {
    "op": "CONT",
@@ -76225,7 +76234,7 @@
    "npts": 2,
    "kw": 50.0,
    "hub_kw": 100.0,
-   "status": "available"
+   "status": "charging"
   },
   "0940PR0004": {
    "op": "CONT",
@@ -76270,7 +76279,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "1000PR0002": {
    "op": "CONT",
@@ -76279,7 +76288,7 @@
    "npts": 2,
    "kw": 120.0,
    "hub_kw": 240.0,
-   "status": "available"
+   "status": "charging"
   },
   "1004PL0001": {
    "op": "CONT",
@@ -76342,7 +76351,7 @@
    "npts": 3,
    "kw": 120.0,
    "hub_kw": 290.0,
-   "status": "charging"
+   "status": "available"
   },
   "1055PL0001": {
    "op": "CONT",
@@ -76351,7 +76360,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "1055PR0002": {
    "op": "CONT",
@@ -76423,7 +76432,7 @@
    "npts": 3,
    "kw": 120.0,
    "hub_kw": 290.0,
-   "status": "available"
+   "status": "charging"
   },
   "1352PR0003": {
    "op": "CONT",
@@ -76441,7 +76450,7 @@
    "npts": 2,
    "kw": 7.0,
    "hub_kw": 14.0,
-   "status": "charging"
+   "status": "available"
   },
   "1391PR0003": {
    "op": "CONT",
@@ -76477,7 +76486,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "1498PR0002": {
    "op": "CONT",
@@ -76522,7 +76531,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "outOfOrder"
+   "status": "unknown"
   },
   "1504PR0002": {
    "op": "CONT",
@@ -76648,7 +76657,7 @@
    "npts": 1,
    "kw": 40.0,
    "hub_kw": 40.0,
-   "status": "available"
+   "status": "charging"
   },
   "1704PR0004": {
    "op": "CONT",
@@ -76657,7 +76666,7 @@
    "npts": 2,
    "kw": 120.0,
    "hub_kw": 240.0,
-   "status": "available"
+   "status": "charging"
   },
   "1715PL0001": {
    "op": "",
@@ -76675,7 +76684,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "blocked"
   },
   "1902PR0002": {
    "op": "CONT",
@@ -76684,7 +76693,7 @@
    "npts": 3,
    "kw": 120.0,
    "hub_kw": 290.0,
-   "status": "inoperative"
+   "status": "available"
   },
   "1905PL0001": {
    "op": "CONT",
@@ -76711,7 +76720,7 @@
    "npts": 2,
    "kw": 7.0,
    "hub_kw": 14.0,
-   "status": "charging"
+   "status": "available"
   },
   "1910PL0001": {
    "op": "CONT",
@@ -76738,7 +76747,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "1943PL0001": {
    "op": "CONT",
@@ -76747,7 +76756,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "1943PR0002": {
    "op": "CONT",
@@ -76756,7 +76765,7 @@
    "npts": 3,
    "kw": 120.0,
    "hub_kw": 290.0,
-   "status": "inoperative"
+   "status": "available"
   },
   "1978PL0001": {
    "op": "",
@@ -76765,7 +76774,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "unknown"
   },
   "1978PL0002": {
    "op": "",
@@ -76774,7 +76783,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "unknown"
   },
   "1978PR0003": {
    "op": "",
@@ -76783,7 +76792,7 @@
    "npts": 2,
    "kw": 50.0,
    "hub_kw": 100.0,
-   "status": "available"
+   "status": "unknown"
   },
   "1981PL0001": {
    "op": "CONT",
@@ -76801,7 +76810,7 @@
    "npts": 2,
    "kw": 120.0,
    "hub_kw": 240.0,
-   "status": "charging"
+   "status": "available"
   },
   "1984PL0001": {
    "op": "CONT",
@@ -76909,7 +76918,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "2393PL0001": {
    "op": "CONT",
@@ -77053,7 +77062,7 @@
    "npts": 2,
    "kw": 50.0,
    "hub_kw": 100.0,
-   "status": "available"
+   "status": "charging"
   },
   "2864PR0008": {
    "op": "CONT",
@@ -77107,7 +77116,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "3386PL0001": {
    "op": "CONT",
@@ -77134,7 +77143,7 @@
    "npts": 2,
    "kw": 120.0,
    "hub_kw": 240.0,
-   "status": "available"
+   "status": "charging"
   },
   "3466PL0001": {
    "op": "",
@@ -77170,7 +77179,7 @@
    "npts": 2,
    "kw": 7.0,
    "hub_kw": 14.0,
-   "status": "available"
+   "status": "charging"
   },
   "3589PR0002": {
    "op": "CONT",
@@ -77179,7 +77188,7 @@
    "npts": 2,
    "kw": 50.0,
    "hub_kw": 100.0,
-   "status": "charging"
+   "status": "available"
   },
   "3589PR0003": {
    "op": "CONT",
@@ -77233,7 +77242,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "3603PR0002": {
    "op": "CONT",
@@ -77323,7 +77332,7 @@
    "npts": 3,
    "kw": 120.0,
    "hub_kw": 290.0,
-   "status": "available"
+   "status": "charging"
   },
   "3886PL0001": {
    "op": "CONT",
@@ -77332,7 +77341,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "3886PR0002": {
    "op": "CONT",
@@ -77341,7 +77350,7 @@
    "npts": 2,
    "kw": 120.0,
    "hub_kw": 240.0,
-   "status": "charging"
+   "status": "available"
   },
   "4246PL0001": {
    "op": "CONT",
@@ -77368,7 +77377,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "outOfOrder"
+   "status": "available"
   },
   "4290PR0002": {
    "op": "CONT",
@@ -77377,7 +77386,7 @@
    "npts": 2,
    "kw": 50.0,
    "hub_kw": 100.0,
-   "status": "available"
+   "status": "charging"
   },
   "4290PR0003": {
    "op": "CONT",
@@ -77386,7 +77395,7 @@
    "npts": 3,
    "kw": 120.0,
    "hub_kw": 290.0,
-   "status": "available"
+   "status": "charging"
   },
   "4321PL0001": {
    "op": "CONT",
@@ -77422,7 +77431,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "4552PR0002": {
    "op": "CONT",
@@ -77449,7 +77458,7 @@
    "npts": 2,
    "kw": 7.0,
    "hub_kw": 14.0,
-   "status": "charging"
+   "status": "available"
   },
   "4578PR0002": {
    "op": "CONT",
@@ -77458,7 +77467,7 @@
    "npts": 2,
    "kw": 50.0,
    "hub_kw": 100.0,
-   "status": "blocked"
+   "status": "available"
   },
   "4578PR0003": {
    "op": "CONT",
@@ -77467,7 +77476,7 @@
    "npts": 2,
    "kw": 120.0,
    "hub_kw": 240.0,
-   "status": "charging"
+   "status": "available"
   },
   "4828PL0001": {
    "op": "CONT",
@@ -77476,7 +77485,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "4828PL0004": {
    "op": "CONT",
@@ -77503,7 +77512,7 @@
    "npts": 2,
    "kw": 120.0,
    "hub_kw": 240.0,
-   "status": "available"
+   "status": "charging"
   },
   "4961PL0001": {
    "op": "CONT",
@@ -77521,7 +77530,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "4961PR0003": {
    "op": "CONT",
@@ -77530,7 +77539,7 @@
    "npts": 3,
    "kw": 120.0,
    "hub_kw": 290.0,
-   "status": "available"
+   "status": "charging"
   },
   "5152PL0001": {
    "op": "",
@@ -77539,7 +77548,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "5152PR0003": {
    "op": "CONT",
@@ -77557,7 +77566,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "outOfOrder"
+   "status": "charging"
   },
   "5739PL0001": {
    "op": "CONT",
@@ -77566,7 +77575,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "5739PR0002": {
    "op": "CONT",
@@ -77611,7 +77620,7 @@
    "npts": 2,
    "kw": 50.0,
    "hub_kw": 100.0,
-   "status": "charging"
+   "status": "available"
   },
   "5750PR0002": {
    "op": "CONT",
@@ -77620,7 +77629,7 @@
    "npts": 2,
    "kw": 50.0,
    "hub_kw": 100.0,
-   "status": "charging"
+   "status": "available"
   },
   "5755PR0002": {
    "op": "CONT",
@@ -77674,7 +77683,7 @@
    "npts": 2,
    "kw": 120.0,
    "hub_kw": 240.0,
-   "status": "charging"
+   "status": "available"
   },
   "6173PL0001": {
    "op": "",
@@ -77683,7 +77692,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "6173PR0002": {
    "op": "CONT",
@@ -77710,7 +77719,7 @@
    "npts": 3,
    "kw": 120.0,
    "hub_kw": 290.0,
-   "status": "available"
+   "status": "charging"
   },
   "6175PL0001": {
    "op": "",
@@ -77755,7 +77764,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "6891PR0002": {
    "op": "CONT",
@@ -77800,7 +77809,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "blocked"
   },
   "7320PL0001": {
    "op": "CONT",
@@ -77863,7 +77872,7 @@
    "npts": 2,
    "kw": 50.0,
    "hub_kw": 100.0,
-   "status": "charging"
+   "status": "available"
   },
   "7679PL0001": {
    "op": "CONT",
@@ -77872,7 +77881,7 @@
    "npts": 2,
    "kw": 7.0,
    "hub_kw": 14.0,
-   "status": "available"
+   "status": "charging"
   },
   "7679PR0002": {
    "op": "CONT",
@@ -77881,7 +77890,7 @@
    "npts": 2,
    "kw": 50.0,
    "hub_kw": 100.0,
-   "status": "blocked"
+   "status": "available"
   },
   "7679PR0003": {
    "op": "CONT",
@@ -77908,7 +77917,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "7695PR0003": {
    "op": "CONT",
@@ -77953,7 +77962,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "7804PL0001": {
    "op": "CONT",
@@ -78025,7 +78034,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "blocked"
   },
   "8467PR0002": {
    "op": "CONT",
@@ -78043,7 +78052,7 @@
    "npts": 2,
    "kw": 120.0,
    "hub_kw": 240.0,
-   "status": "available"
+   "status": "charging"
   },
   "8736PR0002": {
    "op": "CONT",
@@ -78061,7 +78070,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "8765PR0002": {
    "op": "CONT",
@@ -78124,7 +78133,7 @@
    "npts": 2,
    "kw": 50.0,
    "hub_kw": 100.0,
-   "status": "available"
+   "status": "charging"
   },
   "9586PR0003": {
    "op": "CONT",
@@ -78133,7 +78142,7 @@
    "npts": 2,
    "kw": 120.0,
    "hub_kw": 240.0,
-   "status": "available"
+   "status": "charging"
   },
   "9622PL0001": {
    "op": "CONT",
@@ -78142,7 +78151,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "9622PR0002": {
    "op": "CONT",
@@ -78340,7 +78349,7 @@
    "npts": 2,
    "kw": 120.0,
    "hub_kw": 240.0,
-   "status": "available"
+   "status": "charging"
   },
   "A0116PL0001": {
    "op": "CONT",
@@ -78520,7 +78529,7 @@
    "npts": 2,
    "kw": 7.0,
    "hub_kw": 14.0,
-   "status": "charging"
+   "status": "available"
   },
   "E071PL0018": {
    "op": "CONT",
@@ -78538,7 +78547,7 @@
    "npts": 2,
    "kw": 7.0,
    "hub_kw": 14.0,
-   "status": "available"
+   "status": "charging"
   },
   "E071PL0020": {
    "op": "CONT",
@@ -78781,7 +78790,7 @@
    "npts": 2,
    "kw": 120.0,
    "hub_kw": 240.0,
-   "status": "outOfOrder"
+   "status": "available"
   },
   "ABF-00206": {
    "op": "EDPC",
@@ -78826,7 +78835,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "0278PR0002": {
    "op": "",
@@ -78862,7 +78871,7 @@
    "npts": 2,
    "kw": 7.0,
    "hub_kw": 14.0,
-   "status": "charging"
+   "status": "available"
   },
   "0289PR0002": {
    "op": "",
@@ -78889,7 +78898,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "unknown"
+   "status": "available"
   },
   "0461PR0001": {
    "op": "",
@@ -78898,7 +78907,7 @@
    "npts": 2,
    "kw": 50.0,
    "hub_kw": 100.0,
-   "status": "available"
+   "status": "charging"
   },
   "0461PR0002": {
    "op": "",
@@ -78934,7 +78943,7 @@
    "npts": 2,
    "kw": 240.0,
    "hub_kw": 480.0,
-   "status": "charging"
+   "status": "available"
   },
   "0842PL0001": {
    "op": "",
@@ -79015,7 +79024,7 @@
    "npts": 2,
    "kw": 50.0,
    "hub_kw": 100.0,
-   "status": "available"
+   "status": "charging"
   },
   "1393PR0003": {
    "op": "",
@@ -79060,7 +79069,7 @@
    "npts": 2,
    "kw": 50.0,
    "hub_kw": 100.0,
-   "status": "available"
+   "status": "charging"
   },
   "2403PL0001": {
    "op": "",
@@ -79078,7 +79087,7 @@
    "npts": 3,
    "kw": 120.0,
    "hub_kw": 290.0,
-   "status": "available"
+   "status": "charging"
   },
   "3212PL0001": {
    "op": "",
@@ -79105,7 +79114,7 @@
    "npts": 2,
    "kw": 7.0,
    "hub_kw": 14.0,
-   "status": "available"
+   "status": "charging"
   },
   "5767PR0002": {
    "op": "",
@@ -79132,7 +79141,7 @@
    "npts": 3,
    "kw": 120.0,
    "hub_kw": 290.0,
-   "status": "available"
+   "status": "charging"
   },
   "LSB-01484": {
    "op": "EPKS",
@@ -79168,7 +79177,7 @@
    "npts": 18,
    "kw": 22.0,
    "hub_kw": 396.0,
-   "status": "outOfOrder"
+   "status": "available"
   },
   "LSB-01488": {
    "op": "EPKS",
@@ -79258,7 +79267,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "unknown"
+   "status": "available"
   },
   "0218PL0001": {
    "op": "",
@@ -79276,7 +79285,7 @@
    "npts": 2,
    "kw": 50.0,
    "hub_kw": 100.0,
-   "status": "charging"
+   "status": "available"
   },
   "0239PL0001": {
    "op": "",
@@ -79285,7 +79294,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "0239PR0003": {
    "op": "",
@@ -79312,7 +79321,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "1484PL0001": {
    "op": "",
@@ -79321,7 +79330,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "1498PL0001": {
    "op": "",
@@ -79339,7 +79348,7 @@
    "npts": 2,
    "kw": 7.0,
    "hub_kw": 14.0,
-   "status": "available"
+   "status": "charging"
   },
   "1501PR0002": {
    "op": "",
@@ -79357,7 +79366,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "2143PR0002": {
    "op": "",
@@ -79375,7 +79384,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "available"
+   "status": "charging"
   },
   "2608PL0001": {
    "op": "",
@@ -79384,7 +79393,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "charging"
+   "status": "available"
   },
   "3778PL0001": {
    "op": "",
@@ -79449,24 +79458,6 @@
    "hub_kw": 290.0,
    "status": "available"
   },
-  "VIS-00138": {
-   "op": "FCTO",
-   "opname": "CHARGING TOGETHER, UNIPESSOAL LDA",
-   "city": "Viseu",
-   "npts": 2,
-   "kw": 50.0,
-   "hub_kw": 100.0,
-   "status": "unknown"
-  },
-  "VIS-00139": {
-   "op": "FCTO",
-   "opname": "CHARGING TOGETHER, UNIPESSOAL LDA",
-   "city": "Viseu",
-   "npts": 2,
-   "kw": 200.0,
-   "hub_kw": 400.0,
-   "status": "unknown"
-  },
   "CRS-00007": {
    "op": "FCTO",
    "opname": "Iberdrola | bp pulse",
@@ -79474,7 +79465,7 @@
    "npts": 2,
    "kw": 50.0,
    "hub_kw": 100.0,
-   "status": "outOfOrder"
+   "status": "available"
   },
   "CRS-00008": {
    "op": "FCTO",
@@ -79492,7 +79483,7 @@
    "npts": 2,
    "kw": 22.0,
    "hub_kw": 44.0,
-   "status": "unknown"
+   "status": "available"
   },
   "BJA-00072": {
    "op": "TRUE",
@@ -79566,15 +79557,6 @@
    "hub_kw": 800.0,
    "status": "available"
   },
-  "PLM-00089": {
-   "op": "FCTO",
-   "opname": "Iberdrola | bp pulse",
-   "city": "Palmela",
-   "npts": 2,
-   "kw": 400.0,
-   "hub_kw": 800.0,
-   "status": "unknown"
-  },
   "TVR-00037": {
    "op": "GLPP",
    "opname": "Galp Power OPC",
@@ -79591,6 +79573,15 @@
    "npts": 2,
    "kw": 90.0,
    "hub_kw": 180.0,
+   "status": "available"
+  },
+  "MOBI-LSB-02327": {
+   "op": "MOBI",
+   "opname": "MOBIE",
+   "city": "Lisboa",
+   "npts": 1,
+   "kw": 7.4,
+   "hub_kw": 7.4,
    "status": "available"
   },
   "TVD-00112": {
@@ -79690,7 +79681,7 @@
    "npts": 2,
    "kw": 50.0,
    "hub_kw": 100.0,
-   "status": "unknown"
+   "status": "available"
   },
   "0004PR0007": {
    "op": "",
@@ -79699,7 +79690,7 @@
    "npts": 2,
    "kw": 50.0,
    "hub_kw": 100.0,
-   "status": "unknown"
+   "status": "available"
   },
   "0004PR0008": {
    "op": "",
@@ -79708,7 +79699,7 @@
    "npts": 2,
    "kw": 50.0,
    "hub_kw": 100.0,
-   "status": "unknown"
+   "status": "available"
   },
   "0004PR0009": {
    "op": "",
@@ -79717,7 +79708,7 @@
    "npts": 2,
    "kw": 50.0,
    "hub_kw": 100.0,
-   "status": "unknown"
+   "status": "available"
   },
   "0004PR0010": {
    "op": "",
@@ -79726,7 +79717,7 @@
    "npts": 2,
    "kw": 50.0,
    "hub_kw": 100.0,
-   "status": "unknown"
+   "status": "available"
   },
   "CVL-00065": {
    "op": "EPKS",
@@ -79790,6 +79781,159 @@
    "kw": 22.0,
    "hub_kw": 132.0,
    "status": "available"
+  },
+  "1504PR0003": {
+   "op": "",
+   "opname": "",
+   "city": "Porto",
+   "npts": 2,
+   "kw": 90.0,
+   "hub_kw": 180.0,
+   "status": "unknown"
+  },
+  "1504PR0004": {
+   "op": "",
+   "opname": "",
+   "city": "Porto",
+   "npts": 2,
+   "kw": 240.0,
+   "hub_kw": 480.0,
+   "status": "unknown"
+  },
+  "0001PR0035": {
+   "op": "",
+   "opname": "",
+   "city": "Matosinhos",
+   "npts": 2,
+   "kw": 50.0,
+   "hub_kw": 100.0,
+   "status": "unknown"
+  },
+  "0001PR0036": {
+   "op": "",
+   "opname": "",
+   "city": "Matosinhos",
+   "npts": 2,
+   "kw": 50.0,
+   "hub_kw": 100.0,
+   "status": "unknown"
+  },
+  "0001PR0037": {
+   "op": "",
+   "opname": "",
+   "city": "Matosinhos",
+   "npts": 2,
+   "kw": 50.0,
+   "hub_kw": 100.0,
+   "status": "unknown"
+  },
+  "0001PR0038": {
+   "op": "",
+   "opname": "",
+   "city": "Matosinhos",
+   "npts": 2,
+   "kw": 50.0,
+   "hub_kw": 100.0,
+   "status": "unknown"
+  },
+  "0001PR0039": {
+   "op": "",
+   "opname": "",
+   "city": "Matosinhos",
+   "npts": 2,
+   "kw": 50.0,
+   "hub_kw": 100.0,
+   "status": "unknown"
+  },
+  "0001PR0040": {
+   "op": "",
+   "opname": "",
+   "city": "Matosinhos",
+   "npts": 2,
+   "kw": 50.0,
+   "hub_kw": 100.0,
+   "status": "unknown"
+  },
+  "0001PR0041": {
+   "op": "",
+   "opname": "",
+   "city": "Matosinhos",
+   "npts": 2,
+   "kw": 50.0,
+   "hub_kw": 100.0,
+   "status": "unknown"
+  },
+  "0001PR0042": {
+   "op": "",
+   "opname": "",
+   "city": "Matosinhos",
+   "npts": 2,
+   "kw": 50.0,
+   "hub_kw": 100.0,
+   "status": "unknown"
+  },
+  "0001PR0043": {
+   "op": "",
+   "opname": "",
+   "city": "Matosinhos",
+   "npts": 2,
+   "kw": 50.0,
+   "hub_kw": 100.0,
+   "status": "unknown"
+  },
+  "6874PR0001": {
+   "op": "",
+   "opname": "",
+   "city": "São Martinho do Porto",
+   "npts": 2,
+   "kw": 90.0,
+   "hub_kw": 180.0,
+   "status": "inoperative"
+  },
+  "3589PR0004": {
+   "op": "",
+   "opname": "",
+   "city": "Camarate",
+   "npts": 3,
+   "kw": 120.0,
+   "hub_kw": 290.0,
+   "status": "inoperative"
+  },
+  "3341PL0002": {
+   "op": "",
+   "opname": "",
+   "city": "Póvoa de Lanhoso",
+   "npts": 2,
+   "kw": 22.0,
+   "hub_kw": 44.0,
+   "status": "inoperative"
+  },
+  "3341PR0003": {
+   "op": "",
+   "opname": "",
+   "city": "Póvoa de Lanhoso",
+   "npts": 2,
+   "kw": 50.0,
+   "hub_kw": 100.0,
+   "status": "inoperative"
+  },
+  "3341PR0004": {
+   "op": "",
+   "opname": "",
+   "city": "Póvoa de Lanhoso",
+   "npts": 3,
+   "kw": 120.0,
+   "hub_kw": 290.0,
+   "status": "inoperative"
+  },
+  "0335PR0001": {
+   "op": "",
+   "opname": "",
+   "city": "Laranjeiro",
+   "npts": 2,
+   "kw": 50.0,
+   "hub_kw": 100.0,
+   "status": "inoperative"
   }
  }
 }
