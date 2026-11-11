@@ -52,7 +52,10 @@ def is_dc(connector_type):
 
 
 def findings(points):
-    """One dict per finding: check, severity, entity (point_id), detail."""
+    """One dict per finding: check, severity, entity (point_id), site, detail.
+
+    `site` is the site_external_id: a point_id is only unique within its site,
+    so the network model (ohmigo_dataset.py) keys each finding by both."""
     p = points.copy()
     p['V'] = pd.to_numeric(p.voltage, errors='coerce')
     p['W'] = pd.to_numeric(p.max_power_w, errors='coerce')
@@ -62,7 +65,7 @@ def findings(points):
     for _, r in p[m].iterrows():
         rows.append({
             'check': 'tensao_placeholder', 'severity': SEVERITY['tensao_placeholder'],
-            'entity': str(r.point_id),
+            'entity': str(r.point_id), 'site': str(r.site_external_id),
             'detail': f"{r.site_external_id} / {r.connector_type}: {int(r.V)} V "
                       f"(classe histórica no tracker: {LEGACY_CLASS_ROWS} linhas 750→500 V)"})
 
@@ -71,7 +74,7 @@ def findings(points):
     for _, r in p[m].iterrows():
         rows.append({
             'check': 'trifasico_sem_3p', 'severity': SEVERITY['trifasico_sem_3p'],
-            'entity': str(r.point_id),
+            'entity': str(r.point_id), 'site': str(r.site_external_id),
             'detail': f"{r.site_external_id} / {r.operator_id}: {int(r.W)} W a "
                       f"{int(r.V)} V — trifásico real exige >=12 kW "
                       f"(classe histórica no tracker: {MODE3_CLASS_ROWS} linhas)"})
@@ -83,7 +86,7 @@ def main():
     rows = findings(points)
 
     with open(OUT_CSV, 'w', newline='', encoding='utf-8') as fh:
-        w = csv.DictWriter(fh, fieldnames=['check', 'severity', 'entity', 'detail'])
+        w = csv.DictWriter(fh, fieldnames=['check', 'severity', 'entity', 'site', 'detail'])
         w.writeheader()
         w.writerows(rows)
 

@@ -11,7 +11,7 @@
     quick: 'Filtros rápidos', fFree: 'Livre agora', fFast: 'Rápido (50 kW ou mais)', fUltra: 'Ultra (150 kW ou mais)',
     fCard: 'Paga com cartão bancário', more: 'Mais filtros', conn: 'Tomada', op: 'Operador', region: 'Região', dcv: 'Tensão DC', any: 'Qualquer', opSearch: 'Procurar operador…', opNone: 'Nenhum operador encontrado.', selN: '{n} selecionados',
     dcv800: 'Para carros 800 V (mais de 500 V)', dcv400: 'Para carros 400 V (até 500 V)', dcvUnk: 'Tensão não declarada',
-    dcvHelp: 'Tensão máxima declarada nos conectores DC do posto. Acima de 500 V é onde um carro de 800 V carrega à potência máxima; um carro de 400 V carrega em qualquer um.',
+    dcvHelp: 'Tensão máxima dos conectores DC do posto (a do OpenStreetMap quando corrige a declarada no NAP). Acima de 500 V é onde um carro de 800 V carrega à potência máxima; um carro de 400 V carrega em qualquer um.',
     reset: 'Limpar filtros', view: 'Vista', vList: 'Lista', vMap: 'Mapa', showMore: 'Mostrar mais', mapH: 'Mapa dos postos',
     zIn: 'Aproximar', zOut: 'Afastar', inView: ' na vista do mapa', allRes: 'Mostrar todos os resultados',
     mapDesc: 'O mapa mostra os mesmos postos da lista. Toca num ponto para o abrir na lista; a lista tem toda a informação.',
@@ -21,6 +21,10 @@
     geoNote: 'A localização fica só no teu dispositivo: não é enviada para lado nenhum.',
     dSockets: 'Tomadas', cId: 'Tomada', cPlug: 'Ficha', cKw: 'kW', cState: 'Estado', cKwh: '€/kWh', cMin: '€/min', cFlat: '€/carga',
     feeNote: 'Taxa do operador (OPC), sem IVA. A energia é faturada à parte pelo teu comercializador (CEME).',
+    tierFrom: 'após {m} min', tierTo: 'até {m} min', napKw: 'NAP: {kw}',
+    kwOsmNote: 'Onde aparece "NAP: …", a potência mostrada é a do OpenStreetMap (lida no posto pela comunidade), que costuma estar mais certa do que a declarada pelo operador no NAP.',
+    issue_tensao_placeholder: 'Tensão declarada no NAP é um valor de reserva (750 ou 600 V), não a real: {ids}.',
+    issue_trifasico_sem_3p: 'Declarada trifásica no NAP com tensão e potência de monofásica: {ids}.',
     dOp: 'Operador', dCode: 'Código', dPay: 'Pagamento',
     dPayNone: 'sem informação da comunidade', dOsm: 'No OpenStreetMap', dHw: 'Carregador', dHws: 'Carregadores',
     dShared: 'Potência partilhada', sharedTxt: 'até {kw} kW no total por carregador: com outro carro ligado, cada um recebe menos (OpenStreetMap)',
@@ -40,7 +44,7 @@
     quick: 'Quick filters', fFree: 'Free now', fFast: 'Fast (50 kW or more)', fUltra: 'Ultra (150 kW or more)',
     fCard: 'Takes bank cards', more: 'More filters', conn: 'Plug', op: 'Operator', region: 'Region', dcv: 'DC voltage', any: 'Any', opSearch: 'Search operators…', opNone: 'No operator found.', selN: '{n} selected',
     dcv800: 'For 800 V cars (over 500 V)', dcv400: 'For 400 V cars (up to 500 V)', dcvUnk: 'Voltage not declared',
-    dcvHelp: 'Maximum voltage declared on the site’s DC connectors. Over 500 V is where an 800 V car charges at full power; a 400 V car charges on either.',
+    dcvHelp: 'Maximum voltage of the site’s DC connectors (OpenStreetMap’s where it corrects the one declared on the NAP). Over 500 V is where an 800 V car charges at full power; a 400 V car charges on either.',
     reset: 'Clear filters', view: 'View', vList: 'List', vMap: 'Map', showMore: 'Show more', mapH: 'Charger map',
     zIn: 'Zoom in', zOut: 'Zoom out', inView: ' in the map view', allRes: 'Show all results',
     mapDesc: 'The map shows the same chargers as the list. Tap a dot to open it in the list; the list has all the information.',
@@ -50,6 +54,10 @@
     geoNote: 'Your location stays on your device: it is not sent anywhere.',
     dSockets: 'Sockets', cId: 'Socket', cPlug: 'Plug', cKw: 'kW', cState: 'Status', cKwh: '€/kWh', cMin: '€/min', cFlat: '€/session',
     feeNote: 'Operator (CPO) fee, without VAT. Energy is billed separately by your supplier (CEME).',
+    tierFrom: 'after {m} min', tierTo: 'up to {m} min', napKw: 'NAP: {kw}',
+    kwOsmNote: 'Where "NAP: …" appears, the power shown is OpenStreetMap\'s (read off the charger by the community), which is usually more accurate than what the operator declares on the NAP.',
+    issue_tensao_placeholder: 'The voltage declared on the NAP is a placeholder (750 or 600 V), not the real one: {ids}.',
+    issue_trifasico_sem_3p: 'Declared three-phase on the NAP with single-phase voltage and power: {ids}.',
     dOp: 'Operator', dCode: 'Code', dPay: 'Payment',
     dPayNone: 'no community information', dOsm: 'On OpenStreetMap', dHw: 'Charger', dHws: 'Chargers',
     dShared: 'Shared power', sharedTxt: 'up to {kw} kW in total per charger: with another car plugged in, each gets less (OpenStreetMap)',
@@ -161,7 +169,7 @@
     var name = s.lc && (!s.name || s.name === s.ext) ? t('lcName', { s: t('life' + (s.lc === 'planned' ? 'Planned' : 'Construction')).toLowerCase() }) : (s.name && s.name !== s.ext ? s.name : s.ext);
     var btn = el('button', { type: 'button', 'aria-expanded': String(open), 'aria-controls': id, onclick: function () { toggle(s.ext); } },
       el('span', { class: 'nm' }, name),
-      el('span', { class: 'kw' }, s.kw ? N.nf(s.kw) + ' kW' : '—', el('small', null, t('upTo'))),
+      el('span', { class: 'kw' }, s.kw ? N.nf(s.kw, 1) + ' kW' : '—', el('small', null, t('upTo'))),
       el('span', { class: 'where' }, [s.city, s.op].filter(Boolean).join(', '), here && s._d != null ? ' (' + t('km', { d: N.nf(s._d, s._d < 10 ? 1 : 0) }) + ')' : ''),
       el('span', { class: 'line' }, socketRow(s), s.conns.map(function (c) { return el('span', { class: 'tag' }, c); }),
         s.doubt ? el('span', { class: 'tag warn' }, t('dDoubt')) : null,
@@ -171,6 +179,20 @@
     return li;
   }
   function money(v) { return v == null || v === '' ? '—' : N.nf(v, 3); }
+  // A socket's operator fees. Points carry `fees`, the network model's MOBI.E
+  // plans ({REGULAR: {flat: [..], energy: [..], time: [{eur, from, to}]},
+  // AD_HOC_PAYMENT: ...}) with every per-minute tier, the same ohmigo prices
+  // with. Site data from before the model had one string per component
+  // (ENERGY/TIME/FLAT); it still renders until the next weekly refresh.
+  function plan(p) { var f = p.fees; return f ? (f.REGULAR || f.AD_HOC_PAYMENT || f[Object.keys(f)[0]]) : null; }
+  function values(v) { return v && v.length ? v.map(function (x) { return N.nf(x, 3); }).join(' / ') : '—'; }
+  function tiers(v) {
+    if (!v || !v.length) return '—';
+    return v.slice().sort(function (a, b) { return a.from - b.from; }).map(function (x) {
+      return N.nf(x.eur, 3) + (x.from > 0 ? ' ' + t('tierFrom', { m: N.nf(x.from) }) : '') +
+        (x.to != null ? ' ' + t('tierTo', { m: N.nf(x.to) }) : '');
+    }).join('; ');
+  }
   function detail(s, id) {
     var d = el('div', { class: 'detail', id: id });
     var dl = el('dl', null,
@@ -194,13 +216,19 @@
     if (s.lc) d.appendChild(el('p', { class: 'muted small' }, t('lcNote', { s: t('life' + (s.lc === 'planned' ? 'Planned' : 'Construction')).toLowerCase() })));
     else if (!P) d.appendChild(el('p', { class: 'muted small' }, t('loadingSockets')));
     else {
-      var mobie = false;
+      var mobie = false, osmKw = false, issues = {};
       var rows = pts(s).map(function (p) {
         var only = p.regime === 'sem_ceme' && p.nap != null;
         if (p.regime !== 'sem_ceme') mobie = true;
+        var model = p.fees !== undefined, fp = model ? plan(p) : null;
+        if (p.kw_src === 'osm') osmKw = true;
+        (p.issues || []).forEach(function (k) { (issues[k] = issues[k] || []).push(p.point_id); });
         return el('tr', null, el('td', null, el('code', null, p.point_id)), el('td', { class: 'l' }, String(p.connectors || '—').split('|').join(', ')),
-          el('td', null, p.kw ? N.nf(p.kw) : '—'), el('td', { class: 'l' }, N.status(p.status)),
-          el('td', null, only ? N.nf(p.nap, 3) : money(p.ENERGY)), el('td', null, money(p.TIME)), el('td', null, money(p.FLAT)));
+          el('td', null, p.kw ? N.nf(p.kw, 1) : '—', p.kw_src === 'osm' ? el('small', { class: 'muted' }, ' (' + t('napKw', { kw: p.nap_kw == null ? '—' : N.nf(p.nap_kw, 1) }) + ')') : null),
+          el('td', { class: 'l' }, N.status(p.status)),
+          el('td', null, only ? N.nf(p.nap, 3) : model ? values(fp && fp.energy) : money(p.ENERGY)),
+          el('td', null, model ? tiers(fp && fp.time) : money(p.TIME)),
+          el('td', null, model ? values(fp && fp.flat) : money(p.FLAT)));
       });
       d.appendChild(el('div', { class: 'scroll', tabindex: '0', role: 'group', 'aria-label': t('dSockets') },
         el('table', null, el('caption', null, t('dSockets')),
@@ -209,6 +237,8 @@
           el('tbody', null, rows))));
       // The OPC-fee / CEME split only exists on MOBI.E; elsewhere the operator bills directly.
       if (mobie) d.appendChild(el('p', { class: 'small muted' }, t('feeNote')));
+      if (osmKw) d.appendChild(el('p', { class: 'small muted' }, t('kwOsmNote')));
+      Object.keys(issues).forEach(function (k) { d.appendChild(el('p', { class: 'small muted' }, t('issue_' + k, { ids: issues[k].join(', ') }))); });
     }
     var ll = s.lat + ',' + s.lon;
     d.appendChild(el('div', { class: 'actions' },

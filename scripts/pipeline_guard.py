@@ -76,7 +76,8 @@ def main():
     # --- join NAP↔MOBI.E: um formato novo no tarifário → 0% é sinal de alerta ---
     try:
         OPC = pd.read_csv('data/nap_opc_points.csv', dtype=str)
-        rate = OPC.opc_operador.notna().mean() if len(OPC) else 0
+        # opc_match: o join do modelo da rede (opc_tariffs.py), UID curtos incluídos.
+        rate = (OPC.opc_match == '1').mean() if len(OPC) else 0
         check('join_rate', rate, lambda v: f'{100 * v:.1f}%')
     except FileNotFoundError:
         print('FAIL  data/nap_opc_points.csv em falta', file=sys.stderr)

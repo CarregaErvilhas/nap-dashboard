@@ -60,7 +60,10 @@ venv/bin/python scripts/dgeg_crossref.py      # OPC codes -> entities -> data/na
 venv/bin/python scripts/nap_static_checks.py  # NAP-only rules -> data/nap_static_findings.md (errors.md item 8)
 venv/bin/python scripts/tracker_sync.py       # PCVE tracker xlsx -> derived CSVs (never versioned)
 venv/bin/python scripts/tracker_checks.py     # tracker + NAP -> data/tracker_findings.md (errors.md item 13)
+venv/bin/python scripts/osm_umap.py           # OSM dump -> data/umap_cache/ (the model's `osm` blocks)
+venv/bin/python scripts/ohmigo_dataset.py data data/ohmigo_chargers.json  # the network model (site + ohmigo read it)
 venv/bin/python scripts/build_dashboard.py    # -> site/, facts.md, errors.md
+python3 scripts/model_parity.py               # site/data agrees with the network model
 ```
 
 `fetch_tracker.sh` / `tracker_sync.py` need the tracker to be fetched: nothing
