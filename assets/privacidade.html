@@ -5,27 +5,22 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="dark light">
 <meta name="referrer" content="strict-origin-when-cross-origin">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src 'self' data:; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'unsafe-inline'; img-src 'self' data:; base-uri 'none'; form-action 'none'">
 <title>Privacidade — EV NAP Portugal</title>
 <meta name="description" content="O que o EV NAP Portugal guarda no teu navegador e o que não recolhe: sem cookies, sem análise de tráfego, um único pedido a terceiros (estado ao vivo).">
 <link rel="canonical" href="https://nap.ocarroeletrico.com/privacidade.html">
 <link rel="icon" href="favicon.ico" sizes="32x32">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<script>
-// Mesmo tema e idioma do site (chaves nap-theme / nap-lang), validados.
-(function(){var d=document.documentElement,g=function(k,a){try{var v=localStorage.getItem(k);return a.indexOf(v)>-1?v:null}catch(e){return null}};
-var th=g('nap-theme',['auto','light','dark'])||'auto',vi=g('nap-vision',['default','cb','hc'])||'default',q=null;
-try{q=new URLSearchParams(location.search).get('lang')}catch(e){}
-var l=(q==='pt'||q==='en')?q:(g('nap-lang',['pt','en'])||(/^pt/i.test(navigator.language||'')?'pt':'en'));
-var light=th==='light'||(th==='auto'&&matchMedia&&matchMedia('(prefers-color-scheme: light)').matches);
-d.setAttribute('data-theme',light?'light':'dark');d.setAttribute('data-vision',vi);d.lang=l;})();
-</script>
+<script src="boot.js"></script>
 <style>
   :root{color-scheme:dark;--bg:#0f172a;--card:#1e293b;--ink:#e2e8f0;--mut:#94a3b8;--acc:#38bdf8;--line:#334155}
   html[data-theme="light"]{color-scheme:light;--bg:#f8fafc;--card:#fff;--ink:#0f172a;--mut:#475569;--acc:#0369a1;--line:#cbd5e1}
+  html[data-vision="hc"]:not([data-theme]),
   html[data-vision="hc"][data-theme="dark"]{--bg:#000;--card:#000;--ink:#fff;--mut:#e8e8e8;--acc:#ffe14d;--line:#fff}
   html[data-vision="hc"][data-theme="light"]{--bg:#fff;--card:#fff;--ink:#000;--mut:#1a1a1a;--acc:#0033cc;--line:#000}
+  @media (prefers-color-scheme:light){html:not([data-theme]){color-scheme:light;--bg:#f8fafc;--card:#fff;--ink:#0f172a;--mut:#475569;--acc:#0369a1;--line:#cbd5e1}
+    html[data-vision="hc"]:not([data-theme]){--bg:#fff;--card:#fff;--ink:#000;--mut:#1a1a1a;--acc:#0033cc;--line:#000}}
   *{box-sizing:border-box}
   body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 -apple-system,Segoe UI,Roboto,sans-serif;padding:24px 16px}
   main{max-width:68ch;margin:0 auto}
