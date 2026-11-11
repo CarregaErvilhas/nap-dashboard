@@ -19,13 +19,13 @@ Só NUTS1 (PT1/PT2/PT3) no estático; sem NUTS2/NUTS3, que o esquema DATEX II su
 2.378 tomadas (12,2%) sem tipo de utilização.
 
 ## 7. Ids de tomada (EVSE) MOBI.E inconsistentes
-808 tomadas com ids só numéricos ('97', '98'…), fora de qualquer formato; mistura de formatos com e sem prefixo PT-/operador e com e sem zero à esquerda no número da tomada.
+802 tomadas com ids só numéricos ('97', '98'…), fora de qualquer formato; mistura de formatos com e sem prefixo PT-/operador e com e sem zero à esquerda no número da tomada.
 
 ## 8. Tensões placeholder e falso trifásico (NAP estático)
 57 tomadas DC declaram 750 V ou 600 V, valores de reserva da era CHAdeMO; 34 tomadas declaradas mode3AC3p têm tensão monofásica e menos de 11 kW, quando um trifásico real tem pelo menos 12 kW. Os próprios operadores já assinalaram ambas as classes como erro no tracker PCVE (171 e 199 linhas). Lista por tomada em errors.md, secções 8a/8b.
 
 ## 9. Preços anómalos
-Taxa fixa até 2,50 €/carga; no NAP dinâmico pricePerChargingTime até 1,54 €/min (2 pontos &gt;1 €/min, provável erro de unidade €/min vs €/hora); energia a 0 €/kWh combinada com taxa fixa &gt;0 em 1.886 pontos (suspeito de dados incompletos).
+Taxa fixa até 1,30 €/carga; no NAP dinâmico pricePerChargingTime até 1,54 €/min (2 pontos &gt;1 €/min, provável erro de unidade €/min vs €/hora); energia a 0 €/kWh combinada com taxa fixa &gt;0 em 1.886 pontos (suspeito de dados incompletos).
 
 ## 10. Pontos 'removed' ainda no inventário estático
 0 pontos (0%) marcados 'removed' no dinâmico continuam listados como infraestrutura ativa no estático.
@@ -255,10 +255,10 @@ Operador: **1675** sites com correspondência código-a-código têm operador OS
 
 | sites | operador NAP | operador OSM |
 |---|---|---|
-| 755 | WOWPLUG | True Kare |
+| 756 | WOWPLUG | True Kare |
 | 299 | Iberdrola | bp pulse | Charging Together |
 | 178 | Mota-Engil Renewing | Mota Engil II |
-| 104 | Galpgeste | Galp Geste |
+| 103 | Galpgeste | Galp Geste |
 | 80 | Kilometer Low Cost II Serviços, SA | KLC Serviços |
 | 38 | FactorENERGIA | Factor Energia |
 | 21 | uCharge | Logical Gravity |
@@ -274,7 +274,7 @@ Operador: **1675** sites com correspondência código-a-código têm operador OS
 Cobertura OSM (dump do autor do mapa v2.1): **7856 sites NAP** (89%) com código MOBI.E; 102 divergências de localização >150 m em correspondências de código único.
 ## 13. Tracker de erros PCVE (cross-check externo)
 
-O tracker de erros dos operadores (`pt-pcve-errors.xlsx`) é a única fonte atual da identidade dos OPC (PartyId/PartyCode) e a única lista positiva de assets que o operador declarou removidos. Sincronizado em 2026-11-09; 99 CPO, 2270 erros reportados. Gerado por `scripts/tracker_checks.py` a partir de `data/opc_registry_authority.csv`/`data/tracker_errors.csv`.
+O tracker de erros dos operadores (`pt-pcve-errors.xlsx`) é a única fonte atual da identidade dos OPC (PartyId/PartyCode) e a única lista positiva de assets que o operador declarou removidos. Sincronizado em 2026-11-11; 99 CPO, 2287 erros reportados. Gerado por `scripts/tracker_checks.py` a partir de `data/opc_registry_authority.csv`/`data/tracker_errors.csv`.
 
 ### 13a. [MÉDIO] Operadores NAP sem PartyId no tracker (3)
 
