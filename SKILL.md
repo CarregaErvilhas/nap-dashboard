@@ -3,7 +3,7 @@ name: nap-mobie-portugal-ev
 description: >-
   Analyse Portugal's public EV charging network from official open data: NAP MOBI.E
   (DATEX II 3.3 static + dynamic), MOBI.E OPC tariffs, DGEG operator registries
-  and the PCVE error tracker. Produces a self-contained local dashboard (dashboard.html),
+  and the PCVE error tracker. Produces a static multi-page site (site/),
   a facts list and a reportable-errors list. Use when the user asks to analyse,
   aggregate, join, map, visualise, audit data quality of, or build a dashboard for
   the Portuguese EV charging network / "rede de carregamento" / NAP MOBI.E / OPC
@@ -15,8 +15,8 @@ description: >-
 # NAP MOBI.E — Portuguese EV charging network analysis
 
 Analyses Portugal's public EV charging infrastructure by joining official open
-sources. Output: a **self-contained `dashboard.html`** (no external libs, opens
-via `file://`), `facts.md`, and `errors.md` (items to report to data owners).
+sources. Output: a **static site in `site/`** (three pages, no external libs, data in
+`site/data/*.json`, preview with `python3 -m http.server --directory site`), `facts.md`, and `errors.md` (items to report to data owners).
 
 The skill always pulls **fresh data from the official origins** — never rely on a
 stale local copy. `scripts/fetch_data.sh` downloads everything (~230 MB).
@@ -28,7 +28,7 @@ stale local copy. `scripts/fetch_data.sh` downloads everything (~230 MB).
 3. **Join** NAP points ↔ MOBI.E OPC tariffs (the non-obvious part — see Gotchas).
 4. **Resolve** OPC/CEME codes → entities via DGEG registries (OPC identity: the PCVE tracker's PartyId).
 5. **Validate** physical/schema sanity and cross-source consistency.
-6. **Build** the dashboard + facts + reportable errors.
+6. **Build** the site + facts + reportable errors.
 
 The current numbers (sites, points, operators, tariff match, power agreement,
 V×I inconsistencies) are in `facts.md`, regenerated every week: read them
@@ -60,7 +60,7 @@ venv/bin/python scripts/dgeg_crossref.py      # OPC codes -> entities -> data/na
 venv/bin/python scripts/nap_static_checks.py  # NAP-only rules -> data/nap_static_findings.md (errors.md item 8)
 venv/bin/python scripts/tracker_sync.py       # PCVE tracker xlsx -> derived CSVs (never versioned)
 venv/bin/python scripts/tracker_checks.py     # tracker + NAP -> data/tracker_findings.md (errors.md item 13)
-venv/bin/python scripts/build_dashboard.py    # -> dashboard.html, facts.md, errors.md
+venv/bin/python scripts/build_dashboard.py    # -> site/, facts.md, errors.md
 ```
 
 `fetch_tracker.sh` / `tracker_sync.py` need the tracker to be fetched: nothing
@@ -69,7 +69,7 @@ errors.md simply has no tracker item. That is deliberate — a frozen copy of
 somebody else's error list would go stale silently. Never fails the run.
 
 Outputs to give the user:
-- `dashboard.html` — open with `open dashboard.html`
+- `site/` — preview with `python3 -m http.server --directory site` (`file://` does not work: the pages fetch JSON)
 - `facts.md` — interesting facts
 - `errors.md` — reportable data errors, numbered; the last item is the PCVE
   tracker cross-check (only present when the tracker was fetched — do not
@@ -103,18 +103,18 @@ Outputs to give the user:
   static 1:1 with no conflicting states.
 - 30% of connector rows have declared power inconsistent with V×I (>25% off);
   for `mode3AC3p` the physical power is `√3×V×I`, else `V×I`.
-- **Dashboard JSON**: sanitize NaN/Inf → null and dump with `allow_nan=False`,
+- **Site JSON**: sanitize NaN/Inf → null and dump with `allow_nan=False`,
   otherwise the browser's `JSON.parse` fails.
 
-## Dashboard validation (always do this after a rebuild)
+## Site validation (always do this after a rebuild)
 
 ```bash
-venv/bin/python -c "import re,json;h=open('dashboard.html').read();m=re.search(r'const D = (.*?);\n',h,re.S);D=json.loads(m.group(1));print('JSON OK', len(D['points']))"
-venv/bin/python -c "import re;h=open('dashboard.html').read();m=re.search(r'<script>(.*?)</script>',h,re.S);open('/tmp/dash_check.js','w').write(m.group(1))"
-node --check /tmp/dash_check.js
+venv/bin/python scripts/validate_site.py
 ```
 
-If the dashboard renders nothing below the KPIs, it's a JS runtime error — see
+It checks that the JSON parses and matches the schema, `node --check` on every
+script, no inline scripts, the CSP, no `innerHTML`-style sinks and the live-status
+behaviour. If a page renders nothing below the KPIs, it's a JS runtime error — see
 `references/gotchas.md`.
 
 ## PR checks
@@ -123,9 +123,9 @@ If the dashboard renders nothing below the KPIs, it's a JS runtime error — see
 no dependencies. `scripts/ci_paths.py` asserts that (A) no data file sits in the
 repo root, (B) every reference to a data file is `data/`-prefixed, (C) every
 `scripts/*` cited in a workflow exists, (D) the tracker's derived files are NOT tracked. Plus `compileall` and `bash -n`.
-It also runs `scripts/validate_dashboard.py` on the committed `dashboard.html`
-(the artifact `pages.yml` publishes unchecked): embedded JSON, payload escaped
-for the `<script>` context, JS syntax and init.
+It also runs `scripts/validate_site.py` on the committed `site/`
+(the artifact `pages.yml` publishes unchecked): JSON and schema, JS syntax, no
+inline scripts, CSP, no `innerHTML`-style sinks.
 
 It deliberately does **not** run the full pipeline (`fetch_data.sh` is ~230 MB and
 `osm_umap.py` pulls an Overpass dump — don't hammer the official sources on every
@@ -135,12 +135,12 @@ rename a data file, update `DATA_FILES` in `scripts/ci_paths.py`.
 ## Layout
 
 - `scripts/` — the pipeline
-- `assets/` — `dashboard_template.html`, `schemas/*.xsd` (DATEX II 3.3 © CEN; ver `assets/schemas/README.md`)
+- `assets/` — `site/` (pages, partials, CSS, JS, fonts), `schemas/*.xsd` (DATEX II 3.3 © CEN; ver `assets/schemas/README.md`)
 - `references/` — `data-sources.md`, `gotchas.md`
 - `data/` — every fetched or derived file (raw XMLs, CSVs, the tracker xlsx,
   `umap_cache/`, `caop_cache/`), gitignored. Scripts still run from the repo
   root and read `data/…` relative to it.
-- Repo root = code, docs and deliverables only (`dashboard.html`, `facts.md`,
+- Repo root = code, docs and deliverables only (`site/`, `facts.md`,
   `errors.md`, `novidades.md`, `network-census.json`, `assets/`, `Agents-outputs/`)
 
 ## When NOT to use

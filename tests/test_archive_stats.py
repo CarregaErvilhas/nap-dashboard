@@ -13,6 +13,7 @@ Cenário (UTC, terça 2026-11-10; Lisboa = UTC, Açores = UTC-1 em novembro):
   O snapshot de quarta confirma o estado reconstruído (não pode criar transições).
 """
 import datetime as dt
+import json
 import os
 import sys
 import tempfile
@@ -250,7 +251,8 @@ class SyncTest(unittest.TestCase):
             asked.clear()
             new, known, absent = archive_history.sync('https://x', 'PT', cache, dt.date(2026, 11, 8),
                                                       now=now, get=get)
-            self.assertEqual(len(asked), 4)   # só as horas 02, que não ficaram como ausentes
+            # só as horas 02, que não ficaram como ausentes (mais o pedido do manifest, 404)
+            self.assertEqual(len([u for u in asked if u.endswith('.parquet')]), 4)
             self.assertEqual((new, known, absent), (0, 8, 4))
 
     def test_prunes_days_outside_window_but_keeps_static(self):
@@ -282,6 +284,53 @@ class SyncTest(unittest.TestCase):
     def test_manifest_paths_are_extracted_from_any_json(self):
         p = archive_history.rel_path('PT', 'polls', dt.date(2026, 11, 8), 5)
         self.assertEqual(archive_history.PATH_RE.findall('{"x": ["%s"]}' % p)[0][1], 'polls')
+
+    def test_manifest_drives_the_download_backfill_included(self):
+        now = dt.datetime(2026, 11, 20, 0, 30, tzinfo=UTC)
+        base = 'v1/country=PT/table={}/date={}/part-{}.parquet'
+        files = [
+            base.format('status_events', '2026-11-01', 'backfill'),   # antes do ARCHIVE_EPOCH
+            base.format('snapshots', '2026-11-02', 'ocpi'),
+            base.format('polls', '2026-11-10', '07'),
+            base.format('status_events', '2026-10-01', 'backfill'),   # fora da janela
+            base.format('static_versions', '2026-10-01', 'backfill'), # static_versions: desde o início
+            base.format('fee_events', '2026-11-10', '07'),            # tabela que não se usa
+            base.format('polls', '2026-11-10', '08'),                 # listado mas 404
+            'v1/country=ES/table=polls/date=2026-11-10/part-07.parquet',
+        ]
+        asked = []
+
+        def get(url):
+            asked.append(url)
+            if url.endswith('/v1/PT/manifest.json'):
+                return json.dumps({'country': 'PT', 'files': files}).encode()
+            return None if url.endswith('part-08.parquet') else b'PAR1'
+
+        with tempfile.TemporaryDirectory() as cache:
+            new, known, absent = archive_history.sync('https://x', 'PT', cache, dt.date(2026, 10, 25),
+                                                      now=now, get=get)
+            got = sorted(u[len('https://x/'):] for u in asked if u.endswith('.parquet'))
+            self.assertEqual(got, sorted(files[:3] + [files[4], files[6]]))
+            self.assertEqual((new, known, absent), (4, 0, 1))
+            with open(os.path.join(cache, '.missing')) as fh:
+                self.assertEqual(fh.read().split(), [])   # publicado: volta a ser pedido
+            asked.clear()
+            self.assertEqual(archive_history.sync('https://x', 'PT', cache, dt.date(2026, 10, 25),
+                                                  now=now, get=get), (0, 4, 1))
+            self.assertEqual([u for u in asked if u.endswith('.parquet')], ['https://x/' + files[6]])
+
+    def test_unreachable_manifest_falls_back_to_guessing(self):
+        import urllib.error
+        now = dt.datetime(2026, 11, 8, 3, 5, tzinfo=UTC)
+
+        def get(url):
+            if url.endswith('manifest.json'):
+                raise urllib.error.URLError('down')
+            return None
+
+        with tempfile.TemporaryDirectory() as cache:
+            self.assertEqual(archive_history.sync('https://x', 'PT', cache, dt.date(2026, 11, 8),
+                                                  now=now, get=get), (0, 0, 12))
 
 
 if __name__ == '__main__':

@@ -5,11 +5,9 @@ public data sources. The goal:
 
 - Extract and cross-reference data from several sources (NAP MOBI.E, OPC tariff,
   DGEG registries, OSM/umap)
-- Build a **self-contained local dashboard** (`dashboard.html`) to explore the network
+- Build a **static site** (`site/`) to find chargers and explore the network
 - Produce a list of **interesting facts** and a list of **reportable errors** for
   the data owners
-
-![Dashboard NAP MOBI.E](dashboard.png)
 
 ## Data sources
 
@@ -26,17 +24,24 @@ public data sources. The goal:
 
 **Live demo:** <https://nap.ocarroeletrico.com/> (custom domain via CNAME;
 auto-published by `.github/workflows/pages.yml` on every `push` that touches
-`dashboard.html`; regenerated weekly by `.github/workflows/refresh.yml`,
+`site/`; regenerated weekly by `.github/workflows/refresh.yml`,
 Mondays 06:00 UTC).
 
-- **`dashboard.html`** — standalone dashboard (10.4 MB), no external libraries,
-  opens via `file://`. **Bilingual PT/EN**: Portuguese for Portuguese-language
+- **`site/`** — three-page static site, no external libraries, with the data in
+  `site/data/*.json` (local preview: `python3 -m http.server --directory site`;
+  `file://` does not work because the pages fetch the JSON). **Bilingual PT/EN**: Portuguese for Portuguese-language
   browsers, English for everyone else (PT|EN button top-right persists the
-  choice; `?lang=pt|en` forces a language). KPIs, bar charts, an **interactive SVG map** of 8 357 sites
-  (mainland + Madeira/Açores, zoom/pan, click a dot for detail with OSM
-  cross-reference), a 20 932-point table with search, multi-select filters
-  (status/region/power class/operator/connector/payment), click-to-sort headers
-  and pagination.
+  choice; `?lang=pt|en` forces a language); auto/light/dark theme and vision
+  options (colour-blind, high contrast).
+  - **Find** (`index.html`): for drivers. Search by town, operator or code, "Near me"
+    (geolocation stays on the device), quick filters, a card per site with one
+    status mark per socket, detail with sockets, operator fees, payment and
+    "Directions" links (Google Maps, OpenStreetMap), and a canvas map.
+  - **Network** (`rede.html`): community statistics (KPIs, news, bar charts as
+    tables, history, hubs, facts).
+  - **Operators** (`operadores.html`): for the OPCs. Weekly anomaly report per
+    operator (from `Agents-outputs/anomalias-results.md`), OPC churn and reportable
+    errors.
 - **`facts.md`** — interesting facts about the network.
 - **`errors.md`** — errors worth reporting to the data owners (includes community
   OSM/umap doubts and operator/payment divergences).
@@ -66,13 +71,14 @@ venv/bin/python scripts/osm_umap.py          # cross-reference NAP with OSM/umap
 venv/bin/python scripts/make_pt_outline.py   # generate assets/pt_outline.json (map)
 venv/bin/python scripts/tracker_sync.py  # PCVE tracker -> OPC registry + labelled errors
 venv/bin/python scripts/tracker_checks.py # tracker + NAP -> errors.md item 13
-venv/bin/python scripts/build_dashboard.py # generate dashboard.html, facts.md, errors.md
+venv/bin/python scripts/build_dashboard.py # generate site/, facts.md, errors.md
 ```
 
-`build_dashboard.py` reads all intermediate CSVs and injects the data into the
-template `assets/dashboard_template.html`, replacing the `/*__DATA__*/` marker.
-It also regenerates `dashboard.png` (headless Chrome screenshot) for this README;
-if Chrome is missing it warns and skips.
+`build_dashboard.py` reads all intermediate CSVs, writes the data to
+`site/data/*.json` and renders the pages from `assets/site/` into `site/` (via
+`scripts/site_data.py` and `scripts/build_site.py`). To re-render the pages without
+the CSVs, from the committed `site/data`: `python3 scripts/build_site.py`.
+`scripts/validate_site.py` validates the result.
 
 ## Automated agents
 
@@ -109,8 +115,10 @@ python3 scripts/check_agents.py
 | `scripts/tracker_checks.py` | Tracker + NAP cross-check -> `errors.md` item 13 (OPC identity, removed assets) |
 | `scripts/make_pt_outline.py` | Portugal outline for the SVG map (from CAOP) |
 | `scripts/check_quality.py` | Physical/schema sanity checks |
-| `scripts/build_dashboard.py` | Generates the standalone dashboard + facts/errors |
-| `assets/dashboard_template.html` | Dashboard HTML/JS template (`/*__DATA__*/` marker) |
+| `scripts/build_dashboard.py` | Computes the data and generates `site/` + facts/errors |
+| `scripts/site_data.py`, `scripts/build_site.py` | Split the data into `site/data/*.json` and render the pages |
+| `scripts/validate_site.py` | Validates `site/` (JSON, schema, JS, CSP, no `innerHTML`) |
+| `assets/site/` | Site source: pages, partials, CSS, JS, Nunito font |
 | `assets/pt_outline.json` | PT outline polygons + district/island labels for the map (143 KB) |
 | `assets/schemas/*.xsd` | DATEX II 3.3 schemas © CEN (enum source; see `assets/schemas/README.md`, re-fetch `scripts/fetch_schemas.sh`) |
 | `SKILL.md` | Reusable skill with all knowledge and the pipeline |
@@ -141,7 +149,7 @@ cannot be fetched, errors.md simply has no tracker item. See
 - `facilityLocation` lives in the `locationReferencing` namespace, not in
   `locationExtension`.
 - Static CSVs are read with `dtype=str` to avoid losing leading zeros.
-- Embedded dashboard JSON: use `allow_nan=False` plus NaN/Inf cleaning, otherwise
+- Site JSON: use `allow_nan=False` plus NaN/Inf cleaning, otherwise
   the browser's `JSON.parse` fails (bug already fixed).
 - OSM/umap: the v2.1 map author's dump (`Todos.json`) covers ~96% of NAP sites
   (8 011/8 357) by MOBI.E code; `man_made=charge_point` nodes carry payment tags
@@ -164,6 +172,6 @@ Own code (`scripts/`, template, docs, analysis): `PolyForm-Noncommercial-1.0.0` 
 `THIRD-PARTY-NOTICES.md`: NAP/MOBI.E (free use with attribution, no commercial
 use; tariff © MOBI.E), DGEG lists (same), CAOP outline © DGT (CC-BY
 4.0), OSM data © OpenStreetMap contributors (ODbL 1.0, share-alike) +
-v2.1/Caça community maps, DATEX II schemas © CEN. `dashboard.html` is a
-collective work: our code is PolyForm, embedded data keeps its original
+v2.1/Caça community maps, DATEX II schemas © CEN. `site/` is a
+collective work: our code is PolyForm, published data keeps its original
 licences (attribution in footer + map).

@@ -170,6 +170,9 @@ def parse_static(path):
             op_phone = text_of(op, 'telephoneNumber', F)
 
         hours = operating_hours(next(elem.iter(q(F, 'operatingHours')), None))
+        # DATEX II accessibility (wheelChairAccessible, disabilityAccessible...):
+        # quase nenhum operador o publica, mas é a fonte oficial.
+        access = '|'.join(sorted({(x.text or '').strip() for x in elem.iter(q(F, 'accessibility')) if (x.text or '').strip()}))
         applicable_vehicles = all_texts(elem, 'applicableForVehicles', EI)
         auth_methods = []
         stations = elem.findall(EI_T + 'energyInfrastructureStation')
@@ -216,7 +219,7 @@ def parse_static(path):
                       op_id, op_name, op_web, op_phone,
                       '|'.join(sorted(set(auth_methods))),
                       '|'.join(sorted(set(applicable_vehicles))),
-                      n_points, '|'.join(station_ids), hours, loc_desc))
+                      n_points, '|'.join(station_ids), hours, loc_desc, access))
         # clear() alone keeps the element attached to the document root; detach it
         # so iterparse memory stays bounded on the 190 MB XML.
         while elem.getprevious() is not None:
@@ -301,7 +304,7 @@ def main():
                'postcode', 'city', 'country', 'address_line', 'nuts1', 'nuts2', 'nuts3',
                'operator_id', 'operator_name', 'operator_website', 'operator_phone',
                'auth_methods', 'applicable_vehicles', 'n_points', 'station_ids',
-               'operating_hours', 'location_description'],
+               'operating_hours', 'location_description', 'accessibility'],
               sites)
     write_csv(f'{outdir}/nap_static_points.csv',
               ['point_id', 'point_external_id', 'site_id', 'site_external_id', 'station_id',

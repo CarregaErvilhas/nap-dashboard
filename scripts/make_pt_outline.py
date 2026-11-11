@@ -21,31 +21,49 @@ FILES = [
     ('madeira', 'MadeiraConcelhos.geojson'),
     ('acores', 'acores.geojson'),
 ]
-MAX_PTS_PER_RING = 12
+DP_TOL = 0.004  # degrees (~400 m): simplification tolerance of the outline
 KEEP_CONCELHOS = False  # if False, only the outer coastline ring of each polygon
 
 
-def ring_points(ring, maxpts):
+def ring_points(ring, tol=DP_TOL):
+    """Douglas-Peucker: keeps the shape of the coast (a fixed stride of 12 points
+    cut Sesimbra's peninsula so a charger on land drew in the sea). Iterative so
+    long rings do not hit the recursion limit."""
     n = len(ring)
-    if n <= maxpts:
+    if n <= 4:
         return [list(p) for p in ring]
-    step = (n - 1) / (maxpts - 1)
-    idx = sorted({round(i * step) for i in range(maxpts)})
-    return [list(ring[i]) for i in idx]
+    keep = [False] * n
+    keep[0] = keep[-1] = True
+    stack = [(0, n - 1)]
+    while stack:
+        i, j = stack.pop()
+        (x1, y1), (x2, y2) = ring[i][:2], ring[j][:2]
+        dx, dy = x2 - x1, y2 - y1
+        norm = (dx * dx + dy * dy) ** 0.5
+        best, bk = 0.0, -1
+        for k in range(i + 1, j):
+            x, y = ring[k][:2]
+            d = (abs(dy * (x - x1) - dx * (y - y1)) / norm) if norm else ((x - x1) ** 2 + (y - y1) ** 2) ** 0.5
+            if d > best:
+                best, bk = d, k
+        if best > tol:
+            keep[bk] = True
+            stack.append((i, bk))
+            stack.append((bk, j))
+    return [list(ring[i][:2]) for i in range(n) if keep[i]]
 
 
 def decimate_geom(geom):
     t = geom['type']
-    rings = []
-    if t == 'Polygon':
-        rings = geom['coordinates']
-    elif t == 'MultiPolygon':
-        rings = [r for poly in geom['coordinates'] for r in poly]
+    polys = geom['coordinates'] if t == 'MultiPolygon' else [geom['coordinates']] if t == 'Polygon' else []
     out = []
-    for i, r in enumerate(rings):
-        if not KEEP_CONCELHOS and i > 0:
-            continue
-        out.append(ring_points(r, MAX_PTS_PER_RING))
+    for poly in polys:
+        # outer ring of EVERY polygon part (a MultiPolygon concelho has several; keeping
+        # only the first one dropped most of Sesimbra); holes only if KEEP_CONCELHOS
+        for i, r in enumerate(poly):
+            if not KEEP_CONCELHOS and i > 0:
+                continue
+            out.append(ring_points(r))
     return out
 
 

@@ -50,7 +50,7 @@ DATA_FILES = [
     'nap_opc_registry.csv', 'nap_opc_points.csv', 'nap_opc_join_report.txt',
     'agents-summary.json', 'data-provenance.json',
     'concelho_check.csv', 'concelho_mismatches.md',
-    'osm_umap.csv', 'osm_caca.csv', 'osm_umap_findings.md',
+    'osm_umap.csv', 'osm_caca.csv', 'osm_planned.csv', 'osm_umap_findings.md',
     'opc_registry_authority.csv', 'tracker_errors.csv', 'tracker_meta.json',
     'tracker_findings.md', 'tracker_findings.csv',
     'ohmigo_chargers.json',
@@ -64,7 +64,10 @@ TRACKER_DERIVED = {
     'opc_registry_authority.csv', 'tracker_errors.csv', 'tracker_meta.json',
 }
 
-# Onde se procuram referências soltas (B). O próprio .gitignore e o ficheiro que
+# Onde se procuram referências soltas (B). O site/ (gerado) não entra: os
+# seus site/data/*.json (stats, panels, sites, points, outline, opc) são
+# entregáveis do site, não ficheiros do pipeline, e nenhum nome coincide com
+# DATA_FILES; o validate_site.py é que os verifica. O próprio .gitignore e o ficheiro que
 # declara a lista ficam de fora para não se auto-apontar.
 SCAN_DIRS = ['scripts', '.github', 'references', 'Agents', 'assets']
 SCAN_FILES = ['AGENTS.md', 'CLAUDE.md', 'README.md', 'README.en.md', 'SKILL.md',
@@ -120,7 +123,7 @@ for path in tracked_paths():
             fail('B', f'{path}:{lineno}: referência sem prefixo data/ — {line.strip()[:90]}')
 
 # --- C. scripts referenciados pelos workflows existem -----------------------
-for wf in ('refresh.yml', 'agents.yml', 'pr-checks.yml'):
+for wf in ('refresh.yml', 'agents.yml', 'pr-checks.yml', 'pages.yml', 'ohmigo-daily.yml'):
     p = os.path.join('.github', 'workflows', wf)
     if not os.path.exists(p):
         continue

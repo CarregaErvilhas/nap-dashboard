@@ -22,7 +22,7 @@ Licença: os endpoints do NAP são publicados sob licenças de livre acesso (ver
 páginas NAP do IMT-IP, `nap-portugal.imt-ip.pt/nap/multimodalsupplydetail/148` e
 `/149`). Termos do sítio do IMT: uso livre com menção da fonte, sem fins lucrativos
 nem ilícitos — compatível com a licença não comercial deste repo, mas o rodapé
-do dashboard tem de manter a atribuição. Note-se que o MOBI.E passou a exercer
+do site tem de manter a atribuição. Note-se que o MOBI.E passou a exercer
 de EADME do NAP ao abrigo do DL 93/2025; decorre um regime transitório até
 31 de dezembro de 2027.
 
@@ -166,7 +166,7 @@ para verificação no terreno, nunca como fonte de verdade. As descargas ficam e
 cache em `data/umap_cache/` (gitignored).
 
 Licença: os dados OSM subjacentes são **ODbL 1.0** — o uso público exige `©` dos
-contribuidores do OpenStreetMap e ligação à ODbL **no próprio dashboard** (rodapé
+contribuidores do OpenStreetMap e ligação à ODbL **no próprio site** (rodapé
 + atribuição no mapa, feito) e os CSV/campos derivados do OSM mantêm-se sob
 ODbL (share-alike; ver `THIRD-PARTY-NOTICES.md` para os obter). As duas camadas
 umap abaixo têm ainda os direitos dos seus curadores (não foi encontrada licença

@@ -1,7 +1,10 @@
-"""Build a self-contained local dashboard (dashboard.html) from the NAP/MOBI.E/DGEG CSVs.
+"""Build the site data, facts.md and errors.md from the NAP/MOBI.E/DGEG CSVs.
 
-No external libs: pure CSS/JS bar charts, embedded JSON data.
-Run: python build_dashboard.py  ->  writes dashboard.html
+Computes one `data` dict from the pipeline CSVs, writes facts.md and errors.md,
+then hands `data` to `build_site.render`, which writes the multi-page static
+site into site/ (pages + site/data/*.json; see scripts/build_site.py).
+Run from the repo root: python scripts/build_dashboard.py
+Validate afterwards with: python scripts/validate_site.py
 """
 import json
 import html as html_esc
@@ -13,9 +16,10 @@ import pandas as pd
 
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__))))
 import dashboard_i18n as i18n
-import dashboard_payload
 import archive_panel
+import build_site
 import nap_static_checks
+import osm_tags
 
 S = pd.read_csv('data/nap_static_sites.csv', dtype=str)
 P = pd.read_csv('data/nap_static_points.csv', dtype=str)
@@ -115,14 +119,32 @@ site_maxkw = pts.groupby('site_external_id')['max_power_kw'].max()
 site_conn = P.groupby('site_external_id')['connector_type'].apply(
     lambda s: sorted({CONN_NAMES.get(t, t) for t in s if pd.notna(t)}))
 
+# Battery architecture filter: the site's DC connectors by declared voltage.
+# '800' = declares more than 500 V, '400' = declares 500 V or less (0 and absurd values
+# such as 300000 are dropped). A car of either architecture charges on either;
+# the difference is the power an 800 V car gets.
+_dcv = P[P.charging_mode == 'mode4DC'].copy()
+_dcv['_v'] = pd.to_numeric(_dcv.voltage, errors='coerce')
+# 'unk' = a DC connector with no usable voltage (0, empty or absurd), so those
+# sites stay reachable instead of vanishing from both options.
+_dcv['_b'] = _dcv._v.apply(lambda v: 'unk' if not (0 < v <= 2000) else ('800' if v > 500 else '400'))
+site_dcv = _dcv.groupby('site_external_id')['_b'].apply(lambda s: sorted(set(s), key=['800', '400', 'unk'].index))
+
 osm = pd.read_csv('data/osm_umap.csv', dtype=str) if os.path.exists('data/osm_umap.csv') else None
 caca = pd.read_csv('data/osm_caca.csv', dtype=str) if os.path.exists('data/osm_caca.csv') else None
+# NAP vs OSM position: past this distance the two sources disagree and the site is
+# shown at the OSM position (read off the charger by the community, usually right;
+# the NAP has sites in the Atlantic), with a warning. 150 m flags 92 sites, 300 m 42,
+# 500 m 31: 300 m stays clear of way centroids of big car parks.
+OSM_DIVERGE_KM = 0.3
 osm_by_site = {}
 if osm is not None:
     for _, r in osm.iterrows():
         e = osm_by_site.setdefault(r.code, {})
         e['osm_op'] = r.osm_operator
         e['osm_dist'] = float(r.dist_km)
+        # a multi-code ref ("A;B;C") is one OSM element for several sites: not a position
+        e['osm_pos'] = (float(r.osm_lat), float(r.osm_lon)) if ';' not in str(r.osm_ref) else None
         e['osm_access'] = r.osm_access
         e['osm_fee'] = r.osm_fee
         e['ad_hoc'] = (r.pay_cards == 'yes') or (r.auth_none == 'yes')
@@ -153,6 +175,39 @@ if osm is not None:
         pay_by_site[r.code] = site_pay(r)
 pts['pay'] = pts['site_external_id'].map(pay_by_site).apply(lambda v: v if isinstance(v, list) else [])
 
+# Every charger make and model mapped on OSM at the site (["Alpitronic HYC_150",
+# "Efacec QC45"], most common first), joined the
+# same way as the ohmigo dataset (osm_tags.py), so both show the same value. A
+# code that names two NAP sites gets nothing rather than the other one's.
+_by_code = {}
+for _, r in S.iterrows():
+    try:
+        _xy = {'lat': float(r.latitude), 'lon': float(r.longitude)}
+    except (TypeError, ValueError):
+        continue
+    _by_code[r.external_id] = None if r.external_id in _by_code else _xy
+osm_tags_by_site = osm_tags.osm_by_code({c: v for c, v in _by_code.items() if v})
+# DATEX II accessibility on the NAP (almost nobody publishes it) + OSM wheelchair.
+NAP_ACCESSIBLE = {'wheelChairAccessible', 'disabilityAccessible', 'barrierFreeAccessible'}
+nap_access = (S.set_index('external_id')['accessibility'].dropna().to_dict()
+              if 'accessibility' in S.columns else {})
+
+
+def osm_extra(ext):
+    """What the site page shows from OSM beyond the old osm_umap join: every
+    charger make/model (hw), the old codes on stickers (old, oldop), the total
+    power when it is shared between sockets (shared, kW), wheelchair access
+    (wc: 'yes'/'limited'/'no', NAP or OSM) and the community's fixme notes."""
+    o = osm_tags_by_site.get(ext, {})
+    rec = {'hw': o.get('hardware'), 'old': o.get('oldRefs'), 'oldop': o.get('oldOperator'),
+           'shared': o.get('sharedKw'), 'fixme': o.get('fixme')}
+    wc = o.get('wheelchair')
+    if NAP_ACCESSIBLE & set(str(nap_access.get(ext, '')).split('|')):
+        wc = 'yes'
+    if wc in ('yes', 'limited', 'no'):
+        rec['wc'] = wc
+    return {k: v for k, v in rec.items() if v}
+
 sites_map = []
 for _, s in S.iterrows():
     ext = s.external_id
@@ -175,16 +230,37 @@ for _, s in S.iterrows():
         'pw': pw_class(float(site_maxkw.get(ext, 0) or 0) * 1000),
         'conns': site_conn.get(ext, []),
         'pay': pay_by_site.get(ext, []),
+        'dcv': site_dcv.get(ext, []),
     }
     if om:
+        op_ = om.get('osm_pos')
+        # OSM point must be in Portugal (incl. islands) or it is no better than the NAP
+        if (op_ and om['osm_dist'] > OSM_DIVERGE_KM and 29 <= op_[0] <= 42.5 and -32 <= op_[1] <= -6):
+            rec['nap_lat'], rec['nap_lon'] = lat, lon
+            rec['lat'], rec['lon'] = round(op_[0], 6), round(op_[1], 6)
+            rec['loc_km'] = round(om['osm_dist'], 2)
         rec['osm_op'] = om.get('osm_op')
         rec['osm_dist'] = om.get('osm_dist')
         rec['osm_access'] = om.get('osm_access')
         rec['osm_fee'] = om.get('osm_fee')
         rec['ad_hoc'] = om.get('ad_hoc')
+    rec.update(osm_extra(ext))
     if ext in caca_by_site:
         rec['doubt'] = '; '.join(caca_by_site[ext])
     sites_map.append(rec)
+
+# Sites OSM says are planned or under construction (scripts/osm_planned.py). They are not
+# in the NAP, so they carry `lc` ('construction' | 'planned'); the Procurar page hides them
+# by default. No points, no live status; counted nowhere else (KPIs stay NAP-only).
+if os.path.exists('data/osm_planned.csv'):
+    for _, r in pd.read_csv('data/osm_planned.csv', dtype=str, keep_default_na=False).iterrows():
+        _kw = float(r.kw or 0)
+        sites_map.append({
+            'ext': r.ext, 'name': r['name'] or r.ext, 'city': r.city, 'op': r.op,
+            'region': r.region, 'lat': float(r.lat), 'lon': float(r.lon),
+            'status': 'planned', 'lc': r.lc, 'npts': int(r.npts), 'kw': _kw,
+            'pw': pw_class(_kw * 1000), 'conns': [c for c in r.conns.split('|') if c],
+            'pay': [], 'dcv': [], 'osm_ref': r.osm})
 
 # ---- aggregations ----
 def kpi(title, value, sub):
@@ -799,40 +875,10 @@ def clean(o):
         return [clean(v) for v in o]
     return o
 
-tmpl = open('assets/dashboard_template.html').read()
-try:  # host do estado ao vivo; uma variável mal escrita não pode partir o refresh
-    tmpl = dashboard_payload.apply_archive_origin(tmpl, os.environ.get('AMPERE_ARCHIVE_URL'))
-except ValueError as e:
-    print(f'::warning::{e}; fica {dashboard_payload.ARCHIVE_ORIGIN_DEFAULT}')
-# O payload vai para dentro de um <script>: tem de estar escapado para esse
-# contexto (dashboard_payload.dump_payload escapa <, >, & — sem isso um
-# "</script>" num dado do OSM/umap fechava o elemento e executava JS
-# arbitrário no dashboard publicado).
-html = tmpl.replace('/*__DATA__*/', dashboard_payload.dump_payload(clean(data)))
-open('dashboard.html', 'w').write(html)
-print(f'dashboard.html written: {len(pts)} points, {len(data["points"])} records, {len(html)/1e6:.1f} MB')
-
-# ---- screenshot for the README (optional; skipped if no Chrome found) ----
-import shutil, subprocess
-CHROME_CANDIDATES = [
-    '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
-    '/Applications/Google Chrome Dev.app/Contents/MacOS/Google Chrome Dev',
-    '/Applications/Chromium.app/Contents/MacOS/Chromium',
-    'google-chrome',
-    'chromium',
-    'chromium-browser',
-]
-chrome = next((p for p in CHROME_CANDIDATES if shutil.which(p) or os.path.exists(p)), None)
-if chrome:
-    out = 'dashboard.png'
-    subprocess.run([chrome, '--headless=new', '--disable-gpu', '--hide-scrollbars',
-                    f'--screenshot={out}', '--window-size=1440,900',
-                    '--virtual-time-budget=20000',
-                    'file://' + os.path.abspath('dashboard.html')],
-                   check=False, capture_output=True)
-    if os.path.exists(out):
-        print(f'dashboard.png written ({os.path.getsize(out) // 1024} KB)')
-    else:
-        print('dashboard.png screenshot FAILED (chrome ran but no output)')
-else:
-    print('Chrome not found, skipping dashboard.png screenshot')
+# O site multi-página (site/) lê os dados de site/data/*.json; build_site.render
+# escreve-os, copia os ficheiros estáticos de assets/site/ e gera as páginas.
+# AMPERE_ARCHIVE_URL troca a origem do estado ao vivo (CSP + meta nap-live-origin);
+# um valor inválido só avisa e fica a origem por omissão.
+sizes = build_site.render(clean(data), 'site', os.environ.get('AMPERE_ARCHIVE_URL'))
+print(f'site/ written: {len(pts)} points, {len(data["points"])} records; '
+      + ', '.join(f'{n} {b // 1024} KB' for n, b in sizes.items()))

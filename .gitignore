@@ -6,9 +6,10 @@ __pycache__/
 *.pyc
 
 # Everything fetched from a source or derived by the pipeline lives in data/.
-# The repo root keeps only code, docs and the deliverables (dashboard.html,
-# dashboard.png, facts.md, errors.md, novidades.md, network-census.json,
-# assets/, scripts/, Agents/, Agents-outputs/).
+# The repo root keeps only code, docs and the deliverables (site/, which is
+# tracked, facts.md, errors.md, novidades.md,
+# network-census.json, assets/, scripts/, Agents/, Agents-outputs/).
+# `data/*` below is anchored to the root: site/data/ stays tracked.
 #
 # Populate it with:  bash scripts/fetch_tracker.sh && bash scripts/fetch_data.sh
 #                    venv/bin/python scripts/nap_etl.py \

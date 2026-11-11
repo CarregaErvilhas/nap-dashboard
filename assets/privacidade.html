@@ -5,27 +5,22 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="dark light">
 <meta name="referrer" content="strict-origin-when-cross-origin">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src 'self' data:; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'unsafe-inline'; img-src 'self' data:; base-uri 'none'; form-action 'none'">
 <title>Privacidade — EV NAP Portugal</title>
-<meta name="description" content="O que o EV NAP Portugal guarda no teu navegador e o que não recolhe: sem cookies, sem análise de tráfego, sem pedidos a terceiros.">
+<meta name="description" content="O que o EV NAP Portugal guarda no teu navegador e o que não recolhe: sem cookies, sem análise de tráfego, um único pedido a terceiros (estado ao vivo).">
 <link rel="canonical" href="https://nap.ocarroeletrico.com/privacidade.html">
 <link rel="icon" href="favicon.ico" sizes="32x32">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<script>
-// Mesmo tema e idioma do dashboard (chaves nap-theme / nap-lang), validados.
-(function(){var d=document.documentElement,g=function(k,a){try{var v=localStorage.getItem(k);return a.indexOf(v)>-1?v:null}catch(e){return null}};
-var th=g('nap-theme',['auto','light','dark'])||'auto',vi=g('nap-vision',['default','cb','hc'])||'default',q=null;
-try{q=new URLSearchParams(location.search).get('lang')}catch(e){}
-var l=(q==='pt'||q==='en')?q:(g('nap-lang',['pt','en'])||(/^pt/i.test(navigator.language||'')?'pt':'en'));
-var light=th==='light'||(th==='auto'&&matchMedia&&matchMedia('(prefers-color-scheme: light)').matches);
-d.setAttribute('data-theme',light?'light':'dark');d.setAttribute('data-vision',vi);d.lang=l;})();
-</script>
+<script src="boot.js"></script>
 <style>
   :root{color-scheme:dark;--bg:#0f172a;--card:#1e293b;--ink:#e2e8f0;--mut:#94a3b8;--acc:#38bdf8;--line:#334155}
   html[data-theme="light"]{color-scheme:light;--bg:#f8fafc;--card:#fff;--ink:#0f172a;--mut:#475569;--acc:#0369a1;--line:#cbd5e1}
+  html[data-vision="hc"]:not([data-theme]),
   html[data-vision="hc"][data-theme="dark"]{--bg:#000;--card:#000;--ink:#fff;--mut:#e8e8e8;--acc:#ffe14d;--line:#fff}
   html[data-vision="hc"][data-theme="light"]{--bg:#fff;--card:#fff;--ink:#000;--mut:#1a1a1a;--acc:#0033cc;--line:#000}
+  @media (prefers-color-scheme:light){html:not([data-theme]){color-scheme:light;--bg:#f8fafc;--card:#fff;--ink:#0f172a;--mut:#475569;--acc:#0369a1;--line:#cbd5e1}
+    html[data-vision="hc"]:not([data-theme]){--bg:#fff;--card:#fff;--ink:#000;--mut:#1a1a1a;--acc:#0033cc;--line:#000}}
   *{box-sizing:border-box}
   body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 -apple-system,Segoe UI,Roboto,sans-serif;padding:24px 16px}
   main{max-width:68ch;margin:0 auto}
@@ -39,11 +34,11 @@ d.setAttribute('data-theme',light?'light':'dark');d.setAttribute('data-vision',v
 </head>
 <body>
 <main>
-<nav><a href="./">← <span lang="pt">Voltar ao dashboard</span><span lang="en">Back to the dashboard</span></a></nav>
+<nav><a href="./">← <span lang="pt">Voltar ao site</span><span lang="en">Back to the site</span></a></nav>
 
 <section lang="pt">
 <h1>Privacidade</h1>
-<p>Este site é uma página estática. Não tem contas, formulários, cookies nem análise de tráfego. Os dados, o mapa e os gráficos vêm dentro da própria página, com uma exceção: o estado ao vivo dos postos.</p>
+<p>Este site é uma página estática. Não tem contas, formulários, cookies nem análise de tráfego. Os dados vêm de ficheiros JSON do próprio site, pedidos ao mesmo endereço, e o mapa é desenhado no teu navegador. A única exceção é o estado ao vivo dos postos. O tipo de letra (Nunito) também é servido por este site, sem CDN de fontes.</p>
 <h2>O que fica guardado no teu navegador</h2>
 <p>Só preferências de apresentação, no <code>localStorage</code> do teu navegador. Não são enviadas a ninguém e apagam-se limpando os dados do site:</p>
 <ul>
@@ -54,18 +49,20 @@ d.setAttribute('data-theme',light?'light':'dark');d.setAttribute('data-vision',v
 <h2>O que o alojamento vê</h2>
 <p>O site é servido pelo GitHub Pages. Como em qualquer alojamento web, o GitHub recebe o teu endereço IP e os dados normais do pedido (navegador, página pedida) e trata-os segundo a sua <a href="https://docs.github.com/pt/site-policy/privacy-policies/github-general-privacy-statement">declaração de privacidade</a>. Nós não temos acesso a esses registos nem os usamos.</p>
 <h2>O estado ao vivo</h2>
-<p>Ao abrir o dashboard, o teu navegador pede o estado atual de cada posto a <code>ohm-age.ocarroeletrico.com</code>, o arquivo <a href="https://github.com/CarregaErvilhas/AmpereArchive">AmpereArchive</a> (nosso, servido pela Cloudflare). O pedido não leva cookies nem a página de onde vens; a Cloudflare recebe o teu endereço IP e os dados normais do pedido e trata-os segundo a sua <a href="https://www.cloudflare.com/privacypolicy/">política de privacidade</a>. Do nosso lado, a Cloudflare só mostra estatísticas agregadas (número de pedidos, por exemplo), que não permitem seguir um visitante nem uma sessão. Se o pedido falhar ou o bloqueares, o dashboard mostra o estado da última atualização semanal.</p>
+<p>Ao abrir as páginas Procurar ou Rede, o teu navegador pede o estado atual de cada posto a <code>ohm-age.ocarroeletrico.com</code>, o arquivo <a href="https://github.com/CarregaErvilhas/AmpereArchive">AmpereArchive</a> (nosso, servido pela Cloudflare). O pedido não leva cookies nem a página de onde vens; a Cloudflare recebe o teu endereço IP e os dados normais do pedido e trata-os segundo a sua <a href="https://www.cloudflare.com/privacypolicy/">política de privacidade</a>. Do nosso lado, a Cloudflare só mostra estatísticas agregadas (número de pedidos, por exemplo), que não permitem seguir um visitante nem uma sessão. Se o pedido falhar ou o bloqueares, o site mostra o estado da última atualização semanal.</p>
+<h2>Perto de mim</h2>
+<p>O navegador só pede acesso à tua localização quando carregas em «Perto de mim», e podes recusar. As coordenadas são usadas no teu dispositivo, para ordenar os locais por distância e centrar o mapa. Não são enviadas a ninguém nem guardadas, e desaparecem ao fechar ou recarregar a página.</p>
 <h2>Os dados dos postos</h2>
 <p>Vêm de fontes públicas (NAP/MOBI.E, DGEG, OpenStreetMap) e descrevem equipamentos e operadores, não pessoas. Se encontrares aqui um dado pessoal que não devia estar, escreve-nos e removemo-lo.</p>
 <h2>Ligações externas</h2>
-<p>Os sites para onde o dashboard aponta (mobie.pt, OpenStreetMap, GitHub e outros) têm as suas próprias políticas.</p>
+<p>Só saímos deste site se carregares numa ligação. Os sites para onde apontamos (Google Maps, OpenStreetMap, ohmigo, Telegram, GitHub e outros) têm as suas próprias políticas. Nas ligações «Como chegar» e «Ver no OpenStreetMap» vão as coordenadas do posto, não as tuas.</p>
 <h2>Contacto</h2>
 <p>Responsável: O Carro Elétrico / Fernando Miguel, <a href="mailto:info@ocarroeletrico.com">info@ocarroeletrico.com</a>. Podes pedir acesso, retificação ou apagamento de dados pessoais, ou queixar-te à <a href="https://www.cnpd.pt/">CNPD</a>.</p>
 </section>
 
 <section lang="en">
 <h1>Privacy</h1>
-<p>This site is a static page. It has no accounts, forms, cookies or analytics. The data, the map and the charts ship inside the page itself, with one exception: the live status of the chargers.</p>
+<p>This site is a static page. It has no accounts, forms, cookies or analytics. The data comes from JSON files of the site itself, requested from the same address, and the map is drawn in your browser. The one exception is the live status of the chargers. The typeface (Nunito) is also served by this site, with no font CDN.</p>
 <h2>What is stored in your browser</h2>
 <p>Only display preferences, in your browser's <code>localStorage</code>. They are never sent anywhere and go away when you clear the site's data:</p>
 <ul>
@@ -76,11 +73,13 @@ d.setAttribute('data-theme',light?'light':'dark');d.setAttribute('data-vision',v
 <h2>What the host sees</h2>
 <p>The site is served by GitHub Pages. As with any web host, GitHub receives your IP address and the usual request data (browser, requested page) and handles it under its <a href="https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement">privacy statement</a>. We have no access to those logs and do not use them.</p>
 <h2>Live status</h2>
-<p>When you open the dashboard, your browser asks <code>ohm-age.ocarroeletrico.com</code> for the current status of each charger. That is the <a href="https://github.com/CarregaErvilhas/AmpereArchive">AmpereArchive</a> (ours, served by Cloudflare). The request carries no cookies and not the page you came from; Cloudflare receives your IP address and the usual request data and handles them under its <a href="https://www.cloudflare.com/privacypolicy/">privacy policy</a>. On our side, Cloudflare only shows aggregate statistics (such as the number of requests), which cannot follow a visitor or a session. If it fails or you block it, the dashboard shows the status from the last weekly refresh.</p>
+<p>When you open the Find or Network pages, your browser asks <code>ohm-age.ocarroeletrico.com</code> for the current status of each charger. That is the <a href="https://github.com/CarregaErvilhas/AmpereArchive">AmpereArchive</a> (ours, served by Cloudflare). The request carries no cookies and not the page you came from; Cloudflare receives your IP address and the usual request data and handles them under its <a href="https://www.cloudflare.com/privacypolicy/">privacy policy</a>. On our side, Cloudflare only shows aggregate statistics (such as the number of requests), which cannot follow a visitor or a session. If it fails or you block it, the site shows the status from the last weekly refresh.</p>
+<h2>Near me</h2>
+<p>Your browser only asks for access to your location when you press "Near me", and you can refuse. The coordinates are used on your device, to sort the sites by distance and centre the map. They are not sent to anyone or stored, and are gone when you close or reload the page.</p>
 <h2>Charger data</h2>
 <p>It comes from public sources (NAP/MOBI.E, DGEG, OpenStreetMap) and describes equipment and operators, not people. If you find personal data here that should not be, write to us and we will remove it.</p>
 <h2>External links</h2>
-<p>The sites the dashboard links to (mobie.pt, OpenStreetMap, GitHub and others) have their own policies.</p>
+<p>We only leave this site if you click a link. The sites we point to (Google Maps, OpenStreetMap, ohmigo, Telegram, GitHub and others) have their own policies. The "Directions" and "View on OpenStreetMap" links carry the charger's coordinates, not yours.</p>
 <h2>Contact</h2>
 <p>Controller: O Carro Elétrico / Fernando Miguel, <a href="mailto:info@ocarroeletrico.com">info@ocarroeletrico.com</a>. You may ask for access, correction or erasure of personal data, or complain to the <a href="https://www.cnpd.pt/">CNPD</a> (Portuguese data protection authority).</p>
 </section>

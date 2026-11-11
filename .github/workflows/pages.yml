@@ -1,23 +1,26 @@
 name: Deploy dashboard to GitHub Pages
 
-# Publica dashboard.html em https://nap.ocarroeletrico.com/ (domínio próprio,
-# ficheiro CNAME abaixo), com robots.txt, sitemap.xml e
-# /.well-known/security.txt, llms.txt e llms-full.txt. Publica também o dataset do ohmigo em
-# /ohmigo/chargers.json (o artifact ohmigo-dataset mais recente de uma corrida
-# do ohmigo-daily.yml ou refresh.yml na main; ver scripts/ohmigo_dataset.py).
-# Dispara quando o dashboard (ou o screenshot, ou este workflow) muda, ou à mão.
+# Publica o site/ commitado em https://nap.ocarroeletrico.com/ (domínio próprio,
+# ficheiro CNAME abaixo): páginas, js, css, fonte, ícones, site/data/*.json,
+# privacidade.html, 404.html e llms.txt já estão todos lá dentro (gerados pelo
+# scripts/build_site.py e validados pelo scripts/validate_site.py). Junta
+# robots.txt, sitemap.xml, /.well-known/security.txt, llms-full.txt e um
+# /dashboard.html que redireciona para / (links antigos).
+# Publica também o dataset do ohmigo em /ohmigo/chargers.json (o artifact
+# ohmigo-dataset mais recente de uma corrida do ohmigo-daily.yml ou
+# refresh.yml na main; ver scripts/ohmigo_dataset.py).
+# Dispara quando o site, os resumos de texto (llms-full.txt) ou este workflow
+# mudam, ou à mão. Mudanças em assets/ só chegam aqui depois de um
+# build_site.py, que as copia para site/.
 on:
   workflow_dispatch:
   push:
     branches: [main]
     paths:
-      - "dashboard.html"
-      - "dashboard.png"
-      - "assets/privacidade.html"
-      - "assets/404.html"
-      - "assets/favicon.*"
-      - "assets/apple-touch-icon.png"
-      - "assets/llms.txt"
+      - "site/**"
+      - "facts.md"
+      - "errors.md"
+      - "novidades.md"
       - ".github/workflows/pages.yml"
 
 permissions:
@@ -38,23 +41,43 @@ jobs:
       - name: Stage site
         run: |
           mkdir -p public
-          cp dashboard.html public/index.html
-          cp dashboard.html public/dashboard.html
-          cp dashboard.png public/dashboard.png
-          cp assets/privacidade.html assets/404.html assets/favicon.svg assets/favicon.ico assets/apple-touch-icon.png public/
+          # O site inteiro (a lista fechada validada pelo validate_site.py).
+          cp -R site/. public/
+          # O antigo dashboard de página única: redireciona para / sem script
+          # (a CSP das páginas não deixa scripts inline), para links antigos.
+          cat > public/dashboard.html <<'EOF'
+          <!DOCTYPE html>
+          <html lang="pt">
+          <head>
+          <meta charset="utf-8">
+          <meta http-equiv="Content-Security-Policy" content="default-src 'none'; base-uri 'none'; form-action 'none'">
+          <meta name="robots" content="noindex">
+          <meta http-equiv="refresh" content="0; url=/">
+          <link rel="canonical" href="https://nap.ocarroeletrico.com/">
+          <title>NAP EADME</title>
+          </head>
+          <body><p><a href="/">nap.ocarroeletrico.com</a></p></body>
+          </html>
+          EOF
           echo "nap.ocarroeletrico.com" > public/CNAME
-          # llmstxt.org: índice curto para assistentes; llms-full.txt junta os
-          # três resumos em texto (factos, novidades, erros), que o refresh
-          # semanal regenera e dispara este deploy.
-          cp assets/llms.txt public/llms.txt
+          # llmstxt.org: o índice curto (llms.txt) já vem no site/; llms-full.txt
+          # junta os três resumos em texto (factos, novidades, erros), que o
+          # refresh semanal regenera e dispara este deploy.
           { printf '# NAP EADME — texto completo\n\n> Factos, novidades e erros reportáveis da rede de carregamento de VE em Portugal, como estavam neste deploy (%s). Índice: https://nap.ocarroeletrico.com/llms.txt\n\n' "$(date -u +%F)"
             for f in facts novidades errors; do printf '\n---\n\n<!-- %s.md -->\n\n' "$f"; cat "$f.md"; done
           } > public/llms-full.txt
-          # Para os motores de busca: o dashboard (/dashboard.html é o mesmo, com
-          # canonical para /) e a página de privacidade. /ohmigo/ é o dataset
+          # Para os motores de busca: as três páginas do site e a de privacidade
+          # (/dashboard.html só redireciona para /). /ohmigo/ é o dataset
           # (~10 MB), para máquinas: fora do rastreio.
           printf 'User-agent: *\nAllow: /\nDisallow: /ohmigo/\n\nSitemap: https://nap.ocarroeletrico.com/sitemap.xml\n' > public/robots.txt
-          printf '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n  <url><loc>https://nap.ocarroeletrico.com/</loc><lastmod>%s</lastmod></url>\n  <url><loc>https://nap.ocarroeletrico.com/privacidade.html</loc><lastmod>%s</lastmod></url>\n</urlset>\n' "$(date -u +%F)" "$(date -u +%F)" > public/sitemap.xml
+          d=$(date -u +%F)
+          {
+            printf '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
+            for u in / /rede.html /operadores.html /privacidade.html; do
+              printf '  <url><loc>https://nap.ocarroeletrico.com%s</loc><lastmod>%s</lastmod></url>\n' "$u" "$d"
+            done
+            printf '</urlset>\n'
+          } > public/sitemap.xml
           # RFC 9116: a quem escrever sobre um problema de segurança (o mesmo
           # contacto do ohmigo e do CEME). Expires é obrigatório; conta 180
           # dias a partir deste deploy, e o refresh semanal faz um por semana.

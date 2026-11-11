@@ -67,17 +67,18 @@
   variantes da Atlante; 3 da Iberdrola; variantes de maiúsculas/minúsculas da
   REPSOL) — normalizar antes de agregar.
 
-## Build do dashboard
+## Build do site
 
-- `build_dashboard.py` injeta os dados em `assets/dashboard_template.html` no
-  marcador `/*__DATA__*/` através de
-  `json.dumps(clean(data), ensure_ascii=False, allow_nan=False)`.
+- `build_dashboard.py` calcula o dicionário `data`, passa-o por `clean()` e
+  `build_site.render()` grava-o como `site/data/*.json` (via `site_data.py`) e
+  renderiza as páginas de `assets/site/` para `site/`.
 - **Tem** de higienizar os float NaN/Inf para null antes do dump; um `NaN` cru
   quebra o `JSON.parse` do browser (bug histórico, já corrigido pelo helper
   `clean()`).
-- Validar depois de reconstruir: fazer `json.loads` ao JSON extraído de
-  `const D = (.*?);` e passar `node --check` no bloco `<script>` extraído.
-- O dashboard tem de abrir por `file://`, sem bibliotecas externas (CSS/JS puro).
+- Validar depois de reconstruir: `scripts/validate_site.py`.
+- Sem bibliotecas externas (CSS/JS puro). As páginas pedem o JSON por `fetch`,
+  por isso a pré-visualização local usa
+  `python3 -m http.server --directory site`.
 - Bugs JS históricos a vigiar: referência a um id de elemento `status` que não
   existe; `label()` a usar uma `max` indefinida em vez da `m` local. Se os
   gráficos ficarem vazios abaixo dos KPIs, suspeitar de um erro de runtime e

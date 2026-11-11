@@ -4,21 +4,25 @@
 Single-machine analysis of the Portuguese EV charging network. Pinned runtime
 deps in `requirements.txt` (Dependabot, monthly); CI in `.github/workflows/`
 (weekly `refresh.yml` pipeline + `pages.yml` deploy + `agents.yml`). Code
-produces CSVs + a self-contained dashboard (`dashboard.html`, `facts.md`,
-`errors.md`), validated by `scripts/validate_dashboard.py` +
-`scripts/pipeline_guard.py`. Don't over-engineer.
+produces CSVs + a static multi-page site (`site/`, `facts.md`, `errors.md`),
+validated by `scripts/validate_site.py` + `scripts/pipeline_guard.py`. Don't over-engineer.
 
 ## Layout
 - `scripts/` — the pipeline (in the order of "Pipeline order" below, plus
   `extract_enums.py`, `fetch_schemas.sh` and the manual `tracker_fixed.py`);
-  the checks (`validate_dashboard.py`, `pipeline_guard.py`, `ci_paths.py`);
-  the dashboard helpers (`dashboard_payload.py`, `dashboard_i18n.py`); the
+  the checks (`validate_site.py`, `pipeline_guard.py`, `ci_paths.py`);
+  the site helpers (`site_data.py`, `build_site.py`, `dashboard_payload.py`,
+  `dashboard_i18n.py`); the
   anomalias agent's deterministic side (`anomalias_summary.py`,
   `anomalias_evidence.py`, `anomalias_check.py`, `format_anomalias.py`,
-  `check_agents.py`); and `ohmigo_dataset.py`. One-time migrations don't stay
+  `check_agents.py`); `ohmigo_dataset.py`; and `osm_tags.py` (the per-site OSM
+  tags from the Overpass dump, shared by the ohmigo dataset and the site). One-time migrations don't stay
   here once they've run: git keeps them.
-- `assets/` — `dashboard_template.html`, `pt_outline.json` (PT outline for the
-  map), `schemas/*.xsd` (DATEX II 3.3 © CEN; ver `assets/schemas/README.md`)
+- `assets/` — `site/` (the site's sources: `index.html`, `rede.html`,
+  `operadores.html`, the `_head/_header/_footer.html` partials, `app.css`,
+  `boot.js`, `common.js`, `find.js`, `rede.js`, `operadores.js`, `fonts/Nunito`),
+  `privacidade.html`, `404.html`, `llms.txt`, `pt_outline.json` (PT outline for
+  the map), `pt_basemap.json` (OSM places + main roads for the map; refresh by hand with `scripts/make_pt_basemap.py`, copied to `site/data/basemap.json`), `schemas/*.xsd` (DATEX II 3.3 © CEN; ver `assets/schemas/README.md`)
 - `references/` — docs for the SKILL.md (data sources, gotchas)
 - `Agents/` — system prompts dos agentes automáticos (um `.md` por agente; ver
   `Agents/AGENTS.md`). Atual: `Agents/anomalias.md` (anomalias dos dados
@@ -35,8 +39,8 @@ produces CSVs + a self-contained dashboard (`dashboard.html`, `facts.md`,
   `data/opc_registry_authority.csv` and `data/tracker_meta.json` are
   re-extracted from the source xlsx on every run and stay out of git: they are
   a third party's data with no reuse licence, and this repo is public.
-- The repo root holds only code, docs and deliverables: `dashboard.html`,
-  `dashboard.png`, `facts.md`, `errors.md`, `novidades.md`,
+- The repo root holds only code, docs and deliverables: `site/`,
+  `facts.md`, `errors.md`, `novidades.md`,
   `network-census.json`, `assets/`, `scripts/`, `Agents/`, `Agents-outputs/`.
 
 ## Environment
@@ -85,9 +89,11 @@ venv/bin/pip install duckdb
 venv/bin/python scripts/archive_history.py --url https://ohm-age.ocarroeletrico.com   # ou AMPERE_ARCHIVE_URL
 venv/bin/python -m unittest discover -s tests
 ```
-- Fonte: `--url` descarrega os ficheiros horários para `data/archive_cache/`
-  (não há listagem: gera os nomes e aceita 404; usa `v1/<CC>/manifest.json` se
-  um dia existir). `--root DIR | s3://bucket` lê uma cópia local ou o R2.
+- Fonte: `--url` descarrega para `data/archive_cache/` os ficheiros que
+  `v1/<CC>/manifest.json` lista (o endereço não lista; o coletor reescreve o
+  manifest depois de cada hora, e ele inclui o backfill `part-backfill`/`part-ocpi`).
+  Sem manifest, gera os nomes `part-<HH>` desde `ARCHIVE_EPOCH` e aceita 404,
+  e aí o backfill não entra. `--root DIR | s3://bucket` lê uma cópia local ou o R2.
   Janela `--days 28`; `static_versions` vem sempre desde o 1.º dia.
 - Modelo: o snapshot diário é o ponto de partida (instante = `publication_time`
   da 1.ª leitura de estado do dia depois do retrato estático); os eventos
@@ -105,7 +111,7 @@ venv/bin/python -m unittest discover -s tests
   `NEEDS_DAYS` (ocupação e reparação: 14 dias). Os estados são declarados
   pelos operadores, não medidos; dados NAP, uso não comercial.
 - No `refresh.yml`: passo `continue-on-error` antes do `build_dashboard.py`
-  (precisa de `vars.AMPERE_ARCHIVE_URL`; sem ela, ou se falhar, o dashboard
+  (precisa de `vars.AMPERE_ARCHIVE_URL`; sem ela, ou se falhar, o site
   sai sem o painel). `data/archive_cache/` fica em `actions/cache` entre
   corridas; o sync apaga os dias fora da janela (menos `static_versions`).
   Um 403 conta como erro, nunca como "hora sem ficheiro".
@@ -120,25 +126,30 @@ venv/bin/python -m unittest discover -s tests
 `novidades.md` + novo `network-census.json`; primeira corrida = baseline) →
 `scripts/build_dashboard.py`.
 `scripts/build_dashboard.py` reads the intermediate CSVs +
-`data/osm_umap.csv`/`data/osm_caca.csv`/`assets/pt_outline.json` and writes
-`dashboard.html`, `facts.md`, `errors.md`; it appends
+`data/osm_umap.csv`/`data/osm_caca.csv`/`assets/pt_outline.json`, computes the
+`data` dict and writes `facts.md`, `errors.md` and the site: it calls
+`build_site.render(clean(data), 'site', AMPERE_ARCHIVE_URL)`, which splits the
+payload into `site/data/{stats,panels,sites,points,outline,opc}.json`
+(`scripts/site_data.py`, lossless) and renders the pages from `assets/site/`.
+It appends
 `data/nap_static_findings.md` (written by `scripts/nap_static_checks.py`),
 `data/concelho_mismatches.md` (written by `concelho_check.py`),
 `data/osm_umap_findings.md` (written by `scripts/osm_umap.py`) and
 `data/tracker_findings.md` (written by `scripts/tracker_checks.py`) to `errors.md`
 when present.
-It also regenerates `dashboard.png` (README screenshot) via headless Chrome if
-available; it only warns/skips otherwise.
+`python3 scripts/build_site.py` re-renders the pages from the committed
+`site/data` without the CSVs (use it to ship a front-end change between weekly
+refreshes).
 
-`scripts/validate_dashboard.py` (rode no `refresh.yml` antes do commit, no
+`scripts/validate_site.py` (rode no `refresh.yml` antes do commit, no
 `pr-checks.yml` em cada PR, e em local depois de qualquer build) valida o
-`dashboard.html`: o JSON embutido `const D = {…}` tem de fazer `json.loads`,
-tem de estar escapado para o contexto `<script>` (sem `<`, `>` ou `&` crus — ver
-"Dashboard specifics"), cada `<script>` tem de passar `node --check`, e a
-inicialização tem de correr sem exceção numa eval com DOM stub.
+`site/`: os JSON de `site/data` fazem `json.loads` e cumprem o esquema,
+cada `.js` passa `node --check`, nenhuma página tem `<script>` inline, a CSP é
+a esperada, o front end não usa sinks do tipo `innerHTML` (ver "Site
+specifics") e `applyLive` se comporta com dados sintéticos.
 `scripts/pipeline_guard.py` travará o commit se um upstream mudar o formato e o
 pipeline produzir dados absurdos sem rebentar (limiares mínimos para
-sites/pontos/join/DGEG/registo) — falha o job e o dashboard online fica no
+sites/pontos/join/DGEG/registo) — falha o job e o site online fica no
 último bom.
 
 `scripts/nap_static_checks.py` runs the rules on the static NAP alone that
@@ -155,6 +166,15 @@ polygons (downloaded on first run into `data/caop_cache/`, gitignored) and flags
 sites whose coordinates contradict the concelho implied by the site_id code.
 Writes `data/concelho_check.csv` + `data/concelho_mismatches.md` (errors.md items 11a/11b).
 
+`scripts/osm_planned.py` reads the same Overpass dump and writes `data/osm_planned.csv`:
+sites OSM calls planned or under construction (`construction:`/`planned:`/`proposed:`
+`amenity=charging_station`, a `amenity=charging_station` whose stalls are all
+`construction:man_made=charge_point` — how Tesla hubs are mapped — or loose stalls
+grouped within 40 m), minus those already in the NAP (ref match or ≤30 m).
+`build_dashboard.py` appends them to `sites.json` with `lc` = `construction`|`planned`,
+`status` `planned` and no points; "Procurar" has an "Estado do posto" filter whose default
+is in-service only. They are not counted in any KPI.
+
 `scripts/osm_umap.py` cross-references NAP sites against community OSM data: the
 Overpass dump `Todos.json` from the author of the "Postos de Carregamento v2.1"
 umap map (both `amenity=charging_station` and `man_made=charge_point` elements)
@@ -165,7 +185,7 @@ code, preferring the row with the most payment/auth tags), `data/osm_caca.csv` a
 `data/osm_umap_findings.md` (errors.md item 12).
 
 `scripts/make_pt_outline.py` builds `assets/pt_outline.json` (decimated PT
-outline for the dashboard map **plus per-district/island labels** — `{outline:
+outline for the site map **plus per-district/island labels** — `{outline:
 {region: [rings]}, districts: {region: {name: [lon, lat]}}}`) from the CAOP
 concelho polygons in `data/caop_cache/`. Mainland labels use the CAOP `Distrito`
 attribute (18), Madeira/Açores fall back to island name (`Ilha`/`ILHA`, 2+9).
@@ -260,6 +280,36 @@ the owner, not the CPO (Lidl owns its chargers, Galp operates them: the NAP
 says Galp, OSM says Lidl). Additive and optional, so no `SCHEMA` bump;
 without the dump (osm_umap.py not run) sites just lack `osm`. ODbL: see
 `THIRD-PARTY-NOTICES.md`.
+The `osm` block also has `hardware`: every charger make + model mapped at the
+site, most common first (`["ABB Terra HP CP4", "Alpitronic HYC_400"]`;
+`manufacturer`/`model` are only the commonest). The site shows the same list
+(`hw` in `sites.json`, "Carregadores: …" in the detail) and its search finds
+a site by it. Both come from `scripts/osm_tags.py`, so the site and ohmigo
+never disagree about a charger. An element > 1 km from the NAP point is a
+wrong `ref` on OSM, not a second charger, and is left out.
+Also from `osm_tags.py`, in both the `osm` block and `sites.json`:
+- `sharedKw` (`shared`): the total a charger declares
+  (`charging_station:output`/`charge_point:output`) when it is below its
+  sockets charging together. DC plugs of one multi-standard charger
+  (CCS + CHAdeMO) don't add up, only the largest DC type × its count plus the
+  AC sockets, so a 50 kW triple charger with a 50 kW CCS is not "shared".
+- `oldRefs` + `oldOperator` (`old`, `oldop`): OSM `old_ref`/`old_operator`,
+  the sticker of a charger that changed operator. An old code that is another
+  site's code now is dropped. Searchable on the site and in ohmigo.
+- `wheelchair` (`wc`): OSM `wheelchair` yes/limited/no; the site and ohmigo
+  also read the NAP's DATEX II `accessibility` (`nap_etl.py` writes it to
+  `nap_static_sites.csv`; `wheelChairAccessible`/`disabilityAccessible`/
+  `barrierFreeAccessible` = yes). The "Acessível em cadeira de rodas" filter
+  keeps yes and limited; very few sites say anything, and the help text says
+  that missing information is not "inaccessible".
+- `fixme`: the community's open questions on OSM, shown on the site as
+  "Por confirmar no OpenStreetMap"; ohmigo keeps up to 3, cut at 160
+  characters, and tells the assistant to present them as things to check on
+  site, never as facts.
+- `evse` (dataset build only, never written): OSM `ref:EU:EVSE` per element,
+  matched to the NAP `point_external_id` (`evse_key`), so a socket's OSM
+  kW/V/A come from the element that is that socket; the plug + nearest power
+  match over the whole site stays the fallback.
 Also per site, `places`: the shopping centres, hospitals, universities, airports,
 stadiums, supermarkets, car parks and hotels (named, from OSM) whose outline holds
 the site or lies a few metres from it, `{name, type, osm, m}` (`m` = metres to
@@ -291,7 +341,7 @@ A daily refresh (`ohmigo-daily.yml`, cron `49 2,14 * * *`) re-runs only the ohmi
 pipeline (NAP ETL + OSM dump + places + dataset) and publishes a new
 `ohmigo-dataset` artifact (30-day retention), then triggers a Pages deploy, so
 the MCP sees fresher OSM/NAP data between weekly refreshes. It does not build
-the dashboard or commit to `main`.
+the site or commit to `main`.
 
 ## Housekeeping: save ad-hoc analysis scripts
 When an interactive query ends up producing new analysis code (point-in-polygon,
@@ -302,17 +352,15 @@ throwaway one-liner, at least note it in AGENTS.md so it can be rebuilt.
 
 ## Build command
 ```bash
-venv/bin/python scripts/build_dashboard.py
+venv/bin/python scripts/build_dashboard.py   # data + facts/errors + site/
+venv/bin/python scripts/validate_site.py
+python3 scripts/build_site.py                # pages only, from the committed site/data
+python3 -m http.server --directory site      # local preview
 ```
-After editing `assets/dashboard_template.html` or `scripts/build_dashboard.py`,
-**always rebuild `dashboard.html`** (the deliverable) and re-validate. The
-mandated checks live in `scripts/validate_dashboard.py` (JSON embutido +
-`node --check` + eval de inicialização com DOM stub) e o `refresh.yml` corre-o
-antes do commit; em local:
-```bash
-venv/bin/python scripts/build_dashboard.py
-venv/bin/python scripts/validate_dashboard.py
-```
+After editing `assets/site/*` or `scripts/build_dashboard.py`/`build_site.py`,
+**always rebuild `site/`** (the deliverable) and re-validate. `file://` does not
+work: the pages fetch their JSON, so preview over HTTP. `refresh.yml` runs
+`validate_site.py` before the commit.
 
 ## Data gotchas (verified)
 - Join NAP↔MOBI.E by `site_external_id` + last segment of `point_id` (tomada,
@@ -364,88 +412,85 @@ venv/bin/python scripts/validate_dashboard.py
   hides ~90 ad-hoc payment divergences. `scripts/osm_umap.py` dedups per NAP code
   preferring the row with the most payment/auth tags (tie-break: nearest).
 
-## Dashboard specifics
-- Data injected into `assets/dashboard_template.html` at the `/*__DATA__*/` marker via
-  `dashboard_payload.dump_payload(clean(data))` (`scripts/dashboard_payload.py`).
-- **Must** sanitize NaN/Inf floats to null before dumping — bare `NaN` breaks
-  browser `JSON.parse`. The `clean()` helper in `build_dashboard.py` does this.
-- **Must** dump through `dashboard_payload.dump_payload()`, never a raw
-  `json.dumps()`: the payload vive dentro de um `<script>` e o tokenizer HTML
-  fecha o elemento no primeiro `</script`, mesmo dentro de uma string JSON — um
-  `</script>` num dado do OSM/umap (campos `doubt`, `osm_op`, `osm_fee`…) saía
-  do elemento e o resto do ficheiro passava a ser HTML executado (XSS
-  armazenado no dashboard publicado). O escaper converte `<`, `>` e `&` em
-  `\u003c`/`\u003e`/`\u0026`; o `JSON.parse` reconstrói os caracteres originais,
-  por isso o valor em runtime é idêntico. `validate_dashboard.py` chumba
-  qualquer payload com `<`, `>` ou `&` crus.
-- No external libs, pure CSS/JS, must open via `file://` (the live status fetch works there too: the archive sends `access-control-allow-origin: *`).
-- Bilingual PT/EN (single file): `detectLang()` shows PT for `pt*` browsers,
-  EN otherwise; PT|EN toggle persists to `localStorage`, `?lang=pt|en` overrides.
-  Static chrome lives in the JS `STR` table (`data-i18n`/`data-i18n-ph`/
-  `data-i18n-title` attrs); data enums (status/region/pay) are display-mapped at
-  render time, so `D` keeps stable PT/code values for filtering. All dynamic
-  rendering goes through `setLang()`-called functions (never one-shot), and the
-  status×power panel re-renders into `#statusPwPanel` instead of repeated
-  `insertAdjacentHTML`. `D` carries EN mirrors (`kpis_pt` is the PT one —
-  `kpis` stays EN; `facts/errs/anom/hubs/churn_html_en`) generated via
-  `scripts/dashboard_i18n.py` (phrase MAP + PT→EN number conversion); template
-  falls back to PT when an `_en` key is missing. New fixed PT strings in
-  FACTS/ERRS/ANOM/HUBS/CHURN_HTML/NEWS_HTML **must** get a MAP entry or they render in PT
-  for EN users.
-- The `validate_dashboard.py` DOM stub must keep `navigator`/`localStorage`/
-  `documentElement` (installed via `defineProperty` — node ≥21 has read-only
-  natives that swallow plain assignment) or lang detection renders the wrong
-  branch under eval.
-- If the dashboard shows nothing below the KPIs, suspect a JS runtime error (an
-  element id that doesn't exist, a variable out of scope):
-  `validate_dashboard.py`'s DOM-stub eval catches most of them.
-- To ship a template change without the data (the CSVs aren't in a fresh
-  checkout), regenerate `dashboard.html` as `build_dashboard.py` would: the
-  new template with the committed payload in place of `/*__DATA__*/`. The
-  weekly refresh rebuilds it from scratch anyway.
-- The template has no external resources and a `data:` favicon, so it keeps
-  working from `file://`.
-- Interactive map: a self-contained SVG (`#map`) rendered from `D.sites` (per-site
-  lon/lat) + `D.outline` (PT polygons). Regions live in a `REGIONS` object with
-  keys `mainland`/`madeira`/`acores`; site `region` values are `azores` (with a
-  `z`), so the map re-maps `azores`→`acores`. Dots are colored by status
-  (`STATUS_COLOR`), wheel zooms, drag pans, click shows a detail panel
-  (`#mDetail`) with NAP + OSM cross-ref. Filters apply to both table and map;
-  map rows are filtered in `renderMap()`, which reads the same multiSel filter
-  sets (guarded with `typeof …!=='undefined'` because the map runs before the
-  filters are declared).
-- Table features: text search across all columns, multi-select dropdown filters
-  (estado, região, classe potência, operador, tomada, pagamento), click-to-sort
-  headers, pagination (200/page). The payment filter uses `x.pay` (list of OSM
-  payment methods: App/Cartão/Cartão de membro/Sem autenticação/Dinheiro) joined
-  per-site onto every point row.
+## Site specifics
+- Three pages, no external libs, pure CSS/JS: `index.html` "Procurar" (drivers:
+  search by town/operator/code, "Perto de mim", quick filters, a card per site
+  with one status mark per socket, detail with sockets, operator fees, payment
+  and directions links to Google Maps/OpenStreetMap, canvas map),
+  `rede.html` "Rede" (community statistics: KPIs, news, bar charts as real
+  tables, history, hubs, facts) and `operadores.html` "Operadores" (OPCs: weekly
+  anomaly report per operator parsed from `Agents-outputs/anomalias-results.md`
+  by `build_site.parse_opc_report`, OPC churn, reportable errors).
+- Sources in `assets/site/`; output in `site/` (committed, what `pages.yml`
+  serves). Data in `site/data/{stats,panels,sites,points,outline,opc}.json`,
+  fetched same-origin (`credentials: 'omit'`) and split by `scripts/site_data.py`
+  so each page loads only what it uses; a key added to `data` that is not
+  listed there lands in `stats.json`, never dropped.
+- **Must** sanitize NaN/Inf floats to null before the dump (`clean()` in
+  `build_dashboard.py`): bare `NaN` breaks `JSON.parse`.
+- Data is no longer embedded in a `<script>`, so it needs no `<`/`>`/`&`
+  escaping. The rule now: the front end inserts third-party text (OSM names,
+  operator names, community notes, report fragments) **only as text nodes**,
+  through the `el()`/`md()` helpers in `common.js`, never `innerHTML` or
+  similar. `validate_site.py` enforces it. The pre-rendered panels
+  (facts/errs/anom/hubs/churn/news/hist) are baked into the HTML at build time
+  (`<!--PANEL:name-->`) from build-escaped HTML, both languages in `data-lang`
+  blocks.
+- CSP (`<meta>`, in `_head.html`; Pages can't set headers): `default-src 'none';
+  script-src 'self'` (no inline scripts); `style-src 'self' 'unsafe-inline'`
+  only because the history heat map uses inline background styles;
+  `connect-src 'self'` plus the AmpereArchive origin; `font-src 'self'`;
+  `img-src 'self' data:`. Nunito is served from `fonts/`, no font CDN.
+- Bilingual PT/EN: `boot.js` picks the language before paint (`?lang=pt|en`,
+  then `localStorage` `nap-lang`, then the browser; PT for `pt*`). Strings live
+  in the `STR` tables of `common.js` plus `N.addStrings` per page
+  (`data-i18n`/`data-i18n-ph`/`data-i18n-title` attrs); data enums are
+  display-mapped at render time, so the data keeps stable PT/code values.
+  `data` carries EN mirrors (`kpis_pt` is the PT one; `kpis` stays EN;
+  `facts/errs/anom/hubs/churn_html_en`) generated via
+  `scripts/dashboard_i18n.py` (phrase MAP + PT→EN number conversion). New fixed
+  PT strings in FACTS/ERRS/ANOM/HUBS/CHURN_HTML/NEWS_HTML **must** get a MAP
+  entry or they render in PT for EN users.
+- If a page shows nothing below the KPIs, suspect a JS runtime error (an element
+  id that doesn't exist, a variable out of scope); check the browser console and
+  `validate_site.py`.
+- Map: a canvas drawn from `sites.json` (per-site lon/lat) + `outline.json` (PT
+  polygons). Regions are `mainland`/`madeira`/`acores`; site `region` values are
+  `azores` (with a `z`), so the map re-maps `azores`→`acores`.
+- Search and filters on `index.html` run on `sites.json`; point-level data
+  (`points.json`) loads after, for the detail view and the live status. The
+  payment filter uses `x.pay` (list of OSM payment methods: App/Cartão/Cartão de
+  membro/Sem autenticação/Dinheiro) joined per-site onto every point row.
+- "Perto de mim": the browser asks for the location only when the button is
+  pressed; the coordinates are used on the device to sort and centre the map,
+  never sent or stored.
 
 - Aparência: tema (auto/claro/escuro) e visão (padrão/daltonismo/alto contraste)
-  são `data-theme`/`data-vision` no `<html>`, definidos por `window.NAPAPP` num
-  `<script>` do `<head>` (valida contra lista fechada o que lê de
-  `nap-theme`/`nap-vision`; `nap-lang` idem). Cores só por variáveis CSS
-  (`--s-<estado>` para os estados); em cb/hc o mapa usa uma forma por estado.
-  A CSP vai em `<meta>` (o Pages não deixa definir cabeçalhos): o único
-  pedido à rede permitido é `connect-src https://ohm-age.ocarroeletrico.com`
-  (estado ao vivo, abaixo). `assets/privacidade.html`, `404.html` e os ícones
-  são copiados para o site pelo `pages.yml`; a página de privacidade descreve
-  esse pedido (PT e EN), por isso qualquer pedido novo tem de entrar lá também.
-- Estado ao vivo: ao abrir, a página lê `v1/PT/status.json.gz` do
+  são `data-theme`/`data-vision` no `<html>`, definidos por `boot.js` antes de
+  pintar (valida contra lista fechada o que lê de `nap-theme`/`nap-vision`;
+  `nap-lang` idem). Cores só por variáveis CSS (`--s-<estado>` para os
+  estados); um estado nunca é só cor: cor + forma + texto.
+  O único pedido a outro domínio é o estado ao vivo
+  (`connect-src` na CSP, abaixo). `assets/privacidade.html`, `404.html`, os
+  ícones e `llms.txt` são copiados para `site/` pelo `build_site.py`; a página
+  de privacidade descreve os pedidos do site, o `localStorage` e a localização
+  (PT e EN), por isso qualquer pedido ou chave novos têm de entrar lá também.
+- Estado ao vivo: ao abrir, `index.html` e `rede.html` leem `v1/PT/status.json.gz` do
   AmpereArchive (sem cookies nem referrer; se vier ainda em gzip, descomprime
   com `DecompressionStream`) e refaz o que depende do estado: gráficos de
-  estado e ocupação, KPI de ocupação, cores do mapa, tabela e filtro de
+  estado e ocupação, KPI de ocupação, cores do mapa, cartões e filtro de
   estado. Factos, erros e novidades continuam da semana. Casa cada ponto pelo
   `point_id` e por `site_id` == `site_external_id` ou a acabar em
   `-<site_external_id>` (o arquivo usa o `site_id` do NAP, `EZC-AMD-00051`;
   casa quase todos, sem ambíguos); ambíguo fica como estava. Só aceita
   estados da lista DATEX II e ignora ficheiros com mais de 180 min. Sem rede,
   bloqueado ou desatualizado, mostra o estado da semana e diz-o no cabeçalho.
-  `validate_dashboard.py` desliga o fetch (`NAP_NO_LIVE`) e testa
-  `applyLive` com dados sintéticos. O host está no template
-  (`dashboard_payload.ARCHIVE_ORIGIN_DEFAULT`) e o build troca-o, na CSP e
-  no `LIVE_URL`, pela origem de `AMPERE_ARCHIVE_URL` (variável do repo, passada
-  ao passo "Build dashboard"); só aceita `https://host[:porta]`, senão avisa e
-  fica o do template.
+  `validate_site.py` desliga o fetch (`NAP_NO_LIVE`) e testa
+  `applyLive` com dados sintéticos. O host vem de `<meta name="nap-live-origin">`
+  (`dashboard_payload.ARCHIVE_ORIGIN_DEFAULT`) e o build troca-o, nessa meta e
+  no `connect-src` da CSP, pela origem de `AMPERE_ARCHIVE_URL` (variável do
+  repo, passada ao passo de build); só aceita `https://host[:porta]`, senão
+  avisa e fica o por omissão.
 
 ## Convenções de escrita (PT-PT técnico)
 - **tensão**, nunca "voltagem". Unidades abreviam-se `V`/`A`/`kW` normalmente.
@@ -470,10 +515,10 @@ Gate de ~1 s em cada PR para `main`, sem rede e sem dependências (stdlib).
 Mais `compileall` nos scripts Python e `bash -n` nos shell, para o check não ser
 decorativo (um erro de sintaxe só apareceria no refresh da semana seguinte).
 
-**E `scripts/validate_dashboard.py`**, que valida o `dashboard.html` commitado
-(o artefacto que o `pages.yml` publica sem validação nenhuma): JSON embutido,
-escape do payload para o contexto `<script>`, sintaxe JS e inicialização. Sem
-isto, um PR podia injectar `<script>`/`</script>` no ficheiro e o merge
+**E `scripts/validate_site.py`**, que valida o `site/` commitado (o artefacto
+que o `pages.yml` publica sem validação nenhuma): JSON e esquema, sintaxe JS,
+sem `<script>` inline, CSP e sem sinks do tipo `innerHTML`. Sem isto, um PR
+podia injectar um script ou um `innerHTML` com dados de terceiros e o merge
 publicava-o.
 
 **O que este gate não cobre, de propósito:** o pipeline completo não corre no PR
@@ -490,10 +535,10 @@ Ao mover/renomear um ficheiro de dados, actualizar a lista `DATA_FILES` em
 `scripts/ci_paths.py`: é a fonte de verdade dos quatro checks.
 
 ## Deliverables
-- `dashboard.html` — the interactive dashboard (open with `open dashboard.html`)
+- `site/` — the static site (preview: `python3 -m http.server --directory site`)
 - `facts.md` — interesting facts
 - `novidades.md` — weekly network news (new/removed sites, OPC moves, power
-  records; panel above "Visão geral", EN via `dashboard_i18n.MAP`) with
+  records; panel on "Rede", EN via `dashboard_i18n.MAP`) with
   `network-census.json` (committed state for next week's diff)
 - `errors.md` — reportable data errors, numbered, for the data owners; the
   last item is the tracker cross-check, appended from `data/tracker_findings.md`
@@ -501,7 +546,8 @@ Ao mover/renomear um ficheiro de dados, actualizar a lista `DATA_FILES` em
 - `Agents-outputs/anomalias-results.md` — output do agente `Agents/anomalias.md`
   (anomalias dos dados estáticos, agrupadas por OPC)
 - `/ohmigo/chargers.json` on Pages — the ohmigo dataset (Actions artifact, see
-  "ohmigo dataset"). `pages.yml` also publishes `robots.txt`, `sitemap.xml`
+  "ohmigo dataset"). `pages.yml` serves `site/` as the web root plus a
+  `/dashboard.html` redirect to `/`, and also publishes `robots.txt`, `sitemap.xml`
   and `/.well-known/security.txt` (RFC 9116; `Expires` 180 days from each
   deploy).
 
@@ -516,7 +562,7 @@ Ao mover/renomear um ficheiro de dados, actualizar a lista `DATA_FILES` em
   the end of the job) in two places only: the `publish` job of `refresh.yml`
   (a fresh runner: no pip, no repo script on third-party data; it downloads
   the `refresh-publish` artifact, checks each file is a regular file under
-  20 MB, then commits) and the `publish` job of `agents.yml`, same pattern
+  20 MB and in the closed allowlist, which includes the `site/` tree, then commits) and the `publish` job of `agents.yml`, same pattern
   for a closed list of files from `Agents-outputs/`. A push with the App's token triggers `pages.yml`, which
   one with the `GITHUB_TOKEN` wouldn't. The agent job (a model with a
   shell, reading third-party data) never shares a machine with it, and code
