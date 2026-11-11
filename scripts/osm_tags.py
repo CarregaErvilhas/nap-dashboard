@@ -1,8 +1,9 @@
 """Tags OSM por local NAP, a partir do dump Overpass (data/umap_cache/todos.json).
 
-Partilhado por ohmigo_dataset.py (bloco `osm` de cada local) e
-build_dashboard.py (fabricante e modelo do carregador no site), para que os
-dois mostrem o mesmo valor para o mesmo posto. Só stdlib.
+Partilhado por ohmigo_dataset.py (bloco `osm` de cada local, e quem ganha
+quando o OSM discorda do NAP numa tomada: resolve) e build_dashboard.py
+(fabricante e modelo do carregador no site), para que os dois mostrem o mesmo
+valor para o mesmo posto. Só stdlib.
 """
 import json
 import math
@@ -306,3 +307,49 @@ def osm_by_code(sites_by_code, dump=OSM_DUMP):
         if cap and (cap['point'] or cap['station']):
             o['capacity'] = cap['point'] or cap['station']
     return out
+
+
+# Quando o OSM discorda do NAP numa tomada, quem ganha. Os kW/V/A do OSM são
+# lidos na chapa do carregador pela comunidade e costumam estar mais certos do
+# que a declaração do operador (DC com 750 V de reserva, potências que V×I não
+# dá), por isso substituem-na; o valor do NAP fica em napKw/napV/napA/napCable,
+# que só existem quando houve substituição (null = o NAP não declarava nada).
+# Decide-se aqui, uma vez, para o ohmigo e para o site dizerem o mesmo.
+#
+# Mas o OSM edita-se sem conta paga e uma gralha ou um vandalismo não pode
+# passar. Um número do OSM só conta se for plausível:
+#   max    nenhuma tomada pública passa disto. Também denuncia um valor do NAP
+#          que não pode estar certo (300 000 V, na unidade errada): aí não há
+#          com que comparar.
+#   ratio  quão longe de um valor plausível do NAP o OSM pode estar. Trava
+#          lixo, não correcções, por isso é largo: um NAP com 3,7 numa tomada de
+#          22 kW, 50 numa de 350 ou 500 A numa de 25 kW é o que o OSM corrige.
+# Os mesmos limites que o ohmigo usava (OSM_NUMBERS em src/clean.js) quando
+# era ele a decidir.
+OSM_NUMBERS = {'kw': (1000, 20), 'v': (1500, 10), 'a': (1500, 10)}
+
+
+def sane_osm(key, value, nap):
+    top, ratio = OSM_NUMBERS[key]
+
+    def ok(x):
+        return (isinstance(x, (int, float)) and not isinstance(x, bool)
+                and math.isfinite(x) and 0 < x <= top)
+    if not ok(value):
+        return False
+    return not ok(nap) or max(value / nap, nap / value) <= ratio
+
+
+def resolve(pt):
+    """Aplica o OSM (já filtrado por sane_osm) à tomada, guardando o do NAP."""
+    # Uma tomada não dá 0 kW: no NAP isso é um campo em branco, não uma medição.
+    if pt['kw'] is not None and pt['kw'] <= 0:
+        pt['kw'] = None
+    o = pt.get('osm', {})
+    for k, nap in (('kw', 'napKw'), ('v', 'napV'), ('a', 'napA')):
+        if (o.get(k) or 0) > 0:
+            pt[nap] = pt[k]
+            pt[k] = o[k]
+    if isinstance(o.get('cable'), bool) and o['cable'] != pt['cable']:
+        pt['napCable'] = pt['cable']
+        pt['cable'] = o['cable']

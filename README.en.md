@@ -71,7 +71,9 @@ venv/bin/python scripts/osm_umap.py          # cross-reference NAP with OSM/umap
 venv/bin/python scripts/make_pt_outline.py   # generate assets/pt_outline.json (map)
 venv/bin/python scripts/tracker_sync.py  # PCVE tracker -> OPC registry + labelled errors
 venv/bin/python scripts/tracker_checks.py # tracker + NAP -> errors.md item 13
+venv/bin/python scripts/ohmigo_dataset.py data data/ohmigo_chargers.json  # the network model (read by the site and ohmigo)
 venv/bin/python scripts/build_dashboard.py # generate site/, facts.md, errors.md
+python3 scripts/model_parity.py            # the site shows what the model says
 ```
 
 `build_dashboard.py` reads all intermediate CSVs, writes the data to
@@ -105,7 +107,10 @@ python3 scripts/check_agents.py
 | File | Role |
 |----------|------|
 | `scripts/nap_etl.py` | NAP XML parser (static + dynamic) to CSV |
-| `scripts/mobie_join.py` | NAP↔MOBI.E join by `site_external_id` + plug |
+| `scripts/opc_tariffs.py` | The one NAP↔MOBI.E join of the OPC fees (by `site_external_id` + plug) |
+| `scripts/mobie_join.py` | One value per fee component, for the statistics -> `data/nap_opc_points.csv` |
+| `scripts/ohmigo_dataset.py` | The network model (`data/ohmigo_chargers.json`): what the site and ohmigo show about each charger |
+| `scripts/model_parity.py` | Fails the refresh if the site and the network model disagree |
 | `scripts/dgeg_crossref.py` | OPC code → entity resolution (fuzzy match) |
 | `scripts/nap_static_checks.py` | Rules on the static NAP alone -> `errors.md` item 8 (placeholder voltages, fake three-phase) |
 | `scripts/concelho_check.py` | Coordinate validation vs CAOP concelho boundaries |

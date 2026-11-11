@@ -13,11 +13,14 @@
   (`ABF-00011-01`, `PT-EDP-EABF-00008-1`, `ALM-90003-1`, só números): várias
   centenas são só números (`97`, `98`). O `UID_TOMADA` do
   `data/mobie_tarifas.csv` é reconstruído pelo `mobie_tariffs.py` como
-  `<ID>-<tomada>-1`; `mobie_join.py` pega no penúltimo segmento e normaliza como
-  inteiro.
-- A tarifa tem várias linhas por (posto, tomada): manter o tipo de tarifa
-  `REGULAR` quando exista, senão qualquer uma; rodar
-  `FLAT/ENERGY/TIME/PARKING_TIME` para largo.
+  `<ID>-<tomada>-1`; `opc_tariffs.py` (o join que o modelo da rede e o
+  `mobie_join.py` partilham) pega no penúltimo segmento e normaliza como
+  inteiro. Um id só de números entra como tomada e, se não casar, vale a
+  tarifa do local quando todas as tomadas dele têm a mesma.
+- A tarifa tem várias linhas por (posto, tomada), e uma componente pode ter
+  escalões (`€ 0 /min` + `€ 0.18 /min após 30 min`). O modelo da rede guarda
+  todos; para as estatísticas, o `mobie_join.py` fica com a `REGULAR` quando
+  exista (senão qualquer uma) e com o primeiro valor de cada componente.
 - As tarifas OPC do MOBI.E são a **taxa de utilização do posto, não o preço da
   energia**: `ENERGY` (€/kWh) é a componente de utilização indexada à energia — a
   energia em si é faturada pela CEME de quem carrega. Só os OPC ad-hoc ou fora do

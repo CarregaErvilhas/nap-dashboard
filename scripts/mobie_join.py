@@ -4,10 +4,18 @@ Produces:
   data/nap_opc_points.csv   - per point: NAP power/connector/geo + MOBI.E OPC prices
   data/nap_opc_join_report.txt - match-rate report
 
+The tariffs and the regime come from opc_tariffs.py, the same join the network
+model (ohmigo_dataset.py) uses, so the stats here and what the site and ohmigo
+show per socket never disagree about which socket has which fee. This file
+keeps one value per component (the first one MOBI.E publishes, the first tier
+of a TIME), which is what the stats need; the model keeps every tier.
+
 Usage: python mobie_join.py
 """
 import re
 import pandas as pd
+
+from opc_tariffs import FIELD, Tariffs, first_values, has_ceme, regime
 
 M = pd.read_csv('data/mobie_tarifas.csv', sep=';', decimal=',', dtype=str)
 S = pd.read_csv('data/nap_static_sites.csv', dtype=str)
@@ -82,15 +90,24 @@ key = ['site_ext', 'tomada']
 mob['site_ext'] = mob['ID']
 joined = pts.merge(mob, on=key, how='left', suffixes=('', '_mobie'))
 
-# --- regime por posto (NAP) ---
-# brands_accepted vazio = posto sem CEME (fora da MOBI.E): o NAP traz um único
-# pricePerDeliveryUnit sem política que o qualifique, logo o significado do valor
-# (preço final? só energia?) não está declarado. Com brands = roaming MOBI.E:
-# o preço é a tarifa de uso do OPC (a energia vai pelo CEME do condutor).
-has_brands = joined['brands_accepted'].fillna('').str.strip() != ''
-joined['regime'] = 'sem_ceme'
-joined.loc[has_brands & joined['OPERADOR'].notna(), 'regime'] = 'mobie'
-joined.loc[has_brands & joined['OPERADOR'].isna(), 'regime'] = 'mobie_sem_tarifa'
+# --- taxas e regime: o join do modelo da rede (opc_tariffs.py) ---
+# Do pivot acima só ficam os metadados da MOBI.E (operador, tipo de posto,
+# potência, município). As taxas e o regime vêm do opc_tariffs, que também casa
+# os UID_TOMADA curtos (FCT, EPK, HGP...) e tira a tarifa REGULAR aos postos sem
+# CEME. Regime: brands_accepted vazio = posto sem CEME (fora da MOBI.E): o NAP
+# traz um único pricePerDeliveryUnit sem política que o qualifique. Com brands =
+# roaming MOBI.E: o preço é a tarifa de uso do OPC (a energia vai pelo CEME).
+T = Tariffs('data/mobie_tarifas.csv')
+ceme = joined['brands_accepted'].map(has_ceme)
+plans = [T.for_point(s, p, c)[0]
+         for s, p, c in zip(joined['site_external_id'], joined['point_id'], ceme)]
+firsts = [first_values(t) for t in plans]
+joined['TIPO_TARIFARIO'] = [name for name, _ in firsts]
+for col in FIELD:
+    joined[col] = [vals.get(col) for _, vals in firsts]
+joined['regime'] = [regime(c, t) for c, t in zip(ceme, plans)]
+# 1 = a tomada tem tarifa OPC no ficheiro da MOBI.E (o mesmo que `opc` no modelo).
+joined['opc_match'] = [int(t is not None) for t in plans]
 _dp = pd.read_csv('data/nap_dynamic_pricing.csv', dtype=str)
 _dp = _dp[_dp.pricing_policy == 'pricePerDeliveryUnit'].drop_duplicates(['site_id', 'point_id'])
 _fee = _dp.set_index(['site_id', 'point_id'])['min_fee']
@@ -101,11 +118,11 @@ joined.loc[_sc, 'NAP_UNICO'] = _fee.reindex(
 
 # report
 nap_pts = len(pts)
-matched = joined['OPERADOR'].notna().sum()
+matched = int(joined['opc_match'].sum())
 report = f"""MOBI.E join report
   NAP points total:            {nap_pts}
   NAP points matched to MOBI.E tomada: {matched} ({matched/nap_pts*100:.1f}% of total)
-  MOBI.E sockets in file:      {m['UID_TOMADA'].nunique()}
+  MOBI.E sockets in file:      {T.n_sockets}
   MOBI.E sockets kept (wide):  {len(mob)}
 
   Prices present among matched points:
@@ -126,11 +143,11 @@ cols = ['point_id', 'point_external_id', 'site_id', 'site_ext', 'tomada', 'stati
         'connector_type', 'charging_mode', 'connector_format', 'max_power_w', 'voltage', 'max_current',
         'MUNICIPIO', 'OPERADOR', 'TIPO_POSTO', 'NIVELTENSAO', 'TIPO_TARIFARIO',
         'TIPO_TOMADA', 'FORMATO_TOMADA', 'POTENCIA_TOMADA',
-        'FLAT', 'ENERGY', 'TIME', 'PARKING_TIME', 'regime', 'NAP_UNICO']
+        'FLAT', 'ENERGY', 'TIME', 'PARKING_TIME', 'regime', 'NAP_UNICO', 'opc_match']
 out = joined[[c for c in cols if c in joined.columns]].rename(columns={
     'MUNICIPIO': 'opc_municipio', 'OPERADOR': 'opc_operador', 'TIPO_POSTO': 'opc_tipo_posto',
     'NIVELTENSAO': 'opc_nivel_tensao', 'TIPO_TARIFARIO': 'opc_tipo_tarifario',
     'TIPO_TOMADA': 'opc_tipo_tomada', 'FORMATO_TOMADA': 'opc_formato_tomada',
     'POTENCIA_TOMADA': 'opc_potencia_kw'})
 out.to_csv('data/nap_opc_points.csv', index=False)
-print(f'wrote data/nap_opc_points.csv: {len(out)} rows, {out.opc_operador.notna().sum()} with OPC')
+print(f'wrote data/nap_opc_points.csv: {len(out)} rows, {int(out.opc_match.sum())} with OPC')

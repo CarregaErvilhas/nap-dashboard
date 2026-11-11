@@ -40,8 +40,8 @@ de EADME do NAP ao abrigo do DL 93/2025; decorre um regime transitório até
 
   `scripts/mobie_tariffs.py` junta-os e escreve `data/mobie_tarifas.csv`
   (`;`, uma linha por componente, `TARIFA` como
-  `€ 0.15 /min após 0 min até 45 min`), que é o formato que `mobie_join.py` e
-  `ohmigo_dataset.py` lêem. O `UID_TOMADA` é sintético
+  `€ 0.15 /min após 0 min até 45 min`), que é o formato que o `opc_tariffs.py`
+  lê (o join partilhado pelo `mobie_join.py` e pelo `ohmigo_dataset.py`). O `UID_TOMADA` é sintético
   (`<ID>-<tomada>-1`), exceto os ids só numéricos (FCT, ACC, HGP, VIA), que
   ficam como o MOBI.E os publica.
 

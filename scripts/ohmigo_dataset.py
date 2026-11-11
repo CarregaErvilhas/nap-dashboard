@@ -1,14 +1,20 @@
-"""Constrói data/ohmigo_chargers.json: o retrato estático da rede para o ohmigo.
+"""Constrói data/ohmigo_chargers.json: o modelo da rede, o retrato estático de cada posto.
 
-O ohmigo é um servidor MCP (o protocolo que deixa o ChatGPT, o Claude e outros
-assistentes chamarem ferramentas) que responde a "quanto me custa carregar
-aqui?" e "onde é mais barato carregar perto de mim / no meu caminho?". Para
-isso precisa de saber, para cada posto: onde fica, que tomadas tem, que
-potência, e quanto o operador do posto (OPC) cobra pela utilização.
+É o único sítio onde se decide o que é verdade sobre um posto (a potência, a
+tomada, o cabo, as taxas do OPC, o regime). Lêem-no os dois:
+  - o ohmigo, um servidor MCP (o protocolo que deixa o ChatGPT, o Claude e
+    outros assistentes chamarem ferramentas) que responde a "quanto me custa
+    carregar aqui?" e "onde é mais barato carregar perto de mim?";
+  - o site deste repositório: o build_dashboard.py tira daqui o que mostra de
+    cada posto e de cada tomada em "Procurar".
+Antes o site fazia as suas próprias contas sobre os mesmos CSVs, e os dois
+começaram a discordar (taxas por minuto, potências arredondadas, a potência do
+OSM que só o ohmigo aplicava). O pipeline_guard.py confirma, a cada refresh,
+que o site mostra o que está aqui.
 
-Este script junta essas peças num único JSON (~10 MB, ~0,8 MB com gzip), que o
-refresh semanal publica no Pages em https://nap.ocarroeletrico.com/ohmigo/chargers.json.
-O servidor descarrega-o quando arranca e volta a vê-lo de 6 em 6 horas.
+O JSON (~10 MB, ~0,8 MB com gzip) é publicado no Pages em
+https://nap.ocarroeletrico.com/ohmigo/chargers.json. O ohmigo descarrega-o
+quando arranca e volta a vê-lo de 6 em 6 horas.
 
 Do OpenStreetMap vem o bloco `osm` de cada local (nome, marca, horário, se é
 num parque subterrâneo...). A marca é muitas vezes o dono dos postos, não o
@@ -31,24 +37,30 @@ Entradas (todas produzidas por fetch_data.sh + nap_etl.py):
   data/umap_cache/todos.json    o dump OSM que o osm_umap.py descarrega
                                 (opcional: sem ele os locais saem sem `osm`)
 
-Porque não usamos o data/nap_opc_points.csv do mobie_join.py: esse ficheiro
-guarda UM valor por componente (pivot com aggfunc='first'). Uma tomada com
-escalões por minuto ("0 €/min" + "0,18 €/min após 30 min") fica só com um
-deles, e a conta de uma sessão precisa de todos. Por isso lemos o ficheiro de
-tarifas em bruto.
+As taxas do OPC vêm do opc_tariffs.py, o mesmo join que o mobie_join.py usa
+para as estatísticas, mas aqui com todos os escalões: uma tomada com
+"0 €/min" + "0,18 €/min após 30 min" precisa dos dois para a conta de uma
+sessão.
+
+Os problemas que as regras só-NAP do nap_static_checks.py encontram numa
+tomada (750 V de reserva em DC, falso trifásico) vão em `issues`, para quem
+lê o modelo saber que esse valor declarado não é de confiança. Do tracker de
+erros PCVE nada vem para aqui: é de terceiros, sem licença de reutilização, e
+este ficheiro é público.
 
 Uso:  python scripts/ohmigo_dataset.py [pasta_de_dados] [saída.json]
       (por omissão: data  data/ohmigo_chargers.json)
 """
 import json
-import re
 import sys
 from datetime import datetime, timezone
 
 import pandas as pd
 
+import nap_static_checks
 import osm_places
-from osm_tags import evse_key, osm_by_code, osm_for_point
+from opc_tariffs import Tariffs, has_ceme, regime
+from osm_tags import OSM_NUMBERS, evse_key, osm_by_code, osm_for_point, resolve, sane_osm
 
 # Sobe quando o formato do JSON mudar de forma incompatível; o ohmigo recusa
 # versões que não conhece em vez de ler dados errados.
@@ -62,92 +74,8 @@ S = pd.read_csv(f'{DATA}/nap_static_sites.csv', dtype=str)
 # números simples ("19", "160") que se repetem noutros locais.
 P = pd.read_csv(f'{DATA}/nap_static_points.csv', dtype=str).drop_duplicates(['site_id', 'point_id'])
 DP = pd.read_csv(f'{DATA}/nap_dynamic_pricing.csv', dtype=str)
-M = pd.read_csv(f'{DATA}/mobie_tarifas.csv', sep=';', dtype=str).drop_duplicates()
-
-
-# --- Tarifas OPC da MOBI.E ---------------------------------------------------
-# Cada linha do ficheiro é UMA componente de UMA tomada, em texto:
-#   '€ 0.261 /charge'               -> taxa fixa por carregamento (FLAT)
-#   '€ 0.1 /kWh'                     -> por energia (ENERGY)
-#   '€ 0.2 /min após 60 min'         -> por minuto, a partir do minuto 60 (TIME)
-#   '€ 0.03 /min até 120 min'        -> por minuto, até ao minuto 120
-# TIPO_TARIFARIO diz a quem se aplica: REGULAR (quem carrega com um CEME) ou
-# AD_HOC_PAYMENT (quem paga no posto com cartão bancário / QR, sem CEME).
-NUM = r'([\d]+(?:[.,]\d+)?)'
-RE_VAL = re.compile(r'€?\s*' + NUM + r'\s*/\s*(\w+)')
-RE_FROM = re.compile(r'após\s+' + NUM + r'\s*min')
-RE_TO = re.compile(r'até\s+' + NUM + r'\s*min')
-
-
-def num(s):
-    return float(s.replace(',', '.'))
-
-
-def parse_tarifa(s):
-    """'€ 0.2 /min após 60 min' -> {'eur': 0.2, 'unit': 'min', 'from': 60, 'to': None}"""
-    s = str(s).strip()
-    m = RE_VAL.search(s)
-    if not m:
-        return None
-    f, t = RE_FROM.search(s), RE_TO.search(s)
-    return {'eur': num(m.group(1)), 'unit': m.group(2).lower(),
-            'from': num(f.group(1)) if f else 0, 'to': num(t.group(1)) if t else None}
-
-
-def tom_key(x):
-    try:
-        return str(int(str(x)))
-    except (TypeError, ValueError):
-        return None
-
-
-# A mesma chave do mobie_join.py: o ID MOBI.E do local + o número da tomada
-# (penúltimo segmento do UID_TOMADA) <-> site_external_id do NAP + o último
-# segmento do point_id.
-# Há operadores (FCT, EPK, VIA, ACC, HGP) que publicam o UID_TOMADA só como um
-# número ("97"). Na FCT esse número é o point_id do NAP; na HGP não é ("399" na
-# MOBI.E, "202" no NAP). Por isso o número curto entra como tomada (casa quando
-# coincide) e, para o que não casar, há o recurso por local mais abaixo.
-def tomada(x):
-    parts = str(x).split('-')
-    if len(parts) >= 3:
-        return tom_key(parts[-2])
-    return tom_key(x) if len(parts) == 1 else None
-
-
-M['tomada'] = M.UID_TOMADA.map(tomada)
-M['short_uid'] = M.UID_TOMADA.map(lambda x: '-' not in str(x))
-M['plan'] = M.TIPO_TARIFARIO.fillna('REGULAR')
-M['p'] = M.TARIFA.map(parse_tarifa)
-M = M[M.p.notna() & M.TIPO_TARIFA.isin(['FLAT', 'ENERGY', 'TIME', 'PARKING_TIME'])]
-
-# (ID, tomada) -> {plano: {flat: [..], energy: [..], time: [escalões], parking: [escalões]}}
-# Listas porque há tomadas que publicam dois valores para a mesma componente,
-# sem nada que os distinga: o ohmigo mostra-os como um intervalo.
-tariffs = {}
-level = {}  # (ID, tomada) -> nível de tensão (BTN, BTE ou MT): escolhe a TAR
-FIELD = {'FLAT': 'flat', 'ENERGY': 'energy', 'TIME': 'time', 'PARKING_TIME': 'parking'}
-for r in M.itertuples(index=False):
-    k = (r.ID, r.tomada)
-    plan = tariffs.setdefault(k, {}).setdefault(r.plan, {})
-    p = r.p
-    v = plan.setdefault(FIELD[r.TIPO_TARIFA], [])
-    item = p['eur'] if r.TIPO_TARIFA in ('FLAT', 'ENERGY') else {'eur': p['eur'], 'from': p['from'], 'to': p['to']}
-    if item not in v:
-        v.append(item)
-    if isinstance(r.NIVELTENSAO, str) and r.NIVELTENSAO in ('BTN', 'BTE', 'MT'):
-        level[k] = r.NIVELTENSAO
-
-# Recurso para os UID_TOMADA curtos que não casam com nenhum point_id: se
-# todas as tomadas desse local têm exactamente a mesma tarifa, qualquer ponto
-# do local tem essa tarifa, seja qual for a numeração. Se diferem, não há como
-# saber qual é qual e o ponto fica sem tarifa (como antes).
-site_tariff = {}
-for sid, ks in M[M.short_uid].groupby('ID').tomada:
-    plans = {json.dumps(tariffs[(sid, k)], sort_keys=True) for k in set(ks) if (sid, k) in tariffs}
-    if len(plans) == 1:
-        k0 = next(k for k in ks if (sid, k) in tariffs)
-        site_tariff[sid] = (tariffs[(sid, k0)], level.get((sid, k0)))
+# As taxas do OPC de cada tomada, com todos os escalões: ver opc_tariffs.py.
+T = Tariffs(f'{DATA}/mobie_tarifas.csv')
 
 # O preço que o NAP publica para os postos fora da MOBI.E (sem CEME). É um
 # único pricePerDeliveryUnit, sem IVA como todos os preços do NAP (confirmado
@@ -164,8 +92,22 @@ else:
     nap_price = DPU.drop_duplicates('point_id').set_index('point_id').min_fee
     nap_price_of = lambda site, pid: None if pid in shared else nap_price.get(pid)
 
+# Os problemas que as regras só-NAP encontram em cada tomada, os mesmos que o
+# errors.md (item 8) lista para os donos dos dados: `tensao_placeholder` (750
+# ou 600 V num conector DC, um valor de reserva, não a tensão real) e
+# `trifasico_sem_3p` (declarado trifásico com tensão e potência de monofásico).
+issues = {}
+for f in nap_static_checks.findings(P):
+    found = issues.setdefault((f['site'], f['entity']), [])
+    if f['check'] not in found:
+        found.append(f['check'])
+
 
 # --- OpenStreetMap: ver osm_tags.py ---------------------------------------
+
+# Quando o OSM discorda do NAP numa tomada, quem ganha: ver osm_tags.resolve.
+# Números do OSM postos de parte por implausíveis (osm_tags.sane_osm), por campo.
+ignored_osm = {}
 
 
 def region(lat, lon):
@@ -248,17 +190,8 @@ for p in P.itertuples(index=False):
         continue
     mode = str(p.charging_mode)
     kw = fnum(p.max_power_w)
-    has_ceme = isinstance(p.brands_accepted, str) and p.brands_accepted.strip() != ''
-    k = (p.site_external_id, tom_key(str(p.point_id).split('-')[-1]))
-    t = tariffs.get(k)
-    lv = level.get(k)
-    if t is None and p.site_external_id in site_tariff:
-        t, lv = site_tariff[p.site_external_id]
-    # Sem CEME, a tarifa REGULAR (a de quem carrega com um CEME) não se aplica.
-    # A MOBI.E publica-a mesmo assim em alguns destes postos, com tomadas que
-    # não existem (CCS de 400 kW num T2 de 22 kW na HGP); fica só o AD_HOC.
-    if t and not has_ceme:
-        t = {k2: v for k2, v in t.items() if k2 != 'REGULAR'} or None
+    ceme = has_ceme(p.brands_accepted)
+    t, lv = T.for_point(p.site_external_id, p.point_id, ceme)
     pt = {
         'id': p.point_id,
         'kw': round(kw / 1000, 1) if kw else None,
@@ -277,18 +210,17 @@ for p in P.itertuples(index=False):
         'v': nint(p.voltage),
         'a': nint(p.max_current),
         'level': lv,
-        # mobie: aceita CEME e tem tarifa OPC no ficheiro da MOBI.E;
-        # mobie_sem_tarifa: aceita CEME mas não está no ficheiro (o ohmigo usa
-        #   então as taxas do feed dinâmico do NAP);
-        # sem_ceme: fora da MOBI.E (Continente, Tesla...), paga-se ao operador.
-        # Quem decide é o brands_accepted do NAP, não o join (ver AGENTS.md).
-        'regime': ('mobie' if t else 'mobie_sem_tarifa') if has_ceme else 'sem_ceme',
+        # mobie / mobie_sem_tarifa / sem_ceme: ver opc_tariffs.regime.
+        'regime': regime(ceme, t),
         # Só para casar com o OSM (ref:EU:EVSE); sai antes de escrever.
         '_evse': evse_key(p.point_external_id),
     }
     if t:
         pt['opc'] = t
-    if not has_ceme:
+    found = issues.get((p.site_external_id, str(p.point_id)))
+    if found:
+        pt['issues'] = found
+    if not ceme:
         v = fnum(nap_price_of(p.site_id, p.point_id))
         if v is not None:
             pt['napPrice'] = v
@@ -306,10 +238,10 @@ for code, tags in osm.items():
     site['osm'] = tags
     # O que o OSM diz de cada tomada (kW, V, A), lido na chapa pela comunidade:
     # costuma estar mais certo do que o NAP (750/600 V de reserva em DC, ou
-    # potências acima do que V×I permite). O ohmigo prefere-o à declaração.
-    # Só vão os campos em que o OSM discorda do NAP (onde concorda, o valor do
-    # NAP já é o certo), e a lista de tomadas do local fica por aqui: com ela
-    # o ficheiro crescia um terço.
+    # potências acima do que V×I permite), por isso substitui-o (resolve(),
+    # acima). Em `osm` ficam os campos em que o OSM discorda do NAP (onde
+    # concorda, o valor do NAP já é o certo), e a lista de tomadas do local
+    # fica por aqui: com ela o ficheiro crescia um terço.
     # `osmSame` lista os campos em que o OSM confirma o NAP (["a", "v"]): sem
     # ele, um valor sem `osm` tanto podia estar confirmado como não ter sido
     # mapeado. O ohmigo usa-o para dizer se a corrente de uma tomada DC (que
@@ -323,6 +255,12 @@ for code, tags in osm.items():
         mapped = (osm_for_point(pt, evse.get(pt.pop('_evse', None), []))
                   or osm_for_point(pt, tags.get('sockets', [])) or {})
         o = {k: v for k, v in mapped.items() if v != pt.get(k)}
+        # Um número do OSM que não se acredita (gralha, vandalismo) sai já:
+        # nunca chega a substituir o NAP, e quem lê o modelo não o vê.
+        for k in OSM_NUMBERS:
+            if k in o and not sane_osm(k, o[k], pt.get(k)):
+                del o[k]
+                ignored_osm[k] = ignored_osm.get(k, 0) + 1
         if o:
             pt['osm'] = o
         same = [k for k, v in mapped.items() if v == pt.get(k)]
@@ -332,6 +270,7 @@ for code, tags in osm.items():
 for site in sites.values():
     for pt in site['points']:
         pt.pop('_evse', None)
+        resolve(pt)
 
 # Em que centro comercial, hospital, parque... fica o posto: o OSM não o diz
 # num posto, só o dá por geometria (ponto dentro de polígono), por isso fazemo-lo
@@ -360,6 +299,11 @@ n_dc_a = sum(1 for s in out['sites'] for p in s['points']
              if p.get('dc') and ('a' in p.get('osm', {}) or 'a' in p.get('osmSame', [])))
 print(f'{len(out["sites"])} locais ({n_osm} com dados OSM, {n_places} com locais), {n_pts} pontos, {n_opc} com tarifa OPC da MOBI.E -> {OUT}')
 print(f'{n_dc_a}/{n_dc} tomadas DC com a corrente vista no OSM')
+n_resolved = sum(1 for s in out['sites'] for p in s['points']
+                 if any(k in p for k in ('napKw', 'napV', 'napA', 'napCable')))
+n_issues = sum(1 for s in out['sites'] for p in s['points'] if 'issues' in p)
+print(f'{n_resolved} tomadas com valores do OSM em vez do NAP; números do OSM ignorados por implausíveis: {ignored_osm or 0}')
+print(f'{n_issues} tomadas com problemas só-NAP (issues)')
 
 # Guarda: um upstream que mude de formato não pode publicar um ficheiro vazio
 # que o ohmigo depois serviria como "não há postos aqui".

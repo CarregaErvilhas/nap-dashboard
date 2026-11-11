@@ -25,6 +25,9 @@ S = pd.read_csv('data/nap_static_sites.csv', dtype=str)
 P = pd.read_csv('data/nap_static_points.csv', dtype=str)
 ST = pd.read_csv('data/nap_dynamic_status.csv', dtype=str)
 OPC = pd.read_csv('data/nap_opc_points.csv', dtype=str)
+# Points with an OPC tariff in MOBI.E's file, by the join the network model uses
+# (opc_tariffs.py), so this KPI matches what the model and ohmigo price.
+n_opc_pts = int((OPC.opc_match == '1').sum())
 REG = pd.read_csv('data/nap_opc_registry.csv', dtype=str)
 
 outline = {}
@@ -109,22 +112,46 @@ pts['region'] = pts['site_external_id'].map(site_map['region'])
 opc_cols = OPC[PK + ['opc_operador', 'opc_tipo_posto', 'ENERGY', 'TIME', 'FLAT', 'regime', 'NAP_UNICO']]
 pts = pts.merge(opc_cols, on=PK, how='left')
 pts['NAP_UNICO'] = pd.to_numeric(pts['NAP_UNICO'], errors='coerce')
-pts['max_power_kw'] = (pts.max_power_w / 1000).round(0)
+
+# ---- the network model: what the site shows about each socket ----
+# The socket's power (OSM's where it corrects the NAP), the operator fees with
+# every tier, the regime and the NAP-only issues come from the same file ohmigo
+# reads (scripts/ohmigo_dataset.py), so the site and ohmigo say the same thing
+# about every charger; pipeline_guard.py checks it. The Rede statistics stay on
+# what the NAP declares (max_power_w, data/nap_opc_points.csv): they describe
+# the NAP's publication, anomalies included.
+MODEL = 'data/ohmigo_chargers.json'
+if not os.path.exists(MODEL):
+    sys.exit(f'FAIL: {MODEL} em falta: corre primeiro python scripts/ohmigo_dataset.py data {MODEL}')
+model_pts = {(s['id'], p['id']): p for s in json.load(open(MODEL))['sites'] for p in s['points']}
+_m = [model_pts.get(k, {}) for k in zip(pts.site_id, pts.point_id)]
+pts['kw'] = pd.to_numeric(pd.Series([m.get('kw') for m in _m], dtype=object), errors='coerce').values
+# Where OSM replaced the NAP's power: kw_src 'osm' and the NAP's value in nap_kw
+# (null when the NAP declared none).
+pts['kw_src'] = ['osm' if 'napKw' in m else 'nap' for m in _m]
+pts['nap_kw'] = [m.get('napKw') for m in _m]
+pts['model_regime'] = [m.get('regime') for m in _m]
+pts['fees'] = [m.get('opc') for m in _m]
+pts['nap_price'] = [m.get('napPrice') for m in _m]
+pts['issues'] = [m.get('issues', []) for m in _m]
+_dc_v = [(m.get('v'), m.get('dc')) for m in _m]
 
 # ---- site-level map data (with OSM/umap cross-ref enrichment) ----
 site_status = pts.groupby('site_external_id')['status'].agg(
     lambda s: s.value_counts().idxmax() if s.notna().any() else 'unknown')
 site_npts = pts.groupby('site_external_id')['point_id'].count()
-site_maxkw = pts.groupby('site_external_id')['max_power_kw'].max()
+site_maxkw = pts.groupby('site_external_id')['kw'].max()
 site_conn = P.groupby('site_external_id')['connector_type'].apply(
     lambda s: sorted({CONN_NAMES.get(t, t) for t in s if pd.notna(t)}))
 
-# Battery architecture filter: the site's DC connectors by declared voltage.
-# '800' = declares more than 500 V, '400' = declares 500 V or less (0 and absurd values
-# such as 300000 are dropped). A car of either architecture charges on either;
-# the difference is the power an 800 V car gets.
-_dcv = P[P.charging_mode == 'mode4DC'].copy()
-_dcv['_v'] = pd.to_numeric(_dcv.voltage, errors='coerce')
+# Battery architecture filter: the site's DC sockets by voltage, from the model
+# (OSM's where it corrects a NAP placeholder, like ohmigo's min_voltage filter).
+# '800' = more than 500 V, '400' = 500 V or less (0 and absurd values such as
+# 300000 are dropped). A car of either architecture charges on either; the
+# difference is the power an 800 V car gets.
+_dcv = pts[['site_external_id']].assign(_v=[v for v, _ in _dc_v], _dc=[d for _, d in _dc_v])
+_dcv = _dcv[_dcv._dc == True].copy()  # noqa: E712 (None for a point missing from the model)
+_dcv['_v'] = pd.to_numeric(_dcv._v, errors='coerce')
 # 'unk' = a DC connector with no usable voltage (0, empty or absurd), so those
 # sites stay reachable instead of vanishing from both options.
 _dcv['_b'] = _dcv._v.apply(lambda v: 'unk' if not (0 < v <= 2000) else ('800' if v > 500 else '400'))
@@ -226,7 +253,7 @@ for _, s in S.iterrows():
         'lon': lon,
         'status': site_status.get(ext, 'unknown'),
         'npts': int(site_npts.get(ext, 0)),
-        'kw': float(site_maxkw.get(ext, 0)),
+        'kw': float(site_maxkw.get(ext, 0) or 0),
         'pw': pw_class(float(site_maxkw.get(ext, 0) or 0) * 1000),
         'conns': site_conn.get(ext, []),
         'pay': pay_by_site.get(ext, []),
@@ -817,7 +844,7 @@ data = {
         kpi('Sites', len(S), f'{S.region.value_counts().get("mainland",0)} mainland / {S.region.value_counts().get("madeira",0)} madeira / {S.region.value_counts().get("azores",0)} açores'),
         kpi('Charging points', len(pts), f'{int(pts.is_green_energy.str.lower().eq("true").sum())} green energy'),
         kpi('Operators (OPC)', pts.operator_id.nunique(), f'{len(REG)} code/operator combos, {int(REG.dgeg_entidade.notna().sum())} DGEG-matched'),
-        kpi('Points w/ OPC price', int(OPC.opc_operador.notna().sum()), f'{int(OPC.opc_operador.notna().sum())*100//max(len(OPC),1)}% of network'),
+        kpi('Points w/ OPC price', n_opc_pts, f'{n_opc_pts*100//max(len(OPC),1)}% of network'),
         kpi('Occupancy (snapshot)', f'{occupancy_overall:.1f}%', 'charging among available+charging'),
         kpi('Median power', f'{median_kw} kW', f'mean {_pwv.mean()/1000:.0f} kW, max {_pwv.max()/1000:.0f} kW'),
     ],
@@ -826,7 +853,7 @@ data = {
         kpi('Locais', len(S), f'{S.region.value_counts().get("mainland",0)} continente / {S.region.value_counts().get("madeira",0)} Madeira / {S.region.value_counts().get("azores",0)} Açores'),
         kpi('Pontos de carregamento', len(pts), f'{int(pts.is_green_energy.str.lower().eq("true").sum())} energia verde'),
         kpi('Operadores (OPC)', pts.operator_id.nunique(), f'{len(REG)} combinações código/operador, {int(REG.dgeg_entidade.notna().sum())} com reconhecimento DGEG'),
-        kpi('Pontos com tarifa OPC', int(OPC.opc_operador.notna().sum()), f'{int(OPC.opc_operador.notna().sum())*100//max(len(OPC),1)}% da rede'),
+        kpi('Pontos com tarifa OPC', n_opc_pts, f'{n_opc_pts*100//max(len(OPC),1)}% da rede'),
         kpi('Ocupação (snapshot)', f'{occupancy_overall:.1f}%'.replace('.', ','), 'a carregar entre disponíveis+a carregar'),
         kpi('Potência mediana', f'{median_kw} kW', f'média {_pwv.mean()/1000:.0f} kW, máx {_pwv.max()/1000:.0f} kW'),
     ],
@@ -842,10 +869,16 @@ data = {
     'occ_op': agg_op_occ,
     'price_op': {k: round(float(v), 3) for k, v in agg_price_op.items()},
     'price_stats': price_stats,
-    'points': pts[['point_id', 'site_external_id', 'city', 'operator_name', 'region', 'pw_class', 'max_power_kw',
-                   'connector_types', 'status', 'opc_operador', 'ENERGY', 'TIME', 'FLAT', 'regime', 'NAP_UNICO', 'pay']]
-        .rename(columns={'max_power_kw': 'kw', 'connector_types': 'connectors',
-                         'opc_operador': 'opc', 'NAP_UNICO': 'nap'}).to_dict('records'),
+    # Per socket, from the network model (see MODEL above): kw, the fees with
+    # every tier, regime, the NAP's price off MOBI.E (nap) and issues.
+    # pw_class stays the NAP's: rede.js recounts the Rede charts from it with
+    # the live status, and those charts describe what the NAP declares.
+    'points': pts[
+        ['point_id', 'site_external_id', 'city', 'operator_name', 'region', 'pw_class', 'kw', 'kw_src',
+         'nap_kw', 'connector_types', 'status', 'opc_operador', 'fees', 'model_regime', 'nap_price',
+         'issues', 'pay']]
+        .rename(columns={'connector_types': 'connectors', 'opc_operador': 'opc',
+                         'model_regime': 'regime', 'nap_price': 'nap'}).to_dict('records'),
     'facts_html': FACTS_HTML,
     'errs_html': ERRS_HTML,
     'anom_html': ANOM_HTML,

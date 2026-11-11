@@ -140,6 +140,25 @@ jobs:
             exit 0
           fi
           python scripts/archive_history.py --days 28
+      # Centros comerciais, hospitais, parques... do OSM, para o ohmigo saber em
+      # que local fica cada posto. Lê o extrato de Portugal do Geofabrik (~400 MB,
+      # ~10 s a processar); o Overpass dava timeout. Sem ele o dataset sai sem
+      # `places`, por isso uma falha aqui não pára o refresh.
+      - name: Fetch OSM places
+        continue-on-error: true
+        run: |
+          curl -fsSL --retry 3 -o "$RUNNER_TEMP/portugal.osm.pbf" https://download.geofabrik.de/europe/portugal-latest.osm.pbf
+          python scripts/osm_places.py "$RUNNER_TEMP/portugal.osm.pbf"
+      # O modelo da rede (data/ohmigo_chargers.json): postos, tomadas, potência
+      # (a do OSM onde corrige o NAP), taxas OPC com escalões e problemas só-NAP
+      # num único JSON. Lêem-no o ohmigo (servidor MCP de custos de
+      # carregamento) e o build_dashboard.py, por isso corre antes do build.
+      # Só é publicado no fim, depois do pipeline_guard e do validate_site, para
+      # nunca sair de um upstream partido: vai para um artifact (não para o
+      # git: são ~10 MB por semana) e o pages.yml copia-o para
+      # https://nap.ocarroeletrico.com/ohmigo/chargers.json.
+      - name: Build network model (ohmigo dataset)
+        run: python scripts/ohmigo_dataset.py data data/ohmigo_chargers.json
       # Gera facts.md, errors.md e o site (site/: páginas + site/data/*.json).
       - name: Build dashboard
         env:
@@ -151,28 +170,15 @@ jobs:
       # o dashboard online fica no último bom até o upstream ser corrigido.
       - name: Pipeline guard (upstream sanity)
         run: python3 scripts/pipeline_guard.py
+      # O site tem de mostrar de cada posto o que o modelo da rede diz (o mesmo
+      # que o ohmigo lê): potência, taxas, regime, problemas só-NAP.
+      - name: Model parity (site = network model)
+        run: python3 scripts/model_parity.py
       # Validação pós-build: lista fechada de ficheiros, JSON sem NaN, CSP e
       # sem scripts inline nas páginas, sem innerHTML/eval no JS, node --check
       # e teste do estado ao vivo (applyLive) em node.
       - name: Validate site
         run: python3 scripts/validate_site.py
-      # Centros comerciais, hospitais, parques... do OSM, para o ohmigo saber em
-      # que local fica cada posto. Lê o extrato de Portugal do Geofabrik (~400 MB,
-      # ~10 s a processar); o Overpass dava timeout. Sem ele o dataset sai sem
-      # `places`, por isso uma falha aqui não pára o refresh.
-      - name: Fetch OSM places
-        continue-on-error: true
-        run: |
-          curl -fsSL --retry 3 -o "$RUNNER_TEMP/portugal.osm.pbf" https://download.geofabrik.de/europe/portugal-latest.osm.pbf
-          python scripts/osm_places.py "$RUNNER_TEMP/portugal.osm.pbf"
-      # Dataset estático do ohmigo (servidor MCP de custos de carregamento):
-      # postos, tomadas, potência e tarifas OPC num único JSON. Só corre depois
-      # do pipeline_guard, para nunca publicar dados de um upstream partido.
-      # Vai para um artifact (não para o git: são ~10 MB por semana) e o
-      # pages.yml copia-o para https://nap.ocarroeletrico.com/ohmigo/chargers.json.
-      # Fica publicado ANTES do push (job publish), que é o que dispara o pages.yml.
-      - name: Build ohmigo dataset
-        run: python scripts/ohmigo_dataset.py data data/ohmigo_chargers.json
       # Artifact, não release: o repo tem releases imutáveis, e um asset
       # publicado nunca mais pode ser substituído. O pages.yml vai buscar o
       # artifact mais recente com este nome (está disponível antes do commit

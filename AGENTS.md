@@ -15,9 +15,12 @@ validated by `scripts/validate_site.py` + `scripts/pipeline_guard.py`. Don't ove
   `dashboard_i18n.py`); the
   anomalias agent's deterministic side (`anomalias_summary.py`,
   `anomalias_evidence.py`, `anomalias_check.py`, `format_anomalias.py`,
-  `check_agents.py`); `ohmigo_dataset.py`; and `osm_tags.py` (the per-site OSM
-  tags from the Overpass dump, shared by the ohmigo dataset and the site). One-time migrations don't stay
-  here once they've run: git keeps them.
+  `check_agents.py`); `ohmigo_dataset.py` (the network model, below) with
+  `model_parity.py` (the site shows what the model says); `opc_tariffs.py`
+  (the one NAP↔MOBI.E tariff join, shared by the model and `mobie_join.py`);
+  and `osm_tags.py` (the per-site OSM tags from the Overpass dump and the
+  OSM-vs-NAP rule per socket, shared by the model and the site). One-time
+  migrations don't stay here once they've run: git keeps them.
 - `assets/` — `site/` (the site's sources: `index.html`, `rede.html`,
   `operadores.html`, the `_head/_header/_footer.html` partials, `app.css`,
   `boot.js`, `common.js`, `find.js`, `rede.js`, `operadores.js`, `fonts/Nunito`),
@@ -120,12 +123,16 @@ venv/bin/python -m unittest discover -s tests
 `scripts/nap_etl.py` → (`scripts/check_quality.py`, `scripts/summary.py`) →
 `scripts/mobie_join.py` → `scripts/dgeg_lists.py` → `scripts/dgeg_crossref.py` →
 `scripts/nap_static_checks.py` → `scripts/concelho_check.py` →
-`scripts/osm_umap.py` → (`scripts/osm_places.py`, ohmigo dataset only) → `scripts/tracker_sync.py` + `scripts/tracker_checks.py` →
+`scripts/osm_umap.py` → `scripts/tracker_sync.py` + `scripts/tracker_checks.py` →
 `scripts/make_pt_outline.py` →
 `scripts/network_news.py` (diff semanal vs `network-census.json` do HEAD →
 `novidades.md` + novo `network-census.json`; primeira corrida = baseline) →
-`scripts/build_dashboard.py`.
-`scripts/build_dashboard.py` reads the intermediate CSVs +
+(`scripts/osm_places.py`) → `scripts/ohmigo_dataset.py` (the network model,
+`data/ohmigo_chargers.json`) → `scripts/build_dashboard.py` →
+`scripts/model_parity.py`.
+`scripts/build_dashboard.py` reads the network model for everything it shows
+per socket and per site in "Procurar" (see "Network model"), and the
+intermediate CSVs +
 `data/osm_umap.csv`/`data/osm_caca.csv`/`assets/pt_outline.json`, computes the
 `data` dict and writes `facts.md`, `errors.md` and the site: it calls
 `build_site.render(clean(data), 'site', AMPERE_ARCHIVE_URL)`, which splits the
@@ -250,9 +257,24 @@ venv/bin/python scripts/tracker_checks.py   # CSVs + NAP -> findings
   renames itself drops out until the tracker catches up; `min_fee = 0` covers
   46% of pricing rows, so zero is **not** a pricing anomaly.
 
-## ohmigo dataset
-`scripts/ohmigo_dataset.py` builds `data/ohmigo_chargers.json` for the ohmigo
-MCP server (EV charging cost answers for ChatGPT/Claude): sites, points, power,
+## Network model (ohmigo dataset)
+`scripts/ohmigo_dataset.py` builds `data/ohmigo_chargers.json`, **the network
+model**: the one place that decides what is true about each charger. Two
+readers: the ohmigo MCP server (EV charging cost answers for ChatGPT/Claude)
+and this repo's site, whose `build_dashboard.py` takes each socket's power,
+operator fees, regime and NAP-only issues from it (`site/data/points.json`
+`kw`/`kw_src`/`nap_kw`/`fees`/`regime`/`nap`/`issues`, and each site's `kw` and
+`dcv` in `sites.json`). Before, the site computed its own from the same CSVs and
+the two drifted (fees cut to the first €/min tier, kW rounded to the unit, the
+short-`UID_TOMADA` matches only ohmigo had, OSM's power only ohmigo applied).
+`scripts/model_parity.py` runs after the build in `refresh.yml` and fails the
+refresh if `site/data` disagrees with the model of the same run. The Rede
+statistics stay on what the NAP declares (`max_power_w`, `pw_class`,
+`data/nap_opc_points.csv`): they describe the NAP's publication.
+The OPC tariffs come from `scripts/opc_tariffs.py`, the same join
+`mobie_join.py` uses for `data/nap_opc_points.csv`, so the stats and the model
+agree on which socket has which fee.
+Contents: sites, points, power,
 the connector's declared tensão (`v`, V) and max current (`a`, A), the grid
 voltage level (`level`: BTN/BTE/MT, which picks the TAR; **always `null`**,
 because neither MOBI.Data nor the NAP publishes it) and the **raw** MOBI.E OPC tariffs per socket (every €/min tier and
@@ -269,7 +291,16 @@ works at the charger) and a per-point `osm` with the kW/V/A of the matching OSM
 `socket:*` (same plug type, nearest power), **only where it differs from the
 NAP** — read off the charger's plate by the community, it is usually more
 right than the NAP's declaration (DC placeholders 750/600 V, impossible
-powers), and ohmigo prefers it. Where OSM agrees with the NAP, the point
+powers), so the model applies it: `kw`/`v`/`a`/`cable` are OSM's and the NAP's
+value goes to `napKw`/`napV`/`napA`/`napCable`, present only when replaced
+(`null` = the NAP declared none). An OSM number has to be plausible first
+(`osm_tags.sane_osm`: at most 1000 kW / 1500 V / 1500 A, and within ×20 kW or
+×10 V/A of a plausible NAP value), or it is dropped. ohmigo made this call itself
+until the model did; it now reads the result. Per point, `issues` lists what
+the NAP-only rules of `nap_static_checks.py` found on it (`tensao_placeholder`,
+`trifasico_sem_3p`, errors.md item 8). Nothing from the PCVE tracker goes into
+the model: it is a third party's data with no reuse licence, and the model is
+public. Where OSM agrees with the NAP, the point
 lists those fields in `osmSame` (`["a", "v"]`), so ohmigo can tell a value
 confirmed on the charger from one only the operator declared (a DC socket's
 current decides the power a 400 V car gets). All joined from the Overpass dump in
@@ -326,8 +357,9 @@ place whose name repeats one already kept is dropped (two OSM objects for the
 same mall, "Centro Comercial Colombo - Estacionamento Piso -1").
 It's what lets ohmigo find "os postos do Mar Shopping", which no charger is named.
 No status and no CEME prices: ohmigo reads status live from the NAP feed and gets
-energy prices from ceme-v2. `refresh.yml` runs it after the pipeline guard and
-uploads it as the `ohmigo-dataset` Actions artifact (90-day retention; not
+energy prices from ceme-v2. `refresh.yml` builds it before the site (the site
+reads it) and uploads it, only after the pipeline guard, the parity check and
+`validate_site.py` pass, as the `ohmigo-dataset` Actions artifact (90-day retention; not
 committed: ~10 MB a week; not a release, because the repo's releases are
 immutable and an asset can't be replaced); `pages.yml` copies the newest one to
 `https://nap.ocarroeletrico.com/ohmigo/chargers.json`, accepting only artifacts
@@ -458,7 +490,13 @@ work: the pages fetch their JSON, so preview over HTTP. `refresh.yml` runs
   polygons). Regions are `mainland`/`madeira`/`acores`; site `region` values are
   `azores` (with a `z`), so the map re-maps `azores`→`acores`.
 - Search and filters on `index.html` run on `sites.json`; point-level data
-  (`points.json`) loads after, for the detail view and the live status. The
+  (`points.json`) loads after, for the detail view and the live status. Both
+  take power, fees and the DC voltage filter from the network model, so the
+  detail shows every €/min tier ("0; 0,18 após 30 min"), OSM's power with the
+  NAP's beside it ("22 (NAP: 11)") and the NAP-only issues per socket.
+  `find.js` still renders the pre-model `points.json` (`ENERGY`/`TIME`/`FLAT`
+  strings; `site_data.POINT_SHAPES` accepts both) until the first refresh
+  rewrites it; drop that branch after. The
   payment filter uses `x.pay` (list of OSM payment methods: App/Cartão/Cartão de
   membro/Sem autenticação/Dinheiro) joined per-site onto every point row.
 - "Perto de mim": the browser asks for the location only when the button is
