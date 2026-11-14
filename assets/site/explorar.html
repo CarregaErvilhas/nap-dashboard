@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<!--CHROME:head-->
+<link rel="stylesheet" href="explorar.css">
+<title>Explorar a rede de carregamento em Portugal</title>
+<meta name="description" content="Filtra a rede pública de carregamento de veículos elétricos em Portugal por operador, concelho, potência, ficha, estado e pagamento, e vê a ocupação ao vivo e a evolução ao longo do tempo.">
+<link rel="canonical" href="https://nap.ocarroeletrico.com/explorar.html">
+</head>
+<body>
+<!--CHROME:header-->
+<main id="main" class="wrap">
+  <div class="hero">
+    <h1 data-i18n="xH1">Explorar a rede</h1>
+    <p data-i18n="xLead">Escolhe um operador, um concelho ou uma potência: todos os números, o mapa e as tendências passam a falar só dessa parte da rede.</p>
+  </div>
+  <p class="note" id="live" role="status" data-i18n="loading">A carregar…</p>
+
+  <div class="xbar" id="xbar">
+    <div class="xbar-row">
+      <span class="xbar-l" id="lMetric" data-i18n="xMetric">Medir por</span>
+      <div class="seg" id="metric" role="group" aria-labelledby="lMetric"></div>
+    </div>
+    <div class="xbar-row">
+      <p class="xsel" id="selText" aria-live="polite"></p>
+      <ul class="chips xchips" id="chips" aria-label="Filtros ativos" data-i18n-label="xActive"></ul>
+      <button class="btn sm" type="button" id="reset" hidden data-i18n="xReset">Limpar filtros</button>
+    </div>
+  </div>
+
+  <section class="block" aria-labelledby="hSum"><h2 id="hSum" data-i18n="xSum">A tua seleção</h2>
+    <ul class="kpis xkpis" id="kpis"></ul>
+    <div class="card xstatus">
+      <h3 id="hStatus" data-i18n="xStatus">Estado das tomadas agora</h3>
+      <div class="xstack" id="stack" role="group" aria-labelledby="hStatus"></div>
+      <ul class="xlegend" id="legend"></ul>
+    </div>
+  </section>
+
+  <section class="block" aria-labelledby="hDims"><h2 id="hDims" data-i18n="xDims">Reparte e filtra</h2>
+    <p class="muted" data-i18n="xDimsNote">Carrega numa linha para ficar só com ela. Podes juntar várias, na mesma lista ou em listas diferentes.</p>
+    <div class="xgrid" id="dims"></div>
+  </section>
+
+  <section class="block" aria-labelledby="hMap"><h2 id="hMap" data-i18n="xMap">Onde ficam</h2>
+    <div class="xgrid two">
+      <div class="card xmapcard"><canvas id="map" width="560" height="620" role="img" aria-label="Mapa dos locais da seleção" data-i18n-label="xMapAria"></canvas>
+        <p class="muted small" id="mapNote"></p></div>
+      <div class="card"><h3 id="hSites" data-i18n="xSites">Maiores locais da seleção</h3>
+        <div class="scroll" tabindex="0" role="group" aria-labelledby="hSites" id="sites"></div></div>
+    </div>
+  </section>
+
+  <section class="block" aria-labelledby="hFee"><h2 id="hFee" data-i18n="xFee">Quanto cobra o operador</h2>
+    <p class="muted" data-i18n="xFeeNote">Taxa do operador (OPC) por kWh, sem IVA, nas tomadas da seleção que a têm. A energia é cobrada à parte pelo teu comercializador (CEME).</p>
+    <div class="card"><div id="fee"></div></div>
+  </section>
+
+  <section class="block" id="tend" aria-labelledby="hTrend" hidden><h2 id="hTrend" data-i18n="xTrend">Ao longo do tempo</h2>
+    <p class="muted" id="trendNote"></p>
+    <div class="xgrid two">
+      <div class="card"><h3 data-i18n="xTSize">Tomadas publicadas, dia a dia</h3><div id="tSize"></div></div>
+      <div class="card"><h3 data-i18n="xTDown">Fora de serviço, dia a dia (%)</h3><div id="tDown"></div></div>
+    </div>
+    <div class="card xwide"><h3 data-i18n="xTOcc">Ocupação hora a hora (%)</h3><div id="tOcc"></div></div>
+    <div class="card xwide"><h3 data-i18n="xTHeat">Ocupação por dia da semana e hora (%)</h3><div class="scroll" tabindex="0" role="group" aria-labelledby="hTrend" id="tHeat"></div>
+      <p class="muted small" id="heatNote"></p></div>
+    <p class="muted small" data-i18n="xSrc">Estados declarados pelos operadores ao NAP (IMT / MOBI.E), guardados pelo AmpereArchive. Não são medições.</p>
+  </section>
+  <div class="xtip" id="tip" hidden></div>
+</main>
+<!--CHROME:footer-->
+<script src="explorar.js"></script>
+</body>
+</html>

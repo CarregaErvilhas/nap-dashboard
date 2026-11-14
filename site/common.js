@@ -6,7 +6,7 @@
   var A = window.NAPAPP;
   var STR = {
     pt: {
-      navFind: 'Procurar', navNet: 'Rede', navOps: 'Operadores',
+      navFind: 'Procurar', navNet: 'Rede', navExplore: 'Explorar', navOps: 'Operadores',
       appearance: 'Aparência', theme: 'Tema', vision: 'Visão', auto: 'Automático', light: 'Claro', dark: 'Escuro',
       vdefault: 'Padrão', cb: 'Daltonismo', hc: 'Alto contraste', language: 'Idioma',
       liveOk: 'Estado ao vivo de {t} ({n} de {m} tomadas).', liveStale: 'Estado ao vivo indisponível: a mostrar o da semana ({t}).',
@@ -20,7 +20,7 @@
       'pay_Cartão RFID eMSP': 'Cartão do comercializador (RFID)', 'pay_Sem autenticação': 'Sem autenticação'
     },
     en: {
-      navFind: 'Find', navNet: 'Network', navOps: 'Operators',
+      navFind: 'Find', navNet: 'Network', navExplore: 'Explore', navOps: 'Operators',
       appearance: 'Appearance', theme: 'Theme', vision: 'Vision', auto: 'Automatic', light: 'Light', dark: 'Dark',
       vdefault: 'Default', cb: 'Colour-blind', hc: 'High contrast', language: 'Language',
       liveOk: 'Live status as of {t} ({n} of {m} sockets).', liveStale: 'Live status unavailable: showing this week\'s ({t}).',
@@ -52,6 +52,8 @@
     if (n == null || n === '' || isNaN(n)) return '—';
     return Number(n).toLocaleString(lang() === 'pt' ? 'pt-PT' : 'en-GB', { maximumFractionDigits: d == null ? 0 : d, minimumFractionDigits: min || 0 });
   }
+  // Every euro amount on the statistics pages: always two decimals (0,40, never 0,4 or 0,112).
+  function eur(n) { return nf(n, 2, 2); }
   function when(ms) {
     return new Date(ms).toLocaleString(lang() === 'pt' ? 'pt-PT' : 'en-GB', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' });
   }
@@ -186,7 +188,7 @@
       : t('liveOk', { t: when(res.t), n: nf(res.n), m: nf(res.m) });
   }
 
-  window.NAP = { t: t, addStrings: addStrings, lang: lang, nf: nf, when: when, el: el, add: add, clear: clear, md: md,
+  window.NAP = { t: t, addStrings: addStrings, lang: lang, nf: nf, eur: eur, when: when, el: el, add: add, clear: clear, md: md,
     status: status, pwLabel: pwLabel, PW: PW, STATUSES: STATUSES, onLang: onLang, initChrome: initChrome,
     applyI18n: applyI18n, load: load, fetchLive: fetchLive, applyLive: applyLive, liveNote: liveNote };
 })();

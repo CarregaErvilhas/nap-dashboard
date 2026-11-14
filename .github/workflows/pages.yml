@@ -73,7 +73,7 @@ jobs:
           d=$(date -u +%F)
           {
             printf '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
-            for u in / /rede.html /operadores.html /privacidade.html; do
+            for u in / /rede.html /explorar.html /operadores.html /privacidade.html; do
               printf '  <url><loc>https://nap.ocarroeletrico.com%s</loc><lastmod>%s</lastmod></url>\n' "$u" "$d"
             done
             printf '</urlset>\n'

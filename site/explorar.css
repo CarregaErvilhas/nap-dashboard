@@ -1,0 +1,77 @@
+/* "Explorar": only what app.css doesn't have. Colours come from its variables,
+   so theme, colour-blind and high-contrast modes carry over. */
+.xbar { position: sticky; top: 56px; z-index: 20; background: var(--bg); border-bottom: 1px solid var(--line); padding: 10px 0; margin-top: 12px; display: grid; gap: 8px; }
+.xbar-row { display: flex; flex-wrap: wrap; gap: 8px 12px; align-items: center; }
+.xbar-l { font-weight: 800; font-size: var(--step--1); }
+.xsel { margin: 0; font-weight: 700; max-width: none; }
+.xchips { margin: 0; }
+.xchip { font: inherit; font-size: var(--step--1); font-weight: 700; min-height: 36px; padding: 4px 12px; border-radius: 999px; border: 1.5px solid var(--ink); background: var(--ink-soft); color: var(--fg); cursor: pointer; }
+.xchip:hover { background: var(--ink); color: var(--on-ink); }
+#reset { margin-left: auto; }
+@media (max-width: 759px) { .xbar { position: static; } }
+
+.xkpis { margin-bottom: var(--gap); }
+@media (min-width: 980px) { .xkpis { grid-template-columns: repeat(6, 1fr); } }
+.xstatus h3, .xdim h3, .card > h3 { font-size: var(--step-0); margin-bottom: 10px; }
+.xstack { display: flex; gap: 2px; height: 28px; border-radius: 6px; overflow: hidden; }
+.xseg { display: block; min-width: 3px; background: var(--s-unknown); cursor: pointer; }
+.xseg[data-s="available"] { background: var(--s-available); } .xseg[data-s="charging"] { background: var(--s-charging); }
+.xseg[data-s="outOfOrder"] { background: var(--s-outOfOrder); } .xseg[data-s="inoperative"] { background: var(--s-inoperative); }
+.xseg[data-s="blocked"] { background: var(--s-blocked); } .xseg[data-s="planned"] { background: var(--s-planned); } .xseg[data-s="removed"] { background: var(--s-removed); }
+.xseg.dim, .xleg.dim, .xrow.dim { opacity: .6; }
+.xlegend { list-style: none; margin: 10px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; }
+.xleg { font: inherit; font-size: var(--step--1); display: inline-flex; align-items: center; gap: 8px; min-height: 40px; padding: 4px 12px; border-radius: 999px; border: 1.5px solid var(--line); background: var(--card); color: var(--fg); cursor: pointer; font-variant-numeric: tabular-nums; }
+.xleg:hover, .xleg[aria-pressed="true"] { border-color: var(--fg); }
+.xleg[aria-pressed="true"] { box-shadow: inset 0 0 0 1.5px var(--fg); }
+
+.xgrid { display: grid; gap: var(--gap); align-items: start; }
+@media (min-width: 760px) { .xgrid { grid-template-columns: 1fr 1fr; } }
+@media (min-width: 1080px) { #dims { grid-template-columns: repeat(3, 1fr); } }
+.xwide { margin-top: var(--gap); }
+.xfind { min-height: 40px !important; margin-bottom: 8px; }
+.xrows { list-style: none; margin: 0; padding: 0; }
+.xrow { all: unset; box-sizing: border-box; width: 100%; cursor: pointer; display: grid; grid-template-columns: minmax(0, 1fr) auto; grid-template-areas: "lb vl" "tr ex"; gap: 2px 10px; align-items: center; padding: 6px 8px; border-radius: var(--r-s); font-size: var(--step--1); font-variant-numeric: tabular-nums; }
+.xrow:hover { background: var(--bg-alt); }
+.xrow:focus-visible { outline: 3px solid var(--focus); outline-offset: 0; }
+.xrow[aria-pressed="true"] { background: var(--ink-soft); box-shadow: inset 3px 0 0 var(--ink); }
+.xrow .lb { grid-area: lb; font-weight: 700; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.xrow .vl { grid-area: vl; font-weight: 800; text-align: right; white-space: nowrap; }
+.xrow .ex { grid-area: ex; text-align: right; font-size: .78rem; white-space: nowrap; min-width: 4.5em; }
+.xrow .track { grid-area: tr; background: var(--track); border-radius: 4px; height: 8px; overflow: hidden; }
+.xrow .fill { display: block; height: 8px; background: var(--bar); border-radius: 0 4px 4px 0; min-width: 2px; }
+.xrow.few .fill { background: var(--muted); }
+.xmore { margin-top: 8px; }
+
+.xmapcard { padding: 8px; }
+#map { width: 100%; height: auto; display: block; }
+#sites { max-height: 640px; overflow-y: auto; }
+#sites thead th { position: sticky; top: 0; background: var(--card); }
+#fee { max-width: 720px; }
+#sites table th a { font-weight: 700; }
+.xop { display: block; font-weight: 400; }
+
+.xchart { width: 100%; height: auto; display: block; overflow: visible; }
+.xchart .grid { stroke: var(--line); stroke-width: 1; }
+.xchart .axis { stroke: var(--muted); stroke-width: 1; }
+.xchart .tick, .xchart .vlab { fill: var(--muted); font-size: 12px; font-family: inherit; font-variant-numeric: tabular-nums; }
+.xchart .vlab { fill: var(--fg); font-weight: 700; }
+.xchart .ln { fill: none; stroke: var(--bar); stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; }
+.xchart .pt { fill: var(--bar); }
+.xchart .pt.ring { stroke: var(--card); stroke-width: 2; }
+.xchart .col { fill: var(--bar); }
+.xchart .cross { stroke: var(--muted); stroke-width: 1; stroke-dasharray: 3 3; }
+.xchart .hit { fill: transparent; touch-action: pan-y; }
+.xtable { margin-top: 6px; font-size: var(--step--1); }
+.xtable summary { cursor: pointer; color: var(--muted); min-height: 36px; display: inline-flex; align-items: center; }
+.xtable .scroll { max-height: 260px; overflow-y: auto; }
+
+.xheat { border-collapse: separate; border-spacing: 2px; min-width: 560px; table-layout: fixed; }
+.xheat thead td, .xheat tbody th { width: 6.5em; }
+.xheat th, .xheat td { border: 0; padding: 0; text-align: center; font-size: .75rem; color: var(--muted); font-weight: 600; }
+.xheat tbody th { text-align: left; padding-right: 8px; white-space: nowrap; color: var(--fg); }
+.xheat tbody td { height: 26px; border-radius: 4px; background: color-mix(in srgb, var(--bar) var(--k, 0%), var(--track)); }
+.xheat tbody td.na { background: transparent; border: 1px dashed var(--line); }
+
+.xtip { position: fixed; z-index: 60; pointer-events: none; background: var(--fg); color: var(--bg); border-radius: var(--r-s); padding: 6px 10px; font-size: .8rem; line-height: 1.35; max-width: 260px; box-shadow: 0 6px 18px rgb(20 32 58 / .25); }
+.xtip b, .xtip span { display: block; }
+@media print { .xbar { position: static; } .xtip { display: none; } }

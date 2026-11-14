@@ -26,12 +26,12 @@ permissions: {}
 # duas listas (no refresh e em cada PR).
 env:
   SITE_FILES: >-
-    index.html rede.html operadores.html privacidade.html 404.html
-    app.css boot.js common.js find.js rede.js operadores.js
+    index.html rede.html explorar.html operadores.html privacidade.html 404.html
+    app.css boot.js common.js find.js rede.js operadores.js explorar.js explorar.css
     fonts/nunito-latin.woff2 fonts/OFL-Nunito.txt
     favicon.svg favicon.ico apple-touch-icon.png llms.txt
     data/stats.json data/panels.json data/sites.json data/points.json
-    data/outline.json data/opc.json data/basemap.json
+    data/outline.json data/opc.json data/basemap.json data/history.json
 
 concurrency:
   group: "refresh"
@@ -140,6 +140,8 @@ jobs:
             exit 0
           fi
           python scripts/archive_history.py --days 28
+          # Séries da página Explorar, da mesma cópia do arquivo (data/archive_cache).
+          python scripts/explore_history.py
       # Centros comerciais, hospitais, parques... do OSM, para o ohmigo saber em
       # que local fica cada posto. Lê o extrato de Portugal do Geofabrik (~400 MB,
       # ~10 s a processar); o Overpass dava timeout. Sem ele o dataset sai sem

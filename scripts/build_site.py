@@ -19,15 +19,38 @@ import dashboard_payload
 import site_data
 
 SRC = 'assets/site'
-PAGES = ('index.html', 'rede.html', 'operadores.html')
+PAGES = ('index.html', 'rede.html', 'explorar.html', 'operadores.html')
 # Copied as they are. privacidade/404/icons live in assets/ and keep their names.
 STATIC = ('app.css', 'boot.js', 'common.js', 'find.js', 'rede.js', 'operadores.js',
+          'explorar.js', 'explorar.css',
           'fonts/nunito-latin.woff2', 'fonts/OFL-Nunito.txt')
 EXTRA = ('privacidade.html', '404.html', 'favicon.svg', 'favicon.ico',
          'apple-touch-icon.png', 'llms.txt')
 # Static data copied as it is (assets/ -> site/data/): the OSM places and roads
 # for the map, built by scripts/make_pt_basemap.py.
 DATA_COPY = {'pt_basemap.json': 'basemap.json'}
+# The time series for "Explorar" (scripts/explore_history.py, from the
+# AmpereArchive). Optional like the Histórico panel: when this run has no fresh
+# file, the committed one stays; with neither, the page hides the section.
+HISTORY_SRC = 'data/explore_history.json'
+HISTORY = 'history.json'
+HISTORY_EMPTY = {'generated': None, 'ops': [], 'pw': [], 'regions': [],
+                 'daily': {'days': [], 'combos': [], 'n': [], 'down': [], 'unk': [], 'kw': []},
+                 'hourly': {'start': None, 'hours': 0, 'sample_min': 15, 'samples': [], 'combos': [],
+                            'tot': [], 'act': [], 'chg': [], 'down': []}}
+
+
+def write_history(outdir):
+    dst = os.path.join(outdir, 'data', HISTORY)
+    try:
+        with open(HISTORY_SRC, encoding='utf-8') as fh:
+            hist = json.load(fh)
+    except (OSError, ValueError):
+        if os.path.exists(dst):
+            return
+        hist = HISTORY_EMPTY
+    with open(dst, 'w', encoding='utf-8') as fh:
+        json.dump(hist, fh, ensure_ascii=False, separators=(',', ':'), allow_nan=False)
 PANELS = ('news', 'facts', 'errs', 'anom', 'hubs', 'churn', 'hist')
 REPORT = 'Agents-outputs/anomalias-results.md'
 REPORT_URL = ('https://github.com/CarregaErvilhas/nap-dashboard/blob/main/'
@@ -114,6 +137,7 @@ def render(data, outdir='site', archive_url=None):
     with open(os.path.join(outdir, 'data', 'opc.json'), 'w', encoding='utf-8') as fh:
         json.dump(opc or {'date': None, 'url': REPORT_URL, 'opcs': []}, fh,
                   ensure_ascii=False, separators=(',', ':'))
+    write_history(outdir)
     for src, name in DATA_COPY.items():
         shutil.copyfile(os.path.join('assets', src), os.path.join(outdir, 'data', name))
     for rel in STATIC:

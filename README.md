@@ -39,6 +39,9 @@ altere o `site/`; regenerado semanalmente por
     um mapa em canvas.
   - **Rede** (`rede.html`): estatísticas da comunidade (KPIs, novidades, gráficos de
     barras como tabelas, histórico, hubs, factos).
+  - **Explorar** (`explorar.html`): filtros cruzados sobre todas as tomadas (operador,
+    concelho, potência, ficha, região, preço, pagamento, estado), com estado ao vivo, mapa,
+    taxas e evolução no tempo (do AmpereArchive).
   - **Operadores** (`operadores.html`): para os OPC. Relatório semanal de anomalias
     por operador (de `Agents-outputs/anomalias-results.md`), entradas e saídas de OPC
     e erros reportáveis.
