@@ -138,6 +138,12 @@
       } else if (cur) cur.appendChild(n);
     });
   });
+  // The weekly growth table comes oldest first; show the latest week on top.
+  document.querySelectorAll('#historico table.hist').forEach(function (tb) {
+    var th = tb.querySelector('th'), body = tb.tBodies[0];
+    if (!th || !body || !/^(semana|week)$/i.test(th.textContent.trim())) return;
+    [].slice.call(body.rows).reverse().forEach(function (r) { body.appendChild(r); });
+  });
   // Hubs: the first 10 of the table, the rest behind a button.
   var HUBS = { pt: ['Mostrar os {n} hubs', 'Mostrar só os 10 primeiros'], en: ['Show all {n} hubs', 'Show only the first 10'] };
   document.querySelectorAll('#hubs [data-lang]').forEach(function (box) {
