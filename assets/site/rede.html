@@ -8,24 +8,27 @@
 </head>
 <body>
 <!--CHROME:header-->
-<main id="main" class="wrap">
+<main id="main" class="wrap net">
   <div class="hero">
     <h1 data-i18n="netH1">A rede em números</h1>
     <p data-i18n="netLead">Quantos postos há, de quem são, que potência têm e quanto estão ocupados.</p>
   </div>
-  <p class="note" id="live" role="status" data-i18n="loading">A carregar…</p>
+  <section class="summary" id="resumo" aria-labelledby="hResumo"><h2 class="sr" id="hResumo" data-i18n="sSummary">Resumo</h2>
+    <ul class="kpis" id="kpis"></ul>
+    <div class="card now" id="cStatus"></div>
+    <p class="note" id="live" role="status" data-i18n="loading">A carregar…</p></section>
+  <div id="tabsTop"></div>
   <nav class="subnav" aria-label="Secções" data-i18n-label="sections">
-    <a href="#resumo" data-i18n="sSummary">Resumo</a><a href="#novidades" data-panel="news" data-i18n="sNews">Novidades</a>
     <a href="#rede" data-i18n="sNetwork">Postos</a><a href="#operadores" data-i18n="sOps">Operadores</a>
     <a href="#ocupacao" data-i18n="sOcc">Ocupação</a><a href="#precos" data-i18n="sPrice">Preços</a>
     <a href="#historico" data-panel="hist" data-i18n="sHist">Histórico</a><a href="#hubs" data-panel="hubs" data-i18n="sHubs">Hubs</a>
-    <a href="#factos" data-i18n="sFacts">Factos</a>
+    <a href="#novidades" data-panel="news" data-i18n="sNews">Novidades</a><a href="#factos" data-panel="facts" data-i18n="sFacts">Factos</a>
+    <a href="#tudo" class="all" data-i18n="sAll">Tudo</a>
   </nav>
-  <section class="block" id="resumo" aria-labelledby="hResumo"><h2 id="hResumo" data-i18n="sSummary">Resumo</h2><ul class="kpis" id="kpis"></ul></section>
-  <section class="block panel" id="novidades" data-panel="news" aria-labelledby="hNews"><h2 id="hNews" data-i18n="hNews">Novidades da semana</h2><!--PANEL:news--></section>
   <section class="block" id="rede" aria-labelledby="hRede"><h2 id="hRede" data-i18n="hNetwork">Que postos há</h2>
-    <div class="grid two"><div class="card" id="cStatus"></div><div class="card" id="cPw"></div><div class="card" id="cConn"></div><div class="card" id="cRegion"></div><div class="card" id="cCity"></div>
-    <div class="card"><div class="scroll" tabindex="0" role="group" aria-labelledby="hRede" id="cStatusPw"></div></div></div></section>
+    <div class="grid two"><div class="grid"><div class="card" id="cPw"></div><div class="card" id="cConn"></div><div class="card" id="cRegion"></div></div>
+    <div class="card" id="cCity"></div></div>
+    <div class="card wide"><div class="scroll" tabindex="0" role="group" aria-labelledby="hRede" id="cStatusPw"></div></div></section>
   <section class="block" id="operadores" aria-labelledby="hOps"><h2 id="hOps" data-i18n="hOps">Quem opera a rede</h2>
     <div class="grid two"><div class="card" id="cOpSites"></div><div class="card" id="cOpPts"></div></div></section>
   <section class="block" id="ocupacao" aria-labelledby="hOcc"><h2 id="hOcc" data-i18n="hOcc">Ocupação neste momento</h2>
@@ -36,6 +39,7 @@
     <div class="grid two"><div class="card" id="cPriceOp"></div><div class="card"><div class="scroll" tabindex="0" role="group" aria-labelledby="hPrice" id="cPriceStats"></div></div></div></section>
   <section class="block panel" id="historico" data-panel="hist" aria-labelledby="hHist"><h2 id="hHist" data-i18n="hHist">Histórico (AmpereArchive)</h2><div class="heatwrap"><!--PANEL:hist--></div></section>
   <section class="block panel" id="hubs" data-panel="hubs" aria-labelledby="hHubs"><h2 id="hHubs" data-i18n="hHubs">Maiores hubs por potência total</h2><!--PANEL:hubs--></section>
+  <section class="block panel" id="novidades" data-panel="news" aria-labelledby="hNews"><h2 id="hNews" data-i18n="hNews">Novidades da semana</h2><!--PANEL:news--></section>
   <section class="block panel" id="factos" data-panel="facts" aria-labelledby="hFacts"><h2 id="hFacts" data-i18n="hFacts">Factos sobre a rede</h2><!--PANEL:facts--></section>
 </main>
 <!--CHROME:footer-->
