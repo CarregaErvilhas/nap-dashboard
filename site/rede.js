@@ -36,12 +36,12 @@
   var $ = function (id) { return document.getElementById(id); };
 
   // rows: [[label, number|null, labelNode?]]
-  function bars(id, title, rows, dec, suffix) {
+  function bars(id, title, rows, dec, suffix, min) {
     var max = Math.max.apply(null, rows.map(function (r) { return r[1] || 0; }).concat([0]));
     var tb = el('tbody', null, rows.map(function (r) {
       var fill = el('div', { class: 'fill' }); fill.style.width = (max ? 100 * (r[1] || 0) / max : 0) + '%';
       return el('tr', null, el('th', { scope: 'row' }, r[2] || r[0]), el('td', { class: 'b', 'aria-hidden': 'true' }, el('div', { class: 'track' }, fill)),
-        el('td', null, r[1] == null ? '—' : N.nf(r[1], dec) + (suffix || '')));
+        el('td', null, r[1] == null ? '—' : N.nf(r[1], dec, min) + (suffix || '')));
     }));
     N.clear($(id)).appendChild(el('table', { class: 'bars' }, el('caption', null, t(title)),
       el('thead', { class: 'sr' }, el('tr', null, el('th', { scope: 'col' }, ''), el('td', null), el('th', { scope: 'col' }, t('value')))), tb));
@@ -75,7 +75,7 @@
     bars('cOpPts', 'cOpPts', desc(D.op_pts));
     bars('cOccPw', 'cOccPw', D.occ_pw.map(function (x) { return [N.pwLabel(x.c), x.occ]; }), 1, ' %');
     bars('cOccOp', 'cOccOp', D.occ_op.slice().sort(function (a, b) { return (b.occ || 0) - (a.occ || 0); }).map(function (x) { return [x.op, x.occ]; }), 1, ' %');
-    bars('cPriceOp', 'cPriceOp', desc(D.price_op), 3);
+    bars('cPriceOp', 'cPriceOp', desc(D.price_op), 2, '', 2);
     var sts = N.STATUSES.filter(function (s) { return D.status[s]; });
     N.clear($('cStatusPw')).appendChild(el('table', null, el('caption', null, t('cStatusPw')),
       el('thead', null, el('tr', null, el('th', { scope: 'col' }, t('power')), sts.map(function (s) { return el('th', { scope: 'col' }, t('st_' + s)); }))),
@@ -85,7 +85,7 @@
     N.clear($('cPriceStats')).appendChild(el('table', null, el('caption', null, t('cPriceStats')),
       el('thead', null, el('tr', null, ['colWhat', 'colN', 'colMean', 'colMax'].map(function (k) { return el('th', { scope: 'col' }, t(k)); }))),
       el('tbody', null, [['pEnergy', ps.energy], ['pTime', ps.time], ['pFlat', ps.flat], ['pSem', ps.sem_ceme]].filter(function (r) { return r[1]; }).map(function (r) {
-        return el('tr', null, el('th', { scope: 'row', class: 'l' }, t(r[0])), el('td', null, N.nf(r[1].n)), el('td', null, N.nf(r[1].mean, 3)), el('td', null, N.nf(r[1].max, 3))); }))));
+        return el('tr', null, el('th', { scope: 'row', class: 'l' }, t(r[0])), el('td', null, N.nf(r[1].n)), el('td', null, N.nf(r[1].mean, 2, 2)), el('td', null, N.nf(r[1].max, 2, 2))); }))));
     N.liveNote($('live'), liveRes, D.snapshot);
   }
 

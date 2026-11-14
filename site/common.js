@@ -47,9 +47,10 @@
   }
   function addStrings(pt, en) { Object.assign(STR.pt, pt); Object.assign(STR.en, en); }
   function pwLabel(c) { var i = PW.indexOf(c); return i < 0 ? (c || '—') : t('pw' + i); }
-  function nf(n, d) {
+  // min: decimals always shown (money: 0,40 and not 0,4).
+  function nf(n, d, min) {
     if (n == null || n === '' || isNaN(n)) return '—';
-    return Number(n).toLocaleString(lang() === 'pt' ? 'pt-PT' : 'en-GB', { maximumFractionDigits: d == null ? 0 : d, minimumFractionDigits: 0 });
+    return Number(n).toLocaleString(lang() === 'pt' ? 'pt-PT' : 'en-GB', { maximumFractionDigits: d == null ? 0 : d, minimumFractionDigits: min || 0 });
   }
   function when(ms) {
     return new Date(ms).toLocaleString(lang() === 'pt' ? 'pt-PT' : 'en-GB', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' });
