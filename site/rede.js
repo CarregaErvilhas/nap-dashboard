@@ -1,5 +1,7 @@
 // "A rede em números": stat tiles and bar charts. Every chart is a real table
 // (label, bar, value), so it reads the same with a screen reader or no CSS.
+// The summary stays on top; the sections below it show one at a time (the
+// subnav links act as tabs, "Tudo" shows the whole page as before).
 'use strict';
 (function () {
   var N = window.NAP, el = N.el, t = N.t;
@@ -15,7 +17,7 @@
     cOccPw: 'Ocupação por classe de potência (%)', cOccOp: 'Ocupação por operador, os 15 maiores (%)',
     cPriceOp: 'Taxa média por kWh, por operador (€/kWh)', cStatusPw: 'Estado por classe de potência', cPriceStats: 'Componentes da taxa do operador',
     colWhat: 'Componente', colN: 'tomadas', colMean: 'média', colMax: 'máximo', pEnergy: 'Por energia (€/kWh)', pTime: 'Por tempo (€/min)',
-    pFlat: 'Fixa por carregamento (€)', pSem: 'Valor único fora da MOBI.E (*)', power: 'Classe de potência', value: 'Valor'
+    pFlat: 'Fixa por carregamento (€)', pSem: 'Valor único fora da MOBI.E (*)', power: 'Classe de potência', value: 'Valor', sAll: 'Tudo'
   }, {
     netH1: 'The network in numbers', netLead: 'How many chargers there are, who runs them, how powerful and how busy they are.',
     sections: 'Sections', sSummary: 'Summary', sNews: 'News', sNetwork: 'Chargers', sOps: 'Operators', sOcc: 'Occupancy', sPrice: 'Prices',
@@ -28,23 +30,35 @@
     cOccPw: 'Occupancy by power class (%)', cOccOp: 'Occupancy by operator, 15 largest (%)',
     cPriceOp: 'Mean fee per kWh, by operator (€/kWh)', cStatusPw: 'Status by power class', cPriceStats: 'Operator fee components',
     colWhat: 'Component', colN: 'sockets', colMean: 'mean', colMax: 'max', pEnergy: 'Per energy (€/kWh)', pTime: 'Per time (€/min)',
-    pFlat: 'Flat per session (€)', pSem: 'Single value outside MOBI.E (*)', power: 'Power class', value: 'Value'
+    pFlat: 'Flat per session (€)', pSem: 'Single value outside MOBI.E (*)', power: 'Power class', value: 'Value', sAll: 'All'
   });
   var D = null, liveRes = null;
   var $ = function (id) { return document.getElementById(id); };
 
   // rows: [[label, number|null, labelNode?]]
-  function bars(id, title, rows, dec, suffix) {
+  function bars(id, title, rows, dec, suffix, min) {
     var max = Math.max.apply(null, rows.map(function (r) { return r[1] || 0; }).concat([0]));
     var tb = el('tbody', null, rows.map(function (r) {
       var fill = el('div', { class: 'fill' }); fill.style.width = (max ? 100 * (r[1] || 0) / max : 0) + '%';
       return el('tr', null, el('th', { scope: 'row' }, r[2] || r[0]), el('td', { class: 'b', 'aria-hidden': 'true' }, el('div', { class: 'track' }, fill)),
-        el('td', null, r[1] == null ? '—' : N.nf(r[1], dec) + (suffix || '')));
+        el('td', null, r[1] == null ? '—' : N.nf(r[1], dec, min) + (suffix || '')));
     }));
     N.clear($(id)).appendChild(el('table', { class: 'bars' }, el('caption', null, t(title)),
       el('thead', { class: 'sr' }, el('tr', null, el('th', { scope: 'col' }, ''), el('td', null), el('th', { scope: 'col' }, t('value')))), tb));
   }
   var desc = function (o) { return Object.keys(o || {}).map(function (k) { return [k, o[k]]; }).sort(function (a, b) { return b[1] - a[1]; }); };
+
+  // Sockets by status as one stacked bar. The bar is decoration: the list under
+  // it carries every number, with the same shape + text marks as the rest of the site.
+  function statusBar() {
+    var rows = desc(D.status), total = rows.reduce(function (a, r) { return a + r[1]; }, 0);
+    var bar = el('div', { class: 'stack', 'aria-hidden': 'true' }, rows.map(function (r) {
+      var seg = el('i', { 'data-s': N.STATUSES.indexOf(r[0]) >= 0 ? r[0] : 'unknown' }); seg.style.flexGrow = r[1]; return seg; }));
+    N.clear($('cStatus')).appendChild(el('h3', null, t('cStatus')));
+    N.add($('cStatus'), [bar, el('ul', { class: 'legend' }, rows.map(function (r) {
+      return el('li', null, N.status(r[0]), ' ', el('b', null, N.nf(r[1])), ' ',
+        el('span', { class: 'muted' }, total ? N.nf(100 * r[1] / total, 1) + ' %' : '')); }))]);
+  }
 
   function render() {
     if (!D) return;
@@ -52,7 +66,7 @@
     (N.lang() === 'pt' ? D.kpis_pt : D.kpis).forEach(function (k) {
       ul.appendChild(el('li', null, el('span', { class: 't' }, k.t), el('span', { class: 'v' }, typeof k.v === 'number' ? N.nf(k.v) : k.v), el('span', { class: 's' }, k.s)));
     });
-    bars('cStatus', 'cStatus', desc(D.status).map(function (r) { return [r[0], r[1], N.status(r[0])]; }));
+    statusBar();
     bars('cPw', 'cPw', N.PW.map(function (c) { return [N.pwLabel(c), D.pw[c] || 0]; }));
     bars('cConn', 'cConn', desc(D.conn));
     bars('cRegion', 'cRegion', desc(D.region).map(function (r) { return [t('rg_' + r[0]), r[1]]; }));
@@ -61,7 +75,7 @@
     bars('cOpPts', 'cOpPts', desc(D.op_pts));
     bars('cOccPw', 'cOccPw', D.occ_pw.map(function (x) { return [N.pwLabel(x.c), x.occ]; }), 1, ' %');
     bars('cOccOp', 'cOccOp', D.occ_op.slice().sort(function (a, b) { return (b.occ || 0) - (a.occ || 0); }).map(function (x) { return [x.op, x.occ]; }), 1, ' %');
-    bars('cPriceOp', 'cPriceOp', desc(D.price_op), 3);
+    bars('cPriceOp', 'cPriceOp', desc(D.price_op), 2, '', 2);
     var sts = N.STATUSES.filter(function (s) { return D.status[s]; });
     N.clear($('cStatusPw')).appendChild(el('table', null, el('caption', null, t('cStatusPw')),
       el('thead', null, el('tr', null, el('th', { scope: 'col' }, t('power')), sts.map(function (s) { return el('th', { scope: 'col' }, t('st_' + s)); }))),
@@ -71,7 +85,7 @@
     N.clear($('cPriceStats')).appendChild(el('table', null, el('caption', null, t('cPriceStats')),
       el('thead', null, el('tr', null, ['colWhat', 'colN', 'colMean', 'colMax'].map(function (k) { return el('th', { scope: 'col' }, t(k)); }))),
       el('tbody', null, [['pEnergy', ps.energy], ['pTime', ps.time], ['pFlat', ps.flat], ['pSem', ps.sem_ceme]].filter(function (r) { return r[1]; }).map(function (r) {
-        return el('tr', null, el('th', { scope: 'row', class: 'l' }, t(r[0])), el('td', null, N.nf(r[1].n)), el('td', null, N.nf(r[1].mean, 3)), el('td', null, N.nf(r[1].max, 3))); }))));
+        return el('tr', null, el('th', { scope: 'row', class: 'l' }, t(r[0])), el('td', null, N.nf(r[1].n)), el('td', null, N.nf(r[1].mean, 2, 2)), el('td', null, N.nf(r[1].max, 2, 2))); }))));
     N.liveNote($('live'), liveRes, D.snapshot);
   }
 
@@ -93,6 +107,57 @@
       D.kpis_pt.forEach(function (k) { if (/^Ocupação/.test(k.t)) { k.t = 'Ocupação (ao vivo)'; k.v = o.toFixed(1).replace('.', ',') + '%'; } });
     }
   }
+
+  // ---- one section at a time ----
+  var main = $('main'), nav = document.querySelector('.subnav');
+  function show(id, scroll) {
+    var links = [].slice.call(nav.querySelectorAll('a')).filter(function (a) { return !a.hidden; });
+    var ids = links.map(function (a) { return a.getAttribute('href').slice(1); });
+    if (ids.indexOf(id) < 0) id = ids[0];
+    main.classList.toggle('all', id === 'tudo');
+    document.querySelectorAll('section.block').forEach(function (s) { s.classList.toggle('on', s.id === id); });
+    links.forEach(function (a, i) { if (ids[i] === id) a.setAttribute('aria-current', 'true'); else a.removeAttribute('aria-current'); });
+    if (!scroll) return;
+    // Further down the page than the tab bar: bring the new section's start under it.
+    var top = $('tabsTop').getBoundingClientRect().top + window.scrollY - document.querySelector('.top').offsetHeight;
+    if (window.scrollY > top) window.scrollTo(0, top);
+  }
+  main.classList.add('tabbed');
+  show(location.hash.slice(1), false);
+  window.addEventListener('hashchange', function () { show(location.hash.slice(1), true); });
+
+  // The pipeline's panels arrive as flat HTML. Histórico: each numbered study
+  // becomes a <details>, so the section opens as a list of five titles.
+  document.querySelectorAll('#historico [data-lang]').forEach(function (box) {
+    var cur = null;
+    [].slice.call(box.childNodes).forEach(function (n) {
+      if (n.nodeType === 1 && n.tagName === 'H3') {
+        cur = el('details', { class: 'fold' });
+        box.insertBefore(cur, n);
+        cur.appendChild(el('summary', null, n));
+      } else if (cur) cur.appendChild(n);
+    });
+  });
+  // The weekly growth table comes oldest first; show the latest week on top.
+  document.querySelectorAll('#historico table.hist').forEach(function (tb) {
+    var th = tb.querySelector('th'), body = tb.tBodies[0];
+    if (!th || !body || !/^(semana|week)$/i.test(th.textContent.trim())) return;
+    [].slice.call(body.rows).reverse().forEach(function (r) { body.appendChild(r); });
+  });
+  // Hubs: the first 10 of the table, the rest behind a button.
+  var HUBS = { pt: ['Mostrar os {n} hubs', 'Mostrar só os 10 primeiros'], en: ['Show all {n} hubs', 'Show only the first 10'] };
+  document.querySelectorAll('#hubs [data-lang]').forEach(function (box) {
+    var table = box.querySelector('table'), n = table ? table.querySelectorAll('tr').length - 1 : 0;
+    if (n <= 10) return;
+    var txt = HUBS[box.getAttribute('data-lang')] || HUBS.pt;
+    var btn = el('button', { class: 'btn sm', type: 'button', 'aria-expanded': 'false', onclick: function () {
+      var cut = table.classList.toggle('cut');
+      btn.textContent = cut ? txt[0].replace('{n}', n) : txt[1];
+      btn.setAttribute('aria-expanded', String(!cut));
+    } }, txt[0].replace('{n}', n));
+    table.classList.add('cut');
+    box.appendChild(btn);
+  });
 
   N.initChrome();
   N.onLang(render);
