@@ -85,7 +85,7 @@
     N.clear($('cPriceStats')).appendChild(el('table', null, el('caption', null, t('cPriceStats')),
       el('thead', null, el('tr', null, ['colWhat', 'colN', 'colMean', 'colMax'].map(function (k) { return el('th', { scope: 'col' }, t(k)); }))),
       el('tbody', null, [['pEnergy', ps.energy], ['pTime', ps.time], ['pFlat', ps.flat], ['pSem', ps.sem_ceme]].filter(function (r) { return r[1]; }).map(function (r) {
-        return el('tr', null, el('th', { scope: 'row', class: 'l' }, t(r[0])), el('td', null, N.nf(r[1].n)), el('td', null, N.nf(r[1].mean, 2, 2)), el('td', null, N.nf(r[1].max, 2, 2))); }))));
+        return el('tr', null, el('th', { scope: 'row', class: 'l' }, t(r[0])), el('td', null, N.nf(r[1].n)), el('td', null, N.eur(r[1].mean)), el('td', null, N.eur(r[1].max))); }))));
     N.liveNote($('live'), liveRes, D.snapshot);
   }
 

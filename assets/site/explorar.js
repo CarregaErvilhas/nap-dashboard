@@ -118,7 +118,7 @@
     if (v == null) return '—';
     if (m === 'kw') return N.nf(v, v < 100 ? 1 : 0) + ' MW';
     if (m === 'occ' || m === 'down') return N.nf(v, 1) + ' %';
-    if (m === 'fee') return N.nf(v, 3) + ' €';
+    if (m === 'fee') return N.eur(v) + ' €';
     return N.nf(v);
   }
   function passes(d, vals) {
@@ -374,8 +374,8 @@
     var svg = sv('svg', { viewBox: '0 0 ' + W + ' ' + Hh, class: 'xchart', role: 'img', 'aria-label': t('xFee') });
     svg.appendChild(sv('line', { x1: L, x2: W - L, y1: Hh - B, y2: Hh - B, class: 'axis' }));
     bins.forEach(function (n, i) {
-      var h = max ? (Hh - B - T) * n / max : 0, x = L + i * bw, a = N.nf(i * STEP, 2), b = i === NB - 1 ? '+' : N.nf((i + 1) * STEP, 2);
-      var txt = i === NB - 1 ? N.nf(i * STEP, 2) + '+ €/kWh: ' + N.nf(n) : t('feeBin', { a: a, b: b, n: N.nf(n) });
+      var h = max ? (Hh - B - T) * n / max : 0, x = L + i * bw, a = N.eur(i * STEP), b = i === NB - 1 ? '+' : N.eur((i + 1) * STEP);
+      var txt = i === NB - 1 ? a + '+ €/kWh: ' + N.nf(n) : t('feeBin', { a: a, b: b, n: N.nf(n) });
       if (n) svg.appendChild(sv('path', { class: 'col', d: 'M' + (x + 1) + ' ' + (Hh - B) + 'V' + (Hh - B - h + 4) + 'q0 -4 4 -4H' + (x + bw - 5) + 'q4 0 4 4V' + (Hh - B) + 'Z' }));
       if (n && h > 0) svg.appendChild(sv('text', { x: x + bw / 2, y: Hh - B - h - 5, class: 'vlab', 'text-anchor': 'middle' }, N.nf(n)));
       svg.appendChild(sv('text', { x: x, y: Hh - 8, class: 'tick', 'text-anchor': i ? 'middle' : 'start' }, a));
@@ -385,7 +385,7 @@
     });
     svg.appendChild(sv('text', { x: W - L, y: Hh - 8, class: 'tick', 'text-anchor': 'end' }, t('feeAxis')));
     box.appendChild(svg);
-    box.appendChild(el('p', { class: 'muted small' }, t('feeN', { n: N.nf(xs.length), m: N.nf(xs[Math.floor(xs.length / 2)], 3) })));
+    box.appendChild(el('p', { class: 'muted small' }, t('feeN', { n: N.nf(xs.length), m: N.eur(xs[Math.floor(xs.length / 2)]) })));
   }
   function niceStep(span, n) {
     var raw = span / n, p = Math.pow(10, Math.floor(Math.log(raw) / Math.LN10)), f = raw / p;
