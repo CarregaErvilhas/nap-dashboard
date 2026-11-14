@@ -59,6 +59,7 @@ def expected_files():
     files = set(build_site.PAGES) | set(build_site.STATIC) | set(build_site.EXTRA)
     files |= {'data/' + f for f in site_data.FILES}
     files.add('data/opc.json')
+    files.add('data/' + build_site.HISTORY)
     files |= {'data/' + n for n in build_site.DATA_COPY.values()}
     return files
 

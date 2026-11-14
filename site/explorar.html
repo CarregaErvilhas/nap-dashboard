@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#fbfaf5" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0d1322" media="(prefers-color-scheme: dark)">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<!-- GitHub Pages não deixa definir cabeçalhos HTTP: a CSP vai em <meta>. Scripts e estilos só deste site; o único pedido a outro domínio é o estado ao vivo do AmpereArchive. style 'unsafe-inline' existe só para as cores de fundo do mapa de calor do histórico. -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://ohm-age.ocarroeletrico.com; base-uri 'none'; form-action 'none'">
+<meta name="nap-live-origin" content="https://ohm-age.ocarroeletrico.com">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="preload" href="fonts/nunito-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="app.css">
+<script src="boot.js"></script>
+<link rel="stylesheet" href="explorar.css">
+<title>Explorar a rede de carregamento em Portugal</title>
+<meta name="description" content="Filtra a rede pública de carregamento de veículos elétricos em Portugal por operador, concelho, potência, ficha, estado e pagamento, e vê a ocupação ao vivo e a evolução ao longo do tempo.">
+<link rel="canonical" href="https://nap.ocarroeletrico.com/explorar.html">
+</head>
+<body>
+<a class="skip" href="#main"><span data-lang="pt">Saltar para o conteúdo</span><span data-lang="en">Skip to content</span></a>
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="index.html">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 2 5 13h6l-1 9 8-11h-6z"/></svg>
+      <span>Postos PT</span>
+    </a>
+    <nav class="nav" aria-label="Principal">
+      <a href="index.html" data-i18n="navFind">Procurar</a>
+      <a href="rede.html" data-i18n="navNet">Rede</a>
+      <a href="explorar.html" aria-current="page" data-i18n="navExplore">Explorar</a>
+      <a href="operadores.html" data-i18n="navOps">Operadores</a>
+    </nav>
+    <div class="tools">
+      <div class="seg" role="group" aria-label="Idioma / Language">
+        <button class="btn sm" type="button" data-set="lang:pt" lang="pt" aria-label="Português">PT</button>
+        <button class="btn sm" type="button" data-set="lang:en" lang="en" aria-label="English">EN</button>
+      </div>
+      <div class="menu">
+        <button class="btn sm" type="button" id="appBtn" aria-expanded="false" aria-controls="appPanel" data-i18n="appearance">Aparência</button>
+        <div class="menu-panel" id="appPanel" hidden>
+          <fieldset><legend data-i18n="theme">Tema</legend><div class="seg">
+            <button class="btn sm" type="button" data-set="theme:auto" data-i18n="auto">Automático</button>
+            <button class="btn sm" type="button" data-set="theme:light" data-i18n="light">Claro</button>
+            <button class="btn sm" type="button" data-set="theme:dark" data-i18n="dark">Escuro</button></div></fieldset>
+          <fieldset><legend data-i18n="vision">Visão</legend><div class="seg">
+            <button class="btn sm" type="button" data-set="vision:default" data-i18n="vdefault">Padrão</button>
+            <button class="btn sm" type="button" data-set="vision:cb" data-i18n="cb">Daltonismo</button>
+            <button class="btn sm" type="button" data-set="vision:hc" data-i18n="hc">Alto contraste</button></div></fieldset>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+<main id="main" class="wrap">
+  <div class="hero">
+    <h1 data-i18n="xH1">Explorar a rede</h1>
+    <p data-i18n="xLead">Escolhe um operador, um concelho ou uma potência: todos os números, o mapa e as tendências passam a falar só dessa parte da rede.</p>
+  </div>
+  <p class="note" id="live" role="status" data-i18n="loading">A carregar…</p>
+
+  <div class="xbar" id="xbar">
+    <div class="xbar-row">
+      <span class="xbar-l" id="lMetric" data-i18n="xMetric">Medir por</span>
+      <div class="seg" id="metric" role="group" aria-labelledby="lMetric"></div>
+    </div>
+    <div class="xbar-row">
+      <p class="xsel" id="selText" aria-live="polite"></p>
+      <ul class="chips xchips" id="chips" aria-label="Filtros ativos" data-i18n-label="xActive"></ul>
+      <button class="btn sm" type="button" id="reset" hidden data-i18n="xReset">Limpar filtros</button>
+    </div>
+  </div>
+
+  <section class="block" aria-labelledby="hSum"><h2 id="hSum" data-i18n="xSum">A tua seleção</h2>
+    <ul class="kpis xkpis" id="kpis"></ul>
+    <div class="card xstatus">
+      <h3 id="hStatus" data-i18n="xStatus">Estado das tomadas agora</h3>
+      <div class="xstack" id="stack" role="group" aria-labelledby="hStatus"></div>
+      <ul class="xlegend" id="legend"></ul>
+    </div>
+  </section>
+
+  <section class="block" aria-labelledby="hDims"><h2 id="hDims" data-i18n="xDims">Reparte e filtra</h2>
+    <p class="muted" data-i18n="xDimsNote">Carrega numa linha para ficar só com ela. Podes juntar várias, na mesma lista ou em listas diferentes.</p>
+    <div class="xgrid" id="dims"></div>
+  </section>
+
+  <section class="block" aria-labelledby="hMap"><h2 id="hMap" data-i18n="xMap">Onde ficam</h2>
+    <div class="xgrid two">
+      <div class="card xmapcard"><canvas id="map" width="560" height="620" role="img" aria-label="Mapa dos locais da seleção" data-i18n-label="xMapAria"></canvas>
+        <p class="muted small" id="mapNote"></p></div>
+      <div class="card"><h3 id="hSites" data-i18n="xSites">Maiores locais da seleção</h3>
+        <div class="scroll" tabindex="0" role="group" aria-labelledby="hSites" id="sites"></div></div>
+    </div>
+  </section>
+
+  <section class="block" aria-labelledby="hFee"><h2 id="hFee" data-i18n="xFee">Quanto cobra o operador</h2>
+    <p class="muted" data-i18n="xFeeNote">Taxa do operador (OPC) por kWh, sem IVA, nas tomadas da seleção que a têm. A energia é cobrada à parte pelo teu comercializador (CEME).</p>
+    <div class="card"><div id="fee"></div></div>
+  </section>
+
+  <section class="block" id="tend" aria-labelledby="hTrend" hidden><h2 id="hTrend" data-i18n="xTrend">Ao longo do tempo</h2>
+    <p class="muted" id="trendNote"></p>
+    <div class="xgrid two">
+      <div class="card"><h3 data-i18n="xTSize">Tomadas publicadas, dia a dia</h3><div id="tSize"></div></div>
+      <div class="card"><h3 data-i18n="xTDown">Fora de serviço, dia a dia (%)</h3><div id="tDown"></div></div>
+    </div>
+    <div class="card xwide"><h3 data-i18n="xTOcc">Ocupação hora a hora (%)</h3><div id="tOcc"></div></div>
+    <div class="card xwide"><h3 data-i18n="xTHeat">Ocupação por dia da semana e hora (%)</h3><div class="scroll" tabindex="0" role="group" aria-labelledby="hTrend" id="tHeat"></div>
+      <p class="muted small" id="heatNote"></p></div>
+    <p class="muted small" data-i18n="xSrc">Estados declarados pelos operadores ao NAP (IMT / MOBI.E), guardados pelo AmpereArchive. Não são medições.</p>
+  </section>
+  <div class="xtip" id="tip" hidden></div>
+</main>
+<footer><div class="wrap">
+  <p data-lang="pt">Retrato de 2026-11-11T15:20:04.561Z. Os estados são os que cada operador declara. Os preços são a taxa do operador (OPC), sem IVA e sem a energia do teu comercializador.</p>
+  <p data-lang="en">Snapshot of 2026-11-11T15:20:04.561Z. Statuses are what each operator declares. Prices are the operator (CPO) fee, without VAT and without your supplier's energy.</p>
+  <p><a href="https://ocarroeletrico.com/">ocarroeletrico.com</a> &nbsp; <a href="https://ceme.ocarroeletrico.com/"><span data-lang="pt">Comparador de tarifas CEME</span><span data-lang="en">CEME tariff comparison</span></a> &nbsp; <a href="https://ohmigo.ocarroeletrico.com/">ohmigo</a> &nbsp; <a href="privacidade.html"><span data-lang="pt">Privacidade</span><span data-lang="en">Privacy</span></a> &nbsp; <a href="https://github.com/CarregaErvilhas/nap-dashboard"><span data-lang="pt">Código no GitHub</span><span data-lang="en">Code on GitHub</span></a></p>
+  <p>© 2026 O Carro Elétrico / Fernando Miguel, <a href="https://nap.ocarroeletrico.com/">nap.ocarroeletrico.com</a>. <span data-lang="pt">Uso não-comercial livre</span><span data-lang="en">Free non-commercial use</span> (<a href="https://github.com/CarregaErvilhas/nap-dashboard/blob/main/LICENSE">PolyForm Noncommercial 1.0.0</a>, <span data-lang="pt">só código próprio, ver</span><span data-lang="en">own code only, see</span> <a href="https://github.com/CarregaErvilhas/nap-dashboard/blob/main/THIRD-PARTY-NOTICES.md">THIRD-PARTY-NOTICES.md</a>); <span data-lang="pt">uso comercial requer licença</span><span data-lang="en">commercial use requires a licence</span>: <a href="mailto:info@ocarroeletrico.com">info@ocarroeletrico.com</a>, <a href="https://m.me/OCarroEletricoDotCom">Messenger</a>.</p>
+  <p><span data-lang="pt">Fontes</span><span data-lang="en">Sources</span>: NAP EADME (MOBI.E, via NAP-IMT) + <span data-lang="pt">tarifas</span><span data-lang="en">tariffs</span> MOBI.E (<a href="https://www.mobie.pt/">mobie.pt</a>); <span data-lang="pt">listas</span><span data-lang="en">lists</span> DGEG (<a href="https://www.dgeg.gov.pt/">dgeg.gov.pt</a>), <span data-lang="pt">uso livre com menção de fonte, sem fins lucrativos</span><span data-lang="en">free use with attribution, non-profit</span>; <span data-lang="pt">classes de potência</span><span data-lang="en">power classes</span> AFIR (<a href="https://eur-lex.europa.eu/eli/reg/2023/1804/oj">Reg. (UE) 2023/1804, Anexo III</a>); © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors (<a href="https://opendatacommons.org/licenses/odbl/">ODbL</a>); <span data-lang="pt">contorno</span><span data-lang="en">outline</span> © DGT (CAOP, <a href="https://www.dgterritorio.gov.pt/dados-abertos">CC-BY 4.0</a>); <span data-lang="pt">esquemas</span><span data-lang="en">schemas</span> DATEX II © CEN (<a href="https://datex2.eu/">datex2.eu</a>); <span data-lang="pt">mapas da comunidade</span><span data-lang="en">community maps</span> <a href="https://umap.openstreetmap.fr/pt-pt/map/postos-de-carregamento-v21_690884">Postos de Carregamento v2.1</a> + <a href="https://umap.openstreetmap.fr/en/map/caca-aos-postos-de-carregamento_1386222">Caça aos Postos</a> (Alexandre Moleiro); <span data-lang="pt">tipo de letra</span><span data-lang="en">typeface</span> Nunito (<a href="fonts/OFL-Nunito.txt">SIL OFL 1.1</a>).</p>
+</div></footer>
+<script src="common.js"></script>
+<script src="explorar.js"></script>
+</body>
+</html>

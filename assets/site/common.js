@@ -6,7 +6,7 @@
   var A = window.NAPAPP;
   var STR = {
     pt: {
-      navFind: 'Procurar', navNet: 'Rede', navOps: 'Operadores',
+      navFind: 'Procurar', navNet: 'Rede', navExplore: 'Explorar', navOps: 'Operadores',
       appearance: 'Aparência', theme: 'Tema', vision: 'Visão', auto: 'Automático', light: 'Claro', dark: 'Escuro',
       vdefault: 'Padrão', cb: 'Daltonismo', hc: 'Alto contraste', language: 'Idioma',
       liveOk: 'Estado ao vivo de {t} ({n} de {m} tomadas).', liveStale: 'Estado ao vivo indisponível: a mostrar o da semana ({t}).',
@@ -20,7 +20,7 @@
       'pay_Cartão RFID eMSP': 'Cartão do comercializador (RFID)', 'pay_Sem autenticação': 'Sem autenticação'
     },
     en: {
-      navFind: 'Find', navNet: 'Network', navOps: 'Operators',
+      navFind: 'Find', navNet: 'Network', navExplore: 'Explore', navOps: 'Operators',
       appearance: 'Appearance', theme: 'Theme', vision: 'Vision', auto: 'Automatic', light: 'Light', dark: 'Dark',
       vdefault: 'Default', cb: 'Colour-blind', hc: 'High contrast', language: 'Language',
       liveOk: 'Live status as of {t} ({n} of {m} sockets).', liveStale: 'Live status unavailable: showing this week\'s ({t}).',

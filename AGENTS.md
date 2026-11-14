@@ -442,7 +442,7 @@ work: the pages fetch their JSON, so preview over HTTP. `refresh.yml` runs
   preferring the row with the most payment/auth tags (tie-break: nearest).
 
 ## Site specifics
-- Three pages, no external libs, pure CSS/JS: `index.html` "Procurar" (drivers:
+- Four pages, no external libs, pure CSS/JS (the fourth, `explorar.html`, is described below): `index.html` "Procurar" (drivers:
   search by town/operator/code, "Perto de mim", quick filters, a card per site
   with one status mark per socket, detail with sockets, operator fees, payment
   and directions links to Google Maps/OpenStreetMap, canvas map),
@@ -450,6 +450,27 @@ work: the pages fetch their JSON, so preview over HTTP. `refresh.yml` runs
   tables, history, hubs, facts) and `operadores.html` "Operadores" (OPCs: weekly
   anomaly report per operator parsed from `Agents-outputs/anomalias-results.md`
   by `build_site.parse_opc_report`, OPC churn, reportable errors).
+- `explorar.html` "Explorar" (`explorar.js`, `explorar.css`): cross-filters over
+  `points.json`. Each list (operator, municipality, power, plug, region, price
+  regime, payment) and the status strip is a chart and a filter; a list ignores
+  its own filter (so it can be widened) and the rest of the page follows the
+  whole selection: KPIs, map (`sites.json` + `outline.json`, framed on the
+  selection), largest sites, fee histogram. "Medir por" switches every list
+  between sockets, sites, MW, occupancy, out of service and mean fee; ratio
+  metrics grey out groups under 10 sockets. Filters live in the URL hash
+  (`#m=occ&city=Lisboa&pw=…`), so a view can be shared. Live status as on the
+  other pages, re-read every 5 minutes while the page is visible. The "Ao longo
+  do tempo" section reads `site/data/history.json`
+  (`scripts/explore_history.py`, DuckDB over `data/archive_cache`, after
+  `archive_history.py`): a daily cube (operator × power class × region, from
+  `snapshots`, backfill included: one reading a day, so only size and out of
+  service) and an hourly cube of the last 14 days of live collection (operator
+  × power class, 4 samples an hour, gaps skipped) for occupancy by hour and by
+  weekday × hour. They follow only the operator, power and region filters, and
+  the page says so. `build_site.write_history` copies
+  `data/explore_history.json` when the run produced it, keeps the committed
+  file otherwise, and writes an empty one (section hidden) when there is none.
+  Charts are SVG built with `createElementNS`, each with a table view.
 - Sources in `assets/site/`; output in `site/` (committed, what `pages.yml`
   serves). Data in `site/data/{stats,panels,sites,points,outline,opc}.json`,
   fetched same-origin (`credentials: 'omit'`) and split by `scripts/site_data.py`
@@ -510,7 +531,7 @@ work: the pages fetch their JSON, so preview over HTTP. `refresh.yml` runs
   ícones e `llms.txt` são copiados para `site/` pelo `build_site.py`; a página
   de privacidade descreve os pedidos do site, o `localStorage` e a localização
   (PT e EN), por isso qualquer pedido ou chave novos têm de entrar lá também.
-- Estado ao vivo: ao abrir, `index.html` e `rede.html` leem `v1/PT/status.json.gz` do
+- Estado ao vivo: ao abrir, `index.html`, `rede.html` e `explorar.html` leem `v1/PT/status.json.gz` do
   AmpereArchive (sem cookies nem referrer; se vier ainda em gzip, descomprime
   com `DecompressionStream`) e refaz o que depende do estado: gráficos de
   estado e ocupação, KPI de ocupação, cores do mapa, cartões e filtro de

@@ -39,6 +39,9 @@ Mondays 06:00 UTC).
     "Directions" links (Google Maps, OpenStreetMap), and a canvas map.
   - **Network** (`rede.html`): community statistics (KPIs, news, bar charts as
     tables, history, hubs, facts).
+  - **Explore** (`explorar.html`): cross-filters over every socket (operator,
+    municipality, power, plug, region, price, payment, status), with live status, a map,
+    fees and trends over time (from the AmpereArchive).
   - **Operators** (`operadores.html`): for the OPCs. Weekly anomaly report per
     operator (from `Agents-outputs/anomalias-results.md`), OPC churn and reportable
     errors.
