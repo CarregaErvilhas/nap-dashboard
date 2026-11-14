@@ -53,6 +53,10 @@ class ExploreHistoryTest(unittest.TestCase):
         self.assertEqual(h['samples'][4], 0)   # sem leituras entre 03:59 e 05:00
         self.assertEqual(self.total(h, 'tot', 4), 0)
 
+    def test_no_backfill_reads_means_no_back_samples(self):
+        # O cenário só tem leituras ao vivo (note NULL): o cubo do backfill fica vazio.
+        self.assertEqual(self.res['hourly']['back'], {'ts': [], 'combos': [], 'act': [], 'chg': []})
+
     def test_hourly_occupancy(self):
         h = self.res['hourly']
         # 00h: S1/P1 avariada, as outras duas livres.
