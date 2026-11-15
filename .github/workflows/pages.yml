@@ -127,6 +127,8 @@ jobs:
       # ohmigo acima). Só passa JSON válido com menos de 2 MB; sem ele fica o
       # data/changes.json vazio do repo, e a página esconde a lista.
       - name: Stage last 24 h of changes
+        # Uma falha aqui (gh api, unzip) nunca trava o deploy: fica o vazio.
+        continue-on-error: true
         env:
           GH_TOKEN: ${{ github.token }}
           REPO_ID: ${{ github.repository_id }}
