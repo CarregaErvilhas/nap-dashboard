@@ -33,7 +33,7 @@ NAP_M = 30
 CODE_RE = re.compile(r'^(?:MOBI-)?[A-Z]{3}-\d{4,5}$')
 LIFE = (('construction', 'construction'), ('planned', 'planned'), ('proposed', 'planned'))
 SOCKETS = {'type2_combo': 'CCS Combo2', 'type2': 'Type2', 'type2_cable': 'Type2',
-           'chademo': 'CHAdeMO', 'tesla_supercharger': 'CCS Combo2'}
+           'chademo': 'CHAdeMO', 'tesla_supercharger': 'CCS Combo2', 'mcs': 'MCS'}
 
 
 def life_of(tags, what):
