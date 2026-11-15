@@ -60,6 +60,7 @@ def expected_files():
     files |= {'data/' + f for f in site_data.FILES}
     files.add('data/opc.json')
     files.add('data/' + build_site.HISTORY)
+    files.add('data/' + build_site.YEARS)
     files.add('data/' + build_site.CHANGES)
     files |= {'data/' + n for n in build_site.DATA_COPY.values()}
     return files

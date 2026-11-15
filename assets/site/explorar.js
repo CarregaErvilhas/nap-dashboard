@@ -28,7 +28,17 @@
     xTrendHour: ' A ocupação hora a hora não segue a região.', xNoHist: 'Sem histórico para esta seleção.',
     tipN: '{d}: {v} tomadas', tipPct: '{d}: {v} %', heatNote: 'Hora de Lisboa. {d} dias de recolha contínua.', heatBack: ' Mais {b} leituras avulsas desde {s}, de recolhas anteriores (4 a 5 por dia): cada uma conta como um retrato da hora em que foi feita.', heatFew: ' Com poucas semanas por trás, lê isto como uma primeira impressão.', heatLo: 'menos ocupado', heatHi: 'mais ocupado (máximo: {m} %)', heatNa: 'sem dados', heatNaCell: '{w}, {h} h: sem dados',
     heatCell: '{w}, {h} h: {v} %', wd0: 'Segunda', wd1: 'Terça', wd2: 'Quarta', wd3: 'Quinta', wd4: 'Sexta', wd5: 'Sábado', wd6: 'Domingo', xHour: 'Hora', xDay: 'Dia',
-    xTable: 'Ver como tabela', xVal: 'Valor'
+    xTable: 'Ver como tabela', xVal: 'Valor',
+    yH: 'Ao longo dos anos', ySize: 'Tomadas publicadas, mês a mês', yOcc: 'Ocupação média do mês (%)', yDown: 'Fora de serviço, média do mês (%)',
+    ySeason: 'Ocupação por mês do ano (%)', yFee: 'Preço por kWh publicado no NAP (€)', yModel: 'Taxa do operador por kWh, do modelo da rede (€)',
+    yNote: 'Desde dezembro de 2021, com o que o AmpereArchive guarda. Segue os filtros de operador e potência (e a região, nas tomadas e nos preços).',
+    yOld: ' Até janeiro de 2025 a fonte só tinha estados: com um filtro ativo, esses anos só contam as tomadas que ainda existiam em 2025.',
+    yIgn: ' Os outros filtros ativos ({f}) não se aplicam aqui.',
+    ySparse: 'Os meses sem linha tiveram poucas leituras (menos de {c} horas com dados): de março a dezembro de 2024 houve cerca de uma por dia.',
+    yFeeNote: 'Atenção: isto é o que cada operador publica no NAP, sem as redes fora da MOBI.E. Nem sempre é a taxa do operador: muitos publicam o preço ad hoc, que já inclui a energia, e em 2026 vários trocaram um pelo outro. Um salto aqui pode ser essa troca e não uma subida de preço. Lê-o operador a operador.',
+    yModelNote: 'Esta série começa em novembro de 2026 e ganha um ponto por mês: é a taxa do operador (sem energia) nas tomadas MOBI.E.',
+    ySwitch: 'muda a fonte', yReads: '{n} leituras por dia', yMonth: 'Mês', yYear: 'Ano', yCell: '{m} de {y}: {v} %', yNaCell: '{m} de {y}: sem dados',
+    mo0: 'jan', mo1: 'fev', mo2: 'mar', mo3: 'abr', mo4: 'mai', mo5: 'jun', mo6: 'jul', mo7: 'ago', mo8: 'set', mo9: 'out', mo10: 'nov', mo11: 'dez'
   }, {
     xH1: 'Explore the network', xLead: 'Pick an operator, a municipality or a power class: every number, the map and the trends then describe only that part of the network.',
     xMetric: 'Measure by', xActive: 'Active filters', xReset: 'Clear filters', xSum: 'Your selection', xStatus: 'Socket status right now',
@@ -52,7 +62,17 @@
     xTrendHour: ' Hour-by-hour occupancy does not follow the region.', xNoHist: 'No history for this selection.',
     tipN: '{d}: {v} sockets', tipPct: '{d}: {v}%', heatNote: 'Lisbon time. {d} days of continuous collection.', heatBack: ' Plus {b} one-off readings since {s}, from earlier collections (4 to 5 a day): each counts as a snapshot of the hour it was taken.', heatFew: ' With only a few weeks behind it, read this as a first impression.', heatLo: 'less busy', heatHi: 'busier (maximum: {m}%)', heatNa: 'no data', heatNaCell: '{w}, {h}h: no data',
     heatCell: '{w}, {h}h: {v}%', wd0: 'Monday', wd1: 'Tuesday', wd2: 'Wednesday', wd3: 'Thursday', wd4: 'Friday', wd5: 'Saturday', wd6: 'Sunday', xHour: 'Hour', xDay: 'Day',
-    xTable: 'View as a table', xVal: 'Value'
+    xTable: 'View as a table', xVal: 'Value',
+    yH: 'Over the years', ySize: 'Published sockets, month by month', yOcc: 'Mean occupancy of the month (%)', yDown: 'Out of service, mean of the month (%)',
+    ySeason: 'Occupancy by month of the year (%)', yFee: 'Price per kWh published in the NAP (€)', yModel: 'Operator fee per kWh, from the network model (€)',
+    yNote: 'Since December 2021, from what the AmpereArchive keeps. It follows the operator and power filters (and the region, for sockets and prices).',
+    yOld: ' Until January 2025 the source only had statuses: with a filter on, those years only count sockets that still existed in 2025.',
+    yIgn: ' The other active filters ({f}) do not apply here.',
+    ySparse: 'Months without a line had few readings (fewer than {c} hours with data): from March to December 2024 there was about one a day.',
+    yFeeNote: 'Careful: this is what each operator publishes in the NAP, without the networks outside MOBI.E. It is not always the operator fee: many publish the ad hoc price, which already includes energy, and in 2026 several switched from one to the other. A jump here can be that switch and not a price rise. Read it operator by operator.',
+    yModelNote: 'This series starts in November 2026 and gains a point a month: it is the operator fee (without energy) on MOBI.E sockets.',
+    ySwitch: 'source changes', yReads: '{n} readings a day', yMonth: 'Month', yYear: 'Year', yCell: '{m} {y}: {v}%', yNaCell: '{m} {y}: no data',
+    mo0: 'Jan', mo1: 'Feb', mo2: 'Mar', mo3: 'Apr', mo4: 'May', mo5: 'Jun', mo6: 'Jul', mo7: 'Aug', mo8: 'Sep', mo9: 'Oct', mo10: 'Nov', mo11: 'Dec'
   });
 
   var $ = function (id) { return document.getElementById(id); };
@@ -406,9 +426,14 @@
     var svg = sv('svg', { viewBox: '0 0 ' + W + ' ' + Hh, class: 'xchart', role: 'img', 'aria-label': o.title });
     for (var g = lo; g <= hi + step / 2; g += step) {
       svg.appendChild(sv('line', { x1: L, x2: W - R, y1: Y(g), y2: Y(g), class: 'grid' }));
-      svg.appendChild(sv('text', { x: L - 6, y: Y(g) + 4, class: 'tick', 'text-anchor': 'end' }, N.nf(g, o.dec)));
+      svg.appendChild(sv('text', { x: L - 6, y: Y(g) + 4, class: 'tick', 'text-anchor': 'end' }, o.fmt ? o.fmt(g) : N.nf(g, o.dec)));
     }
     (o.ticks || []).forEach(function (tk) { svg.appendChild(sv('text', { x: X(tk[0]), y: Hh - 8, class: 'tick', 'text-anchor': 'middle' }, tk[1])); });
+    (o.marks || []).forEach(function (mk) {
+      svg.appendChild(sv('line', { x1: X(mk[0]), x2: X(mk[0]), y1: T, y2: Hh - B, class: 'mark' }));
+      svg.appendChild(sv('text', { x: X(mk[0]) + 4, y: T + 10, class: 'tick' }, mk[1]));
+    });
+    var show = function (y) { return (o.fmt ? o.fmt(y) : N.nf(y, o.tipDec == null ? o.dec : o.tipDec)) + (o.unit || ''); };
     var d = '', pen = false;
     ys.forEach(function (y, i) { if (y == null) { pen = false; return; } d += (pen ? 'L' : 'M') + X(i).toFixed(1) + ' ' + Y(y).toFixed(1); pen = true; });
     svg.appendChild(sv('path', { d: d, class: 'ln' }));
@@ -422,7 +447,7 @@
       if (ys[i] == null) { cross.setAttribute('visibility', 'hidden'); dot.setAttribute('visibility', 'hidden'); tip(); return; }
       cross.setAttribute('x1', X(i)); cross.setAttribute('x2', X(i)); cross.setAttribute('visibility', 'visible');
       dot.setAttribute('cx', X(i)); dot.setAttribute('cy', Y(ys[i])); dot.setAttribute('visibility', 'visible');
-      tip(e, [o.xs[i], N.nf(ys[i], o.tipDec == null ? o.dec : o.tipDec) + (o.unit || '')]);
+      tip(e, [o.xs[i], show(ys[i])].concat(o.extra && o.extra[i] ? [o.extra[i]] : []));
     }
     hit.addEventListener('pointermove', move); hit.addEventListener('pointerdown', move);
     hit.addEventListener('pointerleave', function () { cross.setAttribute('visibility', 'hidden'); dot.setAttribute('visibility', 'hidden'); tip(); });
@@ -430,7 +455,7 @@
     box.appendChild(svg);
     // The same numbers as a table, for screen readers and for copying.
     var every = Math.max(1, Math.ceil(n / 60)), rows = [];
-    ys.forEach(function (y, i) { if (y != null && (i % every === 0 || i === last)) rows.push(el('tr', null, el('th', { scope: 'row', class: 'l' }, o.xs[i]), el('td', null, N.nf(y, o.tipDec == null ? o.dec : o.tipDec) + (o.unit || '')))); });
+    ys.forEach(function (y, i) { if (y != null && (i % every === 0 || i === last)) rows.push(el('tr', null, el('th', { scope: 'row', class: 'l' }, o.xs[i]), el('td', null, show(y))));  });
     box.appendChild(el('details', { class: 'xtable' }, el('summary', null, t('xTable')), el('div', { class: 'scroll' },
       el('table', null, el('thead', null, el('tr', null, el('th', { scope: 'col', class: 'l' }, o.xlabel), el('th', { scope: 'col' }, t('xVal')))), el('tbody', null, rows)))));
   }
@@ -520,13 +545,77 @@
     $('heatNote').textContent = t('heatNote', { d: days.size }) + (nb ? t('heatBack', { b: nb, s: first }) : '') + (days.size + nb / 5 < 28 ? t('heatFew') : '');
   }
 
+  // ---------------------------------------------------------------- years
+  // Monthly aggregate of the whole archive (scripts/explore_years.py). Sums per month, so every
+  // ratio is computed here, after filtering. Index -1 = attribute unknown (sockets gone before 2025).
+  var Yr = null;
+  function renderYears() {
+    if (!Yr || !Yr.months || Yr.months.length < 2) { $('anos').hidden = true; return; }
+    $('anos').hidden = false;
+    var pick = function (list, f) { var s = new Set(); list.forEach(function (v, i) { if (f.has(v)) s.add(i); }); return s; };
+    var opIx = pick(Yr.ops, F.op), pwIx = pick(Yr.pw, F.pw), rgIx = pick(Yr.regions, F.region);
+    var okOp = function (i) { return !F.op.size || opIx.has(i); }, okPw = function (i) { return !F.pw.size || pwIx.has(i); }, okRg = function (i) { return !F.region.size || rgIx.has(i); };
+    var nm = Yr.months.length, M = Yr.meta, zero = function () { return new Array(nm).fill(0); };
+    var sum = function (block, keys, ok) {
+      var out = {}; keys.forEach(function (k) { out[k] = zero(); });
+      block.combos.forEach(function (c, r) { if (!ok(c)) return; keys.forEach(function (k) { var row = block[k][r]; for (var i = 0; i < nm; i++) out[k][i] += row[i] || 0; }); });
+      return out;
+    };
+    var Z = sum(Yr.size, ['n', 'kn', 'ks', 'mn', 'ms'], function (c) { return okOp(c[0]) && okPw(c[1]) && okRg(c[2]); });
+    var O = sum(Yr.occ, ['tot', 'act', 'chg', 'down'], function (c) { return okOp(c[0]) && okPw(c[1]); });
+    var need = (Yr.needs_cells || {}).occupancy || 0;
+    var lab = Yr.months.map(function (m) { return t('mo' + (Number(m.slice(5)) - 1)) + ' ' + m.slice(0, 4); }), ticks = [], marks = [];
+    Yr.months.forEach(function (m, i) { if (m.slice(5) === '01') ticks.push([i, m.slice(0, 4)]); if (m === '2025-01') marks.push([i, t('ySwitch')]); });
+    var extra = Yr.months.map(function (m, i) { return M.days[i] ? t('yReads', { n: N.nf(M.reads[i] / M.days[i], 0) }) : null; });
+    var ign = DIMS.filter(function (d) { return F[d].size && d !== 'op' && d !== 'pw' && d !== 'region'; }).map(function (d) { return t('d_' + d).toLowerCase(); });
+    $('yNote').textContent = t('yNote') + (F.op.size || F.pw.size || F.region.size ? t('yOld') : '') + (ign.length ? t('yIgn', { f: ign.join(', ') }) : '');
+    var base = { xs: lab, ticks: ticks, marks: marks, extra: extra, w: 1120, h: 240, xlabel: t('yMonth') };
+    var chart = function (id, title, ys, more) { var o = { title: t(title), ys: ys }, k; for (k in base) o[k] = base[k]; for (k in more) o[k] = more[k];
+      if (o.trim) {   // a series that starts late (prices: 2025) drops the empty years before it
+        var i0 = 0; while (i0 < ys.length - 1 && ys[i0] == null) i0++;
+        var shift = function (a) { return a.filter(function (x) { return x[0] >= i0; }).map(function (x) { return [x[0] - i0, x[1]]; }); };
+        o.ys = ys.slice(i0); o.xs = o.xs.slice(i0); o.extra = null; o.ticks = shift(o.ticks); o.marks = [];
+      }
+      if ($(id).clientWidth <= 700) o.w = 640;
+      lineChart($(id), o);
+    };
+    chart('ySize', 'ySize', Z.n.map(function (x) { return x || null; }), { dec: 0, zero: true });
+    var occ = O.act.map(function (a, i) { return a > 0 && M.cells[i] >= need ? 100 * O.chg[i] / a : null; });
+    chart('yOcc', 'yOcc', occ, { dec: 0, tipDec: 1, unit: ' %', zero: true });
+    chart('yDown', 'yDown', O.tot.map(function (a, i) { return a > 0 && M.cells[i] >= need ? 100 * O.down[i] / a : null; }), { dec: 0, tipDec: 1, unit: ' %', zero: true });
+    $('ySparse').textContent = t('ySparse', { c: need });
+    chart('yFee', 'yFee', Z.kn.map(function (n, i) { return n ? Z.ks[i] / n : null; }), { fmt: N.eur, zero: true, trim: true });
+    var model = Z.mn.map(function (n, i) { return n ? Z.ms[i] / n : null; });
+    $('yModelBox').hidden = model.filter(function (v) { return v != null; }).length < 2;
+    if (!$('yModelBox').hidden) chart('yModel', 'yModel', model, { fmt: N.eur, zero: true, trim: true });
+
+    // Seasonality: one row per year, one column per month of the year.
+    var years = [], by = {}, hmax = 0;
+    Yr.months.forEach(function (m, i) { var y = m.slice(0, 4); if (!by[y]) { by[y] = new Array(12).fill(null); years.push(y); } by[y][Number(m.slice(5)) - 1] = occ[i]; if (occ[i] != null) hmax = Math.max(hmax, occ[i]); });
+    years = years.filter(function (y) { return by[y].some(function (v) { return v != null; }); });
+    var hmin = hmax; years.forEach(function (y) { by[y].forEach(function (v) { if (v != null) hmin = Math.min(hmin, v); }); });
+    var cols = []; for (var c = 0; c < 12; c++) cols.push(c);
+    N.clear($('ySeason')).appendChild(el('table', { class: 'xheat xyear' },
+      el('thead', null, el('tr', null, el('td', null), cols.map(function (c) { return el('th', { scope: 'col' }, t('mo' + c)); }))),
+      el('tbody', null, years.map(function (y) {
+        return el('tr', null, el('th', { scope: 'row', class: 'l' }, y), by[y].map(function (v, c) {
+          var td = v == null ? el('td', { class: 'na' }, el('span', { class: 'sr' }, t('heatNa'))) : el('td', null, N.nf(v, 1, 1));
+          var txt = v == null ? t('yNaCell', { m: t('mo' + c), y: y }) : t('yCell', { m: t('mo' + c), y: y, v: N.nf(v, 1) });
+          // The scale runs from the lowest to the highest month, so a 2-point seasonal swing is visible.
+          if (v != null) td.style.setProperty('--k', (hmax > hmin ? Math.round(6 + 54 * (v - hmin) / (hmax - hmin)) : 30) + '%');
+          td.addEventListener('mousemove', function (e) { tip(e, [txt]); }); td.addEventListener('mouseleave', function () { tip(); });
+          return td;
+        }));
+      }))));
+  }
+
   // ---------------------------------------------------------------- loop
   function update() {
     compute(); writeHash();
     renderBar(); renderKpis(); renderStatus();
     CARDS.forEach(renderCard);
     var rows = siteRows(); renderSites(rows); drawMap(rows);
-    renderFee(); renderTrends();
+    renderFee(); renderTrends(); renderYears();
     N.liveNote($('live'), liveRes, snapshot);
   }
   function live() {
@@ -547,5 +636,6 @@
       return N.load('outline');
     }).then(function (o) { outline = o.outline; update(); }).catch(function () {});
     N.load('history').then(function (h) { H = h; renderTrends(); }).catch(function () {});
+    N.load('years').then(function (y) { Yr = y; renderYears(); }).catch(function () {});
   }).catch(function () { $('live').textContent = t('loadFail'); });
 })();
