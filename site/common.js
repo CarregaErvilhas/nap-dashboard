@@ -14,7 +14,7 @@
       loadFail: 'Não foi possível carregar os dados. Verifica a ligação e recarrega a página.',
       st_available: 'Livre', st_charging: 'A carregar', st_outOfOrder: 'Avariado', st_inoperative: 'Inoperacional',
       st_unknown: 'Sem informação', st_blocked: 'Bloqueado', st_planned: 'Planeado', st_removed: 'Removido',
-      rg_mainland: 'Continente', rg_madeira: 'Madeira', rg_azores: 'Açores', rg_OUTSIDE: 'Fora de PT',
+      mcsTrucks: 'camiões', rg_mainland: 'Continente', rg_madeira: 'Madeira', rg_azores: 'Açores', rg_OUTSIDE: 'Fora de PT',
       pw0: 'AC lento (<22 kW)', pw1: 'AC/DC 22–50 kW', pw2: 'DC rápido 50–150 kW', pw3: 'DC ultra 150–350 kW', pw4: 'DC ultra (≥350 kW)',
       pay_App: 'App', 'pay_Multibanco/contactless': 'Multibanco/contactless', pay_Dinheiro: 'Dinheiro',
       'pay_Cartão RFID eMSP': 'Cartão do comercializador (RFID)', 'pay_Sem autenticação': 'Sem autenticação'
@@ -28,7 +28,7 @@
       loadFail: 'Could not load the data. Check your connection and reload the page.',
       st_available: 'Free', st_charging: 'Charging', st_outOfOrder: 'Out of order', st_inoperative: 'Inoperative',
       st_unknown: 'No information', st_blocked: 'Blocked', st_planned: 'Planned', st_removed: 'Removed',
-      rg_mainland: 'Mainland', rg_madeira: 'Madeira', rg_azores: 'Azores', rg_OUTSIDE: 'Outside PT',
+      mcsTrucks: 'trucks', rg_mainland: 'Mainland', rg_madeira: 'Madeira', rg_azores: 'Azores', rg_OUTSIDE: 'Outside PT',
       pw0: 'Slow AC (<22 kW)', pw1: 'AC/DC 22–50 kW', pw2: 'Fast DC 50–150 kW', pw3: 'Ultra DC 150–350 kW', pw4: 'Ultra DC (≥350 kW)',
       pay_App: 'App', 'pay_Multibanco/contactless': 'Bank card/contactless', pay_Dinheiro: 'Cash',
       'pay_Cartão RFID eMSP': 'Supplier card (RFID)', 'pay_Sem autenticação': 'No authentication'

@@ -68,7 +68,9 @@
     });
     statusBar();
     bars('cPw', 'cPw', N.PW.map(function (c) { return [N.pwLabel(c), D.pw[c] || 0]; }));
-    bars('cConn', 'cConn', desc(D.conn));
+    // MCS (camiões) em destaque: poucas tomadas, mas a mais potente que o NAP publica.
+    bars('cConn', 'cConn', desc(D.conn).map(function (r) {
+      return r[0] === 'MCS' ? [r[0], r[1], [el('span', { class: 'tag mcs' }, 'MCS'), ' ', t('mcsTrucks')]] : r; }));
     bars('cRegion', 'cRegion', desc(D.region).map(function (r) { return [t('rg_' + r[0]), r[1]]; }));
     bars('cCity', 'cCity', desc(D.city));
     bars('cOpSites', 'cOpSites', desc(D.op_sites));
