@@ -4,6 +4,7 @@ São as duas decisões que o site e o ohmigo têm de tomar da mesma maneira
 (opc_tariffs.py e osm_tags.resolve). Só stdlib + pandas.
 Corre com `venv/bin/python -m unittest discover -s tests`.
 """
+import json
 import os
 import sys
 import tempfile
@@ -12,7 +13,7 @@ import unittest
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'scripts'))
 
 import opc_tariffs  # noqa: E402
-from osm_tags import resolve, sane_osm  # noqa: E402
+from osm_tags import osm_by_code, resolve, sane_osm  # noqa: E402
 
 HEADER = 'ID;UID_TOMADA;TIPO_TARIFARIO;TIPO_TARIFA;TARIFA;NIVELTENSAO'
 ROWS = [
@@ -105,6 +106,40 @@ class Resolve(unittest.TestCase):
         self.assertTrue(sane_osm('v', 500, 300000))       # the NAP's value is the absurd one
         self.assertFalse(sane_osm('a', True, 32))         # a boolean is not a number
         self.assertFalse(sane_osm('kw', float('nan'), 50))
+
+
+class OsmElement(unittest.TestCase):
+    """O elemento OSM para onde o "Ver no OSM" do site aponta."""
+
+    def element(self, els, sites=None):
+        sites = sites or {'A': {'lat': 38.7, 'lon': -9.1}}
+        with tempfile.NamedTemporaryFile('w', suffix='.json', delete=False) as fh:
+            json.dump({'elements': els}, fh)
+        try:
+            return {c: o.get('element') for c, o in osm_by_code(sites, fh.name).items()}
+        finally:
+            os.unlink(fh.name)
+
+    def test_station_beats_a_closer_charge_point(self):
+        got = self.element([
+            {'type': 'node', 'id': 1, 'lat': 38.7, 'lon': -9.1, 'tags': {'man_made': 'charge_point', 'ref': 'A'}},
+            {'type': 'node', 'id': 2, 'lat': 38.701, 'lon': -9.1, 'tags': {'amenity': 'charging_station', 'ref': 'A'}},
+        ])
+        self.assertEqual(got, {'A': 'node/2'})
+
+    def test_own_ref_beats_a_shared_one(self):
+        got = self.element([
+            {'type': 'node', 'id': 1, 'lat': 38.7, 'lon': -9.1, 'tags': {'amenity': 'charging_station', 'ref': 'A;B'}},
+            {'type': 'node', 'id': 3, 'lat': 38.7, 'lon': -9.1},
+            {'type': 'way', 'id': 9, 'nodes': [3], 'tags': {'amenity': 'charging_station', 'ref': 'MOBI-A'}},
+        ])
+        self.assertEqual(got, {'A': 'way/9'})
+
+    def test_too_far_is_no_match(self):
+        got = self.element([
+            {'type': 'node', 'id': 1, 'lat': 39.7, 'lon': -9.1, 'tags': {'amenity': 'charging_station', 'ref': 'A'}},
+        ])
+        self.assertEqual(got, {})
 
 
 if __name__ == '__main__':

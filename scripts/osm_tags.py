@@ -196,6 +196,7 @@ def osm_by_code(sites_by_code, dump=OSM_DUMP):
     old_refs = {}  # código -> códigos antigos do local (autocolantes de outro operador)
     fixmes = {}    # código -> notas "fixme" da comunidade
     evse = {}      # código -> {id EVSE normalizado: tomadas desse elemento}
+    elements = {}  # código -> [(prioridade, distância, "node/123")], para o link do site
     for e in els:
         t = e.get('tags') or {}
         if t.get('amenity') != 'charging_station' and t.get('man_made') != 'charge_point':
@@ -212,8 +213,14 @@ def osm_by_code(sites_by_code, dump=OSM_DUMP):
         is_point = t.get('man_made') == 'charge_point'
         for code in refs:
             site = sites_by_code.get(code)
-            if not site or km(at[0], at[1], site['lat'], site['lon']) > OSM_MAX_KM:
+            dist = km(at[0], at[1], site['lat'], site['lon']) if site else None
+            if not site or dist > OSM_MAX_KM:
                 continue
+            # O elemento para onde o site aponta: o local inteiro
+            # (charging_station) antes de um poste, só deste código antes de um
+            # partilhado ("A;B;C"), e o mais perto do ponto do NAP.
+            elements.setdefault(code, []).append(
+                ((len(refs) > 1, is_point), round(dist, 4), f"{e['type']}/{e['id']}"))
             for tag, field in OSM_TAGS.items():
                 v = t.get(tag)
                 if not v or (tag == 'name' and CODE_NAME.match(v)):
@@ -297,6 +304,8 @@ def osm_by_code(sites_by_code, dump=OSM_DUMP):
         out.setdefault(code, {})['fixme'] = sorted(notes)[:5]
     for code, ids in evse.items():
         out.setdefault(code, {})['evse'] = ids
+    for code, els_ in elements.items():
+        out.setdefault(code, {})['element'] = min(els_)[2]
     for code in set(points_socks) | set(station_socks) | set(capacity):
         o = out.setdefault(code, {})
         if code in points_socks:

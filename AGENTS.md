@@ -313,7 +313,12 @@ site, most common first (`["ABB Terra HP CP4", "Alpitronic HYC_400"]`;
 `manufacturer`/`model` are only the commonest). The site shows the same list
 (`hw` in `sites.json`, "Carregadores: …" in the detail) and its search finds
 a site by it. Both come from `scripts/osm_tags.py`, so the site and ohmigo
-never disagree about a charger. An element > 1 km from the NAP point is a
+never disagree about a charger. The `osm` block also has `element`, the OSM
+element the site is matched to (`"node/123"`, `"way/456"`: the whole site's
+`amenity=charging_station` before a `man_made=charge_point`, an element with
+only this `ref` before a shared `"A;B;C"`, then the nearest); `sites.json`
+carries it as `osm_ref` (the planned sites already had one), and Procurar's
+"Ver no OSM" opens that element, falling back to a marker at the coordinates. An element > 1 km from the NAP point is a
 wrong `ref` on OSM, not a second charger, and is left out.
 Also from `osm_tags.py`, in both the `osm` block and `sites.json`:
 - `sharedKw` (`shared`): the total a charger declares
