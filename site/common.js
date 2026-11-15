@@ -17,7 +17,10 @@
       rg_mainland: 'Continente', rg_madeira: 'Madeira', rg_azores: 'Açores', rg_OUTSIDE: 'Fora de PT',
       pw0: 'AC lento (<22 kW)', pw1: 'AC/DC 22–50 kW', pw2: 'DC rápido 50–150 kW', pw3: 'DC ultra 150–350 kW', pw4: 'DC ultra (≥350 kW)',
       pay_App: 'App', 'pay_Multibanco/contactless': 'Multibanco/contactless', pay_Dinheiro: 'Dinheiro',
-      'pay_Cartão RFID eMSP': 'Cartão do comercializador (RFID)', 'pay_Sem autenticação': 'Sem autenticação'
+      'pay_Cartão RFID eMSP': 'Cartão do comercializador (RFID)', 'pay_Sem autenticação': 'Sem autenticação',
+      pk_opc: 'Taxa do operador (OPC), sem energia', pk_adhoc: 'Sem contrato (ad hoc), com energia',
+      pk_direct: 'Fora da MOBI.E, preço único com energia', pk_napfee: 'Preço segundo o NAP, sem tarifa na MOBI.E',
+      pks_opc: 'Taxa do operador', pks_adhoc: 'Sem contrato', pks_direct: 'Fora da MOBI.E', pks_napfee: 'Só no NAP'
     },
     en: {
       navFind: 'Find', navNet: 'Network', navExplore: 'Explore', navOps: 'Operators',
@@ -31,7 +34,10 @@
       rg_mainland: 'Mainland', rg_madeira: 'Madeira', rg_azores: 'Azores', rg_OUTSIDE: 'Outside PT',
       pw0: 'Slow AC (<22 kW)', pw1: 'AC/DC 22–50 kW', pw2: 'Fast DC 50–150 kW', pw3: 'Ultra DC 150–350 kW', pw4: 'Ultra DC (≥350 kW)',
       pay_App: 'App', 'pay_Multibanco/contactless': 'Bank card/contactless', pay_Dinheiro: 'Cash',
-      'pay_Cartão RFID eMSP': 'Supplier card (RFID)', 'pay_Sem autenticação': 'No authentication'
+      'pay_Cartão RFID eMSP': 'Supplier card (RFID)', 'pay_Sem autenticação': 'No authentication',
+      pk_opc: 'Operator (CPO) fee, energy not included', pk_adhoc: 'No contract (ad hoc), energy included',
+      pk_direct: 'Outside MOBI.E, single price with energy', pk_napfee: 'Price according to the NAP, no tariff in MOBI.E',
+      pks_opc: 'Operator fee', pks_adhoc: 'No contract', pks_direct: 'Outside MOBI.E', pks_napfee: 'NAP only'
     }
   };
   var PW = ['AC slow (<22kW)', 'AC/DC 22-50kW', 'DC fast 50-150kW', 'DC ultra 150-350kW', 'DC ultra (>=350kW)'];
@@ -54,6 +60,35 @@
   }
   // Every euro amount on the statistics pages: always two decimals (0,40, never 0,4 or 0,112).
   function eur(n) { return nf(n, 2, 2); }
+  // The kinds of price a socket can have (the same rule as scripts/price_kinds.py):
+  //   opc     operator fee on MOBI.E (REGULAR plan): energy NOT included, the driver's CEME bills it
+  //   adhoc   no-contract price on MOBI.E (AD_HOC_PAYMENT plan): energy included
+  //   direct  outside MOBI.E (regime sem_ceme): one price per kWh, energy included
+  //   napfee  MOBI.E socket missing from MOBI.E's tariff file: what the NAP publishes. Nobody says
+  //           whether that is the operator fee or the no-contract price, so it is never either.
+  // Never average or compare across kinds. Returns {kind: {kwh, min, flat, tiers}} for the kinds present.
+  var PRICE_KINDS = ['opc', 'adhoc', 'direct', 'napfee'];
+  function num(v) { if (Array.isArray(v)) v = v[0]; if (v && typeof v === 'object') v = v.eur; return typeof v === 'number' && isFinite(v) ? v : null; }
+  function planOf(x) {
+    var tiers = (x.time || []).slice().sort(function (a, b) { return (a.from || 0) - (b.from || 0); });
+    return { kwh: num(x.energy), min: num(tiers), flat: num(x.flat), tiers: tiers };
+  }
+  function prices(p) {
+    var out = {}, f = p.fees || {};
+    if (p.regime === 'sem_ceme') { if (num(p.nap) != null) out.direct = { kwh: num(p.nap), min: null, flat: null, tiers: [] }; return out; }
+    if (f.REGULAR) out.opc = planOf(f.REGULAR);
+    if (f.AD_HOC_PAYMENT) out.adhoc = planOf(f.AD_HOC_PAYMENT);
+    if (p.regime === 'mobie_sem_tarifa' && p.nap_fees) out.napfee = { kwh: num(p.nap_fees.kwh), min: num(p.nap_fees.min), flat: num(p.nap_fees.flat), tiers: [] };
+    return out;
+  }
+  // "0,55 €/kWh + 0,10 €/min + 0,40 €": every component of one price, zeros left out.
+  function priceText(v, dec) {
+    var f = function (x) { return dec == null ? eur(x) : nf(x, dec); }, parts = [];
+    if (v.kwh) parts.push(f(v.kwh) + ' €/kWh');
+    if (v.min) parts.push(f(v.min) + ' €/min');
+    if (v.flat) parts.push(f(v.flat) + ' €');
+    return parts.length ? parts.join(' + ') : (v.kwh === 0 || v.min === 0 || v.flat === 0 ? f(0) + ' €' : '—');
+  }
   function when(ms) {
     return new Date(ms).toLocaleString(lang() === 'pt' ? 'pt-PT' : 'en-GB', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' });
   }
@@ -188,7 +223,7 @@
       : t('liveOk', { t: when(res.t), n: nf(res.n), m: nf(res.m) });
   }
 
-  window.NAP = { t: t, addStrings: addStrings, lang: lang, nf: nf, eur: eur, when: when, el: el, add: add, clear: clear, md: md,
+  window.NAP = { t: t, addStrings: addStrings, lang: lang, nf: nf, eur: eur, prices: prices, priceText: priceText, PRICE_KINDS: PRICE_KINDS, when: when, el: el, add: add, clear: clear, md: md,
     status: status, pwLabel: pwLabel, PW: PW, STATUSES: STATUSES, onLang: onLang, initChrome: initChrome,
     applyI18n: applyI18n, load: load, fetchLive: fetchLive, applyLive: applyLive, liveNote: liveNote };
 })();

@@ -51,8 +51,8 @@
     </div>
   </section>
 
-  <section class="block" aria-labelledby="hFee"><h2 id="hFee" data-i18n="xFee">Quanto cobra o operador</h2>
-    <p class="muted" data-i18n="xFeeNote">Taxa do operador (OPC) por kWh, sem IVA, nas tomadas da seleção que a têm. A energia é cobrada à parte pelo teu comercializador (CEME).</p>
+  <section class="block" aria-labelledby="hFee"><h2 id="hFee" data-i18n="xFee">Quanto custa carregar</h2>
+    <p class="muted" data-i18n="xFeeNote">Há quatro tipos de preço e não se comparam entre si: uns são só a taxa do operador, outros já trazem a energia. Escolhe um. Valores por kWh, sem IVA.</p>
     <div class="card"><div id="fee"></div></div>
   </section>
 
@@ -77,8 +77,7 @@
     <div class="card xwide"><h3 data-i18n="yDown">Fora de serviço, média do mês (%)</h3><div id="yDown"></div></div>
     <div class="card xwide"><h3 data-i18n="yFee">Preço por kWh publicado no NAP (€)</h3><div id="yFee"></div>
       <p class="note" data-i18n="yFeeNote"></p></div>
-    <div class="card xwide" id="yModelBox" hidden><h3 data-i18n="yModel">Taxa do operador por kWh, do modelo da rede (€)</h3><div id="yModel"></div>
-      <p class="muted small" data-i18n="yModelNote"></p></div>
+    <div id="yKinds"></div>
     <p class="muted small" data-i18n="xSrc">Estados declarados pelos operadores ao NAP (IMT / MOBI.E), guardados pelo AmpereArchive. Não são medições.</p>
   </section>
   <div class="xtip" id="tip" hidden></div>

@@ -19,7 +19,10 @@
     upTo: 'até', sockets: 'tomadas', freeOf: '{a} de {n} livres', km: 'a {d} km',
     geoAsk: 'A pedir a tua localização…', geoFail: 'Não foi possível obter a localização. Procura pela localidade.',
     geoNote: 'A localização fica só no teu dispositivo: não é enviada para lado nenhum.',
-    dSockets: 'Tomadas', cId: 'Tomada', cPlug: 'Ficha', cKw: 'kW', cState: 'Estado', cKwh: '€/kWh', cMin: '€/min', cFlat: '€/carga',
+    dSockets: 'Tomadas', cId: 'Tomada', cPlug: 'Ficha', cKw: 'kW', cState: 'Estado', cKwh: '€/kWh', cMin: '€/min', cFlat: '€/carga', cAdhoc: 'Sem contrato',
+    adhocNote: 'Sem contrato (ad hoc): o que pagas no posto sem cartão de um comercializador. Já inclui a energia. Sem IVA.',
+    directNote: 'Fora da MOBI.E: o preço por kWh já inclui a energia e paga-se ao operador. Sem IVA.',
+    napFeeNote: 'Preço segundo o NAP: a MOBI.E não publica tarifa para {ids}. O valor é o que o operador declara no NAP, sem IVA. Pode ser só a taxa do operador ou já o preço sem contrato, com energia: o NAP não diz qual.',
     feeNote: 'Taxa do operador (OPC), sem IVA. A energia é faturada à parte pelo teu comercializador (CEME).',
     tierFrom: 'após {m} min', tierTo: 'até {m} min', napKw: 'NAP: {kw}',
     kwOsmNote: 'Onde aparece "NAP: …", a potência mostrada é a do OpenStreetMap (lida no posto pela comunidade), que costuma estar mais certa do que a declarada pelo operador no NAP.',
@@ -52,7 +55,10 @@
     upTo: 'up to', sockets: 'sockets', freeOf: '{a} of {n} free', km: '{d} km away',
     geoAsk: 'Asking for your location…', geoFail: 'Could not get your location. Search by town instead.',
     geoNote: 'Your location stays on your device: it is not sent anywhere.',
-    dSockets: 'Sockets', cId: 'Socket', cPlug: 'Plug', cKw: 'kW', cState: 'Status', cKwh: '€/kWh', cMin: '€/min', cFlat: '€/session',
+    dSockets: 'Sockets', cId: 'Socket', cPlug: 'Plug', cKw: 'kW', cState: 'Status', cKwh: '€/kWh', cMin: '€/min', cFlat: '€/session', cAdhoc: 'No contract',
+    adhocNote: 'No contract (ad hoc): what you pay at the charger without a supplier card. Energy is already included. Without VAT.',
+    directNote: 'Outside MOBI.E: the price per kWh already includes energy and is paid to the operator. Without VAT.',
+    napFeeNote: 'Price according to the NAP: MOBI.E publishes no tariff for {ids}. The value is what the operator declares in the NAP, without VAT. It may be the operator fee only or already the no-contract price, with energy: the NAP does not say which.',
     feeNote: 'Operator (CPO) fee, without VAT. Energy is billed separately by your supplier (CEME).',
     tierFrom: 'after {m} min', tierTo: 'up to {m} min', napKw: 'NAP: {kw}',
     kwOsmNote: 'Where "NAP: …" appears, the power shown is OpenStreetMap\'s (read off the charger by the community), which is usually more accurate than what the operator declares on the NAP.',
@@ -184,7 +190,7 @@
   // AD_HOC_PAYMENT: ...}) with every per-minute tier, the same ohmigo prices
   // with. Site data from before the model had one string per component
   // (ENERGY/TIME/FLAT); it still renders until the next weekly refresh.
-  function plan(p) { var f = p.fees; return f ? (f.REGULAR || f.AD_HOC_PAYMENT || f[Object.keys(f)[0]]) : null; }
+  function plan(p) { var f = p.fees; return f ? (f.REGULAR || (f.AD_HOC_PAYMENT ? null : f[Object.keys(f)[0]])) : null; }
   function values(v) { return v && v.length ? v.map(function (x) { return N.nf(x, 3); }).join(' / ') : '—'; }
   function tiers(v) {
     if (!v || !v.length) return '—';
@@ -216,27 +222,40 @@
     if (s.lc) d.appendChild(el('p', { class: 'muted small' }, t('lcNote', { s: t('life' + (s.lc === 'planned' ? 'Planned' : 'Construction')).toLowerCase() })));
     else if (!P) d.appendChild(el('p', { class: 'muted small' }, t('loadingSockets')));
     else {
-      var mobie = false, osmKw = false, issues = {};
-      var rows = pts(s).map(function (p) {
+      var mobie = false, osmKw = false, issues = {}, napFee = [], direct = false;
+      // The kinds of price each socket has (N.prices): the three fee columns are the price
+      // you pay with a contract (operator fee, or the NAP's where MOBI.E has none) or the
+      // single price outside MOBI.E; the no-contract price gets a column of its own.
+      var list = pts(s), kinds = list.map(function (p) { return N.prices(p); });
+      var anyAdhoc = kinds.some(function (k) { return k.adhoc; });
+      var rows = list.map(function (p, i) {
+        var pk = kinds[i], nf = pk.napfee;
+        if (nf) napFee.push(p.point_id);
+        if (pk.direct) direct = true;
         var only = p.regime === 'sem_ceme' && p.nap != null;
-        if (p.regime !== 'sem_ceme') mobie = true;
+        // The fee/CEME note only where a socket really has an operator fee.
+        if (pk.opc || (p.fees === undefined && p.regime !== 'sem_ceme')) mobie = true;
         var model = p.fees !== undefined, fp = model ? plan(p) : null;
         if (p.kw_src === 'osm') osmKw = true;
         (p.issues || []).forEach(function (k) { (issues[k] = issues[k] || []).push(p.point_id); });
         return el('tr', null, el('td', null, el('code', null, p.point_id)), el('td', { class: 'l' }, String(p.connectors || '—').split('|').join(', ')),
           el('td', null, p.kw ? N.nf(p.kw, 1) : '—', p.kw_src === 'osm' ? el('small', { class: 'muted' }, ' (' + t('napKw', { kw: p.nap_kw == null ? '—' : N.nf(p.nap_kw, 1) }) + ')') : null),
           el('td', { class: 'l' }, N.status(p.status)),
-          el('td', null, only ? N.nf(p.nap, 3) : model ? values(fp && fp.energy) : money(p.ENERGY)),
-          el('td', null, model ? tiers(fp && fp.time) : money(p.TIME)),
-          el('td', null, model ? values(fp && fp.flat) : money(p.FLAT)));
+          el('td', null, only ? N.nf(p.nap, 3) : nf ? money(nf.kwh) : model ? values(fp && fp.energy) : money(p.ENERGY)),
+          el('td', null, nf ? money(nf.min) : model ? tiers(fp && fp.time) : money(p.TIME)),
+          el('td', null, nf ? money(nf.flat) : model ? values(fp && fp.flat) : money(p.FLAT)),
+          anyAdhoc ? el('td', null, pk.adhoc ? N.priceText(pk.adhoc, 3) : '—') : null);
       });
       d.appendChild(el('div', { class: 'scroll', tabindex: '0', role: 'group', 'aria-label': t('dSockets') },
         el('table', null, el('caption', null, t('dSockets')),
-          el('thead', null, el('tr', null, ['cId', 'cPlug', 'cKw', 'cState', 'cKwh', 'cMin', 'cFlat'].map(function (k, i) {
+          el('thead', null, el('tr', null, ['cId', 'cPlug', 'cKw', 'cState', 'cKwh', 'cMin', 'cFlat'].concat(anyAdhoc ? ['cAdhoc'] : []).map(function (k, i) {
             return el('th', { scope: 'col', class: i === 1 || i === 3 ? 'l' : null }, t(k)); }))),
           el('tbody', null, rows))));
       // The OPC-fee / CEME split only exists on MOBI.E; elsewhere the operator bills directly.
       if (mobie) d.appendChild(el('p', { class: 'small muted' }, t('feeNote')));
+      if (anyAdhoc) d.appendChild(el('p', { class: 'small muted' }, t('adhocNote')));
+      if (direct) d.appendChild(el('p', { class: 'small muted' }, t('directNote')));
+      if (napFee.length) d.appendChild(el('p', { class: 'small muted' }, t('napFeeNote', { ids: napFee.join(', ') })));
       if (osmKw) d.appendChild(el('p', { class: 'small muted' }, t('kwOsmNote')));
       Object.keys(issues).forEach(function (k) { d.appendChild(el('p', { class: 'small muted' }, t('issue_' + k, { ids: issues[k].join(', ') }))); });
     }

@@ -15,7 +15,8 @@
     cStatus: 'Tomadas por estado', cPw: 'Tomadas por classe de potência', cConn: 'Fichas por tipo', cRegion: 'Locais por região',
     cCity: 'Os 15 concelhos com mais locais', cOpSites: 'Os 15 operadores com mais locais', cOpPts: 'Os 15 operadores com mais tomadas',
     cOccPw: 'Ocupação por classe de potência (%)', cOccOp: 'Ocupação por operador, os 15 maiores (%)',
-    cPriceOp: 'Taxa média por kWh, por operador (€/kWh)', cStatusPw: 'Estado por classe de potência', cPriceStats: 'Componentes da taxa do operador',
+    cPriceOp: 'Taxa média por kWh, por operador (€/kWh)', cStatusPw: 'Estado por classe de potência', cPriceStats: 'Componentes da taxa do operador', cPriceKinds: 'Preço por kWh, por tipo de preço', colKind: 'Tipo',
+    kindsNote: 'Não compares entre linhas: a taxa do operador não inclui a energia, o preço sem contrato e o de fora da MOBI.E incluem, e no que só o NAP publica não se sabe.',
     colWhat: 'Componente', colN: 'tomadas', colMean: 'média', colMax: 'máximo', pEnergy: 'Por energia (€/kWh)', pTime: 'Por tempo (€/min)',
     pFlat: 'Fixa por carregamento (€)', pSem: 'Valor único fora da MOBI.E (*)', power: 'Classe de potência', value: 'Valor', sAll: 'Tudo'
   }, {
@@ -28,7 +29,8 @@
     cStatus: 'Sockets by status', cPw: 'Sockets by power class', cConn: 'Plugs by type', cRegion: 'Sites by region',
     cCity: 'The 15 municipalities with most sites', cOpSites: 'The 15 operators with most sites', cOpPts: 'The 15 operators with most sockets',
     cOccPw: 'Occupancy by power class (%)', cOccOp: 'Occupancy by operator, 15 largest (%)',
-    cPriceOp: 'Mean fee per kWh, by operator (€/kWh)', cStatusPw: 'Status by power class', cPriceStats: 'Operator fee components',
+    cPriceOp: 'Mean fee per kWh, by operator (€/kWh)', cStatusPw: 'Status by power class', cPriceStats: 'Operator fee components', cPriceKinds: 'Price per kWh, by kind of price', colKind: 'Kind',
+    kindsNote: 'Do not compare across rows: the operator fee does not include energy, the no-contract price and the one outside MOBI.E do, and for what only the NAP publishes nobody knows.',
     colWhat: 'Component', colN: 'sockets', colMean: 'mean', colMax: 'max', pEnergy: 'Per energy (€/kWh)', pTime: 'Per time (€/min)',
     pFlat: 'Flat per session (€)', pSem: 'Single value outside MOBI.E (*)', power: 'Power class', value: 'Value', sAll: 'All'
   });
@@ -84,8 +86,17 @@
     var ps = D.price_stats || {};
     N.clear($('cPriceStats')).appendChild(el('table', null, el('caption', null, t('cPriceStats')),
       el('thead', null, el('tr', null, ['colWhat', 'colN', 'colMean', 'colMax'].map(function (k) { return el('th', { scope: 'col' }, t(k)); }))),
-      el('tbody', null, [['pEnergy', ps.energy], ['pTime', ps.time], ['pFlat', ps.flat], ['pSem', ps.sem_ceme]].filter(function (r) { return r[1]; }).map(function (r) {
+      el('tbody', null, [['pEnergy', ps.energy], ['pTime', ps.time], ['pFlat', ps.flat], ps.kinds ? null : ['pSem', ps.sem_ceme]].filter(function (r) { return r && r[1]; }).map(function (r) {
         return el('tr', null, el('th', { scope: 'row', class: 'l' }, t(r[0])), el('td', null, N.nf(r[1].n)), el('td', null, N.eur(r[1].mean)), el('td', null, N.eur(r[1].max))); }))));
+    // One row per kind of price (scripts/price_kinds.py): each has its own mean, never a shared one.
+    if (ps.kinds) {
+      N.add($('cPriceStats'), [el('table', { class: 'kinds' }, el('caption', null, t('cPriceKinds')),
+        el('thead', null, el('tr', null, ['colKind', 'colN', 'colMean', 'colMax'].map(function (k) { return el('th', { scope: 'col' }, t(k)); }))),
+        el('tbody', null, N.PRICE_KINDS.filter(function (k) { return ps.kinds[k] && ps.kinds[k].kwh_n; }).map(function (k) {
+          var v = ps.kinds[k];
+          return el('tr', null, el('th', { scope: 'row', class: 'l' }, t('pk_' + k)), el('td', null, N.nf(v.kwh_n)), el('td', null, N.eur(v.mean)), el('td', null, N.eur(v.max))); }))),
+        el('p', { class: 'muted small' }, t('kindsNote'))]);
+    }
     N.liveNote($('live'), liveRes, D.snapshot);
   }
 

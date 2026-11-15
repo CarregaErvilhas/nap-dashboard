@@ -260,7 +260,7 @@ model**: the one place that decides what is true about each charger. Two
 readers: the ohmigo MCP server (EV charging cost answers for ChatGPT/Claude)
 and this repo's site, whose `build_dashboard.py` takes each socket's power,
 operator fees, regime and NAP-only issues from it (`site/data/points.json`
-`kw`/`kw_src`/`nap_kw`/`fees`/`regime`/`nap`/`issues`, and each site's `kw` and
+`kw`/`kw_src`/`nap_kw`/`fees`/`regime`/`nap`/`nap_fees`/`issues`, and each site's `kw` and
 `dcv` in `sites.json`). Before, the site computed its own from the same CSVs and
 the two drifted (fees cut to the first €/min tier, kW rounded to the unit, the
 short-`UID_TOMADA` matches only ohmigo had, OSM's power only ohmigo applied).
@@ -507,9 +507,28 @@ work: the pages fetch their JSON, so preview over HTTP. `refresh.yml` runs
     from the OPC fee: it is the ad hoc price, energy included (0,55 where the
     fee is 0,13), and in 2026 several operators switched from one to the other
     (Galp: median 0 → 0,60). The page says so. `fold_model` therefore also
-    stores the model's fee (`mn`/`ms`, regime `mobie`) for the month of each
-    refresh; that clean series starts in November 2026 and its chart appears
-    once it has two months.
+    stores the model's per-kWh price for the month of each refresh, one pair
+    of keys per kind of price (`MODEL_KEYS`: `mn`/`ms` operator fee, `an`/`as`
+    ad hoc, `dn`/`ds` outside MOBI.E, `fn`/`fs` NAP only). Those clean series
+    start in November 2026 and each chart appears once it has two months.
+- **Kinds of price.** A socket has up to two of four prices, and they are never
+  averaged or compared with each other, on any page: `opc` (operator fee on
+  MOBI.E, `fees.REGULAR`, **without** energy), `adhoc` (no-contract price on
+  MOBI.E, `fees.AD_HOC_PAYMENT`, **with** energy; 3 710 sockets also have a
+  per-minute or flat part), `direct` (outside MOBI.E, `nap`, with energy) and
+  `napfee` (regime `mobie_sem_tarifa`: what the NAP publishes, `nap_fees`
+  `{kwh, min, flat}`, from the model's `napFees`; nobody says whether it
+  includes energy, so the pages say exactly that). The rule lives in
+  `scripts/price_kinds.py` (stats, `explore_years.fold_model`) and in
+  `NAP.prices` / `NAP.priceText` (`common.js`: Procurar's "Sem contrato"
+  column and notes, Explorar's three price metrics and the histogram's kind
+  picker, Rede's "Preço por kWh, por tipo" table from `price_stats.kinds`);
+  `validate_site.py` runs both over the same cases and fails if they differ.
+  Verified on 2026-11-11: where MOBI.E publishes an ad hoc plan the NAP's
+  per-kWh value is always that plan's (7 083 of 7 083 sockets), otherwise it
+  is the REGULAR fee (3 866 of 3 866). So the NAP only adds information where
+  MOBI.E has no tariff, and a NAP value is never "the operator fee" of a
+  socket that has one.
 - Sources in `assets/site/`; output in `site/` (committed, what `pages.yml`
   serves). Data in `site/data/{stats,panels,sites,points,outline,opc}.json`,
   fetched same-origin (`credentials: 'omit'`) and split by `scripts/site_data.py`

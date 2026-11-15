@@ -45,6 +45,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
 sys.path.insert(0, HERE)
 import build_site  # noqa: E402
+import price_kinds  # noqa: E402
 import site_data  # noqa: E402
 
 errors = []
@@ -458,7 +459,7 @@ def check_node(site, expected):
             # boot.js e common.js correm no âmbito global do browser: cada um
             # vai num bloco próprio para os 'use strict' não se misturarem.
             fh.write(STUB + '\n;(0, eval)(' + json.dumps(boot) + ');\n'
-                     ';(0, eval)(' + json.dumps(common) + ');\n' + PROBE)
+                     ';(0, eval)(' + json.dumps(common) + ');\n' + PROBE + price_probe(site))
         r = subprocess.run(['node', path], capture_output=True, text=True, cwd=tmp)
     if r.returncode != 0:
         msg = next((ln.strip() for ln in r.stderr.splitlines() if re.match(r'\s*\w*Error\b', ln)),
@@ -466,6 +467,49 @@ def check_node(site, expected):
         fail(f'boot.js + common.js em node: {msg}')
     else:
         print(r.stdout.strip() or 'applyLive OK')
+
+
+# Os tipos de preço têm a regra em dois sítios, scripts/price_kinds.py e
+# NAP.prices (common.js): correm os dois sobre os mesmos casos e têm de dar igual.
+PRICE_CASES = [
+    {'regime': 'mobie', 'fees': {'REGULAR': {'flat': [0.4], 'energy': [0.13],
+                                             'time': [{'eur': 0.18, 'from': 30, 'to': None}, {'eur': 0, 'from': 0, 'to': 30}]},
+                                 'AD_HOC_PAYMENT': {'energy': [0.55]}}, 'nap': None, 'nap_fees': None},
+    {'regime': 'mobie', 'fees': {'REGULAR': {'time': [{'eur': 0.033, 'from': 0, 'to': None}]}}, 'nap': None},
+    {'regime': 'mobie', 'fees': {'REGULAR': {'energy': [0.0], 'flat': [0.26]},
+                                 'AD_HOC_PAYMENT': {'flat': [0.21], 'energy': [0.32], 'time': [{'eur': 0.02, 'from': 0, 'to': None}]}}},
+    {'regime': 'sem_ceme', 'fees': None, 'nap': 0.37, 'nap_fees': None},
+    {'regime': 'sem_ceme', 'fees': None, 'nap': None},
+    # Fora da MOBI.E não há taxa do operador nem ad hoc, mesmo que venham no registo.
+    {'regime': 'sem_ceme', 'fees': {'REGULAR': {'energy': [0.1]}}, 'nap': 0.45},
+    {'regime': 'mobie_sem_tarifa', 'fees': None, 'nap': None, 'nap_fees': {'kwh': 0.1, 'min': 0.02, 'flat': 0.26}},
+    {'regime': 'mobie_sem_tarifa', 'fees': None, 'nap': None, 'nap_fees': {'min': 0.12}},
+    {'regime': 'mobie_sem_tarifa', 'fees': None, 'nap': None, 'nap_fees': None},
+    # A taxa do NAP só conta onde a MOBI.E não tem tarifa.
+    {'regime': 'mobie', 'fees': {'REGULAR': {'energy': [0.1]}}, 'nap_fees': {'kwh': 0.6}},
+]
+PRICE_PROBE = '''
+;(function () {
+  var cases = %s, norm = function (o) {
+    var out = {}; Object.keys(o).sort().forEach(function (k) { out[k] = { kwh: o[k].kwh, min: o[k].min, flat: o[k].flat }; }); return JSON.stringify(out); };
+  cases.forEach(function (c) {
+    var got = norm(NAP.prices(c.p)), want = norm(c.want);
+    if (got !== want) throw new Error('NAP.prices difere de price_kinds.kinds em ' + JSON.stringify(c.p) + ': ' + got + ' em vez de ' + want);
+  });
+  console.log('NAP.prices = price_kinds.kinds em ' + cases.length + ' casos');
+})();
+'''
+
+
+def price_probe(site):
+    cases = list(PRICE_CASES)
+    try:   # e numa amostra das tomadas reais do site
+        with open(os.path.join(site, 'data', 'points.json'), encoding='utf-8') as fh:
+            pts = json.load(fh)['points']
+        cases += [{k: p.get(k) for k in ('regime', 'fees', 'nap', 'nap_fees')} for p in pts[::37]]
+    except (OSError, ValueError, KeyError):
+        pass
+    return PRICE_PROBE % json.dumps([{'p': p, 'want': price_kinds.kinds(p)} for p in cases])
 
 
 def main(argv):

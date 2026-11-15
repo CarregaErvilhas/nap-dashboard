@@ -20,6 +20,7 @@ import archive_panel
 import build_site
 import nap_static_checks
 import osm_tags
+import price_kinds
 
 S = pd.read_csv('data/nap_static_sites.csv', dtype=str)
 P = pd.read_csv('data/nap_static_points.csv', dtype=str)
@@ -133,6 +134,7 @@ pts['nap_kw'] = [m.get('napKw') for m in _m]
 pts['model_regime'] = [m.get('regime') for m in _m]
 pts['fees'] = [m.get('opc') for m in _m]
 pts['nap_price'] = [m.get('napPrice') for m in _m]
+pts['nap_fees'] = [m.get('napFees') for m in _m]
 pts['issues'] = [m.get('issues', []) for m in _m]
 _dc_v = [(m.get('v'), m.get('dc')) for m in _m]
 
@@ -341,6 +343,11 @@ price_stats['sem_ceme'] = {'n': int(len(_nu)),
                            'mean': round(float(_nu.mean()), 3) if len(_nu) else None,
                            'max': round(float(_nu.max()), 3) if len(_nu) else None}
 price_stats['regimes'] = {k: int(v) for k, v in OPC.regime.value_counts().items()}
+# Por tipo de preço (taxa do operador, ad hoc, fora da MOBI.E, taxa só no NAP):
+# nunca numa média só, uns trazem a energia e outros não (price_kinds.py).
+price_stats['kinds'] = price_kinds.stats(
+    pts[['fees', 'model_regime', 'nap_price', 'nap_fees']]
+    .rename(columns={'model_regime': 'regime', 'nap_price': 'nap'}).to_dict('records'))
 
 conn_total = sum(agg_conn.values())
 conn_line = ', '.join(
@@ -876,7 +883,7 @@ data = {
     'points': pts[
         ['point_id', 'site_external_id', 'city', 'operator_name', 'region', 'pw_class', 'kw', 'kw_src',
          'nap_kw', 'connector_types', 'status', 'opc_operador', 'fees', 'model_regime', 'nap_price',
-         'issues', 'pay']]
+         'nap_fees', 'issues', 'pay']]
         .rename(columns={'connector_types': 'connectors', 'opc_operador': 'opc',
                          'model_regime': 'regime', 'nap_price': 'nap'}).to_dict('records'),
     'facts_html': FACTS_HTML,

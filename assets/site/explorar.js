@@ -9,12 +9,13 @@
     xH1: 'Explorar a rede', xLead: 'Escolhe um operador, um concelho ou uma potência: todos os números, o mapa e as tendências passam a falar só dessa parte da rede.',
     xMetric: 'Medir por', xActive: 'Filtros ativos', xReset: 'Limpar filtros', xSum: 'A tua seleção', xStatus: 'Estado das tomadas agora',
     xDims: 'Reparte e filtra', xDimsNote: 'Carrega numa linha para ficar só com ela. Podes juntar várias, na mesma lista ou em listas diferentes.',
-    xMap: 'Onde ficam', xMapAria: 'Mapa dos locais da seleção', xSites: 'Maiores locais da seleção', xFee: 'Quanto cobra o operador',
-    xFeeNote: 'Taxa do operador (OPC) por kWh, sem IVA, nas tomadas da seleção que a têm. A energia é cobrada à parte pelo teu comercializador (CEME).',
+    xMap: 'Onde ficam', xMapAria: 'Mapa dos locais da seleção', xSites: 'Maiores locais da seleção', xFee: 'Quanto custa carregar',
+    xFeeNote: 'Há quatro tipos de preço e não se comparam entre si: uns são só a taxa do operador, outros já trazem a energia. Escolhe um. Valores por kWh, sem IVA.',
+    feeAlso: 'Em {n} destas tomadas há ainda uma parte por minuto ou fixa, que este gráfico não mostra.', feeKind: 'Tipo de preço',
     xTrend: 'Ao longo do tempo', xTSize: 'Tomadas publicadas, dia a dia', xTDown: 'Fora de serviço, dia a dia (%)', xTOcc: 'Ocupação hora a hora (%)',
     xTHeat: 'Ocupação por dia da semana e hora (%)',
     xSrc: 'Estados declarados pelos operadores ao NAP (IMT / MOBI.E), guardados pelo AmpereArchive. Não são medições.',
-    m_n: 'Tomadas', m_sites: 'Locais', m_kw: 'Potência', m_occ: 'Ocupação', m_down: 'Fora de serviço', m_fee: 'Taxa por kWh',
+    m_n: 'Tomadas', m_sites: 'Locais', m_kw: 'Potência', m_occ: 'Ocupação', m_down: 'Fora de serviço', m_fee: 'Taxa do operador', m_adhoc: 'Sem contrato', m_direct: 'Fora da MOBI.E',
     d_op: 'Operador', d_city: 'Concelho', d_pw: 'Potência', d_conn: 'Ficha', d_region: 'Região', d_status: 'Estado', d_regime: 'Preço', d_pay: 'Pagamento',
     xFind: 'Procurar em {d}', xAll: 'Mostrar todos ({n})', xLess: 'Mostrar menos', xNone: 'Sem informação', xNoMatch: 'Nada com esse nome.',
     xr_mobie: 'MOBI.E, com taxa publicada', xr_mobie_sem_tarifa: 'MOBI.E, sem taxa publicada', xr_sem_ceme: 'Fora da MOBI.E (preço único)',
@@ -23,32 +24,33 @@
     ks_share: '{p} % da rede', ks_persite: '{v} por local', ks_kw: 'média de {v} kW por tomada', ks_pct: '{p} % das tomadas', ks_occ: 'ocupação de {p} %',
     xFew: 'poucas tomadas', sName: 'Local', sCity: 'Concelho', sN: 'Tomadas', sKw: 'kW', sFree: 'Livres',
     xMapNote: '{n} locais no mapa.', xMapIsl: ' Mais {n} nas ilhas ou fora do mapa.', xOpenFind: 'Abrir {v} em Procurar',
-    feeN: '{n} tomadas com taxa por kWh. Mediana: {m} €/kWh.', feeNone: 'Nenhuma tomada da seleção tem taxa por kWh publicada.', feeBin: '{a} a {b} €/kWh: {n} tomadas',
+    feeN: '{n} tomadas com este preço por kWh. Mediana: {m} €/kWh.', feeNone: 'Nenhuma tomada da seleção tem este tipo de preço por kWh.', feeBin: '{a} a {b} €/kWh: {n} tomadas',
     feeAxis: '€/kWh', xTrendBase: 'Estas séries seguem os filtros de operador, potência e região. Até 8 de novembro há uma leitura por dia, de recolhas mais antigas e menos completas; a partir daí a recolha é contínua.', xTrendIgn: ' Os outros filtros ativos ({f}) não se aplicam aqui.',
     xTrendHour: ' A ocupação hora a hora não segue a região.', xNoHist: 'Sem histórico para esta seleção.',
     tipN: '{d}: {v} tomadas', tipPct: '{d}: {v} %', heatNote: 'Hora de Lisboa. {d} dias de recolha contínua.', heatBack: ' Mais {b} leituras avulsas desde {s}, de recolhas anteriores (4 a 5 por dia): cada uma conta como um retrato da hora em que foi feita.', heatFew: ' Com poucas semanas por trás, lê isto como uma primeira impressão.', heatLo: 'menos ocupado', heatHi: 'mais ocupado (máximo: {m} %)', heatNa: 'sem dados', heatNaCell: '{w}, {h} h: sem dados',
     heatCell: '{w}, {h} h: {v} %', wd0: 'Segunda', wd1: 'Terça', wd2: 'Quarta', wd3: 'Quinta', wd4: 'Sexta', wd5: 'Sábado', wd6: 'Domingo', xHour: 'Hora', xDay: 'Dia',
     xTable: 'Ver como tabela', xVal: 'Valor',
     yH: 'Ao longo dos anos', ySize: 'Tomadas publicadas, mês a mês', yOcc: 'Ocupação média do mês (%)', yDown: 'Fora de serviço, média do mês (%)',
-    ySeason: 'Ocupação por mês do ano (%)', yFee: 'Preço por kWh publicado no NAP (€)', yModel: 'Taxa do operador por kWh, do modelo da rede (€)',
+    ySeason: 'Ocupação por mês do ano (%)', yFee: 'Preço por kWh publicado no NAP (€)', yModel: '{k}, por kWh (€)',
     yNote: 'Desde dezembro de 2021, com o que o AmpereArchive guarda. Segue os filtros de operador e potência (e a região, nas tomadas e nos preços).',
     yOld: ' Até janeiro de 2025 a fonte só tinha estados: com um filtro ativo, esses anos só contam as tomadas que ainda existiam em 2025.',
     yIgn: ' Os outros filtros ativos ({f}) não se aplicam aqui.',
     ySparse: 'Os meses sem linha tiveram poucas leituras (menos de {c} horas com dados): de março a dezembro de 2024 houve cerca de uma por dia.',
     yFeeNote: 'Atenção: isto é o que cada operador publica no NAP, sem as redes fora da MOBI.E. Nem sempre é a taxa do operador: muitos publicam o preço ad hoc, que já inclui a energia, e em 2026 vários trocaram um pelo outro. Um salto aqui pode ser essa troca e não uma subida de preço. Lê-o operador a operador.',
-    yModelNote: 'Esta série começa em novembro de 2026 e ganha um ponto por mês: é a taxa do operador (sem energia) nas tomadas MOBI.E.',
+    yModelNote: 'Do modelo da rede, que separa os tipos de preço. Começa em novembro de 2026 e ganha um ponto por mês.',
     ySwitch: 'muda a fonte', yReads: '{n} leituras por dia', yMonth: 'Mês', yYear: 'Ano', yCell: '{m} de {y}: {v} %', yNaCell: '{m} de {y}: sem dados',
     mo0: 'jan', mo1: 'fev', mo2: 'mar', mo3: 'abr', mo4: 'mai', mo5: 'jun', mo6: 'jul', mo7: 'ago', mo8: 'set', mo9: 'out', mo10: 'nov', mo11: 'dez'
   }, {
     xH1: 'Explore the network', xLead: 'Pick an operator, a municipality or a power class: every number, the map and the trends then describe only that part of the network.',
     xMetric: 'Measure by', xActive: 'Active filters', xReset: 'Clear filters', xSum: 'Your selection', xStatus: 'Socket status right now',
     xDims: 'Break down and filter', xDimsNote: 'Press a row to keep only that one. You can combine several, in the same list or across lists.',
-    xMap: 'Where they are', xMapAria: 'Map of the sites in the selection', xSites: 'Largest sites in the selection', xFee: 'What the operator charges',
-    xFeeNote: 'Operator (CPO) fee per kWh, without VAT, for the sockets in the selection that have one. Energy is billed separately by your supplier (CEME).',
+    xMap: 'Where they are', xMapAria: 'Map of the sites in the selection', xSites: 'Largest sites in the selection', xFee: 'What charging costs',
+    xFeeNote: 'There are four kinds of price and they do not compare with each other: some are the operator fee only, others already include energy. Pick one. Values per kWh, without VAT.',
+    feeAlso: 'On {n} of these sockets there is also a per-minute or flat part, which this chart does not show.', feeKind: 'Kind of price',
     xTrend: 'Over time', xTSize: 'Published sockets, day by day', xTDown: 'Out of service, day by day (%)', xTOcc: 'Occupancy hour by hour (%)',
     xTHeat: 'Occupancy by weekday and hour (%)',
     xSrc: 'Statuses declared by operators to the NAP (IMT / MOBI.E), kept by the AmpereArchive. They are not measurements.',
-    m_n: 'Sockets', m_sites: 'Sites', m_kw: 'Power', m_occ: 'Occupancy', m_down: 'Out of service', m_fee: 'Fee per kWh',
+    m_n: 'Sockets', m_sites: 'Sites', m_kw: 'Power', m_occ: 'Occupancy', m_down: 'Out of service', m_fee: 'Operator fee', m_adhoc: 'No contract', m_direct: 'Outside MOBI.E',
     d_op: 'Operator', d_city: 'Municipality', d_pw: 'Power', d_conn: 'Plug', d_region: 'Region', d_status: 'Status', d_regime: 'Price', d_pay: 'Payment',
     xFind: 'Search in {d}', xAll: 'Show all ({n})', xLess: 'Show fewer', xNone: 'No information', xNoMatch: 'Nothing with that name.',
     xr_mobie: 'MOBI.E, fee published', xr_mobie_sem_tarifa: 'MOBI.E, no fee published', xr_sem_ceme: 'Outside MOBI.E (single price)',
@@ -57,20 +59,20 @@
     ks_share: '{p}% of the network', ks_persite: '{v} per site', ks_kw: 'mean of {v} kW per socket', ks_pct: '{p}% of sockets', ks_occ: 'occupancy of {p}%',
     xFew: 'few sockets', sName: 'Site', sCity: 'Municipality', sN: 'Sockets', sKw: 'kW', sFree: 'Free',
     xMapNote: '{n} sites on the map.', xMapIsl: ' {n} more on the islands or off the map.', xOpenFind: 'Open {v} in Find',
-    feeN: '{n} sockets with a fee per kWh. Median: {m} €/kWh.', feeNone: 'No socket in the selection has a published fee per kWh.', feeBin: '{a} to {b} €/kWh: {n} sockets',
+    feeN: '{n} sockets with this price per kWh. Median: {m} €/kWh.', feeNone: 'No socket in the selection has this kind of price per kWh.', feeBin: '{a} to {b} €/kWh: {n} sockets',
     feeAxis: '€/kWh', xTrendBase: 'These series follow the operator, power and region filters. Until 8 November there is one reading a day, from older and less complete collections; from then on collection is continuous.', xTrendIgn: ' The other active filters ({f}) do not apply here.',
     xTrendHour: ' Hour-by-hour occupancy does not follow the region.', xNoHist: 'No history for this selection.',
     tipN: '{d}: {v} sockets', tipPct: '{d}: {v}%', heatNote: 'Lisbon time. {d} days of continuous collection.', heatBack: ' Plus {b} one-off readings since {s}, from earlier collections (4 to 5 a day): each counts as a snapshot of the hour it was taken.', heatFew: ' With only a few weeks behind it, read this as a first impression.', heatLo: 'less busy', heatHi: 'busier (maximum: {m}%)', heatNa: 'no data', heatNaCell: '{w}, {h}h: no data',
     heatCell: '{w}, {h}h: {v}%', wd0: 'Monday', wd1: 'Tuesday', wd2: 'Wednesday', wd3: 'Thursday', wd4: 'Friday', wd5: 'Saturday', wd6: 'Sunday', xHour: 'Hour', xDay: 'Day',
     xTable: 'View as a table', xVal: 'Value',
     yH: 'Over the years', ySize: 'Published sockets, month by month', yOcc: 'Mean occupancy of the month (%)', yDown: 'Out of service, mean of the month (%)',
-    ySeason: 'Occupancy by month of the year (%)', yFee: 'Price per kWh published in the NAP (€)', yModel: 'Operator fee per kWh, from the network model (€)',
+    ySeason: 'Occupancy by month of the year (%)', yFee: 'Price per kWh published in the NAP (€)', yModel: '{k}, per kWh (€)',
     yNote: 'Since December 2021, from what the AmpereArchive keeps. It follows the operator and power filters (and the region, for sockets and prices).',
     yOld: ' Until January 2025 the source only had statuses: with a filter on, those years only count sockets that still existed in 2025.',
     yIgn: ' The other active filters ({f}) do not apply here.',
     ySparse: 'Months without a line had few readings (fewer than {c} hours with data): from March to December 2024 there was about one a day.',
     yFeeNote: 'Careful: this is what each operator publishes in the NAP, without the networks outside MOBI.E. It is not always the operator fee: many publish the ad hoc price, which already includes energy, and in 2026 several switched from one to the other. A jump here can be that switch and not a price rise. Read it operator by operator.',
-    yModelNote: 'This series starts in November 2026 and gains a point a month: it is the operator fee (without energy) on MOBI.E sockets.',
+    yModelNote: 'From the network model, which keeps the kinds of price apart. It starts in November 2026 and gains a point a month.',
     ySwitch: 'source changes', yReads: '{n} readings a day', yMonth: 'Month', yYear: 'Year', yCell: '{m} {y}: {v}%', yNaCell: '{m} {y}: no data',
     mo0: 'Jan', mo1: 'Feb', mo2: 'Mar', mo3: 'Apr', mo4: 'May', mo5: 'Jun', mo6: 'Jul', mo7: 'Aug', mo8: 'Sep', mo9: 'Oct', mo10: 'Nov', mo11: 'Dec'
   });
@@ -88,8 +90,10 @@
   var CARDS = ['op', 'city', 'pw', 'conn', 'region', 'regime', 'pay'];   // status has its own strip
   var LONG = { op: 1, city: 1 }, MULTI = { conn: 1, pay: 1 };
   var FIXED = { pw: N.PW, status: N.STATUSES, region: ['mainland', 'madeira', 'azores', 'OUTSIDE'], regime: ['mobie', 'mobie_sem_tarifa', 'sem_ceme'] };
-  var METRICS = ['n', 'sites', 'kw', 'occ', 'down', 'fee'];
-  var RATIO = { occ: 1, down: 1, fee: 1 }, MIN_N = 10, TOP = 10;
+  var METRICS = ['n', 'sites', 'kw', 'occ', 'down', 'fee', 'adhoc', 'direct'];
+  var RATIO = { occ: 1, down: 1, fee: 1, adhoc: 1, direct: 1 }, MIN_N = 10, TOP = 10;
+  // The price metrics, one per kind of price (N.prices): a mean never mixes kinds.
+  var PRICE_OF = { fee: 'opc', adhoc: 'adhoc', direct: 'direct' }, feeKind = 'opc';
   var P = [], V = {}, F = {}, metric = 'n', A = null, liveRes = null, snapshot = '';
   var siteInfo = new Map(), outline = null, H = null, open = {}, query = {};
   DIMS.forEach(function (d) { F[d] = new Set(); V[d] = []; });
@@ -105,8 +109,7 @@
       V.region[i] = [p.region || '_'];
       V.regime[i] = [p.regime || '_'];
       V.pay[i] = p.pay && p.pay.length ? p.pay : ['_'];
-      var f = p.fees && p.fees.REGULAR, e = f && f.energy;
-      p._fee = e && e.length && typeof e[0] === 'number' ? e[0] : null;
+      p._pk = N.prices(p);
     });
   }
   function label(d, v) {
@@ -118,12 +121,12 @@
     if (d === 'pay') return t('pay_' + v);
     return v;
   }
-  function acc() { return { n: 0, kw: 0, chg: 0, act: 0, down: 0, feeS: 0, feeN: 0, sites: new Set() }; }
+  function acc() { return { n: 0, kw: 0, chg: 0, act: 0, down: 0, pk: { opc: [0, 0], adhoc: [0, 0], direct: [0, 0], napfee: [0, 0] }, sites: new Set() }; }
   function put(a, p) {
     a.n++; a.kw += p.kw || 0; a.sites.add(p.site_external_id);
     if (p.status === 'charging') { a.chg++; a.act++; } else if (p.status === 'available') a.act++;
     else if (p.status === 'outOfOrder' || p.status === 'inoperative') a.down++;
-    if (p._fee != null) { a.feeS += p._fee; a.feeN++; }
+    for (var k in p._pk) if (p._pk[k].kwh != null) { a.pk[k][0] += p._pk[k].kwh; a.pk[k][1]++; }
   }
   function val(a, m) {
     if (!a) return null;
@@ -132,13 +135,13 @@
     if (m === 'kw') return a.kw / 1000;
     if (m === 'occ') return a.act ? 100 * a.chg / a.act : null;
     if (m === 'down') return a.n ? 100 * a.down / a.n : null;
-    return a.feeN ? a.feeS / a.feeN : null;
+    var k = a.pk[PRICE_OF[m]]; return k && k[1] ? k[0] / k[1] : null;
   }
   function fmt(v, m) {
     if (v == null) return '—';
     if (m === 'kw') return N.nf(v, v < 100 ? 1 : 0) + ' MW';
     if (m === 'occ' || m === 'down') return N.nf(v, 1) + ' %';
-    if (m === 'fee') return N.eur(v) + ' €';
+    if (PRICE_OF[m]) return N.eur(v) + ' €/kWh';
     return N.nf(v);
   }
   function passes(d, vals) {
@@ -206,7 +209,7 @@
   function renderBar() {
     var seg = N.clear($('metric'));
     METRICS.forEach(function (m) {
-      seg.appendChild(el('button', { class: 'btn sm', type: 'button', 'aria-pressed': String(metric === m), onclick: function () { metric = m; update(); } }, t('m_' + m)));
+      seg.appendChild(el('button', { class: 'btn sm', type: 'button', 'aria-pressed': String(metric === m), onclick: function () { metric = m; if (PRICE_OF[m]) feeKind = PRICE_OF[m]; update(); } }, t('m_' + m)));
     });
     var chips = N.clear($('chips')), any = false;
     DIMS.forEach(function (d) { F[d].forEach(function (v) {
@@ -383,15 +386,27 @@
   // ---------------------------------------------------------------- charts
   // Column chart of counts per bin.
   function renderFee() {
-    var box = N.clear($('fee')), xs = [];
-    A.sel.forEach(function (p) { if (p._fee != null) xs.push(p._fee); });
+    var box = N.clear($('fee')), xs = [], more = 0, counts = {};
+    N.PRICE_KINDS.forEach(function (k) { counts[k] = 0; });
+    A.sel.forEach(function (p) {
+      for (var k in p._pk) if (p._pk[k].kwh != null) counts[k]++;
+      var v = p._pk[feeKind];
+      if (v && v.kwh != null) { xs.push(v.kwh); if (v.min || v.flat) more++; }
+    });
+    var seg = el('div', { class: 'seg xkinds', role: 'group', 'aria-label': t('feeKind') }, N.PRICE_KINDS.map(function (k) {
+      return el('button', { class: 'btn sm', type: 'button', 'aria-pressed': String(feeKind === k), onclick: function () { feeKind = k; renderFee(); } },
+        t('pks_' + k), el('span', { class: 'muted' }, ' ' + N.nf(counts[k])));
+    }));
+    box.appendChild(seg);
+    box.appendChild(el('p', { class: 'xkind' }, t('pk_' + feeKind) + '.'));
     if (!xs.length) { box.appendChild(el('p', { class: 'muted' }, t('feeNone'))); return; }
     xs.sort(function (a, b) { return a - b; });
-    var STEP = 0.05, NB = 12, bins = [];
+    // Prices that include energy run higher: wider bins, so both scales fill the chart.
+    var withEnergy = feeKind === 'adhoc' || feeKind === 'direct', STEP = withEnergy ? 0.1 : 0.05, NB = withEnergy ? 10 : 12, bins = [];
     for (var i = 0; i < NB; i++) bins.push(0);
     xs.forEach(function (x) { bins[Math.min(NB - 1, Math.floor(x / STEP + 1e-9))]++; });
     var W = 640, Hh = 200, L = 8, B = 28, T = 18, bw = (W - 2 * L) / NB, max = Math.max.apply(null, bins);
-    var svg = sv('svg', { viewBox: '0 0 ' + W + ' ' + Hh, class: 'xchart', role: 'img', 'aria-label': t('xFee') });
+    var svg = sv('svg', { viewBox: '0 0 ' + W + ' ' + Hh, class: 'xchart', role: 'img', 'aria-label': t('pk_' + feeKind) });
     svg.appendChild(sv('line', { x1: L, x2: W - L, y1: Hh - B, y2: Hh - B, class: 'axis' }));
     bins.forEach(function (n, i) {
       var h = max ? (Hh - B - T) * n / max : 0, x = L + i * bw, a = N.eur(i * STEP), b = i === NB - 1 ? '+' : N.eur((i + 1) * STEP);
@@ -405,7 +420,7 @@
     });
     svg.appendChild(sv('text', { x: W - L, y: Hh - 8, class: 'tick', 'text-anchor': 'end' }, t('feeAxis')));
     box.appendChild(svg);
-    box.appendChild(el('p', { class: 'muted small' }, t('feeN', { n: N.nf(xs.length), m: N.eur(xs[Math.floor(xs.length / 2)]) })));
+    box.appendChild(el('p', { class: 'muted small' }, t('feeN', { n: N.nf(xs.length), m: N.eur(xs[Math.floor(xs.length / 2)]) }) + (more ? ' ' + t('feeAlso', { n: N.nf(more) }) : '')));
   }
   function niceStep(span, n) {
     var raw = span / n, p = Math.pow(10, Math.floor(Math.log(raw) / Math.LN10)), f = raw / p;
@@ -557,10 +572,11 @@
     var nm = Yr.months.length, M = Yr.meta, zero = function () { return new Array(nm).fill(0); };
     var sum = function (block, keys, ok) {
       var out = {}; keys.forEach(function (k) { out[k] = zero(); });
-      block.combos.forEach(function (c, r) { if (!ok(c)) return; keys.forEach(function (k) { var row = block[k][r]; for (var i = 0; i < nm; i++) out[k][i] += row[i] || 0; }); });
+      block.combos.forEach(function (c, r) { if (!ok(c)) return; keys.forEach(function (k) { var row = block[k] && block[k][r]; if (row) for (var i = 0; i < nm; i++) out[k][i] += row[i] || 0; }); });
       return out;
     };
-    var Z = sum(Yr.size, ['n', 'kn', 'ks', 'mn', 'ms'], function (c) { return okOp(c[0]) && okPw(c[1]) && okRg(c[2]); });
+    var KEYS = { opc: ['mn', 'ms'], adhoc: ['an', 'as'], direct: ['dn', 'ds'], napfee: ['fn', 'fs'] };
+    var Z = sum(Yr.size, ['n', 'kn', 'ks', 'mn', 'ms', 'an', 'as', 'dn', 'ds', 'fn', 'fs'], function (c) { return okOp(c[0]) && okPw(c[1]) && okRg(c[2]); });
     var O = sum(Yr.occ, ['tot', 'act', 'chg', 'down'], function (c) { return okOp(c[0]) && okPw(c[1]); });
     var need = (Yr.needs_cells || {}).occupancy || 0;
     var lab = Yr.months.map(function (m) { return t('mo' + (Number(m.slice(5)) - 1)) + ' ' + m.slice(0, 4); }), ticks = [], marks = [];
@@ -584,9 +600,19 @@
     chart('yDown', 'yDown', O.tot.map(function (a, i) { return a > 0 && M.cells[i] >= need ? 100 * O.down[i] / a : null; }), { dec: 0, tipDec: 1, unit: ' %', zero: true });
     $('ySparse').textContent = t('ySparse', { c: need });
     chart('yFee', 'yFee', Z.kn.map(function (n, i) { return n ? Z.ks[i] / n : null; }), { fmt: N.eur, zero: true, trim: true });
-    var model = Z.mn.map(function (n, i) { return n ? Z.ms[i] / n : null; });
-    $('yModelBox').hidden = model.filter(function (v) { return v != null; }).length < 2;
-    if (!$('yModelBox').hidden) chart('yModel', 'yModel', model, { fmt: N.eur, zero: true, trim: true });
+    // One chart per kind of price, from the network model: each appears once it has two months.
+    var kbox = N.clear($('yKinds'));
+    N.PRICE_KINDS.forEach(function (k) {
+      var ys = Z[KEYS[k][0]].map(function (n, i) { return n ? Z[KEYS[k][1]][i] / n : null; });
+      if (ys.filter(function (v) { return v != null; }).length < 2) return;
+      var title = t('yModel', { k: t('pk_' + k) });
+      kbox.appendChild(el('div', { class: 'card xwide' }, el('h3', null, title), el('div', { id: 'yKind_' + k }), el('p', { class: 'muted small' }, t('yModelNote'))));
+      var o = { title: title, ys: ys, fmt: N.eur, zero: true, trim: true }, key; for (key in base) if (o[key] === undefined) o[key] = base[key];
+      var i0 = 0; while (i0 < ys.length - 1 && ys[i0] == null) i0++;
+      o.ys = ys.slice(i0); o.xs = lab.slice(i0); o.extra = null; o.marks = []; o.ticks = ticks.filter(function (x) { return x[0] >= i0; }).map(function (x) { return [x[0] - i0, x[1]]; });
+      if (o.ys.length < 13) o.ticks = o.ys.map(function (_, i) { return [i, o.xs[i]]; });
+      lineChart($('yKind_' + k), o);
+    });
 
     // Seasonality: one row per year, one column per month of the year.
     var years = [], by = {}, hmax = 0;
@@ -625,7 +651,7 @@
   $('reset').addEventListener('click', function () { DIMS.forEach(function (d) { F[d].clear(); }); update(); });
   initMap();
   Promise.all([N.load('points'), N.load('stats')]).then(function (r) {
-    snapshot = r[1].snapshot; prep(r[0].points); readHash(); pruneFilters(); buildCards(); update();
+    snapshot = r[1].snapshot; prep(r[0].points); readHash(); if (PRICE_OF[metric]) feeKind = PRICE_OF[metric]; pruneFilters(); buildCards(); update();
     N.onLang(update);
     live();
     // The archive rewrites the status file every few minutes: follow it while the page is visible.

@@ -88,7 +88,20 @@ class ExploreYearsTest(unittest.TestCase):
             self.assertTrue(self.ey.fold_model(st, pts, '2026-11-11T15:20:04Z'))
         self.assertEqual(self.total(st, 'size', 'mn'), 2)
         self.assertAlmostEqual(self.total(st, 'size', 'ms'), 0.6)
+        # Cada tipo de preço tem as suas chaves: o preço fora da MOBI.E não entra na taxa.
+        pts.append({'operator_name': 'OpC', 'pw_class': None, 'region': 'mainland', 'regime': 'sem_ceme', 'nap': 0.37})
+        self.ey.fold_model(st, pts, '2026-11-11T15:20:04Z')
+        self.assertEqual((self.total(st, 'size', 'mn'), self.total(st, 'size', 'dn')), (2, 1))
+        self.assertAlmostEqual(self.total(st, 'size', 'ds'), 0.37)
         self.assertFalse(self.ey.fold_model(st, pts, '2027-01-01T00:00:00Z'))   # mês que o arquivo ainda não tem
+
+    def test_state_without_a_new_key_still_loads(self):
+        st = self.ey.update(self.con, self.ey.empty_state(), D0 + dt.timedelta(days=2), log=lambda *a: None)
+        del st['size']['an'], st['size']['as']   # um estado escrito antes de a chave existir
+        self.assertTrue(self.ey.fold_model(st, [{'operator_name': 'OpA', 'pw_class': None, 'region': 'mainland',
+                                                 'regime': 'mobie', 'fees': {'AD_HOC_PAYMENT': {'energy': [0.5]}}}],
+                                           '2026-11-11T15:20:04Z'))
+        self.assertEqual(self.total(st, 'size', 'an'), 1)
 
 
 if __name__ == '__main__':
