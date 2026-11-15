@@ -243,9 +243,16 @@
     var ll = s.lat + ',' + s.lon;
     d.appendChild(el('div', { class: 'actions' },
       el('a', { class: 'btn primary', href: 'https://www.google.com/maps/dir/?api=1&destination=' + encodeURIComponent(ll), rel: 'noopener noreferrer', target: '_blank' }, t('directions')),
-      el('a', { class: 'btn', href: 'https://www.openstreetmap.org/?mlat=' + s.lat + '&mlon=' + s.lon + '#map=18/' + s.lat + '/' + s.lon, rel: 'noopener noreferrer', target: '_blank' }, t('seeOsm')),
+      el('a', { class: 'btn', href: osmHref(s), rel: 'noopener noreferrer', target: '_blank' }, t('seeOsm')),
       s.lc ? null : el('a', { class: 'btn', href: 'https://ohmigo.ocarroeletrico.com/', rel: 'noopener', target: '_blank' }, t('cost'))));
     return d;
+  }
+  // The OSM element the site is matched to (its tags, history, who mapped it);
+  // without a match, a marker at the coordinates.
+  function osmHref(s) {
+    var at = '#map=19/' + s.lat + '/' + s.lon;
+    if (/^(node|way|relation)\/\d+$/.test(s.osm_ref || '')) return 'https://www.openstreetmap.org/' + s.osm_ref + at;
+    return 'https://www.openstreetmap.org/?mlat=' + s.lat + '&mlon=' + s.lon + '#map=18/' + s.lat + '/' + s.lon;
   }
   function toggle(ext, scroll) {
     openExt = openExt === ext ? null : ext;
