@@ -26,7 +26,7 @@
     feeN: '{n} tomadas com taxa por kWh. Mediana: {m} €/kWh.', feeNone: 'Nenhuma tomada da seleção tem taxa por kWh publicada.', feeBin: '{a} a {b} €/kWh: {n} tomadas',
     feeAxis: '€/kWh', xTrendBase: 'Estas séries seguem os filtros de operador, potência e região. Até 8 de novembro há uma leitura por dia, de recolhas mais antigas e menos completas; a partir daí a recolha é contínua.', xTrendIgn: ' Os outros filtros ativos ({f}) não se aplicam aqui.',
     xTrendHour: ' A ocupação hora a hora não segue a região.', xNoHist: 'Sem histórico para esta seleção.',
-    tipN: '{d}: {v} tomadas', tipPct: '{d}: {v} %', heatNote: 'Hora de Lisboa. {d} dias de recolha: com menos de 14, lê isto como uma primeira impressão. Cor mais forte é mais ocupado; o máximo é {m} %.',
+    tipN: '{d}: {v} tomadas', tipPct: '{d}: {v} %', heatNote: 'Hora de Lisboa. {d} dias de recolha contínua.', heatBack: ' Mais {b} leituras avulsas desde {s}, de recolhas anteriores (4 a 5 por dia): cada uma conta como um retrato da hora em que foi feita.', heatFew: ' Com poucas semanas por trás, lê isto como uma primeira impressão.', heatLo: 'menos ocupado', heatHi: 'mais ocupado (máximo: {m} %)', heatNa: 'sem dados', heatNaCell: '{w}, {h} h: sem dados',
     heatCell: '{w}, {h} h: {v} %', wd0: 'Segunda', wd1: 'Terça', wd2: 'Quarta', wd3: 'Quinta', wd4: 'Sexta', wd5: 'Sábado', wd6: 'Domingo', xHour: 'Hora', xDay: 'Dia',
     xTable: 'Ver como tabela', xVal: 'Valor'
   }, {
@@ -50,7 +50,7 @@
     feeN: '{n} sockets with a fee per kWh. Median: {m} €/kWh.', feeNone: 'No socket in the selection has a published fee per kWh.', feeBin: '{a} to {b} €/kWh: {n} sockets',
     feeAxis: '€/kWh', xTrendBase: 'These series follow the operator, power and region filters. Until 8 November there is one reading a day, from older and less complete collections; from then on collection is continuous.', xTrendIgn: ' The other active filters ({f}) do not apply here.',
     xTrendHour: ' Hour-by-hour occupancy does not follow the region.', xNoHist: 'No history for this selection.',
-    tipN: '{d}: {v} sockets', tipPct: '{d}: {v}%', heatNote: 'Lisbon time. {d} days collected: with fewer than 14, read this as a first impression. A stronger colour is busier; the maximum is {m}%.',
+    tipN: '{d}: {v} sockets', tipPct: '{d}: {v}%', heatNote: 'Lisbon time. {d} days of continuous collection.', heatBack: ' Plus {b} one-off readings since {s}, from earlier collections (4 to 5 a day): each counts as a snapshot of the hour it was taken.', heatFew: ' With only a few weeks behind it, read this as a first impression.', heatLo: 'less busy', heatHi: 'busier (maximum: {m}%)', heatNa: 'no data', heatNaCell: '{w}, {h}h: no data',
     heatCell: '{w}, {h}h: {v}%', wd0: 'Monday', wd1: 'Tuesday', wd2: 'Wednesday', wd3: 'Thursday', wd4: 'Friday', wd5: 'Saturday', wd6: 'Sunday', xHour: 'Hour', xDay: 'Day',
     xTable: 'View as a table', xVal: 'Value'
   });
@@ -481,13 +481,32 @@
     if (hticks.length > 8) hticks = hticks.filter(function (_, j) { return j % Math.ceil(hticks.length / 8) === 0; });
     lineChart($('tOcc'), { title: t('xTOcc'), xs: hx, ys: occ, dec: 0, tipDec: 1, unit: ' %', zero: true, ticks: hticks, w: $('tOcc').clientWidth > 700 ? 1120 : 640, h: 240, xlabel: t('xHour') });
 
+    // One-off readings from before the collector: each is the whole network at one instant,
+    // so it is a fair sample of that weekday and hour. They fill the profile, not the hourly line.
+    var K = Q.back, nb = 0, first = null;
+    if (K && K.ts.length) {
+      var bc = new Array(K.ts.length).fill(0), ba = new Array(K.ts.length).fill(0);
+      K.combos.forEach(function (c, k) {
+        if (!okOp(c[0]) || !okPw(c[1])) return;
+        for (var i = 0; i < K.ts.length; i++) { bc[i] += K.chg[k][i]; ba[i] += K.act[k][i]; }
+      });
+      K.ts.forEach(function (ts, i) {
+        if (!ba[i]) return;
+        var lc = local(ts * 1000); heat[lc[0]][lc[1]] += bc[i]; cnt[lc[0]][lc[1]] += ba[i]; nb++;
+        if (first == null) first = lc[2];
+      });
+    }
     var hmax = 0; for (w = 0; w < 7; w++) for (i = 0; i < 24; i++) if (cnt[w][i]) hmax = Math.max(hmax, 100 * heat[w][i] / cnt[w][i]);
     var hours = []; for (i = 0; i < 24; i++) hours.push(i);
     N.clear($('tHeat')).appendChild(el('table', { class: 'xheat' },
       el('thead', null, el('tr', null, el('td', null), hours.map(function (h) { return el('th', { scope: 'col' }, h % 3 ? el('span', { class: 'sr' }, String(h)) : String(h)); }))),
       el('tbody', null, heat.map(function (row, wd) {
         return el('tr', null, el('th', { scope: 'row', class: 'l' }, t('wd' + wd)), row.map(function (s, h) {
-          if (!cnt[wd][h]) return el('td', { class: 'na' }, el('span', { class: 'sr' }, '—'));
+          if (!cnt[wd][h]) {
+            var na = el('td', { class: 'na' }, el('span', { class: 'sr' }, t('heatNa'))), natxt = t('heatNaCell', { w: t('wd' + wd), h: h });
+            na.addEventListener('mousemove', function (e) { tip(e, [natxt]); }); na.addEventListener('mouseleave', function () { tip(); });
+            return na;
+          }
           var v = 100 * s / cnt[wd][h], td = el('td', null, el('span', { class: 'sr' }, N.nf(v, 1) + ' %'));
           td.style.setProperty('--k', (hmax ? Math.round(8 + 92 * v / hmax) : 0) + '%');
           var txt = t('heatCell', { w: t('wd' + wd), h: h, v: N.nf(v, 1) });
@@ -495,7 +514,10 @@
           return td;
         }));
       }))));
-    $('heatNote').textContent = t('heatNote', { d: days.size, m: N.nf(hmax, 1) });
+    var key = function (cls, k) { var s = el('span', { class: 'sw ' + cls, 'aria-hidden': 'true' }); if (k) s.style.setProperty('--k', k); return s; };
+    N.clear($('heatKey')).appendChild(el('span', null, key('', '8%'), key('', '54%'), key('', '100%')));
+    N.add($('heatKey'), [el('span', null, t('heatLo') + ' → ' + t('heatHi', { m: N.nf(hmax, 1) })), el('span', null, key('na'), t('heatNa'))]);
+    $('heatNote').textContent = t('heatNote', { d: days.size }) + (nb ? t('heatBack', { b: nb, s: first }) : '') + (days.size + nb / 5 < 28 ? t('heatFew') : '');
   }
 
   // ---------------------------------------------------------------- loop
