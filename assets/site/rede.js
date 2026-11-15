@@ -8,7 +8,7 @@
   N.addStrings({
     netH1: 'A rede em números', netLead: 'Quantos postos há, de quem são, que potência têm e quanto estão ocupados.',
     sections: 'Secções', sSummary: 'Resumo', sNews: 'Novidades', sNetwork: 'Postos', sOps: 'Operadores', sOcc: 'Ocupação', sPrice: 'Preços',
-    sHist: 'Histórico', sHubs: 'Hubs', sFacts: 'Factos', hNews: 'Novidades da semana', hNetwork: 'Que postos há', hOps: 'Quem opera a rede',
+    sHist: 'Histórico', sHubs: 'Hubs', sFacts: 'Factos', hNews: 'Novidades', hWeek: 'Na última semana', hNetwork: 'Que postos há', hOps: 'Quem opera a rede',
     hOcc: 'Ocupação neste momento', occNote: 'Tomadas a carregar sobre as que estão livres ou a carregar.', hPrice: 'Taxa do operador',
     priceNote: 'É o que o operador do posto (OPC) cobra pelo uso, sem IVA. A energia é cobrada à parte pelo teu comercializador (CEME).',
     hHist: 'Histórico (AmpereArchive)', hHubs: 'Maiores hubs por potência total', hFacts: 'Factos sobre a rede',
@@ -21,7 +21,7 @@
   }, {
     netH1: 'The network in numbers', netLead: 'How many chargers there are, who runs them, how powerful and how busy they are.',
     sections: 'Sections', sSummary: 'Summary', sNews: 'News', sNetwork: 'Chargers', sOps: 'Operators', sOcc: 'Occupancy', sPrice: 'Prices',
-    sHist: 'History', sHubs: 'Hubs', sFacts: 'Facts', hNews: 'This week\'s news', hNetwork: 'What chargers exist', hOps: 'Who runs the network',
+    sHist: 'History', sHubs: 'Hubs', sFacts: 'Facts', hNews: 'News', hWeek: 'Over the last week', hNetwork: 'What chargers exist', hOps: 'Who runs the network',
     hOcc: 'Occupancy right now', occNote: 'Sockets charging over those free or charging.', hPrice: 'Operator fee',
     priceNote: 'What the charger operator (CPO) bills for use, without VAT. Energy is billed separately by your supplier (CEME).',
     hHist: 'History (AmpereArchive)', hHubs: 'Largest hubs by total power', hFacts: 'Facts about the network',
@@ -159,8 +159,112 @@
     box.appendChild(btn);
   });
 
+
+  // ---- Novidades: the last 24 h (data/changes.json, scripts/network_24h.py) ----
+  N.addStrings({
+    dWin: 'Das {a} às {b}. Conta o saldo de cada tomada: a que avariou e voltou a funcionar no mesmo período não aparece.',
+    dLate: 'Esta lista tem {h} h de atraso: a próxima atualização ainda não chegou.',
+    dGap: 'O arquivo esteve {m} min sem ler o NAP neste período: pode faltar alguma mudança.',
+    dQuiet: 'Nenhum local nem tomada entrou ou saiu da rede neste período.',
+    t_down: 'tomadas avariaram', t_up: 'tomadas voltaram a funcionar', t_sitesAdd: 'locais novos', t_sitesRem: 'locais saíram',
+    t_ptsAdd: 'tomadas novas', t_ptsRem: 'tomadas retiradas', t_op: 'locais mudaram de operador', t_kw: 'tomadas mudaram de potência', t_fee: 'locais mudaram de taxa',
+    g_down: 'Tomadas que avariaram', g_up: 'Tomadas que voltaram a funcionar', g_sitesAdd: 'Locais novos', g_sitesRem: 'Locais que saíram da rede',
+    g_ptsAdd: 'Tomadas novas em locais que já existiam', g_ptsRem: 'Tomadas retiradas de locais que continuam',
+    g_op: 'Mudança de operador', g_kw: 'Mudança de potência', g_fee: 'Taxa do operador',
+    nSock: '{n} tomada', nSocks: '{n} tomadas', upTo: 'até {kw} kW', at: '{t}', before: 'antes', now: 'agora', noFee: 'sem taxa',
+    f_pricePerDeliveryUnit: '{v} €/kWh', f_pricePerChargingTime: '{v} €/min', f_flatRate: '{v} € por carregamento', f_other: '{v} €',
+    more: 'Mostrar os {n} locais', t_down1: 'tomada avariou', t_up1: 'tomada voltou a funcionar', t_sitesAdd1: 'local novo', t_sitesRem1: 'local saiu',
+    t_ptsAdd1: 'tomada nova', t_ptsRem1: 'tomada retirada', t_op1: 'local mudou de operador', t_kw1: 'tomada mudou de potência', t_fee1: 'local mudou de taxa', less: 'Mostrar só os primeiros', findIt: 'Ver {s} em Procurar'
+  }, {
+    dWin: 'From {a} to {b}. Counts each socket\'s net change: one that broke and came back within the period is left out.',
+    dLate: 'This list is {h} h behind: the next update has not arrived yet.',
+    dGap: 'The archive went {m} min without reading the NAP in this period: some changes may be missing.',
+    dQuiet: 'No site or socket joined or left the network in this period.',
+    t_down: 'sockets went out of order', t_up: 'sockets back in service', t_sitesAdd: 'new sites', t_sitesRem: 'sites left',
+    t_ptsAdd: 'new sockets', t_ptsRem: 'sockets removed', t_op: 'sites changed operator', t_kw: 'sockets changed power', t_fee: 'sites changed fee',
+    g_down: 'Sockets that went out of order', g_up: 'Sockets back in service', g_sitesAdd: 'New sites', g_sitesRem: 'Sites that left the network',
+    g_ptsAdd: 'New sockets at existing sites', g_ptsRem: 'Sockets removed from sites that remain',
+    g_op: 'Operator change', g_kw: 'Power change', g_fee: 'Operator fee',
+    nSock: '{n} socket', nSocks: '{n} sockets', upTo: 'up to {kw} kW', at: '{t}', before: 'before', now: 'now', noFee: 'no fee',
+    f_pricePerDeliveryUnit: '{v} €/kWh', f_pricePerChargingTime: '{v} €/min', f_flatRate: '{v} € per session', f_other: '{v} €',
+    more: 'Show all {n} sites', t_down1: 'socket went out of order', t_up1: 'socket back in service', t_sitesAdd1: 'new site', t_sitesRem1: 'site left',
+    t_ptsAdd1: 'new socket', t_ptsRem1: 'socket removed', t_op1: 'site changed operator', t_kw1: 'socket changed power', t_fee1: 'site changed fee', less: 'Show only the first', findIt: 'See {s} in Find'
+  });
+  var C = null, DAY_CUT = 8, DAY_LATE_H = 6;
+  // [key in changes.json, label key, status shape for the mark, sign]
+  var GROUPS = [['down', 'down', 'outOfOrder', ''], ['up', 'up', 'available', ''],
+    ['sites_added', 'sitesAdd', 'charging', '+'], ['sites_removed', 'sitesRem', 'removed', '−'],
+    ['points_added', 'ptsAdd', 'charging', '+'], ['points_removed', 'ptsRem', 'removed', '−'],
+    ['op_changes', 'op', 'unknown', ''], ['power_changes', 'kw', 'unknown', ''], ['fees', 'fee', 'unknown', '']];
+  var socks = function (n) { return t(n === 1 ? 'nSock' : 'nSocks', { n: N.nf(n) }); };
+  var kw = function (v) { return N.nf(v, 1) + ' kW'; };
+  function fees(list) {
+    if (!list || !list.length) return t('noFee');
+    return list.map(function (f) { return t('f_' + f.policy, { v: N.eur(f.eur) }); }).join(' + ');
+  }
+  function count(k) {
+    var L = C[k] || [];
+    if (k === 'down' || k === 'up' || /^points_|^sites_/.test(k)) return L.reduce(function (a, x) { return a + (x.n || 0); }, 0);
+    return L.length;
+  }
+  function detail(k, x) {
+    if (k === 'down' || k === 'up') return [socks(x.n), ', ', t('at', { t: N.when(Date.parse(x.t)) })];
+    if (/^sites_|^points_/.test(k)) return [socks(x.n), x.kw ? ', ' + t('upTo', { kw: N.nf(x.kw, 1) }) : ''];
+    if (k === 'op_changes') return [x.from, ' → ', el('b', null, x.to)];
+    if (k === 'power_changes') return [x.point, ': ', kw(x.from), ' → ', el('b', null, kw(x.to))];
+    if (k === 'fees') return [socks(x.n), ': ', t('before'), ' ', fees(x.from), '; ', t('now'), ' ', el('b', null, fees(x.to))];
+    return null;
+  }
+  function row(k, x) {
+    var where = [x.city, x.op].filter(Boolean).join(', ');
+    return el('li', null,
+      el('a', { href: 'index.html?q=' + encodeURIComponent(x.site), title: t('findIt', { s: x.site }) }, x.name && x.name !== x.site ? x.name : x.site),
+      where ? el('span', { class: 'where' }, where) : null,
+      el('span', { class: 'what' }, detail(k, x)));
+  }
+  function renderDay() {
+    var box = $('day');
+    if (!box || !C || !C.to) return;
+    var a = Date.parse(C.from), b = Date.parse(C.to);
+    if (!isFinite(a) || !isFinite(b)) return;
+    N.clear(box).hidden = false;
+    box.appendChild(el('h3', null, t('dTitle')));
+    box.appendChild(el('p', { class: 'muted' }, t('dWin', { a: N.when(a), b: N.when(b) })));
+    var late = (Date.now() - b) / 3600000;
+    if (late > DAY_LATE_H) box.appendChild(el('p', { class: 'note' }, t('dLate', { h: N.nf(late) })));
+    if (C.gap_min > 30) box.appendChild(el('p', { class: 'note' }, t('dGap', { m: N.nf(C.gap_min) })));
+    var shown = GROUPS.filter(function (g) { return (C[g[0]] || []).length; });
+    box.appendChild(el('ul', { class: 'tally' }, shown.map(function (g) {
+      return el('li', null, el('a', { href: '#d-' + g[1], onclick: function (e) {
+        e.preventDefault(); var s = $('d-' + g[1]); if (s) { s.scrollIntoView(); s.querySelector('h4').focus(); } } },
+        el('span', { class: 'dot', 'data-s': g[2], 'aria-hidden': 'true' }), el('b', null, g[3] + N.nf(count(g[0]))), ' ', t('t_' + g[1] + (count(g[0]) === 1 ? '1' : ''))));
+    })));
+    if (!['sites_added', 'sites_removed', 'points_added', 'points_removed'].some(function (k) { return (C[k] || []).length; }))
+      box.appendChild(el('p', { class: 'muted' }, t('dQuiet')));
+    var grid = el('div', { class: 'dgrid' });
+    shown.forEach(function (g) {
+      var L = C[g[0]], ul = el('ul', { class: 'rows' }, L.map(function (x) { return row(g[0], x); }));
+      var sec = el('div', { class: 'dgroup', id: 'd-' + g[1] }, el('h4', { tabindex: '-1' },
+        el('span', { class: 'dot', 'data-s': g[2], 'aria-hidden': 'true' }), t('g_' + g[1]), ' ', el('span', { class: 'muted' }, N.nf(count(g[0])))), ul);
+      if (L.length > DAY_CUT) {
+        ul.classList.add('cut');
+        var btn = el('button', { class: 'btn sm', type: 'button', 'aria-expanded': 'false', onclick: function () {
+          var cut = ul.classList.toggle('cut');
+          btn.textContent = cut ? t('more', { n: N.nf(L.length) }) : t('less');
+          btn.setAttribute('aria-expanded', String(!cut));
+        } }, t('more', { n: N.nf(L.length) }));
+        sec.appendChild(btn);
+      }
+      grid.appendChild(sec);
+    });
+    box.appendChild(grid);
+  }
+  N.addStrings({ dTitle: 'Nas últimas 24 horas' }, { dTitle: 'In the last 24 hours' });
+
   N.initChrome();
   N.onLang(render);
+  N.onLang(renderDay);
+  N.load('changes').then(function (c) { C = c; renderDay(); }).catch(function () {});
   N.load('stats').then(function (d) {
     D = d; render();
     // Live status needs the per-socket list (280 KB gzipped): fetched after the page is readable.

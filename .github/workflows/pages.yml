@@ -122,6 +122,46 @@ jobs:
           else
             echo "::warning::sem artifact ohmigo-dataset; /ohmigo/chargers.json fica de fora"
           fi
+      # A lista "Nas últimas 24 horas" da Rede: o artifact "network-24h" mais
+      # recente de uma corrida do network-24h.yml na main (mesmos filtros do
+      # ohmigo acima). Só passa JSON válido com menos de 2 MB; sem ele fica o
+      # data/changes.json vazio do repo, e a página esconde a lista.
+      - name: Stage last 24 h of changes
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO_ID: ${{ github.repository_id }}
+        run: |
+          id=""
+          cands=$(gh api "repos/$GITHUB_REPOSITORY/actions/artifacts?name=network-24h&per_page=20" \
+            --jq "[.artifacts[] | select((.expired | not)
+                    and .workflow_run.head_branch == \"main\"
+                    and (.workflow_run.head_repository_id | tostring) == \"$REPO_ID\")]
+                  | sort_by(.created_at) | reverse | .[] | \"\(.id) \(.workflow_run.id)\"")
+          while read -r aid rid; do
+            [ -n "$aid" ] || continue
+            ok=$(gh api "repos/$GITHUB_REPOSITORY/actions/runs/$rid" --jq \
+              "(.path == \".github/workflows/network-24h.yml\")
+               and (.event == \"schedule\" or .event == \"workflow_dispatch\")
+               and .head_branch == \"main\"
+               and (.head_repository.id | tostring) == \"$REPO_ID\"
+               and (.conclusion == null or .conclusion == \"success\")")
+            if [ "$ok" = "true" ]; then id=$aid; break; fi
+          done <<< "$cands"
+          if [ -z "$id" ]; then echo "::warning::sem artifact network-24h"; exit 0; fi
+          gh api "repos/$GITHUB_REPOSITORY/actions/artifacts/$id/zip" > "$RUNNER_TEMP/n24.zip"
+          unzip -p "$RUNNER_TEMP/n24.zip" > "$RUNNER_TEMP/changes.json"
+          if [ "$(stat -c %s "$RUNNER_TEMP/changes.json")" -lt 2000000 ] && \
+             python3 -c '
+          import json, sys
+          def no_nan(c): raise ValueError(c)
+          d = json.load(open(sys.argv[1]), parse_constant=no_nan)
+          assert d.get("schema") == 1 and d.get("to")
+          ' "$RUNNER_TEMP/changes.json"; then
+            cp "$RUNNER_TEMP/changes.json" public/data/changes.json
+            echo "network-24h: artifact $id"
+          else
+            echo "::warning::network-24h: artifact $id inválido, fica o vazio"
+          fi
       - uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
         with:
           path: public

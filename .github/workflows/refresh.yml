@@ -31,7 +31,7 @@ env:
     fonts/nunito-latin.woff2 fonts/OFL-Nunito.txt
     favicon.svg favicon.ico apple-touch-icon.png llms.txt
     data/stats.json data/panels.json data/sites.json data/points.json
-    data/outline.json data/opc.json data/basemap.json data/history.json
+    data/outline.json data/opc.json data/basemap.json data/history.json data/changes.json
 
 concurrency:
   group: "refresh"

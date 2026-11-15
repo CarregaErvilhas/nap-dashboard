@@ -120,6 +120,20 @@ venv/bin/python -m unittest discover -s tests
   corridas; o sync apaga os dias fora da janela (menos `static_versions`).
   Um 403 conta como erro, nunca como "hora sem ficheiro".
 
+## Últimas 24 h (Rede > Novidades)
+`scripts/network_24h.py` (DuckDB) lê do AmpereArchive as 24 h até à última
+hora fechada e escreve `data/network_24h.json`: locais e tomadas que
+entraram/saíram, mudanças de operador e de potência, taxas do operador, tomadas
+que avariaram ou voltaram. Tudo **líquido** por tomada/local (avariou e voltou
+na janela = nada; saiu e voltou ao feed = nada). Corre de hora a hora no
+`network-24h.yml` (artifact `network-24h`, 2 dias), que dispara o `pages.yml`;
+este copia-o para `data/changes.json` do site (mesmos filtros de confiança do
+`ohmigo-dataset`, JSON válido < 2 MB). Nunca é commitado: o repo guarda um
+`site/data/changes.json` vazio (`build_site.write_changes`) e a página esconde
+a lista. Testes em `tests/test_network_24h.py`. Pré-visualizar com dados reais:
+`venv/bin/python scripts/network_24h.py --url https://ohm-age.ocarroeletrico.com`
+e copiar `data/network_24h.json` para `site/data/changes.json` (sem commitar).
+
 ## Pipeline order
 `scripts/nap_etl.py` → (`scripts/check_quality.py`, `scripts/summary.py`) →
 `scripts/mobie_join.py` → `scripts/dgeg_lists.py` → `scripts/dgeg_crossref.py` →
