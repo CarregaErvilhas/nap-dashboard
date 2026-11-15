@@ -138,7 +138,7 @@ details.ms input[type="checkbox"] { width: 20px; height: 20px; flex: none; }
 .site .line { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 6px 14px; align-items: center; margin-top: 6px; font-size: var(--step--1); }
 .tag { border: 1px solid var(--line); border-radius: 999px; padding: 1px 10px; font-size: .8rem; font-weight: 700; white-space: nowrap; }
 .tag.warn { border-color: var(--s-outOfOrder); }
-/* MCS (camiões): a ficha mais rara e mais potente, em destaque com a cor de ação. */
+/* MCS (veículos pesados): a ficha mais rara e mais potente, em destaque com a cor de ação. */
 .tag.mcs { border-color: var(--ink); background: var(--ink-soft); color: var(--ink-strong); }
 .btn.mcs[aria-pressed="false"] { border-color: var(--ink); }
 .detail { border-top: 1px solid var(--line); padding: 14px 16px 16px; }
