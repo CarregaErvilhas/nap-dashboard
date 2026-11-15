@@ -60,6 +60,7 @@ import pandas as pd
 import nap_static_checks
 import osm_places
 from opc_tariffs import Tariffs, has_ceme, regime
+import price_kinds
 from osm_tags import OSM_NUMBERS, evse_key, osm_by_code, osm_for_point, resolve, sane_osm
 
 # Sobe quando o formato do JSON mudar de forma incompatível; o ohmigo recusa
@@ -91,6 +92,20 @@ else:
     shared = set(P.point_id[P.point_id.duplicated(keep=False)])
     nap_price = DPU.drop_duplicates('point_id').set_index('point_id').min_fee
     nap_price_of = lambda site, pid: None if pid in shared else nap_price.get(pid)
+
+# As taxas que o NAP publica (por kWh, por minuto, fixa), para as tomadas MOBI.E
+# que faltam no ficheiro de tarifas da MOBI.E (regime mobie_sem_tarifa): é o
+# único sítio onde alguém diz quanto custam. Nas outras o NAP não entra: onde a
+# MOBI.E tem plano ad hoc, o valor do NAP é esse e não a taxa (price_kinds.py).
+_fee_key = ['site_id', 'point_id'] if 'site_id' in DP.columns else ['point_id']
+_fee_rows = {}
+for _row in DP[_fee_key + ['pricing_policy', 'min_fee']].itertuples(index=False):
+    _fee_rows.setdefault(tuple(_row[:len(_fee_key)]), []).append(_row[-2:])
+if 'site_id' in DP.columns:
+    nap_fees_of = lambda site, pid: price_kinds.nap_fees(_fee_rows.get((site, pid), ()))
+else:
+    _shared = set(P.point_id[P.point_id.duplicated(keep=False)])
+    nap_fees_of = lambda site, pid: None if pid in _shared else price_kinds.nap_fees(_fee_rows.get((pid,), ()))
 
 # Os problemas que as regras só-NAP encontram em cada tomada, os mesmos que o
 # errors.md (item 8) lista para os donos dos dados: `tensao_placeholder` (750
@@ -225,6 +240,10 @@ for p in P.itertuples(index=False):
         v = fnum(nap_price_of(p.site_id, p.point_id))
         if v is not None:
             pt['napPrice'] = v
+    elif pt['regime'] == 'mobie_sem_tarifa':
+        nf = nap_fees_of(p.site_id, p.point_id)
+        if nf:
+            pt['napFees'] = nf
     site['points'].append(pt)
 
 # O código MOBI.E (external_id) é único por local no NAP; se não for, o OSM

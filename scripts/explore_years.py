@@ -19,9 +19,9 @@ O que guarda, por mês:
   Não é uma série limpa da taxa do operador: comparado com o modelo da rede,
   em muitas tomadas o NAP traz o preço ad hoc, com energia (0,55 onde a taxa
   é 0,13), e em 2026 vários operadores passaram de um para o outro. Por isso
-  `mn`/`ms` guardam também, a partir de agora, a taxa por kWh do modelo da
-  rede (`points.json`, regime `mobie`) do mês de cada refresh: essa sim
-  compara-se de mês para mês. O retrato é o do último dia a menos de 3 % da
+  `MODEL_KEYS` guardam também, a partir de agora, o preço por kWh do modelo
+  da rede (`points.json`) do mês de cada refresh, um par de chaves por tipo
+  de preço (price_kinds.py): esses sim comparam-se de mês para mês. O retrato é o do último dia a menos de 3 % da
   mediana do mês: o NAP perde operadores inteiros durante dias, e na troca de
   fonte (janeiro de 2025) há cinco dias com tomadas a dobrar.
 - `occ`: ocupação e fora de serviço, por operador × classe de potência. Cada
@@ -55,6 +55,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import archive_history  # noqa: E402
 import archive_stats  # noqa: E402
 from explore_history import PW, REGIONS  # noqa: E402
+import price_kinds  # noqa: E402
 
 STATE = 'site/data/years.json'
 SCHEMA = 1
@@ -70,7 +71,9 @@ NEEDS_RES_MIN = {
     'repair_time': 15,     # duração das avarias
     'sessions': 5,         # sessões por tomada e duração (DC rápido: 20 a 40 min)
 }
-SIZE_KEYS = ('n', 'kw', 'kn', 'ks', 'tn', 'ts', 'mn', 'ms')
+# Do modelo da rede, por tipo de preço (price_kinds.KINDS): contagem e soma do valor por kWh.
+MODEL_KEYS = {'opc': ('mn', 'ms'), 'adhoc': ('an', 'as'), 'direct': ('dn', 'ds'), 'napfee': ('fn', 'fs')}
+SIZE_KEYS = ('n', 'kw', 'kn', 'ks', 'tn', 'ts') + tuple(k for pair in MODEL_KEYS.values() for k in pair)
 SNAP_KEYS = SIZE_KEYS[:6]   # o que vem do retrato do arquivo
 # Células (dia, hora) com leituras que um mês precisa para a sua média contar.
 NEEDS_CELLS = {'occupancy': 120, 'out_of_service': 120}
@@ -262,6 +265,8 @@ class Cube:
         self.block, self.keys = block, keys
         self.ix = {tuple(c): i for i, c in enumerate(block['combos'])}
         for k in keys:
+            # Uma chave que o estado ainda não tem (estatística nova) começa a zeros.
+            block.setdefault(k, [[] for _ in block['combos']])
             for row in block[k]:
                 row.extend([0] * (n_months - len(row)))
         self.n = n_months
@@ -377,20 +382,22 @@ def update(con, state, today, log=print):
 
 
 def fold_model(state, points, snapshot):
-    """A taxa por kWh do modelo da rede (regime `mobie`) no mês do retrato
-    semanal. Substitui a do mesmo mês: fica a do último refresh de cada mês."""
+    """O preço por kWh do modelo da rede, por tipo de preço (price_kinds.py), no
+    mês do retrato semanal. Substitui o do mesmo mês: fica o do último refresh
+    de cada mês. São séries separadas, uma por tipo: nunca se somam."""
     key = str(snapshot or '')[:7]
     if key not in state['months']:
         return False
     mi = state['months'].index(key)
     size = Cube(state['size'], SIZE_KEYS, len(state['months']))
     op_ix = {o: i for i, o in enumerate(state['ops'])}
-    for k in ('mn', 'ms'):
-        for row in state['size'][k]:
-            row[mi] = 0
+    for pair in MODEL_KEYS.values():
+        for k in pair:
+            for row in state['size'][k]:
+                row[mi] = 0
     for p in points:
-        fee = ((p.get('fees') or {}).get('REGULAR') or {}).get('energy') or []
-        if p.get('regime') != 'mobie' or not fee or not isinstance(fee[0], (int, float)):
+        found = {kind: v['kwh'] for kind, v in price_kinds.kinds(p).items() if v['kwh'] is not None}
+        if not found:
             continue
         name = p.get('operator_name')
         if name not in op_ix:
@@ -399,8 +406,10 @@ def fold_model(state, points, snapshot):
         pw = PW.index(p['pw_class']) if p.get('pw_class') in PW else -1
         region = REGIONS.index(p['region']) if p.get('region') in REGIONS else -1
         i = size.row((op_ix[name], pw, region))
-        state['size']['mn'][i][mi] += 1
-        state['size']['ms'][i][mi] = round(state['size']['ms'][i][mi] + fee[0], 4)
+        for kind, kwh in found.items():
+            n_key, s_key = MODEL_KEYS[kind]
+            state['size'][n_key][i][mi] += 1
+            state['size'][s_key][i][mi] = round(state['size'][s_key][i][mi] + kwh, 4)
     return True
 
 

@@ -71,6 +71,8 @@ def main():
             miss('regime', key, r.get('regime'), m.get('regime'))
         if not close(r.get('nap'), m.get('napPrice')):
             miss('preço do NAP', key, r.get('nap'), m.get('napPrice'))
+        if (r.get('nap_fees') or None) != (m.get('napFees') or None):
+            miss('taxa do NAP', key, r.get('nap_fees'), m.get('napFees'))
         if (r.get('issues') or []) != m.get('issues', []):
             miss('issues', key, r.get('issues'), m.get('issues'))
     n_model = sum(1 for s in model if s['code'] not in dup for _ in s['points'])
