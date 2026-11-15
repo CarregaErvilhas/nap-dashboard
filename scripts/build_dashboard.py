@@ -41,7 +41,8 @@ st_times = ST.snapshot_time.dropna()
 snapshot = st_times.iloc[0] if len(st_times) else 'sem snapshot no feed dinâmico'
 
 CONN_NAMES = {'iec62196T2': 'Type2', 'iec62196T2COMBO': 'CCS Combo2',
-              'chademo': 'CHAdeMO', 'iec60309x2single16': 'CEE 16A'}
+              'chademo': 'CHAdeMO', 'iec60309x2single16': 'CEE 16A',
+              'mcs': 'MCS'}  # 'mcs': nap_etl.connector_type
 
 
 def region(lon, lat):

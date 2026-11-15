@@ -39,7 +39,8 @@ OSM_TAGS = {'name': 'name', 'brand': 'brand', 'operator': 'operator',
 # type2_cable é um T2 com cabo preso; tesla_destination é um T2 na Europa.
 OSM_SOCKET = {'type2': 'T2', 'type2_cable': 'T2', 'tesla_destination': 'T2',
               'type2_combo': 'CCS', 'chademo': 'CHADEMO', 'schuko': 'SCHUKO',
-              'type1': 'T1', 'type1_combo': 'CCS1', 'cee_blue': 'CEE'}
+              'type1': 'T1', 'type1_combo': 'CCS1', 'cee_blue': 'CEE',
+              'mcs': 'MCS'}  # Megawatt Charging System (veículos pesados)
 # payment:<isto>=yes no OSM = paga-se com cartão bancário no posto.
 OSM_CARDS = {'cards', 'credit_cards', 'debit_cards', 'contactless', 'visa',
              'mastercard', 'maestro', 'visa_electron', 'american_express'}
@@ -54,7 +55,11 @@ def osm_num(v, unit=None):
     if not nums:
         return None
     n = max(nums)
-    if unit == 'kw' and n >= 1000:  # escrito em W
+    # '1000 kW' (um MCS, ou um CCS de 1 MW) é kW; só um número sem unidade
+    # (ou em W) a partir de 1000 vem escrito em W.
+    if unit == 'kw' and re.search(r'\d\s*MW', str(v)):
+        n *= 1000
+    elif unit == 'kw' and n >= 1000 and not re.search(r'[kK]\s*[wW]', str(v)):
         n /= 1000
     return round(n, 1) if unit == 'kw' else round(n)
 
@@ -137,7 +142,7 @@ def evse_key(x):
 
 # Fichas DC: num carregador multi-norma (CCS + CHAdeMO) só uma carrega de cada
 # vez, por isso não se somam umas às outras.
-DC_SOCKETS = {'type2_combo', 'chademo', 'type1_combo', 'tesla_supercharger', 'tesla_supercharger_ccs'}
+DC_SOCKETS = {'type2_combo', 'chademo', 'type1_combo', 'tesla_supercharger', 'tesla_supercharger_ccs', 'mcs'}
 
 
 def shared_kw(tags):

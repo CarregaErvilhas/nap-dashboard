@@ -9,6 +9,7 @@
     findLead: 'Todos os postos públicos de Portugal, com o estado que o operador declara, a potência, as tomadas e como se paga.',
     qLabel: 'Localidade, operador, nome ou código do posto', qPh: 'Ex.: Coimbra, Ionity, LSB-00123', near: 'Perto de mim',
     quick: 'Filtros rápidos', fFree: 'Livre agora', fFast: 'Rápido (50 kW ou mais)', fUltra: 'Ultra (150 kW ou mais)',
+    fMcs: 'MCS (pesados)', fMcsTitle: 'Megawatt Charging System: a ficha dos veículos pesados elétricos (camiões e autocarros), até 3,75 MW. Mostra também os locais ainda em construção.',
     fCard: 'Paga com cartão bancário', more: 'Mais filtros', conn: 'Tomada', op: 'Operador', region: 'Região', dcv: 'Tensão DC', any: 'Qualquer', opSearch: 'Procurar operador…', opNone: 'Nenhum operador encontrado.', selN: '{n} selecionados',
     dcv800: 'Para carros 800 V (mais de 500 V)', dcv400: 'Para carros 400 V (até 500 V)', dcvUnk: 'Tensão não declarada',
     dcvHelp: 'Tensão máxima dos conectores DC do posto (a do OpenStreetMap quando corrige a declarada no NAP). Acima de 500 V é onde um carro de 800 V carrega à potência máxima; um carro de 400 V carrega em qualquer um.',
@@ -42,6 +43,7 @@
     findLead: 'Every public charger in Portugal, with the status the operator declares, power, plugs and how to pay.',
     qLabel: 'Town, operator, name or charger code', qPh: 'E.g. Coimbra, Ionity, LSB-00123', near: 'Near me',
     quick: 'Quick filters', fFree: 'Free now', fFast: 'Fast (50 kW or more)', fUltra: 'Ultra (150 kW or more)',
+    fMcs: 'MCS (heavy vehicles)', fMcsTitle: 'Megawatt Charging System: the plug for heavy electric vehicles (trucks and buses), up to 3.75 MW. Also shows sites still under construction.',
     fCard: 'Takes bank cards', more: 'More filters', conn: 'Plug', op: 'Operator', region: 'Region', dcv: 'DC voltage', any: 'Any', opSearch: 'Search operators…', opNone: 'No operator found.', selN: '{n} selected',
     dcv800: 'For 800 V cars (over 500 V)', dcv400: 'For 400 V cars (up to 500 V)', dcvUnk: 'Voltage not declared',
     dcvHelp: 'Maximum voltage of the site’s DC connectors (OpenStreetMap’s where it corrects the one declared on the NAP). Over 500 V is where an 800 V car charges at full power; a 400 V car charges on either.',
@@ -75,7 +77,7 @@
   var PAGE = 30;
   var S = [], P = null, bySite = new Map(), outline = null, snapshot = '';
   var F = fresh();
-  function fresh() { return { q: '', free: false, fast: false, ultra: false, card: false, wc: false, conn: [], op: [], region: [], dcv: [], life: ['op'] }; }
+  function fresh() { return { q: '', free: false, fast: false, ultra: false, mcs: false, card: false, wc: false, conn: [], op: [], region: [], dcv: [], life: ['op'] }; }
   var here = null, shown = PAGE, result = [], listed = [], openExt = null, liveRes = null, dirty = false, opGroup = {};
   var $ = function (id) { return document.getElementById(id); };
   var norm = function (s) { return String(s == null ? '' : s).normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase(); };
@@ -128,6 +130,7 @@
     result = S.filter(function (s) {
       if (F.fast && !(s.kw >= 50)) return false;
       if (F.ultra && !(s.kw >= 150)) return false;
+      if (F.mcs && s.conns.indexOf('MCS') < 0) return false;
       if (F.card && s.pay.indexOf('Multibanco/contactless') < 0) return false;
       if (F.wc && s.wc !== 'yes' && s.wc !== 'limited') return false;
       if (F.conn.length && !F.conn.some(function (c) { return s.conns.indexOf(c) >= 0; })) return false;
@@ -135,7 +138,8 @@
       if (F.region.length && F.region.indexOf(s.region) < 0) return false;
       if (F.dcv.length && !F.dcv.some(function (c) { return (s.dcv || []).indexOf(c) >= 0; })) return false;
       if (F.free && !freeCount(s)) return false;
-      if (F.life.length && F.life.indexOf(s.lc || 'op') < 0) return false;
+      // MCS mostra também os locais em construção: os primeiros são do OSM, ainda fora do NAP.
+      if (!F.mcs && F.life.length && F.life.indexOf(s.lc || 'op') < 0) return false;
       for (var i = 0; i < words.length; i++) if (s._k.indexOf(words[i]) < 0) return false;
       return true;
     });
@@ -171,7 +175,7 @@
       el('span', { class: 'nm' }, name),
       el('span', { class: 'kw' }, s.kw ? N.nf(s.kw, 1) + ' kW' : '—', el('small', null, t('upTo'))),
       el('span', { class: 'where' }, [s.city, s.op].filter(Boolean).join(', '), here && s._d != null ? ' (' + t('km', { d: N.nf(s._d, s._d < 10 ? 1 : 0) }) + ')' : ''),
-      el('span', { class: 'line' }, socketRow(s), s.conns.map(function (c) { return el('span', { class: 'tag' }, c); }),
+      el('span', { class: 'line' }, socketRow(s), s.conns.map(function (c) { return el('span', { class: c === 'MCS' ? 'tag mcs' : 'tag' }, c); }),
         s.doubt ? el('span', { class: 'tag warn' }, t('dDoubt')) : null,
         s.loc_km ? el('span', { class: 'tag warn' }, t('dLoc')) : null));
     var li = el('li', { class: 'site' + (open ? ' sel' : ''), 'data-ext': s.ext }, btn);
@@ -455,6 +459,8 @@
     var uniq = function (a) { return Array.from(new Set(a)).filter(Boolean).sort(function (x, y) { return String(x).localeCompare(String(y), 'pt'); }); };
     var pair = function (v) { return [v, v]; };
     multi('fConn', 'conn', uniq([].concat.apply([], S.map(function (s) { return s.conns; }))).map(pair));
+    // O chip MCS só aparece quando há algum local com MCS (incluindo os em construção).
+    $('fMcsLi').hidden = !S.some(function (s) { return s.conns.indexOf('MCS') >= 0; });
     // One entry per operator group; the label is the commonest spelling in the data.
     var cnt = {};
     S.forEach(function (s) { if (!s.op) return; var k = opKey(s.op); s._g = k; (cnt[k] = cnt[k] || {})[s.op] = ((cnt[k] || {})[s.op] || 0) + 1; });
