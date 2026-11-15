@@ -182,6 +182,19 @@ def km(lat1, lon1, lat2, lon2):
     return 2 * 6371 * math.asin(math.sqrt(a))
 
 
+def nap_code(ref, codes):
+    """O código do NAP a que um `ref` do OSM se refere.
+
+    O OSM escreve muitas vezes `MOBI-LSB-00001` por `LSB-00001`, mas há locais
+    do NAP cujo código tem mesmo o prefixo (`MOBI-CHV-00002`), às vezes ao lado
+    de outro sem ele (`CHV-00002`). Por isso primeiro o ref tal como está, só
+    depois sem `MOBI-`."""
+    ref = ref.strip()
+    if ref in codes or not ref.startswith('MOBI-'):
+        return ref
+    return ref[5:]
+
+
 def osm_by_code(sites_by_code, dump=OSM_DUMP):
     """external_id do NAP -> {campo: valor} das tags OSM desse local.
 
@@ -213,7 +226,7 @@ def osm_by_code(sites_by_code, dump=OSM_DUMP):
             at = (sum(p[0] for p in pts) / len(pts), sum(p[1] for p in pts) / len(pts)) if pts else (None, None)
         if at[0] is None:
             continue
-        refs = [r.strip().removeprefix('MOBI-') for r in str(t.get('ref', '')).split(';') if r.strip()]
+        refs = [nap_code(r, sites_by_code) for r in str(t.get('ref', '')).split(';') if r.strip()]
         socks = osm_sockets(t)
         is_point = t.get('man_made') == 'charge_point'
         for code in refs:
@@ -252,7 +265,7 @@ def osm_by_code(sites_by_code, dump=OSM_DUMP):
                         if evse_key(x):
                             evse.setdefault(code, {})[evse_key(x)] = socks
             for r in str(t.get('old_ref', '')).split(';'):
-                r = r.strip().removeprefix('MOBI-')
+                r = nap_code(r, sites_by_code)
                 # Um código antigo que hoje é de outro local apontaria para o
                 # posto errado: fica de fora.
                 if r and r != code and r not in sites_by_code:
