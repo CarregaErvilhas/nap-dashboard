@@ -60,6 +60,7 @@ def expected_files():
     files |= {'data/' + f for f in site_data.FILES}
     files.add('data/opc.json')
     files.add('data/' + build_site.HISTORY)
+    files.add('data/' + build_site.CHANGES)
     files |= {'data/' + n for n in build_site.DATA_COPY.values()}
     return files
 
@@ -111,7 +112,7 @@ def _no_constant(name):
 
 def check_data(site):
     ok = True
-    for name in list(site_data.FILES) + ['opc.json'] + list(build_site.DATA_COPY.values()):
+    for name in list(site_data.FILES) + ['opc.json', build_site.CHANGES] + list(build_site.DATA_COPY.values()):
         p = os.path.join(site, 'data', name)
         if not os.path.isfile(p):
             ok = False

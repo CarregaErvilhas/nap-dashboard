@@ -1,0 +1,54 @@
+name: Rede - últimas 24 h
+
+# A lista "Nas últimas 24 horas" do separador Novidades (rede.html): o que
+# mudou na rede (locais e tomadas que entraram ou saíram, operador, potência,
+# taxas, tomadas que avariaram ou voltaram) a partir do Parquet do
+# AmpereArchive (scripts/network_24h.py, ~2 MB por corrida). Não faz commit:
+# publica o artifact "network-24h" e dispara o pages.yml, que o copia para
+# data/changes.json do site.
+#
+# Uma vez por hora, 7 min depois da hora: o arquivo publica cada hora um minuto
+# ou dois depois de ela fechar. O cron do GitHub é best-effort (pode atrasar),
+# por isso a página mostra a janela e avisa quando a lista tem mais de 6 h.
+# Uma falha aqui não abre issue (seria uma por hora): fica a lista anterior.
+on:
+  schedule:
+    - cron: "7 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: write
+
+concurrency:
+  group: "network-24h"
+  cancel-in-progress: true
+
+jobs:
+  changes:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: "3.15"
+      - name: Install deps
+        run: pip install "$(grep -E '^duckdb==' requirements.txt)"
+      - name: Last 24 h of changes
+        env:
+          AMPERE_ARCHIVE_URL: ${{ vars.AMPERE_ARCHIVE_URL }}
+        run: python3 scripts/network_24h.py --output data/network_24h.json
+      - name: Publish (artifact)
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: network-24h
+          path: data/network_24h.json
+          retention-days: 2
+          if-no-files-found: error
+      - name: Trigger Pages deploy
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run pages.yml --repo "$GITHUB_REPOSITORY"
