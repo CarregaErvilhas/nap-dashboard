@@ -32,6 +32,7 @@ env:
     favicon.svg favicon.ico apple-touch-icon.png llms.txt
     data/stats.json data/panels.json data/sites.json data/points.json
     data/outline.json data/opc.json data/basemap.json data/history.json
+    data/years.json
 
 concurrency:
   group: "refresh"
@@ -142,6 +143,9 @@ jobs:
           python scripts/archive_history.py --days 28
           # Séries da página Explorar, da mesma cópia do arquivo (data/archive_cache).
           python scripts/explore_history.py
+          # Agregado mensal de "Ao longo dos anos": acrescenta ao site/data/years.json
+          # commitado os dias acabados que ele ainda não tem (estão todos na cache de 28 dias).
+          python scripts/explore_years.py
       # Centros comerciais, hospitais, parques... do OSM, para o ohmigo saber em
       # que local fica cada posto. Lê o extrato de Portugal do Geofabrik (~400 MB,
       # ~10 s a processar); o Overpass dava timeout. Sem ele o dataset sai sem

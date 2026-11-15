@@ -34,6 +34,10 @@ DATA_COPY = {'pt_basemap.json': 'basemap.json'}
 # file, the committed one stays; with neither, the page hides the section.
 HISTORY_SRC = 'data/explore_history.json'
 HISTORY = 'history.json'
+# The monthly aggregate of the whole archive, also for "Explorar". It is its own
+# state: scripts/explore_years.py reads it, adds the days it lacks and rewrites it
+# in place, so the build never touches it (and must never replace it with an empty one).
+YEARS = 'years.json'
 HISTORY_EMPTY = {'generated': None, 'ops': [], 'pw': [], 'regions': [],
                  'daily': {'days': [], 'combos': [], 'n': [], 'down': [], 'unk': [], 'kw': []},
                  'hourly': {'start': None, 'hours': 0, 'sample_min': 15, 'samples': [], 'combos': [],

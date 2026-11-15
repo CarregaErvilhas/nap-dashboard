@@ -475,6 +475,41 @@ work: the pages fetch their JSON, so preview over HTTP. `refresh.yml` runs
   `data/explore_history.json` when the run produced it, keeps the committed
   file otherwise, and writes an empty one (section hidden) when there is none.
   Charts are SVG built with `createElementNS`, each with a table view.
+- "Ao longo dos anos" on the same page reads `site/data/years.json`, the monthly
+  aggregate of the **whole** AmpereArchive (December 2021 on) written by
+  `scripts/explore_years.py`. The file is its own state: each run adds the
+  finished UTC days it lacks and rewrites it, so `refresh.yml` only needs its
+  28-day cache, and `build_site.py` never touches it. First build or rebuild,
+  by hand: `explore_years.py --download data/archive_full` (~5 700 files,
+  260 MB, gitignored) then `--root data/archive_full --rebuild` (~90 s).
+  - `size`: month-end snapshot per operator × power class × region (sockets,
+    kW, and the per-kWh / per-minute price **published in the NAP**). The
+    snapshot day is the last one within 3 % of the month's median, because the
+    NAP loses whole operators for days and the source switch has five days of
+    doubled sockets.
+  - `occ`: occupancy and out of service per operator × power class. Every
+    archive read is the whole network at one instant; at most one per quarter
+    of an hour is kept, reads are averaged per (day, hour) cell and the cells
+    are summed, so a month read every 15 minutes and one read 5 times a day
+    are on the same scale. A month needs 120 cells (`needs_cells`) to be drawn.
+  - `meta`: days, cells, reads and `res_min` (median minutes between reads)
+    per month. `NEEDS_RES_MIN` lists what each statistic needs
+    (`repair_time` 15, `sessions` 5) and `ready` counts the months that
+    qualify: a new statistic that needs precision checks `res_min` and gets
+    every month of live collection for free. Add it as new keys in the cubes
+    (additive sums), bump nothing: missing keys read as 0.
+  - Attributes are the latest known, not as-of: a site that changed operator
+    counts for the current one in every month. Before 2025 the source (OCPI)
+    had statuses only, so sockets gone by 2025 have operator and power -1 and
+    only show with no filter on.
+  - **The NAP price is not an operator-fee history.** Against the network
+    model, on 4 908 of 8 774 MOBI.E sockets the NAP's per-kWh value differs
+    from the OPC fee: it is the ad hoc price, energy included (0,55 where the
+    fee is 0,13), and in 2026 several operators switched from one to the other
+    (Galp: median 0 → 0,60). The page says so. `fold_model` therefore also
+    stores the model's fee (`mn`/`ms`, regime `mobie`) for the month of each
+    refresh; that clean series starts in November 2026 and its chart appears
+    once it has two months.
 - Sources in `assets/site/`; output in `site/` (committed, what `pages.yml`
   serves). Data in `site/data/{stats,panels,sites,points,outline,opc}.json`,
   fetched same-origin (`credentials: 'omit'`) and split by `scripts/site_data.py`
