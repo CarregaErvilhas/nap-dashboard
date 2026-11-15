@@ -15,6 +15,13 @@ página filtra no navegador por operador, classe de potência e região:
   recolha não contam (`samples` diz quantas contaram). Dá a ocupação hora a
   hora e o perfil dia da semana × hora.
 
+- `hourly.back`: as leituras avulsas de antes do coletor (backfill, 4 a 5 por
+  dia, a horas variadas), uma amostra por leitura × operador × classe de
+  potência, com o estado de todas as tomadas no instante publicado pelo NAP.
+  Uma leitura é um retrato válido da ocupação nesse instante, por isso entra
+  no perfil dia da semana × hora (que sem ela teria horas vazias enquanto o
+  coletor não fizer 14 dias), mas não na série hora a hora nem em durações.
+
 Uso (da raiz do repo; precisa de `duckdb`):
     python3 scripts/explore_history.py [--root data/archive_cache] [--output data/explore_history.json]
 
@@ -86,6 +93,32 @@ WITH inst AS (
 SELECT CAST(epoch(h) AS BIGINT) AS h, operator, pw, tot, act, chg, down FROM per
 """
 
+# Estado de cada tomada em cada leitura do backfill: o último retrato ou
+# evento até ao instante publicado (os eventos do backfill têm esse instante).
+BACK_SQL = f"""
+WITH reads AS (
+  SELECT publication_time AS t, ts FROM polls
+  WHERE feed = 'status' AND http = 200 AND note LIKE 'backfill%' AND publication_time IS NOT NULL
+), anch AS (
+  SELECT CAST(ts AS DATE) AS date, min(t) AS t FROM reads GROUP BY 1
+), st AS (
+  SELECT s.site_id, s.point_id, s.status, a.t AS ts FROM snapshots s JOIN anch a USING (date)
+  UNION ALL
+  SELECT site_id, point_id, status, ts FROM status_events WHERE ts <= (SELECT max(t) FROM reads)
+), grid AS (
+  SELECT k.site_id, k.point_id, r.t FROM (SELECT DISTINCT site_id, point_id FROM st) k CROSS JOIN reads r
+), state AS (
+  SELECT g.t, g.site_id, g.point_id, st.status
+  FROM grid g ASOF JOIN st ON g.site_id = st.site_id AND g.point_id = st.point_id AND g.t >= st.ts
+)
+SELECT CAST(epoch(s.t) AS BIGINT) AS t, x.operator, x.pw,
+       count(*) FILTER (WHERE s.status IN ('available', 'charging')) AS act,
+       count(*) FILTER (WHERE s.status = 'charging') AS chg
+FROM state s JOIN xsock x USING (site_id, point_id)
+WHERE x.pw IS NOT NULL
+GROUP BY ALL
+"""
+
 SAMPLES_SQL = f"""
 SELECT CAST(epoch(date_trunc('hour', t)) AS BIGINT) AS h, count(*) FROM (
   SELECT unnest(generate_series(date_trunc('hour', getvariable('h0')), (SELECT e FROM win),
@@ -147,6 +180,16 @@ def compute(con, hours_days=14, end=None):
               'combos': [[op(k[0]), k[1]] for k in hkeys],
               'tot': [hcube[k][0] for k in hkeys], 'act': [hcube[k][1] for k in hkeys],
               'chg': [hcube[k][2] for k in hkeys], 'down': [hcube[k][3] for k in hkeys]}
+    brows = con.execute(BACK_SQL).fetchall()
+    times = sorted({r[0] for r in brows})
+    t_ix = {t: i for i, t in enumerate(times)}
+    bcube = {}
+    for t, o, pw, act, chg in brows:
+        c = bcube.setdefault((o, pw), [[0] * len(times) for _ in range(2)])
+        c[0][t_ix[t]], c[1][t_ix[t]] = act, chg
+    bkeys = sorted(bcube, key=lambda k: (-sum(bcube[k][0]), k))
+    hourly['back'] = {'ts': times, 'combos': [[op(k[0]), k[1]] for k in bkeys],
+                      'act': [bcube[k][0] for k in bkeys], 'chg': [bcube[k][1] for k in bkeys]}
     return {'generated': datetime.datetime.now(datetime.timezone.utc).isoformat(timespec='seconds'),
             'ops': ops, 'pw': PW, 'regions': REGIONS, 'daily': daily, 'hourly': hourly}
 
@@ -167,6 +210,7 @@ def main():
         json.dump(res, fh, ensure_ascii=False, separators=(',', ':'))
     print(f"  wrote {a.output}: {len(res['daily']['days'])} dias × {len(res['daily']['combos'])} combinações, "
           f"{res['hourly']['hours']} horas × {len(res['hourly']['combos'])} combinações, "
+          f"{len(res['hourly']['back']['ts'])} leituras do backfill, "
           f"{os.path.getsize(a.output) // 1024} KB")
 
 

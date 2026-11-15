@@ -5,6 +5,7 @@ Usage:
 """
 import csv
 import os
+import re
 import sys
 from lxml import etree
 
@@ -25,6 +26,19 @@ def text_of(el, tag, ns=EI):
     for e in el.iter(q(ns, tag)):
         return (e.text or '').strip() or None
     return None
+
+
+# DATEX II 3.3 has no MCS value: a Megawatt Charging System socket comes as
+# connectorType=other with the name in otherConnector. Keep it as 'mcs' so the
+# rest of the pipeline sees a plug type, not 'other'.
+RE_MCS = re.compile(r'\bmcs\b|megawatt', re.I)
+
+
+def connector_type(cn):
+    t = text_of(cn, 'connectorType', EI)
+    if t in ('other', 'otherCable') and RE_MCS.search(text_of(cn, 'otherConnector', EI) or ''):
+        return 'mcs'
+    return t
 
 
 def all_texts(el, tag, ns=EI):
@@ -206,7 +220,7 @@ def parse_static(path):
                     points.append((
                         rpid, pt_ext, sid, ext_id, sid_st, op_id, usage, green,
                         avail_power, '|'.join(sorted(set(brands))),
-                        text_of(cn, 'connectorType', EI),
+                        connector_type(cn),
                         text_of(cn, 'chargingMode', EI),
                         text_of(cn, 'connectorFormat', EI),
                         text_of(cn, 'maxPowerAtSocket', EI),

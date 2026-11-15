@@ -34,7 +34,7 @@ ERRORS_ITEM = 8  # errors.md item number
 # Lowercase on purpose: is_dc() lowercases the value before startswith(), and a
 # mixed-case tuple silently matches nothing (e.g. 'iec62196T2COMBO').
 DC_CONNECTORS = ('chademo', 'iec62196t1combo', 'iec62196t2combo',
-                 'pantographtopdown', 'pantographbottomup')
+                 'pantographtopdown', 'pantographbottomup', 'mcs')
 PLACEHOLDER_VOLTAGES = (750, 600)
 LEGACY_CLASS_ROWS = 171   # tracker history: 750 -> 500 V
 MODE3_CLASS_ROWS = 199    # tracker history: mode3AC3p -> mode2AC1p

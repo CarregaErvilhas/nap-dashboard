@@ -485,7 +485,11 @@ work: the pages fetch their JSON, so preview over HTTP. `refresh.yml` runs
   `snapshots`, backfill included: one reading a day, so only size and out of
   service) and an hourly cube of the last 14 days of live collection (operator
   × power class, 4 samples an hour, gaps skipped) for occupancy by hour and by
-  weekday × hour. They follow only the operator, power and region filters, and
+  weekday × hour, plus `hourly.back`: one sample per backfill status read
+  (4 to 5 a day, the whole network at the NAP's publication instant), which
+  only feeds the weekday × hour profile so it has no empty hours while the
+  live collector is young. Hours still without data are hatched and labelled
+  "sem dados", never shown as 0 %. They follow only the operator, power and region filters, and
   the page says so. `build_site.write_history` copies
   `data/explore_history.json` when the run produced it, keeps the committed
   file otherwise, and writes an empty one (section hidden) when there is none.

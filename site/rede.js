@@ -68,7 +68,10 @@
     });
     statusBar();
     bars('cPw', 'cPw', N.PW.map(function (c) { return [N.pwLabel(c), D.pw[c] || 0]; }));
-    bars('cConn', 'cConn', desc(D.conn));
+    // MCS (veículos pesados) sempre em destaque, mesmo a 0: diz que o NAP ainda não publica nenhuma.
+    var conn = desc(D.conn).filter(function (r) { return r[0] !== 'MCS'; });
+    conn.push(['MCS', (D.conn || {}).MCS || 0, [el('span', { class: 'tag mcs' }, 'MCS'), ' ', t('mcsHeavy')]]);
+    bars('cConn', 'cConn', conn);
     bars('cRegion', 'cRegion', desc(D.region).map(function (r) { return [t('rg_' + r[0]), r[1]]; }));
     bars('cCity', 'cCity', desc(D.city));
     bars('cOpSites', 'cOpSites', desc(D.op_sites));

@@ -37,7 +37,8 @@ HISTORY = 'history.json'
 HISTORY_EMPTY = {'generated': None, 'ops': [], 'pw': [], 'regions': [],
                  'daily': {'days': [], 'combos': [], 'n': [], 'down': [], 'unk': [], 'kw': []},
                  'hourly': {'start': None, 'hours': 0, 'sample_min': 15, 'samples': [], 'combos': [],
-                            'tot': [], 'act': [], 'chg': [], 'down': []}}
+                            'tot': [], 'act': [], 'chg': [], 'down': [],
+                            'back': {'ts': [], 'combos': [], 'act': [], 'chg': []}}}
 
 
 def write_history(outdir):
