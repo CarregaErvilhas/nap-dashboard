@@ -135,6 +135,13 @@ class OsmElement(unittest.TestCase):
         ])
         self.assertEqual(got, {'A': 'way/9'})
 
+    def test_own_charge_point_beats_a_shared_station(self):
+        got = self.element([
+            {'type': 'node', 'id': 1, 'lat': 38.7, 'lon': -9.1, 'tags': {'amenity': 'charging_station', 'ref': 'A;B'}},
+            {'type': 'node', 'id': 2, 'lat': 38.7, 'lon': -9.1, 'tags': {'man_made': 'charge_point', 'ref': 'A'}},
+        ])
+        self.assertEqual(got, {'A': 'node/2'})
+
     def test_too_far_is_no_match(self):
         got = self.element([
             {'type': 'node', 'id': 1, 'lat': 39.7, 'lon': -9.1, 'tags': {'amenity': 'charging_station', 'ref': 'A'}},

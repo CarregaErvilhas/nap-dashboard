@@ -216,9 +216,10 @@ def osm_by_code(sites_by_code, dump=OSM_DUMP):
             dist = km(at[0], at[1], site['lat'], site['lon']) if site else None
             if not site or dist > OSM_MAX_KM:
                 continue
-            # O elemento para onde o site aponta: o local inteiro
-            # (charging_station) antes de um poste, só deste código antes de um
-            # partilhado ("A;B;C"), e o mais perto do ponto do NAP.
+            # O elemento para onde o site aponta: primeiro um só deste código
+            # antes de um partilhado ("A;B;C", que é de vários locais), depois o
+            # local inteiro (charging_station) antes de um poste, depois o mais
+            # perto do ponto do NAP.
             elements.setdefault(code, []).append(
                 ((len(refs) > 1, is_point), round(dist, 4), f"{e['type']}/{e['id']}"))
             for tag, field in OSM_TAGS.items():
