@@ -302,7 +302,10 @@ lists those fields in `osmSame` (`["a", "v"]`), so ohmigo can tell a value
 confirmed on the charger from one only the operator declared (a DC socket's
 current decides the power a 400 V car gets). All joined from the Overpass dump in
 `data/umap_cache/todos.json` by `ref` = NAP `external_id` (any code form, so
-Continente's `0001PL0002` joins too; ≤1 km from the NAP point). It's what lets
+Continente's `0001PL0002` joins too; ≤1 km from the NAP point). A `MOBI-`
+prefix on the OSM `ref` is dropped only when the ref as written is not a NAP
+code (`osm_tags.nap_code`): 87 NAP sites really are `MOBI-XXX-00000`, 31 of
+them next to a `XXX-00000`, and stripping it always left them unmatched. It's what lets
 ohmigo find "o posto do Lidl de Coimbra": OSM's `brand`/`operator` are often
 the owner, not the CPO (Lidl owns its chargers, Galp operates them: the NAP
 says Galp, OSM says Lidl). Additive and optional, so no `SCHEMA` bump;

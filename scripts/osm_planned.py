@@ -171,7 +171,9 @@ def main():
         s = u['src']
         t = s['tags']
         refs = [x.strip() for k in ('ref', 'old_ref') for x in str(t.get(k, '')).split(';')]
-        refs = [r[5:] if r.startswith('MOBI-') else r for r in refs if CODE_RE.match(r)]
+        # O NAP também tem códigos com MOBI- (MOBI-CHV-00002): vale com ou sem.
+        refs = [r for r in refs if CODE_RE.match(r)]
+        refs += [r[5:] for r in refs if r.startswith('MOBI-')]
         d = dist_m(s['lat'], s['lon'], slat, slon)
         d = np.where(np.isnan(d), 1e12, d)
         if any(r in ext for r in refs) or d.min() <= NAP_M:

@@ -15,8 +15,8 @@ Usage: python scripts/osm_umap.py        (run from repo root)
 
 Fetches the umap map settings (GeoJSON endpoint) + its datalayers, and the raw
 Overpass dump; caches them in data/umap_cache/. Joins against data/nap_static_sites.csv
-by the MOBI.E ref code (a MOBI- prefix on the OSM side is stripped; multi-code
-refs "A;B;C" are expanded; way polygons use the centroid).
+by the MOBI.E ref code (a MOBI- prefix on the OSM side is stripped, unless the
+NAP code has it too; multi-code refs "A;B;C" are expanded; way polygons use the centroid).
 
 Writes:
   data/osm_umap.csv            OSM stations matched to NAP sites (+dist, operator,
@@ -78,9 +78,11 @@ def haversine(lon1, lat1, lon2, lat2):
     return 2 * r * np.arcsin(np.sqrt(a))
 
 
-def norm_code(c):
+def norm_code(c, ext=()):
+    # The NAP has codes that really start with MOBI- (MOBI-CHV-00002, sometimes
+    # next to a CHV-00002): the ref as written first, then without the prefix.
     c = c.strip()
-    if c.startswith('MOBI-'):
+    if c.startswith('MOBI-') and c not in ext:
         c = c[5:]
     return c
 
@@ -134,7 +136,7 @@ def main():
     rows = []
     for f in osm_raw_features():
         refs = f['refs']
-        codes = [norm_code(c) for c in str(refs).split(';') if CODE_RE.match(c.strip())]
+        codes = [norm_code(c, ext) for c in str(refs).split(';') if CODE_RE.match(c.strip())]
         hits = [c for c in codes if c in ext]
         if not hits:
             continue

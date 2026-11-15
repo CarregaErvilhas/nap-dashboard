@@ -142,6 +142,17 @@ class OsmElement(unittest.TestCase):
         ])
         self.assertEqual(got, {'A': 'node/2'})
 
+    def test_mobi_prefix(self):
+        # MOBI-CHV-00002 é um código do NAP, ao lado de um CHV-00002: cada ref
+        # vai para o seu; MOBI-AVR-00011 só existe sem o prefixo.
+        sites = {c: {'lat': 38.7, 'lon': -9.1} for c in ('MOBI-CHV-00002', 'CHV-00002', 'AVR-00011')}
+        got = self.element([
+            {'type': 'node', 'id': 1, 'lat': 38.7, 'lon': -9.1, 'tags': {'amenity': 'charging_station', 'ref': 'MOBI-CHV-00002'}},
+            {'type': 'node', 'id': 2, 'lat': 38.7, 'lon': -9.1, 'tags': {'amenity': 'charging_station', 'ref': 'CHV-00002'}},
+            {'type': 'node', 'id': 3, 'lat': 38.7, 'lon': -9.1, 'tags': {'amenity': 'charging_station', 'ref': 'MOBI-AVR-00011'}},
+        ], sites)
+        self.assertEqual(got, {'MOBI-CHV-00002': 'node/1', 'CHV-00002': 'node/2', 'AVR-00011': 'node/3'})
+
     def test_too_far_is_no_match(self):
         got = self.element([
             {'type': 'node', 'id': 1, 'lat': 39.7, 'lon': -9.1, 'tags': {'amenity': 'charging_station', 'ref': 'A'}},
