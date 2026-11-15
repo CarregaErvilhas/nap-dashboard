@@ -39,7 +39,8 @@ OSM_TAGS = {'name': 'name', 'brand': 'brand', 'operator': 'operator',
 # type2_cable é um T2 com cabo preso; tesla_destination é um T2 na Europa.
 OSM_SOCKET = {'type2': 'T2', 'type2_cable': 'T2', 'tesla_destination': 'T2',
               'type2_combo': 'CCS', 'chademo': 'CHADEMO', 'schuko': 'SCHUKO',
-              'type1': 'T1', 'type1_combo': 'CCS1', 'cee_blue': 'CEE'}
+              'type1': 'T1', 'type1_combo': 'CCS1', 'cee_blue': 'CEE',
+              'mcs': 'MCS'}  # Megawatt Charging System (veículos pesados)
 # payment:<isto>=yes no OSM = paga-se com cartão bancário no posto.
 OSM_CARDS = {'cards', 'credit_cards', 'debit_cards', 'contactless', 'visa',
              'mastercard', 'maestro', 'visa_electron', 'american_express'}
@@ -54,7 +55,11 @@ def osm_num(v, unit=None):
     if not nums:
         return None
     n = max(nums)
-    if unit == 'kw' and n >= 1000:  # escrito em W
+    # '1000 kW' (um MCS, ou um CCS de 1 MW) é kW; só um número sem unidade
+    # (ou em W) a partir de 1000 vem escrito em W.
+    if unit == 'kw' and re.search(r'\d\s*MW', str(v)):
+        n *= 1000
+    elif unit == 'kw' and n >= 1000 and not re.search(r'[kK]\s*[wW]', str(v)):
         n /= 1000
     return round(n, 1) if unit == 'kw' else round(n)
 
@@ -137,7 +142,7 @@ def evse_key(x):
 
 # Fichas DC: num carregador multi-norma (CCS + CHAdeMO) só uma carrega de cada
 # vez, por isso não se somam umas às outras.
-DC_SOCKETS = {'type2_combo', 'chademo', 'type1_combo', 'tesla_supercharger', 'tesla_supercharger_ccs'}
+DC_SOCKETS = {'type2_combo', 'chademo', 'type1_combo', 'tesla_supercharger', 'tesla_supercharger_ccs', 'mcs'}
 
 
 def shared_kw(tags):
@@ -177,6 +182,19 @@ def km(lat1, lon1, lat2, lon2):
     return 2 * 6371 * math.asin(math.sqrt(a))
 
 
+def nap_code(ref, codes):
+    """O código do NAP a que um `ref` do OSM se refere.
+
+    O OSM escreve muitas vezes `MOBI-LSB-00001` por `LSB-00001`, mas há locais
+    do NAP cujo código tem mesmo o prefixo (`MOBI-CHV-00002`), às vezes ao lado
+    de outro sem ele (`CHV-00002`). Por isso primeiro o ref tal como está, só
+    depois sem `MOBI-`."""
+    ref = ref.strip()
+    if ref in codes or not ref.startswith('MOBI-'):
+        return ref
+    return ref[5:]
+
+
 def osm_by_code(sites_by_code, dump=OSM_DUMP):
     """external_id do NAP -> {campo: valor} das tags OSM desse local.
 
@@ -196,6 +214,7 @@ def osm_by_code(sites_by_code, dump=OSM_DUMP):
     old_refs = {}  # código -> códigos antigos do local (autocolantes de outro operador)
     fixmes = {}    # código -> notas "fixme" da comunidade
     evse = {}      # código -> {id EVSE normalizado: tomadas desse elemento}
+    elements = {}  # código -> [(prioridade, distância, "node/123")], para o link do site
     for e in els:
         t = e.get('tags') or {}
         if t.get('amenity') != 'charging_station' and t.get('man_made') != 'charge_point':
@@ -207,13 +226,20 @@ def osm_by_code(sites_by_code, dump=OSM_DUMP):
             at = (sum(p[0] for p in pts) / len(pts), sum(p[1] for p in pts) / len(pts)) if pts else (None, None)
         if at[0] is None:
             continue
-        refs = [r.strip().removeprefix('MOBI-') for r in str(t.get('ref', '')).split(';') if r.strip()]
+        refs = [nap_code(r, sites_by_code) for r in str(t.get('ref', '')).split(';') if r.strip()]
         socks = osm_sockets(t)
         is_point = t.get('man_made') == 'charge_point'
         for code in refs:
             site = sites_by_code.get(code)
-            if not site or km(at[0], at[1], site['lat'], site['lon']) > OSM_MAX_KM:
+            dist = km(at[0], at[1], site['lat'], site['lon']) if site else None
+            if not site or dist > OSM_MAX_KM:
                 continue
+            # O elemento para onde o site aponta: primeiro um só deste código
+            # antes de um partilhado ("A;B;C", que é de vários locais), depois o
+            # local inteiro (charging_station) antes de um poste, depois o mais
+            # perto do ponto do NAP.
+            elements.setdefault(code, []).append(
+                ((len(refs) > 1, is_point), round(dist, 4), f"{e['type']}/{e['id']}"))
             for tag, field in OSM_TAGS.items():
                 v = t.get(tag)
                 if not v or (tag == 'name' and CODE_NAME.match(v)):
@@ -239,7 +265,7 @@ def osm_by_code(sites_by_code, dump=OSM_DUMP):
                         if evse_key(x):
                             evse.setdefault(code, {})[evse_key(x)] = socks
             for r in str(t.get('old_ref', '')).split(';'):
-                r = r.strip().removeprefix('MOBI-')
+                r = nap_code(r, sites_by_code)
                 # Um código antigo que hoje é de outro local apontaria para o
                 # posto errado: fica de fora.
                 if r and r != code and r not in sites_by_code:
@@ -297,6 +323,8 @@ def osm_by_code(sites_by_code, dump=OSM_DUMP):
         out.setdefault(code, {})['fixme'] = sorted(notes)[:5]
     for code, ids in evse.items():
         out.setdefault(code, {})['evse'] = ids
+    for code, els_ in elements.items():
+        out.setdefault(code, {})['element'] = min(els_)[2]
     for code in set(points_socks) | set(station_socks) | set(capacity):
         o = out.setdefault(code, {})
         if code in points_socks:

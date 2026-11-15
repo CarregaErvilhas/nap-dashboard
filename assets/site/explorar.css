@@ -82,3 +82,6 @@
 .xyear tbody td { height: 34px; color: var(--fg); font-weight: 700; font-size: .8rem; font-variant-numeric: tabular-nums; }
 .xyear thead td, .xyear tbody th { width: 4em; }
 .card > .note { margin: 10px 0 0; max-width: none; }
+
+/* MCS (veículos pesados) em destaque na lista das fichas. */
+.xrow.mcs .lb { color: var(--ink-strong); font-weight: 800; }
