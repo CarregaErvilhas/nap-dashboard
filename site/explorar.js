@@ -96,6 +96,7 @@
     if (d === 'status') return t('st_' + v);
     if (d === 'regime') return t('xr_' + v);
     if (d === 'pay') return t('pay_' + v);
+    if (d === 'conn' && v === 'MCS') return 'MCS (' + t('mcsHeavy') + ')';
     return v;
   }
   function acc() { return { n: 0, kw: 0, chg: 0, act: 0, down: 0, feeS: 0, feeN: 0, sites: new Set() }; }
@@ -270,7 +271,7 @@
       var fill = el('span', { class: 'fill' }); fill.style.width = (max && r.x != null ? Math.min(100, 100 * r.x / max) : 0) + '%';
       var extra = r.few ? t('xFew') : (share && total ? N.nf(100 * r.x / total, 1) + ' %' : N.nf(r.a.n) + ' ' + t('m_n').toLowerCase());
       if (metric === 'n' && MULTI[d]) extra = '';
-      ul.appendChild(el('li', null, el('button', { class: 'xrow' + (dim ? ' dim' : '') + (r.few ? ' few' : ''), type: 'button', 'aria-pressed': String(on), 'data-v': r.v, onclick: function () { toggle(d, r.v); } },
+      ul.appendChild(el('li', null, el('button', { class: 'xrow' + (dim ? ' dim' : '') + (r.few ? ' few' : '') + (d === 'conn' && r.v === 'MCS' ? ' mcs' : ''), type: 'button', 'aria-pressed': String(on), 'data-v': r.v, onclick: function () { toggle(d, r.v); } },
         el('span', { class: 'lb' }, label(d, r.v)), el('span', { class: 'track', 'aria-hidden': 'true' }, fill),
         el('span', { class: 'vl' }, fmt(r.x, metric)), el('span', { class: 'ex muted' }, extra))));
     });

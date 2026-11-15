@@ -78,3 +78,6 @@
 .xtip { position: fixed; z-index: 60; pointer-events: none; background: var(--fg); color: var(--bg); border-radius: var(--r-s); padding: 6px 10px; font-size: .8rem; line-height: 1.35; max-width: 260px; box-shadow: 0 6px 18px rgb(20 32 58 / .25); }
 .xtip b, .xtip span { display: block; }
 @media print { .xbar { position: static; } .xtip { display: none; } }
+
+/* MCS (veículos pesados) em destaque na lista das fichas. */
+.xrow.mcs .lb { color: var(--ink-strong); font-weight: 800; }
