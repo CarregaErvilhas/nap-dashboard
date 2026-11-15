@@ -195,10 +195,37 @@ def nap_code(ref, codes):
     return ref[5:]
 
 
-def osm_by_code(sites_by_code, dump=OSM_DUMP):
+# Um posto que o OSM dá como desativado ou em obra continua a ser o elemento
+# desse local (o "Ver no OSM" abre-o), mas as tags dele não descrevem o posto
+# de hoje: não entram em mais nada.
+OSM_LIFECYCLE = ('disused', 'construction')
+
+
+def lifecycle(t):
+    """'disused'/'construction' se o elemento é um posto nesse estado, senão None."""
+    for p in OSM_LIFECYCLE:
+        if t.get(f'{p}:amenity') == 'charging_station' or t.get(f'{p}:man_made') == 'charge_point':
+            return p
+    return None
+
+
+def evse_sites(pairs):
+    """(point_external_id, external_id do local) -> {id EVSE normalizado: local}.
+    Um id EVSE que o NAP dá a dois locais fica de fora."""
+    out = {}
+    for ev, code in pairs:
+        k = evse_key(ev)
+        if k:
+            out[k] = code if out.get(k, code) == code else None
+    return {k: c for k, c in out.items() if c}
+
+
+def osm_by_code(sites_by_code, dump=OSM_DUMP, evse_to_code=None):
     """external_id do NAP -> {campo: valor} das tags OSM desse local.
 
-    sites_by_code: external_id -> {'lat': ..., 'lon': ...}."""
+    sites_by_code: external_id -> {'lat': ..., 'lon': ...}.
+    evse_to_code: evse_sites() dos pontos do NAP. Um elemento cujo `ref` não é
+    código de nenhum local casa pelo `ref:EU:EVSE` (os ids das tomadas)."""
     try:
         els = json.load(open(dump))['elements']
     except (OSError, ValueError, KeyError) as e:
@@ -217,8 +244,11 @@ def osm_by_code(sites_by_code, dump=OSM_DUMP):
     elements = {}  # código -> [(prioridade, distância, "node/123")], para o link do site
     for e in els:
         t = e.get('tags') or {}
+        lc = None
         if t.get('amenity') != 'charging_station' and t.get('man_made') != 'charge_point':
-            continue
+            lc = lifecycle(t)
+            if not lc:
+                continue
         if e['type'] == 'node':
             at = (e.get('lat'), e.get('lon'))
         else:
@@ -227,19 +257,25 @@ def osm_by_code(sites_by_code, dump=OSM_DUMP):
         if at[0] is None:
             continue
         refs = [nap_code(r, sites_by_code) for r in str(t.get('ref', '')).split(';') if r.strip()]
+        if evse_to_code and not any(r in sites_by_code for r in refs):
+            refs = sorted({evse_to_code[k] for k in map(evse_key, str(t.get('ref:EU:EVSE', '')).split(';'))
+                           if k in evse_to_code})
         socks = osm_sockets(t)
-        is_point = t.get('man_made') == 'charge_point'
+        is_point = (t.get(f'{lc}:man_made') if lc else t.get('man_made')) == 'charge_point'
         for code in refs:
             site = sites_by_code.get(code)
             dist = km(at[0], at[1], site['lat'], site['lon']) if site else None
             if not site or dist > OSM_MAX_KM:
                 continue
-            # O elemento para onde o site aponta: primeiro um só deste código
-            # antes de um partilhado ("A;B;C", que é de vários locais), depois o
-            # local inteiro (charging_station) antes de um poste, depois o mais
-            # perto do ponto do NAP.
+            # O elemento para onde o site aponta: primeiro um posto em serviço
+            # antes de um desativado ou em obra, depois um só deste código antes
+            # de um partilhado ("A;B;C", que é de vários locais), depois o local
+            # inteiro (charging_station) antes de um poste, depois o mais perto
+            # do ponto do NAP.
             elements.setdefault(code, []).append(
-                ((len(refs) > 1, is_point), round(dist, 4), f"{e['type']}/{e['id']}"))
+                ((lc is not None, len(refs) > 1, is_point), round(dist, 4), f"{e['type']}/{e['id']}"))
+            if lc:
+                continue
             for tag, field in OSM_TAGS.items():
                 v = t.get(tag)
                 if not v or (tag == 'name' and CODE_NAME.match(v)):

@@ -216,7 +216,8 @@ for _, r in S.iterrows():
     except (TypeError, ValueError):
         continue
     _by_code[r.external_id] = None if r.external_id in _by_code else _xy
-osm_tags_by_site = osm_tags.osm_by_code({c: v for c, v in _by_code.items() if v})
+osm_tags_by_site = osm_tags.osm_by_code({c: v for c, v in _by_code.items() if v},
+                                        evse_to_code=osm_tags.evse_sites(zip(P.point_external_id, P.site_external_id)))
 # DATEX II accessibility on the NAP (almost nobody publishes it) + OSM wheelchair.
 NAP_ACCESSIBLE = {'wheelChairAccessible', 'disabilityAccessible', 'barrierFreeAccessible'}
 nap_access = (S.set_index('external_id')['accessibility'].dropna().to_dict()

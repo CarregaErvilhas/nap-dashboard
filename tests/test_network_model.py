@@ -13,7 +13,7 @@ import unittest
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'scripts'))
 
 import opc_tariffs  # noqa: E402
-from osm_tags import osm_by_code, resolve, sane_osm  # noqa: E402
+from osm_tags import evse_sites, osm_by_code, resolve, sane_osm  # noqa: E402
 
 HEADER = 'ID;UID_TOMADA;TIPO_TARIFARIO;TIPO_TARIFA;TARIFA;NIVELTENSAO'
 ROWS = [
@@ -111,14 +111,17 @@ class Resolve(unittest.TestCase):
 class OsmElement(unittest.TestCase):
     """O elemento OSM para onde o "Ver no OSM" do site aponta."""
 
-    def element(self, els, sites=None):
+    def tags(self, els, sites=None, evse=None):
         sites = sites or {'A': {'lat': 38.7, 'lon': -9.1}}
         with tempfile.NamedTemporaryFile('w', suffix='.json', delete=False) as fh:
             json.dump({'elements': els}, fh)
         try:
-            return {c: o.get('element') for c, o in osm_by_code(sites, fh.name).items()}
+            return osm_by_code(sites, fh.name, evse)
         finally:
             os.unlink(fh.name)
+
+    def element(self, els, sites=None, evse=None):
+        return {c: o.get('element') for c, o in self.tags(els, sites, evse).items()}
 
     def test_station_beats_a_closer_charge_point(self):
         got = self.element([
@@ -152,6 +155,38 @@ class OsmElement(unittest.TestCase):
             {'type': 'node', 'id': 3, 'lat': 38.7, 'lon': -9.1, 'tags': {'amenity': 'charging_station', 'ref': 'MOBI-AVR-00011'}},
         ], sites)
         self.assertEqual(got, {'MOBI-CHV-00002': 'node/1', 'CHV-00002': 'node/2', 'AVR-00011': 'node/3'})
+
+    def test_evse_when_the_ref_is_not_a_nap_code(self):
+        evse = evse_sites([('PT*EDP*E*LSB*00001*1', 'A'), ('PT*EDP*E*LSB*00002*1', 'B')])
+        got = self.element([
+            {'type': 'node', 'id': 1, 'lat': 38.7, 'lon': -9.1, 'tags': {'amenity': 'charging_station', 'ref:EU:EVSE': 'PT*EDP*E*LSB*00001*01'}},
+            {'type': 'node', 'id': 2, 'lat': 38.7, 'lon': -9.1, 'tags': {'amenity': 'charging_station', 'ref': '1A', 'ref:EU:EVSE': 'PT*EDP*ELSB*00002*1'}},
+        ], {'A': {'lat': 38.7, 'lon': -9.1}, 'B': {'lat': 38.7, 'lon': -9.1}}, evse)
+        self.assertEqual(got, {'A': 'node/1', 'B': 'node/2'})
+
+    def test_the_ref_wins_over_the_evse(self):
+        evse = evse_sites([('PT*EDP*E*LSB*00002*1', 'B')])
+        got = self.element([
+            {'type': 'node', 'id': 1, 'lat': 38.7, 'lon': -9.1, 'tags': {'amenity': 'charging_station', 'ref': 'A', 'ref:EU:EVSE': 'PT*EDP*E*LSB*00002*1'}},
+        ], {'A': {'lat': 38.7, 'lon': -9.1}, 'B': {'lat': 38.7, 'lon': -9.1}}, evse)
+        self.assertEqual(got, {'A': 'node/1'})
+
+    def test_evse_on_two_sites_is_dropped(self):
+        self.assertEqual(evse_sites([('PT*X*E*A*1*1', 'A'), ('PT*X*E*A*1*1', 'B'), ('PT*X*E*A*2*1', 'A')]), {'PTXEA21': 'A'})
+
+    def test_disused_is_linked_but_its_tags_are_not_used(self):
+        got = self.tags([
+            {'type': 'node', 'id': 1, 'lat': 38.7, 'lon': -9.1, 'tags': {'disused:amenity': 'charging_station', 'ref': 'A', 'operator': 'Velho'}},
+        ])
+        self.assertEqual(got, {'A': {'element': 'node/1'}})
+
+    def test_in_service_beats_disused(self):
+        got = self.element([
+            {'type': 'node', 'id': 1, 'lat': 38.7, 'lon': -9.1, 'tags': {'disused:amenity': 'charging_station', 'ref': 'A'}},
+            {'type': 'node', 'id': 2, 'lat': 38.701, 'lon': -9.1, 'tags': {'construction:man_made': 'charge_point', 'ref': 'A'}},
+            {'type': 'node', 'id': 3, 'lat': 38.705, 'lon': -9.1, 'tags': {'man_made': 'charge_point', 'ref': 'A;B'}},
+        ])
+        self.assertEqual(got, {'A': 'node/3'})
 
     def test_too_far_is_no_match(self):
         got = self.element([
