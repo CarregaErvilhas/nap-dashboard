@@ -137,7 +137,8 @@ def region(lat, lon):
 # Os nomes DATEX II das fichas -> os nomes que um condutor conhece.
 CONNECTOR = {'iec62196T2': 'T2', 'iec62196T2COMBO': 'CCS', 'chademo': 'CHADEMO',
              'domestic': 'SCHUKO', 'domesticF': 'SCHUKO', 'iec62196T1': 'T1',
-             'iec62196T1COMBO': 'CCS1', 'iec60309x2three16': 'CEE'}
+             'iec62196T1COMBO': 'CCS1', 'iec60309x2three16': 'CEE',
+             'mcs': 'MCS'}
 
 
 def fnum(x):

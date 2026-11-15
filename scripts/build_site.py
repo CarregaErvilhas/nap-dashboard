@@ -56,6 +56,20 @@ def write_history(outdir):
         hist = HISTORY_EMPTY
     with open(dst, 'w', encoding='utf-8') as fh:
         json.dump(hist, fh, ensure_ascii=False, separators=(',', ':'), allow_nan=False)
+# "Últimas 24 h" on Rede (scripts/network_24h.py). Rebuilt every hour by
+# network-24h.yml and put in place by pages.yml at deploy time, never
+# committed: the repo keeps an empty placeholder (the page hides the block).
+CHANGES = 'changes.json'
+CHANGES_EMPTY = {'schema': 1, 'from': None, 'to': None}
+
+
+def write_changes(outdir):
+    dst = os.path.join(outdir, 'data', CHANGES)
+    if not os.path.exists(dst):
+        with open(dst, 'w', encoding='utf-8') as fh:
+            json.dump(CHANGES_EMPTY, fh, separators=(',', ':'))
+
+
 PANELS = ('news', 'facts', 'errs', 'anom', 'hubs', 'churn', 'hist')
 REPORT = 'Agents-outputs/anomalias-results.md'
 REPORT_URL = ('https://github.com/CarregaErvilhas/nap-dashboard/blob/main/'
@@ -143,6 +157,7 @@ def render(data, outdir='site', archive_url=None):
         json.dump(opc or {'date': None, 'url': REPORT_URL, 'opcs': []}, fh,
                   ensure_ascii=False, separators=(',', ':'))
     write_history(outdir)
+    write_changes(outdir)
     for src, name in DATA_COPY.items():
         shutil.copyfile(os.path.join('assets', src), os.path.join(outdir, 'data', name))
     for rel in STATIC:

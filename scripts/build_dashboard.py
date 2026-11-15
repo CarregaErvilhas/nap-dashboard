@@ -42,7 +42,8 @@ st_times = ST.snapshot_time.dropna()
 snapshot = st_times.iloc[0] if len(st_times) else 'sem snapshot no feed dinâmico'
 
 CONN_NAMES = {'iec62196T2': 'Type2', 'iec62196T2COMBO': 'CCS Combo2',
-              'chademo': 'CHAdeMO', 'iec60309x2single16': 'CEE 16A'}
+              'chademo': 'CHAdeMO', 'iec60309x2single16': 'CEE 16A',
+              'mcs': 'MCS'}  # 'mcs': nap_etl.connector_type
 
 
 def region(lon, lat):
@@ -226,10 +227,13 @@ def osm_extra(ext):
     """What the site page shows from OSM beyond the old osm_umap join: every
     charger make/model (hw), the old codes on stickers (old, oldop), the total
     power when it is shared between sockets (shared, kW), wheelchair access
-    (wc: 'yes'/'limited'/'no', NAP or OSM) and the community's fixme notes."""
+    (wc: 'yes'/'limited'/'no', NAP or OSM), the community's fixme notes and the
+    matched OSM element (osm_ref)."""
     o = osm_tags_by_site.get(ext, {})
     rec = {'hw': o.get('hardware'), 'old': o.get('oldRefs'), 'oldop': o.get('oldOperator'),
-           'shared': o.get('sharedKw'), 'fixme': o.get('fixme')}
+           'shared': o.get('sharedKw'), 'fixme': o.get('fixme'),
+           # the OSM element the site is matched to ("node/123"), for the "Ver no OSM" link
+           'osm_ref': o.get('element')}
     wc = o.get('wheelchair')
     if NAP_ACCESSIBLE & set(str(nap_access.get(ext, '')).split('|')):
         wc = 'yes'

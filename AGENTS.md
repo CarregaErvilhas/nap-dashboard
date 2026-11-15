@@ -120,6 +120,20 @@ venv/bin/python -m unittest discover -s tests
   corridas; o sync apaga os dias fora da janela (menos `static_versions`).
   Um 403 conta como erro, nunca como "hora sem ficheiro".
 
+## Últimas 24 h (Rede > Novidades)
+`scripts/network_24h.py` (DuckDB) lê do AmpereArchive as 24 h até à última
+hora fechada e escreve `data/network_24h.json`: locais e tomadas que
+entraram/saíram, mudanças de operador e de potência, taxas do operador, tomadas
+que avariaram ou voltaram. Tudo **líquido** por tomada/local (avariou e voltou
+na janela = nada; saiu e voltou ao feed = nada). Corre de hora a hora no
+`network-24h.yml` (artifact `network-24h`, 2 dias), que dispara o `pages.yml`;
+este copia-o para `data/changes.json` do site (mesmos filtros de confiança do
+`ohmigo-dataset`, JSON válido < 2 MB). Nunca é commitado: o repo guarda um
+`site/data/changes.json` vazio (`build_site.write_changes`) e a página esconde
+a lista. Testes em `tests/test_network_24h.py`. Pré-visualizar com dados reais:
+`venv/bin/python scripts/network_24h.py --url https://ohm-age.ocarroeletrico.com`
+e copiar `data/network_24h.json` para `site/data/changes.json` (sem commitar).
+
 ## Pipeline order
 `scripts/nap_etl.py` → (`scripts/check_quality.py`, `scripts/summary.py`) →
 `scripts/mobie_join.py` → `scripts/dgeg_lists.py` → `scripts/dgeg_crossref.py` →
@@ -302,7 +316,10 @@ lists those fields in `osmSame` (`["a", "v"]`), so ohmigo can tell a value
 confirmed on the charger from one only the operator declared (a DC socket's
 current decides the power a 400 V car gets). All joined from the Overpass dump in
 `data/umap_cache/todos.json` by `ref` = NAP `external_id` (any code form, so
-Continente's `0001PL0002` joins too; ≤1 km from the NAP point). It's what lets
+Continente's `0001PL0002` joins too; ≤1 km from the NAP point). A `MOBI-`
+prefix on the OSM `ref` is dropped only when the ref as written is not a NAP
+code (`osm_tags.nap_code`): 87 NAP sites really are `MOBI-XXX-00000`, 31 of
+them next to a `XXX-00000`, and stripping it always left them unmatched. It's what lets
 ohmigo find "o posto do Lidl de Coimbra": OSM's `brand`/`operator` are often
 the owner, not the CPO (Lidl owns its chargers, Galp operates them: the NAP
 says Galp, OSM says Lidl). Additive and optional, so no `SCHEMA` bump;
@@ -313,7 +330,12 @@ site, most common first (`["ABB Terra HP CP4", "Alpitronic HYC_400"]`;
 `manufacturer`/`model` are only the commonest). The site shows the same list
 (`hw` in `sites.json`, "Carregadores: …" in the detail) and its search finds
 a site by it. Both come from `scripts/osm_tags.py`, so the site and ohmigo
-never disagree about a charger. An element > 1 km from the NAP point is a
+never disagree about a charger. The `osm` block also has `element`, the OSM
+element the site is matched to (`"node/123"`, `"way/456"`: an element with
+only this `ref` before a shared `"A;B;C"`, then the whole site's
+`amenity=charging_station` before a `man_made=charge_point`, then the nearest); `sites.json`
+carries it as `osm_ref` (the planned sites already had one), and Procurar's
+"Ver no OSM" opens that element, falling back to a marker at the coordinates. An element > 1 km from the NAP point is a
 wrong `ref` on OSM, not a second charger, and is left out.
 Also from `osm_tags.py`, in both the `osm` block and `sites.json`:
 - `sharedKw` (`shared`): the total a charger declares
