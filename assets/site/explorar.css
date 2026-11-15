@@ -76,5 +76,5 @@
 .xtip b, .xtip span { display: block; }
 @media print { .xbar { position: static; } .xtip { display: none; } }
 
-/* MCS (camiões) em destaque na lista das fichas. */
+/* MCS (veículos pesados) em destaque na lista das fichas. */
 .xrow.mcs .lb { color: var(--ink-strong); font-weight: 800; }

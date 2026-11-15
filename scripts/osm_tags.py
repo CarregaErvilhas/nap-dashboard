@@ -40,7 +40,7 @@ OSM_TAGS = {'name': 'name', 'brand': 'brand', 'operator': 'operator',
 OSM_SOCKET = {'type2': 'T2', 'type2_cable': 'T2', 'tesla_destination': 'T2',
               'type2_combo': 'CCS', 'chademo': 'CHADEMO', 'schuko': 'SCHUKO',
               'type1': 'T1', 'type1_combo': 'CCS1', 'cee_blue': 'CEE',
-              'mcs': 'MCS'}  # Megawatt Charging System (camiões)
+              'mcs': 'MCS'}  # Megawatt Charging System (veículos pesados)
 # payment:<isto>=yes no OSM = paga-se com cartão bancário no posto.
 OSM_CARDS = {'cards', 'credit_cards', 'debit_cards', 'contactless', 'visa',
              'mastercard', 'maestro', 'visa_electron', 'american_express'}

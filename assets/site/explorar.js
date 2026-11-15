@@ -96,7 +96,7 @@
     if (d === 'status') return t('st_' + v);
     if (d === 'regime') return t('xr_' + v);
     if (d === 'pay') return t('pay_' + v);
-    if (d === 'conn' && v === 'MCS') return 'MCS (' + t('mcsTrucks') + ')';
+    if (d === 'conn' && v === 'MCS') return 'MCS (' + t('mcsHeavy') + ')';
     return v;
   }
   function acc() { return { n: 0, kw: 0, chg: 0, act: 0, down: 0, feeS: 0, feeN: 0, sites: new Set() }; }
