@@ -1,7 +1,8 @@
-# Novidades da rede (2026-11-11 → 2026-11-11)
+# Novidades da rede (2026-11-11 → 2026-11-16)
 
-- **Estreias:** 1 novo local em funcionamento (`MOBI-LSB-02327` · Lisboa · MOBI · 7,4 kW). 143 reativados (`0002PL0018` · Amadora · CONT · 22 kW; `0004PR0004` · Vila Nova de Gaia · CONT · 120 kW; `0004PR0005` · Vila Nova de Gaia · CONT · 120 kW; `0004PR0006` · Vila Nova de Gaia · ? · 50 kW; `0004PR0007` · Vila Nova de Gaia · ? · 50 kW; `0004PR0008` · Vila Nova de Gaia · ? · 50 kW; `0004PR0009` · Vila Nova de Gaia · ? · 50 kW; `0004PR0010` · Vila Nova de Gaia · ? · 50 kW; `0205PL0001` · Caldas da Rainha · ? · 22 kW; `0205PR0003` · Caldas da Rainha · CONT · 120 kW (+133 restantes)).
-- **Saídas:** 4 locais saíram da rede ou foram desligados (`PLM-00089` · Palmela · FCTO · 400 kW; `VIS-00138` · Viseu · FCTO · 50 kW; `VIS-00139` · Viseu · FCTO · 200 kW; `VNG-00072` · Vila Nova de Gaia · EDPC · 120 kW).
-- **Maior estreia:** `MOBI-LSB-02327` (Lisboa, MOBI) com 1 ponto e 7,4 kW no total.
-- **Cidade em alta:** Lisboa com 1 estreia.
-- **Balanço:** +16 locais (0,2% em módulo), +30 pontos face à semana anterior.
+- **Estreias:** 11 novos locais em funcionamento (`CBR-00160` · Coimbra · HORZ · 200 kW; `CLD-00047` · Caldas da Rainha · IBRD · 22 kW; `CVL-00060` · Covilhã · DTEI · 60 kW; `FAR-00107` · Faro · IBRD · 22 kW; `LSB-01549` · Lisboa · EMEL · 7,4 kW; `LSB-01550` · Lisboa · EMEL · 7,4 kW; `LSB-01551` · Lisboa · EMEL · 7,4 kW; `LSB-01552` · Lisboa · EMEL · 7,4 kW; `LSB-01553` · Lisboa · EMEL · 7,4 kW; `LSB-01554` · Lisboa · EMEL · 22 kW (+1 restantes)). 355 reativados (`0001PR0010` · Matosinhos · ? · 50 kW; `0001PR0032` · Matosinhos · CONT · 350 kW; `0001PR0034` · Matosinhos · CONT · 350 kW; `0001PR0035` · Matosinhos · ? · 50 kW; `0001PR0036` · Matosinhos · ? · 50 kW; `0001PR0037` · Matosinhos · ? · 50 kW; `0001PR0038` · Matosinhos · ? · 50 kW; `0001PR0039` · Matosinhos · ? · 50 kW; `0001PR0040` · Matosinhos · ? · 50 kW; `0001PR0041` · Matosinhos · ? · 50 kW (+345 restantes)).
+- **Saídas:** 8 locais saíram da rede ou foram desligados (`0001PR0029` · Matosinhos · CONT · 50 kW; `BRR-00008` · Barreiro · MAKS · 22 kW; `BRR-00009` · Barreiro · MAKS · 22 kW; `BRR-00010` · Barreiro · MAKS · 22 kW; `BRR-00011` · Barreiro · MAKS · 22 kW; `BRR-00138` · Barreiro · MAKS · 22 kW; `BRR-00139` · Barreiro · MAKS · 22 kW; `ODM-00005` · Odemira · REPS · 50 kW).
+- **Recorde:** nova tomada mais potente: `AVR-00038-01` (`AVR-00038`) com 1000,0 kW (antes 600 kW).
+- **Maior estreia:** `CBR-00160` (Coimbra, HORZ) com 5 pontos e 672 kW no total.
+- **Cidade em alta:** Lisboa com 6 estreias.
+- **Balanço:** +7 locais (0,1% em módulo), +28 pontos face à semana anterior.
