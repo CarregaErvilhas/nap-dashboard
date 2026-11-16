@@ -856,18 +856,18 @@ data = {
     'snapshot': snapshot,
     'kpis': [
         kpi('Sites', len(S), f'{S.region.value_counts().get("mainland",0)} mainland / {S.region.value_counts().get("madeira",0)} madeira / {S.region.value_counts().get("azores",0)} açores'),
-        kpi('Charging points', len(pts), f'{int(pts.is_green_energy.str.lower().eq("true").sum())} green energy'),
+        kpi('Sockets', len(pts), f'{int(pts.is_green_energy.str.lower().eq("true").sum())} green energy'),
         kpi('Operators (OPC)', pts.operator_id.nunique(), f'{len(REG)} code/operator combos, {int(REG.dgeg_entidade.notna().sum())} DGEG-matched'),
-        kpi('Points w/ OPC price', n_opc_pts, f'{n_opc_pts*100//max(len(OPC),1)}% of network'),
+        kpi('Sockets w/ OPC price', n_opc_pts, f'{n_opc_pts*100//max(len(OPC),1)}% of network'),
         kpi('Occupancy (snapshot)', f'{occupancy_overall:.1f}%', 'charging among available+charging'),
         kpi('Median power', f'{median_kw} kW', f'mean {_pwv.mean()/1000:.0f} kW, max {_pwv.max()/1000:.0f} kW'),
     ],
     # PT mirror of the EN kpis above (template picks per browser language).
     'kpis_pt': [
         kpi('Locais', len(S), f'{S.region.value_counts().get("mainland",0)} continente / {S.region.value_counts().get("madeira",0)} Madeira / {S.region.value_counts().get("azores",0)} Açores'),
-        kpi('Pontos de carregamento', len(pts), f'{int(pts.is_green_energy.str.lower().eq("true").sum())} energia verde'),
+        kpi('Tomadas', len(pts), f'{int(pts.is_green_energy.str.lower().eq("true").sum())} energia verde'),
         kpi('Operadores (OPC)', pts.operator_id.nunique(), f'{len(REG)} combinações código/operador, {int(REG.dgeg_entidade.notna().sum())} com reconhecimento DGEG'),
-        kpi('Pontos com tarifa OPC', n_opc_pts, f'{n_opc_pts*100//max(len(OPC),1)}% da rede'),
+        kpi('Tomadas com tarifa OPC', n_opc_pts, f'{n_opc_pts*100//max(len(OPC),1)}% da rede'),
         kpi('Ocupação (snapshot)', f'{occupancy_overall:.1f}%'.replace('.', ','), 'a carregar entre disponíveis+a carregar'),
         kpi('Potência mediana', f'{median_kw} kW', f'média {_pwv.mean()/1000:.0f} kW, máx {_pwv.max()/1000:.0f} kW'),
     ],
