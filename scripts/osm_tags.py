@@ -273,7 +273,7 @@ def osm_by_code(sites_by_code, dump=OSM_DUMP, evse_to_code=None):
             # inteiro (charging_station) antes de um poste, depois o mais perto
             # do ponto do NAP.
             elements.setdefault(code, []).append(
-                ((lc is not None, len(refs) > 1, is_point), round(dist, 4), f"{e['type']}/{e['id']}"))
+                ((lc is not None, len(refs) > 1, is_point), round(dist, 4), f"{e['type']}/{e['id']}", lc))
             if lc:
                 continue
             for tag, field in OSM_TAGS.items():
@@ -360,7 +360,14 @@ def osm_by_code(sites_by_code, dump=OSM_DUMP, evse_to_code=None):
     for code, ids in evse.items():
         out.setdefault(code, {})['evse'] = ids
     for code, els_ in elements.items():
-        out.setdefault(code, {})['element'] = min(els_)[2]
+        best = min(els_)
+        out.setdefault(code, {})['element'] = best[2]
+        # Sem nenhum elemento em serviço, o OSM diz que o posto está desativado
+        # ou em obra (o do elemento escolhido para o link). O OSM manda no
+        # ciclo de vida; o estado ao vivo do operador, quando diz que carrega,
+        # ganha a ambos (decide-se no site, que é quem o lê).
+        if best[3]:
+            out[code]['lifecycle'] = best[3]
     for code in set(points_socks) | set(station_socks) | set(capacity):
         o = out.setdefault(code, {})
         if code in points_socks:
