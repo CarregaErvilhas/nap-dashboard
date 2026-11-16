@@ -319,7 +319,14 @@ current decides the power a 400 V car gets). All joined from the Overpass dump i
 Continente's `0001PL0002` joins too; ≤1 km from the NAP point). A `MOBI-`
 prefix on the OSM `ref` is dropped only when the ref as written is not a NAP
 code (`osm_tags.nap_code`): 87 NAP sites really are `MOBI-XXX-00000`, 31 of
-them next to a `XXX-00000`, and stripping it always left them unmatched. It's what lets
+them next to a `XXX-00000`, and stripping it always left them unmatched. An element whose `ref` is no NAP code
+(missing, a typo like `MLG-00022`, a bay number like `1A`) joins by its
+`ref:EU:EVSE` instead: each socket id (`PT*EDP*E*MGL*00022*1`, `evse_key`)
+names its NAP point and so its site (`osm_tags.evse_sites`; an id the NAP
+gives two sites is dropped). The `ref` wins when both are there. Elements
+mapped as `disused:`/`construction:` `amenity=charging_station` or
+`man_made=charge_point` (`osm_tags.lifecycle`) are the site's element for the
+link only, after any in-service one: their tags are not today's charger. It's what lets
 ohmigo find "o posto do Lidl de Coimbra": OSM's `brand`/`operator` are often
 the owner, not the CPO (Lidl owns its chargers, Galp operates them: the NAP
 says Galp, OSM says Lidl). Additive and optional, so no `SCHEMA` bump;

@@ -61,7 +61,7 @@ import nap_static_checks
 import osm_places
 from opc_tariffs import Tariffs, has_ceme, regime
 import price_kinds
-from osm_tags import OSM_NUMBERS, evse_key, osm_by_code, osm_for_point, resolve, sane_osm
+from osm_tags import OSM_NUMBERS, evse_key, evse_sites, osm_by_code, osm_for_point, resolve, sane_osm
 
 # Sobe quando o formato do JSON mudar de forma incompatível; o ohmigo recusa
 # versões que não conhece em vez de ler dados errados.
@@ -252,7 +252,8 @@ by_code = {}
 for site in sites.values():
     by_code[site['code']] = None if site['code'] in by_code else site
 osm = osm_by_code({c: s for c, s in by_code.items() if s and isinstance(c, str)},
-                  f'{DATA}/umap_cache/todos.json')
+                  f'{DATA}/umap_cache/todos.json',
+                  evse_sites(zip(P.point_external_id, P.site_external_id)))
 for code, tags in osm.items():
     site = by_code[code]
     site['osm'] = tags
