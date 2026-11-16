@@ -1,6 +1,6 @@
 {
-  "snapshot_date": "2026-11-11",
-  "generated_utc": "2026-11-11T15:31:14+00:00",
+  "snapshot_date": "2026-11-16",
+  "generated_utc": "2026-11-16T15:33:36+00:00",
   "opcs": {
     "ACCI": {
       "name": "ACCIONA RECARGA PORTUGAL,UNIPESSOAL LDA",
@@ -15,7 +15,7 @@
     "ATLA": {
       "name": "Atlante Infra Portugal, S.A",
       "sites": 598,
-      "points": 1381
+      "points": 1380
     },
     "AUCH": {
       "name": "Auchan Retail Portugal S.A",
@@ -84,8 +84,8 @@
     },
     "CONT": {
       "name": "Modelo Continente Hipermercados, S.A.",
-      "sites": 445,
-      "points": 944
+      "sites": 444,
+      "points": 942
     },
     "CSCP": {
       "name": "Cascais Proxima",
@@ -94,8 +94,8 @@
     },
     "DTEI": {
       "name": "DTE, Instalacoes Especiais",
-      "sites": 85,
-      "points": 200
+      "sites": 86,
+      "points": 203
     },
     "ECOI": {
       "name": "Ecoinside - Soluções em Ecoeficiência e Sustentabilidade Lda",
@@ -105,7 +105,7 @@
     "EDPC": {
       "name": "EDP Comercial",
       "sites": 1685,
-      "points": 3543
+      "points": 3549
     },
     "EMAC": {
       "name": "EMACOM - Telecomunicações da Madeira, Unipessoal, Lda",
@@ -114,8 +114,8 @@
     },
     "EMEL": {
       "name": "EMEL - Empresa Municipal de Mobilidade e Estacionamento de Lisboa, E.M., S.A.",
-      "sites": 83,
-      "points": 184
+      "sites": 89,
+      "points": 196
     },
     "EMOB": {
       "name": "Emobtec - Tec. Mobilidade Elétrica, unipessoal Lda",
@@ -209,8 +209,8 @@
     },
     "GLPP": {
       "name": "Galp Power OPC",
-      "sites": 1612,
-      "points": 3448
+      "sites": 1613,
+      "points": 3450
     },
     "GOLD": {
       "name": "Gold Energy",
@@ -244,13 +244,13 @@
     },
     "HORZ": {
       "name": "Powerdot, S.A",
-      "sites": 788,
-      "points": 2141
+      "sites": 790,
+      "points": 2151
     },
     "IBRD": {
       "name": "Iberdrola Clientes Portugal, Unipessoal, Lda",
-      "sites": 190,
-      "points": 378
+      "sites": 193,
+      "points": 384
     },
     "IHOM": {
       "name": "iHome Lda",
@@ -299,8 +299,8 @@
     },
     "MAKS": {
       "name": "Maksu",
-      "sites": 49,
-      "points": 49
+      "sites": 43,
+      "points": 43
     },
     "MEOE": {
       "name": "MEO Energia - Comercialização de Energia, SA",
@@ -384,8 +384,8 @@
     },
     "REPS": {
       "name": "REPSOL Portuguesa Lda",
-      "sites": 223,
-      "points": 579
+      "sites": 222,
+      "points": 576
     },
     "SARE": {
       "name": "Superareosa Supermercados, Lda",
@@ -444,8 +444,8 @@
     },
     "VIAV": {
       "name": "Via Verde Transição Energética, S.A.",
-      "sites": 11,
-      "points": 27
+      "sites": 12,
+      "points": 29
     },
     "VISA": {
       "name": "VISACASA - SERVIÇOS DE ASSISTÊNCIA E MANUTENÇÃO GLOBAL S.A.",
