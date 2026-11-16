@@ -326,7 +326,15 @@ names its NAP point and so its site (`osm_tags.evse_sites`; an id the NAP
 gives two sites is dropped). The `ref` wins when both are there. Elements
 mapped as `disused:`/`construction:` `amenity=charging_station` or
 `man_made=charge_point` (`osm_tags.lifecycle`) are the site's element for the
-link only, after any in-service one: their tags are not today's charger. It's what lets
+link only, after any in-service one: their tags are not today's charger.
+When a site has only such elements, the `osm` block says so in `lifecycle`
+(`disused` | `construction`, from the element linked) and `sites.json` in
+`olc`. OSM decides the life cycle of a site the NAP still publishes: Procurar
+counts it as disused / under construction ("Estado do posto" filter, hidden by
+default) **unless the operator reports a socket `available` or `charging`
+now** (live status, or the week's when live is off): then it is in service and
+the detail says OSM is out of date. The Rede statistics are unchanged: they
+describe the NAP's publication. It's what lets
 ohmigo find "o posto do Lidl de Coimbra": OSM's `brand`/`operator` are often
 the owner, not the CPO (Lidl owns its chargers, Galp operates them: the NAP
 says Galp, OSM says Lidl). Additive and optional, so no `SCHEMA` bump;

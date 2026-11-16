@@ -178,7 +178,16 @@ class OsmElement(unittest.TestCase):
         got = self.tags([
             {'type': 'node', 'id': 1, 'lat': 38.7, 'lon': -9.1, 'tags': {'disused:amenity': 'charging_station', 'ref': 'A', 'operator': 'Velho'}},
         ])
-        self.assertEqual(got, {'A': {'element': 'node/1'}})
+        self.assertEqual(got, {'A': {'element': 'node/1', 'lifecycle': 'disused'}})
+
+    def test_lifecycle_only_without_an_element_in_service(self):
+        got = self.tags([
+            {'type': 'node', 'id': 1, 'lat': 38.7, 'lon': -9.1, 'tags': {'construction:amenity': 'charging_station', 'ref': 'A'}},
+            {'type': 'node', 'id': 2, 'lat': 38.7, 'lon': -9.1, 'tags': {'disused:amenity': 'charging_station', 'ref': 'B'}},
+            {'type': 'node', 'id': 3, 'lat': 38.7, 'lon': -9.1, 'tags': {'man_made': 'charge_point', 'ref': 'B'}},
+        ], {'A': {'lat': 38.7, 'lon': -9.1}, 'B': {'lat': 38.7, 'lon': -9.1}})
+        self.assertEqual(got['A'].get('lifecycle'), 'construction')
+        self.assertNotIn('lifecycle', got['B'])
 
     def test_in_service_beats_disused(self):
         got = self.element([

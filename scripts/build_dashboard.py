@@ -234,7 +234,9 @@ def osm_extra(ext):
     rec = {'hw': o.get('hardware'), 'old': o.get('oldRefs'), 'oldop': o.get('oldOperator'),
            'shared': o.get('sharedKw'), 'fixme': o.get('fixme'),
            # the OSM element the site is matched to ("node/123"), for the "Ver no OSM" link
-           'osm_ref': o.get('element')}
+           'osm_ref': o.get('element'),
+           # 'disused' | 'construction' when OSM has the site only in that state
+           'olc': o.get('lifecycle')}
     wc = o.get('wheelchair')
     if NAP_ACCESSIBLE & set(str(nap_access.get(ext, '')).split('|')):
         wc = 'yes'

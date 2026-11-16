@@ -37,8 +37,10 @@
     dLoc: 'Localização', locWarn: 'O NAP e o OpenStreetMap discordam na localização (a {d} km). Mostramos a do OpenStreetMap.',
     dDoubt: 'Dúvida da comunidade', directions: 'Como chegar', seeOsm: 'Ver no OpenStreetMap', cost: 'Quanto custa carregar aqui (ohmigo)',
     loadingSockets: 'A carregar as tomadas…',
-    life: 'Estado do posto', lifeOp: 'Em funcionamento', lifeConstruction: 'Em construção', lifePlanned: 'Planeado',
-    lifeHelp: 'Por omissão só aparecem postos em funcionamento. Os postos em construção ou planeados vêm do OpenStreetMap: ainda não estão no NAP, por isso não têm estado, tomadas nem preços.',
+    life: 'Estado do posto', lifeOp: 'Em funcionamento', lifeConstruction: 'Em construção', lifePlanned: 'Planeado', lifeDisused: 'Desativado',
+    lifeHelp: 'Por omissão só aparecem postos em funcionamento. Os postos em construção ou planeados vêm do OpenStreetMap: ainda não estão no NAP, por isso não têm estado, tomadas nem preços. Um posto que o NAP publica mas que o OpenStreetMap dá como desativado ou em construção conta como tal, a não ser que o operador o dê agora como disponível ou a carregar.',
+    olcNote: 'No OpenStreetMap este posto está marcado como {s}. O NAP ainda o publica: as tomadas e os preços abaixo são os que o operador declara.',
+    olcLive: 'No OpenStreetMap este posto está marcado como {s}, mas o operador dá-o agora como disponível ou a carregar: o OpenStreetMap está desatualizado.',
     lcNote: 'Este posto ainda não está no NAP: o OpenStreetMap indica-o como {s}. Não há estado das tomadas nem preços, e a localização e a potência são as que a comunidade mapeou.',
     lcName: 'Posto {s}'
   }, {
@@ -74,8 +76,10 @@
     dLoc: 'Location', locWarn: 'The NAP and OpenStreetMap disagree on the location ({d} km apart). We show the OpenStreetMap one.',
     dDoubt: 'Community doubt', directions: 'Directions', seeOsm: 'View on OpenStreetMap', cost: 'What charging here costs (ohmigo)',
     loadingSockets: 'Loading sockets…',
-    life: 'Charger status', lifeOp: 'In service', lifeConstruction: 'Under construction', lifePlanned: 'Planned',
-    lifeHelp: 'By default only chargers in service are listed. Chargers under construction or planned come from OpenStreetMap: they are not in the NAP yet, so they have no status, sockets or prices.',
+    life: 'Charger status', lifeOp: 'In service', lifeConstruction: 'Under construction', lifePlanned: 'Planned', lifeDisused: 'Disused',
+    lifeHelp: 'By default only chargers in service are listed. Chargers under construction or planned come from OpenStreetMap: they are not in the NAP yet, so they have no status, sockets or prices. A charger the NAP publishes but OpenStreetMap lists as disused or under construction counts as such, unless the operator reports it available or charging right now.',
+    olcNote: 'OpenStreetMap lists this charger as {s}. The NAP still publishes it: the sockets and prices below are what the operator declares.',
+    olcLive: 'OpenStreetMap lists this charger as {s}, but the operator reports it available or charging right now: OpenStreetMap is out of date.',
     lcNote: 'This charger is not in the NAP yet: OpenStreetMap lists it as {s}. There is no socket status or pricing, and the location and power are what the community mapped.',
     lcName: '{s} charger'
   });
@@ -145,7 +149,7 @@
       if (F.dcv.length && !F.dcv.some(function (c) { return (s.dcv || []).indexOf(c) >= 0; })) return false;
       if (F.free && !freeCount(s)) return false;
       // MCS mostra também os locais em construção: os primeiros são do OSM, ainda fora do NAP.
-      if (!F.mcs && F.life.length && F.life.indexOf(s.lc || 'op') < 0) return false;
+      if (!F.mcs && F.life.length && F.life.indexOf(life(s)) < 0) return false;
       for (var i = 0; i < words.length; i++) if (s._k.indexOf(words[i]) < 0) return false;
       return true;
     });
@@ -162,6 +166,16 @@
     shown = PAGE;
     render();
   }
+  // OSM decides the life cycle of a site the NAP publishes ('disused' or
+  // 'construction' in olc), except when the operator reports a socket
+  // available or charging now: then it is in service and OSM is out of date.
+  function liveOn(s) {
+    var list = P ? pts(s) : [];
+    if (list.length) return list.some(function (p) { return p.status === 'available' || p.status === 'charging'; });
+    return s.status === 'available' || s.status === 'charging';
+  }
+  function life(s) { return s.lc || (s.olc && !liveOn(s) ? s.olc : 'op'); }
+  function olcName(s) { return t(s.olc === 'construction' ? 'lifeConstruction' : 'lifeDisused').toLowerCase(); }
   // The list follows the map: once the user pans or zooms, only sites inside the view are listed.
   function inView(s) { return s.lon >= view[0] && s.lon <= view[2] && s.lat >= view[1] && s.lat <= view[3]; }
   function byMap() { return dirty && !here; }
@@ -223,6 +237,7 @@
     if (s.doubt) N.add(dl, [el('dt', null, t('dDoubt')), el('dd', null, s.doubt)]);
     if (s.loc_km) N.add(dl, [el('dt', null, t('dLoc')), el('dd', null, t('locWarn', { d: N.nf(s.loc_km, s.loc_km < 10 ? 1 : 0) }))]);
     d.appendChild(dl);
+    if (s.olc) d.appendChild(el('p', { class: 'muted small' }, t(liveOn(s) ? 'olcLive' : 'olcNote', { s: olcName(s) })));
     if (s.lc) d.appendChild(el('p', { class: 'muted small' }, t('lcNote', { s: t('life' + (s.lc === 'planned' ? 'Planned' : 'Construction')).toLowerCase() })));
     else if (!P) d.appendChild(el('p', { class: 'muted small' }, t('loadingSockets')));
     else {
@@ -491,7 +506,7 @@
     multi('fOp', 'op', Object.keys(opGroup).sort(function (a, b) { return opGroup[a].localeCompare(opGroup[b], 'pt'); }).map(function (k) { return [k, opGroup[k]]; }), true);
     multi('fRegion', 'region', uniq(S.map(function (s) { return s.region; })).map(function (v) { return [v, t('rg_' + v)]; }));
     multi('fDcv', 'dcv', [['800', t('dcv800')], ['400', t('dcv400')], ['unk', t('dcvUnk')]]);
-    multi('fLife', 'life', [['op', t('lifeOp')], ['construction', t('lifeConstruction')], ['planned', t('lifePlanned')]]);
+    multi('fLife', 'life', [['op', t('lifeOp')], ['construction', t('lifeConstruction')], ['planned', t('lifePlanned')], ['disused', t('lifeDisused')]]);
   }
 
   function init() {
