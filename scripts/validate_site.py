@@ -460,7 +460,7 @@ def check_node(site, expected):
             # boot.js e common.js correm no âmbito global do browser: cada um
             # vai num bloco próprio para os 'use strict' não se misturarem.
             fh.write(STUB + '\n;(0, eval)(' + json.dumps(boot) + ');\n'
-                     ';(0, eval)(' + json.dumps(common) + ');\n' + PROBE + price_probe(site))
+                     ';(0, eval)(' + json.dumps(common) + ');\n' + PROBE + price_probe(site) + SESSION_PROBE)
         r = subprocess.run(['node', path], capture_output=True, text=True, cwd=tmp)
     if r.returncode != 0:
         msg = next((ln.strip() for ln in r.stderr.splitlines() if re.match(r'\s*\w*Error\b', ln)),
@@ -500,6 +500,34 @@ PRICE_PROBE = '''
   console.log('NAP.prices = price_kinds.kinds em ' + cases.length + ' casos');
 })();
 '''
+
+
+# NAP.sessionCost (common.js): o custo de uma sessão a um preço, contas feitas à mão.
+# (preço, kWh, kW, custo esperado; None = sem custo)
+SESSION_CASES = [
+    # escalões fora de ordem e um escalão que começa a meio: 162,16 min, 0,18 nos últimos 132,16
+    ({'regime': 'mobie', 'fees': PRICE_CASES[0]['fees']}, 'opc', 20, 7.4, 0.4 + 2.6 + 0.18 * (1200 / 7.4 - 30)),
+    ({'regime': 'mobie', 'fees': PRICE_CASES[0]['fees']}, 'opc', 20, 22, 0.4 + 2.6 + 0.18 * (1200 / 22 - 30)),
+    ({'regime': 'mobie', 'fees': PRICE_CASES[0]['fees']}, 'adhoc', 20, 7.4, 11.0),
+    ({'regime': 'mobie', 'fees': PRICE_CASES[1]['fees']}, 'opc', 20, 11, 3.6),
+    ({'regime': 'mobie', 'fees': PRICE_CASES[2]['fees']}, 'opc', 20, 3.7, 0.26),    # só a parte fixa
+    ({'regime': 'mobie', 'fees': {'REGULAR': {'energy': [0], 'time': [{'eur': 0, 'from': 0, 'to': None}]}}}, 'opc', 20, 7.4, 0.0),
+    ({'regime': 'mobie', 'fees': {'REGULAR': {'time': [{'eur': 0.1, 'from': 0, 'to': 10}, {'eur': 0.2, 'from': 10, 'to': None}]}}}, 'opc', 20, 60, 3.0),
+    ({'regime': 'mobie_sem_tarifa', 'nap_fees': {'min': 0.12}}, 'napfee', 20, 50, 2.88),
+    ({'regime': 'mobie', 'fees': {'REGULAR': {}}}, 'opc', 20, 7.4, None),   # sem componentes: não é 0 €
+    ({'regime': 'mobie', 'fees': PRICE_CASES[1]['fees']}, 'opc', 20, 0, None),
+]
+SESSION_PROBE = '''
+;(function () {
+  var cases = %s;
+  cases.forEach(function (c) {
+    var got = NAP.sessionCost(NAP.prices(c[0])[c[1]], c[2], c[3]);
+    if (c[4] === null ? got !== null : !(typeof got === 'number' && Math.abs(got - c[4]) < 1e-9))
+      throw new Error('NAP.sessionCost(' + JSON.stringify(c.slice(0, 4)) + ') = ' + got + ' em vez de ' + c[4]);
+  });
+  console.log('NAP.sessionCost certo em ' + cases.length + ' casos');
+})();
+''' % json.dumps(SESSION_CASES)
 
 
 def price_probe(site):

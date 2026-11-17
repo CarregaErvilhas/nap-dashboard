@@ -560,7 +560,15 @@ work: the pages fetch their JSON, so preview over HTTP. `refresh.yml` runs
   `NAP.prices` / `NAP.priceText` (`common.js`: Procurar's "Sem contrato"
   column and notes, Explorar's three price metrics and the histogram's kind
   picker, Rede's "Preço por kWh, por tipo" table from `price_stats.kinds`);
-  `validate_site.py` runs both over the same cases and fails if they differ.
+  `NAP.sessionCost` (`common.js`) prices one session at one kind (flat +
+  €/kWh + every €/min tier over the minutes at a constant kW), for Rede's
+  "Quanto custa uma sessão de 20 kWh, por escalão" table (`rede.js`, from
+  `points.json`: NAP power classes split AC/DC by plug, the socket's NAP
+  power caps the car's, medians count €0; `opc` and `adhoc` only, since
+  `direct` is per kWh and `napfee` is of unknown content). It is front-end
+  only, so `validate_site.py` checks it against hand-computed `SESSION_CASES`.
+  `validate_site.py` runs `price_kinds.kinds` and `NAP.prices` over the same
+  cases and fails if they differ.
   Verified on 2026-11-11: where MOBI.E publishes an ad hoc plan the NAP's
   per-kWh value is always that plan's (7 083 of 7 083 sockets), otherwise it
   is the REGULAR fee (3 866 of 3 866). So the NAP only adds information where
