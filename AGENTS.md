@@ -111,6 +111,21 @@ venv/bin/python -m unittest discover -s tests
   dia × hora local (Lisboa/Açores/Madeira pelas coordenadas), DC vs AC pelo
   `mode` dos conectores; (4) tomadas paradas e tomadas que oscilam com
   `unknown`; (5) locais/tomadas/kW por semana desde o retrato inicial.
+- `sites_at` (no `archive_stats.json`, fora do painel): os locais vivos há 365 dias e
+  agora, com a última posição, para "Locais por concelho, há um ano e agora" (Rede >
+  Concelhos). Conta locais vivos em dois instantes, por isso as trocas de código de toda
+  a rede (2026-06-18) e os re-retratos com tudo `added` (2026-11-08) não contam. Uma
+  entrada em bloco (no mesmo dia, >= 50 códigos vistos pela 1.ª vez do mesmo operador,
+  descontadas as saídas) é o operador a chegar ao NAP, não postos novos (Modelo
+  Continente, 451 a 2026-10-07): fica fora e a página diz quais foram. Um código que volta
+  depois de uma falha do feed não conta como chegada (EDP, 59 de 60 a 2026-08-19).
+  Limite: os 46 locais `CNT-` sem operador no NAP, no mesmo dia, ficam abaixo dos 50 e
+  contam como crescimento. Também conta as tomadas de cada local nos dois instantes,
+  e a página mostra-as primeiro: a Maksu está a passar os postos para a Telpark (mesmo
+  grupo), que junta muitos num só local (Lisboa: 874 → 840 locais, 1 620 → 1 946
+  tomadas). Cada tomada conta uma vez por local pelo `externalId` normalizado (sem `*`
+  nem zeros à esquerda): a EDP publicou cada tomada com dois formatos de id até
+  2026-09-22 (4 363 tomadas há um ano, 2 827 distintas).
 - Cada stat diz quantos dias tem por trás e fica "preliminar" abaixo de
   `NEEDS_DAYS` (ocupação e reparação: 14 dias). Os estados são declarados
   pelos operadores, não medidos; dados NAP, uso não comercial.
@@ -186,7 +201,10 @@ item-8 counts.
 `scripts/concelho_check.py` locates every site inside official CAOP concelho
 polygons (downloaded on first run into `data/caop_cache/`, gitignored) and flags the
 sites whose coordinates contradict the concelho implied by the site_id code.
-Writes `data/concelho_check.csv` + `data/concelho_mismatches.md` (errors.md items 11a/11b).
+Writes `data/concelho_check.csv` + `data/concelho_mismatches.md` (errors.md items 11a/11b),
+plus `data/concelhos.csv`: all 308 concelhos (278 mainland, 19 Azores, 11 Madeira; it warns
+on any other count), the denominator of Rede > Concelhos. `load_concelhos()` + `locator()`
+are reused by `build_dashboard.py` to place the archive's sites (below).
 
 `scripts/osm_planned.py` reads the same Overpass dump and writes `data/osm_planned.csv`:
 sites OSM calls planned or under construction (`construction:`/`planned:`/`proposed:`
@@ -548,6 +566,19 @@ work: the pages fetch their JSON, so preview over HTTP. `refresh.yml` runs
     of keys per kind of price (`MODEL_KEYS`: `mn`/`ms` operator fee, `an`/`as`
     ad hoc, `dn`/`ds` outside MOBI.E, `fn`/`fs` NAP only). Those clean series
     start in November 2026 and each chart appears once it has two months.
+- Rede > Concelhos (`rede.js` `fastCard`/`growthCard`, from `stats.json` `territory`,
+  built by `scripts/territory_stats.py`): the concelho is CAOP's (coordinates in the
+  official polygons), never the NAP's free-text `city` of the "15 concelhos" chart.
+  Concelhos with no socket of 50 kW or more (NAP-declared power, working or not), and
+  sites and sockets per concelho a year ago vs now (`sites_at` above; sockets first;
+  hidden without the archive).
+  Measured 2026-11-17: all 308 concelhos have a site, 54 have no 50 kW socket.
+- Rede > Operadores, "Pagar com cartão bancário" (`cardPayCard`, `stats.json`
+  `card_pay`): at sites with a socket of 50 kW or more, the NAP's `auth_methods`
+  (`creditCard`/`debitCard` only: `nfc`/`pinpad` are undocumented in DATEX II) and
+  OSM's `payment:cards`, side by side and never merged (they disagree on ~400 sites).
+  AFIR Art. 5 needs the installation date and the TEN-T location, which the NAP lacks,
+  so the page says it is not a compliance measure.
 - **Kinds of price.** A socket has up to two of four prices, and they are never
   averaged or compared with each other, on any page: `opc` (operator fee on
   MOBI.E, `fees.REGULAR`, **without** energy), `adhoc` (no-contract price on

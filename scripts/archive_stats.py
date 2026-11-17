@@ -435,6 +435,107 @@ def growth(con):
     return {'baseline': _iso(base_e), 'weeks': weeks}
 
 
+BULK_MIN = 50   # locais do mesmo operador acrescentados no mesmo dia (UTC)
+GROWTH_DAYS = 365
+
+
+def sites_at(con, days=GROWTH_DAYS, bulk_min=BULK_MIN):
+    """Os locais vivos no arquivo há `days` dias e agora, com a última posição
+    conhecida, para o crescimento por concelho (territory_stats.growth).
+
+    Contar locais vivos em dois instantes, em vez de somar `added`/`removed`,
+    deixa de fora as trocas de código (EDP `ABF-00008` → `EDP-ABF-00008`): o
+    local sai e entra no mesmo concelho. Uma entrada em bloco (>= `bulk_min`
+    códigos novos do mesmo operador no mesmo dia, descontadas as saídas, fora do
+    retrato inicial) é a chegada desse operador ao NAP, não postos novos: a Modelo
+    Continente publicou 451 locais a 2026-10-07. Esses locais vêm marcados
+    (`bulk`) e a lista `bulk` diz quais foram. Um código que já existia e volta
+    depois de uma falha do feed não é chegada (EDP, 59 de 60 a 2026-08-19).
+
+    Devolve None sem `static_versions`, senão {t0, t1, bulk: [{day, op, n}],
+    sites: [[key, lat, lon, in_t0, in_t1, is_bulk, points_t0, points_t1]]}.
+    """
+    t1 = con.execute("SELECT max(valid_from) FROM static_versions").fetchone()[0]
+    if t1 is None:
+        return None
+    t0 = t1 - datetime.timedelta(days=days)
+    base = con.execute("SELECT min(valid_from) FROM static_versions").fetchone()[0]
+    if t0 < base:
+        t0 = base
+    # Uma entrada é um `added` de um local que não estava vivo: o arquivo tem
+    # re-retratos com tudo `added` outra vez (2026-11-08, 8 811 linhas) e trocou o
+    # código de toda a rede num dia (2026-06-18: 8 016 saídas, 8 020 entradas),
+    # por isso o bloco é o saldo do dia por operador: códigos vistos pela 1.ª vez
+    # (`first`) menos saídas. O operador de um local removido é o da versão anterior.
+    con.execute("""
+        CREATE OR REPLACE TEMP TABLE site_moves AS
+        WITH v AS (
+          SELECT key, valid_from, op, attrs,
+                 lag(op) OVER (PARTITION BY key ORDER BY valid_from) AS prev_op,
+                 json_extract_string(coalesce(attrs, lag(attrs) OVER (PARTITION BY key ORDER BY valid_from)),
+                                     '$.operatorName') AS o
+          FROM static_versions WHERE kind = 'site'
+        )
+        SELECT key, valid_from, CAST(valid_from AS DATE) AS d, o, attrs,
+               op = 'added' AND prev_op IS NULL AS first,
+               CASE WHEN op = 'added' AND (prev_op IS NULL OR prev_op = 'removed') THEN 'in'
+                    WHEN op = 'removed' AND coalesce(prev_op, '') <> 'removed' THEN 'out'
+                    WHEN op = 'removed' THEN 'none'
+                    ELSE 'same' END AS move
+        FROM v""")
+    bulk = con.execute("""
+        SELECT d, o, count(*) FILTER (WHERE first) - count(*) FILTER (WHERE move = 'out') AS n
+        FROM site_moves
+        WHERE valid_from > ? + INTERVAL 1 HOUR AND valid_from > ?
+        GROUP BY 1, 2 HAVING n >= ? ORDER BY 1, 2""", [base, t0, bulk_min]).fetchall()
+    rows = con.execute("""
+        WITH alive AS (
+          -- vivo num instante = o último movimento até lá foi uma entrada
+          SELECT key,
+                 arg_max(move, valid_from) FILTER (WHERE move IN ('in', 'out') AND valid_from <= ?) AS m0,
+                 arg_max(move, valid_from) FILTER (WHERE move IN ('in', 'out')) AS m1,
+                 min(valid_from) FILTER (WHERE first) AS first_in,
+                 arg_max(attrs, valid_from) FILTER (WHERE attrs IS NOT NULL) AS a
+          FROM site_moves GROUP BY key
+        )
+        SELECT alive.key,
+               TRY_CAST(json_extract_string(alive.a, '$.lat') AS DOUBLE),
+               TRY_CAST(json_extract_string(alive.a, '$.lon') AS DOUBLE),
+               coalesce(m0 = 'in', false), coalesce(m1 = 'in', false),
+               CAST(first_in AS DATE), m.o
+        FROM alive LEFT JOIN site_moves m ON m.key = alive.key AND m.valid_from = alive.first_in AND m.first
+        ORDER BY alive.key""", [t0]).fetchall()
+    # Tomadas vivas por local nos dois instantes (a chave da tomada é
+    # "<local>/<tomada>"): um operador que junta vários postos num só local
+    # (Maksu → Telpark, do mesmo grupo: 294 locais com 315 tomadas passaram a
+    # 44 com 433) faz o concelho perder locais sem perder tomadas.
+    # A mesma tomada pode estar publicada duas vezes no mesmo local, com dois
+    # formatos de id: a EDP teve `PT*EDP*E*ABF*00065*01` e `PT*EDP*EABF*00065*1`
+    # lado a lado até 2026-09-22 (4 363 tomadas há um ano, 2 827 distintas). Conta
+    # cada id normalizado (sem `*` nem zeros à esquerda) uma vez por local; sem id,
+    # conta a chave. Só dentro do local: entre locais o id não é uma chave fiável.
+    pts = {k: (p0, p1) for k, p0, p1 in con.execute(r"""
+        WITH p AS (
+          SELECT split_part(key, '/', 1) AS site,
+                 arg_max(op, valid_from) FILTER (WHERE valid_from <= ?) AS m0,
+                 arg_max(op, valid_from) AS m1,
+                 coalesce(replace(regexp_replace(upper(json_extract_string(
+                     arg_max(attrs, valid_from) FILTER (WHERE attrs IS NOT NULL), '$.externalId')),
+                     '(^|\*)0+([0-9])', '\1\2', 'g'), '*', ''), key) AS eid
+          FROM static_versions WHERE kind = 'point' GROUP BY key
+        )
+        SELECT site, count(DISTINCT eid) FILTER (WHERE m0 IS NOT NULL AND m0 <> 'removed'),
+               count(DISTINCT eid) FILTER (WHERE m1 <> 'removed')
+        FROM p GROUP BY site""", [t0]).fetchall()}
+    bulk_keys = {(d, o) for d, o, _n in bulk}
+    sites = [[k, lat, lon, bool(a0), bool(a1), bool(a1 and not a0 and d is not None and (d, o) in bulk_keys),
+              int(pts.get(k, (0, 0))[0]) if a0 else 0, int(pts.get(k, (0, 0))[1]) if a1 else 0]
+             for k, lat, lon, a0, a1, d, o in rows if a0 or a1]
+    return {'t0': _iso(t0.timestamp()), 't1': _iso(t1.timestamp()),
+            'bulk': [{'day': d.isoformat(), 'op': o, 'n': int(n)} for d, o, n in bulk],
+            'sites': sites}
+
+
 # ------------------------------------------------------- tudo junto
 
 # Quanto tempo de dados cada stat precisa para ser lida como tendência.
@@ -456,4 +557,6 @@ def compute(con, start_cap=None, end_cap=None, gap_min=GAP_MIN, min_points=5,
         'occupancy': occupancy_heatmap(con),
         'suspicious': suspicious(con, stale_days, flips_per_day, min_points),
         'growth': growth(con),
+        # Não vai para o painel Histórico: o build_dashboard põe-no por concelho.
+        'sites_at': sites_at(con),
     }

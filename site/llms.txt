@@ -7,7 +7,7 @@ Os dados de terceiros mantêm as licenças de origem (ver THIRD-PARTY-NOTICES.md
 ## Site
 
 - [Procurar](https://nap.ocarroeletrico.com/): pesquisa de postos por localidade, operador ou código, filtros rápidos, «Perto de mim», estado por tomada, tarifas do operador e como chegar. Os dados são carregados por JSON no navegador, por isso a página HTML não tem texto útil para leitura por agentes; prefere os ficheiros abaixo.
-- [Rede](https://nap.ocarroeletrico.com/rede.html): estatísticas da rede (KPIs, novidades, gráficos em tabelas, histórico, hubs, factos).
+- [Rede](https://nap.ocarroeletrico.com/rede.html): estatísticas da rede (KPIs, novidades, gráficos em tabelas, concelhos sem posto rápido e crescimento por concelho, pagamento por cartão nos postos de 50 kW ou mais, histórico, hubs, factos).
 - [Explorar](https://nap.ocarroeletrico.com/explorar.html): a rede filtrada por operador, concelho, potência, ficha, estado, preço e pagamento, com estado ao vivo, mapa e evolução (tomadas e avarias por dia, ocupação por hora).
 - [Operadores](https://nap.ocarroeletrico.com/operadores.html): relatório semanal de anomalias por operador, entradas e saídas de OPC e erros reportáveis.
 - [Privacidade](https://nap.ocarroeletrico.com/privacidade.html): o que o site não recolhe.

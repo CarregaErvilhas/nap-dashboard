@@ -49,7 +49,7 @@ DATA_FILES = [
     'nap_dynamic_status.csv', 'nap_dynamic_pricing.csv',
     'nap_opc_registry.csv', 'nap_opc_points.csv', 'nap_opc_join_report.txt',
     'agents-summary.json', 'data-provenance.json',
-    'concelho_check.csv', 'concelho_mismatches.md',
+    'concelho_check.csv', 'concelhos.csv', 'concelho_mismatches.md',
     'osm_umap.csv', 'osm_caca.csv', 'osm_planned.csv', 'osm_umap_findings.md',
     'opc_registry_authority.csv', 'tracker_errors.csv', 'tracker_meta.json',
     'tracker_findings.md', 'tracker_findings.csv',

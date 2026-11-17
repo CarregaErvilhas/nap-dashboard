@@ -66,7 +66,7 @@
     <p class="note" id="live" role="status" data-i18n="loading">A carregar…</p></section>
   <div id="tabsTop"></div>
   <nav class="subnav" aria-label="Secções" data-i18n-label="sections">
-    <a href="#rede" data-i18n="sNetwork">Postos</a><a href="#operadores" data-i18n="sOps">Operadores</a>
+    <a href="#rede" data-i18n="sNetwork">Postos</a><a href="#operadores" data-i18n="sOps">Operadores</a><a href="#concelhos" data-i18n="sConc">Concelhos</a>
     <a href="#ocupacao" data-i18n="sOcc">Ocupação</a><a href="#precos" data-i18n="sPrice">Preços</a>
     <a href="#historico" data-panel="hist" data-i18n="sHist">Histórico</a><a href="#hubs" data-panel="hubs" data-i18n="sHubs">Hubs</a>
     <a href="#novidades" data-panel="news" data-i18n="sNews">Novidades</a><a href="#factos" data-panel="facts" data-i18n="sFacts">Factos</a>
@@ -77,7 +77,12 @@
     <div class="card" id="cCity"></div></div>
     <div class="card wide"><div class="scroll" tabindex="0" role="group" aria-labelledby="hRede" id="cStatusPw"></div></div></section>
   <section class="block" id="operadores" aria-labelledby="hOps"><h2 id="hOps" data-i18n="hOps">Quem opera a rede</h2>
-    <div class="grid two"><div class="card" id="cOpSites"></div><div class="card" id="cOpPts"></div></div></section>
+    <div class="grid two"><div class="card" id="cOpSites"></div><div class="card" id="cOpPts"></div></div>
+    <div class="card" id="cCardPay" hidden></div></section>
+  <section class="block" id="concelhos" aria-labelledby="hConc"><h2 id="hConc" data-i18n="hConc">Os concelhos</h2>
+    <p class="muted" data-i18n="concNote">Concelho onde o posto fica, pelas coordenadas que o operador publica e os limites oficiais (CAOP, Direção-Geral do Território). Pode diferir do concelho escrito no NAP, que é o do gráfico dos 15 concelhos.</p>
+    <div class="card" id="cFast" hidden></div>
+    <div class="card" id="cGrowth" hidden></div></section>
   <section class="block" id="ocupacao" aria-labelledby="hOcc"><h2 id="hOcc" data-i18n="hOcc">Ocupação neste momento</h2>
     <p class="muted" data-i18n="occNote">Tomadas a carregar sobre as que estão livres ou a carregar.</p>
     <div class="grid two"><div class="card" id="cOccPw"></div><div class="card" id="cOccOp"></div></div></section>

@@ -12,6 +12,7 @@ concelho's centroid to the site's actual coordinates.
 
 Writes:
   data/concelho_check.csv      every site + real and code-implied concelho/distrito
+  data/concelhos.csv           all 308 concelhos (concelho, distrito or ilha, region)
   data/concelho_mismatches.md  errors.md fragment: 11a (wrong district) + 11b (right
                           district, wrong concelho) tables with distances
 """
@@ -29,7 +30,7 @@ CAOP_FILES = [
     ('madeira', 'geograficas/Madeira/MadeiraConcelhos.geojson', 'Municipio', 'Ilha'),
 ]
 BASE = 'https://raw.githubusercontent.com/jotanmiguel/caop_GeoJSON/master/'
-STOP = {'A', 'DE', 'DA', 'DO', 'DAS', 'DOS', 'E', 'EM'}
+STOP = {'A', 'À', 'DE', 'DA', 'DO', 'DAS', 'DOS', 'E', 'EM'}
 
 
 def fetch_caop():
@@ -134,11 +135,17 @@ def region(lon, lat):
     return None
 
 
-def main():
-    sites = pd.read_csv('data/nap_static_sites.csv', dtype=str)
-    sites['mcode'] = sites.site_id.apply(muncode)
+# CAOP file key -> the region names the rest of the pipeline uses (nap_etl/ohmigo: 'azores').
+CAOP_REGION = {'continente': 'mainland', 'acores': 'azores', 'madeira': 'madeira'}
+# Portugal has 308 concelhos (278 mainland, 19 Azores, 11 Madeira): anything else
+# means the CAOP mirror changed its layout and every per-concelho count is off.
+N_CONCELHOS = {'mainland': 278, 'azores': 19, 'madeira': 11}
 
-    print('Loading CAOP polygons...')
+
+def load_concelhos():
+    """CAOP concelhos as [((name, distrito_or_ilha), region, outer, holes)], names
+    through pretty() so they match conc_real in data/concelho_check.csv. Each ring
+    carries its bounding box: (minx, miny, maxx, maxy, ring)."""
     paths = fetch_caop()
     name_keys = {k: nk for k, _r, nk, _d in CAOP_FILES}
     dist_keys = {k: dk for k, _r, _n, dk in CAOP_FILES}
@@ -151,29 +158,26 @@ def main():
             dist = str(f['properties'].get(dk) or '').strip()
             geom = f['geometry']
             polys = geom['coordinates'] if geom['type'] == 'MultiPolygon' else [geom['coordinates']]
-            entry = conc_map.setdefault((name, dist), {'outer': [], 'holes': []})
+            entry = conc_map.setdefault((name, dist), {'region': CAOP_REGION[key], 'outer': [], 'holes': []})
             for poly in polys:
                 entry['outer'].append(poly[0])
                 entry['holes'].extend(poly[1:])
 
-    items = []
-    for (name, dist), v in conc_map.items():
-        pname = pretty(name)
-        outer = []
-        for ring in v['outer']:
+    def boxed(rings):
+        out = []
+        for ring in rings:
             xs = [p[0] for p in ring]
             ys = [p[1] for p in ring]
-            outer.append((min(xs), min(ys), max(xs), max(ys), ring))
-        holes = []
-        for ring in v['holes']:
-            xs = [p[0] for p in ring]
-            ys = [p[1] for p in ring]
-            holes.append((min(xs), min(ys), max(xs), max(ys), ring))
-        items.append(((pname, pretty(dist)), outer, holes))
-    centroids = {k: centroid(outer[0][4]) for k, outer, _h in items}
+            out.append((min(xs), min(ys), max(xs), max(ys), ring))
+        return out
+    return [((pretty(name), pretty(dist)), v['region'], boxed(v['outer']), boxed(v['holes']))
+            for (name, dist), v in conc_map.items()]
 
+
+def locator(items):
+    """locate(lon, lat) -> (concelho, distrito) or None, over load_concelhos() items."""
     def locate(lon, lat):
-        for (name, dist), outer, holes in items:
+        for key, _region, outer, holes in items:
             for bx1, by1, bx2, by2, ring in outer:
                 if not (bx1 <= lon <= bx2 and by1 <= lat <= by2):
                     continue
@@ -184,8 +188,32 @@ def main():
                             inside = False
                             break
                     if inside:
-                        return (name, dist)
+                        return key
         return None
+    return locate
+
+
+def write_concelhos(items, path='data/concelhos.csv'):
+    """Every concelho, with or without chargers: the denominator for "concelhos
+    sem carregador" (data/concelho_check.csv only has the ones with a site)."""
+    df = pd.DataFrame([(k[0], k[1], region) for k, region, _o, _h in items],
+                      columns=['concelho', 'distrito', 'region']).sort_values(['region', 'distrito', 'concelho'])
+    counts = df.region.value_counts().to_dict()
+    if counts != N_CONCELHOS:
+        print('WARNING: CAOP has %s concelhos, expected %s' % (counts, N_CONCELHOS))
+    df.to_csv(path, index=False)
+    return df
+
+
+def main():
+    sites = pd.read_csv('data/nap_static_sites.csv', dtype=str)
+    sites['mcode'] = sites.site_id.apply(muncode)
+
+    print('Loading CAOP polygons...')
+    items = load_concelhos()
+    write_concelhos(items)
+    centroids = {k: centroid(outer[0][4]) for k, _r, outer, _h in items}
+    locate = locator(items)
 
     print('Point-in-polygon over %d concelhos...' % len(items))
     out = []
@@ -239,7 +267,7 @@ def main():
             fh.write('| `%s` | %s | %s | %s | %d |\n'
                      % (r.site_id, r.mcode, r.conc_code, r.conc_real, r.km))
 
-    print('wrote data/concelho_check.csv, data/concelho_mismatches.md')
+    print('wrote data/concelho_check.csv, data/concelhos.csv, data/concelho_mismatches.md')
 
 
 if __name__ == '__main__':

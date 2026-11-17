@@ -21,6 +21,7 @@ import build_site
 import nap_static_checks
 import osm_tags
 import price_kinds
+import territory_stats
 
 S = pd.read_csv('data/nap_static_sites.csv', dtype=str)
 P = pd.read_csv('data/nap_static_points.csv', dtype=str)
@@ -852,6 +853,33 @@ except (FileNotFoundError, ValueError):
     _hist = None
 HIST_HTML, HIST_HTML_EN = archive_panel.render(_hist, 'pt'), archive_panel.render(_hist, 'en')
 
+# ---- Rede > Concelhos: CAOP concelhos, card payment at fast chargers, growth ----
+# scripts/territory_stats.py. The concelho is CAOP's (concelho_check.py), not the
+# NAP's free-text `city` of the "15 concelhos" chart. Each key is left out when
+# its inputs are missing, and the page hides that card.
+_fast_sites = set(P.loc[P.max_power_w.apply(_num) >= territory_stats.FAST_W, 'site_id'])
+_conc = _fsafe('data/concelhos.csv', dtype=str)
+territory = None
+if _ccf is not None and _conc is not None:
+    _conc_rows = list(_conc[['concelho', 'distrito', 'region']].itertuples(index=False, name=None))
+    territory = territory_stats.coverage(
+        _conc_rows, _ccf[['site_id', 'conc_real', 'dist_real']].itertuples(index=False, name=None), _fast_sites)
+    # A year of the archive, located the same way (archive_history.py -> sites_at).
+    if _hist and _hist.get('sites_at'):
+        try:
+            import concelho_check
+            territory['growth'] = territory_stats.growth(
+                _hist['sites_at'], _conc_rows, concelho_check.locator(concelho_check.load_concelhos()))
+        except (OSError, ValueError) as e:
+            print(f'territory growth skipped: {e}')
+card_pay = None
+_fs = S[S.site_id.isin(_fast_sites)]
+if len(_fs):
+    _osm_cards = osm.set_index('code').pay_cards.to_dict() if osm is not None else {}
+    card_pay = territory_stats.card_pay(
+        [(r.site_id, r.operator_name, r.auth_methods, _osm_cards.get(r.external_id)) for r in _fs.itertuples()])
+    card_pay['osm'] = osm is not None
+
 data = {
     'snapshot': snapshot,
     'kpis': [
@@ -883,6 +911,8 @@ data = {
     'occ_op': agg_op_occ,
     'price_op': {k: round(float(v), 3) for k, v in agg_price_op.items()},
     'price_stats': price_stats,
+    'territory': territory,
+    'card_pay': card_pay,
     # Per socket, from the network model (see MODEL above): kw, the fees with
     # every tier, regime, the NAP's price off MOBI.E (nap) and issues.
     # pw_class stays the NAP's: rede.js recounts the Rede charts from it with
