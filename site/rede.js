@@ -210,7 +210,8 @@
     cardLead: 'O regulamento europeu AFIR obriga os postos de 50 kW ou mais instalados desde 13 de abril de 2024 a aceitar cartão bancário, com leitor ou sem contacto, e os mais antigos na rede rodoviária transeuropeia (RTE-T) a partir de 1 de janeiro de 2027. O NAP não diz quando cada posto foi instalado nem se fica na RTE-T: estes números não dizem quem cumpre.',
     cardSrc: 'Fonte', cardYes: 'aceita', cardNo: 'não aceita', cardUnk: 'não diz', cardNap: 'NAP (o operador)', cardOsm: 'OpenStreetMap (a comunidade)',
     cardSites: '{n} locais com pelo menos um posto de 50 kW ou mais.',
-    cardDisagree: 'As duas fontes discordam em {a} locais: em {b} o NAP diz que aceita e o OpenStreetMap que não, em {c} é ao contrário.',
+    cardDisagree: 'As duas fontes discordam em {a} locais: em {b} o NAP diz que aceita e o OpenStreetMap que não, em {c} o OpenStreetMap diz que aceita e o NAP não o declara.',
+    cardNapNote: 'O NAP só lista os meios que o local aceita: sem cartão na lista, não diz que não aceita.',
     cardOpsH: 'Por operador, os {n} com mais locais de 50 kW ou mais', colOp: 'Operador', colFast: 'locais', colNapYes: 'NAP: aceita', colOsmYes: 'OSM: aceita', colOsmNo: 'OSM: não aceita',
     cardHow: 'No NAP conta o cartão de crédito ou de débito (creditCard, debitCard) nos meios de autenticação do local; nfc e pinpad sozinhos não dizem que o cartão é bancário. No OpenStreetMap, a etiqueta payment:cards.'
   }, {
@@ -234,7 +235,8 @@
     cardLead: 'The EU AFIR regulation requires chargers of 50 kW or more installed since 13 April 2024 to take bank cards, with a reader or contactless, and older ones on the trans-European road network (TEN-T) from 1 January 2027. The NAP does not say when each charger was installed or whether it is on the TEN-T: these numbers do not say who complies.',
     cardSrc: 'Source', cardYes: 'accepts', cardNo: 'does not', cardUnk: 'does not say', cardNap: 'NAP (the operator)', cardOsm: 'OpenStreetMap (the community)',
     cardSites: '{n} sites with at least one charger of 50 kW or more.',
-    cardDisagree: 'The two sources disagree on {a} sites: on {b} the NAP says cards work and OpenStreetMap says they do not, on {c} the other way round.',
+    cardDisagree: 'The two sources disagree on {a} sites: on {b} the NAP says cards work and OpenStreetMap says they do not, on {c} OpenStreetMap says they work and the NAP does not declare it.',
+    cardNapNote: 'The NAP only lists the methods a site takes: no card in the list does not mean cards are refused.',
     cardOpsH: 'By operator, the {n} with most sites of 50 kW or more', colOp: 'Operator', colFast: 'sites', colNapYes: 'NAP: accepts', colOsmYes: 'OSM: accepts', colOsmNo: 'OSM: does not',
     cardHow: 'In the NAP, a credit or debit card (creditCard, debitCard) among the site\'s authentication methods; nfc and pinpad alone do not say the card is a bank card. In OpenStreetMap, the payment:cards tag.'
   });
@@ -316,18 +318,22 @@
     N.clear(box).appendChild(el('h3', null, t('cardH')));
     box.appendChild(el('p', { class: 'muted small' }, t('cardLead')));
     box.appendChild(el('p', null, t('cardSites', { n: N.nf(C.n) })));
-    var cell = function (v) { return el('td', null, N.nf(v), ' ', el('span', { class: 'muted' }, pctOf(v, C.n))); };
-    var src = [['cardNap', C.nap, C.n - C.nap, null]];
+    // "711 (19,8 %)": the share in brackets, so the two numbers never read as one.
+    var share = function (v, n) { return el('td', null, N.nf(v), el('span', { class: 'muted' }, ' (' + pctOf(v, n) + ')')); };
+    var cell = function (v) { return share(v, C.n); };
+    // The NAP lists the methods a site takes: no card in the list is "does not say", never "does not".
+    var src = [['cardNap', C.nap, null, C.n - C.nap]];
     if (C.osm) src.push(['cardOsm', C.osm_yes, C.osm_no, C.osm_none]);
     box.appendChild(wrap(t('cardH'), el('table', { class: 'conc' }, cols(['cardSrc', 'cardYes', 'cardNo', 'cardUnk']),
       el('tbody', null, src.map(function (r) {
-        return el('tr', null, el('th', { scope: 'row', class: 'l' }, t(r[0])), cell(r[1]), cell(r[2]), r[3] == null ? el('td', null, '—') : cell(r[3]));
+        return el('tr', null, el('th', { scope: 'row', class: 'l' }, t(r[0])), cell(r[1]), r[2] == null ? el('td', null, '—') : cell(r[2]), cell(r[3]));
       })))));
+    box.appendChild(el('p', { class: 'muted small' }, t('cardNapNote')));
     if (C.osm) box.appendChild(el('p', null, t('cardDisagree', { a: N.nf(C.nap_only + C.osm_only), b: N.nf(C.nap_only), c: N.nf(C.osm_only) })));
     var opCols = ['colOp', 'colFast', 'colNapYes'].concat(C.osm ? ['colOsmYes', 'colOsmNo'] : []);
     box.appendChild(wrap(t('cardOpsH', { n: N.nf(C.ops.length) }), el('table', { class: 'conc' }, el('caption', null, t('cardOpsH', { n: N.nf(C.ops.length) })), cols(opCols),
       el('tbody', null, C.ops.map(function (o) {
-        var td = function (v) { return el('td', null, N.nf(v), ' ', el('span', { class: 'muted' }, pctOf(v, o[1]))); };
+        var td = function (v) { return share(v, o[1]); };
         return el('tr', null, el('th', { scope: 'row', class: 'l' }, o[0]), el('td', null, N.nf(o[1])), td(o[2]), C.osm ? td(o[3]) : null, C.osm ? td(o[4]) : null);
       })))));
     box.appendChild(el('p', { class: 'muted small' }, t('cardHow')));
