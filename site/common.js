@@ -81,6 +81,22 @@
     if (p.regime === 'mobie_sem_tarifa' && p.nap_fees) out.napfee = { kwh: num(p.nap_fees.kwh), min: num(p.nap_fees.min), flat: num(p.nap_fees.flat), tiers: [] };
     return out;
   }
+  // What one session costs at one price (an entry of prices(p)), without VAT: the flat part, the
+  // €/kWh part and every €/min tier over the minutes kwh takes at a constant kw. The per-minute part
+  // is why a slower car pays more for the same energy. Only within one kind of price: the operator
+  // fee leaves out the energy the CEME bills. null when the price has no component at all.
+  function sessionCost(v, kwh, kw) {
+    if (!v || !(kw > 0)) return null;
+    var tiers = v.tiers && v.tiers.length ? v.tiers : v.min != null ? [{ eur: v.min, from: 0, to: null }] : [];
+    if (v.kwh == null && v.flat == null && !tiers.length) return null;
+    var mins = 60 * kwh / kw, c = (v.flat || 0) + (v.kwh || 0) * kwh;
+    tiers.forEach(function (x) {
+      if (typeof x === 'number') x = { eur: x, from: 0, to: null };
+      var a = x.from || 0, b = x.to == null ? mins : Math.min(x.to, mins);
+      if (b > a) c += (x.eur || 0) * (b - a);
+    });
+    return c;
+  }
   // "0,55 €/kWh + 0,10 €/min + 0,40 €": every component of one price, zeros left out.
   function priceText(v, dec) {
     var f = function (x) { return dec == null ? eur(x) : nf(x, dec); }, parts = [];
@@ -223,7 +239,7 @@
       : t('liveOk', { t: when(res.t), n: nf(res.n), m: nf(res.m) });
   }
 
-  window.NAP = { t: t, addStrings: addStrings, lang: lang, nf: nf, eur: eur, prices: prices, priceText: priceText, PRICE_KINDS: PRICE_KINDS, when: when, el: el, add: add, clear: clear, md: md,
+  window.NAP = { t: t, addStrings: addStrings, lang: lang, nf: nf, eur: eur, prices: prices, priceText: priceText, sessionCost: sessionCost, PRICE_KINDS: PRICE_KINDS, when: when, el: el, add: add, clear: clear, md: md,
     status: status, pwLabel: pwLabel, PW: PW, STATUSES: STATUSES, onLang: onLang, initChrome: initChrome,
     applyI18n: applyI18n, load: load, fetchLive: fetchLive, applyLive: applyLive, liveNote: liveNote };
 })();

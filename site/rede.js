@@ -18,7 +18,14 @@
     cPriceOp: 'Taxa média por kWh, por operador (€/kWh)', cStatusPw: 'Estado por classe de potência', cPriceStats: 'Componentes da taxa do operador', cPriceKinds: 'Preço por kWh, por tipo de preço', colKind: 'Tipo',
     kindsNote: 'Não compares entre linhas: a taxa do operador não inclui a energia, o preço sem contrato e o de fora da MOBI.E incluem, e no que só o NAP publica não se sabe.',
     colWhat: 'Componente', colN: 'tomadas', colMean: 'média', colMax: 'máximo', pEnergy: 'Por energia (€/kWh)', pTime: 'Por tempo (€/min)',
-    pFlat: 'Fixa por carregamento (€)', pSem: 'Valor único fora da MOBI.E (*)', power: 'Classe de potência', value: 'Valor', sAll: 'Tudo'
+    pFlat: 'Fixa por carregamento (€)', pSem: 'Valor único fora da MOBI.E (*)', power: 'Classe de potência', value: 'Valor', sAll: 'Tudo',
+    sessH: 'Quanto custa uma sessão de {k} kWh, por escalão',
+    sessLead: 'Mediana das tomadas de cada escalão, contando as que cobram 0 €, sem IVA. Ao minuto, quanto mais devagar o carro carrega, mais paga pela mesma energia: por isso vai uma coluna por potência do carro.',
+    sessAc: 'AC: carro a carregar a…', sessDc: 'DC: carro a carregar, em média, a…', sessCar: '{kw} kW', sessMin0: 'ao minuto desde o início', sessMinL: 'ao minuto só ao fim de um tempo',
+    sessCap: 'A potência é a menor entre a do carro e a da tomada (a que o NAP declara). Escalões do NAP, separados em AC e DC pela ficha.',
+    sessDcNote: 'No DC é uma potência média constante: a curva real do carro desce à medida que a bateria enche, por isso o tempo, e a parte ao minuto, são uma aproximação.',
+    sessOut: '{n} tomadas ficam de fora: a ficha não bate com a classe de potência ou o NAP não a declara.',
+    sessAc0: 'AC abaixo de 22 kW', sessAc1: 'AC 22 kW ou mais', sessDc1: 'DC 22–50 kW', sessDc2: 'DC 50–150 kW', sessDc3: 'DC 150–350 kW', sessDc4: 'DC 350 kW ou mais'
   }, {
     netH1: 'The network in numbers', netLead: 'How many chargers there are, who runs them, how powerful and how busy they are.',
     sections: 'Sections', sSummary: 'Summary', sNews: 'News', sNetwork: 'Chargers', sOps: 'Operators', sOcc: 'Occupancy', sPrice: 'Prices',
@@ -32,9 +39,16 @@
     cPriceOp: 'Mean fee per kWh, by operator (€/kWh)', cStatusPw: 'Status by power class', cPriceStats: 'Operator fee components', cPriceKinds: 'Price per kWh, by kind of price', colKind: 'Kind',
     kindsNote: 'Do not compare across rows: the operator fee does not include energy, the no-contract price and the one outside MOBI.E do, and for what only the NAP publishes nobody knows.',
     colWhat: 'Component', colN: 'sockets', colMean: 'mean', colMax: 'max', pEnergy: 'Per energy (€/kWh)', pTime: 'Per time (€/min)',
-    pFlat: 'Flat per session (€)', pSem: 'Single value outside MOBI.E (*)', power: 'Power class', value: 'Value', sAll: 'All'
+    pFlat: 'Flat per session (€)', pSem: 'Single value outside MOBI.E (*)', power: 'Power class', value: 'Value', sAll: 'All',
+    sessH: 'What a {k} kWh session costs, by power class',
+    sessLead: 'Median of the sockets in each class, counting those that charge €0, without VAT. Per minute, the slower the car charges, the more it pays for the same energy: hence one column per car power.',
+    sessAc: 'AC: car charging at…', sessDc: 'DC: car charging, on average, at…', sessCar: '{kw} kW', sessMin0: 'per minute from the start', sessMinL: 'per minute only after a while',
+    sessCap: 'The power is the lower of the car\'s and the socket\'s (as declared in the NAP). NAP power classes, split into AC and DC by plug.',
+    sessDcNote: 'On DC this is a constant average power: the car\'s real curve drops as the battery fills, so the time, and the per-minute part, are an approximation.',
+    sessOut: '{n} sockets are left out: the plug does not match the power class, or the NAP declares none.',
+    sessAc0: 'AC below 22 kW', sessAc1: 'AC 22 kW or more', sessDc1: 'DC 22–50 kW', sessDc2: 'DC 50–150 kW', sessDc3: 'DC 150–350 kW', sessDc4: 'DC 350 kW or more'
   });
-  var D = null, liveRes = null;
+  var D = null, liveRes = null, PTS = null, sessKind = 'opc';
   var $ = function (id) { return document.getElementById(id); };
 
   // rows: [[label, number|null, labelNode?]]
@@ -100,7 +114,74 @@
           return el('tr', null, el('th', { scope: 'row', class: 'l' }, t('pk_' + k)), el('td', null, N.nf(v.kwh_n)), el('td', null, N.eur(v.mean)), el('td', null, N.eur(v.max))); }))),
         el('p', { class: 'muted small' }, t('kindsNote'))]);
     }
+    sessionCard();
     N.liveNote($('live'), liveRes, D.snapshot);
+  }
+
+  // What a reference session costs per power class (N.sessionCost), one kind of price at a time:
+  // the operator fee and the no-contract price never share a table. Rows are the NAP's power classes
+  // (as every Rede chart), split into AC and DC by plug; the socket's power is the NAP's too.
+  var SESS_KWH = 20;
+  var SESS = {
+    AC: { cars: [3.7, 7.4, 11], rows: [['AC slow (<22kW)', 'sessAc0'], ['AC/DC 22-50kW', 'sessAc1']] },
+    DC: { cars: [25, 50, 100], rows: [['AC/DC 22-50kW', 'sessDc1'], ['DC fast 50-150kW', 'sessDc2'], ['DC ultra 150-350kW', 'sessDc3'], ['DC ultra (>=350kW)', 'sessDc4']] }
+  };
+  function current(p) { return /CCS|CHAdeMO/i.test(p.connectors || '') ? 'DC' : p.connectors ? 'AC' : null; }
+  function napKw(p) { return p.kw_src === 'osm' && p.nap_kw != null ? p.nap_kw : p.kw; }
+  function median(xs) {
+    if (!xs.length) return null;
+    xs.sort(function (a, b) { return a - b; });
+    var m = xs.length >> 1;
+    return xs.length % 2 ? xs[m] : (xs[m - 1] + xs[m]) / 2;
+  }
+  // 'start' when a €/min tier above 0 runs from the first minute (a slower car pays more for the same
+  // energy), 'later' when every such tier starts after a while (a fee for staying plugged in), else null.
+  function perMinute(v) {
+    var pos = (v.tiers && v.tiers.length ? v.tiers : [{ eur: v.min, from: 0 }]).map(function (x) {
+      return typeof x === 'number' ? { eur: x, from: 0 } : x; }).filter(function (x) { return x && x.eur > 0; });
+    return !pos.length ? null : pos.some(function (x) { return !x.from; }) ? 'start' : 'later';
+  }
+  function sessionCard() {
+    var box = $('cSession');
+    if (!box) return;
+    N.clear(box);
+    box.hidden = !PTS;   // the per-socket list comes after stats.json
+    if (!PTS) return;
+    var cells = {}, out = 0, counts = { opc: 0, adhoc: 0 };
+    PTS.forEach(function (p) {
+      var pk = N.prices(p), cur = current(p), kw = napKw(p), key = cur + '|' + p.pw_class;
+      ['opc', 'adhoc'].forEach(function (k) { if (pk[k]) counts[k]++; });
+      var v = pk[sessKind];
+      if (!v || N.sessionCost(v, SESS_KWH, 1) == null) return;
+      var row = cur && SESS[cur].rows.some(function (r) { return r[0] === p.pw_class; });
+      if (!row || !(kw > 0)) { out++; return; }
+      var c = cells[key] || (cells[key] = { n: 0, start: 0, later: 0, costs: SESS[cur].cars.map(function () { return []; }) });
+      c.n++;
+      var pm = perMinute(v);
+      if (pm) c[pm]++;
+      SESS[cur].cars.forEach(function (car, i) { c.costs[i].push(N.sessionCost(v, SESS_KWH, Math.min(car, kw))); });
+    });
+    box.appendChild(el('h3', null, t('sessH', { k: N.nf(SESS_KWH) })));
+    box.appendChild(el('p', { class: 'muted small' }, t('sessLead')));
+    box.appendChild(el('div', { class: 'seg', role: 'group', 'aria-label': t('colKind') }, ['opc', 'adhoc'].map(function (k) {
+      return el('button', { class: 'btn sm', type: 'button', 'aria-pressed': String(sessKind === k), onclick: function () { sessKind = k; sessionCard(); } },
+        t('pk_' + k), el('span', { class: 'muted' }, ' ' + N.nf(counts[k])));
+    })));
+    ['AC', 'DC'].forEach(function (cur) {
+      var S = SESS[cur], rows = S.rows.filter(function (r) { return cells[cur + '|' + r[0]]; });
+      if (!rows.length) return;
+      box.appendChild(el('div', { class: 'scroll', tabindex: '0', role: 'group', 'aria-label': t(cur === 'AC' ? 'sessAc' : 'sessDc') }, el('table', { class: 'sess' },
+        el('caption', null, t(cur === 'AC' ? 'sessAc' : 'sessDc')),
+        el('thead', null, el('tr', null, el('th', { scope: 'col' }, t('power')), el('th', { scope: 'col' }, t('colN')), el('th', { scope: 'col' }, t('sessMin0')), el('th', { scope: 'col' }, t('sessMinL')),
+          S.cars.map(function (car) { return el('th', { scope: 'col' }, t('sessCar', { kw: N.nf(car, 1) })); }))),
+        el('tbody', null, rows.map(function (r) {
+          var c = cells[cur + '|' + r[0]];
+          return el('tr', null, el('th', { scope: 'row', class: 'l' }, t(r[1])), el('td', null, N.nf(c.n)), el('td', null, N.nf(100 * c.start / c.n) + ' %'), el('td', null, N.nf(100 * c.later / c.n) + ' %'),
+            c.costs.map(function (xs) { var m = median(xs); return el('td', null, m == null ? '—' : N.eur(m) + ' €'); }));
+        })))));
+    });
+    box.appendChild(el('p', { class: 'muted small' }, t('sessCap') + ' ' + t('sessDcNote')));
+    if (out) box.appendChild(el('p', { class: 'muted small' }, t('sessOut', { n: N.nf(out) })));
   }
 
   // The same aggregations build_dashboard.py does, over the live statuses.
@@ -282,6 +363,6 @@
   N.load('stats').then(function (d) {
     D = d; render();
     // Live status needs the per-socket list (280 KB gzipped): fetched after the page is readable.
-    return N.load('points').then(function (r) { return N.fetchLive(r.points).then(function (res) { liveRes = res; if (res && !res.stale) recompute(r.points); render(); }); });
+    return N.load('points').then(function (r) { PTS = r.points; return N.fetchLive(r.points).then(function (res) { liveRes = res; if (res && !res.stale) recompute(r.points); render(); }); });
   }).catch(function () { $('live').textContent = t('loadFail'); });
 })();
