@@ -295,3 +295,8 @@ table.sess { margin-top: 14px; }
 .panel .weekh { margin-bottom: 8px; }
 @media (max-width: 619px) { .day ul.rows li { grid-template-columns: 1fr; } .day ul.rows .what { grid-column: 1; grid-row: auto; text-align: left; max-width: none; } }
 @media print { .day ul.rows.cut li { display: grid; } }
+
+/* ---- Rede > Concelhos + card payment (rede.js fastCard/growthCard/cardPayCard) ---- */
+#cFast, #cGrowth, #cCardPay { margin-top: 16px; }
+#cGrowth .seg { margin: 10px 0 4px; }
+table.conc { margin-top: 14px; }

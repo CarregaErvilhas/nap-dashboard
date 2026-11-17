@@ -372,3 +372,57 @@ class PanelTest(unittest.TestCase):
     def test_empty(self):
         import archive_panel
         self.assertEqual(archive_panel.render(None), '')
+
+
+@unittest.skipUnless(HAVE_DUCKDB, 'precisa de duckdb')
+class SitesAtTest(unittest.TestCase):
+    """archive_stats.sites_at: locais vivos há um ano e agora, com as entradas em bloco à parte."""
+
+    def run_sites_at(self, rows, points=(), **kw):
+        import archive_stats
+        con = archive_stats.connect()
+        con.execute("CREATE TABLE static_versions (country VARCHAR, valid_from TIMESTAMPTZ, kind VARCHAR, "
+                    "key VARCHAR, op VARCHAR, hash VARCHAR, attrs VARCHAR)")
+        con.executemany("INSERT INTO static_versions VALUES ('PT', ?, 'site', ?, ?, NULL, ?)", rows)
+        if points:
+            con.executemany("INSERT INTO static_versions VALUES ('PT', ?, 'point', ?, ?, NULL, ?)",
+                            [(t, k, op, json.dumps({'externalId': e}) if e else None) for t, k, op, e in points])
+        return archive_stats.sites_at(con, **kw)
+
+    def test_rekeys_snapshots_and_bulk_entries(self):
+        a = lambda op, lat=38.7: json.dumps({'lat': str(lat), 'lon': '-9.1', 'operatorName': op})
+        T = lambda d: dt.datetime(2025, 1, 1, tzinfo=dt.timezone.utc) + dt.timedelta(days=d)
+        rows = [(T(0), 'A', 'added', a('X')), (T(0), 'B', 'added', a('X')),          # retrato inicial
+                (T(200), 'A', 'removed', None), (T(200), 'X-A', 'added', a('X')),    # troca de código
+                (T(250), 'X-A', 'added', a('X')), (T(250), 'B', 'added', a('X')),    # re-retrato: não é entrada
+                (T(300), 'N', 'added', a('X', 39.0))]                                # posto novo
+        rows += [(T(310), 'C%d' % i, 'added', a('Cont')) for i in range(3)]          # operador chega ao NAP
+        rows += [(T(100), 'R%d' % i, 'added', a('Y')) for i in range(3)]             # falha do feed:
+        rows += [(T(170), 'R%d' % i, 'removed', None) for i in range(3)]             # saem já depois de t0...
+        rows += [(T(305), 'R%d' % i, 'added', a('Y')) for i in range(3)]             # ...e voltam: não é bloco
+        points = [(T(0), 'A/1', 'added', 'PT*X*E*A*01'), (T(0), 'A/2', 'added', 'PT*X*E*A*02'),
+                  (T(0), 'A/dup', 'added', 'PT*X*EA*1'),                                # a A/1 outra vez
+                  (T(200), 'X-A/1', 'added', None), (T(200), 'X-A/2', 'added', None), (T(200), 'X-A/3', 'added', None),
+                  (T(280), 'X-A/3', 'removed', None)]                                 # X-A: 3, depois 2
+        r = self.run_sites_at(rows, points, days=150, bulk_min=3)   # t0 = dia 160
+        self.assertEqual(r['bulk'], [{'day': '2025-11-07', 'op': 'Cont', 'n': 3}])
+        got = {k: (a0, a1, b) for k, _lat, _lon, a0, a1, b, _p0, _p1 in r['sites']}
+        pts = {k: (p0, p1) for k, *_x, p0, p1 in r['sites']}
+        self.assertEqual(pts['A'], (2, 0))     # vivo só há um ano
+        self.assertEqual(pts['X-A'], (0, 2))   # vivo só agora, com a tomada removida já fora
+        self.assertEqual(pts['N'], (0, 0))     # local sem tomadas no arquivo
+        self.assertEqual(got['A'], (True, False, False))
+        self.assertEqual(got['X-A'], (False, True, False))   # o mesmo posto: um sai, o outro entra
+        self.assertEqual(got['B'], (True, True, False))
+        self.assertEqual(got['N'], (False, True, False))
+        self.assertEqual(got['C0'], (False, True, True))
+        self.assertEqual(got['R0'], (True, True, False))
+        lat = {k: la for k, la, *_ in r['sites']}
+        self.assertEqual(lat['N'], 39.0)
+
+    def test_empty_table(self):
+        import archive_stats
+        con = archive_stats.connect()
+        con.execute("CREATE TABLE static_versions (country VARCHAR, valid_from TIMESTAMPTZ, kind VARCHAR, "
+                    "key VARCHAR, op VARCHAR, hash VARCHAR, attrs VARCHAR)")
+        self.assertIsNone(archive_stats.sites_at(con))

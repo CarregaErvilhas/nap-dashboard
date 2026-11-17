@@ -115,6 +115,9 @@
         el('p', { class: 'muted small' }, t('kindsNote'))]);
     }
     sessionCard();
+    fastCard();
+    growthCard();
+    cardPayCard();
     N.liveNote($('live'), liveRes, D.snapshot);
   }
 
@@ -182,6 +185,152 @@
     });
     box.appendChild(el('p', { class: 'muted small' }, t('sessCap') + ' ' + t('sessDcNote')));
     if (out) box.appendChild(el('p', { class: 'muted small' }, t('sessOut', { n: N.nf(out) })));
+  }
+
+  // ---- Concelhos (CAOP) and bank cards at fast chargers: stats.json `territory`, `card_pay`
+  // (scripts/territory_stats.py). Weekly numbers, never recounted with the live status.
+  N.addStrings({
+    sConc: 'Concelhos', hConc: 'Os concelhos',
+    concNote: 'Concelho onde o posto fica, pelas coordenadas que o operador publica e os limites oficiais (CAOP, Direção-Geral do Território). Pode diferir do concelho escrito no NAP, que é o do gráfico dos 15 concelhos.',
+    fastH: 'Concelhos sem posto de 50 kW ou mais',
+    fastLead: 'Dos {n} concelhos, {s} têm pelo menos um local de carregamento no NAP e {f} têm pelo menos um posto de 50 kW ou mais. Nos {x} da lista só há carregamento mais lento.',
+    fastNone: 'Concelhos sem nenhum local de carregamento no NAP', fastDef: 'Posto de 50 kW ou mais: uma tomada com essa potência, tal como o NAP a declara, esteja ou não a funcionar.',
+    colRegion: 'Região', colConc: 'Concelho', colDist: 'Distrito ou ilha', colConcN: 'concelhos', colWithSite: 'com algum local', colWithFast: 'com 50 kW ou mais', colSitesSlow: 'locais, todos abaixo de 50 kW',
+    growthH: 'Locais por concelho, há um ano e agora',
+    growthLead: 'De {a} a {b}, sem as entradas em bloco da nota em baixo, a rede passou de {n0} para {n1} locais ({d}) e de {p0} para {p1} tomadas ({dp}).',
+    growthCount: 'Em {what}, {g} concelhos ganharam, {s} ficaram iguais e {l} perderam.', gBy: 'Contar', gByP: 'tomadas', gByN: 'locais',
+    growthMerge: 'Um operador pode juntar vários postos num só local: em Lisboa, a Maksu está a passar os seus para a Telpark, do mesmo grupo, com menos locais e mais tomadas. Por isso a contagem por tomadas vem primeiro.',
+    growthBulk: 'Ficam de fora os {n} locais, ainda publicados hoje, que entraram no NAP de uma vez, no dia em que o operador os começou a publicar, e não no dia em que abriram: {list}.',
+    growthBulkItem: '{op} ({n}, a {d})',
+    growthHow: 'Conta os locais publicados no NAP em cada um dos dois dias, a partir do arquivo AmpereArchive. Um local que mudou de código conta como o mesmo.',
+    growthUnplaced: '{n} locais com coordenadas fora de qualquer concelho (no mar, fora do país) ficam de fora.',
+    gAbs: 'Maior subida', gPct: 'Maior subida em %', gDown: 'Desceram', gPctNote: 'Só concelhos com {m} ou mais {what} há um ano.',
+    colYearAgo: 'há um ano', colNow: 'agora', colDiff: 'diferença', colPct: '%',
+    cardH: 'Pagar com cartão bancário nos postos de 50 kW ou mais',
+    cardLead: 'O regulamento europeu AFIR obriga os postos de 50 kW ou mais instalados desde 13 de abril de 2024 a aceitar cartão bancário, com leitor ou sem contacto, e os mais antigos na rede rodoviária transeuropeia (RTE-T) a partir de 1 de janeiro de 2027. O NAP não diz quando cada posto foi instalado nem se fica na RTE-T: estes números não dizem quem cumpre.',
+    cardSrc: 'Fonte', cardYes: 'aceita', cardNo: 'não aceita', cardUnk: 'não diz', cardNap: 'NAP (o operador)', cardOsm: 'OpenStreetMap (a comunidade)',
+    cardSites: '{n} locais com pelo menos um posto de 50 kW ou mais.',
+    cardDisagree: 'As duas fontes discordam em {a} locais: em {b} o NAP diz que aceita e o OpenStreetMap que não, em {c} é ao contrário.',
+    cardOpsH: 'Por operador, os {n} com mais locais de 50 kW ou mais', colOp: 'Operador', colFast: 'locais', colNapYes: 'NAP: aceita', colOsmYes: 'OSM: aceita', colOsmNo: 'OSM: não aceita',
+    cardHow: 'No NAP conta o cartão de crédito ou de débito (creditCard, debitCard) nos meios de autenticação do local; nfc e pinpad sozinhos não dizem que o cartão é bancário. No OpenStreetMap, a etiqueta payment:cards.'
+  }, {
+    sConc: 'Municipalities', hConc: 'Municipalities',
+    concNote: 'The municipality the charger is in, from the coordinates the operator publishes and the official boundaries (CAOP, Direção-Geral do Território). It can differ from the town written in the NAP, which is what the 15-municipality chart uses.',
+    fastH: 'Municipalities without a 50 kW or faster charger',
+    fastLead: 'Of the {n} municipalities, {s} have at least one charging site in the NAP and {f} have at least one charger of 50 kW or more. The {x} listed have only slower charging.',
+    fastNone: 'Municipalities with no charging site in the NAP', fastDef: 'Charger of 50 kW or more: a socket with that power as the NAP declares it, working or not.',
+    colRegion: 'Region', colConc: 'Municipality', colDist: 'District or island', colConcN: 'municipalities', colWithSite: 'with any site', colWithFast: 'with 50 kW or more', colSitesSlow: 'sites, all below 50 kW',
+    growthH: 'Sites per municipality, a year ago and now',
+    growthLead: 'From {a} to {b}, leaving out the bulk entries in the note below, the network went from {n0} to {n1} sites ({d}) and from {p0} to {p1} sockets ({dp}).',
+    growthCount: 'In {what}, {g} municipalities gained, {s} stayed the same and {l} lost.', gBy: 'Count', gByP: 'sockets', gByN: 'sites',
+    growthMerge: 'An operator can merge several chargers into one site: in Lisbon, Maksu is handing its chargers to Telpark, from the same group, with fewer sites and more sockets. That is why the socket count comes first.',
+    growthBulk: 'Left out: the {n} sites, still published today, that entered the NAP all at once, on the day the operator started publishing them rather than the day they opened: {list}.',
+    growthBulkItem: '{op} ({n}, on {d})',
+    growthHow: 'Counts the sites published in the NAP on each of the two days, from the AmpereArchive. A site that changed code counts as the same site.',
+    growthUnplaced: '{n} sites whose coordinates fall outside every municipality (at sea, abroad) are left out.',
+    gAbs: 'Largest rise', gPct: 'Largest rise in %', gDown: 'Fell', gPctNote: 'Only municipalities with {m} or more {what} a year ago.',
+    colYearAgo: 'a year ago', colNow: 'now', colDiff: 'change', colPct: '%',
+    cardH: 'Paying by bank card at chargers of 50 kW or more',
+    cardLead: 'The EU AFIR regulation requires chargers of 50 kW or more installed since 13 April 2024 to take bank cards, with a reader or contactless, and older ones on the trans-European road network (TEN-T) from 1 January 2027. The NAP does not say when each charger was installed or whether it is on the TEN-T: these numbers do not say who complies.',
+    cardSrc: 'Source', cardYes: 'accepts', cardNo: 'does not', cardUnk: 'does not say', cardNap: 'NAP (the operator)', cardOsm: 'OpenStreetMap (the community)',
+    cardSites: '{n} sites with at least one charger of 50 kW or more.',
+    cardDisagree: 'The two sources disagree on {a} sites: on {b} the NAP says cards work and OpenStreetMap says they do not, on {c} the other way round.',
+    cardOpsH: 'By operator, the {n} with most sites of 50 kW or more', colOp: 'Operator', colFast: 'sites', colNapYes: 'NAP: accepts', colOsmYes: 'OSM: accepts', colOsmNo: 'OSM: does not',
+    cardHow: 'In the NAP, a credit or debit card (creditCard, debitCard) among the site\'s authentication methods; nfc and pinpad alone do not say the card is a bank card. In OpenStreetMap, the payment:cards tag.'
+  });
+  var growthView = 'abs', growthBy = 'p', GROWTH_TOP = 15, GROWTH_PCT_MIN = 10;
+  var cols = function (keys) { return el('thead', null, el('tr', null, keys.map(function (k) { return el('th', { scope: 'col' }, t(k)); }))); };
+  var pctOf = function (a, n) { return n ? N.nf(100 * a / n, 1) + ' %' : '—'; };
+  var signed = function (v, d) { return (v > 0 ? '+' : v < 0 ? '−' : '') + N.nf(Math.abs(v), d); };
+  var day = function (iso) { return new Date(iso).toLocaleDateString(N.lang() === 'pt' ? 'pt-PT' : 'en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' }); };
+  var wrap = function (label, table) { return el('div', { class: 'scroll', tabindex: '0', role: 'group', 'aria-label': label }, table); };
+
+  function fastCard() {
+    var box = $('cFast'), T = D.territory;
+    box.hidden = !T;
+    if (!T) return;
+    N.clear(box).appendChild(el('h3', null, t('fastH')));
+    box.appendChild(el('p', null, t('fastLead', { n: N.nf(T.n), s: N.nf(T.with_site), f: N.nf(T.with_fast), x: N.nf(T.no_fast.length) })));
+    box.appendChild(wrap(t('colRegion'), el('table', { class: 'conc' }, cols(['colRegion', 'colConcN', 'colWithSite', 'colWithFast']),
+      el('tbody', null, ['mainland', 'madeira', 'azores'].filter(function (r) { return T.by_region[r]; }).map(function (r) {
+        var b = T.by_region[r];
+        return el('tr', null, el('th', { scope: 'row', class: 'l' }, t('rg_' + r)), el('td', null, N.nf(b.n)), el('td', null, N.nf(b.with_site)), el('td', null, N.nf(b.with_fast)));
+      })))));
+    if (T.no_fast.length) {
+      box.appendChild(wrap(t('fastH'), el('table', { class: 'conc' }, el('caption', null, t('fastH')), cols(['colConc', 'colDist', 'colSitesSlow']),
+        el('tbody', null, T.no_fast.map(function (r) {
+          return el('tr', null, el('th', { scope: 'row', class: 'l' }, r[0]), el('td', { class: 'l' }, r[1]), el('td', null, N.nf(r[3])));
+        })))));
+    }
+    if (T.none.length) {
+      box.appendChild(wrap(t('fastNone'), el('table', { class: 'conc' }, el('caption', null, t('fastNone')), cols(['colConc', 'colDist']),
+        el('tbody', null, T.none.map(function (r) {
+          return el('tr', null, el('th', { scope: 'row', class: 'l' }, r[0]), el('td', { class: 'l' }, r[1]));
+        })))));
+    }
+    box.appendChild(el('p', { class: 'muted small' }, t('fastDef')));
+  }
+
+  function growthCard() {
+    var box = $('cGrowth'), G = D.territory && D.territory.growth;
+    box.hidden = !G;
+    if (!G) return;
+    var hasP = G.p0 != null, by = hasP ? growthBy : 'n', i0 = by === 'p' ? 6 : 3;
+    var rows = G.rows.map(function (r) { return { c: r[0], d: r[1], n0: r[i0], n1: r[i0 + 1], diff: r[i0 + 1] - r[i0] }; });
+    var up = rows.filter(function (r) { return r.diff > 0; }).length, down = rows.filter(function (r) { return r.diff < 0; }).length;
+    var change = function (a, b) { return signed(b - a) + (a ? ', ' + signed(100 * (b - a) / a, 1) + ' %' : ''); };
+    var what = t(by === 'p' ? 'gByP' : 'gByN');
+    N.clear(box).appendChild(el('h3', null, t('growthH')));
+    box.appendChild(el('p', null, t('growthLead', { a: day(G.t0), b: day(G.t1), n0: N.nf(G.n0), n1: N.nf(G.n1), d: change(G.n0, G.n1),
+      p0: N.nf(G.p0), p1: N.nf(G.p1), dp: hasP ? change(G.p0, G.p1) : '—' })));
+    if (hasP) box.appendChild(el('div', { class: 'seg', role: 'group', 'aria-label': t('gBy') }, [el('span', { class: 'muted small' }, t('gBy') + ':')].concat(['p', 'n'].map(function (v) {
+      return el('button', { class: 'btn sm', type: 'button', 'aria-pressed': String(by === v), onclick: function () { growthBy = v; growthCard(); } }, t(v === 'p' ? 'gByP' : 'gByN'));
+    }))));
+    box.appendChild(el('p', null, t('growthCount', { what: what, g: N.nf(up), s: N.nf(rows.length - up - down), l: N.nf(down) })));
+    var views = { abs: function (a, b) { return b.diff - a.diff || b.n1 - a.n1; },
+      pct: function (a, b) { return b.diff / b.n0 - a.diff / a.n0 || b.diff - a.diff; },
+      down: function (a, b) { return a.diff - b.diff || b.n0 - a.n0; } };
+    var pick = rows.filter(function (r) {
+      return growthView === 'down' ? r.diff < 0 : growthView === 'pct' ? r.n0 >= GROWTH_PCT_MIN && r.diff > 0 : r.diff > 0; })
+      .sort(views[growthView]).slice(0, GROWTH_TOP);
+    box.appendChild(el('div', { class: 'seg', role: 'group', 'aria-label': t('growthH') }, [['abs', 'gAbs'], ['pct', 'gPct'], ['down', 'gDown']].map(function (v) {
+      return el('button', { class: 'btn sm', type: 'button', 'aria-pressed': String(growthView === v[0]), onclick: function () { growthView = v[0]; growthCard(); } }, t(v[1]));
+    })));
+    box.appendChild(wrap(t('growthH'), el('table', { class: 'conc' }, cols(['colConc', 'colDist', 'colYearAgo', 'colNow', 'colDiff', 'colPct']),
+      el('tbody', null, pick.map(function (r) {
+        return el('tr', null, el('th', { scope: 'row', class: 'l' }, r.c), el('td', { class: 'l' }, r.d), el('td', null, N.nf(r.n0)), el('td', null, N.nf(r.n1)),
+          el('td', null, signed(r.diff)), el('td', null, r.n0 ? signed(100 * r.diff / r.n0, 0) + ' %' : '—'));
+      })))));
+    if (growthView === 'pct') box.appendChild(el('p', { class: 'muted small' }, t('gPctNote', { m: N.nf(GROWTH_PCT_MIN), what: what })));
+    var notes = [t('growthHow')].concat(hasP ? [t('growthMerge')] : []);
+    if (G.bulk) notes.push(t('growthBulk', { n: N.nf(G.bulk), list: G.bulk_entries.map(function (b) {
+      return t('growthBulkItem', { op: b.op || '—', n: N.nf(b.n), d: day(b.day + 'T12:00:00Z') }); }).join('; ') }));
+    if (G.unplaced) notes.push(t('growthUnplaced', { n: N.nf(G.unplaced) }));
+    box.appendChild(el('p', { class: 'muted small' }, notes.join(' ')));
+  }
+
+  function cardPayCard() {
+    var box = $('cCardPay'), C = D.card_pay;
+    box.hidden = !C;
+    if (!C) return;
+    N.clear(box).appendChild(el('h3', null, t('cardH')));
+    box.appendChild(el('p', { class: 'muted small' }, t('cardLead')));
+    box.appendChild(el('p', null, t('cardSites', { n: N.nf(C.n) })));
+    var cell = function (v) { return el('td', null, N.nf(v), ' ', el('span', { class: 'muted' }, pctOf(v, C.n))); };
+    var src = [['cardNap', C.nap, C.n - C.nap, null]];
+    if (C.osm) src.push(['cardOsm', C.osm_yes, C.osm_no, C.osm_none]);
+    box.appendChild(wrap(t('cardH'), el('table', { class: 'conc' }, cols(['cardSrc', 'cardYes', 'cardNo', 'cardUnk']),
+      el('tbody', null, src.map(function (r) {
+        return el('tr', null, el('th', { scope: 'row', class: 'l' }, t(r[0])), cell(r[1]), cell(r[2]), r[3] == null ? el('td', null, '—') : cell(r[3]));
+      })))));
+    if (C.osm) box.appendChild(el('p', null, t('cardDisagree', { a: N.nf(C.nap_only + C.osm_only), b: N.nf(C.nap_only), c: N.nf(C.osm_only) })));
+    var opCols = ['colOp', 'colFast', 'colNapYes'].concat(C.osm ? ['colOsmYes', 'colOsmNo'] : []);
+    box.appendChild(wrap(t('cardOpsH', { n: N.nf(C.ops.length) }), el('table', { class: 'conc' }, el('caption', null, t('cardOpsH', { n: N.nf(C.ops.length) })), cols(opCols),
+      el('tbody', null, C.ops.map(function (o) {
+        var td = function (v) { return el('td', null, N.nf(v), ' ', el('span', { class: 'muted' }, pctOf(v, o[1]))); };
+        return el('tr', null, el('th', { scope: 'row', class: 'l' }, o[0]), el('td', null, N.nf(o[1])), td(o[2]), C.osm ? td(o[3]) : null, C.osm ? td(o[4]) : null);
+      })))));
+    box.appendChild(el('p', { class: 'muted small' }, t('cardHow')));
   }
 
   // The same aggregations build_dashboard.py does, over the live statuses.
