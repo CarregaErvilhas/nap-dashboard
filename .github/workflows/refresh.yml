@@ -29,7 +29,7 @@ env:
     index.html rede.html explorar.html operadores.html privacidade.html 404.html
     app.css boot.js common.js find.js rede.js operadores.js explorar.js explorar.css
     fonts/nunito-latin.woff2 fonts/OFL-Nunito.txt
-    favicon.svg favicon.ico apple-touch-icon.png llms.txt
+    favicon.svg favicon.ico apple-touch-icon.png og.png llms.txt
     data/stats.json data/panels.json data/sites.json data/points.json
     data/outline.json data/opc.json data/basemap.json data/history.json data/changes.json
     data/years.json
