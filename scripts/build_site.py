@@ -7,6 +7,7 @@ Pages are static files from `assets/site/`; the only build-time substitutions
 are the pre-rendered panels (`<!--PANEL:name-->`), the snapshot date and the
 live-status origin. Everything else is fetched from `site/data/*.json`.
 """
+import hashlib
 import html as html_esc
 import json
 import os
@@ -25,7 +26,7 @@ STATIC = ('app.css', 'boot.js', 'common.js', 'find.js', 'rede.js', 'operadores.j
           'explorar.js', 'explorar.css',
           'fonts/nunito-latin.woff2', 'fonts/OFL-Nunito.txt')
 EXTRA = ('privacidade.html', '404.html', 'favicon.svg', 'favicon.ico',
-         'apple-touch-icon.png', 'llms.txt')
+         'apple-touch-icon.png', 'llms.txt', 'og.png')
 # Static data copied as it is (assets/ -> site/data/): the OSM places and roads
 # for the map, built by scripts/make_pt_basemap.py.
 DATA_COPY = {'pt_basemap.json': 'basemap.json'}
@@ -150,6 +151,52 @@ def _panel(data, name):
             f'<div lang="en" data-lang="en">{en}</div>')
 
 
+SITE_URL = 'https://nap.ocarroeletrico.com'
+OG_IMAGE = 'assets/og.png'  # scripts/make_og_image.py
+OG_ALT = ('Mapa de Portugal continental com um ponto por posto de carregamento, ao lado do título '
+          '«Postos de carregamento em Portugal».')
+
+
+def social_tags(tmpl):
+    """The Open Graph and X tags for a link preview, from the page's own title, description
+    and canonical URL, put right after the canonical link.
+
+    The image URL carries a hash of the file: X (and Facebook, LinkedIn) cache what they
+    fetched per image URL for days, a failed fetch included (X then draws a grey box), so a
+    new image gets a new URL and is fetched again."""
+    def one(rx):
+        m = re.search(rx, tmpl)
+        if not m:
+            raise SystemExit(f'página sem {rx}: precisa dele para as etiquetas de partilha')
+        return m
+    title = one(r'<title>([^<]*)</title>').group(1)
+    desc = one(r'<meta name="description" content="([^"]*)">').group(1)
+    canon = one(r'<link rel="canonical" href="([^"]*)">')
+    with open(OG_IMAGE, 'rb') as fh:
+        img = f'{SITE_URL}/og.png?v={hashlib.sha256(fh.read()).hexdigest()[:10]}'
+    alt = html_esc.escape(OG_ALT)
+    tags = '\n'.join((
+        '<meta property="og:type" content="website">',
+        '<meta property="og:site_name" content="Postos PT">',
+        f'<meta property="og:title" content="{title}">',
+        f'<meta property="og:description" content="{desc}">',
+        f'<meta property="og:url" content="{canon.group(1)}">',
+        '<meta property="og:locale" content="pt_PT">',
+        '<meta property="og:locale:alternate" content="en_GB">',
+        f'<meta property="og:image" content="{img}">',
+        '<meta property="og:image:type" content="image/png">',
+        '<meta property="og:image:width" content="1200">',
+        '<meta property="og:image:height" content="630">',
+        f'<meta property="og:image:alt" content="{alt}">',
+        '<meta name="twitter:card" content="summary_large_image">',
+        f'<meta name="twitter:title" content="{title}">',
+        f'<meta name="twitter:description" content="{desc}">',
+        f'<meta name="twitter:image" content="{img}">',
+        f'<meta name="twitter:image:alt" content="{alt}">',
+    ))
+    return tmpl[:canon.end()] + '\n' + tags + tmpl[canon.end():]
+
+
 def render(data, outdir='site', archive_url=None):
     sizes = site_data.write(data, outdir)
     opc = parse_opc_report()
@@ -188,6 +235,7 @@ def render(data, outdir='site', archive_url=None):
                 if not body:  # hide the whole section, as the old dashboard did
                     tmpl = tmpl.replace(f'data-panel="{name}"', f'data-panel="{name}" hidden')
         tmpl = tmpl.replace('<!--SNAPSHOT-->', snap)
+        tmpl = social_tags(tmpl)
         left = re.findall(r'<!--(?:PANEL:\w+|SNAPSHOT|CHROME:\w+)-->', tmpl)
         if left:
             raise SystemExit(f'{page}: marcadores por substituir: {left}')

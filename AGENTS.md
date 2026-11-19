@@ -26,7 +26,7 @@ validated by `scripts/validate_site.py` + `scripts/pipeline_guard.py`. Don't ove
   `operadores.html`, the `_head/_header/_footer.html` partials, `app.css`,
   `boot.js`, `common.js`, `find.js`, `rede.js`, `operadores.js`, `fonts/Nunito`),
   `privacidade.html`, `404.html`, `llms.txt`, `pt_outline.json` (PT outline for
-  the map), `pt_basemap.json` (OSM places + main roads for the map; refresh by hand with `scripts/make_pt_basemap.py`, copied to `site/data/basemap.json`), `schemas/*.xsd` (DATEX II 3.3 © CEN; ver `assets/schemas/README.md`)
+  the map), `pt_basemap.json` (OSM places + main roads for the map; refresh by hand with `scripts/make_pt_basemap.py`, copied to `site/data/basemap.json`), `og.png` (the link-preview image, mainland map with a dot per site; redraw by hand with `scripts/make_og_image.py`, which needs a Chromium; `build_site.social_tags` writes the og:/twitter: tags of each page from its `<title>`, description and canonical, with a hash of the image in its URL so X re-fetches it when it changes), `schemas/*.xsd` (DATEX II 3.3 © CEN; ver `assets/schemas/README.md`)
 - `references/` — docs for the SKILL.md (data sources, gotchas)
 - `Agents/` — system prompts dos agentes automáticos (um `.md` por agente; ver
   `Agents/AGENTS.md`). Atual: `Agents/anomalias.md` (anomalias dos dados
