@@ -1,11 +1,11 @@
 {
-  "snapshot_date": "2026-11-16",
-  "generated_utc": "2026-11-16T15:33:36+00:00",
+  "snapshot_date": "2026-11-21",
+  "generated_utc": "2026-11-21T10:57:34+00:00",
   "opcs": {
     "ACCI": {
-      "name": "ACCIONA RECARGA PORTUGAL,UNIPESSOAL LDA",
-      "sites": 14,
-      "points": 27
+      "name": "Acciona Recarga Portugal",
+      "sites": 15,
+      "points": 28
     },
     "ALFA": {
       "name": "Alfa Energia",
@@ -23,9 +23,9 @@
       "points": 3
     },
     "BBGE": {
-      "name": "BBG Energia Unipessoal, Lda",
-      "sites": 2,
-      "points": 3
+      "name": "Morenergy",
+      "sites": 3,
+      "points": 4
     },
     "BELM": {
       "name": "Blk Mobility, LDA",
@@ -59,8 +59,8 @@
     },
     "CEPS": {
       "name": "Cepsa Portuguesa Petroleos",
-      "sites": 37,
-      "points": 75
+      "sites": 38,
+      "points": 77
     },
     "CEVE": {
       "name": "CEVE - Cooperativa Eléctrica do Vale D’Este C.R.L.",
@@ -84,8 +84,8 @@
     },
     "CONT": {
       "name": "Modelo Continente Hipermercados, S.A.",
-      "sites": 444,
-      "points": 942
+      "sites": 443,
+      "points": 940
     },
     "CSCP": {
       "name": "Cascais Proxima",
@@ -99,13 +99,13 @@
     },
     "ECOI": {
       "name": "Ecoinside - Soluções em Ecoeficiência e Sustentabilidade Lda",
-      "sites": 59,
-      "points": 149
+      "sites": 60,
+      "points": 151
     },
     "EDPC": {
       "name": "EDP Comercial",
-      "sites": 1685,
-      "points": 3549
+      "sites": 1688,
+      "points": 3555
     },
     "EMAC": {
       "name": "EMACOM - Telecomunicações da Madeira, Unipessoal, Lda",
@@ -114,8 +114,8 @@
     },
     "EMEL": {
       "name": "EMEL - Empresa Municipal de Mobilidade e Estacionamento de Lisboa, E.M., S.A.",
-      "sites": 89,
-      "points": 196
+      "sites": 94,
+      "points": 206
     },
     "EMOB": {
       "name": "Emobtec - Tec. Mobilidade Elétrica, unipessoal Lda",
@@ -154,8 +154,8 @@
     },
     "EVIO": {
       "name": "EVIO - Electrical Mobility",
-      "sites": 21,
-      "points": 35
+      "sites": 20,
+      "points": 31
     },
     "EVPW": {
       "name": "EVpower, Charging Solutions Lda",
@@ -179,8 +179,8 @@
     },
     "FCTO": {
       "name": "Iberdrola | bp pulse",
-      "sites": 304,
-      "points": 725
+      "sites": 316,
+      "points": 748
     },
     "FRIO": {
       "name": "Distrifrio Supermercados, Lda",
@@ -209,8 +209,8 @@
     },
     "GLPP": {
       "name": "Galp Power OPC",
-      "sites": 1613,
-      "points": 3450
+      "sites": 1631,
+      "points": 3486
     },
     "GOLD": {
       "name": "Gold Energy",
@@ -229,8 +229,8 @@
     },
     "HELX": {
       "name": "Helexia II Energy Services, Lda.",
-      "sites": 237,
-      "points": 455
+      "sites": 238,
+      "points": 457
     },
     "HEXA": {
       "name": "HEXAGONAL OCEAN, LDA",
@@ -244,8 +244,8 @@
     },
     "HORZ": {
       "name": "Powerdot, S.A",
-      "sites": 790,
-      "points": 2151
+      "sites": 800,
+      "points": 2187
     },
     "IBRD": {
       "name": "Iberdrola Clientes Portugal, Unipessoal, Lda",
@@ -274,8 +274,8 @@
     },
     "KLCS": {
       "name": "Kilometer Low Cost II Serviços, SA",
-      "sites": 86,
-      "points": 107
+      "sites": 87,
+      "points": 108
     },
     "KPMS": {
       "name": "KPM Serviços de Engenheria, Unip Lda",
@@ -294,13 +294,8 @@
     },
     "LUSI": {
       "name": "LUSIADAENERGIA, S.A.",
-      "sites": 14,
-      "points": 25
-    },
-    "MAKS": {
-      "name": "Maksu",
-      "sites": 43,
-      "points": 43
+      "sites": 15,
+      "points": 26
     },
     "MEOE": {
       "name": "MEO Energia - Comercialização de Energia, SA",
@@ -329,8 +324,8 @@
     },
     "MOTA": {
       "name": "Mota-Engil Renewing",
-      "sites": 187,
-      "points": 336
+      "sites": 189,
+      "points": 340
     },
     "NEUR": {
       "name": "Neureifen - Electric Mobility, Lda",
@@ -349,8 +344,8 @@
     },
     "PARI": {
       "name": "Parinox Energia",
-      "sites": 6,
-      "points": 7
+      "sites": 7,
+      "points": 8
     },
     "PLUG": {
       "name": "e-Plug, Lda",
@@ -384,8 +379,8 @@
     },
     "REPS": {
       "name": "REPSOL Portuguesa Lda",
-      "sites": 222,
-      "points": 576
+      "sites": 224,
+      "points": 580
     },
     "SARE": {
       "name": "Superareosa Supermercados, Lda",
@@ -429,13 +424,13 @@
     },
     "TRUE": {
       "name": "WOWPLUG",
-      "sites": 768,
-      "points": 1537
+      "sites": 779,
+      "points": 1559
     },
     "TSLA": {
       "name": "Tesla",
       "sites": 9,
-      "points": 184
+      "points": 192
     },
     "VEIM": {
       "name": "Veimonte Lda",
@@ -459,8 +454,13 @@
     },
     "ZUND": {
       "name": "Grupo Easycharger, SL",
-      "sites": 14,
-      "points": 27
+      "sites": 1,
+      "points": 2
+    },
+    "ZUNP": {
+      "name": "Grupo Easycharger, SL",
+      "sites": 13,
+      "points": 25
     }
   }
 }
