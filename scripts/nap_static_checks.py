@@ -10,9 +10,10 @@ Outputs:  data/nap_static_findings.csv one row per finding (machine)
 
 These rules used to live in tracker_checks.py, which returns early when the
 PCVE tracker could not be fetched, so they vanished from errors.md on every run
-where Google blocked the download. They only read the NAP. The tracker is where
-they came from: both classes were already adjudicated by real operators, which
-is what makes them findings and not guesses.
+where Google blocked the download. They only read the NAP. The first two come
+from the tracker: both classes were already adjudicated by real operators,
+which is what makes them findings and not guesses. The other two need no
+adjudication: a value that is missing, or one no charger can have.
 
   tensao_placeholder  750 V / 600 V on a DC connector: legacy CHAdeMO-era
                       placeholder values (tracker: 171 rows of 750 -> 500 V).
@@ -20,6 +21,16 @@ is what makes them findings and not guesses.
                       < 11 kW declared. A real three-phase point is >= 12 kW
                       (230 V x 32 A x sqrt3). Tracker: 199 rows of
                       mode3AC3p -> mode2AC1p.
+  tensao_em_falta     a DC connector with no voltage. Without it nobody can
+                      tell whether an 800 V car charges at full power there
+                      (the site's "Tensão DC" filter and ohmigo split at 500 V).
+  tensao_impossivel   above 1500 V, where low voltage ends for DC (the Low
+                      Voltage Directive and IEC 61851-23 stop there): a unit
+                      slip (300000 for 300?), never a real charger.
+
+What the installed equipment says (the plate on OSM, the model's rating) is
+another script, hardware_checks.py: it needs the OSM join and a catalogue of
+models, and these rules must run without either.
 """
 import csv
 import sys
@@ -36,15 +47,22 @@ ERRORS_ITEM = 8  # errors.md item number
 DC_CONNECTORS = ('chademo', 'iec62196t1combo', 'iec62196t2combo',
                  'pantographtopdown', 'pantographbottomup', 'mcs')
 PLACEHOLDER_VOLTAGES = (750, 600)
+# Low voltage ends at 1500 V DC (Low Voltage Directive 2014/35/EU, art. 1).
+MAX_DC_VOLTAGE = 1500
 LEGACY_CLASS_ROWS = 171   # tracker history: 750 -> 500 V
 MODE3_CLASS_ROWS = 199    # tracker history: mode3AC3p -> mode2AC1p
 
-ORDER = ['tensao_placeholder', 'trifasico_sem_3p']
+# The order is also the subsection letter (8a, 8b...): fixed, so a link to
+# "8c" keeps pointing at the same rule in a week with no 8a.
+ORDER = ['tensao_placeholder', 'trifasico_sem_3p', 'tensao_em_falta', 'tensao_impossivel']
 TITLES = {
     'tensao_placeholder': 'Tensões placeholder (750 V / 600 V) em conectores DC',
     'trifasico_sem_3p': 'Pontos declarados trifásicos sem potência trifásica',
+    'tensao_em_falta': 'Conectores DC sem tensão declarada',
+    'tensao_impossivel': f'Tensões acima de {MAX_DC_VOLTAGE} V, o limite da baixa tensão em DC',
 }
-SEVERITY = {'tensao_placeholder': 'ALTO', 'trifasico_sem_3p': 'MÉDIO'}
+SEVERITY = {'tensao_placeholder': 'ALTO', 'trifasico_sem_3p': 'MÉDIO',
+            'tensao_em_falta': 'MÉDIO', 'tensao_impossivel': 'ALTO'}
 
 
 def is_dc(connector_type):
@@ -78,6 +96,19 @@ def findings(points):
             'detail': f"{r.site_external_id} / {r.operator_id}: {int(r.W)} W a "
                       f"{int(r.V)} V — trifásico real exige >=12 kW "
                       f"(classe histórica no tracker: {MODE3_CLASS_ROWS} linhas)"})
+
+    dc = p.connector_type.map(is_dc)
+    for _, r in p[dc & ~(p.V > 0)].iterrows():
+        rows.append({
+            'check': 'tensao_em_falta', 'severity': SEVERITY['tensao_em_falta'],
+            'entity': str(r.point_id), 'site': str(r.site_external_id),
+            'detail': f"{r.site_external_id} / {r.connector_type}: sem tensão"})
+
+    for _, r in p[p.V > MAX_DC_VOLTAGE].iterrows():
+        rows.append({
+            'check': 'tensao_impossivel', 'severity': SEVERITY['tensao_impossivel'],
+            'entity': str(r.point_id), 'site': str(r.site_external_id),
+            'detail': f"{r.site_external_id} / {r.connector_type}: {int(r.V)} V"})
     return rows
 
 
@@ -91,14 +122,11 @@ def main():
         w.writerows(rows)
 
     L = []
-    sub = 'abcdefgh'
-    i = 0
-    for check in ORDER:
+    for i, check in enumerate(ORDER):
         sel = [r for r in rows if r['check'] == check]
         if not sel:
             continue
-        i += 1
-        L.append(f'### {ERRORS_ITEM}{sub[i-1]}. [{SEVERITY[check]}] '
+        L.append(f'### {ERRORS_ITEM}{"abcdefgh"[i]}. [{SEVERITY[check]}] '
                  f'{TITLES[check]} ({len(sel)})')
         L.append('')
         L.append('| severidade | point_id | evidência |')

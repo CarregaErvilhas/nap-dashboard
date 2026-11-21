@@ -69,13 +69,15 @@ venv/bin/python scripts/summary.py         # resumo numérico
 venv/bin/python scripts/mobie_join.py      # junta NAP + tarifário MOBI.E -> data/nap_opc_points.csv
 venv/bin/python scripts/dgeg_lists.py      # DGEG OPC/CEME a partir das páginas web
 venv/bin/python scripts/dgeg_crossref.py   # resolve códigos OPC -> entidades DGEG
-venv/bin/python scripts/nap_static_checks.py # tensões placeholder + falso trifásico -> errors.md item 8
+venv/bin/python scripts/nap_static_checks.py # tensões placeholder/em falta/impossíveis + falso trifásico -> errors.md item 8
 venv/bin/python scripts/concelho_check.py    # valida coordenadas vs concelho CAOP
 venv/bin/python scripts/osm_umap.py          # cruza NAP com OSM/umap (comunidade)
 venv/bin/python scripts/make_pt_outline.py   # gera assets/pt_outline.json (mapa)
 venv/bin/python scripts/tracker_sync.py  # tracker PCVE -> registo OPC + erros rotulados
 venv/bin/python scripts/tracker_checks.py # tracker + NAP -> errors.md item 13
 venv/bin/python scripts/ohmigo_dataset.py data data/ohmigo_chargers.json  # o modelo da rede (lêem-no o site e o ohmigo)
+bash scripts/fetch_charger_models.sh       # catálogo de modelos de carregadores (CHARGER_MODELS_URL, em segredo)
+venv/bin/python scripts/hardware_checks.py # tensão DC do NAP vs equipamento instalado -> errors.md item 14
 venv/bin/python scripts/build_dashboard.py # gera site/, facts.md, errors.md
 python3 scripts/model_parity.py            # o site mostra o que o modelo diz
 ```
@@ -116,7 +118,8 @@ python3 scripts/check_agents.py
 | `scripts/ohmigo_dataset.py` | O modelo da rede (`data/ohmigo_chargers.json`): o que o site e o ohmigo mostram de cada posto |
 | `scripts/model_parity.py` | Falha o refresh se o site e o modelo da rede discordarem |
 | `scripts/dgeg_crossref.py` | Resolução de códigos OPC para entidades (fuzzy match) |
-| `scripts/nap_static_checks.py` | Regras só sobre o NAP estático -> `errors.md` item 8 (tensões placeholder, falso trifásico) |
+| `scripts/nap_static_checks.py` | Regras só sobre o NAP estático -> `errors.md` item 8 (tensões placeholder, em falta ou impossíveis, falso trifásico) |
+| `scripts/hardware_checks.py` | Tensão DC do NAP vs equipamento instalado (tomada no OSM + modelo no catálogo da comunidade) -> `errors.md` item 14 |
 | `scripts/concelho_check.py` | Verificação de coordenadas vs limites concelho (CAOP) |
 | `scripts/osm_umap.py` | Cross-check com OSM/umap da comunidade (operadores, pagamento, dúvidas) |
 | `scripts/fetch_tracker.sh` | Descarrega o tracker de erros PCVE (sem credenciais na CI; URL em segredo) |
@@ -146,6 +149,10 @@ São sempre re-extraídos do xls de origem em cada corrida e **nunca versionados
 — são dados de terceiros, sem licença de reutilização. Se o tracker não for
 buscado, o item 13 de `errors.md` simplesmente não é escrito. Ver
 `THIRD-PARTY-NOTICES.md`.
+
+O catálogo de modelos de carregadores (`charger_models.txt`, um Google Doc da
+comunidade) segue a mesma regra: descarregado em cada corrida, nunca versionado.
+Sem ele, o item 14 sai só com a tensão das tomadas no OSM.
 
 ## Notas de engenharia / armadilhas
 

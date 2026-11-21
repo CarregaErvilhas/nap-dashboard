@@ -118,6 +118,32 @@ Armadilhas (verificadas):
   em `Notes` ("Check HW amperage"), pelo que qualquer filtro sobre `Error type`
   as descarta em silêncio.
 
+## Catálogo de modelos de carregadores (comunidade)
+
+Um Google Doc, "Modelos de Carregadores usados em Portugal", que um membro da
+comunidade mantém a partir de fichas técnicas e fotografias das chapas: uma
+secção por variante de modelo, `§.Marca.Modelo_com_traços`, com a potência
+(`120kW total`) e a tensão e corrente máximas DC (`1000V 200A`; `125/400A` é
+CHAdeMO/CCS). Os modelos só AC não têm linha de tensão. Não diz que carregador
+está em que posto: isso vem das tags `manufacturer`/`model` do OSM.
+
+Lê-o o `scripts/hardware_checks.py` (errors.md item 14), descarregado em cada
+corrida por `scripts/fetch_charger_models.sh` a partir do export em texto
+(`…/export?format=txt`). Como o tracker, é de terceiros e sem licença de
+reutilização: o URL vive no segredo `CHARGER_MODELS_URL` e nada dele é
+versionado.
+
+Armadilhas:
+
+- O export vem com BOM e CRLF; o fetch tira os CR.
+- O nome do modelo no Doc e no OSM raramente é igual (`HYC300` vs `HYC_300`,
+  `Cabinet HYC1000 + 2x HYC 1000 EV Dispenser` vs `HYC_1000`,
+  `iFC160` vs `iFC160-350A`): o `hardware_checks.lookup` normaliza, procura
+  cada parte de uma combinação e o prefixo mais longo que acaba numa palavra,
+  nunca só a marca.
+- Variantes do mesmo modelo podem ter tensões diferentes (`Magnum_Cap.MCQCA`:
+  500 e 1000 V): um modelo assim não dá uma tensão nominal ao local.
+
 ## AFIR — classes de potência (reporting)
 
 - **Regulamento (UE) 2023/1804** (AFIR), ligação estável:

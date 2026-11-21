@@ -43,10 +43,11 @@ para as estatísticas, mas aqui com todos os escalões: uma tomada com
 sessão.
 
 Os problemas que as regras só-NAP do nap_static_checks.py encontram numa
-tomada (750 V de reserva em DC, falso trifásico) vão em `issues`, para quem
-lê o modelo saber que esse valor declarado não é de confiança. Do tracker de
-erros PCVE nada vem para aqui: é de terceiros, sem licença de reutilização, e
-este ficheiro é público.
+tomada (750 V de reserva em DC, tensão em falta ou impossível, falso
+trifásico) vão em `issues`, para quem lê o modelo saber que esse valor
+declarado não é de confiança. Do tracker de erros PCVE e do catálogo de
+modelos de carregadores (hardware_checks.py) nada vem para aqui: são de
+terceiros, sem licença de reutilização, e este ficheiro é público.
 
 Uso:  python scripts/ohmigo_dataset.py [pasta_de_dados] [saída.json]
       (por omissão: data  data/ohmigo_chargers.json)
@@ -109,8 +110,9 @@ else:
 
 # Os problemas que as regras só-NAP encontram em cada tomada, os mesmos que o
 # errors.md (item 8) lista para os donos dos dados: `tensao_placeholder` (750
-# ou 600 V num conector DC, um valor de reserva, não a tensão real) e
-# `trifasico_sem_3p` (declarado trifásico com tensão e potência de monofásico).
+# ou 600 V num conector DC, um valor de reserva, não a tensão real),
+# `trifasico_sem_3p` (declarado trifásico com tensão e potência de monofásico),
+# `tensao_em_falta` (DC sem tensão) e `tensao_impossivel` (acima de 1500 V).
 issues = {}
 for f in nap_static_checks.findings(P):
     found = issues.setdefault((f['site'], f['entity']), [])

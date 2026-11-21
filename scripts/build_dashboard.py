@@ -557,6 +557,8 @@ if os.path.exists('data/mobie_stations.json'):
 _static_f = nap_static_checks.findings(P)
 n_placeholder_v = sum(1 for r in _static_f if r['check'] == 'tensao_placeholder')
 n_fake_3p = sum(1 for r in _static_f if r['check'] == 'trifasico_sem_3p')
+n_dc_no_v = sum(1 for r in _static_f if r['check'] == 'tensao_em_falta')
+n_v_impossible = sum(1 for r in _static_f if r['check'] == 'tensao_impossivel')
 
 _fl = OPC.FLAT.dropna().apply(_num)
 _fl = _fl[_fl.apply(lambda x: x == x)]  # descarta NaN de parse: senão .max() = nan e o painel mostra "nan €/carga"
@@ -652,8 +654,8 @@ ERRS_HTML = f"""
   <div class="meta">{pt(n_bare_uid)} tomadas com ids só numéricos ('97', '98'…), fora de qualquer formato; mistura de formatos com e sem prefixo PT-/operador e com e sem zero à esquerda no número da tomada.</div>
 </li>
 <li>
-  <div class="head">8. Tensões placeholder e falso trifásico (NAP estático)</div>
-  <div class="meta">{pt(n_placeholder_v)} tomadas DC declaram 750 V ou 600 V, valores de reserva da era CHAdeMO; {pt(n_fake_3p)} tomadas declaradas <code>mode3AC3p</code> têm tensão monofásica e menos de 11 kW, quando um trifásico real tem pelo menos 12 kW. Os próprios operadores já assinalaram ambas as classes como erro no tracker PCVE (171 e 199 linhas). Lista por tomada em errors.md, secções 8a/8b.</div>
+  <div class="head">8. Tensões placeholder, em falta ou impossíveis e falso trifásico (NAP estático)</div>
+  <div class="meta">{pt(n_placeholder_v)} tomadas DC declaram 750 V ou 600 V, valores de reserva da era CHAdeMO; {pt(n_fake_3p)} tomadas declaradas <code>mode3AC3p</code> têm tensão monofásica e menos de 11 kW, quando um trifásico real tem pelo menos 12 kW. Os próprios operadores já assinalaram ambas as classes como erro no tracker PCVE (171 e 199 linhas). Mais {pt(n_dc_no_v)} tomadas DC sem tensão declarada e {pt(n_v_impossible)} acima de 1500 V, o limite da baixa tensão em DC. Lista por tomada em errors.md, secções 8a a 8d.</div>
 </li>
 <li>
   <div class="head">9. Preços anómalos</div>
@@ -842,6 +844,9 @@ with open('errors.md', 'w') as fh:
             fh.write(frag.read())
     if os.path.exists('data/tracker_findings.md'):
         with open('data/tracker_findings.md') as frag:
+            fh.write(frag.read())
+    if os.path.exists('data/hardware_findings.md'):
+        with open('data/hardware_findings.md') as frag:
             fh.write(frag.read())
 print('facts.md and errors.md written')
 

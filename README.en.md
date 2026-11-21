@@ -68,13 +68,15 @@ venv/bin/python scripts/summary.py         # numeric summary
 venv/bin/python scripts/mobie_join.py      # join NAP + MOBI.E tariff -> data/nap_opc_points.csv
 venv/bin/python scripts/dgeg_lists.py      # DGEG OPC/CEME from the web pages
 venv/bin/python scripts/dgeg_crossref.py   # resolve OPC codes -> DGEG entities
-venv/bin/python scripts/nap_static_checks.py # placeholder voltages + fake three-phase -> errors.md item 8
+venv/bin/python scripts/nap_static_checks.py # placeholder/missing/impossible voltages + fake three-phase -> errors.md item 8
 venv/bin/python scripts/concelho_check.py    # validate coordinates vs CAOP concelho
 venv/bin/python scripts/osm_umap.py          # cross-reference NAP with OSM/umap (community)
 venv/bin/python scripts/make_pt_outline.py   # generate assets/pt_outline.json (map)
 venv/bin/python scripts/tracker_sync.py  # PCVE tracker -> OPC registry + labelled errors
 venv/bin/python scripts/tracker_checks.py # tracker + NAP -> errors.md item 13
 venv/bin/python scripts/ohmigo_dataset.py data data/ohmigo_chargers.json  # the network model (read by the site and ohmigo)
+bash scripts/fetch_charger_models.sh       # community catalogue of charger models (CHARGER_MODELS_URL, a secret)
+venv/bin/python scripts/hardware_checks.py # NAP DC voltage vs installed equipment -> errors.md item 14
 venv/bin/python scripts/build_dashboard.py # generate site/, facts.md, errors.md
 python3 scripts/model_parity.py            # the site shows what the model says
 ```
@@ -115,7 +117,8 @@ python3 scripts/check_agents.py
 | `scripts/ohmigo_dataset.py` | The network model (`data/ohmigo_chargers.json`): what the site and ohmigo show about each charger |
 | `scripts/model_parity.py` | Fails the refresh if the site and the network model disagree |
 | `scripts/dgeg_crossref.py` | OPC code → entity resolution (fuzzy match) |
-| `scripts/nap_static_checks.py` | Rules on the static NAP alone -> `errors.md` item 8 (placeholder voltages, fake three-phase) |
+| `scripts/nap_static_checks.py` | Rules on the static NAP alone -> `errors.md` item 8 (placeholder, missing or impossible voltages, fake three-phase) |
+| `scripts/hardware_checks.py` | NAP DC voltage vs installed equipment (socket on OSM + model in the community catalogue) -> `errors.md` item 14 |
 | `scripts/concelho_check.py` | Coordinate validation vs CAOP concelho boundaries |
 | `scripts/osm_umap.py` | Community OSM/umap cross-check (operators, payment, doubts) |
 | `scripts/fetch_tracker.sh` | Downloads the PCVE error tracker (no CI credentials; URL kept in a secret) |

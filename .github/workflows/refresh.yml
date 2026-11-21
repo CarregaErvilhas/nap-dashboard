@@ -165,6 +165,18 @@ jobs:
       # https://nap.ocarroeletrico.com/ohmigo/chargers.json.
       - name: Build network model (ohmigo dataset)
         run: python scripts/ohmigo_dataset.py data data/ohmigo_chargers.json
+      # A tensão DC que o NAP declara vs o equipamento instalado (errors.md
+      # item 14): a tensão da tomada no OSM e a nominal do carregador mapeado
+      # lá, segundo o catálogo de modelos que a comunidade mantém num Google
+      # Doc. Secret, não literal, pela mesma razão do TRACKER_URL: o repo é
+      # público e o catálogo é de outrem, sem licença de reutilização, por isso
+      # nada dele é versionado. Sem ele o item sai só com o OSM.
+      - name: Equipment cross-check (NAP voltage vs installed chargers)
+        env:
+          CHARGER_MODELS_URL: ${{ secrets.CHARGER_MODELS_URL }}
+        run: |
+          bash scripts/fetch_charger_models.sh
+          python scripts/hardware_checks.py
       # Gera facts.md, errors.md e o site (site/: páginas + site/data/*.json).
       - name: Build dashboard
         env:
