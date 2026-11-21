@@ -76,7 +76,7 @@ venv/bin/python scripts/make_pt_outline.py   # gera assets/pt_outline.json (mapa
 venv/bin/python scripts/tracker_sync.py  # tracker PCVE -> registo OPC + erros rotulados
 venv/bin/python scripts/tracker_checks.py # tracker + NAP -> errors.md item 13
 venv/bin/python scripts/ohmigo_dataset.py data data/ohmigo_chargers.json  # o modelo da rede (lêem-no o site e o ohmigo)
-bash scripts/fetch_charger_models.sh       # catálogo de modelos de carregadores (CHARGER_MODELS_URL, em segredo)
+bash scripts/fetch_charger_models.sh       # catálogo de modelos de carregadores (Google Doc público do Alexandre Moleiro)
 venv/bin/python scripts/hardware_checks.py # tensão DC do NAP vs equipamento instalado -> errors.md item 14
 venv/bin/python scripts/build_dashboard.py # gera site/, facts.md, errors.md
 python3 scripts/model_parity.py            # o site mostra o que o modelo diz

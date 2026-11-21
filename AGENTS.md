@@ -216,12 +216,13 @@ value per operator). 14c: OSM and the catalogue disagree with each other, the
 list for someone with a photo of the plate. The catalogue alone never makes a
 14b: the maximum voltage varies between revisions of a model. A site's rating
 counts only when every charger mapped there is in the catalogue and the DC ones
-share one voltage. The catalogue is someone else's work with no reuse licence:
-`fetch_charger_models.sh` downloads its text export on every run from the
-`CHARGER_MODELS_URL` secret into `data/charger_models.txt` (gitignored, check D
-of `ci_paths.py`), and without it item 14 runs on OSM alone and says so. Only
-the conclusions are published (the model comes from OSM, its rating is the
-maker's). Nothing of it goes into the network model.
+share one voltage. The catalogue is public and free to use (Alexandre Moleiro
+keeps it): `fetch_charger_models.sh` downloads its text export on every run
+into `data/charger_models.txt` (gitignored, check D of `ci_paths.py`: a copy in
+git would go stale), and without it item 14 runs on OSM alone and says so. The
+parser is `charger_models.parse`, shared with the network model's `models`
+(below): it also reads the brands at the end of the document that have no
+`§.Marca.Modelo` line (Wallbox, Volt-E, Wowplug, XCharge...).
 
 `scripts/concelho_check.py` locates every site inside official CAOP concelho
 polygons (downloaded on first run into `data/caop_cache/`, gitignored) and flags the
@@ -353,9 +354,8 @@ value goes to `napKw`/`napV`/`napA`/`napCable`, present only when replaced
 until the model did; it now reads the result. Per point, `issues` lists what
 the NAP-only rules of `nap_static_checks.py` found on it (`tensao_placeholder`,
 `trifasico_sem_3p`, `tensao_em_falta`, `tensao_impossivel`, errors.md item 8).
-Nothing from the PCVE tracker or the catalogue of charger models goes into the
-model: they are third parties' data with no reuse licence, and the model is
-public. Where OSM agrees with the NAP, the point
+Nothing from the PCVE tracker goes into the model: it is a third party's data
+with no reuse licence, and the model is public. Where OSM agrees with the NAP, the point
 lists those fields in `osmSame` (`["a", "v"]`), so ohmigo can tell a value
 confirmed on the charger from one only the operator declared (a DC socket's
 current decides the power a 400 V car gets). All joined from the Overpass dump in
@@ -452,12 +452,14 @@ from the catalogue Alexandre Moleiro keeps in a Google Doc ("Modelos de
 Carregadores usados em Portugal": per model and version, total kW, max V,
 cable A, and the kW **each car** gets at 400 V and 800 V with 1, 2, 3… cars
 plugged in). It is the same file `hardware_checks.py` reads
-(`fetch_charger_models.sh`, `CHARGER_MODELS_URL` secret,
-`data/charger_models.txt`): the author's, with no reuse licence, so the URL is
-never in the repo, only its numbers are used (never its photos or logos), and
-`ohmigo_dataset.py` writes `models` only with `CHARGER_MODELS_PUBLISH=yes` (a
-repo variable, set once the author agrees; `charger_models.load` also refuses
-a catalogue of under 50 models). The join to a site
+(`fetch_charger_models.sh` -> `data/charger_models.txt`): public and free to
+use, credited with its link (`charger_models.SOURCE_URL`) wherever its figures
+are shown; only its numbers are used, never its photos or operator logos
+(they are not the author's). `charger_models.load` refuses a catalogue of under
+50 models, so a document that changed format can't empty every site's
+`models`. A version starts at a `§.Marca.Modelo` line or, for the brands
+without one, at the name line right before its power line, under the latest
+brand header with flags ("Wallbox 🇪🇦"). The join to a site
 is the OSM `hardware` (`charger_models.match`: same name once normalised, or
 OSM more specific, "iFC160-350A"; a part of a set, "blueberry PLUS", matches
 every set it is in; `LABEL_ALIAS` for names OSM writes differently). Of the
@@ -485,6 +487,40 @@ with the JSON, and `pages.yml` publishes them under `/photos/` (JPEG only,
 `<16 hex>.jpg`, < 400 kB): the site shows them from its own domain, so the
 CSP and the privacy page need no third party. Procurar links sites without a
 photo to MapComplete, so a driver can add one.
+
+More per site and per socket for drivers, all additive (no `SCHEMA` bump):
+- `unit` (per DC point): which charger of the site the socket is on, from the
+  OSM posts (`man_made=charge_point` with the `ref:EU:EVSE` of several
+  sockets, `osm_tags` `units`), numbered in socket order, only when two or more
+  DC sockets of the site share it (an AC post's sockets have their own
+  circuits). With the live status, Procurar's detail says "a partilhar com …:
+  até ~X kW cada" (the model's two-car figure) and which charger to pick when
+  another is busy; ohmigo's `lookup_charger` returns `chargers` and
+  `pickCharger`. `points.json` carries it as `u`.
+- `underground` (`'osm'` | `'nap'`): an underground car park, from OSM
+  (`location=underground`, or `level`/`layer` below zero, `osm_tags.underground`)
+  or the NAP's `locationDescription` ("Parque Coberto - Piso -1"): often no
+  mobile signal, so open the app before driving in. `sites.json` `ug`.
+- `osm.checkDate`: the latest `check_date`/`survey:date` on OSM, when someone
+  checked the charger on site. `sites.json` `chk`.
+- `nearby`: cafés, restaurants, fast food, toilets, shops and fuel stations
+  within 150 m, per type `{type, n, m, name}` (`osm_places.nearby_for`, from
+  `data/umap_cache/amenities.json`, which `osm_places.py <pbf>` writes from the
+  same Geofabrik extract as `places`). `sites.json` `nb`.
+- `history`: the site in the AmpereArchive, `archive_stats.site_stats` (same
+  spans as the per-operator stats), written by `archive_history.py` to
+  `data/site_history.json`: `down`, the % of the observed time its sockets were
+  `outOfOrder`/`inoperative`, and `busy.wd`/`busy.we`, the % of the time they
+  were charging per local hour on weekdays and weekends (`null` for an hour
+  with under 2 days of data); `days` behind it, and nothing under 7 days.
+  Top-level `historySource` has the window. `refresh.yml` computes it and keeps
+  it in `actions/cache`, so `ohmigo-daily.yml` (which does not read the
+  archive) restores the weekly one. `sites.json` carries `hd`/`hn` and `hb`,
+  48 characters (weekdays then weekends, the tenth of the %, `.` = no data),
+  which Procurar draws as two bar charts with the current hour marked and the
+  quietest hours between 7 and 23.
+Rede > Operadores has "Que carregadores usa cada operador" (`stats.json`
+`op_models`): the models joined at each operator's sites, top 20 operators.
 
 A daily refresh (`ohmigo-daily.yml`, cron `49 2,14 * * *`) re-runs only the ohmigo
 pipeline (NAP ETL + OSM dump + places + dataset) and publishes a new
@@ -762,8 +798,9 @@ Gate de ~1 s em cada PR para `main`, sem rede e sem dependências (stdlib).
   tem de aparecer com o prefixo `data/` (apanha um `pd.read_csv('nap_static_sites.csv')`
   que volte ao sítio antigo);
 - **C** — cada `scripts/*.py`/`*.sh` citado num workflow existe no disco;
-- **D** — os dados de terceiros sem licença (os derivados do tracker e o
-  catálogo de modelos de carregadores, `UNLICENSED`) estão **fora** do git, e o
+- **D** — os dados de terceiros que vêm sempre da origem (os derivados do
+  tracker, sem licença, e o catálogo de modelos de carregadores, lido fresco em
+  cada corrida; `NOT_VERSIONED`) estão **fora** do git, e o
   `.gitignore` não tem excepções para eles (testa o índice com `git ls-files`, **não**
   `git check-ignore`: este reporta ficheiros já versionados como "não
   ignorados", que é precisamente o caso proibido).

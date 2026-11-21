@@ -13,13 +13,11 @@ O documento não tem postos, tem modelos. A ligação a cada posto é o
 `hardware` do OpenStreetMap (osm_tags.py: fabricante + modelo mapeados pela
 comunidade), feita aqui por `match()` e aplicada pelo ohmigo_dataset.py.
 
-O documento é do autor, sem licença de reutilização, e segue as regras do
-tracker PCVE: fetch_charger_models.sh descarrega-o do segredo
-CHARGER_MODELS_URL para data/charger_models.txt (gitignored), o mesmo ficheiro
-que o hardware_checks.py lê, e o endereço nunca está no código. Só os números
-se usam, nunca as fotos e os logótipos (não são dele). O ohmigo_dataset.py só
-publica os `models` com CHARGER_MODELS_PUBLISH=yes (variável do repo), quando
-o autor autorizar.
+O documento é público e de uso livre. fetch_charger_models.sh descarrega-o em
+cada corrida para data/charger_models.txt (gitignored, para nunca ficar
+velho), o mesmo ficheiro que o hardware_checks.py lê. Só os números se usam,
+nunca as fotos e os logótipos (não são do autor); quem os mostra dá o crédito
+com o link (SOURCE_URL).
 
 Uso:  python scripts/charger_models.py                 # resume o catálogo
       python scripts/charger_models.py --labels data/ohmigo_chargers.json
@@ -34,6 +32,7 @@ from collections import Counter
 CATALOG = 'data/charger_models.txt'
 AUTHOR = 'Alexandre Moleiro'
 TITLE = 'Modelos de Carregadores usados em Portugal'
+SOURCE_URL = 'https://docs.google.com/document/d/1SyhISXEaZiAPYuRLQ9dA2OtFrwysFm01Yei11qTLQLw'
 
 CAR = '\U0001F697'  # 🚗: uma linha só com N carros abre o caso "N carros ligados"
 RE_KEY = re.compile(r'^§\.([^.\s]+)\.(\S+)')
@@ -90,7 +89,7 @@ def parse_entry(key, lines):
     if 'com cabo' in ln.lower():
         v['cable'] = True
     i += 1
-    cars, group, after_plus = [], None, False
+    cars, group, after_plus, ac_side = [], None, False, False
     for ln in lines[i:]:
         mv = RE_VOLTS.match(ln)
         if mv and not cars and 'maxV' not in v:
@@ -112,7 +111,7 @@ def parse_entry(key, lines):
             continue
         if ln and set(ln) == {CAR}:
             if after_plus:  # "+ 🚗 22kW AC": a tomada AC ao lado, não outro caso
-                after_plus = False
+                after_plus, ac_side = False, True
                 continue
             group = {'n': len(ln)}
             cars.append(group)
@@ -124,9 +123,13 @@ def parse_entry(key, lines):
             continue
         ma = RE_AC_ONLY.match(ln)
         if ma and group is not None:
-            # Modelo só AC: o que cada carro recebe. Num combinado, a AC ao lado.
+            # Modelo só AC: o que cada carro recebe. Num combinado, a AC ao lado
+            # (quando a linha da potência total não a diz: "30kW total").
             if 'totalKw' not in v:
                 group['kwAc'] = num(ma.group(2))
+            elif ac_side:
+                v.setdefault('acKw', num(ma.group(2)))
+            ac_side = False
             continue
         if ln.lower().startswith('exclusivo'):
             v['exclusive'] = True
@@ -140,12 +143,65 @@ def parse_entry(key, lines):
     dc = [c for c in cars if 'kw400' in c or 'kw800' in c]
     if dc:
         v['cars'] = dc
-    elif 'totalKw' in v and not cars:
-        return None
     v['label'] = re.sub(r'\s+', ' ', ' '.join(v['label'])).strip()
+    # Uma bateria no nome ("Net Zero 233 kWh") é a do carregador.
+    kwh = re.search(r'(\d+)\s*kWh', v['label'])
+    if kwh and 'batteryKwh' not in v:
+        v['batteryKwh'] = int(kwh.group(1))
     if not v['sites']:
         del v['sites']
     return v
+
+
+# Uma linha com bandeiras (letras regionais, "Wallbox 🇪🇦") é o cabeçalho de uma marca.
+FLAGS = re.compile('[\U0001F1E6-\U0001F1FF]')
+
+
+def brand_header(line):
+    """"Hellonext (Zerova) 🇨🇳🇵🇹" -> "Hellonext"; None se a linha não é um cabeçalho."""
+    if not FLAGS.search(line) or RE_KEY.match(line):
+        return None
+    name = re.sub(r'\s*\(.*?\)', '', FLAGS.sub('', line)).strip()
+    return name or None
+
+
+def power_line(line):
+    return bool(RE_TOTAL.search(line) or RE_AC_ONLY.match(line))
+
+
+def entry_starts(lines):
+    """Onde começa cada versão: [(índice, marca, modelo, a linha é o nome)].
+
+    Quase todas começam numa linha `§.Marca.Modelo`, seguida do nome. As
+    últimas marcas do documento (e uma ou outra versão colada à anterior) não
+    têm essa linha: aí a versão começa no nome, a linha logo antes da potência
+    ("Supernova SN 60" e depois "60kW total"), e a marca é a do cabeçalho com
+    bandeira mais recente ("Wallbox 🇪🇦")."""
+    ne = [i for i, ln in enumerate(lines) if ln]
+    after = {i: (ne[k + 1] if k + 1 < len(ne) else None) for k, i in enumerate(ne)}
+    label = set()  # as linhas do nome de uma versão `§.`, até à potência
+    out, brand = [], None
+    for k, i in enumerate(ne):
+        ln = lines[i]
+        m = RE_KEY.match(ln)
+        if m:
+            out.append((i, m.group(1), m.group(2), False))
+            for j in ne[k + 1:]:
+                if power_line(lines[j]) or RE_KEY.match(lines[j]):
+                    break
+                label.add(j)
+            continue
+        b = brand_header(ln)
+        if b:
+            brand = b
+            continue
+        if (i in label or not brand or CAR in ln or ln == '+' or power_line(ln)
+                or RE_VOLTS.match(ln) or RE_DC.search(ln) or RE_CODE.match(ln)):
+            continue
+        nxt = after[i]
+        if nxt is not None and power_line(lines[nxt]):
+            out.append((i, brand.replace(' ', '_'), ln.replace(' ', '_'), True))
+    return out
 
 
 def parse(text):
@@ -153,19 +209,18 @@ def parse(text):
 
     Versões repetidas (a mesma linha duas vezes, porque no documento diferem só
     nas fichas ou nos logótipos dos operadores, que são imagens) contam uma vez."""
-    text = text.lstrip('﻿')
+    text = text.lstrip('\ufeff')
     lines = [ln.strip() for ln in text.splitlines()]
-    starts = [i for i, ln in enumerate(lines) if RE_KEY.match(ln)]
+    starts = entry_starts(lines)
     out = {}
-    for j, s in enumerate(starts):
-        end = starts[j + 1] if j + 1 < len(starts) else len(lines)
-        m = RE_KEY.match(lines[s])
-        brand, model = m.group(1).replace('_', ' '), m.group(2).replace('_', ' ')
-        body = [ln for ln in lines[s + 1:end] if ln]
+    for j, (s, kb, km, named) in enumerate(starts):
+        end = starts[j + 1][0] if j + 1 < len(starts) else len(lines)
+        brand, model = kb.replace('_', ' '), km.replace('_', ' ')
+        body = [ln for ln in lines[(s if named else s + 1):end] if ln]
         v = parse_entry((brand, model), body)
         if not v:
             continue
-        key = f'{m.group(1)}.{m.group(2)}'
+        key = f'{kb}.{km}'
         e = out.setdefault(key, {'brand': brand, 'model': model, 'variants': []})
         same = next((x for x in e['variants']
                      if {k: y for k, y in x.items() if k != 'sites'} == {k: y for k, y in v.items() if k != 'sites'}), None)
@@ -196,6 +251,12 @@ LABEL_ALIAS = {
     'abbterrahpcp4': 'ABB.Cabinet_Terra_HP175_+_Terra_HP_Charge_Post_Gen2',
     'abbterrahpchargepostgen2': 'ABB.Cabinet_Terra_HP175_+_Terra_HP_Charge_Post_Gen2',
     'iskraemecoihpcdd': 'iskraemeco.1_Cabinet_iHPCPU_PU_400_+_2_iHPCDD_D_350',
+    # O OSM escreve o Supernova só com o número ("wallbox SN 60").
+    'wallboxsn60': 'Wallbox.Supernova_SN_60',
+    'wallboxsn60hv': 'Wallbox.Supernova_SN_60HV',
+    'wallboxsn120': 'Wallbox.Supernova_SN120',
+    'wallboxsn150': 'Wallbox.Supernova_SN_150',
+    'xchargenetzero233': 'XCharge.Net_Zero_233_kWh',
 }
 # Palavras que não distinguem um componente ("1 Cabinet Nova 360" = "Nova 360").
 FILLER = re.compile(r'^(?:cabinet|dispensador|dispenser|power|unit)$', re.I)

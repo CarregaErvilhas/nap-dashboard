@@ -44,10 +44,9 @@ Uma tomada entra quando o NAP contradiz o equipamento e nada o confirma:
 Não entram: tomadas em que o OSM (ou o catálogo) confirma o NAP, e as tensões em
 falta ou acima de 1500 V (essas são do item 8, nap_static_checks.py).
 
-O catálogo é de terceiros e não tem licença de reutilização, por isso nunca é
-versionado (como o tracker PCVE): lê-se em cada corrida e daqui só saem as
-conclusões, com o modelo (que vem do OSM, ODbL) e a sua tensão nominal (um
-dado do fabricante).
+O catálogo é público e de uso livre (o Alexandre Moleiro mantém-no num Google
+Doc); lê-se fresco em cada corrida (fetch_charger_models.sh) e não é
+versionado, para nunca ficar velho.
 """
 import csv
 import hashlib
@@ -56,6 +55,8 @@ import os
 import re
 import sys
 from collections import Counter, defaultdict
+
+import charger_models
 
 MODEL = 'data/ohmigo_chargers.json'
 CATALOG = 'data/charger_models.txt'
@@ -90,30 +91,23 @@ def norm(s):
 def parse_catalog(text):
     """{(marca, modelo): {'v': {...}, 'a': {...}, 'kw': {...}}} a partir do texto do Doc.
 
-    Cada variante de um modelo começa numa linha `§.Marca.Modelo_com_traços`
-    e traz a tensão e a corrente máximas numa linha `1000V 200A` (ou
-    `1000V 125/400A`: CHAdeMO/CCS) e a potência em `120kW total`. Um modelo sem
-    linha de tensão é só AC. As variantes do mesmo modelo juntam-se."""
-    cat = defaultdict(lambda: {'v': set(), 'a': set(), 'kw': set()})
-    cur = None
-    for line in text.replace('﻿', '').splitlines():
-        line = line.strip()
-        m = re.match(r'^§\.([^.]+)\.(.+)$', line)
-        if m:
-            cur = (m.group(1).replace('_', ' ').strip(), m.group(2).replace('_', ' ').strip())
-            cat[cur]  # um modelo AC também conta como "está no catálogo"
-            continue
-        if cur is None:
-            continue
-        m = re.match(r'^(\d{3,4})\s*V\b(.*)$', line)
-        if m:
-            cat[cur]['v'].add(int(m.group(1)))
-            cat[cur]['a'].update(int(x) for x in re.findall(r'(\d+)\s*(?=[/A])', m.group(2)))
-            continue
-        m = re.match(r'^(\d+(?:[.,]\d+)?)\s*kW\s+total', line, re.I)
-        if m:
-            cat[cur]['kw'].add(float(m.group(1).replace(',', '.')))
-    return dict(cat)
+    O parser é o de charger_models.py (o mesmo que o modelo da rede usa), que
+    também lê as marcas do fim do documento sem linha `§.Marca.Modelo`
+    (Wallbox, Volt-E...). Aqui juntam-se as versões de cada modelo: as
+    tensões máximas, as correntes (com a de boost) e as potências totais. Um
+    modelo só AC fica com tudo vazio, mas "está no catálogo"."""
+    cat = {}
+    for e in charger_models.parse(text).values():
+        c = cat.setdefault((e['brand'], e['model']), {'v': set(), 'a': set(), 'kw': set()})
+        for v in e['variants']:
+            if v.get('maxV'):
+                c['v'].add(v['maxV'])
+            c['a'].update(v.get('amps', []))
+            if v.get('boostA'):
+                c['a'].add(v['boostA'])
+            if v.get('totalKw'):
+                c['kw'].add(float(v['totalKw']))
+    return cat
 
 
 def catalog_index(cat):
@@ -224,7 +218,7 @@ def render(rows, catalog_note):
          'Compara a tensão máxima que o NAP declara em cada tomada DC com o equipamento que lá está: '
          'a tensão da tomada no OpenStreetMap (muitas vezes lida na chapa pela comunidade) e a '
          'tensão nominal do modelo de carregador mapeado no OSM (`manufacturer` + `model`), segundo '
-         'o catálogo "Modelos de Carregadores usados em Portugal" que a comunidade mantém (só nas '
+         'o catálogo "Modelos de Carregadores usados em Portugal" que o Alexandre Moleiro mantém (só nas '
          'fichas CCS). Só entra quando nada do equipamento confirma o NAP. A classe é a do filtro '
          '"Tensão DC" do site e do ohmigo: acima de 500 V um carro de 800 V carrega à potência '
          'máxima, até 500 V não. Tensões em falta ou acima de 1500 V estão no item 8.', '',

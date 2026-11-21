@@ -103,6 +103,31 @@ Outra marca 🇩🇪
 """
 
 
+# As últimas marcas do documento não têm linha `§.`: a versão começa no nome,
+# logo antes da potência, e a marca é a do cabeçalho com bandeira.
+TAIL = f"""Wallbox 🇪🇦
+\tSupernova SN 60
+60kW total
+500V 150A
+\t{CAR}
+60kW @ 400VDC
+{CAR}{CAR}
+30kW @ 400VDC
+Wowplug 🇵🇹
+\teDOT
+2x 22kW AC
+\t{CAR}
+22kW AC
+\tXCharge 🇨🇳🇩🇪
+\tNet Zero 233 kWh
+210kW total
+1000V 400A
+\t{CAR}
+150kW @ 400VDC
+150kW @ 800VDC
+"""
+
+
 class Parse(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
@@ -131,6 +156,18 @@ class Parse(unittest.TestCase):
         v = self.m['Marca.Wall_22']['variants'][0]
         self.assertEqual((v['acKw'], v['acSockets'], v.get('cable')), (22, 2, True))
         self.assertNotIn('cars', v)
+
+    def test_brands_without_anchor_lines(self):
+        m = cm.parse(DOC + TAIL)
+        self.assertEqual(m['Wallbox.Supernova_SN_60']['variants'][0]['cars'], [{'n': 1, 'kw400': 60}, {'n': 2, 'kw400': 30}])
+        self.assertEqual(m['Wowplug.eDOT']['variants'][0]['acKw'], 22)
+        net = m['XCharge.Net_Zero_233_kWh']['variants'][0]
+        self.assertEqual((net['totalKw'], net['batteryKwh']), (210, 233))
+        # As versões com `§.` não mudam por haver marcas sem ele.
+        self.assertEqual(sorted(k for k in m if k.startswith('Marca.')), ['Marca.HYC300', 'Marca.QC50', 'Marca.Wall_22'])
+        idx = cm.index(m)
+        self.assertEqual(cm.match('wallbox SN 60', idx), ['Wallbox.Supernova_SN_60'])
+        self.assertEqual(cm.match('wowplug eDOT', idx), ['Wowplug.eDOT'])
 
     def test_boost_battery_and_example_site(self):
         v = self.m['Outra.Cabinet_PU200_+_2x_Dispenser_Plus']['variants'][0]

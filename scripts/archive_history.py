@@ -209,6 +209,9 @@ def main(argv=None):
     ap.add_argument('--stale-days', type=int, default=7)
     ap.add_argument('--flips-per-day', type=int, default=4)
     ap.add_argument('--output', default='data/archive_stats.json')
+    # Por posto: avarias e ocupação por hora (archive_stats.site_stats), para o
+    # modelo da rede (ohmigo_dataset.py). À parte: com ~9000 locais é grande.
+    ap.add_argument('--site-output', default='data/site_history.json')
     ap.add_argument('--s3-endpoint')
     a = ap.parse_args(argv)
     if not COUNTRY_RE.match(a.country):
@@ -245,6 +248,11 @@ def main(argv=None):
     os.makedirs(os.path.dirname(path) or '.', exist_ok=True)
     with open(path, 'w', encoding='utf-8') as fh:
         json.dump(res, fh, ensure_ascii=False, indent=1)
+    sites = archive_stats.site_stats(con)
+    with open(a.site_output, 'w', encoding='utf-8') as fh:
+        json.dump({'coverage': {k: res['coverage'][k] for k in ('start', 'end', 'days')}, 'sites': sites},
+                  fh, ensure_ascii=False, separators=(',', ':'))
+    print(f'  wrote {a.site_output}: {len(sites)} locais')
     c = res['coverage']
     print(f"  wrote {path}: {c['start']} → {c['end']} ({c['observed_hours']} h observadas, "
           f"{c['gaps']} lacunas, {c['anchor_mismatch']}/{c['anchor_checked']} discrepâncias no snapshot)")

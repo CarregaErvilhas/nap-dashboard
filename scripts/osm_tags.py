@@ -215,6 +215,30 @@ def photo_refs(tags):
     return out
 
 
+# Num parque subterrâneo muitas vezes não há rede móvel: a app do CEME não
+# arranca a sessão. O OSM diz-o em `location=underground`, ou com um piso
+# (`level`) ou uma camada (`layer`) abaixo de zero.
+def underground(tags):
+    if tags.get('location') == 'underground':
+        return True
+    for k in ('level', 'layer'):
+        nums = [osm_num(x) for x in str(tags.get(k, '')).split(';') if RE_NUM.search(x)]
+        if nums and all(str(x).strip().startswith('-') for x in str(tags.get(k, '')).split(';') if x.strip()):
+            return True
+    return False
+
+
+# Quando alguém da comunidade foi lá ver: `check_date` (e `survey:date`), em
+# ISO. Ano ou ano-mês também valem ("2025", "2025-02").
+RE_DATE = re.compile(r'^\d{4}(?:-\d{2}(?:-\d{2})?)?$')
+
+
+def check_date(tags):
+    dates = [str(tags.get(k, '')).strip() for k in ('check_date', 'survey:date')]
+    dates = [d for d in dates if RE_DATE.match(d)]
+    return max(dates) if dates else None
+
+
 def km(lat1, lon1, lat2, lon2):
     p = math.pi / 180
     a = (math.sin((lat2 - lat1) * p / 2) ** 2
@@ -283,6 +307,9 @@ def osm_by_code(sites_by_code, dump=OSM_DUMP, evse_to_code=None):
     evse = {}      # código -> {id EVSE normalizado: tomadas desse elemento}
     elements = {}  # código -> [(prioridade, distância, "node/123")], para o link do site
     photos = {}    # código -> referências de fotos (photo_refs), pela ordem em que aparecem
+    under = set()  # códigos com um elemento em parque subterrâneo
+    units = {}     # código -> [[ids EVSE de um poste], ...]: tomadas do mesmo carregador
+    checked = {}   # código -> a data mais recente em que alguém lá foi ver
     for e in els:
         t = e.get('tags') or {}
         lc = None
@@ -341,6 +368,12 @@ def osm_by_code(sites_by_code, dump=OSM_DUMP, evse_to_code=None):
                     for x in str(t.get('ref:EU:EVSE', '')).split(';'):
                         if evse_key(x):
                             evse.setdefault(code, {})[evse_key(x)] = socks
+                # Um poste (charge_point) com os ids de várias tomadas: são do
+                # mesmo carregador, e com dois carros ligados a potência
+                # divide-se entre eles (charger_models: o valor para 2 carros).
+                keys = sorted({evse_key(x) for x in str(t.get('ref:EU:EVSE', '')).split(';')} - {None})
+                if is_point and len(keys) >= 2:
+                    units.setdefault(code, []).append(keys)
             for r in str(t.get('old_ref', '')).split(';'):
                 r = nap_code(r, sites_by_code)
                 # Um código antigo que hoje é de outro local apontaria para o
@@ -352,6 +385,11 @@ def osm_by_code(sites_by_code, dump=OSM_DUMP, evse_to_code=None):
             for r in photo_refs(t):
                 if r not in photos.setdefault(code, []):
                     photos[code].append(r)
+            if underground(t):
+                under.add(code)
+            d = check_date(t)
+            if d and d > checked.get(code, ''):
+                checked[code] = d
             if socks:
                 # Um elemento com vários refs ("A;B;C") cobre vários locais:
                 # os valores servem a todos, as quantidades não são de nenhum.
@@ -405,6 +443,12 @@ def osm_by_code(sites_by_code, dump=OSM_DUMP, evse_to_code=None):
         out.setdefault(code, {})['evse'] = ids
     for code, refs in photos.items():
         out.setdefault(code, {})['photoRefs'] = refs[:6]
+    for code in under:
+        out.setdefault(code, {})['underground'] = True
+    for code, u in units.items():
+        out.setdefault(code, {})['units'] = u
+    for code, d in checked.items():
+        out.setdefault(code, {})['checkDate'] = d
     for code, els_ in elements.items():
         best = min(els_)
         out.setdefault(code, {})['element'] = best[2]

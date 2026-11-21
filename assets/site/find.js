@@ -4,6 +4,8 @@
 'use strict';
 (function () {
   var N = window.NAP, el = N.el, t = N.t;
+  // Alexandre Moleiro's list of charger models (scripts/charger_models.py): the credit links it.
+  var MODELS_DOC = 'https://docs.google.com/document/d/1SyhISXEaZiAPYuRLQ9dA2OtFrwysFm01Yei11qTLQLw';
   N.addStrings({
     findH1: 'Onde carregar, e se está livre agora',
     findLead: 'Todos os postos públicos de Portugal, com o estado que o operador declara, a potência, as tomadas e como se paga.',
@@ -45,9 +47,20 @@
     m500: 'Só chega a {v} V: um carro de 800 V carrega devagar, ou precisa de converter a tensão (boost).',
     mExcl: 'só para clientes da rede', mBattery: 'com bateria de {kwh} kWh',
     mVariants: 'Conforme a versão instalada, que não sabemos qual é.',
-    mSrc: 'O que cada carro recebe, segundo a lista de modelos de {who}; o modelo é o que a comunidade mapeou no OpenStreetMap. Valores do fabricante: o operador pode limitar a potência.',
+    mSrc: 'O que cada carro recebe, segundo a lista de modelos de {who}; o modelo é o que a comunidade mapeou no OpenStreetMap. Valores do fabricante: o operador pode limitar a potência.', mSrcLink: 'Ver a lista',
     phSite: 'Foto do local', phModel: 'Foto de um {m}, não deste posto', phBy: '{who}, {lic}', phTaken: 'tirada em {d}',
     phLink: 'Ver foto no {src}', phAdd: 'Tens uma foto deste posto? Junta-a ao OpenStreetMap com o MapComplete',
+    dUg: 'Parque subterrâneo', ugTxt: 'Pode não haver rede móvel lá dentro: abre a app ou tem o cartão à mão antes de entrares.',
+    ugOsm: '(OpenStreetMap)', ugNap: '(descrição do operador no NAP)',
+    dChk: 'Verificado no local', chkTxt: 'pela comunidade do OpenStreetMap em {d}',
+    dNb: 'Perto (até 150 m)', nb_cafe: 'café', nb_restaurant: 'restaurante', nb_fast_food: 'comida rápida', nb_toilets: 'casa de banho', nb_shop: 'loja', nb_fuel: 'bomba de combustível',
+    nbMore: '{n} × {k}',
+    dDown: 'Avarias', downTxt: 'avariado {p} % do tempo nos últimos {n} dias', downNone: 'sem avarias declaradas nos últimos {n} dias',
+    dBusy: 'Ocupação por hora', busyWd: 'Dias úteis', busyWe: 'Fim de semana', busyNote: 'Percentagem do tempo em que as tomadas estavam a carregar, nos últimos {n} dias, segundo o estado que o operador declara. A barra mais escura é a hora atual.',
+    busyQuiet: 'Mais livre (entre as 7 h e as 23 h): {h}.', busyPeak: 'Mais cheio: {h}.', busyHour: '{h} h',
+    cUnit: 'Carregador', unitShared: 'a partilhar com {ids}', unitSharedKw: 'a partilhar com {ids}: até ~{kw} kW cada',
+    unitTip: 'Tomadas com a mesma letra estão no mesmo carregador (OpenStreetMap): com dois carros, a potência divide-se.',
+    unitPick: 'Para mais potência, escolhe {ids}: o carregador não tem ninguém a carregar.',
     life: 'Estado do posto', lifeOp: 'Em funcionamento', lifeConstruction: 'Em construção', lifePlanned: 'Planeado', lifeDisused: 'Desativado',
     lifeHelp: 'Por omissão só aparecem postos em funcionamento. Os postos em construção ou planeados vêm do OpenStreetMap: ainda não estão no NAP, por isso não têm estado, tomadas nem preços. Um posto que o NAP publica mas que o OpenStreetMap dá como desativado ou em construção conta como tal, a não ser que o operador o dê agora como disponível ou a carregar.',
     olcNote: 'No OpenStreetMap este posto está marcado como {s}. O NAP ainda o publica: as tomadas e os preços abaixo são os que o operador declara.',
@@ -95,9 +108,20 @@
     m500: 'Only goes up to {v} V: an 800 V car charges slowly, or needs to convert the voltage (boost).',
     mExcl: 'for the network\'s customers only', mBattery: 'with a {kwh} kWh battery',
     mVariants: 'Depending on the version installed, which we do not know.',
-    mSrc: 'What each car gets, from the charger list by {who}; the model is the one the community mapped on OpenStreetMap. Manufacturer figures: the operator may cap the power.',
+    mSrc: 'What each car gets, from the charger list by {who}; the model is the one the community mapped on OpenStreetMap. Manufacturer figures: the operator may cap the power.', mSrcLink: 'See the list',
     phSite: 'Photo of this site', phModel: 'Photo of a {m}, not of this charger', phBy: '{who}, {lic}', phTaken: 'taken on {d}',
     phLink: 'See photo on {src}', phAdd: 'Got a photo of this charger? Add it to OpenStreetMap with MapComplete',
+    dUg: 'Underground car park', ugTxt: 'There may be no mobile signal inside: open the app or have the card at hand before you drive in.',
+    ugOsm: '(OpenStreetMap)', ugNap: '(operator\'s description on the NAP)',
+    dChk: 'Checked on site', chkTxt: 'by the OpenStreetMap community on {d}',
+    dNb: 'Nearby (within 150 m)', nb_cafe: 'café', nb_restaurant: 'restaurant', nb_fast_food: 'fast food', nb_toilets: 'toilets', nb_shop: 'shop', nb_fuel: 'fuel station',
+    nbMore: '{n} × {k}',
+    dDown: 'Out of order', downTxt: 'out of order {p} % of the time over the last {n} days', downNone: 'no faults declared over the last {n} days',
+    dBusy: 'Occupancy by hour', busyWd: 'Weekdays', busyWe: 'Weekends', busyNote: 'Share of the time the sockets were charging over the last {n} days, as the operator declares the status. The darker bar is the current hour.',
+    busyQuiet: 'Quietest (7 am to 11 pm): {h}.', busyPeak: 'Busiest: {h}.', busyHour: '{h}:00',
+    cUnit: 'Charger', unitShared: 'sharing with {ids}', unitSharedKw: 'sharing with {ids}: up to ~{kw} kW each',
+    unitTip: 'Sockets with the same letter are on the same charger (OpenStreetMap): with two cars, the power is split.',
+    unitPick: 'For more power, pick {ids}: nobody is charging on that charger.',
     life: 'Charger status', lifeOp: 'In service', lifeConstruction: 'Under construction', lifePlanned: 'Planned', lifeDisused: 'Disused',
     lifeHelp: 'By default only chargers in service are listed. Chargers under construction or planned come from OpenStreetMap: they are not in the NAP yet, so they have no status, sockets or prices. A charger the NAP publishes but OpenStreetMap lists as disused or under construction counts as such, unless the operator reports it available or charging right now.',
     olcNote: 'OpenStreetMap lists this charger as {s}. The NAP still publishes it: the sockets and prices below are what the operator declares.',
@@ -310,6 +334,65 @@
     }
     return box;
   }
+  // Underground, checked on site, nearby, history (sites.json ug/chk/nb/hd/hn/hb).
+  function localNow(s) {
+    var tz = s.region === 'azores' ? 'Atlantic/Azores' : s.region === 'madeira' ? 'Atlantic/Madeira' : 'Europe/Lisbon';
+    try {
+      var parts = new Intl.DateTimeFormat('en-GB', { timeZone: tz, hour: 'numeric', hourCycle: 'h23', weekday: 'short' }).formatToParts(new Date());
+      var get = function (k) { return (parts.filter(function (x) { return x.type === k; })[0] || {}).value; };
+      return { hour: +get('hour'), we: get('weekday') === 'Sat' || get('weekday') === 'Sun' };
+    } catch (e) { var d = new Date(); return { hour: d.getHours(), we: d.getDay() === 0 || d.getDay() === 6 }; }
+  }
+  function busyRow(code) {
+    return code.split('').map(function (c) { return c === '.' ? null : +c * 10; });
+  }
+  function hourRanges(hours) {
+    // [7, 8, 9, 14] -> "7–9 h, 14 h"
+    var out = [], i = 0;
+    while (i < hours.length) {
+      var j = i;
+      while (j + 1 < hours.length && hours[j + 1] === hours[j] + 1) j++;
+      out.push(i === j ? t('busyHour', { h: hours[i] }) : hours[i] + '–' + t('busyHour', { h: hours[j] + 1 }));
+      i = j + 1;
+    }
+    return out.join(', ');
+  }
+  function busyChart(s) {
+    if (!s.hb || s.hb.length !== 48) return null;
+    var now = localNow(s), box = el('div', { class: 'busy' });
+    [[busyRow(s.hb.slice(0, 24)), 'busyWd', !now.we], [busyRow(s.hb.slice(24)), 'busyWe', now.we]].forEach(function (r) {
+      var vals = r[0], bars = el('div', { class: 'bars', role: 'img', 'aria-label': t(r[1]) + ': ' + vals.map(function (v, h) { return h + ' h ' + (v == null ? '—' : v + '%'); }).join(', ') });
+      vals.forEach(function (v, h) {
+        bars.appendChild(el('span', { class: 'bar' + (r[2] && h === now.hour ? ' now' : '') + (v == null ? ' na' : ''), style: 'height:' + (v == null ? 4 : Math.max(4, v)) + '%', title: h + ' h: ' + (v == null ? '—' : v + ' %') }));
+      });
+      var day = vals.map(function (v, h) { return { v: v, h: h }; }).filter(function (x) { return x.v != null && x.h >= 7 && x.h < 23; });
+      var lo = day.length ? Math.min.apply(null, day.map(function (x) { return x.v; })) : null;
+      var hi = day.length ? Math.max.apply(null, day.map(function (x) { return x.v; })) : null;
+      var txt = [];
+      if (lo != null) txt.push(t('busyQuiet', { h: hourRanges(day.filter(function (x) { return x.v === lo; }).map(function (x) { return x.h; })) }));
+      if (hi != null && hi > lo) txt.push(t('busyPeak', { h: hourRanges(day.filter(function (x) { return x.v === hi; }).map(function (x) { return x.h; })) }));
+      box.appendChild(el('div', { class: 'busyrow' }, el('div', { class: 'small' }, el('b', null, t(r[1])), txt.length ? ' · ' + txt.join(' ') : ''), bars,
+        el('div', { class: 'axis small muted', 'aria-hidden': 'true' }, ['0', '6', '12', '18', '23'].map(function (x) { return el('span', null, x); }))));
+    });
+    box.appendChild(el('p', { class: 'small muted' }, t('busyNote', { n: s.hn || '' })));
+    return box;
+  }
+  function nearbyText(nb) {
+    return nb.map(function (x) {
+      var k = t('nb_' + x.type);
+      return (x.n > 1 ? t('nbMore', { n: x.n, k: k }) : k) + ' (' + (x.name ? x.name + ', ' : '') + x.m + ' m)';
+    }).join(', ');
+  }
+  // Sockets on the same charger (points.json `u`, from OSM's posts): with
+  // another car on it, each gets the model's two-car figure. Live status
+  // decides which charger is free right now.
+  function unitLetter(u) { return String.fromCharCode(65 + (u % 26)); }
+  function twoCarKw(s, p) {
+    var m = s.mdl && p.mi != null ? s.mdl[p.mi] : null;
+    if (!m) return null;
+    var two = (m.v || []).map(function (v) { var c = (v.cars || []).filter(function (x) { return x[0] === 2; })[0]; return c ? Math.max(c[1] || 0, c[2] || 0) : null; }).filter(function (x) { return x; });
+    return two.length ? Math.min.apply(null, two) : null;
+  }
   function detail(s, id) {
     var d = el('div', { class: 'detail', id: id });
     var dl = el('dl', null,
@@ -326,6 +409,10 @@
     });
     if (s.shared) N.add(dl, [el('dt', null, t('dShared')), el('dd', null, t('sharedTxt', { kw: N.nf(s.shared) }))]);
     if (s.wc) N.add(dl, [el('dt', null, t('dWc')), el('dd', null, t('wc_' + s.wc))]);
+    if (s.ug) N.add(dl, [el('dt', null, t('dUg')), el('dd', null, t('ugTxt') + ' ' + t(s.ug === 'nap' ? 'ugNap' : 'ugOsm'))]);
+    if (s.nb) N.add(dl, [el('dt', null, t('dNb')), el('dd', null, nearbyText(s.nb) + ' (OpenStreetMap)')]);
+    if (s.hd != null) N.add(dl, [el('dt', null, t('dDown')), el('dd', null, t(s.hd > 0 ? 'downTxt' : 'downNone', { p: N.nf(s.hd, 1), n: s.hn }))]);
+    if (s.chk) N.add(dl, [el('dt', null, t('dChk')), el('dd', null, t('chkTxt', { d: s.chk }))]);
     if (s.old) N.add(dl, [el('dt', null, t('dOld')), el('dd', null, s.old.join(', ') + (s.oldop ? ' (' + s.oldop + ')' : ''))]);
     // Feedback on these goes to the OSM mappers' Telegram group (they asked for it there).
     if (s.fixme) N.add(dl, [el('dt', null, t('dFixme')), el('dd', null, s.fixme.join('; ') + ' ',
@@ -333,8 +420,11 @@
     if (s.doubt) N.add(dl, [el('dt', null, t('dDoubt')), el('dd', null, s.doubt)]);
     if (s.loc_km) N.add(dl, [el('dt', null, t('dLoc')), el('dd', null, t('locWarn', { d: N.nf(s.loc_km, s.loc_km < 10 ? 1 : 0) }))]);
     d.appendChild(dl);
-    if (s.mdl) d.appendChild(el('p', { class: 'small muted' }, t('mSrc', { who: 'Alexandre Moleiro' })));
+    if (s.mdl) d.appendChild(el('p', { class: 'small muted' }, t('mSrc', { who: 'Alexandre Moleiro' }), ' ',
+      el('a', { href: MODELS_DOC, rel: 'noopener noreferrer', target: '_blank' }, t('mSrcLink'))));
     if (!s.lc || s.ph) d.appendChild(photos(s));
+    var bc = busyChart(s);
+    if (bc) d.appendChild(el('div', null, el('h4', { class: 'small' }, t('dBusy')), bc));
     if (s.olc) d.appendChild(el('p', { class: 'muted small' }, t(liveOn(s) ? 'olcLive' : 'olcNote', { s: olcName(s) })));
     if (s.lc) d.appendChild(el('p', { class: 'muted small' }, t('lcNote', { s: t('life' + (s.lc === 'planned' ? 'Planned' : 'Construction')).toLowerCase() })));
     else if (!P) d.appendChild(el('p', { class: 'muted small' }, t('loadingSockets')));
@@ -345,6 +435,18 @@
       // single price outside MOBI.E; the no-contract price gets a column of its own.
       var list = pts(s), kinds = list.map(function (p) { return N.prices(p); });
       var anyAdhoc = kinds.some(function (k) { return k.adhoc; });
+      var anyUnit = list.some(function (p) { return p.u != null; });
+      var byUnit = {};
+      list.forEach(function (p) { if (p.u != null) (byUnit[p.u] = byUnit[p.u] || []).push(p); });
+      var sharedNow = function (p) {
+        return p.u == null ? [] : byUnit[p.u].filter(function (q) { return q !== p && q.status === 'charging'; });
+      };
+      var unitNote = function (p) {
+        var mates = sharedNow(p);
+        if (!mates.length) return null;
+        var kw = p.status === 'available' ? twoCarKw(s, p) : null, ids = mates.map(function (q) { return q.point_id; }).join(', ');
+        return el('small', { class: 'muted' }, ' (' + (kw ? t('unitSharedKw', { ids: ids, kw: N.nf(kw) }) : t('unitShared', { ids: ids })) + ')');
+      };
       var rows = list.map(function (p, i) {
         var pk = kinds[i], nf = pk.napfee;
         if (nf) napFee.push(p.point_id);
@@ -357,7 +459,8 @@
         (p.issues || []).forEach(function (k) { (issues[k] = issues[k] || []).push(p.point_id); });
         return el('tr', null, el('td', null, el('code', null, p.point_id)), el('td', { class: 'l' }, String(p.connectors || '—').split('|').join(', ')),
           el('td', null, p.kw ? N.nf(p.kw, 1) : '—', p.kw_src === 'osm' ? el('small', { class: 'muted' }, ' (' + t('napKw', { kw: p.nap_kw == null ? '—' : N.nf(p.nap_kw, 1) }) + ')') : null),
-          el('td', { class: 'l' }, N.status(p.status)),
+          anyUnit ? el('td', null, p.u != null ? unitLetter(p.u) : '—') : null,
+          el('td', { class: 'l' }, N.status(p.status), p.status === 'available' ? unitNote(p) : null),
           el('td', null, only ? N.nf(p.nap, 3) : nf ? money(nf.kwh) : model ? values(fp && fp.energy) : money(p.ENERGY)),
           el('td', null, nf ? money(nf.min) : model ? tiers(fp && fp.time) : money(p.TIME)),
           el('td', null, nf ? money(nf.flat) : model ? values(fp && fp.flat) : money(p.FLAT)),
@@ -365,10 +468,17 @@
       });
       d.appendChild(el('div', { class: 'scroll', tabindex: '0', role: 'group', 'aria-label': t('dSockets') },
         el('table', null, el('caption', null, t('dSockets')),
-          el('thead', null, el('tr', null, ['cId', 'cPlug', 'cKw', 'cState', 'cKwh', 'cMin', 'cFlat'].concat(anyAdhoc ? ['cAdhoc'] : []).map(function (k, i) {
-            return el('th', { scope: 'col', class: i === 1 || i === 3 ? 'l' : null }, t(k)); }))),
+          el('thead', null, el('tr', null, ['cId', 'cPlug', 'cKw'].concat(anyUnit ? ['cUnit'] : [], ['cState', 'cKwh', 'cMin', 'cFlat'], anyAdhoc ? ['cAdhoc'] : []).map(function (k) {
+            return el('th', { scope: 'col', class: k === 'cPlug' || k === 'cState' ? 'l' : null }, t(k)); }))),
           el('tbody', null, rows))));
       // The OPC-fee / CEME split only exists on MOBI.E; elsewhere the operator bills directly.
+      if (anyUnit) {
+        d.appendChild(el('p', { class: 'small muted' }, t('unitTip')));
+        // A free charger (no socket charging) next to a busy one: say which to pick.
+        var busyUnit = Object.keys(byUnit).some(function (u) { return byUnit[u].some(function (q) { return q.status === 'charging'; }); });
+        var freeUnits = Object.keys(byUnit).filter(function (u) { return byUnit[u].every(function (q) { return q.status === 'available'; }); });
+        if (busyUnit && freeUnits.length) d.appendChild(el('p', { class: 'small' }, t('unitPick', { ids: freeUnits.map(function (u) { return unitLetter(+u) + ' (' + byUnit[u].map(function (q) { return q.point_id; }).join(', ') + ')'; }).join('; ') })));
+      }
       if (mobie) d.appendChild(el('p', { class: 'small muted' }, t('feeNote')));
       if (anyAdhoc) d.appendChild(el('p', { class: 'small muted' }, t('adhocNote')));
       if (direct) d.appendChild(el('p', { class: 'small muted' }, t('directNote')));
