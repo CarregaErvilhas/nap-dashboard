@@ -72,7 +72,7 @@ html[lang="pt"] [data-lang="en"], html[lang="en"] [data-lang="pt"] { display: no
 .top { position: sticky; top: 0; z-index: 30; background: var(--bg); border-bottom: 1px solid var(--line); }
 .top .wrap { display: flex; align-items: center; gap: 12px; min-height: 56px; flex-wrap: wrap; padding-block: 6px; }
 .brand { font-weight: 900; font-size: 1.1rem; color: var(--fg); text-decoration: none; margin-right: auto; display: flex; align-items: center; gap: 8px; }
-.brand svg { width: 26px; height: 26px; color: var(--ink); }
+.brand img { width: 28px; height: 33px; display: block; }
 .nav { display: flex; gap: 4px; order: 3; width: 100%; overflow-x: auto; }
 .nav a { padding: 8px 12px; border-radius: 999px; color: var(--fg); text-decoration: none; font-weight: 700; white-space: nowrap; min-height: 44px; display: inline-flex; align-items: center; }
 .nav a[aria-current="page"] { background: var(--fg); color: var(--bg); }
