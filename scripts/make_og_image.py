@@ -1,6 +1,12 @@
-"""Draw the link-preview image (assets/og.png, 1200x630) from the committed site data.
+"""Draw the link-preview image (assets/og.png, 1200x630) from the committed site data,
+and the raster icons (assets/favicon.ico, assets/apple-touch-icon.png) from the mascot.
 
     python3 scripts/make_og_image.py [--chromium PATH]
+
+The mascot is assets/favicon.svg: a map pin with a face and the group's
+lightning bolt, like the other sites' (ohmigo's plug, Voltaria's book, the
+reporter car of ocarroeletrico.com). The header shows it as is; browsers that
+can't use an SVG favicon, and iPhones' home screens, get the PNG/ICO drawn here.
 
 X, WhatsApp, Facebook and LinkedIn show this image when someone shares a page
 of the site (the og:image/twitter:image tags that build_site.py writes). It is
@@ -14,6 +20,7 @@ import argparse
 import json
 import os
 import shutil
+import struct
 import subprocess
 import sys
 import tempfile
@@ -24,6 +31,7 @@ W, H = 1200, 630
 # The map's box, on the right of the card. Mainland Portugal only: the islands
 # would shrink it to nothing at this size.
 MAP = (760, 40, 400, 550)  # x, y, w, h
+MASCOT_H = 230
 
 
 def project(lon_lat, bounds, box):
@@ -46,14 +54,20 @@ def svg(outline, sites):
                    for x, y in (pr(s['lon'], s['lat']) for s in sites
                                 if s.get('region') == 'mainland' and s.get('lat') is not None
                                 and s.get('status') not in ('planned', 'removed')))
-    return (f'<svg width="{W}" height="{H}" viewBox="0 0 {W} {H}" style="position:absolute;inset:0">'
+    # The mascot is a map pin: its tip marks Lisbon. In the SVG's viewBox (24 8 212 252) the tip
+    # is at (130, 248), so at MASCOT_H px tall it sits 106/212 of the width in and 240/252 down.
+    lx, ly = pr(-9.14, 38.72)
+    mw = MASCOT_H * 212 / 252
+    pin = (f'<img src="{(ROOT / "assets/favicon.svg").as_uri()}" alt="" style="position:absolute;'
+           f'left:{lx - mw * 106 / 212:.0f}px;top:{ly - MASCOT_H * 240 / 252:.0f}px;height:{MASCOT_H}px;'
+           f'z-index:1;filter:drop-shadow(0 10px 12px rgba(15,23,42,.18))">')
+    return pin + (f'<svg width="{W}" height="{H}" viewBox="0 0 {W} {H}" style="position:absolute;inset:0">'
             f'<path d="{paths}" fill="#f1e9df" stroke="#e3d6c8" stroke-width="1"/>'
             f'<g fill="#c2410c" fill-opacity=".55">{dots}</g></svg>')
 
 
 def page(outline, sites):
     font = (ROOT / 'assets/site/fonts/nunito-latin.woff2').as_uri()
-    bolt = '<path d="M13 2 5 13h6l-1 9 8-11h-6z"/>'
     return f"""<!doctype html><meta charset="utf-8"><style>
 @font-face {{ font-family: Nunito; src: url("{font}") format("woff2"); font-weight: 200 1000; }}
 html, body {{ margin: 0; width: {W}px; height: {H}px; overflow: hidden; background: #fbfaf5; }}
@@ -61,18 +75,55 @@ body {{ position: relative; font-family: Nunito, sans-serif; color: #14203a; }}
 .txt {{ position: absolute; left: 80px; top: 0; bottom: 0; width: 640px; display: flex;
         flex-direction: column; justify-content: center; }}
 .brand {{ display: flex; align-items: center; gap: 14px; font-weight: 800; font-size: 34px; }}
-.brand span.tile {{ width: 56px; height: 56px; border-radius: 14px; background: #0f172a;
-                    display: grid; place-items: center; }}
 h1 {{ font-size: 70px; line-height: 1.05; font-weight: 900; margin: 34px 0 22px; letter-spacing: -1px; }}
 p {{ font-size: 30px; line-height: 1.35; color: #56627a; margin: 0; }}
 .url {{ margin-top: 34px; font-size: 26px; font-weight: 800; color: #c2410c; }}
 </style><body>{svg(outline, sites)}
 <div class="txt">
-  <div class="brand"><span class="tile"><svg width="34" height="34" viewBox="0 0 24 24" fill="#38bdf8">{bolt}</svg></span>Postos PT</div>
+  <div class="brand">Postos PT</div>
   <h1>Postos de carregamento em Portugal</h1>
   <p>Onde estão, se estão livres agora e quanto custam. Dados oficiais do NAP.</p>
   <div class="url">nap.ocarroeletrico.com</div>
 </div></body>"""
+
+
+def shot(chromium, html, size, out, transparent):
+    """Screenshot an HTML string at size x size."""
+    with tempfile.TemporaryDirectory() as tmp:
+        src = Path(tmp) / 'p.html'
+        src.write_text(html, encoding='utf-8')
+        args = [chromium, '--headless', '--no-sandbox', '--disable-gpu', '--hide-scrollbars',
+                f'--window-size={size},{size}', f'--screenshot={out}', src.as_uri()]
+        if transparent:
+            args.insert(2, '--default-background-color=00000000')
+        subprocess.run(args, check=True, capture_output=True)
+
+
+def icon_html(size, share, background):
+    """The mascot centred in a square, filling `share` of its height."""
+    svg = (ROOT / 'assets/favicon.svg').as_uri()
+    return (f'<!doctype html><body style="margin:0;width:{size}px;height:{size}px;display:grid;'
+            f'place-items:center;background:{background}"><img src="{svg}" style="height:{size * share:.0f}px">')
+
+
+def icons(chromium):
+    """favicon.ico (16, 32 and 48 px, transparent) and apple-touch-icon.png (180 px on the page's
+    background, with room around: iOS rounds the corners)."""
+    shot(chromium, icon_html(180, .78, '#fbfaf5'), 180, ROOT / 'assets/apple-touch-icon.png', False)
+    pngs = []
+    with tempfile.TemporaryDirectory() as tmp:
+        for s in (16, 32, 48):
+            p = Path(tmp) / f'{s}.png'
+            shot(chromium, icon_html(s, 1, 'transparent'), s, p, True)
+            pngs.append((s, p.read_bytes()))
+    # ICO with PNG entries (every browser since IE Vista reads them): a 6-byte header,
+    # a 16-byte entry per image, then the PNGs.
+    head = struct.pack('<HHH', 0, 1, len(pngs))
+    off, dirs = 6 + 16 * len(pngs), b''
+    for s, data in pngs:
+        dirs += struct.pack('<BBBBHHII', s, s, 0, 0, 1, 32, len(data), off)
+        off += len(data)
+    (ROOT / 'assets/favicon.ico').write_bytes(head + dirs + b''.join(d for _, d in pngs))
 
 
 def main():
@@ -88,7 +139,8 @@ def main():
         subprocess.run([a.chromium, '--headless', '--no-sandbox', '--disable-gpu', '--hide-scrollbars',
                         f'--window-size={W},{H}', f'--screenshot={a.out}', src.as_uri()],
                        check=True, capture_output=True)
-    print('escrito', a.out, file=sys.stderr)
+    icons(a.chromium)
+    print('escrito', a.out, 'favicon.ico, apple-touch-icon.png', file=sys.stderr)
 
 
 if __name__ == '__main__':
