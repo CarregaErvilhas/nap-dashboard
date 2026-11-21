@@ -49,6 +49,37 @@ jobs:
         run: python scripts/nap_etl.py data/evChargingInfra_latest.xml data/evActualStatus_latest.xml data
       - name: OSM cross-check (fetches Todos.json fresh)
         run: python scripts/osm_umap.py
+      # Modelos de carregador: o catálogo público que o Alexandre Moleiro mantém
+      # num Google Doc (fetch_charger_models.sh -> data/charger_models.txt), lido
+      # fresco em cada corrida. Lêem-no o dataset (charger_models.py: quanto cada
+      # modelo dá a um carro de 400 ou 800 V, sozinho ou partilhado) e o
+      # hardware_checks.py (errors.md item 14).
+      - name: Charger model catalogue
+        run: bash scripts/fetch_charger_models.sh
+      # Fotos do local (OSM: Panoramax, Commons) e do modelo (Commons), em
+      # miniatura (scripts/charger_photos.py). Ficam em cache entre corridas:
+      # só se descarregam as novas. Vão no artifact com o dataset.
+      - name: Restore charger photos cache
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: |
+            data/photos
+            data/photos.json
+          key: charger-photos-${{ github.run_id }}
+          restore-keys: charger-photos-
+      - name: Charger photos
+        continue-on-error: true
+        run: python scripts/charger_photos.py
+      # O histórico por posto (avarias e ocupação por hora, archive_history.py
+      # -> data/site_history.json) entra no modelo da rede. O refresh semanal
+      # calcula-o; esta cache leva-o também à corrida diária do ohmigo, que não
+      # lê o arquivo.
+      - name: Restore per-site history
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: data/site_history.json
+          key: site-history-${{ github.run_id }}
+          restore-keys: site-history-
       - name: Fetch OSM places
         continue-on-error: true
         run: |
@@ -60,7 +91,11 @@ jobs:
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: ohmigo-dataset
-          path: data/ohmigo_chargers.json
+          # O dataset e as miniaturas das fotos que ele refere (photos/<id>.jpg):
+          # no mesmo artifact, para o pages.yml nunca publicar um sem as outras.
+          path: |
+            data/ohmigo_chargers.json
+            data/photos/
           retention-days: 30
           if-no-files-found: error
       # Dispara o deploy do Pages para que o /ohmigo/chargers.json publicado

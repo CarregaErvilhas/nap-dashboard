@@ -126,13 +126,26 @@ pts['NAP_UNICO'] = pd.to_numeric(pts['NAP_UNICO'], errors='coerce')
 MODEL = 'data/ohmigo_chargers.json'
 if not os.path.exists(MODEL):
     sys.exit(f'FAIL: {MODEL} em falta: corre primeiro python scripts/ohmigo_dataset.py data {MODEL}')
-model_pts = {(s['id'], p['id']): p for s in json.load(open(MODEL))['sites'] for p in s['points']}
+_model_sites = json.load(open(MODEL))['sites']
+model_pts = {(s['id'], p['id']): p for s in _model_sites for p in s['points']}
+# Per site, from the same model: the charger models from the catalogue
+# (charger_models.py: what a 400 V or 800 V car gets, alone or sharing) and
+# the photos (charger_photos.py: the site's own, from OSM; the model's, from
+# Commons). Keyed by the MOBI.E code, as sites_map is.
+model_by_code = {s['code']: s for s in _model_sites}
 _m = [model_pts.get(k, {}) for k in zip(pts.site_id, pts.point_id)]
 pts['kw'] = pd.to_numeric(pd.Series([m.get('kw') for m in _m], dtype=object), errors='coerce').values
 # Where OSM replaced the NAP's power: kw_src 'osm' and the NAP's value in nap_kw
 # (null when the NAP declared none).
 pts['kw_src'] = ['osm' if 'napKw' in m else 'nap' for m in _m]
 pts['nap_kw'] = [m.get('napKw') for m in _m]
+# Which of the site's charger models (sites.json `mdl`) this socket is, when the
+# model could tell: the detail shows the per-car power on that socket's row.
+pts['mi'] = pd.Series([m.get('model') for m in _m], dtype=object).values
+# Which charger (unit) of the site this socket is on, from OSM's posts: two
+# sockets with the same `u` share the charger's power (sites.json `mdl` says
+# how much each gets with two cars). Null when unknown.
+pts['u'] = pd.Series([m.get('unit') for m in _m], dtype=object).values
 pts['model_regime'] = [m.get('regime') for m in _m]
 pts['fees'] = [m.get('opc') for m in _m]
 pts['nap_price'] = [m.get('napPrice') for m in _m]
@@ -282,6 +295,34 @@ for _, s in S.iterrows():
         rec['osm_fee'] = om.get('osm_fee')
         rec['ad_hoc'] = om.get('ad_hoc')
     rec.update(osm_extra(ext))
+    ms = model_by_code.get(ext) or {}
+    if ms.get('models'):
+        # n: name, v: the versions that fit the sockets (cars = [[n, kW at 400 V,
+        # kW at 800 V], ...]), ph: a photo of the model (not of this site).
+        rec['mdl'] = [{k: v for k, v in (('n', m['name']), ('v', m['variants']), ('ph', m.get('photo'))) if v}
+                      for m in ms['models']]
+    if ms.get('photos'):
+        rec['ph'] = ms['photos']
+    # Underground car park ('osm' | 'nap': who says so): often no mobile signal.
+    if ms.get('underground'):
+        rec['ug'] = ms['underground']
+    # The last time someone from the community checked the charger on site (OSM).
+    if (ms.get('osm') or {}).get('checkDate'):
+        rec['chk'] = ms['osm']['checkDate']
+    # Cafés, restaurants, toilets, shops and fuel stations within 150 m (OSM).
+    if ms.get('nearby'):
+        rec['nb'] = ms['nearby']
+    # The site's history in the AmpereArchive: % of the time out of order (hd)
+    # over hn days, and occupancy per local hour as 48 characters, weekdays then
+    # weekends, each the tenth of the % charging (0-9, '.' = no data): compact,
+    # because sites.json is what Procurar loads first.
+    h = ms.get('history')
+    if h:
+        if h.get('down') is not None:
+            rec['hd'], rec['hn'] = h['down'], round(h['days'])
+        if h.get('busy'):
+            enc = lambda xs: ''.join('.' if x is None else str(min(9, x // 10)) for x in xs)
+            rec['hb'] = enc(h['busy']['wd']) + enc(h['busy']['we'])
     if ext in caca_by_site:
         rec['doubt'] = '; '.join(caca_by_site[ext])
     sites_map.append(rec)
@@ -877,6 +918,19 @@ if _ccf is not None and _conc is not None:
                 _hist['sites_at'], _conc_rows, concelho_check.locator(concelho_check.load_concelhos()))
         except (OSError, ValueError) as e:
             print(f'territory growth skipped: {e}')
+# Which charger models each operator uses (Rede > Operadores): the models the
+# network model joined to each site (OSM's make + Alexandre Moleiro's list of
+# models), counted in sites. Top operators by sites with a known model.
+_ops = {}
+for _s in _model_sites:
+    if not _s.get('models'):
+        continue
+    o = _ops.setdefault(_s.get('operator') or '?', {'n': 0, 'm': {}})
+    o['n'] += 1
+    for _m in _s['models']:
+        o['m'][_m['name']] = o['m'].get(_m['name'], 0) + 1
+op_models = [[op, o['n'], sorted(o['m'].items(), key=lambda kv: (-kv[1], kv[0]))[:4]]
+             for op, o in sorted(_ops.items(), key=lambda kv: (-kv[1]['n'], kv[0]))[:20]] or None
 card_pay = None
 _fs = S[S.site_id.isin(_fast_sites)]
 if len(_fs):
@@ -918,6 +972,7 @@ data = {
     'price_stats': price_stats,
     'territory': territory,
     'card_pay': card_pay,
+    'op_models': op_models,
     # Per socket, from the network model (see MODEL above): kw, the fees with
     # every tier, regime, the NAP's price off MOBI.E (nap) and issues.
     # pw_class stays the NAP's: rede.js recounts the Rede charts from it with
@@ -925,7 +980,7 @@ data = {
     'points': pts[
         ['point_id', 'site_external_id', 'city', 'operator_name', 'region', 'pw_class', 'kw', 'kw_src',
          'nap_kw', 'connector_types', 'status', 'opc_operador', 'fees', 'model_regime', 'nap_price',
-         'nap_fees', 'issues', 'pay']]
+         'nap_fees', 'issues', 'pay', 'mi', 'u']]
         .rename(columns={'connector_types': 'connectors', 'opc_operador': 'opc',
                          'model_regime': 'regime', 'nap_price': 'nap'}).to_dict('records'),
     'facts_html': FACTS_HTML,

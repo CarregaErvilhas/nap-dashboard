@@ -17,6 +17,9 @@ Dois passos:
      cache os locais saem sem `places`.
   2. places_for(sites) (importado por ohmigo_dataset.py): para cada posto, os
      locais que o contêm ou estão a poucos metros.
+Do mesmo extrato, fetch_amenities() + nearby_for(): os cafés, restaurantes,
+casas de banho, lojas e bombas a menos de 150 m (data/umap_cache/amenities.json),
+para a espera de um carregamento rápido.
 
 Porque não um posto "dentro" de um centro comercial no OSM: muitos postos estão
 na rua ao lado, ou num parque que não tem o nome do centro. Por isso o
@@ -193,7 +196,105 @@ def places_for(sites, path=CACHE):
     return out
 
 
+# --- O que há perto do posto, para a espera ------------------------------
+# Num carregamento rápido de 20 a 40 minutos, o condutor quer saber se há onde
+# beber um café, comer ou ir à casa de banho. Do mesmo extrato: os pontos (e o
+# centro das áreas) destes tipos, com ou sem nome, a menos de NEAR_M metros.
+AMENITY_CACHE = 'data/umap_cache/amenities.json'
+NEAR_M = 150
+AMENITIES = [
+    ('amenity', 'cafe', 'cafe'),
+    ('amenity', 'restaurant', 'restaurant'),
+    ('amenity', 'fast_food', 'fast_food'),
+    ('amenity', 'toilets', 'toilets'),
+    ('shop', 'convenience', 'shop'),
+    ('shop', 'supermarket', 'shop'),
+    ('amenity', 'fuel', 'fuel'),   # uma bomba tem quase sempre loja e casa de banho
+]
+
+
+def amenity_of(tags):
+    for k, v, kind in AMENITIES:
+        if tags.get(k) == v:
+            return kind
+    return None
+
+
+def fetch_amenities(pbf, path=AMENITY_CACHE, min_count=1000):
+    """Lê o extrato e escreve [lat, lon, tipo, nome] por ponto de interesse."""
+    import osmium
+
+    wanted = [(k, v) for k, v, _ in AMENITIES]
+    fp = (osmium.FileProcessor(pbf)
+          .with_areas(osmium.filter.TagFilter(*wanted))
+          .with_filter(osmium.filter.TagFilter(*wanted)))
+    pois = []
+    for o in fp:
+        if o.is_way() or o.is_relation():
+            continue  # as áreas chegam à parte
+        tags = dict(o.tags)
+        kind = amenity_of(tags)
+        if not kind:
+            continue
+        if o.is_node():
+            lat, lon = o.location.lat, o.location.lon
+        else:
+            ring = next(iter(o.outer_rings()), None)
+            if not ring:
+                continue
+            pts = [(n.lat, n.lon) for n in ring]
+            lat, lon = sum(p[0] for p in pts) / len(pts), sum(p[1] for p in pts) / len(pts)
+        pois.append([round(lat, 5), round(lon, 5), kind, tags.get('name')])
+    if len(pois) < min_count:
+        sys.exit(f'FAIL: só {len(pois)} pontos de interesse em {pbf}; a cache não é escrita.')
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    with open(path, 'w') as f:
+        json.dump({'fetchedAt': time.time(), 'source': os.path.basename(pbf), 'pois': pois},
+                  f, ensure_ascii=False, separators=(',', ':'))
+    print(f'{len(pois)} pontos de interesse em {path}')
+    return pois
+
+
+def nearby_for(sites, path=AMENITY_CACHE, radius=NEAR_M):
+    """{código do site: [{type, n, m, name}]}: por tipo, quantos há a menos de
+    `radius` metros, a que distância fica o mais perto e o nome dele (se o
+    tiver), o mais perto primeiro. Vazio (com aviso) sem cache."""
+    try:
+        with open(path) as f:
+            cache = json.load(f)
+    except (OSError, ValueError) as e:
+        print(f'aviso: sem pontos de interesse ({path}: {e}); os locais saem sem `nearby`')
+        return {}
+    grid = {}
+    for lat, lon, kind, name in cache['pois']:
+        grid.setdefault((int(lat // CELL), int(lon // CELL)), []).append((lat, lon, kind, name))
+    out = {}
+    for code, s in sites.items():
+        lat, lon = s['lat'], s['lon']
+        ci, cj = int(lat // CELL), int(lon // CELL)
+        best = {}
+        for di in (-1, 0, 1):
+            for dj in (-1, 0, 1):
+                for plat, plon, kind, name in grid.get((ci + di, cj + dj), []):
+                    m = math.dist(_xy(lat, lon, lat), _xy(plat, plon, lat))
+                    if m > radius:
+                        continue
+                    b = best.setdefault(kind, {'type': kind, 'n': 0, 'm': math.inf, 'name': None})
+                    b['n'] += 1
+                    if m < b['m']:
+                        b['m'], b['name'] = m, name
+        if best:
+            out[code] = [{k: v for k, v in {**b, 'm': round(b['m'])}.items() if v is not None}
+                         for b in sorted(best.values(), key=lambda b: b['m'])]
+    return out
+
+
 if __name__ == '__main__':
     if len(sys.argv) != 2:
         sys.exit('uso: python scripts/osm_places.py <portugal-latest.osm.pbf>')
     fetch(sys.argv[1])
+    # Uma falha aqui não deita fora os locais, que já foram escritos.
+    try:
+        fetch_amenities(sys.argv[1])
+    except SystemExit as e:
+        print(e)

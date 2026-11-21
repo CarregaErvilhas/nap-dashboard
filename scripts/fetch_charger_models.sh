@@ -1,22 +1,21 @@
 #!/usr/bin/env bash
-# Fetch the community's catalogue of charger models for hardware_checks.py.
+# Fetch the catalogue of charger models for charger_models.py and hardware_checks.py.
 # Run from the repo root:  bash scripts/fetch_charger_models.sh
 #
-# The catalogue is a Google Doc ("Modelos de Carregadores usados em Portugal")
-# that a member of the community keeps: one section per model (`§.Marca.Modelo`)
-# with its maximum DC voltage and current (`1000V 200A`). hardware_checks.py
-# reads it to know the rated voltage of the charger OSM says is at each site.
+# The catalogue is a public Google Doc ("Modelos de Carregadores usados em
+# Portugal") that Alexandre Moleiro keeps, free to use: per model and version,
+# the maximum DC voltage and current (`1000V 200A`), the total power and what
+# each car gets at 400 V and 800 V. charger_models.py parses it (the network
+# model's `models`); hardware_checks.py reads the rated voltage (errors.md
+# item 14).
 #
-# Same rules as the PCVE tracker (fetch_tracker.sh): it is someone else's work
-# with no reuse licence and this repo is public, so
-#   * the URL lives in the CHARGER_MODELS_URL secret, never in the source;
-#   * nothing from it is versioned (data/ is gitignored);
-#   * a failed fetch never fails the pipeline: hardware_checks.py then runs on
-#     OSM's socket voltages alone and errors.md says the catalogue was missing.
+#   * Fetched fresh on every run (data/ is gitignored), so it never goes stale.
+#   * A failed fetch never fails the pipeline: the model then has no `models`,
+#     and hardware_checks.py runs on OSM's socket voltages alone and says so.
 #
-# CHARGER_MODELS_URL is the Doc's plain-text export,
-# https://docs.google.com/document/d/<id>/export?format=txt
-# A local copy works too: CHARGER_MODELS_FILE=path/to/export.txt.
+# CHARGER_MODELS_URL overrides the Doc's plain-text export below; a local copy
+# works too: CHARGER_MODELS_FILE=path/to/export.txt.
+CHARGER_MODELS_URL="${CHARGER_MODELS_URL:-https://docs.google.com/document/d/1SyhISXEaZiAPYuRLQ9dA2OtFrwysFm01Yei11qTLQLw/export?format=txt}"
 set -euo pipefail
 
 mkdir -p data
@@ -38,9 +37,6 @@ elif [ -n "${CHARGER_MODELS_URL:-}" ]; then
     echo "aviso: catálogo de modelos não descarregado (HTTP ${code})." >&2
     rm -f "$TMP"
   fi
-else
-  echo "aviso: sem CHARGER_MODELS_URL nem CHARGER_MODELS_FILE: o item 14 de errors.md" >&2
-  echo "       usa só a tensão das tomadas no OSM nesta corrida." >&2
 fi
 
 if [ -f "$TMP" ]; then

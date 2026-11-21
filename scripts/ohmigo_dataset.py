@@ -53,11 +53,13 @@ Uso:  python scripts/ohmigo_dataset.py [pasta_de_dados] [saída.json]
       (por omissão: data  data/ohmigo_chargers.json)
 """
 import json
+import re
 import sys
 from datetime import datetime, timezone
 
 import pandas as pd
 
+import charger_models
 import nap_static_checks
 import osm_places
 from opc_tariffs import Tariffs, has_ceme, regime
@@ -274,6 +276,27 @@ for code, tags in osm.items():
     # de todos os elementos do local (também quando esse elemento não tem a
     # ficha desta tomada: o id EVSE está mapeado no poste errado).
     evse = tags.pop('evse', {})
+    # Que tomadas são do mesmo carregador (osm_tags: um poste do OSM com os ids
+    # EVSE de várias). `unit` numera-os no local (0, 1, ...), só os que têm duas
+    # ou mais tomadas deste local: com outro carro ligado à mesma unidade, cada
+    # um recebe menos (o valor para 2 carros de `models`). O site e o ohmigo
+    # juntam-lhe o estado ao vivo ("a do lado está a carregar").
+    unit_of = {}
+    for u, keys in enumerate(tags.pop('units', [])):
+        for k in keys:
+            unit_of.setdefault(k, u)
+    # Só DC: num poste AC (2 × 22 kW) cada tomada tem o seu circuito, e a
+    # potência não se divide. Numerados pela ordem da primeira tomada de cada um.
+    members = {}
+    for pt in site['points']:
+        u = unit_of.get(pt.get('_evse'))
+        if u is not None and pt.get('dc'):
+            members.setdefault(u, []).append(pt)
+    shared = [pts for pts in members.values() if len(pts) >= 2]
+    shared.sort(key=lambda pts: site['points'].index(pts[0]))
+    for n, pts in enumerate(shared):
+        for pt in pts:
+            pt['unit'] = n
     for pt in site['points']:
         mapped = (osm_for_point(pt, evse.get(pt.pop('_evse', None), []))
                   or osm_for_point(pt, tags.get('sockets', [])) or {})
@@ -295,6 +318,60 @@ for site in sites.values():
         pt.pop('_evse', None)
         resolve(pt)
 
+# Que carregador é, e quanto dá a cada carro: o catálogo de modelos do
+# Alexandre Moleiro (charger_models.py) ligado ao `hardware` que o OSM mapeia
+# no local. Fica no local (`models`: as versões do modelo que batem com as
+# tomadas) e em cada tomada que se consegue atribuir (`model`, o índice):
+# diz ao ohmigo o que um carro de 400 V ou de 800 V recebe e quanto desce com
+# outro carro ligado, o que a placa (kw) não diz. Depois do resolve(): as
+# versões escolhem-se pelos kW e A finais. Sem o catálogo, nada muda.
+catalog = charger_models.load(f'{DATA}/charger_models.txt')
+catalog_meta = None
+if catalog:
+    cidx = charger_models.index(catalog)
+    for site in sites.values():
+        found, assign = charger_models.site_models((site.get('osm') or {}).get('hardware'),
+                                                   site['points'], catalog, cidx)
+        if found:
+            site['models'] = found
+            for j, i in assign.items():
+                site['points'][j]['model'] = i
+    catalog_meta = {'author': charger_models.AUTHOR, 'title': charger_models.TITLE, 'url': charger_models.SOURCE_URL}
+
+# Fotos (charger_photos.py): as do local, que a comunidade pôs no OSM, e uma
+# do modelo de carregador, escolhida à mão no Wikimedia Commons. `src` é o
+# caminho da miniatura no Pages (photos/<id>.jpg, publicada com este
+# ficheiro); sem `src` é só um link (Mapillary). Cada uma leva o autor, a
+# licença e a página de origem: a licença (CC BY-SA, quase sempre) pede o crédito.
+try:
+    photo_index = json.load(open(f'{DATA}/photos.json', encoding='utf-8'))
+except (OSError, ValueError):
+    photo_index = {}
+try:
+    model_photo = json.load(open('assets/charger_model_photos.json', encoding='utf-8'))['models']
+except (OSError, ValueError, KeyError):
+    model_photo = {}
+for site in sites.values():
+    refs = (site.get('osm') or {}).pop('photoRefs', [])
+    found = [photo_index[r] for r in refs if r in photo_index]
+    if found:
+        site['photos'] = found[:4]
+    for m in site.get('models', []):
+        ph = next((photo_index.get('commons:' + model_photo[k]) for k in m['keys']
+                   if model_photo.get(k) and photo_index.get('commons:' + model_photo[k], {}).get('src')), None)
+        if ph:
+            m['photo'] = ph
+
+# Parque subterrâneo: muitas vezes sem rede móvel, e a app do CEME não arranca
+# a sessão. Diz-o o OSM (osm_tags.underground) ou a descrição do local no NAP
+# ("Parque Coberto - Piso -1", "Parque Subterrâneo"). `underground` diz quem.
+RE_UNDERGROUND = re.compile(r'piso\s*-\s*\d|\bcave\b|subterr|sub-?solo|n[ií]vel\s*-\s*\d|underground', re.I)
+for site in sites.values():
+    if (site.get('osm') or {}).pop('underground', None):
+        site['underground'] = 'osm'
+    elif RE_UNDERGROUND.search(site.get('locationDescription') or ''):
+        site['underground'] = 'nap'
+
 # Em que centro comercial, hospital, parque... fica o posto: o OSM não o diz
 # num posto, só o dá por geometria (ponto dentro de polígono), por isso fazemo-lo
 # aqui (osm_places.py). Deixa o ohmigo encontrar "os postos do Mar Shopping" sem
@@ -304,11 +381,40 @@ places = osm_places.places_for({c: s for c, s in by_code.items() if s and isinst
 for code, found in places.items():
     by_code[code]['places'] = found
 
+# O que há perto para a espera (osm_places.nearby_for): cafés, restaurantes,
+# casas de banho, lojas e bombas a menos de 150 m, do extrato do Geofabrik.
+nearby = osm_places.nearby_for({c: s for c, s in by_code.items() if s and isinstance(c, str)},
+                               f'{DATA}/umap_cache/amenities.json')
+for code, found in nearby.items():
+    by_code[code]['nearby'] = found
+
+# O histórico de cada posto no AmpereArchive (archive_stats.site_stats, escrito
+# pelo archive_history.py): % do tempo avariado e ocupação por hora, em dias
+# úteis e ao fim de semana. Estados declarados pelos operadores. `history.days`
+# diz quantos dias há por trás; sem o ficheiro, os locais saem sem `history`.
+history_meta = None
+try:
+    with open(f'{DATA}/site_history.json', encoding='utf-8') as f:
+        hist = json.load(f)
+    for site in sites.values():
+        h = hist['sites'].get(site['id'])
+        if h:
+            site['history'] = h
+    history_meta = hist.get('coverage')
+except (OSError, ValueError, KeyError) as e:
+    print(f'aviso: sem histórico por posto ({DATA}/site_history.json: {e})')
+
 out = {
     'schema': SCHEMA,
     'generatedAt': datetime.now(timezone.utc).isoformat(timespec='seconds'),
     'sites': [s for s in sites.values() if s['points']],
 }
+# De onde vêm os `models`, para quem os mostra dar o crédito.
+if catalog_meta:
+    out['modelsSource'] = catalog_meta
+# A janela do histórico por posto (início, fim, dias observados).
+if history_meta:
+    out['historySource'] = {**history_meta, 'source': 'NAP via AmpereArchive'}
 with open(OUT, 'w') as f:
     json.dump(out, f, ensure_ascii=False, separators=(',', ':'))
 
@@ -327,6 +433,20 @@ n_resolved = sum(1 for s in out['sites'] for p in s['points']
 n_issues = sum(1 for s in out['sites'] for p in s['points'] if 'issues' in p)
 print(f'{n_resolved} tomadas com valores do OSM em vez do NAP; números do OSM ignorados por implausíveis: {ignored_osm or 0}')
 print(f'{n_issues} tomadas com problemas só-NAP (issues)')
+n_models = sum(1 for s in out['sites'] if 'models' in s)
+n_model_dc = sum(1 for s in out['sites'] for p in s['points'] if p.get('dc') and 'model' in p)
+print(f'{n_models} locais com modelo de carregador do catálogo; {n_model_dc}/{n_dc} tomadas DC com modelo')
+n_photo = sum(1 for s in out['sites'] if any(p.get('src') for p in s.get('photos', [])))
+n_mphoto = sum(1 for s in out['sites'] if any('photo' in m for m in s.get('models', [])))
+print(f'{n_photo} locais com foto do local, {n_mphoto} com foto do modelo')
+n_under = sum(1 for s in out['sites'] if s.get('underground'))
+n_check = sum(1 for s in out['sites'] if (s.get('osm') or {}).get('checkDate'))
+print(f'{n_under} locais em parque subterrâneo, {n_check} com data de verificação no OSM')
+n_unit = sum(1 for s in out['sites'] for p in s['points'] if 'unit' in p)
+print(f'{n_unit} tomadas com o carregador (unidade) a que pertencem')
+n_near = sum(1 for s in out['sites'] if 'nearby' in s)
+n_hist = sum(1 for s in out['sites'] if 'history' in s)
+print(f'{n_near} locais com cafés/restaurantes/WC por perto, {n_hist} com histórico')
 
 # Guarda: um upstream que mude de formato não pode publicar um ficheiro vazio
 # que o ohmigo depois serviria como "não há postos aqui".

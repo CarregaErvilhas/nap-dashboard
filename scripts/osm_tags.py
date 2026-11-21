@@ -8,6 +8,7 @@ valor para o mesmo posto. Só stdlib.
 import json
 import math
 import re
+import urllib.parse
 from collections import Counter
 
 # --- OpenStreetMap ------------------------------------------------------------
@@ -175,6 +176,69 @@ def hardware_label(make, model):
     return ' '.join(x for x in (make, model) if x)[:80]
 
 
+# Fotos do posto no OSM: o MapComplete (tema "charging stations") põe-nas no
+# Panoramax e escreve `panoramax=<uuid>` no elemento; há também Mapillary e
+# Wikimedia Commons. São referências, não imagens: charger_photos.py vai
+# buscar a miniatura, o autor e a licença de cada uma.
+RE_PHOTO_TAG = re.compile(r'^(panoramax|mapillary|wikimedia_commons|image)(?::\d+)?$')
+RE_UUID = re.compile(r'[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}')
+
+
+def photo_refs(tags):
+    """As fotos que um elemento OSM aponta, como 'panoramax:<uuid>',
+    'mapillary:<id>' ou 'commons:File:<nome>'. Um `image` só conta se for de
+    um destes três (um URL qualquer não se descarrega)."""
+    out = []
+    for k, v in tags.items():
+        m = RE_PHOTO_TAG.match(k)
+        if not m:
+            continue
+        for x in str(v).split(';'):
+            x = x.strip()
+            kind = m.group(1)
+            if kind == 'image':
+                if 'panoramax' in x and RE_UUID.search(x):
+                    kind, x = 'panoramax', RE_UUID.search(x).group(0)
+                elif 'mapillary.com' in x and re.search(r'pKey=(\d+)|/(\d{6,})', x):
+                    g = re.search(r'pKey=(\d+)|/(\d{6,})', x)
+                    kind, x = 'mapillary', g.group(1) or g.group(2)
+                elif 'wikimedia.org' in x and re.search(r'(File:[^?#]+)', x):
+                    kind, x = 'wikimedia_commons', urllib.parse.unquote(re.search(r'(File:[^?#]+)', x).group(1))
+                else:
+                    continue
+            if kind == 'panoramax' and RE_UUID.fullmatch(x):
+                out.append(f'panoramax:{x}')
+            elif kind == 'mapillary' and x.isdigit():
+                out.append(f'mapillary:{x}')
+            elif kind == 'wikimedia_commons' and x.startswith('File:'):
+                out.append('commons:' + x.replace('_', ' '))
+    return out
+
+
+# Num parque subterrâneo muitas vezes não há rede móvel: a app do CEME não
+# arranca a sessão. O OSM diz-o em `location=underground`, ou com um piso
+# (`level`) ou uma camada (`layer`) abaixo de zero.
+def underground(tags):
+    if tags.get('location') == 'underground':
+        return True
+    for k in ('level', 'layer'):
+        nums = [osm_num(x) for x in str(tags.get(k, '')).split(';') if RE_NUM.search(x)]
+        if nums and all(str(x).strip().startswith('-') for x in str(tags.get(k, '')).split(';') if x.strip()):
+            return True
+    return False
+
+
+# Quando alguém da comunidade foi lá ver: `check_date` (e `survey:date`), em
+# ISO. Ano ou ano-mês também valem ("2025", "2025-02").
+RE_DATE = re.compile(r'^\d{4}(?:-\d{2}(?:-\d{2})?)?$')
+
+
+def check_date(tags):
+    dates = [str(tags.get(k, '')).strip() for k in ('check_date', 'survey:date')]
+    dates = [d for d in dates if RE_DATE.match(d)]
+    return max(dates) if dates else None
+
+
 def km(lat1, lon1, lat2, lon2):
     p = math.pi / 180
     a = (math.sin((lat2 - lat1) * p / 2) ** 2
@@ -242,6 +306,10 @@ def osm_by_code(sites_by_code, dump=OSM_DUMP, evse_to_code=None):
     fixmes = {}    # código -> notas "fixme" da comunidade
     evse = {}      # código -> {id EVSE normalizado: tomadas desse elemento}
     elements = {}  # código -> [(prioridade, distância, "node/123")], para o link do site
+    photos = {}    # código -> referências de fotos (photo_refs), pela ordem em que aparecem
+    under = set()  # códigos com um elemento em parque subterrâneo
+    units = {}     # código -> [[ids EVSE de um poste], ...]: tomadas do mesmo carregador
+    checked = {}   # código -> a data mais recente em que alguém lá foi ver
     for e in els:
         t = e.get('tags') or {}
         lc = None
@@ -300,6 +368,12 @@ def osm_by_code(sites_by_code, dump=OSM_DUMP, evse_to_code=None):
                     for x in str(t.get('ref:EU:EVSE', '')).split(';'):
                         if evse_key(x):
                             evse.setdefault(code, {})[evse_key(x)] = socks
+                # Um poste (charge_point) com os ids de várias tomadas: são do
+                # mesmo carregador, e com dois carros ligados a potência
+                # divide-se entre eles (charger_models: o valor para 2 carros).
+                keys = sorted({evse_key(x) for x in str(t.get('ref:EU:EVSE', '')).split(';')} - {None})
+                if is_point and len(keys) >= 2:
+                    units.setdefault(code, []).append(keys)
             for r in str(t.get('old_ref', '')).split(';'):
                 r = nap_code(r, sites_by_code)
                 # Um código antigo que hoje é de outro local apontaria para o
@@ -308,6 +382,14 @@ def osm_by_code(sites_by_code, dump=OSM_DUMP, evse_to_code=None):
                     old_refs.setdefault(code, set()).add(r)
             if t.get('fixme', '').strip():
                 fixmes.setdefault(code, set()).add(t['fixme'].strip()[:200])
+            for r in photo_refs(t):
+                if r not in photos.setdefault(code, []):
+                    photos[code].append(r)
+            if underground(t):
+                under.add(code)
+            d = check_date(t)
+            if d and d > checked.get(code, ''):
+                checked[code] = d
             if socks:
                 # Um elemento com vários refs ("A;B;C") cobre vários locais:
                 # os valores servem a todos, as quantidades não são de nenhum.
@@ -359,6 +441,14 @@ def osm_by_code(sites_by_code, dump=OSM_DUMP, evse_to_code=None):
         out.setdefault(code, {})['fixme'] = sorted(notes)[:5]
     for code, ids in evse.items():
         out.setdefault(code, {})['evse'] = ids
+    for code, refs in photos.items():
+        out.setdefault(code, {})['photoRefs'] = refs[:6]
+    for code in under:
+        out.setdefault(code, {})['underground'] = True
+    for code, u in units.items():
+        out.setdefault(code, {})['units'] = u
+    for code, d in checked.items():
+        out.setdefault(code, {})['checkDate'] = d
     for code, els_ in elements.items():
         best = min(els_)
         out.setdefault(code, {})['element'] = best[2]

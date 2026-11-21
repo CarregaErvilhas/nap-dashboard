@@ -118,6 +118,7 @@
     fastCard();
     growthCard();
     cardPayCard();
+    opModelsCard();
     N.liveNote($('live'), liveRes, D.snapshot);
   }
 
@@ -206,6 +207,9 @@
     growthUnplaced: '{n} locais com coordenadas fora de qualquer concelho (no mar, fora do país) ficam de fora.',
     gAbs: 'Maior subida', gPct: 'Maior subida em %', gDown: 'Desceram', gPctNote: 'Só concelhos com {m} ou mais {what} há um ano.',
     colYearAgo: 'há um ano', colNow: 'agora', colDiff: 'diferença', colPct: '%',
+    omH: 'Que carregadores usa cada operador', omLead: 'Os modelos de carregador que a comunidade mapeou no OpenStreetMap nos locais de cada operador, contados em locais. Só os operadores com mais locais de modelo conhecido.',
+    omSites: 'locais com modelo conhecido', omModels: 'modelos (locais)',
+    omHow: 'Modelo: o fabricante e o modelo no OpenStreetMap, ligados à lista de modelos de carregadores do Alexandre Moleiro.', omList: 'Ver a lista',
     cardH: 'Pagar com cartão bancário nos postos de 50 kW ou mais',
     cardLead: 'O regulamento europeu AFIR obriga os postos de 50 kW ou mais instalados desde 13 de abril de 2024 a aceitar cartão bancário, com leitor ou sem contacto, e os mais antigos na rede rodoviária transeuropeia (RTE-T) a partir de 1 de janeiro de 2027. O NAP não diz quando cada posto foi instalado nem se fica na RTE-T: estes números não dizem quem cumpre.',
     cardSrc: 'Fonte', cardYes: 'aceita', cardNo: 'não aceita', cardUnk: 'não diz', cardNap: 'NAP (o operador)', cardOsm: 'OpenStreetMap (a comunidade)',
@@ -231,6 +235,9 @@
     growthUnplaced: '{n} sites whose coordinates fall outside every municipality (at sea, abroad) are left out.',
     gAbs: 'Largest rise', gPct: 'Largest rise in %', gDown: 'Fell', gPctNote: 'Only municipalities with {m} or more {what} a year ago.',
     colYearAgo: 'a year ago', colNow: 'now', colDiff: 'change', colPct: '%',
+    omH: 'Which chargers each operator uses', omLead: 'The charger models the community mapped on OpenStreetMap at each operator\'s sites, counted in sites. Only the operators with the most sites of known model.',
+    omSites: 'sites with a known model', omModels: 'models (sites)',
+    omHow: 'Model: the make and model on OpenStreetMap, joined to Alexandre Moleiro\'s list of charger models.', omList: 'See the list',
     cardH: 'Paying by bank card at chargers of 50 kW or more',
     cardLead: 'The EU AFIR regulation requires chargers of 50 kW or more installed since 13 April 2024 to take bank cards, with a reader or contactless, and older ones on the trans-European road network (TEN-T) from 1 January 2027. The NAP does not say when each charger was installed or whether it is on the TEN-T: these numbers do not say who complies.',
     cardSrc: 'Source', cardYes: 'accepts', cardNo: 'does not', cardUnk: 'does not say', cardNap: 'NAP (the operator)', cardOsm: 'OpenStreetMap (the community)',
@@ -337,6 +344,23 @@
         return el('tr', null, el('th', { scope: 'row', class: 'l' }, o[0]), el('td', null, N.nf(o[1])), td(o[2]), C.osm ? td(o[3]) : null, C.osm ? td(o[4]) : null);
       })))));
     box.appendChild(el('p', { class: 'muted small' }, t('cardHow')));
+  }
+
+  // Which charger models each operator uses (stats.json `op_models`: [operator,
+  // sites with a known model, [[model, sites], ...]]), from the network model.
+  function opModelsCard() {
+    var box = $('cOpModels'), M = D.op_models;
+    box.hidden = !M;
+    if (!M) return;
+    N.clear(box).appendChild(el('h3', null, t('omH')));
+    box.appendChild(el('p', { class: 'muted small' }, t('omLead')));
+    box.appendChild(wrap(t('omH'), el('table', { class: 'conc' }, cols(['colOp', 'omSites', 'omModels']),
+      el('tbody', null, M.map(function (o) {
+        return el('tr', null, el('th', { scope: 'row', class: 'l' }, o[0]), el('td', null, N.nf(o[1])),
+          el('td', { class: 'l' }, o[2].map(function (m) { return m[0] + ' (' + N.nf(m[1]) + ')'; }).join(', ')));
+      })))));
+    box.appendChild(el('p', { class: 'muted small' }, t('omHow'), ' ',
+      el('a', { href: 'https://docs.google.com/document/d/1SyhISXEaZiAPYuRLQ9dA2OtFrwysFm01Yei11qTLQLw', rel: 'noopener noreferrer', target: '_blank' }, t('omList'))));
   }
 
   // The same aggregations build_dashboard.py does, over the live statuses.

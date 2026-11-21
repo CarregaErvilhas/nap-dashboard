@@ -338,6 +338,67 @@ def occupancy_heatmap(con):
     return out
 
 
+# ------------------------------------------------------- por posto (o modelo da rede)
+
+SITE_MIN_DAYS = 7     # menos do que isto e um posto não tem histórico que se mostre
+SITE_CELL_DAYS = 2    # uma hora de um tipo de dia precisa de 2 dias com leituras
+
+
+def site_stats(con, min_days=SITE_MIN_DAYS, cell_days=SITE_CELL_DAYS):
+    """Por local (site_id do NAP, o `id` do modelo da rede), o que um condutor
+    quer saber antes de ir:
+      down  % do tempo observado em que as tomadas estavam avariadas
+            (outOfOrder/inoperative), todas as do local juntas;
+      busy  ocupação por hora local, em dias úteis (wd) e ao fim de semana
+            (we): % do tempo a carregar entre as tomadas a carregar ou livres,
+            arredondada à unidade; None numa hora com menos de `cell_days` dias.
+    Tudo a partir dos mesmos spans das estatísticas por operador (build()):
+    estados declarados pelos operadores, não medidos. Vazio com menos de
+    `min_days` dias de janela, porque seria o retrato de uma semana má."""
+    cov = coverage(con)
+    if not cov or cov['days'] < min_days:
+        return {}
+    down = con.execute(f"""
+        SELECT sp.site_id, sum(o.secs), coalesce(sum(o.secs) FILTER (WHERE sp.status IN {DOWN}), 0)
+        FROM spans sp JOIN spans_obs o USING (id)
+        WHERE sp.status NOT IN {NOT_OBSERVED}
+        GROUP BY 1 HAVING sum(o.secs) > 0""").fetchall()
+    busy = con.execute("""
+        WITH h AS (
+          SELECT unnest(generate_series(date_trunc('hour', (SELECT s FROM win)),
+                                        (SELECT e FROM win), INTERVAL 1 HOUR)) AS h0
+        ), hh AS (
+          SELECT h0, h0 + INTERVAL 1 HOUR AS h1 FROM h
+          WHERE NOT EXISTS (SELECT 1 FROM gaps WHERE gaps.g0 < h0 + INTERVAL 1 HOUR AND gaps.g1 > h0)
+        ), sp AS (
+          SELECT sp.site_id, sp.status,
+                 CASE k.region WHEN 'azores' THEN 'Atlantic/Azores'
+                               WHEN 'madeira' THEN 'Atlantic/Madeira'
+                               ELSE 'Europe/Lisbon' END AS tz,
+                 greatest(sp.t0, (SELECT s FROM win)) AS c0,
+                 least(sp.t1, (SELECT e FROM win)) AS c1
+          FROM spans sp JOIN sockets k USING (site_id, point_id)
+          WHERE sp.status IN ('available', 'charging')
+        ), x AS (
+          SELECT sp.site_id, sp.status, timezone(sp.tz, hh.h0) AS lt,
+                 epoch(least(sp.c1, hh.h1) - greatest(sp.c0, hh.h0)) AS secs
+          FROM sp JOIN hh ON hh.h0 < sp.c1 AND hh.h1 > sp.c0
+        )
+        SELECT site_id, isodow(lt) >= 6 AS we, hour(lt) AS hr,
+               sum(secs) FILTER (WHERE status = 'charging') AS ch, sum(secs) AS tot,
+               count(DISTINCT CAST(lt AS DATE)) AS days
+        FROM x WHERE secs > 0 GROUP BY ALL""").fetchall()
+    out = {}
+    for site, secs, dn in down:
+        out[site] = {'down': round(100 * dn / secs, 1), 'days': cov['days']}
+    for site, we, hr, ch, tot, days in busy:
+        if days < cell_days or not tot:
+            continue
+        b = out.setdefault(site, {'days': cov['days']}).setdefault('busy', {'wd': [None] * 24, 'we': [None] * 24})
+        b['we' if we else 'wd'][hr] = round(100 * (ch or 0) / tot)
+    return out
+
+
 # ------------------------------------------------------- 4. telemetria suspeita
 
 def suspicious(con, stale_days=7, flips_per_day=4, min_points=5):
