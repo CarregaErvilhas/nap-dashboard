@@ -158,7 +158,8 @@ e copiar `data/network_24h.json` para `site/data/changes.json` (sem commitar).
 `scripts/network_news.py` (diff semanal vs `network-census.json` do HEAD →
 `novidades.md` + novo `network-census.json`; primeira corrida = baseline) →
 (`scripts/osm_places.py`) → `scripts/ohmigo_dataset.py` (the network model,
-`data/ohmigo_chargers.json`) → `scripts/build_dashboard.py` →
+`data/ohmigo_chargers.json`) → `scripts/fetch_charger_models.sh` +
+`scripts/hardware_checks.py` → `scripts/build_dashboard.py` →
 `scripts/model_parity.py`.
 `scripts/build_dashboard.py` reads the network model for everything it shows
 per socket and per site in "Procurar" (see "Network model"), and the
@@ -171,8 +172,9 @@ payload into `site/data/{stats,panels,sites,points,outline,opc}.json`
 It appends
 `data/nap_static_findings.md` (written by `scripts/nap_static_checks.py`),
 `data/concelho_mismatches.md` (written by `concelho_check.py`),
-`data/osm_umap_findings.md` (written by `scripts/osm_umap.py`) and
-`data/tracker_findings.md` (written by `scripts/tracker_checks.py`) to `errors.md`
+`data/osm_umap_findings.md` (written by `scripts/osm_umap.py`),
+`data/tracker_findings.md` (written by `scripts/tracker_checks.py`) and
+`data/hardware_findings.md` (written by `scripts/hardware_checks.py`) to `errors.md`
 when present.
 `python3 scripts/build_site.py` re-renders the pages from the committed
 `site/data` without the CSVs (use it to ship a front-end change between weekly
@@ -189,14 +191,37 @@ pipeline produzir dados absurdos sem rebentar (limiares mínimos para
 sites/pontos/join/DGEG/registo) — falha o job e o site online fica no
 último bom.
 
-`scripts/nap_static_checks.py` runs the rules on the static NAP alone that
+`scripts/nap_static_checks.py` runs the rules on the static NAP alone. Two
 were mined from the tracker's classes: 750/600 V on a DC connector (legacy
 placeholder; tracker: 171 rows of 750 → 500 V) and `mode3AC3p` with
 single-phase voltage and < 11 kW (tracker: 199 rows of `mode3AC3p` →
-`mode2AC1p`). They live outside `tracker_checks.py` so they still run when the
-tracker fetch fails. Writes `data/nap_static_findings.csv` + `.md` (errors.md
-item 8, subsections 8a/8b); `build_dashboard.py` imports `findings()` for the
+`mode2AC1p`). Two need no adjudication: a DC connector with no voltage, and a
+voltage above 1500 V, where low voltage ends for DC. They live outside
+`tracker_checks.py` so they still run when the tracker fetch fails. Writes
+`data/nap_static_findings.csv` + `.md` (errors.md item 8, subsections 8a–8d, one
+fixed letter per rule); `build_dashboard.py` imports `findings()` for the
 item-8 counts.
+
+`scripts/hardware_checks.py` checks the DC voltage the NAP declares against the
+equipment installed (errors.md item 14), from the network model: the socket's
+voltage on OSM (`osm.v`, or the NAP's when `osmSame` confirms it) and, on CCS,
+the rated voltage of the charger OSM maps at the site (`osm.hardware`), looked
+up in the community's catalogue of models (a Google Doc, "Modelos de
+Carregadores usados em Portugal": `§.Marca.Modelo` sections with
+`1000V 200A`). 14a: the NAP and the equipment fall on different sides of 500 V,
+the threshold of Procurar's "Tensão DC" filter and of ohmigo (the error that
+changes what an 800 V car gets). 14b: same side, a different value from OSM's,
+aggregated per operator and pattern (thousands of sockets, mostly one template
+value per operator). 14c: OSM and the catalogue disagree with each other, the
+list for someone with a photo of the plate. The catalogue alone never makes a
+14b: the maximum voltage varies between revisions of a model. A site's rating
+counts only when every charger mapped there is in the catalogue and the DC ones
+share one voltage. The catalogue is someone else's work with no reuse licence:
+`fetch_charger_models.sh` downloads its text export on every run from the
+`CHARGER_MODELS_URL` secret into `data/charger_models.txt` (gitignored, check D
+of `ci_paths.py`), and without it item 14 runs on OSM alone and says so. Only
+the conclusions are published (the model comes from OSM, its rating is the
+maker's). Nothing of it goes into the network model.
 
 `scripts/concelho_check.py` locates every site inside official CAOP concelho
 polygons (downloaded on first run into `data/caop_cache/`, gitignored) and flags the
@@ -327,8 +352,9 @@ value goes to `napKw`/`napV`/`napA`/`napCable`, present only when replaced
 ×10 V/A of a plausible NAP value), or it is dropped. ohmigo made this call itself
 until the model did; it now reads the result. Per point, `issues` lists what
 the NAP-only rules of `nap_static_checks.py` found on it (`tensao_placeholder`,
-`trifasico_sem_3p`, errors.md item 8). Nothing from the PCVE tracker goes into
-the model: it is a third party's data with no reuse licence, and the model is
+`trifasico_sem_3p`, `tensao_em_falta`, `tensao_impossivel`, errors.md item 8).
+Nothing from the PCVE tracker or the catalogue of charger models goes into the
+model: they are third parties' data with no reuse licence, and the model is
 public. Where OSM agrees with the NAP, the point
 lists those fields in `osmSame` (`["a", "v"]`), so ohmigo can tell a value
 confirmed on the charger from one only the operator declared (a DC socket's
@@ -697,8 +723,9 @@ Gate de ~1 s em cada PR para `main`, sem rede e sem dependências (stdlib).
   tem de aparecer com o prefixo `data/` (apanha um `pd.read_csv('nap_static_sites.csv')`
   que volte ao sítio antigo);
 - **C** — cada `scripts/*.py`/`*.sh` citado num workflow existe no disco;
-- **D** — os derivados do tracker estão **fora** do git, e o `.gitignore` não
-  tem excepções para eles (testa o índice com `git ls-files`, **não**
+- **D** — os dados de terceiros sem licença (os derivados do tracker e o
+  catálogo de modelos de carregadores, `UNLICENSED`) estão **fora** do git, e o
+  `.gitignore` não tem excepções para eles (testa o índice com `git ls-files`, **não**
   `git check-ignore`: este reporta ficheiros já versionados como "não
   ignorados", que é precisamente o caso proibido).
 

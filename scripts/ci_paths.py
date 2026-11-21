@@ -54,6 +54,7 @@ DATA_FILES = [
     'opc_registry_authority.csv', 'tracker_errors.csv', 'tracker_meta.json',
     'tracker_findings.md', 'tracker_findings.csv',
     'ohmigo_chargers.json',
+    'charger_models.txt', 'hardware_findings.csv', 'hardware_findings.md',
 ]
 CACHE_DIRS = ['umap_cache', 'caop_cache']
 
@@ -63,6 +64,11 @@ CACHE_DIRS = ['umap_cache', 'caop_cache']
 TRACKER_DERIVED = {
     'opc_registry_authority.csv', 'tracker_errors.csv', 'tracker_meta.json',
 }
+# Tudo o que é de outrem e sem licença de reutilização, e de onde vem em cada
+# corrida. O catálogo de modelos de carregadores é um Google Doc da comunidade
+# (hardware_checks.py): pelas mesmas razões do tracker, nunca vai para o git.
+UNLICENSED = {**{n: 'fetch_tracker.sh + tracker_sync.py' for n in TRACKER_DERIVED},
+              'charger_models.txt': 'fetch_charger_models.sh'}
 
 # Onde se procuram referências soltas (B). O site/ (gerado) não entra: os
 # seus site/data/*.json (stats, panels, sites, points, outline, opc) são
@@ -133,17 +139,16 @@ for wf in ('refresh.yml', 'agents.yml', 'pr-checks.yml', 'pages.yml', 'ohmigo-da
                 if not os.path.exists(os.path.join('scripts', ref)):
                     fail('C', f'{p}:{lineno}: referencia scripts/{ref} que não existe')
 
-# --- D. derivados do tracker nunca versionados ------------------------------
+# --- D. dados de terceiros sem licença nunca versionados ---------------------
 # Testamos o índice com `git ls-files`, não `git check-ignore`: este último
 # reporta ficheiros JÁ versionados como "não ignorados", que é exactamente o
 # caso proibido aqui.
 tracked = set(tracked_paths())
-for name in sorted(TRACKER_DERIVED):
+for name, source in sorted(UNLICENSED.items()):
     p = os.path.join('data', name)
     if p in tracked:
-        fail('D', f'{p} está versionado — o tracker tem de ser sempre extraído da '
-                  f'origem (fetch_tracker.sh + tracker_sync.py), nunca copiado '
-                  f'para o git')
+        fail('D', f'{p} está versionado — é de terceiros sem licença e tem de vir '
+                  f'sempre da origem ({source}), nunca copiado para o git')
     if f'!{p}' in GITIGNORE:
         fail('D', f'.gitignore tem `!{p}` — essa excepção volta a pôr no git '
                   f'dados derivados de terceiros')
@@ -158,5 +163,5 @@ if errors:
     sys.exit(1)
 
 print(f'OK: raiz limpa, {len(DATA_FILES)} ficheiros de dados só referenciados '
-      f'como data/…, scripts dos workflows existem, {len(TRACKER_DERIVED)} '
-      f'derivados do tracker fora do git.')
+      f'como data/…, scripts dos workflows existem, {len(UNLICENSED)} '
+      f'ficheiros de terceiros sem licença fora do git.')
