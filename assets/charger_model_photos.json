@@ -1,0 +1,4 @@
+{
+ "about": "Uma foto livre do Wikimedia Commons por modelo de carregador, escolhida à mão: chave do catálogo (charger_models.py, `§.Marca.Modelo` sem o `§.`) -> 'File:<nome>'. Um modelo, não um posto: quem a mostra diz que é de outro carregador do mesmo modelo. scripts/charger_photos.py descarrega a miniatura, o autor e a licença. Só ficheiros com licença livre (CC BY, CC BY-SA, CC0, domínio público) em que o modelo se reconhece.",
+ "models": {}
+}

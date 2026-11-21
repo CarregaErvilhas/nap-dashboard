@@ -447,6 +447,45 @@ artifact with the same name). It exits non-zero (and the
 refresh fails) below 5 000 sites or 10 000 tariffed points. `SCHEMA` in the
 script bumps on incompatible format changes.
 
+Also per site, `models`: the charger models of `scripts/charger_models.py`,
+from the catalogue Alexandre Moleiro keeps in a Google Doc ("Modelos de
+Carregadores usados em Portugal": per model and version, total kW, max V,
+cable A, and the kW **each car** gets at 400 V and 800 V with 1, 2, 3… cars
+plugged in). It is the same file `hardware_checks.py` reads
+(`fetch_charger_models.sh`, `CHARGER_MODELS_URL` secret,
+`data/charger_models.txt`): the author's, with no reuse licence, so the URL is
+never in the repo, only its numbers are used (never its photos or logos), and
+`ohmigo_dataset.py` writes `models` only with `CHARGER_MODELS_PUBLISH=yes` (a
+repo variable, set once the author agrees; `charger_models.load` also refuses
+a catalogue of under 50 models). The join to a site
+is the OSM `hardware` (`charger_models.match`: same name once normalised, or
+OSM more specific, "iFC160-350A"; a part of a set, "blueberry PLUS", matches
+every set it is in; `LABEL_ALIAS` for names OSM writes differently). Of the
+model's versions, only those whose amps and kW fit the site's sockets stay
+(`variants`, cars = `[n, kW at 400 V, kW at 800 V]`); none better than the
+others keeps them all. Each point gets `model` (index into `models`) when it
+can be told: the only DC model, else the one whose one-car kW is nearest; an
+AC socket, the only model with AC; a DC model no DC socket can be (they all
+declare more than it gives: OSM has an old charger) leaves the site. Top-level
+`modelsSource` carries the author and title for the credit. `python scripts/charger_models.py --labels
+data/ohmigo_chargers.json` lists the OSM names that match nothing.
+The site shows them in Procurar's detail (`mdl` in `sites.json`, `mi` per point).
+
+And `photos` (per site) and `models[].photo`: thumbnails from
+`scripts/charger_photos.py`. A site's own photos are the OSM references
+(`osm_tags.photo_refs`: `panoramax=`, `mapillary=`, `wikimedia_commons=`,
+`image=` pointing at one of them; MapComplete's charging-station theme saves
+photos on Panoramax); a model's photo is a Commons file chosen by hand per
+catalogue key in `assets/charger_model_photos.json` (a photo of the same model,
+not of the site: everyone who shows it says so). The script downloads a 500 px
+thumbnail of each to `data/photos/<id>.jpg` with author, licence and source
+page in `data/photos.json` (cached between runs; Mapillary is a link only,
+its API needs a key). The thumbnails travel in the `ohmigo-dataset` artifact
+with the JSON, and `pages.yml` publishes them under `/photos/` (JPEG only,
+`<16 hex>.jpg`, < 400 kB): the site shows them from its own domain, so the
+CSP and the privacy page need no third party. Procurar links sites without a
+photo to MapComplete, so a driver can add one.
+
 A daily refresh (`ohmigo-daily.yml`, cron `49 2,14 * * *`) re-runs only the ohmigo
 pipeline (NAP ETL + OSM dump + places + dataset) and publishes a new
 `ohmigo-dataset` artifact (30-day retention), then triggers a Pages deploy, so

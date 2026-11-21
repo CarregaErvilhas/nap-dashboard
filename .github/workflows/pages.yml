@@ -6,7 +6,8 @@ name: Deploy dashboard to GitHub Pages
 # scripts/build_site.py e validados pelo scripts/validate_site.py). Junta
 # robots.txt, sitemap.xml, /.well-known/security.txt, llms-full.txt e um
 # /dashboard.html que redireciona para / (links antigos).
-# Publica também o dataset do ohmigo em /ohmigo/chargers.json (o artifact
+# Publica também o dataset do ohmigo em /ohmigo/chargers.json e as miniaturas
+# das fotos que ele refere em /photos/ (o artifact
 # ohmigo-dataset mais recente de uma corrida do ohmigo-daily.yml ou
 # refresh.yml na main; ver scripts/ohmigo_dataset.py).
 # Dispara quando o site, os resumos de texto (llms-full.txt) ou este workflow
@@ -114,11 +115,28 @@ jobs:
                and (.conclusion == null or .conclusion == \"success\")")
             if [ "$ok" = "true" ]; then id=$aid; echo "ohmigo: artifact $aid da corrida $rid"; break; fi
           done <<< "$cands"
-          # O zip tem um só ficheiro; -p sem nome extrai-o.
+          # O zip tem o JSON do dataset e as miniaturas das fotos (photos/<id>.jpg,
+          # scripts/charger_photos.py), que vão para /photos/. -p de tudo menos
+          # photos/ dá o JSON (artifacts antigos só têm esse ficheiro).
           if [ -n "$id" ]; then
             gh api "repos/$GITHUB_REPOSITORY/actions/artifacts/$id/zip" > "$RUNNER_TEMP/ohmigo.zip"
-            unzip -p "$RUNNER_TEMP/ohmigo.zip" > public/ohmigo/chargers.json
+            unzip -p "$RUNNER_TEMP/ohmigo.zip" -x 'photos/*' > public/ohmigo/chargers.json
             python3 -c 'import json,sys; d=json.load(open(sys.argv[1])); print("ohmigo:", len(d["sites"]), "sites, schema", d["schema"])' public/ohmigo/chargers.json
+            # Só JPEG, nome <16 hex>.jpg, menos de 400 kB, no máximo 2000: o
+            # resto do zip não entra no site.
+            mkdir -p "$RUNNER_TEMP/photos" public/photos
+            unzip -q -j "$RUNNER_TEMP/ohmigo.zip" 'photos/*' -d "$RUNNER_TEMP/photos" 2>/dev/null || true
+            n=0
+            for f in "$RUNNER_TEMP"/photos/*; do
+              [ -f "$f" ] && [ ! -L "$f" ] || continue
+              b=$(basename -- "$f")
+              [[ "$b" =~ ^[0-9a-f]{16}\.jpg$ ]] || { echo "::warning::foto ignorada: $b"; continue; }
+              [ "$(stat -c %s "$f")" -lt 400000 ] || continue
+              [ "$(head -c 3 "$f" | od -An -tx1 | tr -d ' \n')" = "ffd8ff" ] || continue
+              [ "$n" -lt 2000 ] || break
+              cp -- "$f" "public/photos/$b"; n=$((n+1))
+            done
+            echo "ohmigo: $n fotos"
           else
             echo "::warning::sem artifact ohmigo-dataset; /ohmigo/chargers.json fica de fora"
           fi

@@ -300,3 +300,10 @@ table.sess { margin-top: 14px; }
 #cFast, #cGrowth, #cCardPay { margin-top: 16px; }
 #cGrowth .seg { margin: 10px 0 4px; }
 table.conc { margin-top: 14px; }
+
+/* Fotos no detalhe do posto (find.js photos()): miniaturas de 500 px, lado a lado. */
+.detail .photos { display: flex; flex-wrap: wrap; gap: .75rem; margin: .75rem 0; }
+.detail .photos > p { flex-basis: 100%; margin: 0; }
+.detail .photo { margin: 0; flex: 0 1 15rem; max-width: 100%; }
+.detail .photo img { display: block; width: 100%; height: 12rem; object-fit: cover; border-radius: .5rem; background: var(--line, #ddd); }
+.detail .photo figcaption { margin-top: .25rem; }

@@ -39,6 +39,15 @@
     dLoc: 'Localização', locWarn: 'O NAP e o OpenStreetMap discordam na localização (a {d} km). Mostramos a do OpenStreetMap.',
     dDoubt: 'Dúvida da comunidade', directions: 'Como chegar', seeOsm: 'Ver no OpenStreetMap', cost: 'Quanto custa carregar aqui (ohmigo)',
     loadingSockets: 'A carregar as tomadas…',
+    dModel: 'Modelo do carregador', dModels: 'Modelos dos carregadores',
+    mAlone: 'Um carro sozinho: até {a}', mShared: 'com {n} carros ligados: até {a} cada',
+    m400: '{kw} kW a 400 V', m800: '{kw} kW a 800 V', mTotal: '{kw} kW no total', mAc: 'mais uma tomada AC de {kw} kW', mAcOnly: '{n} × {kw} kW AC',
+    m500: 'Só chega a {v} V: um carro de 800 V carrega devagar, ou precisa de converter a tensão (boost).',
+    mExcl: 'só para clientes da rede', mBattery: 'com bateria de {kwh} kWh',
+    mVariants: 'Conforme a versão instalada, que não sabemos qual é.',
+    mSrc: 'O que cada carro recebe, segundo a lista de modelos de {who}; o modelo é o que a comunidade mapeou no OpenStreetMap. Valores do fabricante: o operador pode limitar a potência.',
+    phSite: 'Foto do local', phModel: 'Foto de um {m}, não deste posto', phBy: '{who}, {lic}', phTaken: 'tirada em {d}',
+    phLink: 'Ver foto no {src}', phAdd: 'Tens uma foto deste posto? Junta-a ao OpenStreetMap com o MapComplete',
     life: 'Estado do posto', lifeOp: 'Em funcionamento', lifeConstruction: 'Em construção', lifePlanned: 'Planeado', lifeDisused: 'Desativado',
     lifeHelp: 'Por omissão só aparecem postos em funcionamento. Os postos em construção ou planeados vêm do OpenStreetMap: ainda não estão no NAP, por isso não têm estado, tomadas nem preços. Um posto que o NAP publica mas que o OpenStreetMap dá como desativado ou em construção conta como tal, a não ser que o operador o dê agora como disponível ou a carregar.',
     olcNote: 'No OpenStreetMap este posto está marcado como {s}. O NAP ainda o publica: as tomadas e os preços abaixo são os que o operador declara.',
@@ -80,6 +89,15 @@
     dLoc: 'Location', locWarn: 'The NAP and OpenStreetMap disagree on the location ({d} km apart). We show the OpenStreetMap one.',
     dDoubt: 'Community doubt', directions: 'Directions', seeOsm: 'View on OpenStreetMap', cost: 'What charging here costs (ohmigo)',
     loadingSockets: 'Loading sockets…',
+    dModel: 'Charger model', dModels: 'Charger models',
+    mAlone: 'One car alone: up to {a}', mShared: 'with {n} cars plugged in: up to {a} each',
+    m400: '{kw} kW at 400 V', m800: '{kw} kW at 800 V', mTotal: '{kw} kW in total', mAc: 'plus an AC socket of {kw} kW', mAcOnly: '{n} × {kw} kW AC',
+    m500: 'Only goes up to {v} V: an 800 V car charges slowly, or needs to convert the voltage (boost).',
+    mExcl: 'for the network\'s customers only', mBattery: 'with a {kwh} kWh battery',
+    mVariants: 'Depending on the version installed, which we do not know.',
+    mSrc: 'What each car gets, from the charger list by {who}; the model is the one the community mapped on OpenStreetMap. Manufacturer figures: the operator may cap the power.',
+    phSite: 'Photo of this site', phModel: 'Photo of a {m}, not of this charger', phBy: '{who}, {lic}', phTaken: 'taken on {d}',
+    phLink: 'See photo on {src}', phAdd: 'Got a photo of this charger? Add it to OpenStreetMap with MapComplete',
     life: 'Charger status', lifeOp: 'In service', lifeConstruction: 'Under construction', lifePlanned: 'Planned', lifeDisused: 'Disused',
     lifeHelp: 'By default only chargers in service are listed. Chargers under construction or planned come from OpenStreetMap: they are not in the NAP yet, so they have no status, sockets or prices. A charger the NAP publishes but OpenStreetMap lists as disused or under construction counts as such, unless the operator reports it available or charging right now.',
     olcNote: 'OpenStreetMap lists this charger as {s}. The NAP still publishes it: the sockets and prices below are what the operator declares.',
@@ -221,6 +239,77 @@
         (x.to != null ? ' ' + t('tierTo', { m: N.nf(x.to) }) : '');
     }).join('; ');
   }
+  // The charger models at the site (sites.json `mdl`, from the network model:
+  // the catalogue of charger_models.py joined to the make/model OSM maps there).
+  // Per version: cars = [[n, kW at 400 V, kW at 800 V], ...]. Several versions
+  // fit the sockets: show the range, and say so.
+  function range(vals) {
+    vals = vals.filter(function (x) { return x != null; });
+    if (!vals.length) return null;
+    var lo = Math.min.apply(null, vals), hi = Math.max.apply(null, vals);
+    return lo === hi ? N.nf(lo) : N.nf(lo) + '–' + N.nf(hi);
+  }
+  function carsAt(vs, n, col) { return range(vs.map(function (v) { var c = (v.cars || []).filter(function (x) { return x[0] === n; })[0]; return c ? c[col] : null; })); }
+  function modelText(m) {
+    var vs = m.v || [], out = [];
+    var dc = vs.filter(function (v) { return v.cars; });
+    if (dc.length) {
+      var at = function (n) {
+        var a = carsAt(dc, n, 1), b = carsAt(dc, n, 2);
+        return [a ? t('m400', { kw: a }) : null, b ? t('m800', { kw: b }) : null].filter(Boolean).join(', ');
+      };
+      var line = t('mAlone', { a: at(1) }), most = 1;
+      dc.forEach(function (v) { v.cars.forEach(function (c) { if (c[0] > most) most = c[0]; }); });
+      if (most > 1) line += '; ' + t('mShared', { n: 2, a: at(2) });
+      out.push(line + '.');
+      var tot = range(dc.map(function (v) { return v.totalKw; })), ac = range(dc.map(function (v) { return v.acKw; }));
+      out.push([tot ? t('mTotal', { kw: tot }) : null, ac ? t('mAc', { kw: ac }) : null].filter(Boolean).join(', ') + '.');
+      var maxV = Math.max.apply(null, dc.map(function (v) { return v.maxV || 0; }));
+      if (maxV && maxV <= 500) out.push(t('m500', { v: maxV }));
+    } else if (vs.length) {
+      out.push(t('mAcOnly', { n: range(vs.map(function (v) { return v.acSockets || 1; })), kw: range(vs.map(function (v) { return v.acKw; })) }) + '.');
+    }
+    var extra = [];
+    if (vs.some(function (v) { return v.exclusive; })) extra.push(t('mExcl'));
+    var bat = range(vs.map(function (v) { return v.batteryKwh; }));
+    if (bat) extra.push(t('mBattery', { kwh: bat }));
+    if (extra.length) out.push(extra.join('; ') + '.');
+    var text = out.join(' ');
+    // Only when the versions really differ in what the text says (a range).
+    if (text.indexOf('–') >= 0) text += ' ' + t('mVariants');
+    return text;
+  }
+  // Photos: the site's own (OSM: Panoramax, Commons; s.ph) first, then one of
+  // each model (Commons; not this charger, and the caption says so). The
+  // thumbnails are served from this site (/photos/, published with the network
+  // model), so opening a detail asks nothing of another domain. A photo the
+  // deploy lacks (a local preview) just goes away.
+  function figure(p, caption) {
+    var cap = [caption, t('phBy', { who: p.credit || '?', lic: p.license || '?' })];
+    if (p.taken) cap.push(t('phTaken', { d: p.taken }));
+    var img = el('img', { src: p.src, alt: caption, loading: 'lazy', decoding: 'async',
+      onerror: function () { var f = img.parentNode; if (f && f.parentNode) f.parentNode.removeChild(f); } });
+    return el('figure', { class: 'photo' }, img,
+      el('figcaption', { class: 'small muted' }, cap.join(' · ') + ' ', p.page ? el('a', { href: p.page, rel: 'noopener noreferrer', target: '_blank' }, '↗') : null));
+  }
+  function photos(s) {
+    var figs = [], links = [];
+    (s.ph || []).forEach(function (p) {
+      if (p.src) figs.push(figure(p, t('phSite')));
+      else if (p.page) links.push(el('a', { href: p.page, rel: 'noopener noreferrer', target: '_blank' }, t('phLink', { src: p.credit || 'Mapillary' })));
+    });
+    (s.mdl || []).forEach(function (m) { if (m.ph && m.ph.src) figs.push(figure(m.ph, t('phModel', { m: m.n }))); });
+    var box = el('div', { class: 'photos' }, figs);
+    if (links.length) box.appendChild(el('p', { class: 'small' }, links));
+    // No photo of the site itself: ask for one. MapComplete's charging station
+    // theme saves it on Panoramax and tags the OSM element, and the next daily
+    // refresh brings it here.
+    if (!(s.ph || []).some(function (p) { return p.src; }) && !s.lc) {
+      box.appendChild(el('p', { class: 'small' }, el('a', { href: 'https://mapcomplete.org/charging_stations?z=19&lat=' + s.lat + '&lon=' + s.lon +
+        (/^(node|way)\/\d+$/.test(s.osm_ref || '') ? '#' + s.osm_ref : ''), rel: 'noopener noreferrer', target: '_blank' }, t('phAdd'))));
+    }
+    return box;
+  }
   function detail(s, id) {
     var d = el('div', { class: 'detail', id: id });
     var dl = el('dl', null,
@@ -232,6 +321,9 @@
         s.osm_fee ? t('dFee') + ': ' + s.osm_fee : null].filter(Boolean).join('; '))]);
     }
     if (s.hw) N.add(dl, [el('dt', null, t(s.hw.length > 1 ? 'dHws' : 'dHw')), el('dd', null, s.hw.join(', ') + ' (OpenStreetMap)')]);
+    (s.mdl || []).forEach(function (m, i) {
+      N.add(dl, [el('dt', null, i ? '' : t(s.mdl.length > 1 ? 'dModels' : 'dModel')), el('dd', null, el('b', null, m.n), ': ' + modelText(m))]);
+    });
     if (s.shared) N.add(dl, [el('dt', null, t('dShared')), el('dd', null, t('sharedTxt', { kw: N.nf(s.shared) }))]);
     if (s.wc) N.add(dl, [el('dt', null, t('dWc')), el('dd', null, t('wc_' + s.wc))]);
     if (s.old) N.add(dl, [el('dt', null, t('dOld')), el('dd', null, s.old.join(', ') + (s.oldop ? ' (' + s.oldop + ')' : ''))]);
@@ -241,6 +333,8 @@
     if (s.doubt) N.add(dl, [el('dt', null, t('dDoubt')), el('dd', null, s.doubt)]);
     if (s.loc_km) N.add(dl, [el('dt', null, t('dLoc')), el('dd', null, t('locWarn', { d: N.nf(s.loc_km, s.loc_km < 10 ? 1 : 0) }))]);
     d.appendChild(dl);
+    if (s.mdl) d.appendChild(el('p', { class: 'small muted' }, t('mSrc', { who: 'Alexandre Moleiro' })));
+    if (!s.lc || s.ph) d.appendChild(photos(s));
     if (s.olc) d.appendChild(el('p', { class: 'muted small' }, t(liveOn(s) ? 'olcLive' : 'olcNote', { s: olcName(s) })));
     if (s.lc) d.appendChild(el('p', { class: 'muted small' }, t('lcNote', { s: t('life' + (s.lc === 'planned' ? 'Planned' : 'Construction')).toLowerCase() })));
     else if (!P) d.appendChild(el('p', { class: 'muted small' }, t('loadingSockets')));

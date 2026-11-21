@@ -146,6 +146,31 @@ jobs:
           # Agregado mensal de "Ao longo dos anos": acrescenta ao site/data/years.json
           # commitado os dias acabados que ele ainda não tem (estão todos na cache de 28 dias).
           python scripts/explore_years.py
+      # Modelos de carregador: o catálogo que o Alexandre Moleiro mantém num
+      # Google Doc (fetch_charger_models.sh -> data/charger_models.txt). Lêem-no o
+      # dataset (charger_models.py: quanto cada modelo dá a um carro de 400 ou
+      # 800 V, sozinho ou partilhado) e o hardware_checks.py (errors.md item 14).
+      # Secret, não literal, pela mesma razão do TRACKER_URL: o repo é público e
+      # o catálogo é de outrem, sem licença de reutilização; nada dele é
+      # versionado, e o dataset só o publica com vars.CHARGER_MODELS_PUBLISH.
+      - name: Charger model catalogue
+        env:
+          CHARGER_MODELS_URL: ${{ secrets.CHARGER_MODELS_URL }}
+        run: bash scripts/fetch_charger_models.sh
+      # Fotos do local (OSM: Panoramax, Commons) e do modelo (Commons), em
+      # miniatura (scripts/charger_photos.py). Ficam em cache entre corridas:
+      # só se descarregam as novas. Vão no artifact com o dataset.
+      - name: Restore charger photos cache
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: |
+            data/photos
+            data/photos.json
+          key: charger-photos-${{ github.run_id }}
+          restore-keys: charger-photos-
+      - name: Charger photos
+        continue-on-error: true
+        run: python scripts/charger_photos.py
       # Centros comerciais, hospitais, parques... do OSM, para o ohmigo saber em
       # que local fica cada posto. Lê o extrato de Portugal do Geofabrik (~400 MB,
       # ~10 s a processar); o Overpass dava timeout. Sem ele o dataset sai sem
@@ -164,6 +189,9 @@ jobs:
       # git: são ~10 MB por semana) e o pages.yml copia-o para
       # https://nap.ocarroeletrico.com/ohmigo/chargers.json.
       - name: Build network model (ohmigo dataset)
+        env:
+          # 'yes' quando o autor do catálogo de modelos autorizar a publicação.
+          CHARGER_MODELS_PUBLISH: ${{ vars.CHARGER_MODELS_PUBLISH }}
         run: python scripts/ohmigo_dataset.py data data/ohmigo_chargers.json
       # A tensão DC que o NAP declara vs o equipamento instalado (errors.md
       # item 14): a tensão da tomada no OSM e a nominal do carregador mapeado
@@ -172,11 +200,7 @@ jobs:
       # público e o catálogo é de outrem, sem licença de reutilização, por isso
       # nada dele é versionado. Sem ele o item sai só com o OSM.
       - name: Equipment cross-check (NAP voltage vs installed chargers)
-        env:
-          CHARGER_MODELS_URL: ${{ secrets.CHARGER_MODELS_URL }}
-        run: |
-          bash scripts/fetch_charger_models.sh
-          python scripts/hardware_checks.py
+        run: python scripts/hardware_checks.py
       # Gera facts.md, errors.md e o site (site/: páginas + site/data/*.json).
       - name: Build dashboard
         env:
@@ -205,7 +229,11 @@ jobs:
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: ohmigo-dataset
-          path: data/ohmigo_chargers.json
+          # O dataset e as miniaturas das fotos que ele refere (photos/<id>.jpg):
+          # no mesmo artifact, para o pages.yml nunca publicar um sem as outras.
+          path: |
+            data/ohmigo_chargers.json
+            data/photos/
           retention-days: 90
           if-no-files-found: error
       # Lista fechada do que o job publish pode commitar: os quatro ficheiros

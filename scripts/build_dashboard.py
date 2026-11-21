@@ -126,13 +126,22 @@ pts['NAP_UNICO'] = pd.to_numeric(pts['NAP_UNICO'], errors='coerce')
 MODEL = 'data/ohmigo_chargers.json'
 if not os.path.exists(MODEL):
     sys.exit(f'FAIL: {MODEL} em falta: corre primeiro python scripts/ohmigo_dataset.py data {MODEL}')
-model_pts = {(s['id'], p['id']): p for s in json.load(open(MODEL))['sites'] for p in s['points']}
+_model_sites = json.load(open(MODEL))['sites']
+model_pts = {(s['id'], p['id']): p for s in _model_sites for p in s['points']}
+# Per site, from the same model: the charger models from the catalogue
+# (charger_models.py: what a 400 V or 800 V car gets, alone or sharing) and
+# the photos (charger_photos.py: the site's own, from OSM; the model's, from
+# Commons). Keyed by the MOBI.E code, as sites_map is.
+model_by_code = {s['code']: s for s in _model_sites}
 _m = [model_pts.get(k, {}) for k in zip(pts.site_id, pts.point_id)]
 pts['kw'] = pd.to_numeric(pd.Series([m.get('kw') for m in _m], dtype=object), errors='coerce').values
 # Where OSM replaced the NAP's power: kw_src 'osm' and the NAP's value in nap_kw
 # (null when the NAP declared none).
 pts['kw_src'] = ['osm' if 'napKw' in m else 'nap' for m in _m]
 pts['nap_kw'] = [m.get('napKw') for m in _m]
+# Which of the site's charger models (sites.json `mdl`) this socket is, when the
+# model could tell: the detail shows the per-car power on that socket's row.
+pts['mi'] = pd.Series([m.get('model') for m in _m], dtype=object).values
 pts['model_regime'] = [m.get('regime') for m in _m]
 pts['fees'] = [m.get('opc') for m in _m]
 pts['nap_price'] = [m.get('napPrice') for m in _m]
@@ -282,6 +291,14 @@ for _, s in S.iterrows():
         rec['osm_fee'] = om.get('osm_fee')
         rec['ad_hoc'] = om.get('ad_hoc')
     rec.update(osm_extra(ext))
+    ms = model_by_code.get(ext) or {}
+    if ms.get('models'):
+        # n: name, v: the versions that fit the sockets (cars = [[n, kW at 400 V,
+        # kW at 800 V], ...]), ph: a photo of the model (not of this site).
+        rec['mdl'] = [{k: v for k, v in (('n', m['name']), ('v', m['variants']), ('ph', m.get('photo'))) if v}
+                      for m in ms['models']]
+    if ms.get('photos'):
+        rec['ph'] = ms['photos']
     if ext in caca_by_site:
         rec['doubt'] = '; '.join(caca_by_site[ext])
     sites_map.append(rec)
@@ -925,7 +942,7 @@ data = {
     'points': pts[
         ['point_id', 'site_external_id', 'city', 'operator_name', 'region', 'pw_class', 'kw', 'kw_src',
          'nap_kw', 'connector_types', 'status', 'opc_operador', 'fees', 'model_regime', 'nap_price',
-         'nap_fees', 'issues', 'pay']]
+         'nap_fees', 'issues', 'pay', 'mi']]
         .rename(columns={'connector_types': 'connectors', 'opc_operador': 'opc',
                          'model_regime': 'regime', 'nap_price': 'nap'}).to_dict('records'),
     'facts_html': FACTS_HTML,

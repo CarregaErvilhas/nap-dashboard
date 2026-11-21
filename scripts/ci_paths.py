@@ -54,7 +54,7 @@ DATA_FILES = [
     'opc_registry_authority.csv', 'tracker_errors.csv', 'tracker_meta.json',
     'tracker_findings.md', 'tracker_findings.csv',
     'ohmigo_chargers.json',
-    'charger_models.txt', 'hardware_findings.csv', 'hardware_findings.md',
+    'charger_models.txt', 'hardware_findings.csv', 'hardware_findings.md', 'photos.json',
 ]
 CACHE_DIRS = ['umap_cache', 'caop_cache']
 
