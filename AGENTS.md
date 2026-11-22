@@ -606,6 +606,14 @@ work: the pages fetch their JSON, so preview over HTTP. `refresh.yml` runs
   tables, history, hubs, facts) and `operadores.html` "Operadores" (OPCs: weekly
   anomaly report per operator parsed from `Agents-outputs/anomalias-results.md`
   by `build_site.parse_opc_report`, OPC churn, reportable errors).
+- `grupo.html` "O grupo" (`grupo.css`, `grupo.js`, mascots in `assets/site/grupo/*.svg`),
+  linked from the footer: the group's sites in order (O Carro Elétrico, ohmigo, Voltaria,
+  Comparador CEME, Postos PT, AmpereArchive), one mascot and one speech bubble each. Static
+  text in both languages (`data-lang`); `grupo.js` only wires up the header. Every site of
+  the group has this page in its own style, from the prototype in `CarregaErvilhas/OCarroEletrico`
+  (`scripts/oce.py` `GRUPO`, `site/strings.json` `grupo.*`): keep the descriptions in step
+  with it. The mascots are each site's brand, outside this repo's licences. A file added
+  to `site/` also goes into `SITE_FILES` in `refresh.yml` (validate_site.py checks it).
 - `explorar.html` "Explorar" (`explorar.js`, `explorar.css`): cross-filters over
   `points.json`. Each list (operator, municipality, power, plug, region, price
   regime, payment) and the status strip is a chart and a filter; a list ignores

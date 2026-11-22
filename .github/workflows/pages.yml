@@ -67,14 +67,14 @@ jobs:
           { printf '# NAP EADME — texto completo\n\n> Factos, novidades e erros reportáveis da rede de carregamento de VE em Portugal, como estavam neste deploy (%s). Índice: https://nap.ocarroeletrico.com/llms.txt\n\n' "$(date -u +%F)"
             for f in facts novidades errors; do printf '\n---\n\n<!-- %s.md -->\n\n' "$f"; cat "$f.md"; done
           } > public/llms-full.txt
-          # Para os motores de busca: as três páginas do site e a de privacidade
+          # Para os motores de busca: as páginas do site e a de privacidade
           # (/dashboard.html só redireciona para /). /ohmigo/ é o dataset
           # (~10 MB), para máquinas: fora do rastreio.
           printf 'User-agent: *\nAllow: /\nDisallow: /ohmigo/\n\nSitemap: https://nap.ocarroeletrico.com/sitemap.xml\n' > public/robots.txt
           d=$(date -u +%F)
           {
             printf '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
-            for u in / /rede.html /explorar.html /operadores.html /privacidade.html; do
+            for u in / /rede.html /explorar.html /operadores.html /grupo.html /privacidade.html; do
               printf '  <url><loc>https://nap.ocarroeletrico.com%s</loc><lastmod>%s</lastmod></url>\n' "$u" "$d"
             done
             printf '</urlset>\n'
