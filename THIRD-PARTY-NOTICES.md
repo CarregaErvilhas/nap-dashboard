@@ -7,6 +7,14 @@ PolyForm. Where published in the site (`site/data/*.json`, fetched by
 into their HTML), the site is a collective work: our code is
 PolyForm-Noncommercial, the third-party portions stay under their own terms.
 
+## Mascots of the group's sites
+
+`assets/site/grupo/*.svg` (copied to `site/grupo/`, shown on `grupo.html`) are the
+mascots of the sites of the O Carro Elétrico group (O Carro Elétrico, ohmigo, Voltaria,
+Comparador CEME, Postos PT, AmpereArchive). Each belongs to its own site and is its brand:
+they are **not** covered by PolyForm or any other licence of this repo, and may not be
+reused apart from a link to that site.
+
 ## Data sources and schemas
 
 | Resource | Origin | Licence / terms | What we do |

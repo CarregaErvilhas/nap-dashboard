@@ -45,6 +45,8 @@ altere o `site/`; regenerado semanalmente por
   - **Operadores** (`operadores.html`): para os OPC. Relatório semanal de anomalias
     por operador (de `Agents-outputs/anomalias-results.md`), entradas e saídas de OPC
     e erros reportáveis.
+  - **O grupo** (`grupo.html`): os outros sites do grupo O Carro Elétrico, cada um
+    com a sua mascote, a descrição e as ligações para o site e para o GitHub.
 - **`facts.md`** — factos interessantes da rede.
 - **`errors.md`** — erros reportáveis aos donos dos dados (inclui dúvidas da
   comunidade OSM/umap e divergências de operador/pagamento).

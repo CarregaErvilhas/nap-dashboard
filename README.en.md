@@ -45,6 +45,8 @@ Mondays 06:00 UTC).
   - **Operators** (`operadores.html`): for the OPCs. Weekly anomaly report per
     operator (from `Agents-outputs/anomalias-results.md`), OPC churn and reportable
     errors.
+  - **The group** (`grupo.html`): the other sites of the O Carro Elétrico group, each
+    with its mascot, a description and links to the site and to GitHub.
 - **`facts.md`** — interesting facts about the network.
 - **`errors.md`** — errors worth reporting to the data owners (includes community
   OSM/umap doubts and operator/payment divergences).
