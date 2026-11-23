@@ -1,9 +1,6 @@
-# Novidades da rede (2026-11-16 → 2026-11-21)
+# Novidades da rede (2026-11-21 → 2026-11-23)
 
-- **Estreias:** 56 novos locais em funcionamento (`0217PL0002` · Évora · ? · 22 kW; `0271PR0002` · Arroja · ? · 120 kW; `ABF-00193` · Albufeira · LUSI · 22 kW; `ALD-00017` · Almeida · HORZ · 100 kW; `ALM-00110` · Almada · MOTA · 150 kW; `CSC-00552` · Cascais · TRUE · 22 kW; `ELV-00024` · Elvas · HORZ · 300 kW; `GDL-00072` · Grândola · EDPC · 400 kW; `LRS-00134` · Loures · EDPC · 60 kW; `LSB-00967` · Lisboa · TRUE · 22 kW (+46 restantes)). 395 reativados (`0001PR0009` · Matosinhos · ? · 50 kW; `0001PR0013` · Matosinhos · CONT · 120 kW; `0002PL0019` · Amadora · CONT · 22 kW; `0002PR0002` · Amadora · ? · 50 kW; `0002PR0029` · Amadora · CONT · 350 kW; `0230PL0001` · Guarda · CONT · 7 kW; `0230PR0003` · Guarda · CONT · 120 kW; `0241PR0003` · Castelo Branco · CONT · 50 kW; `0270PR0002` · Almeirim · CONT · 120 kW; `0289PR0002` · Alverca · ? · 50 kW (+385 restantes)).
-- **Saídas:** 46 locais saíram da rede ou foram desligados (`BRR-00140` · Barreiro · MAKS · 22 kW; `BRR-00141` · Barreiro · MAKS · 22 kW; `CBR-00144` · Coimbra · MAKS · 22 kW; `CBR-00145` · Coimbra · MAKS · 22 kW; `CBR-00146` · Coimbra · MAKS · 22 kW; `CBR-00162` · Coimbra · MAKS · 30 kW; `CBR-00163` · Coimbra · MAKS · 30 kW; `CVL-00049` · Covilhã · MAKS · 22 kW; `CVL-00050` · Covilhã · MAKS · 22 kW; `CVL-00051` · Covilhã · MAKS · 22 kW (+36 restantes)).
-- **OPCs:** Maksu (`MAKS`) saiu da rede; Grupo Easycharger, SL (`ZUND`): 27→2 pontos (-25); Grupo Easycharger, SL (`ZUNP`) entrou na rede (13 locais).
-- **Recorde:** nova tomada mais potente: `752` (`VFX-00152`) com 1000 kW (antes 1000,0 kW).
-- **Maior estreia:** `PLM-00084` (Palmela, HORZ) com 6 pontos e 1800 kW no total.
-- **Cidade em alta:** Lisboa com 14 estreias.
-- **Balanço:** +28 locais (0,3% em módulo), +117 pontos face à semana anterior.
+- **Estreias:** 4 novos locais em funcionamento (`0001PL0014` · ? · ? · 22 kW; `3387PL0001` · ? · ? · 22 kW; `9587PL0003` · Queluz · ? · 22 kW; `9587PR0004` · Queluz · ? · 120 kW). 287 reativados (`0001PR0010` · Matosinhos · ? · 50 kW; `0002PR0030` · Amadora · CONT · 350 kW; `0004PL0002` · Vila Nova de Gaia · CONT · 22 kW; `0205PR0003` · Caldas da Rainha · CONT · 120 kW; `0209PR0003` · Viana do Castelo · ? · 50 kW; `0211PR0002` · Felgueiras · CONT · 120 kW; `0215PR0003` · Santarém · ? · 50 kW; `0250PR0002` · ? · CONT · 120 kW; `0319PL0001` · Porto · CONT · 22 kW; `0333PR0002` · Maia · CONT · 50 kW (+277 restantes)).
+- **Maior estreia:** `9587PR0004` (Queluz, ?) com 3 pontos e 290 kW no total.
+- **Cidade em alta:** ? com 2 estreias.
+- **Balanço:** +4 locais (0,0% em módulo), +9 pontos face à semana anterior.

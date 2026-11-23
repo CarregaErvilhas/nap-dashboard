@@ -84,13 +84,19 @@
     </div>
     <div id="opView" tabindex="-1" style="margin-top:16px"></div>
   </section>
-  <section class="block panel" id="mudancas" data-panel="churn" hidden aria-labelledby="hChurn"><h2 id="hChurn" data-i18n="hChurn">Entradas, saídas e mudanças de operadores</h2></section>
+  <section class="block panel" id="mudancas" data-panel="churn" aria-labelledby="hChurn"><h2 id="hChurn" data-i18n="hChurn">Entradas, saídas e mudanças de operadores</h2><div lang="pt" data-lang="pt"><div class="meta">Rotatividade de OPCs desde <b>2026-11-16</b> (3 OPCs).<br>Limiares: entrada/saída sempre; variação só se |Δpontos| ≥ 20 e ≥ 20%.</div>
+<table><tr><th class="l">OPC</th><th>estado</th><th>sites</th><th>pontos</th><th class="l">nota</th></tr>
+<tr><td class="l">ZUNP</td><td>novo</td><td>0→13</td><td>0→25</td><td class="l">Grupo Easycharger, SL</td></tr><tr><td class="l">MAKS</td><td>saiu</td><td>43→0</td><td>43→0</td><td class="l">Maksu</td></tr><tr><td class="l">ZUND</td><td>quebra</td><td>14→1</td><td>27→2</td><td class="l">variação ≥20 pontos e ≥20%; mesmo nome de ZUNP</td></tr></table>
+</div><div lang="en" data-lang="en"><div class="meta">OPC churn since <b>2026-11-16</b> (3 OPCs).<br>Thresholds: entries/exits always; change only if |Δpoints| ≥ 20 and ≥ 20%.</div>
+<table><tr><th class="l">OPC</th><th>status</th><th>sites</th><th>points</th><th class="l">note</th></tr>
+<tr><td class="l">ZUNP</td><td>novo</td><td>0→13</td><td>0→25</td><td class="l">Grupo Easycharger, SL</td></tr><tr><td class="l">MAKS</td><td>saiu</td><td>43→0</td><td>43→0</td><td class="l">Maksu</td></tr><tr><td class="l">ZUND</td><td>quebra</td><td>14→1</td><td>27→2</td><td class="l">variação ≥20 points and ≥20%; mesmo nome de ZUNP</td></tr></table>
+</div></section>
   <section class="block panel" id="erros" data-panel="errs" aria-labelledby="hErrs"><h2 id="hErrs" data-i18n="hErrs">Erros reportáveis nos dados oficiais</h2>
     <p class="muted" data-i18n="errsNote">Problemas de toda a rede, para quem gere os dados (NAP, MOBI.E, DGEG). A lista completa por tomada está no errors.md.</p>
     <ol><div lang="pt" data-lang="pt">
 <li>
   <div class="head">1. Tensão / corrente / potência inconsistentes (NAP estático)</div>
-  <div class="meta">26,7% das tomadas (5.255/19.693) têm potência declarada que não bate com V×I (&gt;25% de diferença). Destas, 1.644 (8,3%) declaram potência <b>acima</b> da capacidade elétrica (fisicamente impossível), ex. 1200 V × 600 A = 720 kW declarados como 200 kW. Valores suspeitos no dataset: tensões de 1200 V e 3600 V, correntes de 600 A.</div>
+  <div class="meta">26,7% das tomadas (5.263/19.702) têm potência declarada que não bate com V×I (&gt;25% de diferença). Destas, 1.650 (8,4%) declaram potência <b>acima</b> da capacidade elétrica (fisicamente impossível), ex. 1200 V × 600 A = 720 kW declarados como 200 kW. Valores suspeitos no dataset: tensões de 1200 V e 3600 V, correntes de 600 A.</div>
 </li>
 <li>
   <div class="head">2. Potência NAP vs MOBI.E em contradição (sem dados)</div>
@@ -110,7 +116,7 @@
 </li>
 <li>
   <div class="head">6. <code>usage_type</code> em falta</div>
-  <div class="meta">2.567 tomadas (13,0%) sem tipo de utilização.</div>
+  <div class="meta">2.576 tomadas (13,1%) sem tipo de utilização.</div>
 </li>
 <li>
   <div class="head">7. Ids de tomada (EVSE) MOBI.E inconsistentes</div>
@@ -139,7 +145,7 @@
 </div><div lang="en" data-lang="en">
 <li>
   <div class="head">1. Voltage / current / power mismatch (static NAP)</div>
-  <div class="meta">26.7% of connectors (5,255/19,693) declare power inconsistent with V×I (&gt;25% off). Of these, 1,644 (8.3%) declare power <b>above</b> electrical capacity (physically impossible), e.g. 1200 V × 600 A = 720 kW declared as 200 kW. Suspicious values in the dataset: 1200 V and 3600 V voltages, 600 A currents.</div>
+  <div class="meta">26.7% of connectors (5,263/19,702) declare power inconsistent with V×I (&gt;25% off). Of these, 1,650 (8.4%) declare power <b>above</b> electrical capacity (physically impossible), e.g. 1200 V × 600 A = 720 kW declared as 200 kW. Suspicious values in the dataset: 1200 V and 3600 V voltages, 600 A currents.</div>
 </li>
 <li>
   <div class="head">2. NAP vs MOBI.E power contradiction (no data)</div>
@@ -159,7 +165,7 @@
 </li>
 <li>
   <div class="head">6. <code>usage_type</code> missing</div>
-  <div class="meta">2,567 connectors (13.0%) with no usage type.</div>
+  <div class="meta">2,576 connectors (13.1%) with no usage type.</div>
 </li>
 <li>
   <div class="head">7. Inconsistent MOBI.E socket (EVSE) ids</div>
@@ -189,8 +195,8 @@
     <p><a href="https://github.com/CarregaErvilhas/nap-dashboard/blob/main/errors.md" data-i18n="errsLink">Ler o errors.md completo no GitHub</a></p></section>
 </main>
 <footer><div class="wrap">
-  <p data-lang="pt">Retrato de 2026-11-21T10:50:04.137Z. Os estados são os que cada operador declara. Os preços são a taxa do operador (OPC), sem IVA e sem a energia do teu comercializador.</p>
-  <p data-lang="en">Snapshot of 2026-11-21T10:50:04.137Z. Statuses are what each operator declares. Prices are the operator (CPO) fee, without VAT and without your supplier's energy.</p>
+  <p data-lang="pt">Retrato de 2026-11-23T17:45:04.457Z. Os estados são os que cada operador declara. Os preços são a taxa do operador (OPC), sem IVA e sem a energia do teu comercializador.</p>
+  <p data-lang="en">Snapshot of 2026-11-23T17:45:04.457Z. Statuses are what each operator declares. Prices are the operator (CPO) fee, without VAT and without your supplier's energy.</p>
   <p><a href="grupo.html"><span data-lang="pt">O grupo</span><span data-lang="en">The group</span></a> &nbsp; <a href="https://ocarroeletrico.com/">ocarroeletrico.com</a> &nbsp; <a href="https://ceme.ocarroeletrico.com/"><span data-lang="pt">Comparador de tarifas CEME</span><span data-lang="en">CEME tariff comparison</span></a> &nbsp; <a href="https://ohmigo.ocarroeletrico.com/">ohmigo</a> &nbsp; <a href="privacidade.html"><span data-lang="pt">Privacidade</span><span data-lang="en">Privacy</span></a> &nbsp; <a href="https://github.com/CarregaErvilhas/nap-dashboard"><span data-lang="pt">Código no GitHub</span><span data-lang="en">Code on GitHub</span></a></p>
   <p>© 2026 O Carro Elétrico / Fernando Miguel, <a href="https://nap.ocarroeletrico.com/">nap.ocarroeletrico.com</a>. <span data-lang="pt">Uso não-comercial livre</span><span data-lang="en">Free non-commercial use</span> (<a href="https://github.com/CarregaErvilhas/nap-dashboard/blob/main/LICENSE">PolyForm Noncommercial 1.0.0</a>, <span data-lang="pt">só código próprio, ver</span><span data-lang="en">own code only, see</span> <a href="https://github.com/CarregaErvilhas/nap-dashboard/blob/main/THIRD-PARTY-NOTICES.md">THIRD-PARTY-NOTICES.md</a>); <span data-lang="pt">uso comercial requer licença</span><span data-lang="en">commercial use requires a licence</span>: <a href="mailto:info@ocarroeletrico.com">info@ocarroeletrico.com</a>, <a href="https://m.me/OCarroEletricoDotCom">Messenger</a>.</p>
   <p><span data-lang="pt">Fontes</span><span data-lang="en">Sources</span>: NAP EADME (MOBI.E, via NAP-IMT) + <span data-lang="pt">tarifas</span><span data-lang="en">tariffs</span> MOBI.E (<a href="https://www.mobie.pt/">mobie.pt</a>); <span data-lang="pt">listas</span><span data-lang="en">lists</span> DGEG (<a href="https://www.dgeg.gov.pt/">dgeg.gov.pt</a>), <span data-lang="pt">uso livre com menção de fonte, sem fins lucrativos</span><span data-lang="en">free use with attribution, non-profit</span>; <span data-lang="pt">classes de potência</span><span data-lang="en">power classes</span> AFIR (<a href="https://eur-lex.europa.eu/eli/reg/2023/1804/oj">Reg. (UE) 2023/1804, Anexo III</a>); © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors (<a href="https://opendatacommons.org/licenses/odbl/">ODbL</a>); <span data-lang="pt">contorno</span><span data-lang="en">outline</span> © DGT (CAOP, <a href="https://www.dgterritorio.gov.pt/dados-abertos">CC-BY 4.0</a>); <span data-lang="pt">esquemas</span><span data-lang="en">schemas</span> DATEX II © CEN (<a href="https://datex2.eu/">datex2.eu</a>); <span data-lang="pt">mapas da comunidade</span><span data-lang="en">community maps</span> <a href="https://umap.openstreetmap.fr/pt-pt/map/postos-de-carregamento-v21_690884">Postos de Carregamento v2.1</a> + <a href="https://umap.openstreetmap.fr/en/map/caca-aos-postos-de-carregamento_1386222">Caça aos Postos</a> (Alexandre Moleiro); <span data-lang="pt">tipo de letra</span><span data-lang="en">typeface</span> Nunito (<a href="fonts/OFL-Nunito.txt">SIL OFL 1.1</a>).</p>
