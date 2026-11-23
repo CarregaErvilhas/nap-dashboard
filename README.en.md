@@ -188,3 +188,13 @@ use; tariff © MOBI.E), DGEG lists (same), CAOP outline © DGT (CC-BY
 v2.1/Caça community maps, DATEX II schemas © CEN. `site/` is a
 collective work: our code is PolyForm, published data keeps its original
 licences (attribution in footer + map).
+
+### The name and the art are not licensed
+
+The licences cover the code and the data, not the brand. Not licensed: the name
+**Postos PT**, the domain, the mascot (the blue map pin with a face and a lightning
+bolt), its icon and the images made from them (`assets/favicon.svg`, `assets/og.png`,
+`assets/favicon.ico`, `assets/apple-touch-icon.png` and their copies in `site/`). The mascots in
+`assets/site/grupo/` belong to the group's sites, each one its site's brand (see
+`THIRD-PARTY-NOTICES.md`). You may use the name to say where the content comes from.
+A fork needs its own name and art.

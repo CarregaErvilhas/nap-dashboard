@@ -193,3 +193,13 @@ DGT (CC-BY 4.0), dados OSM © OpenStreetMap contributors (ODbL 1.0,
 share-alike) + mapas comunidade v2.1/Caça aos Postos, esquemas DATEX II © CEN.
 O `site/` é obra coletiva: o nosso código é PolyForm, os dados
 publicados mantêm as licenças originais (atribuição no footer + mapa).
+
+### O nome e a imagem ficam de fora
+
+As licenças cobrem o código e os dados, não a marca. Não estão licenciados o nome
+**Postos PT**, o domínio, a mascote (o pino de mapa azul com cara e um raio), o ícone
+e as imagens feitas com eles (`assets/favicon.svg`, `assets/og.png`,
+`assets/favicon.ico`, `assets/apple-touch-icon.png` e as cópias em `site/`). As mascotes em `assets/site/grupo/`
+são dos sites do grupo, cada uma com a marca do seu site (ver `THIRD-PARTY-NOTICES.md`).
+Podes usar o nome para dizer de onde vem o conteúdo. Um fork precisa de nome e de
+imagem próprios.
