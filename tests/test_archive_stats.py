@@ -21,6 +21,11 @@ import unittest
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'scripts'))
 
+# Sem `pytz`, como no CI: o DuckDB precisa dele para entregar um TIMESTAMPTZ ao
+# Python, e o refresh partia com ele em falta. Bloqueá-lo aqui faz o teste falhar
+# mesmo numa máquina que o tenha instalado.
+sys.modules['pytz'] = None
+
 try:
     import duckdb  # noqa: F401
     HAVE_DUCKDB = True
