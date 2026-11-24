@@ -10,8 +10,11 @@
 # validação nenhuma): lista fechada de ficheiros, JSON, CSP e scripts das
 # páginas, painéis, JS sem innerHTML/eval, sintaxe JS e estado ao vivo.
 #
-# Corre em ~1 s, sem dependências (stdlib) e sem rede. O refresh semanal
-# (`refresh.yml`) continua a ser o teste de integração a sério.
+# O job `paths-and-syntax` corre em ~1 s, sem dependências (stdlib) e sem rede.
+# O job `unit-tests` corre os testes de tests/ com o duckdb, o pandas e o lxml
+# instalados do PyPI, nas versões do requirements.txt: dados sintéticos, sem
+# tocar nos servidores oficiais. O refresh semanal (`refresh.yml`) continua a
+# ser o teste de integração a sério.
 name: PR checks
 
 on:
@@ -73,3 +76,37 @@ jobs:
       # se as cópias de assets/ em site/ estiverem desatualizadas.
       - name: Validar o site
         run: python3 scripts/validate_site.py
+
+  # Os testes do DuckDB fazem skipUnless(HAVE_DUCKDB) e, sem este job, nunca
+  # correram em CI: foi assim que o crash do pytz (#116) chegou ao refresh.
+  # Instalar do PyPI uma versão fixa não é o problema da regra "sem rede" (essa
+  # protege os servidores do NAP/Overpass de um fetch de 230 MB por PR).
+  unit-tests:
+    name: Testes unitários
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: "3.15"
+
+      # Só o que tests/ importa, com as versões do requirements.txt (o
+      # Dependabot fica a única fonte). Sem pytz, de propósito: o refresh não o
+      # tem, e os testes bloqueiam o import para o apanhar.
+      - name: Instalar dependências dos testes
+        run: |
+          pip install \
+            "$(grep -E '^duckdb==' requirements.txt)" \
+            "$(grep -E '^pandas==' requirements.txt)" \
+            "$(grep -E '^lxml==' requirements.txt)"
+
+      # Um teste saltado conta como falha: um skipUnless(HAVE_DUCKDB) que salta
+      # em silêncio é o que escondeu o crash do pytz.
+      - name: Correr os testes
+        run: |
+          python -m unittest discover -s tests 2>&1 | tee unittest.log
+          if grep -E 'skipped=[1-9]' unittest.log; then
+            echo "::error::Há testes saltados; falta uma dependência no passo de instalação"
+            exit 1
+          fi

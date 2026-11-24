@@ -804,8 +804,9 @@ work: the pages fetch their JSON, so preview over HTTP. `refresh.yml` runs
 
 ## PR checks (`.github/workflows/pr-checks.yml`)
 
-Gate de ~1 s em cada PR para `main`, sem rede e sem dependências (stdlib).
-`scripts/ci_paths.py` corre quatro verificações:
+Dois jobs em cada PR para `main`. O primeiro (`paths-and-syntax`) é um gate
+de ~1 s, sem rede e sem dependências (stdlib). `scripts/ci_paths.py` corre
+quatro verificações:
 
 - **A** — nenhum ficheiro de dados na raiz do repo;
 - **B** — em código, workflows e docs, qualquer menção a um ficheiro de dados
@@ -827,6 +828,19 @@ que o `pages.yml` publica sem validação nenhuma): JSON e esquema, sintaxe JS,
 sem `<script>` inline, CSP e sem sinks do tipo `innerHTML`. Sem isto, um PR
 podia injectar um script ou um `innerHTML` com dados de terceiros e o merge
 publicava-o.
+
+**O segundo job (`unit-tests`)** corre `python -m unittest discover -s tests`
+com o `duckdb`, o `pandas` e o `lxml` instalados do PyPI, nas versões do
+`requirements.txt` (lidas com `grep -E '^duckdb=='`, como no `network-24h.yml`,
+para o Dependabot ser a única fonte de versões). Só o que `tests/` importa, e
+**sem `pytz`**: os testes do DuckDB bloqueiam o import, porque o refresh também
+não o tem. O job falha se algum teste for saltado (`skipped=` na saída): os
+testes fazem `skipUnless(HAVE_DUCKDB)`, e foi um skip silencioso que escondeu
+o crash do `pytz` no `archive_history.py` (#116). Instalar do PyPI uma versão
+fixa não colide com a regra "sem rede": essa regra existe para não bater nos
+servidores oficiais (NAP, Overpass, DGEG) nem descarregar ~230 MB a cada PR; os
+testes correm em ~1,5 s sobre dados sintéticos. Ao acrescentar um teste que
+importe outra dependência, acrescentá-la ao passo de instalação.
 
 **O que este gate não cobre, de propósito:** o pipeline completo não corre no PR
 — `fetch_data.sh` são ~230 MB e o `osm_umap.py` traz um dump Overpass; bater nos
