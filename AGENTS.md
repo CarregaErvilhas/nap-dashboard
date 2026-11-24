@@ -354,6 +354,11 @@ value goes to `napKw`/`napV`/`napA`/`napCable`, present only when replaced
 until the model did; it now reads the result. Per point, `issues` lists what
 the NAP-only rules of `nap_static_checks.py` found on it (`tensao_placeholder`,
 `trifasico_sem_3p`, `tensao_em_falta`, `tensao_impossivel`, errors.md item 8).
+Each point also has `evse`, the NAP `point_external_id` exactly as published
+(`PT*EDP*E*LSB*90050*01`), the id on the socket's sticker: the point `id` is
+only unique within its site, so this is what a link to one socket uses
+(VoltFrame). Not guaranteed unique (a few operators publish the same id on two
+sites) and never a join key: the NAP↔MOBI.E join rule in "Data gotchas" stands.
 Nothing from the PCVE tracker goes into the model: it is a third party's data
 with no reuse licence, and the model is public. Where OSM agrees with the NAP, the point
 lists those fields in `osmSame` (`["a", "v"]`), so ohmigo can tell a value
@@ -415,7 +420,8 @@ Also from `osm_tags.py`, in both the `osm` block and `sites.json`:
   "Por confirmar no OpenStreetMap"; ohmigo keeps up to 3, cut at 160
   characters, and tells the assistant to present them as things to check on
   site, never as facts.
-- `evse` (dataset build only, never written): OSM `ref:EU:EVSE` per element,
+- `evse` in the `osm` block (dataset build only, never written; not the
+  point's `evse` above): OSM `ref:EU:EVSE` per element,
   matched to the NAP `point_external_id` (`evse_key`), so a socket's OSM
   kW/V/A come from the element that is that socket; the plug + nearest power
   match over the whole site stays the fallback.
