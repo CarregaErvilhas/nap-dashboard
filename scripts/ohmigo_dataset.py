@@ -214,6 +214,11 @@ for p in P.itertuples(index=False):
     t, lv = T.for_point(p.site_external_id, p.point_id, ceme)
     pt = {
         'id': p.point_id,
+        # O id EVSE tal como o operador o publica no NAP (PT*EDP*E*LSB*90050*01),
+        # o que está no autocolante da tomada. O `id` só é único dentro do local;
+        # este é o que se pode pôr num link para uma tomada. Não é garantido
+        # único: há operadores que repetem o mesmo id em dois locais.
+        'evse': text(p.point_external_id),
         'kw': round(kw / 1000, 1) if kw else None,
         # Ficha em branco no NAP: None, não o texto "nan" que str(NaN) daria.
         'connector': CONNECTOR.get(text(p.connector_type), text(p.connector_type)),
