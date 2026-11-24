@@ -516,13 +516,14 @@ def sites_at(con, days=GROWTH_DAYS, bulk_min=BULK_MIN):
     Devolve None sem `static_versions`, senão {t0, t1, bulk: [{day, op, n}],
     sites: [[key, lat, lon, in_t0, in_t1, is_bulk, points_t0, points_t1]]}.
     """
-    t1 = con.execute("SELECT max(valid_from) FROM static_versions").fetchone()[0]
+    # Instantes em segundos epoch, nunca TIMESTAMPTZ: para entregar um TIMESTAMPTZ
+    # ao Python o DuckDB precisa do `pytz`, que não está no requirements.txt (o
+    # pandas 3 deixou de o trazer), e o refresh morria aqui sem histórico por posto.
+    t1, base = con.execute(
+        "SELECT epoch(max(valid_from)), epoch(min(valid_from)) FROM static_versions").fetchone()
     if t1 is None:
         return None
-    t0 = t1 - datetime.timedelta(days=days)
-    base = con.execute("SELECT min(valid_from) FROM static_versions").fetchone()[0]
-    if t0 < base:
-        t0 = base
+    t0 = max(t1 - days * 86400, base)
     # Uma entrada é um `added` de um local que não estava vivo: o arquivo tem
     # re-retratos com tudo `added` outra vez (2026-11-08, 8 811 linhas) e trocou o
     # código de toda a rede num dia (2026-06-18: 8 016 saídas, 8 020 entradas),
@@ -547,13 +548,13 @@ def sites_at(con, days=GROWTH_DAYS, bulk_min=BULK_MIN):
     bulk = con.execute("""
         SELECT d, o, count(*) FILTER (WHERE first) - count(*) FILTER (WHERE move = 'out') AS n
         FROM site_moves
-        WHERE valid_from > ? + INTERVAL 1 HOUR AND valid_from > ?
+        WHERE valid_from > to_timestamp(?) + INTERVAL 1 HOUR AND valid_from > to_timestamp(?)
         GROUP BY 1, 2 HAVING n >= ? ORDER BY 1, 2""", [base, t0, bulk_min]).fetchall()
     rows = con.execute("""
         WITH alive AS (
           -- vivo num instante = o último movimento até lá foi uma entrada
           SELECT key,
-                 arg_max(move, valid_from) FILTER (WHERE move IN ('in', 'out') AND valid_from <= ?) AS m0,
+                 arg_max(move, valid_from) FILTER (WHERE move IN ('in', 'out') AND valid_from <= to_timestamp(?)) AS m0,
                  arg_max(move, valid_from) FILTER (WHERE move IN ('in', 'out')) AS m1,
                  min(valid_from) FILTER (WHERE first) AS first_in,
                  arg_max(attrs, valid_from) FILTER (WHERE attrs IS NOT NULL) AS a
@@ -578,7 +579,7 @@ def sites_at(con, days=GROWTH_DAYS, bulk_min=BULK_MIN):
     pts = {k: (p0, p1) for k, p0, p1 in con.execute(r"""
         WITH p AS (
           SELECT split_part(key, '/', 1) AS site,
-                 arg_max(op, valid_from) FILTER (WHERE valid_from <= ?) AS m0,
+                 arg_max(op, valid_from) FILTER (WHERE valid_from <= to_timestamp(?)) AS m0,
                  arg_max(op, valid_from) AS m1,
                  coalesce(replace(regexp_replace(upper(json_extract_string(
                      arg_max(attrs, valid_from) FILTER (WHERE attrs IS NOT NULL), '$.externalId')),
@@ -592,7 +593,7 @@ def sites_at(con, days=GROWTH_DAYS, bulk_min=BULK_MIN):
     sites = [[k, lat, lon, bool(a0), bool(a1), bool(a1 and not a0 and d is not None and (d, o) in bulk_keys),
               int(pts.get(k, (0, 0))[0]) if a0 else 0, int(pts.get(k, (0, 0))[1]) if a1 else 0]
              for k, lat, lon, a0, a1, d, o in rows if a0 or a1]
-    return {'t0': _iso(t0.timestamp()), 't1': _iso(t1.timestamp()),
+    return {'t0': _iso(t0), 't1': _iso(t1),
             'bulk': [{'day': d.isoformat(), 'op': o, 'n': int(n)} for d, o, n in bulk],
             'sites': sites}
 
