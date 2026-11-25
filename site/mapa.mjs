@@ -128,6 +128,7 @@ export async function open(opts) {
     zoomBy(d) { if (d > 0) map.zoomIn(); else map.zoomOut(); },
     bounds() { const b = map.getBounds(); return [b.getWest(), b.getSouth(), b.getEast(), b.getNorth()]; },
     theme(dark, lang) { map.setStyle(style(bm, url, lang, dark), { diff: false }); },
+    resize() { map.resize(); },
     remove() { map.remove(); },
   };
 }
