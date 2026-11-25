@@ -611,7 +611,7 @@ work: the pages fetch their JSON, so preview over HTTP. `refresh.yml` runs
   preferring the row with the most payment/auth tags (tie-break: nearest).
 
 ## Site specifics
-- Four pages, no external libs, pure CSS/JS (the fourth, `explorar.html`, is described below): `index.html` "Procurar" (drivers:
+- Four pages, pure CSS/JS, no external libs except the on-demand "Mapa detalhado" below (the fourth, `explorar.html`, is described below): `index.html` "Procurar" (drivers:
   search by town/operator/code, "Perto de mim", quick filters, a card per site
   with one status mark per socket, detail with sockets, operator fees, payment
   and directions links to Google Maps/OpenStreetMap, canvas map),
@@ -745,7 +745,8 @@ work: the pages fetch their JSON, so preview over HTTP. `refresh.yml` runs
 - CSP (`<meta>`, in `_head.html`; Pages can't set headers): `default-src 'none';
   script-src 'self'` (no inline scripts); `style-src 'self' 'unsafe-inline'`
   only because the history heat map uses inline background styles;
-  `connect-src 'self'` plus the AmpereArchive origin; `font-src 'self'`;
+  `connect-src 'self'` plus the AmpereArchive origin and `maptiles.ocarroeletrico.com`;
+  `worker-src 'self'` (MapLibre's worker module); `font-src 'self'`;
   `img-src 'self' data:`. Nunito is served from `fonts/`, no font CDN.
 - Bilingual PT/EN: `boot.js` picks the language before paint (`?lang=pt|en`,
   then `localStorage` `nap-lang`, then the browser; PT for `pt*`). Strings live
@@ -763,6 +764,23 @@ work: the pages fetch their JSON, so preview over HTTP. `refresh.yml` runs
 - Map: a canvas drawn from `sites.json` (per-site lon/lat) + `outline.json` (PT
   polygons). Regions are `mainland`/`madeira`/`acores`; site `region` values are
   `azores` (with a `z`), so the map re-maps `azores`→`acores`.
+- "Mapa detalhado" (Procurar's map tools and each site's detail): the streets,
+  only on demand. `find.js` imports `mapa.mjs`, which loads MapLibre GL JS,
+  pmtiles and the Protomaps style generator from `site/vendor/` (as published
+  on npm; `validate_site.VENDOR` pins each sha256 and exempts only those bytes
+  from the sink rule) and the basemap from `https://maptiles.ocarroeletrico.com`
+  (R2 `basemap`): `current.json` names the dated `portugal-AAAAMMDD.pmtiles`,
+  plus `fonts/` (Noto Sans glyph ranges) and `sprites/v4/` (light, dark). The
+  MapLibre map takes the canvas's place and drives the same `view`, so the
+  list follows it; region and +/− buttons and the site's detail move it; the
+  sites are the canvas's own `mark()` shapes as icons. Light and dark styles
+  only: the colour-blind and high-contrast modes keep the light streets, and
+  the sites keep the mode's colours. `basemap-tiles.yml` (monthly) re-cuts
+  Portugal to z14 (~330 MB, under the CDN's 512 MB cacheable size; z15 would
+  be ~690 MB) and uploads it over R2's S3 API, because `cf`/wrangler uploads
+  stop at 300 MB. Its secrets: `R2_ACCESS_KEY_ID`/`R2_SECRET_ACCESS_KEY` (an R2
+  token for that bucket only) and the variable `R2_ACCOUNT_ID`. Cloudflare
+  resources are managed with the `cf` CLI.
 - Search and filters on `index.html` run on `sites.json`; point-level data
   (`points.json`) loads after, for the detail view and the live status. Both
   take power, fees and the DC voltage filter from the network model, so the

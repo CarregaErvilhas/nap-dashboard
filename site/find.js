@@ -16,7 +16,7 @@
     dcv800: 'Para carros 800 V (mais de 500 V)', dcv400: 'Para carros 400 V (até 500 V)', dcvUnk: 'Tensão não declarada',
     dcvHelp: 'Tensão máxima dos conectores DC do posto (a do OpenStreetMap quando corrige a declarada no NAP). Acima de 500 V é onde um carro de 800 V carrega à potência máxima; um carro de 400 V carrega em qualquer um.',
     reset: 'Limpar filtros', view: 'Vista', vList: 'Lista', vMap: 'Mapa', showMore: 'Mostrar mais', mapH: 'Mapa dos postos',
-    zIn: 'Aproximar', zOut: 'Afastar', inView: ' na vista do mapa', allRes: 'Mostrar todos os resultados',
+    zIn: 'Aproximar', zOut: 'Afastar', mDetail: 'Mapa detalhado', mLoading: 'A carregar o mapa detalhado…', mFail: 'Não foi possível abrir o mapa detalhado. Fica o mapa simples.', inView: ' na vista do mapa', allRes: 'Mostrar todos os resultados',
     mapDesc: 'O mapa mostra os mesmos postos da lista. Toca num ponto para o abrir na lista; a lista tem toda a informação.',
     count1: '{n} local', countN: '{n} locais', countNear: ', do mais perto para o mais longe', none: 'Nenhum posto com estes filtros. Tira um filtro ou procura outra localidade.',
     upTo: 'até', sockets: 'tomadas', freeOf: '{a} de {n} livres', km: 'a {d} km',
@@ -78,7 +78,7 @@
     dcv800: 'For 800 V cars (over 500 V)', dcv400: 'For 400 V cars (up to 500 V)', dcvUnk: 'Voltage not declared',
     dcvHelp: 'Maximum voltage of the site’s DC connectors (OpenStreetMap’s where it corrects the one declared on the NAP). Over 500 V is where an 800 V car charges at full power; a 400 V car charges on either.',
     reset: 'Clear filters', view: 'View', vList: 'List', vMap: 'Map', showMore: 'Show more', mapH: 'Charger map',
-    zIn: 'Zoom in', zOut: 'Zoom out', inView: ' in the map view', allRes: 'Show all results',
+    zIn: 'Zoom in', zOut: 'Zoom out', mDetail: 'Detailed map', mLoading: 'Loading the detailed map…', mFail: 'Could not open the detailed map. The simple map stays.', inView: ' in the map view', allRes: 'Show all results',
     mapDesc: 'The map shows the same chargers as the list. Tap a dot to open it in the list; the list has all the information.',
     count1: '{n} site', countN: '{n} sites', countNear: ', nearest first', none: 'No chargers match these filters. Remove one or search another town.',
     upTo: 'up to', sockets: 'sockets', freeOf: '{a} of {n} free', km: '{d} km away',
@@ -504,6 +504,7 @@
     d.appendChild(el('div', { class: 'actions' },
       el('a', { class: 'btn primary', href: 'https://www.google.com/maps/dir/?api=1&destination=' + encodeURIComponent(ll), rel: 'noopener noreferrer', target: '_blank' }, t('directions')),
       el('a', { class: 'btn', href: osmHref(s), rel: 'noopener noreferrer', target: '_blank' }, t('seeOsm')),
+      el('button', { class: 'btn', type: 'button', onclick: function () { detailedAt(s); } }, t('mDetail')),
       s.lc ? null : el('a', { class: 'btn', href: 'https://ohmigo.ocarroeletrico.com/', rel: 'noopener', target: '_blank' }, t('cost'))));
     return d;
   }
@@ -608,6 +609,7 @@
     g.restore();
   }
   function drawMap() {
+    if (gl) { glSync(); return; }
     var cv = $('map');
     if (!cv || $('mapbox').hidden && !window.matchMedia('(min-width: 980px)').matches) return;
     var g = cv.getContext('2d'), c = colors(), p = proj(cv);
@@ -629,6 +631,65 @@
     });
     if (sel) { g.lineWidth = 4; g.strokeStyle = c.sel; g.beginPath(); g.arc(p.x(sel.lon), p.y(sel.lat), r + 7, 0, 6.3); g.stroke(); mark(g, p.x(sel.lon), p.y(sel.lat), r + 2, sel.status, c); }
     if (here) { g.fillStyle = c.sel; g.beginPath(); g.arc(p.x(here.lon), p.y(here.lat), 7, 0, 6.3); g.fill(); g.lineWidth = 3; g.strokeStyle = c.land; g.stroke(); }
+  }
+  // "Mapa detalhado" (mapa.mjs): streets from our own basemap, loaded only on
+  // demand (MapLibre is ~1.7 MB). It takes over the canvas's place, shows the
+  // same result set and drives the same `view`, so the list follows it too.
+  var gl = null, glBusy = false, glView = null, glLast = null;
+  function dark() {
+    var th = document.documentElement.getAttribute('data-theme');
+    return th ? th === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches;
+  }
+  function glIcon(st, px) {
+    var cv = document.createElement('canvas'), g, c = colors(), halo = {};
+    cv.width = cv.height = px; g = cv.getContext('2d');
+    Object.keys(c).forEach(function (k) { halo[k] = c.land; });
+    mark(g, px / 2, px / 2, px * 0.38, st === 'unknown' || st === 'planned' ? 'available' : st, halo);
+    mark(g, px / 2, px / 2, px * 0.28, st, c);
+    return g.getImageData(0, 0, px, px);
+  }
+  function glSync() {
+    // Panning re-renders the list, not the sites: only new data is sent to the map.
+    var key = [result, result.length, openExt, here && here.lat, here && here.lon, liveRes];
+    if (!glLast || key.some(function (v, i) { return v !== glLast[i]; })) {
+      glLast = key; gl.update({ sites: result, selected: openExt, here: here });
+    }
+    // `view` moved by something else (a region, "Perto de mim", a reset): follow it.
+    if (glView && view.join() !== glView.join()) { glView = view.slice(); gl.fit(view); }
+  }
+  function glShow(on) {
+    $('map').hidden = on; $('mapgl').hidden = !on;
+    $('mDetail').setAttribute('aria-pressed', String(on));
+  }
+  function detailedOpen(at) {
+    if (gl || glBusy) return;
+    glBusy = true; glShow(true);
+    var note = $('mapNote'); note.textContent = t('mLoading'); note.hidden = false;
+    var statuses = N.STATUSES;
+    import('./mapa.mjs').then(function (m) {
+      return m.open({
+        box: $('mapgl'), bounds: at ? undefined : view, center: at ? [at.lon, at.lat] : undefined, zoom: at ? 17 : undefined,
+        lang: N.lang(), dark: dark(), ink: colors().sel, statuses: statuses, icon: glIcon,
+        statusOf: function (s) { return statuses.indexOf(s.status) >= 0 ? s.status : 'unknown'; },
+        sites: result, selected: openExt, here: here,
+        onPick: function (ext) { openExt = null; setView('list'); toggle(ext, true); },
+        onMove: function (b) { view = b.slice(); glView = b.slice(); viewMoved(); }
+      });
+    }).then(function (ctl) {
+      gl = ctl; glBusy = false; glView = view.slice(); note.hidden = true;
+    }).catch(function () {
+      glBusy = false; glShow(false); note.textContent = t('mFail'); drawMap();
+    });
+  }
+  function detailedClose() {
+    if (!gl) return;
+    view = gl.bounds(); gl.remove(); gl = null; glView = null; glLast = null;
+    N.clear($('mapgl')); glShow(false); drawMap(); viewMoved();
+  }
+  // From a site's detail: the map, on that site, at street level.
+  function detailedAt(s) {
+    openExt = s.ext; setView('map');
+    if (gl) { gl.fly([s.lon, s.lat], 17); glSync(); } else detailedOpen(s);
   }
   function zoom(f, cx, cy) {
     var w = view[2] - view[0], h = view[3] - view[1];
@@ -659,11 +720,13 @@
       var lon = view[0] + (q.x - (cv.width - (view[2] - view[0]) * p.k * p.sc) / 2) / (p.k * p.sc), lat = view[3] - (q.y - (cv.height - (view[3] - view[1]) * p.sc) / 2) / p.sc;
       zoom(e.deltaY > 0 ? 1.25 : 0.8, lon, lat);
     }, { passive: false });
-    $('zIn').addEventListener('click', function () { zoom(0.6); });
-    $('zOut').addEventListener('click', function () { zoom(1.6); });
+    $('zIn').addEventListener('click', function () { if (gl) gl.zoomBy(1); else zoom(0.6); });
+    $('zOut').addEventListener('click', function () { if (gl) gl.zoomBy(-1); else zoom(1.6); });
+    $('mDetail').addEventListener('click', function () { if (gl) detailedClose(); else detailedOpen(null); });
     document.querySelectorAll('[data-region]').forEach(function (b) { b.addEventListener('click', function () { view = VIEWS[b.getAttribute('data-region')].slice(); drawMap(); viewMoved(); }); });
-    new MutationObserver(drawMap).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme', 'data-vision'] });
-    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', drawMap);
+    var restyle = function () { if (gl) gl.theme(dark(), N.lang()); else drawMap(); };
+    new MutationObserver(restyle).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme', 'data-vision'] });
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', restyle);
   }
   function setView(v) {
     var map = v === 'map';
@@ -767,7 +830,7 @@
     $('moreBtn').addEventListener('click', function () { shown += PAGE; render(); });
     $('vList').addEventListener('click', function () { setView('list'); });
     $('vMap').addEventListener('click', function () { setView('map'); });
-    N.onLang(function () { if (S.length) { options(); legend(); render(); if (P) N.liveNote($('live'), liveRes, snapshot); } });
+    N.onLang(function () { if (gl) gl.theme(dark(), N.lang()); if (S.length) { options(); legend(); render(); if (P) N.liveNote($('live'), liveRes, snapshot); } });
 
     N.load('sites').then(function (d) {
       S = d.sites;

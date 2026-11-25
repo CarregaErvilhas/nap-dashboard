@@ -33,6 +33,7 @@ falhava sempre); em local avisa e salta só os passos 9.
 Só usa stdlib + node.
 """
 import html.parser
+import hashlib
 import json
 import os
 import re
@@ -318,8 +319,34 @@ SINKS = [
 ]
 
 
+# Third-party code copied as published (the "Mapa detalhado" libraries): the
+# sink rule is for this site's own code, so these are exempt, but only byte for
+# byte as reviewed. Updating one means a new hash here, in the same PR.
+VENDOR = {
+    'vendor/maplibre/maplibre-gl.mjs': 'e02cb08c572fd0950a75343cd558099c2a1dbbaf67f26b0c96f115431962d1ae',
+    'vendor/maplibre/maplibre-gl-worker.mjs': '73d7a024a4efe1a46e49db193e18cfe33271e3ecc652ec7542c281a4ef5f0f04',
+    'vendor/maplibre/maplibre-gl.css': 'a90798a1953017790e590f7e1bd35ff103a8a4263972cb47290b78adf86f8c20',
+    'vendor/pmtiles/pmtiles.js': 'caf981bc46f6327ee7e65d5dc964d89d38a69f60edca2bd4c5c890c21b554c6c',
+    'vendor/basemaps/basemaps.mjs': '9d6ee63bee82fd4af79bedaaab538f904341b35fbc1f6254b86166aa4ee24cf1',
+}
+
+
+def check_vendor(site):
+    for rel, want in sorted(VENDOR.items()):
+        p = os.path.join(site, rel)
+        try:
+            with open(p, 'rb') as fh:
+                got = hashlib.sha256(fh.read()).hexdigest()
+        except OSError:
+            fail(f'{rel}: em falta')
+            continue
+        if got != want:
+            fail(f'{rel}: sha256 {got} não é o revisto ({want}); atualizar VENDOR só com a nova versão revista')
+    print(f'vendor: {len(VENDOR)} ficheiros iguais aos revistos')
+
+
 def check_sinks(site, expected):
-    for rel in sorted(f for f in expected if f.endswith('.js')):
+    for rel in sorted(f for f in expected if f.endswith(('.js', '.mjs')) and f not in VENDOR):
         p = os.path.join(site, rel)
         if not os.path.isfile(p):
             continue
@@ -463,7 +490,7 @@ def check_node(site, expected):
             print('aviso: node não encontrado; node --check e teste de applyLive saltados',
                   file=sys.stderr)
         return
-    js = sorted(f for f in expected if f.endswith('.js'))
+    js = sorted(f for f in expected if f.endswith(('.js', '.mjs')))
     for rel in js:
         p = os.path.join(site, rel)
         if not os.path.isfile(p):
@@ -577,6 +604,7 @@ def main(argv):
     check_data(site)
     check_pages(site, expected)
     check_panels(site)
+    check_vendor(site)
     check_sinks(site, expected)
     check_publish_list(expected)
     check_node(site, expected)

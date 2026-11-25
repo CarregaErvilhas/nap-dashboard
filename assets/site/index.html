@@ -63,8 +63,11 @@
         <button class="btn sm" type="button" data-region="azores" data-i18n="rg_azores">Açores</button>
         <button class="btn sm" type="button" id="zIn" aria-label="Aproximar" data-i18n-label="zIn">+</button>
         <button class="btn sm" type="button" id="zOut" aria-label="Afastar" data-i18n-label="zOut">−</button>
+        <button class="btn sm" type="button" id="mDetail" aria-pressed="false" data-i18n="mDetail">Mapa detalhado</button>
       </div>
       <canvas id="map" width="880" height="1173" role="img" aria-describedby="mapDesc"></canvas>
+      <div class="mapgl" id="mapgl" hidden></div>
+      <p class="small muted" id="mapNote" role="status" hidden></p>
       <p class="small muted" id="mapDesc" data-i18n="mapDesc">O mapa mostra os mesmos postos da lista. Toca num ponto para o abrir na lista; a lista tem toda a informação.</p>
       <ul class="legend" id="legend"></ul>
     </section>

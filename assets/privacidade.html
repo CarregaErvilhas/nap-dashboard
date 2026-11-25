@@ -7,7 +7,7 @@
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'unsafe-inline'; img-src 'self' data:; base-uri 'none'; form-action 'none'">
 <title>Privacidade — EV NAP Portugal</title>
-<meta name="description" content="O que o EV NAP Portugal guarda no teu navegador e o que não recolhe: sem cookies, sem análise de tráfego, um único pedido a terceiros (estado ao vivo).">
+<meta name="description" content="O que o EV NAP Portugal guarda no teu navegador e o que não recolhe: sem cookies, sem análise de tráfego, pedidos a outros domínios só para o estado ao vivo e, a pedido, o mapa de ruas.">
 <link rel="canonical" href="https://nap.ocarroeletrico.com/privacidade.html">
 <link rel="icon" href="favicon.ico" sizes="32x32">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
@@ -38,7 +38,7 @@
 
 <section lang="pt">
 <h1>Privacidade</h1>
-<p>Este site é uma página estática. Não tem contas, formulários, cookies nem análise de tráfego. Os dados vêm de ficheiros JSON do próprio site, pedidos ao mesmo endereço, e o mapa é desenhado no teu navegador. A única exceção é o estado ao vivo dos postos. O tipo de letra (Nunito) também é servido por este site, sem CDN de fontes.</p>
+<p>Este site é uma página estática. Não tem contas, formulários, cookies nem análise de tráfego. Os dados vêm de ficheiros JSON do próprio site, pedidos ao mesmo endereço, e o mapa é desenhado no teu navegador. As exceções são o estado ao vivo dos postos e, só se carregares em «Mapa detalhado», o mapa de ruas. O tipo de letra (Nunito) também é servido por este site, sem CDN de fontes.</p>
 <h2>O que fica guardado no teu navegador</h2>
 <p>Só preferências de apresentação, no <code>localStorage</code> do teu navegador. Não são enviadas a ninguém e apagam-se limpando os dados do site:</p>
 <ul>
@@ -50,6 +50,7 @@
 <p>O site é servido pelo GitHub Pages. Como em qualquer alojamento web, o GitHub recebe o teu endereço IP e os dados normais do pedido (navegador, página pedida) e trata-os segundo a sua <a href="https://docs.github.com/pt/site-policy/privacy-policies/github-general-privacy-statement">declaração de privacidade</a>. Nós não temos acesso a esses registos nem os usamos.</p>
 <h2>O estado ao vivo</h2>
 <p>Ao abrir as páginas Procurar, Rede ou Explorar, o teu navegador pede o estado atual de cada posto (na Explorar, de novo a cada 5 minutos enquanto a página estiver à vista) a <code>ohm-age.ocarroeletrico.com</code>, o arquivo <a href="https://github.com/CarregaErvilhas/AmpereArchive">AmpereArchive</a> (nosso, servido pela Cloudflare). O pedido não leva cookies nem a página de onde vens; a Cloudflare recebe o teu endereço IP e os dados normais do pedido e trata-os segundo a sua <a href="https://www.cloudflare.com/privacypolicy/">política de privacidade</a>. Do nosso lado, a Cloudflare só mostra estatísticas agregadas (número de pedidos, por exemplo), que não permitem seguir um visitante nem uma sessão. Se o pedido falhar ou o bloqueares, o site mostra o estado da última atualização semanal.</p>
+<p>O botão «Mapa detalhado» do Procurar mostra as ruas. Só depois de carregares nele, o teu navegador pede o mapa base (OpenStreetMap, preparado pelo Protomaps) a <code>maptiles.ocarroeletrico.com</code>, nosso também, servido pela Cloudflare: os pedidos dizem que zona do mapa estás a ver, sem cookies nem a página de onde vens, e a Cloudflare trata-os como acima. A biblioteca do mapa (MapLibre) vem deste site. Sem carregares no botão, nada disto é pedido.</p>
 <h2>Perto de mim</h2>
 <p>O navegador só pede acesso à tua localização quando carregas em «Perto de mim», e podes recusar. As coordenadas são usadas no teu dispositivo, para ordenar os locais por distância e centrar o mapa. Não são enviadas a ninguém nem guardadas, e desaparecem ao fechar ou recarregar a página.</p>
 <h2>Fotos</h2>
@@ -64,7 +65,7 @@
 
 <section lang="en">
 <h1>Privacy</h1>
-<p>This site is a static page. It has no accounts, forms, cookies or analytics. The data comes from JSON files of the site itself, requested from the same address, and the map is drawn in your browser. The one exception is the live status of the chargers. The typeface (Nunito) is also served by this site, with no font CDN.</p>
+<p>This site is a static page. It has no accounts, forms, cookies or analytics. The data comes from JSON files of the site itself, requested from the same address, and the map is drawn in your browser. The exceptions are the live status of the chargers and, only if you press “Detailed map”, the street map. The typeface (Nunito) is also served by this site, with no font CDN.</p>
 <h2>What is stored in your browser</h2>
 <p>Only display preferences, in your browser's <code>localStorage</code>. They are never sent anywhere and go away when you clear the site's data:</p>
 <ul>
@@ -76,6 +77,7 @@
 <p>The site is served by GitHub Pages. As with any web host, GitHub receives your IP address and the usual request data (browser, requested page) and handles it under its <a href="https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement">privacy statement</a>. We have no access to those logs and do not use them.</p>
 <h2>Live status</h2>
 <p>When you open the Find, Network or Explore pages, your browser asks <code>ohm-age.ocarroeletrico.com</code> for the current status of each charger (on Explore, again every 5 minutes while the page is visible). That is the <a href="https://github.com/CarregaErvilhas/AmpereArchive">AmpereArchive</a> (ours, served by Cloudflare). The request carries no cookies and not the page you came from; Cloudflare receives your IP address and the usual request data and handles them under its <a href="https://www.cloudflare.com/privacypolicy/">privacy policy</a>. On our side, Cloudflare only shows aggregate statistics (such as the number of requests), which cannot follow a visitor or a session. If it fails or you block it, the site shows the status from the last weekly refresh.</p>
+<p>The “Detailed map” button on Find shows the streets. Only after you press it does your browser ask <code>maptiles.ocarroeletrico.com</code> (also ours, served by Cloudflare) for the basemap (OpenStreetMap, prepared by Protomaps): the requests say which part of the map you are looking at, with no cookies and not the page you came from, and Cloudflare handles them as above. The map library (MapLibre) comes from this site. If you never press the button, none of this is requested.</p>
 <h2>Near me</h2>
 <p>Your browser only asks for access to your location when you press "Near me", and you can refuse. The coordinates are used on your device, to sort the sites by distance and centre the map. They are not sent to anyone or stored, and are gone when you close or reload the page.</p>
 <h2>Photos</h2>

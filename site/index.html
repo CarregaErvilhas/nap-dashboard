@@ -7,8 +7,8 @@
 <meta name="theme-color" content="#fbfaf5" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#0d1322" media="(prefers-color-scheme: dark)">
 <meta name="referrer" content="strict-origin-when-cross-origin">
-<!-- GitHub Pages não deixa definir cabeçalhos HTTP: a CSP vai em <meta>. Scripts e estilos só deste site; o único pedido a outro domínio é o estado ao vivo do AmpereArchive.  Sem style inline: o mapa de calor usa classes h0..h100 e o JS só mexe no CSSOM. -->
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; manifest-src 'self'; connect-src 'self' https://ohm-age.ocarroeletrico.com; base-uri 'none'; form-action 'none'">
+<!-- GitHub Pages não deixa definir cabeçalhos HTTP: a CSP vai em <meta>. Scripts e estilos só deste site; os pedidos a outro domínio são o estado ao vivo do AmpereArchive e, só depois de carregar em «Mapa detalhado», o mapa base em maptiles.ocarroeletrico.com (o worker do MapLibre vem deste site).  Sem style inline: o mapa de calor usa classes h0..h100 e o JS só mexe no CSSOM. -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; manifest-src 'self'; worker-src 'self'; connect-src 'self' https://ohm-age.ocarroeletrico.com https://maptiles.ocarroeletrico.com; base-uri 'none'; form-action 'none'">
 <meta name="nap-live-origin" content="https://ohm-age.ocarroeletrico.com">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
@@ -129,8 +129,11 @@
         <button class="btn sm" type="button" data-region="azores" data-i18n="rg_azores">Açores</button>
         <button class="btn sm" type="button" id="zIn" aria-label="Aproximar" data-i18n-label="zIn">+</button>
         <button class="btn sm" type="button" id="zOut" aria-label="Afastar" data-i18n-label="zOut">−</button>
+        <button class="btn sm" type="button" id="mDetail" aria-pressed="false" data-i18n="mDetail">Mapa detalhado</button>
       </div>
       <canvas id="map" width="880" height="1173" role="img" aria-describedby="mapDesc"></canvas>
+      <div class="mapgl" id="mapgl" hidden></div>
+      <p class="small muted" id="mapNote" role="status" hidden></p>
       <p class="small muted" id="mapDesc" data-i18n="mapDesc">O mapa mostra os mesmos postos da lista. Toca num ponto para o abrir na lista; a lista tem toda a informação.</p>
       <ul class="legend" id="legend"></ul>
     </section>
