@@ -157,6 +157,8 @@ class Scan(html.parser.HTMLParser):
     def __init__(self):
         super().__init__(convert_charrefs=True)
         self.scripts = []      # (src, tem_corpo, posição)
+        self.ldjson = []       # corpos de <script type="application/ld+json"> (dados, não correm)
+        self._ld = None
         self.csp = []          # (content, posição)
         self.handlers = []     # (tag, atributo)
         self.bad_urls = []     # (tag, atributo, valor)
@@ -178,7 +180,10 @@ class Scan(html.parser.HTMLParser):
                     self.bad_urls.append((tag, k, (v or '')[:60]))
         if tag == 'meta' and (a.get('http-equiv') or '').lower() == 'content-security-policy':
             self.csp.append((a.get('content') or '', self._pos))
-        if tag == 'script':
+        if tag == 'script' and (a.get('type') or '').lower() == 'application/ld+json' and not a.get('src'):
+            self._ld = []
+            self.ldjson.append(self._ld)
+        elif tag == 'script':
             self._in_script = [a.get('src'), False, self._pos]
             self.scripts.append(self._in_script)
 
@@ -187,8 +192,11 @@ class Scan(html.parser.HTMLParser):
     def handle_endtag(self, tag):
         if tag == 'script':
             self._in_script = None
+            self._ld = None
 
     def handle_data(self, data):
+        if self._ld is not None:
+            self._ld.append(data)
         if self._in_script is not None and data.strip():
             self._in_script[1] = True
 
@@ -231,6 +239,16 @@ def check_pages(site, expected):
                 print(f'aviso: {rel} tem <script> inline (página fora de build_site.PAGES; '
                       f'não exige script-src \'self\')')
             continue
+        for parts in s.ldjson:
+            try:
+                ld = json.loads(''.join(parts))
+            except ValueError:
+                fail(f'{rel}: JSON-LD inválido')
+            else:
+                if not isinstance(ld, dict) or ld.get('@context') != 'https://schema.org':
+                    fail(f'{rel}: JSON-LD sem @context schema.org')
+        if rel in ('index.html', 'rede.html', 'operadores.html') and not s.ldjson:
+            fail(f'{rel}: sem JSON-LD')
         left = MARKER_RE.findall(text)
         if left:
             fail(f'{rel}: marcadores por substituir: {left}')
