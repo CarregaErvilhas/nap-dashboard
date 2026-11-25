@@ -1,0 +1,135 @@
+name: Mapa base (tiles)
+
+# O mapa base do "Mapa detalhado" do Procurar (mapa.mjs): um extrato de
+# Portugal (continente e ilhas, scripts/basemap_region.py) do build diário do
+# Protomaps (OpenStreetMap), até ao zoom 14, ~330 MB. Vai para o R2 `basemap`,
+# servido em https://maptiles.ocarroeletrico.com (Cache Rule: 30 dias no CDN,
+# que só guarda ficheiros até 512 MB, daí o z14 e a guarda de tamanho abaixo).
+#
+# Cada mês é um ficheiro novo, portugal-AAAAMMDD.pmtiles, e o current.json
+# (fora da cache) passa a apontar para ele: uma página aberta nunca mistura
+# partes de dois meses. Ficam os dois mais recentes; o anterior serve quem
+# ainda tem o ponteiro antigo.
+#
+# Pela API S3 do R2, não pelo `cf`: o upload do `cf` (e do wrangler) acaba
+# nos 300 MB. Uma só credencial, um token R2 "Object Read & Write" só deste
+# bucket: segredos R2_ACCESS_KEY_ID e R2_SECRET_ACCESS_KEY, e a variável
+# R2_ACCOUNT_ID (o endpoint).
+on:
+  schedule:
+    - cron: "17 3 9 * *"   # dia 9 de cada mês, 03:17 UTC
+  workflow_dispatch:
+    inputs:
+      force:
+        description: "Publicar mesmo que o build já seja o publicado"
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+  issues: write
+
+concurrency:
+  group: "basemap-tiles"
+  cancel-in-progress: false
+
+env:
+  PMTILES_VERSION: "1.31.2"
+  PMTILES_SHA256: "3ed7dbf4ec2e6dfe5e25b6f70d1ffc932729f93c86db353bf514dd71010a312f"
+  BUCKET: basemap
+  MAX_BYTES: "480000000"   # abaixo dos 512 MB que o CDN guarda
+  MIN_BYTES: "150000000"   # um extrato vazio ou cortado não chega aqui
+
+jobs:
+  tiles:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+      AWS_DEFAULT_REGION: auto
+      # O R2 não precisa das somas de verificação que o aws CLI manda por omissão.
+      AWS_REQUEST_CHECKSUM_CALCULATION: when_required
+      AWS_RESPONSE_CHECKSUM_VALIDATION: when_required
+      R2_ACCOUNT_ID: ${{ vars.R2_ACCOUNT_ID }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Install pmtiles
+        run: |
+          set -euo pipefail
+          f="go-pmtiles_${PMTILES_VERSION}_Linux_x86_64.tar.gz"
+          curl -fsSL -o "$RUNNER_TEMP/$f" "https://github.com/protomaps/go-pmtiles/releases/download/v${PMTILES_VERSION}/$f"
+          echo "${PMTILES_SHA256}  $RUNNER_TEMP/$f" | sha256sum -c -
+          tar -xzf "$RUNNER_TEMP/$f" -C "$RUNNER_TEMP" pmtiles
+          "$RUNNER_TEMP/pmtiles" version
+
+      - name: Pick the latest Protomaps build
+        id: build
+        run: |
+          set -euo pipefail
+          test -n "$R2_ACCOUNT_ID" && test -n "$AWS_ACCESS_KEY_ID" || { echo "::error::faltam R2_ACCOUNT_ID / R2_ACCESS_KEY_ID / R2_SECRET_ACCESS_KEY"; exit 1; }
+          key=$(curl -fsSL https://build-metadata.protomaps.dev/builds.json | python3 -c 'import json,sys; print(json.load(sys.stdin)[-1]["key"])')
+          [[ "$key" =~ ^[0-9]{8}\.pmtiles$ ]] || { echo "::error::build inesperado: $key"; exit 1; }
+          echo "key=$key" >> "$GITHUB_OUTPUT"
+          echo "out=portugal-${key%.pmtiles}.pmtiles" >> "$GITHUB_OUTPUT"
+          cur=$(curl -fsS https://maptiles.ocarroeletrico.com/current.json | python3 -c 'import json,sys; print(json.load(sys.stdin).get("pmtiles",""))' || true)
+          echo "current=$cur" >> "$GITHUB_OUTPUT"
+          echo "build $key; publicado: ${cur:-nenhum}"
+
+      - name: Extract Portugal (z0-14)
+        if: steps.build.outputs.current != steps.build.outputs.out || inputs.force
+        run: |
+          set -euo pipefail
+          python3 scripts/basemap_region.py data/basemap_region.geojson
+          "$RUNNER_TEMP/pmtiles" extract "https://build.protomaps.com/${{ steps.build.outputs.key }}" \
+            "data/${{ steps.build.outputs.out }}" --region=data/basemap_region.geojson --maxzoom=14
+          "$RUNNER_TEMP/pmtiles" verify "data/${{ steps.build.outputs.out }}"
+          size=$(stat -c %s "data/${{ steps.build.outputs.out }}")
+          echo "tamanho: $size bytes"
+          [ "$size" -ge "$MIN_BYTES" ] || { echo "::error::extrato pequeno demais ($size)"; exit 1; }
+          [ "$size" -le "$MAX_BYTES" ] || { echo "::error::extrato acima de $MAX_BYTES: o CDN deixa de o guardar (baixar o zoom ou apertar a região)"; exit 1; }
+
+      - name: Upload and switch current.json
+        if: steps.build.outputs.current != steps.build.outputs.out || inputs.force
+        run: |
+          set -euo pipefail
+          ep="https://${R2_ACCOUNT_ID}.r2.cloudflarestorage.com"
+          out="${{ steps.build.outputs.out }}"
+          aws s3 cp "data/$out" "s3://$BUCKET/$out" --endpoint-url "$ep" \
+            --content-type application/octet-stream --cache-control "public, max-age=2592000, immutable" --only-show-errors
+          # O ponteiro só muda depois de o ficheiro estar inteiro no bucket.
+          printf '{"pmtiles":"%s","build":"%s"}\n' "$out" "${{ steps.build.outputs.key }}" > data/current.json
+          aws s3 cp data/current.json "s3://$BUCKET/current.json" --endpoint-url "$ep" \
+            --content-type application/json --cache-control no-store --only-show-errors
+          curl -fsS https://maptiles.ocarroeletrico.com/current.json
+          # O que o pmtiles.js do browser precisa, pelo CDN: um pedido parcial
+          # (206, nunca o ficheiro inteiro), CORS e o ETag à vista.
+          h=$(curl -fsS -r 0-126 -o /dev/null -D - -H 'Origin: https://nap.ocarroeletrico.com' "https://maptiles.ocarroeletrico.com/$out" | tr -d '\r')
+          echo "$h"
+          echo "$h" | grep -qE '^HTTP/[0-9.]+ 206' || { echo "::error::sem pedido parcial (206)"; exit 1; }
+          echo "$h" | grep -qi '^access-control-allow-origin:' || { echo "::error::sem CORS"; exit 1; }
+          echo "$h" | grep -i '^access-control-expose-headers:' | grep -qi etag || { echo "::error::ETag não exposto"; exit 1; }
+
+      - name: Keep the two newest
+        if: steps.build.outputs.current != steps.build.outputs.out || inputs.force
+        run: |
+          set -euo pipefail
+          ep="https://${R2_ACCOUNT_ID}.r2.cloudflarestorage.com"
+          aws s3api list-objects-v2 --bucket "$BUCKET" --prefix portugal- --endpoint-url "$ep" \
+            --query 'Contents[].Key' --output text | tr '\t' '\n' | grep -E '^portugal-[0-9]{8}\.pmtiles$' \
+            | sort -r | tail -n +3 | while read -r k; do
+              echo "apagar $k"
+              aws s3 rm "s3://$BUCKET/$k" --endpoint-url "$ep" --only-show-errors
+            done
+
+      - name: Notify on failure
+        if: failure()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh issue create --repo "$GITHUB_REPOSITORY" \
+            --title "Basemap tiles refresh failed (run $GITHUB_RUN_ID)" \
+            --body "The detailed map keeps last month's tiles. Run: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"

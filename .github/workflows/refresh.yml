@@ -30,6 +30,10 @@ env:
     app.css boot.js common.js find.js rede.js operadores.js explorar.js explorar.css grupo.js grupo.css
     grupo/carro.svg grupo/ohmigo.svg grupo/voltaria.svg grupo/ceme.svg grupo/nap.svg grupo/ampere.svg
     fonts/nunito-latin.woff2 fonts/OFL-Nunito.txt
+    mapa.mjs vendor/maplibre/maplibre-gl.mjs vendor/maplibre/maplibre-gl-worker.mjs
+    vendor/maplibre/maplibre-gl.css vendor/maplibre/LICENSE.txt
+    vendor/pmtiles/pmtiles.js vendor/pmtiles/LICENSE.txt
+    vendor/basemaps/basemaps.mjs vendor/basemaps/LICENSE.txt
     favicon.svg favicon.ico apple-touch-icon.png og.png llms.txt site.webmanifest
     data/stats.json data/panels.json data/sites.json data/points.json
     data/outline.json data/opc.json data/basemap.json data/history.json data/changes.json

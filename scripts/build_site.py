@@ -27,7 +27,14 @@ STATIC = ('app.css', 'boot.js', 'common.js', 'find.js', 'rede.js', 'operadores.j
           # The mascots of the group's sites (grupo.html), each its own site's brand.
           'grupo/carro.svg', 'grupo/ohmigo.svg', 'grupo/voltaria.svg', 'grupo/ceme.svg',
           'grupo/nap.svg', 'grupo/ampere.svg',
-          'fonts/nunito-latin.woff2', 'fonts/OFL-Nunito.txt')
+          'fonts/nunito-latin.woff2', 'fonts/OFL-Nunito.txt',
+          # "Mapa detalhado" (mapa.mjs, loaded on demand) and the libraries it
+          # imports, as published on npm; validate_site.VENDOR pins their sha256.
+          'mapa.mjs',
+          'vendor/maplibre/maplibre-gl.mjs', 'vendor/maplibre/maplibre-gl-worker.mjs',
+          'vendor/maplibre/maplibre-gl.css', 'vendor/maplibre/LICENSE.txt',
+          'vendor/pmtiles/pmtiles.js', 'vendor/pmtiles/LICENSE.txt',
+          'vendor/basemaps/basemaps.mjs', 'vendor/basemaps/LICENSE.txt')
 EXTRA = ('privacidade.html', '404.html', 'favicon.svg', 'favicon.ico',
          'apple-touch-icon.png', 'llms.txt', 'og.png', 'site.webmanifest')
 # Static data copied as it is (assets/ -> site/data/): the OSM places and roads

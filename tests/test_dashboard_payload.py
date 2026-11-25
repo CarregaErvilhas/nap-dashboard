@@ -22,7 +22,7 @@ class ArchiveOriginTest(unittest.TestCase):
 
     def test_replaces_csp_and_live_origin(self):
         out = dp.apply_archive_origin(self.tmpl(), 'https://Archive.Example.org/')
-        self.assertIn("connect-src 'self' https://archive.example.org;", out)
+        self.assertIn("connect-src 'self' https://archive.example.org https://maptiles.ocarroeletrico.com;", out)
         self.assertIn('<meta name="nap-live-origin" content="https://archive.example.org">', out)
         self.assertNotIn(dp.ARCHIVE_ORIGIN_DEFAULT, out)
 
