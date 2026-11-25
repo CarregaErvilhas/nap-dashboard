@@ -16,7 +16,7 @@
     dcv800: 'Para carros 800 V (mais de 500 V)', dcv400: 'Para carros 400 V (até 500 V)', dcvUnk: 'Tensão não declarada',
     dcvHelp: 'Tensão máxima dos conectores DC do posto (a do OpenStreetMap quando corrige a declarada no NAP). Acima de 500 V é onde um carro de 800 V carrega à potência máxima; um carro de 400 V carrega em qualquer um.',
     reset: 'Limpar filtros', view: 'Vista', vList: 'Lista', vMap: 'Mapa', showMore: 'Mostrar mais', mapH: 'Mapa dos postos',
-    zIn: 'Aproximar', zOut: 'Afastar', mDetail: 'Mapa detalhado', mLoading: 'A carregar o mapa detalhado…', mFail: 'Não foi possível abrir o mapa detalhado. Fica o mapa simples.', inView: ' na vista do mapa', allRes: 'Mostrar todos os resultados',
+    zIn: 'Aproximar', zOut: 'Afastar', mDetail: 'Mapa detalhado', mWide: 'Expandir mapa', mLoading: 'A carregar o mapa detalhado…', mFail: 'Não foi possível abrir o mapa detalhado. Fica o mapa simples.', inView: ' na vista do mapa', allRes: 'Mostrar todos os resultados',
     mapDesc: 'O mapa mostra os mesmos postos da lista. Toca num ponto para o abrir na lista; a lista tem toda a informação.',
     count1: '{n} local', countN: '{n} locais', countNear: ', do mais perto para o mais longe', none: 'Nenhum posto com estes filtros. Tira um filtro ou procura outra localidade.',
     upTo: 'até', sockets: 'tomadas', freeOf: '{a} de {n} livres', km: 'a {d} km',
@@ -78,7 +78,7 @@
     dcv800: 'For 800 V cars (over 500 V)', dcv400: 'For 400 V cars (up to 500 V)', dcvUnk: 'Voltage not declared',
     dcvHelp: 'Maximum voltage of the site’s DC connectors (OpenStreetMap’s where it corrects the one declared on the NAP). Over 500 V is where an 800 V car charges at full power; a 400 V car charges on either.',
     reset: 'Clear filters', view: 'View', vList: 'List', vMap: 'Map', showMore: 'Show more', mapH: 'Charger map',
-    zIn: 'Zoom in', zOut: 'Zoom out', mDetail: 'Detailed map', mLoading: 'Loading the detailed map…', mFail: 'Could not open the detailed map. The simple map stays.', inView: ' in the map view', allRes: 'Show all results',
+    zIn: 'Zoom in', zOut: 'Zoom out', mDetail: 'Detailed map', mWide: 'Expand map', mLoading: 'Loading the detailed map…', mFail: 'Could not open the detailed map. The simple map stays.', inView: ' in the map view', allRes: 'Show all results',
     mapDesc: 'The map shows the same chargers as the list. Tap a dot to open it in the list; the list has all the information.',
     count1: '{n} site', countN: '{n} sites', countNear: ', nearest first', none: 'No chargers match these filters. Remove one or search another town.',
     upTo: 'up to', sockets: 'sockets', freeOf: '{a} of {n} free', km: '{d} km away',
@@ -684,7 +684,7 @@
   function detailedClose() {
     if (!gl) return;
     view = gl.bounds(); gl.remove(); gl = null; glView = null; glLast = null;
-    N.clear($('mapgl')); glShow(false); drawMap(); viewMoved();
+    N.clear($('mapgl')); glShow(false); fitCanvas(); drawMap(); viewMoved();
   }
   // From a site's detail: the map, on that site, at street level.
   function detailedAt(s) {
@@ -692,6 +692,25 @@
     // On a phone the map is its own view, under the search: bring it up.
     if (!window.matchMedia('(min-width: 980px)').matches) $('mapbox').scrollIntoView({ block: 'start' });
     if (gl) { gl.fly([s.lon, s.lat], 17); glSync(); } else detailedOpen(s);
+  }
+  // «Expandir mapa»: the canvas bitmap follows its box (at 2x, as the default 880x1173 does for
+  // ~440 CSS px, so dots and labels keep their size) and `view` grows to fill the new shape,
+  // around the same centre: drawMap only draws inside `view`, and the list counts what is in it.
+  function fitCanvas() {
+    var cv = $('map'), b = cv.getBoundingClientRect(), wide = $('mapbox').parentNode.classList.contains('wide');
+    if (!b.width) return;
+    var w = wide ? Math.round(b.width * 2) : 880, h = wide ? Math.round(b.height * 2) : 1173;
+    if (cv.width === w && cv.height === h) return;
+    cv.width = w; cv.height = h;
+    var p = proj(cv), ox = (w - (view[2] - view[0]) * p.k * p.sc) / 2, oy = (h - (view[3] - view[1]) * p.sc) / 2;
+    view = [view[0] - ox / (p.k * p.sc), view[1] - oy / p.sc, view[2] + ox / (p.k * p.sc), view[3] + oy / p.sc];
+    // Only a list already following the map re-filters: a resize is not the user moving the map.
+    drawMap(); if (dirty) viewMoved();
+  }
+  function setWide(on) {
+    $('mapbox').parentNode.classList.toggle('wide', on);
+    $('mWide').setAttribute('aria-pressed', String(on));
+    if (gl) gl.resize(); else fitCanvas();
   }
   function zoom(f, cx, cy) {
     var w = view[2] - view[0], h = view[3] - view[1];
@@ -725,6 +744,8 @@
     $('zIn').addEventListener('click', function () { if (gl) gl.zoomBy(1); else zoom(0.6); });
     $('zOut').addEventListener('click', function () { if (gl) gl.zoomBy(-1); else zoom(1.6); });
     $('mDetail').addEventListener('click', function () { if (gl) detailedClose(); else detailedOpen(null); });
+    $('mWide').addEventListener('click', function () { setWide($('mWide').getAttribute('aria-pressed') !== 'true'); });
+    var rt; window.addEventListener('resize', function () { clearTimeout(rt); rt = setTimeout(function () { if (!gl) fitCanvas(); }, 150); });
     document.querySelectorAll('[data-region]').forEach(function (b) { b.addEventListener('click', function () { view = VIEWS[b.getAttribute('data-region')].slice(); drawMap(); viewMoved(); }); });
     var restyle = function () { if (gl) gl.theme(dark(), N.lang()); else drawMap(); };
     new MutationObserver(restyle).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme', 'data-vision'] });
