@@ -160,7 +160,34 @@ OG_ALT = ('Mapa de Portugal continental com um ponto por posto de carregamento, 
           '«Postos de carregamento em Portugal».')
 
 
-def social_tags(tmpl):
+def structured_data(page, title, desc, canon):
+    """schema.org JSON-LD for the page (a data block: the CSP's script-src does not run it).
+
+    The home is a WebSite + Organization; Rede and Operadores are a Dataset (about the NAP, which
+    stays the source: no licence is claimed here, THIRD-PARTY-NOTICES.md has them); every page
+    but the home has a BreadcrumbList."""
+    org = {'@type': 'Organization', 'name': 'O Carro Elétrico', 'url': 'https://ocarroeletrico.com/'}
+    graph = []
+    if page == 'index.html':
+        graph.append({'@type': 'WebSite', 'name': 'Postos PT', 'url': canon,
+                      'description': desc, 'inLanguage': ['pt-PT', 'en'], 'publisher': org})
+        graph.append(dict(org, **{'@id': 'https://ocarroeletrico.com/#org'}))
+    else:
+        graph.append({'@type': 'BreadcrumbList', 'itemListElement': [
+            {'@type': 'ListItem', 'position': 1, 'name': 'Postos PT', 'item': SITE_URL + '/'},
+            {'@type': 'ListItem', 'position': 2, 'name': title, 'item': canon}]})
+    if page in ('rede.html', 'operadores.html'):
+        graph.append({'@type': 'Dataset', 'name': title, 'description': desc, 'url': canon,
+                      'inLanguage': ['pt-PT', 'en'], 'creator': org,
+                      'temporalCoverage': 'P1W',
+                      'spatialCoverage': {'@type': 'Country', 'name': 'Portugal'}})
+    doc = json.dumps({'@context': 'https://schema.org', '@graph': graph}, ensure_ascii=False)
+    doc = doc.replace('<', '\\u003c').replace('&', '\\u0026')  # nothing can close the block
+    return ('<link rel="alternate" type="text/plain" href="llms.txt" title="llms.txt">\n'
+            f'<script type="application/ld+json">{doc}</script>')
+
+
+def social_tags(tmpl, page=''):
     """The Open Graph and X tags for a link preview, from the page's own title, description
     and canonical URL, put right after the canonical link.
 
@@ -197,6 +224,7 @@ def social_tags(tmpl):
         f'<meta name="twitter:image" content="{img}">',
         f'<meta name="twitter:image:alt" content="{alt}">',
     ))
+    tags += '\n' + structured_data(page, html_esc.unescape(title), html_esc.unescape(desc), canon.group(1))
     return tmpl[:canon.end()] + '\n' + tags + tmpl[canon.end():]
 
 
@@ -238,7 +266,7 @@ def render(data, outdir='site', archive_url=None):
                 if not body:  # hide the whole section, as the old dashboard did
                     tmpl = tmpl.replace(f'data-panel="{name}"', f'data-panel="{name}" hidden')
         tmpl = tmpl.replace('<!--SNAPSHOT-->', snap)
-        tmpl = social_tags(tmpl)
+        tmpl = social_tags(tmpl, page)
         left = re.findall(r'<!--(?:PANEL:\w+|SNAPSHOT|CHROME:\w+)-->', tmpl)
         if left:
             raise SystemExit(f'{page}: marcadores por substituir: {left}')
