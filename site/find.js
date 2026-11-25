@@ -689,6 +689,8 @@
   // From a site's detail: the map, on that site, at street level.
   function detailedAt(s) {
     openExt = s.ext; setView('map');
+    // On a phone the map is its own view, under the search: bring it up.
+    if (!window.matchMedia('(min-width: 980px)').matches) $('mapbox').scrollIntoView({ block: 'start' });
     if (gl) { gl.fly([s.lon, s.lat], 17); glSync(); } else detailedOpen(s);
   }
   function zoom(f, cx, cy) {

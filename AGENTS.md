@@ -780,7 +780,23 @@ work: the pages fetch their JSON, so preview over HTTP. `refresh.yml` runs
   be ~690 MB) and uploads it over R2's S3 API, because `cf`/wrangler uploads
   stop at 300 MB. Its secrets: `R2_ACCESS_KEY_ID`/`R2_SECRET_ACCESS_KEY` (an R2
   token for that bucket only) and the variable `R2_ACCOUNT_ID`. Cloudflare
-  resources are managed with the `cf` CLI.
+  resources are managed with the `cf` CLI. How they are set:
+  - R2 `basemap`: location hint WEUR, no jurisdiction (public OSM data);
+    public only through the custom domain `maptiles.ocarroeletrico.com`,
+    minimum TLS 1.3 (as `pictures.*`: Android 9 and older can't open the
+    detailed map and get the fallback message).
+  - CORS on the bucket: GET/HEAD from any origin, request headers `range`
+    and `if-match`, exposed `ETag`, `Content-Range`, `Content-Length`
+    (pmtiles.js reads the ETag), max age 1 day.
+  - Cache Rule `maptiles: …` (zone phase `http_request_cache_settings`):
+    every path but `/current.json` is cacheable, 30 days at the edge and 1 day
+    in the browser whatever the object says (`cf r2 objects put` can't set
+    `Cache-Control`), 4xx never stored, query strings out of the cache key.
+    `current.json` is never cached, so a new month shows up at once.
+  - Glyphs: only the ranges Portugal's map asks for (Latin, Latin extended,
+    punctuation, plus Arabic, Tifinagh and variation selectors for Morocco's
+    names at low zoom). A missing range is a 404 and a console warning, never
+    a broken map; add it with `cf r2 objects put`.
 - Search and filters on `index.html` run on `sites.json`; point-level data
   (`points.json`) loads after, for the detail view and the live status. Both
   take power, fees and the DC voltage filter from the network model, so the

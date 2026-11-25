@@ -105,7 +105,13 @@ jobs:
           aws s3 cp data/current.json "s3://$BUCKET/current.json" --endpoint-url "$ep" \
             --content-type application/json --cache-control no-store --only-show-errors
           curl -fsS https://maptiles.ocarroeletrico.com/current.json
-          curl -fsS -r 0-126 -o /dev/null -w "header: %{http_code}\n" "https://maptiles.ocarroeletrico.com/$out"
+          # O que o pmtiles.js do browser precisa, pelo CDN: um pedido parcial
+          # (206, nunca o ficheiro inteiro), CORS e o ETag à vista.
+          h=$(curl -fsS -r 0-126 -o /dev/null -D - -H 'Origin: https://nap.ocarroeletrico.com' "https://maptiles.ocarroeletrico.com/$out" | tr -d '\r')
+          echo "$h"
+          echo "$h" | grep -qE '^HTTP/[0-9.]+ 206' || { echo "::error::sem pedido parcial (206)"; exit 1; }
+          echo "$h" | grep -qi '^access-control-allow-origin:' || { echo "::error::sem CORS"; exit 1; }
+          echo "$h" | grep -i '^access-control-expose-headers:' | grep -qi etag || { echo "::error::ETag não exposto"; exit 1; }
 
       - name: Keep the two newest
         if: steps.build.outputs.current != steps.build.outputs.out || inputs.force
