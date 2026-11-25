@@ -29,7 +29,7 @@ STATIC = ('app.css', 'boot.js', 'common.js', 'find.js', 'rede.js', 'operadores.j
           'grupo/nap.svg', 'grupo/ampere.svg',
           'fonts/nunito-latin.woff2', 'fonts/OFL-Nunito.txt')
 EXTRA = ('privacidade.html', '404.html', 'favicon.svg', 'favicon.ico',
-         'apple-touch-icon.png', 'llms.txt', 'og.png')
+         'apple-touch-icon.png', 'llms.txt', 'og.png', 'site.webmanifest')
 # Static data copied as it is (assets/ -> site/data/): the OSM places and roads
 # for the map, built by scripts/make_pt_basemap.py.
 DATA_COPY = {'pt_basemap.json': 'basemap.json'}

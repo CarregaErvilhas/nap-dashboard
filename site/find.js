@@ -363,7 +363,9 @@
     [[busyRow(s.hb.slice(0, 24)), 'busyWd', !now.we], [busyRow(s.hb.slice(24)), 'busyWe', now.we]].forEach(function (r) {
       var vals = r[0], bars = el('div', { class: 'bars', role: 'img', 'aria-label': t(r[1]) + ': ' + vals.map(function (v, h) { return h + ' h ' + (v == null ? '—' : v + '%'); }).join(', ') });
       vals.forEach(function (v, h) {
-        bars.appendChild(el('span', { class: 'bar' + (r[2] && h === now.hour ? ' now' : '') + (v == null ? ' na' : ''), style: 'height:' + (v == null ? 4 : Math.max(4, v)) + '%', title: h + ' h: ' + (v == null ? '—' : v + ' %') }));
+        var bar = el('span', { class: 'bar' + (r[2] && h === now.hour ? ' now' : '') + (v == null ? ' na' : ''), title: h + ' h: ' + (v == null ? '—' : v + ' %') });
+        bar.style.height = (v == null ? 4 : Math.max(4, v)) + '%';  // CSSOM, não atributo: a CSP não deixa style inline
+        bars.appendChild(bar);
       });
       var day = vals.map(function (v, h) { return { v: v, h: h }; }).filter(function (x) { return x.v != null && x.h >= 7 && x.h < 23; });
       var lo = day.length ? Math.min.apply(null, day.map(function (x) { return x.v; })) : null;

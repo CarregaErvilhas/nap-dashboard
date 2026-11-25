@@ -1,0 +1,15 @@
+{
+  "name": "Postos PT",
+  "short_name": "Postos PT",
+  "description": "Postos de carregamento de veículos elétricos em Portugal: estado, potência, tomadas e preços.",
+  "lang": "pt-PT",
+  "start_url": "/",
+  "scope": "/",
+  "display": "browser",
+  "background_color": "#fbfaf5",
+  "theme_color": "#fbfaf5",
+  "icons": [
+    { "src": "/favicon.svg", "type": "image/svg+xml", "sizes": "any", "purpose": "any" },
+    { "src": "/apple-touch-icon.png", "type": "image/png", "sizes": "180x180", "purpose": "any" }
+  ]
+}

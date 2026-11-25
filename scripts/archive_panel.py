@@ -126,8 +126,8 @@ def _heat(m, t, lang):
                 cells.append('<td class="mut">·</td>')
             else:
                 a = min(100, round(v * 1.5))  # 66 % de ocupação já é cor cheia
-                cells.append(f'<td title="{_n(v, lang)} % · {m["days"][d][h]} d" '
-                             f'style="background:color-mix(in srgb, var(--s-charging) {a}%, transparent)">'
+                a = 5 * round(a / 5)  # classe h0..h100 de 5 em 5 (app.css): sem atributo style, a CSP não precisa de unsafe-inline
+                cells.append(f'<td class="h{a}" title="{_n(v, lang)} % · {m["days"][d][h]} d">'
                              f'{round(v)}</td>')
         rows.append(f'<tr><th>{t["days"][d]}</th>{"".join(cells)}</tr>')
     return f'<table class="hist heat"><thead><tr>{head}</tr></thead><tbody>{"".join(rows)}</tbody></table>'

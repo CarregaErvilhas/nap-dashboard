@@ -85,7 +85,7 @@ html[lang="pt"] [data-lang="en"], html[lang="en"] [data-lang="pt"] { display: no
 .btn.primary { background: var(--ink); border-color: var(--ink); color: var(--on-ink); }
 .btn.primary:hover { background: var(--ink-strong); border-color: var(--ink-strong); }
 .btn[aria-pressed="true"] { background: var(--fg); border-color: var(--fg); color: var(--bg); }
-.btn.sm { min-height: 36px; padding: 4px 12px; font-size: var(--step--1); }
+.btn.sm { min-height: 44px; padding: 4px 12px; font-size: var(--step--1); }
 .menu { position: relative; }
 .menu-panel { position: absolute; right: 0; top: calc(100% + 6px); background: var(--card); border: 1.5px solid var(--line); border-radius: var(--r); padding: 14px; width: min(300px, 88vw); box-shadow: 0 12px 30px rgb(20 32 58 / .18); }
 .menu-panel fieldset { border: 0; padding: 0; margin: 0 0 12px; }
@@ -185,7 +185,30 @@ table.bars .fill { background: var(--bar); height: 12px; border-radius: 0 4px 4p
 table.bars td, table.bars th { border-bottom: 0; padding-block: 5px; }
 table.bars th { font-weight: 600; color: var(--fg); white-space: normal; text-align: left; }
 table.bars caption, table caption { text-align: left; font-weight: 800; font-size: var(--step-0); padding-bottom: 8px; color: var(--fg); }
-.heatwrap td[style] { color: var(--fg); }
+.heatwrap td[class^="h"] { color: var(--fg); }
+/* mapa de calor do histórico: 21 passos, sem style inline (CSP sem unsafe-inline) */
+.heat td.h0 { background: color-mix(in srgb, var(--s-charging) 0%, transparent); }
+.heat td.h5 { background: color-mix(in srgb, var(--s-charging) 5%, transparent); }
+.heat td.h10 { background: color-mix(in srgb, var(--s-charging) 10%, transparent); }
+.heat td.h15 { background: color-mix(in srgb, var(--s-charging) 15%, transparent); }
+.heat td.h20 { background: color-mix(in srgb, var(--s-charging) 20%, transparent); }
+.heat td.h25 { background: color-mix(in srgb, var(--s-charging) 25%, transparent); }
+.heat td.h30 { background: color-mix(in srgb, var(--s-charging) 30%, transparent); }
+.heat td.h35 { background: color-mix(in srgb, var(--s-charging) 35%, transparent); }
+.heat td.h40 { background: color-mix(in srgb, var(--s-charging) 40%, transparent); }
+.heat td.h45 { background: color-mix(in srgb, var(--s-charging) 45%, transparent); }
+.heat td.h50 { background: color-mix(in srgb, var(--s-charging) 50%, transparent); }
+.heat td.h55 { background: color-mix(in srgb, var(--s-charging) 55%, transparent); }
+.heat td.h60 { background: color-mix(in srgb, var(--s-charging) 60%, transparent); }
+.heat td.h65 { background: color-mix(in srgb, var(--s-charging) 65%, transparent); }
+.heat td.h70 { background: color-mix(in srgb, var(--s-charging) 70%, transparent); }
+.heat td.h75 { background: color-mix(in srgb, var(--s-charging) 75%, transparent); }
+.heat td.h80 { background: color-mix(in srgb, var(--s-charging) 80%, transparent); }
+.heat td.h85 { background: color-mix(in srgb, var(--s-charging) 85%, transparent); }
+.heat td.h90 { background: color-mix(in srgb, var(--s-charging) 90%, transparent); }
+.heat td.h95 { background: color-mix(in srgb, var(--s-charging) 95%, transparent); }
+.heat td.h100 { background: color-mix(in srgb, var(--s-charging) 100%, transparent); }
+.mt12 { margin-top: 12px; } .mt16 { margin-top: 16px; }
 
 /* ---- stat tiles ---- */
 .kpis { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin: 0; padding: 0; list-style: none; }
