@@ -162,6 +162,7 @@ class Scan(html.parser.HTMLParser):
         self.csp = []          # (content, posição)
         self.handlers = []     # (tag, atributo)
         self.bad_urls = []     # (tag, atributo, valor)
+        self.styled = []       # tags com atributo style (a CSP não o deixa correr)
         self.tags = []
         self._in_script = None
         self._pos = 0
@@ -173,6 +174,8 @@ class Scan(html.parser.HTMLParser):
         for k, v in attrs:
             k = k.lower()
             a[k] = v
+            if k == 'style':
+                self.styled.append(tag)
             if k.startswith('on'):
                 self.handlers.append((tag, k))
             if k in URL_ATTRS or k == 'srcdoc':
@@ -259,6 +262,10 @@ def check_pages(site, expected):
             first_script = min((sp for _, _, sp in s.scripts), default=None)
             if first_script is not None and first_script < pos:
                 fail(f'{rel}: a CSP vem depois do primeiro <script> (não o cobre)')
+            if csp_directives(content).get('style-src') != ["'self'"]:
+                fail(f'{rel}: style-src tem de ser exatamente \'self\' (sem unsafe-inline)')
+            for tag in s.styled:
+                fail(f'{rel}: atributo style em <{tag}> (a CSP não o deixa correr; usar uma classe)')
             ssrc = csp_directives(content).get('script-src')
             if ssrc != ["'self'"]:
                 fail(f'{rel}: script-src tem de ser exatamente \'self\', é {ssrc}')

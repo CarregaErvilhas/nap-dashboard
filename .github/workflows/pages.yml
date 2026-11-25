@@ -72,11 +72,17 @@ jobs:
           # (~10 MB), para máquinas: fora do rastreio.
           echo "5162276ff8f52857dee877725610e84e" > public/5162276ff8f52857dee877725610e84e.txt   # IndexNow key (see the indexnow job)
           printf 'User-agent: *\nAllow: /\nDisallow: /ohmigo/\n\nSitemap: https://nap.ocarroeletrico.com/sitemap.xml\n' > public/robots.txt
-          d=$(date -u +%F)
+          # lastmod: a data do retrato dos dados (site/data/stats.json), a única que
+          # muda de facto nas páginas de dados. grupo e privacidade são texto fixo,
+          # sem lastmod (um valor inventado é pior do que nenhum).
+          d=$(python3 -c "import json;print(json.load(open('site/data/stats.json'))['snapshot'][:10])")
           {
             printf '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
-            for u in / /rede.html /explorar.html /operadores.html /grupo.html /privacidade.html; do
+            for u in / /rede.html /explorar.html /operadores.html; do
               printf '  <url><loc>https://nap.ocarroeletrico.com%s</loc><lastmod>%s</lastmod></url>\n' "$u" "$d"
+            done
+            for u in /grupo.html /privacidade.html; do
+              printf '  <url><loc>https://nap.ocarroeletrico.com%s</loc></url>\n' "$u"
             done
             printf '</urlset>\n'
           } > public/sitemap.xml

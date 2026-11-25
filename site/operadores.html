@@ -7,11 +7,12 @@
 <meta name="theme-color" content="#fbfaf5" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#0d1322" media="(prefers-color-scheme: dark)">
 <meta name="referrer" content="strict-origin-when-cross-origin">
-<!-- GitHub Pages não deixa definir cabeçalhos HTTP: a CSP vai em <meta>. Scripts e estilos só deste site; o único pedido a outro domínio é o estado ao vivo do AmpereArchive. style 'unsafe-inline' existe só para as cores de fundo do mapa de calor do histórico. -->
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://ohm-age.ocarroeletrico.com; base-uri 'none'; form-action 'none'">
+<!-- GitHub Pages não deixa definir cabeçalhos HTTP: a CSP vai em <meta>. Scripts e estilos só deste site; o único pedido a outro domínio é o estado ao vivo do AmpereArchive.  Sem style inline: o mapa de calor usa classes h0..h100 e o JS só mexe no CSSOM. -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; manifest-src 'self'; connect-src 'self' https://ohm-age.ocarroeletrico.com; base-uri 'none'; form-action 'none'">
 <meta name="nap-live-origin" content="https://ohm-age.ocarroeletrico.com">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="manifest" href="site.webmanifest">
 <link rel="preload" href="fonts/nunito-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="app.css">
 <script src="boot.js"></script>
@@ -80,11 +81,11 @@
   </div>
   <section class="block" id="escolher" aria-labelledby="hPick"><h2 id="hPick" data-i18n="hPick">Anomalias por operador</h2>
     <p class="note" id="repNote" data-i18n="loading">A carregar…</p>
-    <div class="card" style="margin-top:12px">
+    <div class="card mt12">
       <label class="field" for="opSel"><span data-i18n="pickLabel">Operador (código e nome)</span>
         <select id="opSel"><option value="" data-i18n="pickAll">Todos: ver a tabela resumo</option></select></label>
     </div>
-    <div id="opView" tabindex="-1" style="margin-top:16px"></div>
+    <div id="opView" class="mt16" tabindex="-1"></div>
   </section>
   <section class="block panel" id="mudancas" data-panel="churn" aria-labelledby="hChurn"><h2 id="hChurn" data-i18n="hChurn">Entradas, saídas e mudanças de operadores</h2><div lang="pt" data-lang="pt"><div class="meta">Rotatividade de OPCs desde <b>2026-11-16</b> (3 OPCs).<br>Limiares: entrada/saída sempre; variação só se |Δpontos| ≥ 20 e ≥ 20%.</div>
 <table><tr><th class="l">OPC</th><th>estado</th><th>sites</th><th>pontos</th><th class="l">nota</th></tr>
