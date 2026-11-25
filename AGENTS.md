@@ -480,7 +480,11 @@ data/ohmigo_chargers.json` lists the OSM names that match nothing.
 The site shows them in Procurar's detail (`mdl` in `sites.json`, `mi` per point).
 
 And `photos` (per site) and `models[].photo`: thumbnails from
-`scripts/charger_photos.py`. A site's own photos are the OSM references
+`scripts/charger_photos.py`. A site's own photos are, first, its main photo on
+olh'o'posto (`olhaoposto.ocarroeletrico.com/api/v1/main-photos`, moderated,
+CC BY-SA 4.0; ref `olhaoposto:<NAP site id>`, re-downloaded when its
+`publishedAt` changes, since the static URL stays the same; kept as they were
+when that API is down), then the OSM references
 (`osm_tags.photo_refs`: `panoramax=`, `mapillary=`, `wikimedia_commons=`,
 `image=` pointing at one of them; MapComplete's charging-station theme saves
 photos on Panoramax); a model's photo is a Commons file chosen by hand per
@@ -492,7 +496,10 @@ its API needs a key). The thumbnails travel in the `ohmigo-dataset` artifact
 with the JSON, and `pages.yml` publishes them under `/photos/` (JPEG only,
 `<16 hex>.jpg`, < 400 kB): the site shows them from its own domain, so the
 CSP and the privacy page need no third party. Procurar links sites without a
-photo to MapComplete, so a driver can add one.
+photo to MapComplete, so a driver can add one. `sites.json` `oop` is the NAP
+site id (`EZC-AMD-00051`): Procurar links every site to its olh'o'posto page,
+and an olh'o'posto photo to its place on the Panoramax map (`map`). `?posto=`
+(NAP code or site id) opens that site's detail; olh'o'posto links here with it.
 
 More per site and per socket for drivers, all additive (no `SCHEMA` bump):
 - `unit` (per DC point): which charger of the site the socket is on, from the
