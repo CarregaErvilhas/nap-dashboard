@@ -303,6 +303,9 @@ for _, s in S.iterrows():
                       for m in ms['models']]
     if ms.get('photos'):
         rec['ph'] = ms['photos']
+    # The NAP site id (EZC-AMD-00051): olh'o'posto's station page, and ?posto= takes it too.
+    if ms.get('id'):
+        rec['oop'] = ms['id']
     # Underground car park ('osm' | 'nap': who says so): often no mobile signal.
     if ms.get('underground'):
         rec['ug'] = ms['underground']

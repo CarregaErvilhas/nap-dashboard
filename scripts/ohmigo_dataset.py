@@ -343,7 +343,8 @@ if catalog:
                 site['points'][j]['model'] = i
     catalog_meta = {'author': charger_models.AUTHOR, 'title': charger_models.TITLE, 'url': charger_models.SOURCE_URL}
 
-# Fotos (charger_photos.py): as do local, que a comunidade pôs no OSM, e uma
+# Fotos (charger_photos.py): a principal do olh'o'posto (primeiro: foi
+# moderada e é deste posto), as do local que a comunidade pôs no OSM, e uma
 # do modelo de carregador, escolhida à mão no Wikimedia Commons. `src` é o
 # caminho da miniatura no Pages (photos/<id>.jpg, publicada com este
 # ficheiro); sem `src` é só um link (Mapillary). Cada uma leva o autor, a
@@ -357,7 +358,7 @@ try:
 except (OSError, ValueError, KeyError):
     model_photo = {}
 for site in sites.values():
-    refs = (site.get('osm') or {}).pop('photoRefs', [])
+    refs = ['olhaoposto:' + site['id']] + (site.get('osm') or {}).pop('photoRefs', [])
     found = [photo_index[r] for r in refs if r in photo_index]
     if found:
         site['photos'] = found[:4]

@@ -1,10 +1,12 @@
 """Fotos dos postos e dos modelos de carregador, para ajudar a reconhecê-los.
 
 Dois tipos, e quem as mostra diz sempre qual é:
-  - foto do local: a que a comunidade põe no OpenStreetMap (`panoramax=`,
-    `mapillary=`, `wikimedia_commons=`, `image=`; o tema de postos de
-    carregamento do MapComplete grava as fotos no Panoramax). Mostra aquele
-    posto, onde está no parque.
+  - foto do local: a principal do olh'o'posto (olhaoposto.ocarroeletrico.com,
+    fotos de postos moderadas, publicadas no nosso Panoramax), e as que a
+    comunidade põe no OpenStreetMap (`panoramax=`, `mapillary=`,
+    `wikimedia_commons=`, `image=`; o tema de postos de carregamento do
+    MapComplete grava as fotos no Panoramax). Mostra aquele posto, onde está
+    no parque.
   - foto do modelo: uma foto livre do Wikimedia Commons de um carregador do
     mesmo modelo (assets/charger_model_photos.json, escolhida à mão, por
     chave do catálogo de charger_models.py). Ajuda a saber qual é o
@@ -20,7 +22,10 @@ terceiros. Do Mapillary não se descarrega nada (a API pede uma chave): fica só
 o link.
 
 O que já está em data/photos/ não se volta a pedir (o refresh guarda a pasta
-em cache). Uma foto que deixa de estar no OSM sai do índice.
+em cache). Uma foto que deixa de estar no OSM sai do índice. A do olh'o'posto
+tem sempre o mesmo link (pictures.ocarroeletrico.com/<id do posto>.thumb.jpg)
+mesmo quando a comunidade escolhe outra: volta a descarregar-se quando muda a
+data de publicação.
 
 Uso:  python scripts/charger_photos.py [dump OSM] [fotos dos modelos]
 Só stdlib.
@@ -46,6 +51,8 @@ MAX_BYTES = 400_000  # uma miniatura de 500 px nunca chega perto; acima disto n�
 UA = {'User-Agent': 'nap-dashboard (https://nap.ocarroeletrico.com)'}
 PANORAMAX_API = 'https://api.panoramax.xyz/api'
 COMMONS_API = 'https://commons.wikimedia.org/w/api.php'
+OLHAOPOSTO_API = 'https://olhaoposto.ocarroeletrico.com/api/v1/main-photos'
+PANORAMAX_OOP = 'https://panoramax.ocarroeletrico.com'
 
 
 def get(url, tries=3):
@@ -123,6 +130,30 @@ def commons(files):
     return out
 
 
+def olhaoposto():
+    """'olhaoposto:<id do posto>' -> {thumb, credit, license, page, map, published}.
+
+    Só a foto principal de cada posto (as das tomadas ficam no olh'o'posto).
+    `map` abre a foto no mapa do Panoramax do olh'o'posto."""
+    d = json.loads(get(OLHAOPOSTO_API))
+    lic = 'CC BY-SA 4.0' if d.get('license') == 'CC-BY-SA-4.0' else d.get('license')
+    out = {}
+    for p in d.get('photos', []):
+        st = p.get('station') or {}
+        if p.get('target') != st.get('id') or not str(p.get('thumb', '')).startswith('https://pictures.ocarroeletrico.com/'):
+            continue
+        out[f'olhaoposto:{st["id"]}'] = {
+            'thumb': p['thumb'],
+            'credit': p.get('credit') or "olh'o'posto",
+            'license': lic,
+            'page': p.get('page'),
+            'map': (f'{PANORAMAX_OOP}/viewer?focus=map&pic={urllib.parse.quote(p["panoramax"])}'
+                    if p.get('panoramax') else None),
+            'published': p.get('publishedAt'),
+        }
+    return out
+
+
 def refs_in_dump(path):
     try:
         els = json.load(open(path))['elements']
@@ -143,22 +174,30 @@ def main():
     except (OSError, ValueError, KeyError) as e:
         print(f'aviso: sem fotos de modelos ({MODEL_PHOTOS}: {e})')
         model_photos = {}
+    try:
+        oop = olhaoposto()
+    except Exception as e:  # noqa: BLE001 — sem o olh'o'posto ficam as do OSM
+        print(f"aviso: olh'o'posto falhou ({e})")
+        oop = None
     refs = refs_in_dump(DUMP) + ['commons:' + f for f in model_photos.values() if f.startswith('File:')]
-    refs = list(dict.fromkeys(refs))
     try:
         old = json.load(open(INDEX))
     except (OSError, ValueError):
         old = {}
+    # Com o olh'o'posto em baixo, guarda as que já tinha em vez de as tirar do site.
+    refs += list(oop) if oop is not None else [r for r in old if r.startswith('olhaoposto:')]
+    refs = list(dict.fromkeys(refs))
     os.makedirs(DIR, exist_ok=True)
     index, todo = {}, []
     for r in refs:
+        stale = oop is not None and r in oop and (old.get(r) or {}).get('published') != oop[r]['published']
         if r.startswith('mapillary:'):
             index[r] = {'page': f'https://www.mapillary.com/app/?pKey={r.split(":", 1)[1]}', 'credit': 'Mapillary'}
-        elif r in old and old[r].get('src') and os.path.exists(os.path.join(DIR, os.path.basename(old[r]['src']))):
+        elif not stale and r in old and old[r].get('src') and os.path.exists(os.path.join(DIR, os.path.basename(old[r]['src']))):
             index[r] = old[r]
         else:
             todo.append(r)
-    meta = {}
+    meta = {r: oop[r] for r in todo if oop and r in oop}
     pids = [r.split(':', 1)[1] for r in todo if r.startswith('panoramax:')]
     files = [r.split(':', 1)[1] for r in todo if r.startswith('commons:')]
     try:
@@ -187,7 +226,7 @@ def main():
         name = f'{file_id(r)}.jpg'
         with open(os.path.join(DIR, name), 'wb') as f:
             f.write(b)
-        index[r] = {'src': f'photos/{name}', **{k: m[k] for k in ('credit', 'license', 'page', 'taken') if m.get(k)}}
+        index[r] = {'src': f'photos/{name}', **{k: m[k] for k in ('credit', 'license', 'page', 'taken', 'map', 'published') if m.get(k)}}
         time.sleep(0.5)
     # O que já não é referido sai da pasta: o artifact leva só o que se usa.
     keep = {os.path.basename(v['src']) for v in index.values() if v.get('src')}

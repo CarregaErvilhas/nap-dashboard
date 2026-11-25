@@ -50,6 +50,7 @@
     mSrc: 'O que cada carro recebe, segundo a lista de modelos de {who}; o modelo é o que a comunidade mapeou no OpenStreetMap. Valores do fabricante: o operador pode limitar a potência.', mSrcLink: 'Ver a lista',
     phSite: 'Foto do local', phModel: 'Foto de um {m}, não deste posto', phBy: '{who}, {lic}', phTaken: 'tirada em {d}',
     phLink: 'Ver foto no {src}', phAdd: 'Tens uma foto deste posto? Junta-a ao OpenStreetMap com o MapComplete',
+    phMap: 'Ver a foto no mapa do Panoramax', phOop: 'Fotos e links estáticos deste posto no olh\'o\'posto',
     dUg: 'Parque subterrâneo', ugTxt: 'Pode não haver rede móvel lá dentro: abre a app ou tem o cartão à mão antes de entrares.',
     ugOsm: '(OpenStreetMap)', ugNap: '(descrição do operador no NAP)',
     dChk: 'Verificado no local', chkTxt: 'pela comunidade do OpenStreetMap em {d}',
@@ -111,6 +112,7 @@
     mSrc: 'What each car gets, from the charger list by {who}; the model is the one the community mapped on OpenStreetMap. Manufacturer figures: the operator may cap the power.', mSrcLink: 'See the list',
     phSite: 'Photo of this site', phModel: 'Photo of a {m}, not of this charger', phBy: '{who}, {lic}', phTaken: 'taken on {d}',
     phLink: 'See photo on {src}', phAdd: 'Got a photo of this charger? Add it to OpenStreetMap with MapComplete',
+    phMap: 'See the photo on the Panoramax map', phOop: 'Photos and static links for this charger on olh\'o\'posto',
     dUg: 'Underground car park', ugTxt: 'There may be no mobile signal inside: open the app or have the card at hand before you drive in.',
     ugOsm: '(OpenStreetMap)', ugNap: '(operator\'s description on the NAP)',
     dChk: 'Checked on site', chkTxt: 'by the OpenStreetMap community on {d}',
@@ -316,15 +318,25 @@
     return el('figure', { class: 'photo' }, img,
       el('figcaption', { class: 'small muted' }, cap.join(' · ') + ' ', p.page ? el('a', { href: p.page, rel: 'noopener noreferrer', target: '_blank' }, '↗') : null));
   }
+  // olh'o'posto (OOP) is the community photo site for these same chargers: its
+  // station page has the photos and their static links, and its main photo is
+  // on its own Panoramax, where the map shows it in place.
+  var OOP = 'https://olhaoposto.ocarroeletrico.com';
+  function ext(href, text) { return el('a', { href: href, rel: 'noopener noreferrer', target: '_blank' }, text); }
   function photos(s) {
-    var figs = [], links = [];
+    var figs = [], links = [], more = [];
     (s.ph || []).forEach(function (p) {
       if (p.src) figs.push(figure(p, t('phSite')));
-      else if (p.page) links.push(el('a', { href: p.page, rel: 'noopener noreferrer', target: '_blank' }, t('phLink', { src: p.credit || 'Mapillary' })));
+      else if (p.page) links.push(ext(p.page, t('phLink', { src: p.credit || 'Mapillary' })));
+      if (p.src && /^https:\/\/panoramax\.ocarroeletrico\.com\/viewer\?/.test(p.map || '')) {
+        more.push(ext(p.map + '&map=19/' + s.lat + '/' + s.lon, t('phMap')));
+      }
     });
+    if (s.oop) more.push(ext(OOP + (N.lang() === 'en' ? '/en/stations/' : '/postos/') + encodeURIComponent(s.oop), t('phOop')));
     (s.mdl || []).forEach(function (m) { if (m.ph && m.ph.src) figs.push(figure(m.ph, t('phModel', { m: m.n }))); });
     var box = el('div', { class: 'photos' }, figs);
     if (links.length) box.appendChild(el('p', { class: 'small' }, links));
+    more.forEach(function (a) { box.appendChild(el('p', { class: 'small' }, a)); });
     // No photo of the site itself: ask for one. MapComplete's charging station
     // theme saves it on Panoramax and tags the OSM element, and the next daily
     // refresh brings it here.
@@ -723,7 +735,11 @@
     N.initChrome();
     legend();
     initMap();
-    var q0 = new URLSearchParams(location.search).get('q');
+    var qs = new URLSearchParams(location.search), q0 = qs.get('q');
+    // ?posto= opens one site: its NAP code (AMD-00051) or NAP site id (EZC-AMD-00051),
+    // as olh'o'posto links here. Unknown, it is just a search.
+    var posto = (qs.get('posto') || '').trim().slice(0, 64);
+    if (posto) q0 = posto;
     if (q0) { F.q = q0; $('q').value = q0; }
     $('search').addEventListener('submit', function (e) { e.preventDefault(); });
     var timer;
@@ -757,6 +773,10 @@
       S = d.sites;
       S.forEach(function (s) { s._k = norm([s.name, s.ext, s.city, s.op, s.osm_op].concat(s.hw || [], s.old || []).join(' ')); s._g = s.op ? opKey(s.op) : ''; });
       options(); filter();
+      if (posto) {
+        var hit = S.filter(function (s) { return s.ext === posto || s.oop === posto; })[0];
+        if (hit) { F.q = hit.ext; $('q').value = hit.ext; filter(); toggle(hit.ext, true); }
+      }
       N.load('outline').then(function (o) { outline = o.outline; drawMap(); });
       return Promise.all([N.load('points'), N.load('stats')]);
     }).then(function (r) {
