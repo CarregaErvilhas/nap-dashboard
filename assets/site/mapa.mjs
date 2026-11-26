@@ -8,7 +8,7 @@
 
 const BASE = 'https://maptiles.ocarroeletrico.com';
 const VENDOR = new URL('./vendor/', import.meta.url).href;
-const ATTRIBUTION = '<a href="https://www.openstreetmap.org/copyright">© OpenStreetMap</a> · <a href="https://protomaps.com">Protomaps</a>';
+const ATTRIBUTION = '<a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">© OpenStreetMap</a> · <a href="https://protomaps.com" target="_blank" rel="noopener">Protomaps</a>';
 
 let ready = null;
 function loadScript(src) {

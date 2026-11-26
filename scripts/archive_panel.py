@@ -13,7 +13,7 @@ TXT = {
     'pt': {
         'meta': ('{h} h de dados ({start} → {end} UTC), {gaps} lacuna(s) de recolha ({gap_h} h) descontadas. '
                  'Os estados são os que cada operador declara ao NAP, não medições. '
-                 'Fonte: NAP (IMT / MOBI.E) via <a href="https://github.com/CarregaErvilhas/AmpereArchive">AmpereArchive</a> '
+                 'Fonte: NAP (IMT / MOBI.E) via <a href="https://github.com/CarregaErvilhas/AmpereArchive" target="_blank" rel="noopener">AmpereArchive</a> '
                  '(não oficial); uso sem fins lucrativos.'),
         'prelim': 'preliminar: {d} de {n} dias necessários',
         'ok': '{d} dias de dados',
@@ -51,7 +51,7 @@ TXT = {
     'en': {
         'meta': ('{h} h of data ({start} → {end} UTC), {gaps} collection gap(s) ({gap_h} h) left out. '
                  'Statuses are what each operator declares to the NAP, not measurements. '
-                 'Source: NAP (IMT / MOBI.E) via <a href="https://github.com/CarregaErvilhas/AmpereArchive">AmpereArchive</a> '
+                 'Source: NAP (IMT / MOBI.E) via <a href="https://github.com/CarregaErvilhas/AmpereArchive" target="_blank" rel="noopener">AmpereArchive</a> '
                  '(unofficial); non-commercial use.'),
         'prelim': 'preliminary: {d} of {n} days needed',
         'ok': '{d} days of data',

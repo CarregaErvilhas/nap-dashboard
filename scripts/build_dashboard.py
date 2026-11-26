@@ -867,7 +867,7 @@ news_bullets = [ln[2:].strip() for ln in news_lines
                 if ln.startswith('- **')]
 if news_bullets:
     lis = ''.join(f'<li>{_md_inline(b)}</li>' for b in news_bullets)
-    NEWS_HTML = f"""<div class="meta">{html_esc.escape(news_title)} · <a href="{NEWS_URL}">ver novidades.md no GitHub</a></div>
+    NEWS_HTML = f"""<div class="meta">{html_esc.escape(news_title)} · <a href="{NEWS_URL}" target="_blank" rel="noopener">ver novidades.md no GitHub</a></div>
 <ul>{lis}</ul>
 """
 
