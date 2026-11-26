@@ -57,8 +57,6 @@
     dNb: 'Perto (até 150 m)', nb_cafe: 'café', nb_restaurant: 'restaurante', nb_fast_food: 'comida rápida', nb_toilets: 'casa de banho', nb_shop: 'loja', nb_fuel: 'bomba de combustível',
     nbMore: '{n} × {k}',
     dDown: 'Avarias', downTxt: 'avariado {p} % do tempo nos últimos {n} dias', downNone: 'sem avarias declaradas nos últimos {n} dias',
-    dBusy: 'Ocupação por hora', busyWd: 'Dias úteis', busyWe: 'Fim de semana', busyNote: 'Percentagem do tempo em que as tomadas estavam a carregar, nos últimos {n} dias, segundo o estado que o operador declara. A barra mais escura é a hora atual.',
-    busyQuiet: 'Mais livre (entre as 7 h e as 23 h): {h}.', busyPeak: 'Mais cheio: {h}.', busyHour: '{h} h',
     cUnit: 'Carregador', unitShared: 'a partilhar com {ids}', unitSharedKw: 'a partilhar com {ids}: até ~{kw} kW cada',
     unitTip: 'Tomadas com a mesma letra estão no mesmo carregador (OpenStreetMap): com dois carros, a potência divide-se.',
     unitPick: 'Para mais potência, escolhe {ids}: o carregador não tem ninguém a carregar.',
@@ -119,8 +117,6 @@
     dNb: 'Nearby (within 150 m)', nb_cafe: 'café', nb_restaurant: 'restaurant', nb_fast_food: 'fast food', nb_toilets: 'toilets', nb_shop: 'shop', nb_fuel: 'fuel station',
     nbMore: '{n} × {k}',
     dDown: 'Out of order', downTxt: 'out of order {p} % of the time over the last {n} days', downNone: 'no faults declared over the last {n} days',
-    dBusy: 'Occupancy by hour', busyWd: 'Weekdays', busyWe: 'Weekends', busyNote: 'Share of the time the sockets were charging over the last {n} days, as the operator declares the status. The darker bar is the current hour.',
-    busyQuiet: 'Quietest (7 am to 11 pm): {h}.', busyPeak: 'Busiest: {h}.', busyHour: '{h}:00',
     cUnit: 'Charger', unitShared: 'sharing with {ids}', unitSharedKw: 'sharing with {ids}: up to ~{kw} kW each',
     unitTip: 'Sockets with the same letter are on the same charger (OpenStreetMap): with two cars, the power is split.',
     unitPick: 'For more power, pick {ids}: nobody is charging on that charger.',
@@ -346,51 +342,7 @@
     }
     return box;
   }
-  // Underground, checked on site, nearby, history (sites.json ug/chk/nb/hd/hn/hb).
-  function localNow(s) {
-    var tz = s.region === 'azores' ? 'Atlantic/Azores' : s.region === 'madeira' ? 'Atlantic/Madeira' : 'Europe/Lisbon';
-    try {
-      var parts = new Intl.DateTimeFormat('en-GB', { timeZone: tz, hour: 'numeric', hourCycle: 'h23', weekday: 'short' }).formatToParts(new Date());
-      var get = function (k) { return (parts.filter(function (x) { return x.type === k; })[0] || {}).value; };
-      return { hour: +get('hour'), we: get('weekday') === 'Sat' || get('weekday') === 'Sun' };
-    } catch (e) { var d = new Date(); return { hour: d.getHours(), we: d.getDay() === 0 || d.getDay() === 6 }; }
-  }
-  function busyRow(code) {
-    return code.split('').map(function (c) { return c === '.' ? null : +c * 10; });
-  }
-  function hourRanges(hours) {
-    // [7, 8, 9, 14] -> "7–9 h, 14 h"
-    var out = [], i = 0;
-    while (i < hours.length) {
-      var j = i;
-      while (j + 1 < hours.length && hours[j + 1] === hours[j] + 1) j++;
-      out.push(i === j ? t('busyHour', { h: hours[i] }) : hours[i] + '–' + t('busyHour', { h: hours[j] + 1 }));
-      i = j + 1;
-    }
-    return out.join(', ');
-  }
-  function busyChart(s) {
-    if (!s.hb || s.hb.length !== 48) return null;
-    var now = localNow(s), box = el('div', { class: 'busy' });
-    [[busyRow(s.hb.slice(0, 24)), 'busyWd', !now.we], [busyRow(s.hb.slice(24)), 'busyWe', now.we]].forEach(function (r) {
-      var vals = r[0], bars = el('div', { class: 'bars', role: 'img', 'aria-label': t(r[1]) + ': ' + vals.map(function (v, h) { return h + ' h ' + (v == null ? '—' : v + '%'); }).join(', ') });
-      vals.forEach(function (v, h) {
-        var bar = el('span', { class: 'bar' + (r[2] && h === now.hour ? ' now' : '') + (v == null ? ' na' : ''), title: h + ' h: ' + (v == null ? '—' : v + ' %') });
-        bar.style.height = (v == null ? 4 : Math.max(4, v)) + '%';  // CSSOM, não atributo: a CSP não deixa style inline
-        bars.appendChild(bar);
-      });
-      var day = vals.map(function (v, h) { return { v: v, h: h }; }).filter(function (x) { return x.v != null && x.h >= 7 && x.h < 23; });
-      var lo = day.length ? Math.min.apply(null, day.map(function (x) { return x.v; })) : null;
-      var hi = day.length ? Math.max.apply(null, day.map(function (x) { return x.v; })) : null;
-      var txt = [];
-      if (lo != null) txt.push(t('busyQuiet', { h: hourRanges(day.filter(function (x) { return x.v === lo; }).map(function (x) { return x.h; })) }));
-      if (hi != null && hi > lo) txt.push(t('busyPeak', { h: hourRanges(day.filter(function (x) { return x.v === hi; }).map(function (x) { return x.h; })) }));
-      box.appendChild(el('div', { class: 'busyrow' }, el('div', { class: 'small' }, el('b', null, t(r[1])), txt.length ? ' · ' + txt.join(' ') : ''), bars,
-        el('div', { class: 'axis small muted', 'aria-hidden': 'true' }, ['0', '6', '12', '18', '23'].map(function (x) { return el('span', null, x); }))));
-    });
-    box.appendChild(el('p', { class: 'small muted' }, t('busyNote', { n: s.hn || '' })));
-    return box;
-  }
+  // Underground, checked on site, nearby, history (sites.json ug/chk/nb/hd/hn).
   function nearbyText(nb) {
     return nb.map(function (x) {
       var k = t('nb_' + x.type);
@@ -437,8 +389,7 @@
     if (s.mdl) d.appendChild(el('p', { class: 'small muted' }, t('mSrc', { who: 'Alexandre Moleiro' }), ' ',
       el('a', { href: MODELS_DOC, rel: 'noopener noreferrer', target: '_blank' }, t('mSrcLink'))));
     if (!s.lc || s.ph) d.appendChild(photos(s));
-    var bc = busyChart(s);
-    if (bc) d.appendChild(el('div', null, el('h4', { class: 'small' }, t('dBusy')), bc));
+    if (P && !s.lc && window.NAP_USO) { var uso = window.NAP_USO.section(s, pts(s)); if (uso) d.appendChild(uso); }
     if (s.olc) d.appendChild(el('p', { class: 'muted small' }, t(liveOn(s) ? 'olcLive' : 'olcNote', { s: olcName(s) })));
     if (s.lc) d.appendChild(el('p', { class: 'muted small' }, t('lcNote', { s: t('life' + (s.lc === 'planned' ? 'Planned' : 'Construction')).toLowerCase() })));
     else if (!P) d.appendChild(el('p', { class: 'muted small' }, t('loadingSockets')));

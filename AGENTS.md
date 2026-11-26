@@ -24,7 +24,7 @@ validated by `scripts/validate_site.py` + `scripts/pipeline_guard.py`. Don't ove
   migrations don't stay here once they've run: git keeps them.
 - `assets/` — `site/` (the site's sources: `index.html`, `rede.html`,
   `operadores.html`, the `_head/_header/_footer.html` partials, `app.css`,
-  `boot.js`, `common.js`, `find.js`, `rede.js`, `operadores.js`, `fonts/Nunito`),
+  `boot.js`, `common.js`, `find.js`, `uso.js`, `rede.js`, `operadores.js`, `fonts/Nunito`),
   `privacidade.html`, `404.html`, `llms.txt`, `pt_outline.json` (PT outline for
   the map), `pt_basemap.json` (OSM places + main roads for the map; refresh by hand with `scripts/make_pt_basemap.py`, copied to `site/data/basemap.json`), `favicon.svg` (the mascot: a map pin with a face and the lightning bolt of the group's other mascots; also the header's logo), `og.png` (the link-preview image, mainland map with a dot per site and the mascot pinning Lisbon; redraw it, `favicon.ico` and `apple-touch-icon.png` by hand with `scripts/make_og_image.py`, which needs a Chromium; `build_site.social_tags` writes the og:/twitter: tags of each page from its `<title>`, description and canonical, with a hash of the image in its URL so X re-fetches it when it changes), `schemas/*.xsd` (DATEX II 3.3 © CEN; ver `assets/schemas/README.md`)
 - `references/` — docs for the SKILL.md (data sources, gotchas)
@@ -148,6 +148,34 @@ este copia-o para `data/changes.json` do site (mesmos filtros de confiança do
 a lista. Testes em `tests/test_network_24h.py`. Pré-visualizar com dados reais:
 `venv/bin/python scripts/network_24h.py --url https://ohm-age.ocarroeletrico.com`
 e copiar `data/network_24h.json` para `site/data/changes.json` (sem commitar).
+
+## Histórico por posto (Procurar > detalhe)
+`scripts/site_history.py` (DuckDB) lê o AmpereArchive pelo endereço público e
+escreve `data/site_history/sites/<xx>.json.gz`: 256 ficheiros (FNV-1a 32 do id NAP
+do local, módulo 256) com o uso de cada tomada, que o `uso.js` desenha.
+- Célula = uma tomada numa hora UTC. Das leituras de estado do arquivo fica no
+  máximo uma a cada 5 min; o estado de cada tomada nessa leitura é o retrato do dia
+  mais os eventos do dia até ela. A recolha ao minuto e as reposições (poucas
+  leituras por dia) ficam na mesma escala; hora sem leitura = sem célula, "sem
+  dados". Os baldes (horas, dias locais, meses locais, dia da semana x hora) somam
+  as frações de cada célula.
+- Ids antigos (antes do prefixo do operador, 2026-06-18) contam para o id de hoje só
+  quando exatamente um id atual acaba em `-<antigo>` (há MOBI-XXX ao lado de XXX).
+  Fuso: Açores pelas coordenadas do `static_versions`, o resto Lisboa.
+- Estado (`data/site_history_state`): células dos últimos 40 dias e dos meses em
+  aberto, um Parquet por mês fechado, `meta.json`. Cada corrida refaz só os dias
+  que faltam e os dois últimos. Sem estado começa 45 dias atrás; `--all` faz o
+  arquivo todo desde 2021.
+- `site-history.yml`, de hora a hora (:17): estado no cache do Actions (e, se o
+  cache sumir, no artifact da última corrida boa), artifact `site-history`
+  (ficheiros + estado, 2 dias), dispara o `pages.yml`, que valida os 256 ficheiros
+  e os copia para `data/sites/`. Nunca commitado. Corre aqui e não no AmpereArchive
+  porque este repo é público (minutos do Actions grátis); dentro do coletor pedia
+  mais RAM ao Zerops.
+- Testes em `tests/test_site_history.py`. Pré-visualizar: `python3 scripts/site_history.py
+  --url https://ohm-age.ocarroeletrico.com` e copiar `data/site_history/sites/` para
+  `site/data/sites/` (sem commitar). O gráfico "ocupação por hora" antigo (`hb`)
+  saiu: nunca chegou a produção.
 
 ## Pipeline order
 `scripts/nap_etl.py` → (`scripts/check_quality.py`, `scripts/summary.py`) →
@@ -529,9 +557,9 @@ More per site and per socket for drivers, all additive (no `SCHEMA` bump):
   Top-level `historySource` has the window. `refresh.yml` computes it and keeps
   it in `actions/cache`, so `ohmigo-daily.yml` (which does not read the
   archive) restores the weekly one. `sites.json` carries `hd`/`hn` and `hb`,
-  48 characters (weekdays then weekends, the tenth of the %, `.` = no data),
-  which Procurar draws as two bar charts with the current hour marked and the
-  quietest hours between 7 and 23.
+  48 characters (weekdays then weekends, the tenth of the %, `.` = no data).
+  Procurar shows `hd`/`hn` ("Avarias") but no longer draws `hb`: the usage
+  charts come from the AmpereArchive's per-site files (`uso.js`, "Site specifics").
 Rede > Operadores has "Que carregadores usa cada operador" (`stats.json`
 `op_models`): the models joined at each operator's sites, top 20 operators.
 
@@ -745,7 +773,7 @@ work: the pages fetch their JSON, so preview over HTTP. `refresh.yml` runs
 - CSP (`<meta>`, in `_head.html`; Pages can't set headers): `default-src 'none';
   script-src 'self'` (no inline scripts); `style-src 'self' 'unsafe-inline'`
   only because the history heat map uses inline background styles;
-  `connect-src 'self'` plus the AmpereArchive origin and `maptiles.ocarroeletrico.com`;
+  `connect-src 'self'` plus the AmpereArchive origin, its sites bucket (`ohm-age-sites.ocarroeletrico.com`) and `maptiles.ocarroeletrico.com`;
   `worker-src 'self'` (MapLibre's worker module); `font-src 'self'`;
   `img-src 'self' data:`. Nunito is served from `fonts/`, no font CDN.
 - Bilingual PT/EN: `boot.js` picks the language before paint (`?lang=pt|en`,
@@ -797,6 +825,20 @@ work: the pages fetch their JSON, so preview over HTTP. `refresh.yml` runs
     punctuation, plus Arabic, Tifinagh and variation selectors for Morocco's
     names at low zoom). A missing range is a 404 and a console warning, never
     a broken map; add it with `cf r2 objects put`.
+- "Uso ao longo do tempo" in Procurar's site detail (`uso.js`): stacked bars of
+  the time each socket spent charging / available / out of order / unknown over
+  24 h, 7 days, 30 days and every month the archive has, one lane per socket
+  (per plug and power above 8 sockets; a single socket can be picked), and a
+  weekday x hour occupancy map below. Data: `data/sites/<xx>.json.gz`, 256
+  files published with the site (see "Histórico por posto" above), fetched
+  when a detail opens and keyed by the NAP site id (`sites.json` `oop`, or the
+  id `applyLive` matched, `p.nap_site`). No file: the section hides; a site the
+  file lacks: one line saying so. `uso.js` `shardOf` must hash like
+  `site_history.shard_of`: `validate_site.py` runs both on the same ids.
+  Months with under 2 reads per hour (the replayed history) are drawn lighter
+  and called a sample; an hour with no read is hatched, never 0 %. Every
+  bucket is `[cells, charging, available, down]` in hundredths of a cell, so
+  sockets add up.
 - Search and filters on `index.html` run on `sites.json`; point-level data
   (`points.json`) loads after, for the detail view and the live status. Both
   take power, fees and the DC voltage filter from the network model, so the

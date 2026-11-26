@@ -504,6 +504,8 @@ def check_node(site, expected):
             boot = fh.read()
         with open(os.path.join(site, 'common.js'), encoding='utf-8') as fh:
             common = fh.read()
+        with open(os.path.join(site, 'uso.js'), encoding='utf-8') as fh:
+            uso = fh.read()
     except OSError:
         return  # falta já reportada
     with tempfile.TemporaryDirectory() as tmp:
@@ -512,7 +514,8 @@ def check_node(site, expected):
             # boot.js e common.js correm no âmbito global do browser: cada um
             # vai num bloco próprio para os 'use strict' não se misturarem.
             fh.write(STUB + '\n;(0, eval)(' + json.dumps(boot) + ');\n'
-                     ';(0, eval)(' + json.dumps(common) + ');\n' + PROBE + price_probe(site) + SESSION_PROBE)
+                     ';(0, eval)(' + json.dumps(common) + ');\n;(0, eval)(' + json.dumps(uso) + ');\n'
+                     + PROBE + price_probe(site) + SESSION_PROBE + uso_probe())
         r = subprocess.run(['node', path], capture_output=True, text=True, cwd=tmp)
     if r.returncode != 0:
         msg = next((ln.strip() for ln in r.stderr.splitlines() if re.match(r'\s*\w*Error\b', ln)),
@@ -520,6 +523,27 @@ def check_node(site, expected):
         fail(f'boot.js + common.js em node: {msg}')
     else:
         print(r.stdout.strip() or 'applyLive OK')
+
+
+# uso.js encontra o histórico de um posto em data/sites/<xx>.json.gz pelo mesmo
+# hash que o scripts/site_history.py usa ao escrever (shard_of): se divergirem, o
+# detalhe pede o ficheiro errado e diz "sem histórico" a todos os postos.
+USO_IDS = ['GLP-GDM-00060', 'EZC-AMD-00051', 'MOBI-AMD-00001', 'CNT-0002PL0012', 'á', 'LSB-00380']
+
+
+def uso_probe():
+    from site_history import shard_of
+    want = {i: shard_of(i) for i in USO_IDS}
+    return '''
+;(function () {
+  var want = %s;
+  Object.keys(want).forEach(function (id) {
+    var got = NAP_USO.shardOf(id);
+    if (got !== want[id]) throw new Error('uso.js shardOf(' + id + ') = ' + got + ', site_history.py escreve em ' + want[id]);
+  });
+  console.log('uso.js shardOf = site_history.shard_of em ' + Object.keys(want).length + ' casos');
+})();
+''' % json.dumps(want)
 
 
 # Os tipos de preço têm a regra em dois sítios, scripts/price_kinds.py e

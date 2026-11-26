@@ -209,16 +209,18 @@
       var c = (idx.get(p.point_id) || []).filter(function (s) { return s === p.site_external_id || s.endsWith('-' + p.site_external_id); });
       if (c.length !== 1) return;
       var v = obj.points[c[0] + '/' + p.point_id], st = v && v.s;
+      p.nap_site = c[0];   // the NAP site id (EZC-AMD-00051): Procurar's usage history is keyed by it
       if (typeof st === 'string' && STATUSES.indexOf(st) >= 0) { p.status = st; n++; }
     });
     return n ? { stale: false, t: pub, n: n, m: points.length } : null;
   }
-  function fetchLive(points) {
-    var url = liveUrl();
-    if (window.NAP_NO_LIVE || !url || typeof fetch !== 'function') return Promise.resolve(null);
+  // A JSON file, 15 s at most, no cookies, no referrer. A .json.gz may arrive
+  // still gzipped (served as a file, not with Content-Encoding).
+  function fetchJson(url, cache) {
+    if (typeof fetch !== 'function') return Promise.reject(new Error('no fetch'));
     var ctl = typeof AbortController === 'function' ? new AbortController() : null;
     var timer = ctl && setTimeout(function () { ctl.abort(); }, 15000);
-    return fetch(url, { signal: ctl ? ctl.signal : undefined, credentials: 'omit', referrerPolicy: 'no-referrer', cache: 'no-cache' })
+    return fetch(url, { signal: ctl ? ctl.signal : undefined, credentials: 'omit', referrerPolicy: 'no-referrer', cache: cache || 'default' })
       .then(function (r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.arrayBuffer(); })
       .then(function (buf) {
         var u = new Uint8Array(buf);
@@ -228,9 +230,14 @@
         }
         return JSON.parse(new TextDecoder().decode(u));
       })
+      .finally(function () { if (timer) clearTimeout(timer); });
+  }
+  function fetchLive(points) {
+    var url = liveUrl();
+    if (window.NAP_NO_LIVE || !url) return Promise.resolve(null);
+    return fetchJson(url, 'no-cache')
       .then(function (obj) { return applyLive(obj, points); })
-      .catch(function () { return null; })
-      .then(function (r) { if (timer) clearTimeout(timer); return r; });
+      .catch(function () { return null; });
   }
   function liveNote(node, res, snapshot) {
     var snap = Date.parse(snapshot);
@@ -241,5 +248,5 @@
 
   window.NAP = { t: t, addStrings: addStrings, lang: lang, nf: nf, eur: eur, prices: prices, priceText: priceText, sessionCost: sessionCost, PRICE_KINDS: PRICE_KINDS, when: when, el: el, add: add, clear: clear, md: md,
     status: status, pwLabel: pwLabel, PW: PW, STATUSES: STATUSES, onLang: onLang, initChrome: initChrome,
-    applyI18n: applyI18n, load: load, fetchLive: fetchLive, applyLive: applyLive, liveNote: liveNote };
+    applyI18n: applyI18n, load: load, fetchLive: fetchLive, applyLive: applyLive, liveNote: liveNote, fetchJson: fetchJson };
 })();
