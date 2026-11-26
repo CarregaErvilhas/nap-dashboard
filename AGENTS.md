@@ -1,293 +1,78 @@
 # AGENTS.md — NAP EADME data analysis
 
 ## Project type
-Single-machine analysis of the Portuguese EV charging network. Pinned runtime
-deps in `requirements.txt` (Dependabot, monthly); CI in `.github/workflows/`
-(weekly `refresh.yml` pipeline + `pages.yml` deploy + `agents.yml`). Code
-produces CSVs + a static multi-page site (`site/`, `facts.md`, `errors.md`),
-validated by `scripts/validate_site.py` + `scripts/pipeline_guard.py`. Don't over-engineer.
+Single-machine analysis of the Portuguese EV charging network. Pinned runtime deps in `requirements.txt` (Dependabot, monthly); CI in `.github/workflows/` (weekly `refresh.yml` pipeline + `pages.yml` deploy + `agents.yml`). Code produces CSVs + a static multi-page site (`site/`, `facts.md`, `errors.md`), validated by `scripts/validate_site.py` + `scripts/pipeline_guard.py`. Don't over-engineer.
 
 ## Layout
-- `scripts/` — the pipeline (in the order of "Pipeline order" below, plus
-  `extract_enums.py` and `fetch_schemas.sh`; the tracker verdicts live in the private
-  `pt-pcve-errors`, not here);
-  the checks (`validate_site.py`, `pipeline_guard.py`, `ci_paths.py`);
-  the site helpers (`site_data.py`, `build_site.py`, `dashboard_payload.py`,
-  `dashboard_i18n.py`); the
-  anomalias agent's deterministic side (`anomalias_summary.py`,
-  `anomalias_evidence.py`, `anomalias_check.py`, `format_anomalias.py`,
-  `check_agents.py`); `ohmigo_dataset.py` (the network model, below) with
-  `model_parity.py` (the site shows what the model says); `opc_tariffs.py`
-  (the one NAP↔MOBI.E tariff join, shared by the model and `mobie_join.py`);
-  and `osm_tags.py` (the per-site OSM tags from the Overpass dump and the
-  OSM-vs-NAP rule per socket, shared by the model and the site). One-time
-  migrations don't stay here once they've run: git keeps them.
-- `assets/` — `site/` (the site's sources: `index.html`, `rede.html`,
-  `operadores.html`, the `_head/_header/_footer.html` partials, `app.css`,
-  `boot.js`, `common.js`, `find.js`, `uso.js`, `rede.js`, `operadores.js`, `fonts/Nunito`),
-  `privacidade.html`, `404.html`, `llms.txt`, `pt_outline.json` (PT outline for
-  the map), `pt_basemap.json` (OSM places + main roads for the map; refresh by hand with `scripts/make_pt_basemap.py`, copied to `site/data/basemap.json`), `favicon.svg` (the mascot: a map pin with a face and the lightning bolt of the group's other mascots; also the header's logo), `og.png` (the link-preview image, mainland map with a dot per site and the mascot pinning Lisbon; redraw it, `favicon.ico` and `apple-touch-icon.png` by hand with `scripts/make_og_image.py`, which needs a Chromium; `build_site.social_tags` writes the og:/twitter: tags of each page from its `<title>`, description and canonical, with a hash of the image in its URL so X re-fetches it when it changes), `schemas/*.xsd` (DATEX II 3.3 © CEN; ver `assets/schemas/README.md`)
+- `scripts/` — the pipeline (in the order of "Pipeline order" below, plus `extract_enums.py` and `fetch_schemas.sh`; the tracker verdicts live in the private `pt-pcve-errors`, not here); the checks (`validate_site.py`, `pipeline_guard.py`, `ci_paths.py`); the site helpers (`site_data.py`, `build_site.py`, `dashboard_payload.py`, `dashboard_i18n.py`); the anomalias agent's deterministic side (`anomalias_summary.py`, `anomalias_evidence.py`, `anomalias_check.py`, `format_anomalias.py`, `check_agents.py`); `ohmigo_dataset.py` (the network model, below) with `model_parity.py` (the site shows what the model says); `opc_tariffs.py` (the one NAP↔MOBI.E tariff join, shared by the model and `mobie_join.py`); and `osm_tags.py` (the per-site OSM tags from the Overpass dump and the OSM-vs-NAP rule per socket, shared by the model and the site). One-time migrations don't stay here once they've run: git keeps them.
+- `assets/` — `site/` (the site's sources: `index.html`, `rede.html`, `operadores.html`, the `_head/_header/_footer.html` partials, `app.css`, `boot.js`, `common.js`, `find.js`, `uso.js`, `rede.js`, `operadores.js`, `fonts/Nunito`), `privacidade.html`, `404.html`, `llms.txt`, `pt_outline.json` (PT outline for the map), `pt_basemap.json` (OSM places + main roads for the map; refresh by hand with `scripts/make_pt_basemap.py`, copied to `site/data/basemap.json`), `favicon.svg` (the mascot: a map pin with a face and the lightning bolt of the group's other mascots; also the header's logo), `og.png` (the link-preview image, mainland map with a dot per site and the mascot pinning Lisbon; redraw it, `favicon.ico` and `apple-touch-icon.png` by hand with `scripts/make_og_image.py`, which needs a Chromium; `build_site.social_tags` writes the og:/twitter: tags of each page from its `<title>`, description and canonical, with a hash of the image in its URL so X re-fetches it when it changes), `schemas/*.xsd` (DATEX II 3.3 © CEN; ver `assets/schemas/README.md`)
 - `references/` — docs for the SKILL.md (data sources, gotchas)
-- `Agents/` — system prompts dos agentes automáticos (um `.md` por agente; ver
-  `Agents/AGENTS.md`). Atual: `Agents/anomalias.md` (anomalias dos dados
-  estáticos NAP → `Agents-outputs/anomalias-results.md`, agrupado por OPC).
-- `Agents-outputs/` — relatórios gerados pelos agentes (ex.
-  `Agents-outputs/anomalias-results.md`).
-- `data/` — everything fetched from a source or derived by the pipeline: raw XMLs,
-  the MOBI.E tariff CSV, the DGEG HTML/CSV, all intermediate CSVs,
-  the tracker's `data/pt_pcve_errors.xlsx`, and the `data/umap_cache/` (umap maps/OSM
-  dump) + `data/caop_cache/` (CAOP concelho polygons) caches. All gitignored
-  (`data/*`, with `data/.gitkeep` kept), tracker derivatives included (below).
-  Still run every script from the repo root — paths are `data/…` relative to it.
-- **Nothing derived from the tracker is versioned.** `data/tracker_errors.csv`,
-  `data/opc_registry_authority.csv` and `data/tracker_meta.json` are
-  re-extracted from the source xlsx on every run and stay out of git: they are
-  a third party's data with no reuse licence, and this repo is public.
-- The repo root holds only code, docs and deliverables: `site/`,
-  `facts.md`, `errors.md`, `novidades.md`,
-  `network-census.json`, `assets/`, `scripts/`, `Agents/`, `Agents-outputs/`.
+- `Agents/` — system prompts dos agentes automáticos (um `.md` por agente; ver `Agents/AGENTS.md`). Atual: `Agents/anomalias.md` (anomalias dos dados estáticos NAP → `Agents-outputs/anomalias-results.md`, agrupado por OPC).
+- `Agents-outputs/` — relatórios gerados pelos agentes (ex. `Agents-outputs/anomalias-results.md`).
+- `data/` — everything fetched from a source or derived by the pipeline: raw XMLs, the MOBI.E tariff CSV, the DGEG HTML/CSV, all intermediate CSVs, the tracker's `data/pt_pcve_errors.xlsx`, and the `data/umap_cache/` (umap maps/OSM dump) + `data/caop_cache/` (CAOP concelho polygons) caches. All gitignored (`data/*`, with `data/.gitkeep` kept), tracker derivatives included (below). Still run every script from the repo root — paths are `data/…` relative to it.
+- **Nothing derived from the tracker is versioned.** `data/tracker_errors.csv`, `data/opc_registry_authority.csv` and `data/tracker_meta.json` are re-extracted from the source xlsx on every run and stay out of git: they are a third party's data with no reuse licence, and this repo is public.
+- The repo root holds only code, docs and deliverables: `site/`, `facts.md`, `errors.md`, `novidades.md`, `network-census.json`, `assets/`, `scripts/`, `Agents/`, `Agents-outputs/`.
 
 ## Environment
-- Create and use a local venv — never rely on the system Python (it may be a
-  recent version where pip is blocked by PEP 668). The core pipeline needs
-  `pandas` and `lxml` (`requirements.txt` pins the full CI set):
+- Create and use a local venv — never rely on the system Python (it may be a recent version where pip is blocked by PEP 668). The core pipeline needs `pandas` and `lxml` (`requirements.txt` pins the full CI set):
   ```bash
   python3 -m venv venv
   venv/bin/pip install pandas lxml
   ```
-- Reference the venv interpreter as `venv/bin/python` in commands; do not
-  hardcode absolute paths to this machine's venv.
-- Raw XMLs are big (`data/evChargingInfra_latest.xml` ~190 MB). Don't read them with
-  the Read tool or cat them; parse with `scripts/nap_etl.py`.
+- Reference the venv interpreter as `venv/bin/python` in commands; do not hardcode absolute paths to this machine's venv.
+- Raw XMLs are big (`data/evChargingInfra_latest.xml` ~190 MB). Don't read them with the Read tool or cat them; parse with `scripts/nap_etl.py`.
 
 ## Fetch fresh data
 ```bash
 bash scripts/fetch_data.sh
 ```
-Downloads the live NAP XMLs, the MOBI.Data tariff/station JSON and the DGEG
-HTML pages from the official origins (see `scripts/fetch_data.sh` for the exact
-URLs), then `scripts/mobie_tariffs.py` builds `data/mobie_tarifas.csv` (the layout
-`mobie_join.py` and `ohmigo_dataset.py` read) from the two JSON files. mobie.pt
-does not serve a tariff CSV; see `references/data-sources.md` for what MOBI.Data
-lacks (grid level, parking time, per-socket power, some sites).
+Downloads the live NAP XMLs, the MOBI.Data tariff/station JSON and the DGEG HTML pages from the official origins (see `scripts/fetch_data.sh` for the exact URLs), then `scripts/mobie_tariffs.py` builds `data/mobie_tarifas.csv` (the layout `mobie_join.py` and `ohmigo_dataset.py` read) from the two JSON files. mobie.pt does not serve a tariff CSV; see `references/data-sources.md` for what MOBI.Data lacks (grid level, parking time, per-socket power, some sites).
 
-Optional: read the dynamic status (`evActualStatus`, ~40 MB) from the
-[AmpereArchive](https://github.com/CarregaErvilhas/AmpereArchive) instead of the
-NAP: `NAP_STATUS_SOURCE=archive AMPERE_ARCHIVE_URL=https://ohm-age.ocarroeletrico.com bash scripts/fetch_data.sh`
-(country via `AMPERE_ARCHIVE_COUNTRY`, default `PT`). It downloads
-`v1/PT/status.json.gz` to `data/archiveStatus_latest.json.gz`, and
-`nap_etl.py` uses it when `data/evActualStatus_latest.xml` is absent
-(`scripts/archive_status.py` converts it to the same CSVs). A missing, stale
-(> `ARCHIVE_MAX_AGE_MIN`, 180) or truncated file falls back to the NAP. Default
-stays `nap`; the static feed still comes from the NAP (the archive does
-not keep `brandsAccepted`, NUTS or contacts).
+Optional: read the dynamic status (`evActualStatus`, ~40 MB) from the [AmpereArchive](https://github.com/CarregaErvilhas/AmpereArchive) instead of the NAP: `NAP_STATUS_SOURCE=archive AMPERE_ARCHIVE_URL=https://ohm-age.ocarroeletrico.com bash scripts/fetch_data.sh` (country via `AMPERE_ARCHIVE_COUNTRY`, default `PT`). It downloads `v1/PT/status.json.gz` to `data/archiveStatus_latest.json.gz`, and `nap_etl.py` uses it when `data/evActualStatus_latest.xml` is absent (`scripts/archive_status.py` converts it to the same CSVs). A missing, stale (> `ARCHIVE_MAX_AGE_MIN`, 180) or truncated file falls back to the NAP. Default stays `nap`; the static feed still comes from the NAP (the archive does not keep `brandsAccepted`, NUTS or contacts).
 
 ## Histórico (AmpereArchive, opcional)
-`scripts/archive_history.py` lê o Parquet do
-[AmpereArchive](https://github.com/CarregaErvilhas/AmpereArchive) com DuckDB e
-escreve `data/archive_stats.json`; o `build_dashboard.py` mostra-o no painel
-"Histórico" (`scripts/archive_panel.py`, PT+EN) e esconde-o quando o ficheiro
-não existe. Cálculos em `scripts/archive_stats.py`, testes em `tests/`:
+`scripts/archive_history.py` lê o Parquet do [AmpereArchive](https://github.com/CarregaErvilhas/AmpereArchive) com DuckDB e escreve `data/archive_stats.json`; o `build_dashboard.py` mostra-o no painel "Histórico" (`scripts/archive_panel.py`, PT+EN) e esconde-o quando o ficheiro não existe. Cálculos em `scripts/archive_stats.py`, testes em `tests/`:
 ```bash
 venv/bin/pip install duckdb
 venv/bin/python scripts/archive_history.py --url https://ohm-age.ocarroeletrico.com   # ou AMPERE_ARCHIVE_URL
 venv/bin/python -m unittest discover -s tests
 ```
-- Fonte: `--url` descarrega para `data/archive_cache/` os ficheiros que
-  `v1/<CC>/manifest.json` lista (o endereço não lista; o coletor reescreve o
-  manifest depois de cada hora, e ele inclui o backfill `part-backfill`/`part-ocpi`).
-  Sem manifest, gera os nomes `part-<HH>` desde `ARCHIVE_EPOCH` e aceita 404,
-  e aí o backfill não entra. `--root DIR | s3://bucket` lê uma cópia local ou o R2.
-  Janela `--days 28`; `static_versions` vem sempre desde o 1.º dia.
-- Modelo: o snapshot diário é o ponto de partida (instante = `publication_time`
-  da 1.ª leitura de estado do dia depois do retrato estático); os eventos
-  aplicam-se por cima e cada snapshot seguinte corrige o estado. A
-  `coverage.anchor_mismatch` tem de ficar a 0 (1.º evento depois do snapshot
-  com `prev_status` ≠ estado do snapshot). As lacunas de recolha (`polls`,
-  leituras boas separadas por > 5 min) saem do tempo observado.
-- Stats: (1) % do tempo `outOfOrder`/`inoperative` por OPC; (2) episódios
-  `outOfOrder`/`inoperative` → `available` (mediana dos fechados; saídas para
-  `charging`/outro, abertos e censurados contados à parte); (3) ocupação
-  dia × hora local (Lisboa/Açores/Madeira pelas coordenadas), DC vs AC pelo
-  `mode` dos conectores; (4) tomadas paradas e tomadas que oscilam com
-  `unknown`; (5) locais/tomadas/kW por semana desde o retrato inicial.
-- `sites_at` (no `archive_stats.json`, fora do painel): os locais vivos há 365 dias e
-  agora, com a última posição, para "Locais por concelho, há um ano e agora" (Rede >
-  Concelhos). Conta locais vivos em dois instantes, por isso as trocas de código de toda
-  a rede (2026-06-18) e os re-retratos com tudo `added` (2026-11-08) não contam. Uma
-  entrada em bloco (no mesmo dia, >= 50 códigos vistos pela 1.ª vez do mesmo operador,
-  descontadas as saídas) é o operador a chegar ao NAP, não postos novos (Modelo
-  Continente, 451 a 2026-10-07): fica fora e a página diz quais foram. Um código que volta
-  depois de uma falha do feed não conta como chegada (EDP, 59 de 60 a 2026-08-19).
-  Limite: os 46 locais `CNT-` sem operador no NAP, no mesmo dia, ficam abaixo dos 50 e
-  contam como crescimento. Também conta as tomadas de cada local nos dois instantes,
-  e a página mostra-as primeiro: a Maksu está a passar os postos para a Telpark (mesmo
-  grupo), que junta muitos num só local (Lisboa: 874 → 840 locais, 1 620 → 1 946
-  tomadas). Cada tomada conta uma vez por local pelo `externalId` normalizado (sem `*`
-  nem zeros à esquerda): a EDP publicou cada tomada com dois formatos de id até
-  2026-09-22 (4 363 tomadas há um ano, 2 827 distintas).
-- Cada stat diz quantos dias tem por trás e fica "preliminar" abaixo de
-  `NEEDS_DAYS` (ocupação e reparação: 14 dias). Os estados são declarados
-  pelos operadores, não medidos; dados NAP, uso não comercial.
-- No `refresh.yml`: passo `continue-on-error` antes do `build_dashboard.py`
-  (precisa de `vars.AMPERE_ARCHIVE_URL`; sem ela, ou se falhar, o site
-  sai sem o painel). `data/archive_cache/` fica em `actions/cache` entre
-  corridas; o sync apaga os dias fora da janela (menos `static_versions`).
-  Um 403 conta como erro, nunca como "hora sem ficheiro".
+- Fonte: `--url` descarrega para `data/archive_cache/` os ficheiros que `v1/<CC>/manifest.json` lista (o endereço não lista; o coletor reescreve o manifest depois de cada hora, e ele inclui o backfill `part-backfill`/`part-ocpi`). Sem manifest, gera os nomes `part-<HH>` desde `ARCHIVE_EPOCH` e aceita 404, e aí o backfill não entra. `--root DIR | s3://bucket` lê uma cópia local ou o R2. Janela `--days 28`; `static_versions` vem sempre desde o 1.º dia.
+- Modelo: o snapshot diário é o ponto de partida (instante = `publication_time` da 1.ª leitura de estado do dia depois do retrato estático); os eventos aplicam-se por cima e cada snapshot seguinte corrige o estado. A `coverage.anchor_mismatch` tem de ficar a 0 (1.º evento depois do snapshot com `prev_status` ≠ estado do snapshot). As lacunas de recolha (`polls`, leituras boas separadas por > 5 min) saem do tempo observado.
+- Stats: (1) % do tempo `outOfOrder`/`inoperative` por OPC; (2) episódios `outOfOrder`/`inoperative` → `available` (mediana dos fechados; saídas para `charging`/outro, abertos e censurados contados à parte); (3) ocupação dia × hora local (Lisboa/Açores/Madeira pelas coordenadas), DC vs AC pelo `mode` dos conectores; (4) tomadas paradas e tomadas que oscilam com `unknown`; (5) locais/tomadas/kW por semana desde o retrato inicial.
+- `sites_at` (no `archive_stats.json`, fora do painel): os locais vivos há 365 dias e agora, com a última posição, para "Locais por concelho, há um ano e agora" (Rede > Concelhos). Conta locais vivos em dois instantes, por isso as trocas de código de toda a rede (2026-06-18) e os re-retratos com tudo `added` (2026-11-08) não contam. Uma entrada em bloco (no mesmo dia, >= 50 códigos vistos pela 1.ª vez do mesmo operador, descontadas as saídas) é o operador a chegar ao NAP, não postos novos (Modelo Continente, 451 a 2026-10-07): fica fora e a página diz quais foram. Um código que volta depois de uma falha do feed não conta como chegada (EDP, 59 de 60 a 2026-08-19). Limite: os 46 locais `CNT-` sem operador no NAP, no mesmo dia, ficam abaixo dos 50 e contam como crescimento. Também conta as tomadas de cada local nos dois instantes, e a página mostra-as primeiro: a Maksu está a passar os postos para a Telpark (mesmo grupo), que junta muitos num só local (Lisboa: 874 → 840 locais, 1 620 → 1 946 tomadas). Cada tomada conta uma vez por local pelo `externalId` normalizado (sem `*` nem zeros à esquerda): a EDP publicou cada tomada com dois formatos de id até 2026-09-22 (4 363 tomadas há um ano, 2 827 distintas).
+- Cada stat diz quantos dias tem por trás e fica "preliminar" abaixo de `NEEDS_DAYS` (ocupação e reparação: 14 dias). Os estados são declarados pelos operadores, não medidos; dados NAP, uso não comercial.
+- No `refresh.yml`: passo `continue-on-error` antes do `build_dashboard.py` (precisa de `vars.AMPERE_ARCHIVE_URL`; sem ela, ou se falhar, o site sai sem o painel). `data/archive_cache/` fica em `actions/cache` entre corridas; o sync apaga os dias fora da janela (menos `static_versions`). Um 403 conta como erro, nunca como "hora sem ficheiro".
 
 ## Últimas 24 h (Rede > Novidades)
-`scripts/network_24h.py` (DuckDB) lê do AmpereArchive as 24 h até à última
-hora fechada e escreve `data/network_24h.json`: locais e tomadas que
-entraram/saíram, mudanças de operador e de potência, taxas do operador, tomadas
-que avariaram ou voltaram. Tudo **líquido** por tomada/local (avariou e voltou
-na janela = nada; saiu e voltou ao feed = nada). Corre de hora a hora no
-`network-24h.yml` (artifact `network-24h`, 2 dias), que dispara o `pages.yml`;
-este copia-o para `data/changes.json` do site (mesmos filtros de confiança do
-`ohmigo-dataset`, JSON válido < 2 MB). Nunca é commitado: o repo guarda um
-`site/data/changes.json` vazio (`build_site.write_changes`) e a página esconde
-a lista. Testes em `tests/test_network_24h.py`. Pré-visualizar com dados reais:
-`venv/bin/python scripts/network_24h.py --url https://ohm-age.ocarroeletrico.com`
-e copiar `data/network_24h.json` para `site/data/changes.json` (sem commitar).
+`scripts/network_24h.py` (DuckDB) lê do AmpereArchive as 24 h até à última hora fechada e escreve `data/network_24h.json`: locais e tomadas que entraram/saíram, mudanças de operador e de potência, taxas do operador, tomadas que avariaram ou voltaram. Tudo **líquido** por tomada/local (avariou e voltou na janela = nada; saiu e voltou ao feed = nada). Corre de hora a hora no `network-24h.yml` (artifact `network-24h`, 2 dias), que dispara o `pages.yml`; este copia-o para `data/changes.json` do site (mesmos filtros de confiança do `ohmigo-dataset`, JSON válido < 2 MB). Nunca é commitado: o repo guarda um `site/data/changes.json` vazio (`build_site.write_changes`) e a página esconde a lista. Testes em `tests/test_network_24h.py`. Pré-visualizar com dados reais: `venv/bin/python scripts/network_24h.py --url https://ohm-age.ocarroeletrico.com` e copiar `data/network_24h.json` para `site/data/changes.json` (sem commitar).
 
 ## Histórico por posto (Procurar > detalhe)
-`scripts/site_history.py` (DuckDB) lê o AmpereArchive pelo endereço público e
-escreve `data/site_history/sites/<xx>.json.gz`: 256 ficheiros (FNV-1a 32 do id NAP
-do local, módulo 256) com o uso de cada tomada, que o `uso.js` desenha.
-- Célula = uma tomada numa hora UTC. Das leituras de estado do arquivo fica no
-  máximo uma a cada 5 min; o estado de cada tomada nessa leitura é o retrato do dia
-  mais os eventos do dia até ela. A recolha ao minuto e as reposições (poucas
-  leituras por dia) ficam na mesma escala; hora sem leitura = sem célula, "sem
-  dados". Os baldes (horas, dias locais, meses locais, dia da semana x hora) somam
-  as frações de cada célula.
-- Ids antigos (antes do prefixo do operador, 2026-06-18) contam para o id de hoje só
-  quando exatamente um id atual acaba em `-<antigo>` (há MOBI-XXX ao lado de XXX).
-  Fuso: Açores pelas coordenadas do `static_versions`, o resto Lisboa.
-- Estado (`data/site_history_state`): células dos últimos 40 dias e dos meses em
-  aberto, um Parquet por mês fechado, `meta.json`. Cada corrida refaz só os dias
-  que faltam e os dois últimos. Sem estado começa 45 dias atrás; `--all` faz o
-  arquivo todo desde 2021.
-- `site-history.yml`, de hora a hora (:17): estado no cache do Actions (e, se o
-  cache sumir, no artifact da última corrida boa), artifact `site-history`
-  (ficheiros + estado, 2 dias), dispara o `pages.yml`, que valida os 256 ficheiros
-  e os copia para `data/sites/`. Nunca commitado. Corre aqui e não no AmpereArchive
-  porque este repo é público (minutos do Actions grátis); dentro do coletor pedia
-  mais RAM ao Zerops.
-- Testes em `tests/test_site_history.py`. Pré-visualizar: `python3 scripts/site_history.py
-  --url https://ohm-age.ocarroeletrico.com` e copiar `data/site_history/sites/` para
-  `site/data/sites/` (sem commitar). O gráfico "ocupação por hora" antigo (`hb`)
-  saiu: nunca chegou a produção.
+`scripts/site_history.py` (DuckDB) lê o AmpereArchive pelo endereço público e escreve `data/site_history/sites/<xx>.json.gz`: 256 ficheiros (FNV-1a 32 do id NAP do local, módulo 256) com o uso de cada tomada, que o `uso.js` desenha.
+- Célula = uma tomada numa hora UTC. Das leituras de estado do arquivo fica no máximo uma a cada 5 min; o estado de cada tomada nessa leitura é o retrato do dia mais os eventos do dia até ela. A recolha ao minuto e as reposições (poucas leituras por dia) ficam na mesma escala; hora sem leitura = sem célula, "sem dados". Os baldes (horas, dias locais, meses locais, dia da semana x hora) somam as frações de cada célula.
+- Ids antigos (antes do prefixo do operador, 2026-06-18) contam para o id de hoje só quando exatamente um id atual acaba em `-<antigo>` (há MOBI-XXX ao lado de XXX). Fuso: Açores pelas coordenadas do `static_versions`, o resto Lisboa.
+- Estado (`data/site_history_state`): células dos últimos 40 dias e dos meses em aberto, um Parquet por mês fechado, `meta.json`. Cada corrida refaz só os dias que faltam e os dois últimos. Sem estado começa 45 dias atrás; `--all` faz o arquivo todo desde 2021.
+- `site-history.yml`, de hora a hora (:17): estado no cache do Actions (e, se o cache sumir, no artifact da última corrida boa), artifact `site-history` (ficheiros + estado, 2 dias), dispara o `pages.yml`, que valida os 256 ficheiros e os copia para `data/sites/`. Nunca commitado. Corre aqui e não no AmpereArchive porque este repo é público (minutos do Actions grátis); dentro do coletor pedia mais RAM ao Zerops.
+- Testes em `tests/test_site_history.py`. Pré-visualizar: `python3 scripts/site_history.py --url https://ohm-age.ocarroeletrico.com` e copiar `data/site_history/sites/` para `site/data/sites/` (sem commitar). O gráfico "ocupação por hora" antigo (`hb`) saiu: nunca chegou a produção.
 
 ## Pipeline order
-`scripts/nap_etl.py` → (`scripts/check_quality.py`, `scripts/summary.py`) →
-`scripts/mobie_join.py` → `scripts/dgeg_lists.py` → `scripts/dgeg_crossref.py` →
-`scripts/nap_static_checks.py` → `scripts/concelho_check.py` →
-`scripts/osm_umap.py` → `scripts/tracker_sync.py` + `scripts/tracker_checks.py` →
-`scripts/make_pt_outline.py` →
-`scripts/network_news.py` (diff semanal vs `network-census.json` do HEAD →
-`novidades.md` + novo `network-census.json`; primeira corrida = baseline) →
-(`scripts/osm_places.py`) → `scripts/ohmigo_dataset.py` (the network model,
-`data/ohmigo_chargers.json`) → `scripts/fetch_charger_models.sh` +
-`scripts/hardware_checks.py` → `scripts/build_dashboard.py` →
-`scripts/model_parity.py`.
-`scripts/build_dashboard.py` reads the network model for everything it shows
-per socket and per site in "Procurar" (see "Network model"), and the
-intermediate CSVs +
-`data/osm_umap.csv`/`data/osm_caca.csv`/`assets/pt_outline.json`, computes the
-`data` dict and writes `facts.md`, `errors.md` and the site: it calls
-`build_site.render(clean(data), 'site', AMPERE_ARCHIVE_URL)`, which splits the
-payload into `site/data/{stats,panels,sites,points,outline,opc}.json`
-(`scripts/site_data.py`, lossless) and renders the pages from `assets/site/`.
-It appends
-`data/nap_static_findings.md` (written by `scripts/nap_static_checks.py`),
-`data/concelho_mismatches.md` (written by `concelho_check.py`),
-`data/osm_umap_findings.md` (written by `scripts/osm_umap.py`),
-`data/tracker_findings.md` (written by `scripts/tracker_checks.py`) and
-`data/hardware_findings.md` (written by `scripts/hardware_checks.py`) to `errors.md`
-when present.
-`python3 scripts/build_site.py` re-renders the pages from the committed
-`site/data` without the CSVs (use it to ship a front-end change between weekly
-refreshes).
+`scripts/nap_etl.py` → (`scripts/check_quality.py`, `scripts/summary.py`) → `scripts/mobie_join.py` → `scripts/dgeg_lists.py` → `scripts/dgeg_crossref.py` → `scripts/nap_static_checks.py` → `scripts/concelho_check.py` → `scripts/osm_umap.py` → `scripts/tracker_sync.py` + `scripts/tracker_checks.py` → `scripts/make_pt_outline.py` → `scripts/network_news.py` (diff semanal vs `network-census.json` do HEAD → `novidades.md` + novo `network-census.json`; primeira corrida = baseline) → (`scripts/osm_places.py`) → `scripts/ohmigo_dataset.py` (the network model, `data/ohmigo_chargers.json`) → `scripts/fetch_charger_models.sh` + `scripts/hardware_checks.py` → `scripts/build_dashboard.py` → `scripts/model_parity.py`. `scripts/build_dashboard.py` reads the network model for everything it shows per socket and per site in "Procurar" (see "Network model"), and the intermediate CSVs + `data/osm_umap.csv`/`data/osm_caca.csv`/`assets/pt_outline.json`, computes the `data` dict and writes `facts.md`, `errors.md` and the site: it calls `build_site.render(clean(data), 'site', AMPERE_ARCHIVE_URL)`, which splits the payload into `site/data/{stats,panels,sites,points,outline,opc}.json` (`scripts/site_data.py`, lossless) and renders the pages from `assets/site/`. It appends `data/nap_static_findings.md` (written by `scripts/nap_static_checks.py`), `data/concelho_mismatches.md` (written by `concelho_check.py`), `data/osm_umap_findings.md` (written by `scripts/osm_umap.py`), `data/tracker_findings.md` (written by `scripts/tracker_checks.py`) and `data/hardware_findings.md` (written by `scripts/hardware_checks.py`) to `errors.md` when present. `python3 scripts/build_site.py` re-renders the pages from the committed `site/data` without the CSVs (use it to ship a front-end change between weekly refreshes).
 
-`scripts/validate_site.py` (rode no `refresh.yml` antes do commit, no
-`pr-checks.yml` em cada PR, e em local depois de qualquer build) valida o
-`site/`: os JSON de `site/data` fazem `json.loads` e cumprem o esquema,
-cada `.js` passa `node --check`, nenhuma página tem `<script>` inline, a CSP é
-a esperada, o front end não usa sinks do tipo `innerHTML` (ver "Site
-specifics") e `applyLive` se comporta com dados sintéticos.
-`scripts/pipeline_guard.py` travará o commit se um upstream mudar o formato e o
-pipeline produzir dados absurdos sem rebentar (limiares mínimos para
-sites/pontos/join/DGEG/registo) — falha o job e o site online fica no
-último bom.
+`scripts/validate_site.py` (rode no `refresh.yml` antes do commit, no `pr-checks.yml` em cada PR, e em local depois de qualquer build) valida o `site/`: os JSON de `site/data` fazem `json.loads` e cumprem o esquema, cada `.js` passa `node --check`, nenhuma página tem `<script>` inline, a CSP é a esperada, o front end não usa sinks do tipo `innerHTML` (ver "Site specifics") e `applyLive` se comporta com dados sintéticos. `scripts/pipeline_guard.py` travará o commit se um upstream mudar o formato e o pipeline produzir dados absurdos sem rebentar (limiares mínimos para sites/pontos/join/DGEG/registo) — falha o job e o site online fica no último bom.
 
-`scripts/nap_static_checks.py` runs the rules on the static NAP alone. Two
-were mined from the tracker's classes: 750/600 V on a DC connector (legacy
-placeholder; tracker: 171 rows of 750 → 500 V) and `mode3AC3p` with
-single-phase voltage and < 11 kW (tracker: 199 rows of `mode3AC3p` →
-`mode2AC1p`). Two need no adjudication: a DC connector with no voltage, and a
-voltage above 1500 V, where low voltage ends for DC. They live outside
-`tracker_checks.py` so they still run when the tracker fetch fails. Writes
-`data/nap_static_findings.csv` + `.md` (errors.md item 8, subsections 8a–8d, one
-fixed letter per rule); `build_dashboard.py` imports `findings()` for the
-item-8 counts.
+`scripts/nap_static_checks.py` runs the rules on the static NAP alone. Two were mined from the tracker's classes: 750/600 V on a DC connector (legacy placeholder; tracker: 171 rows of 750 → 500 V) and `mode3AC3p` with single-phase voltage and < 11 kW (tracker: 199 rows of `mode3AC3p` → `mode2AC1p`). Two need no adjudication: a DC connector with no voltage, and a voltage above 1500 V, where low voltage ends for DC. They live outside `tracker_checks.py` so they still run when the tracker fetch fails. Writes `data/nap_static_findings.csv` + `.md` (errors.md item 8, subsections 8a–8d, one fixed letter per rule); `build_dashboard.py` imports `findings()` for the item-8 counts.
 
-`scripts/hardware_checks.py` checks the DC voltage the NAP declares against the
-equipment installed (errors.md item 14), from the network model: the socket's
-voltage on OSM (`osm.v`, or the NAP's when `osmSame` confirms it) and, on CCS,
-the rated voltage of the charger OSM maps at the site (`osm.hardware`), looked
-up in the community's catalogue of models (a Google Doc, "Modelos de
-Carregadores usados em Portugal": `§.Marca.Modelo` sections with
-`1000V 200A`). 14a: the NAP and the equipment fall on different sides of 500 V,
-the threshold of Procurar's "Tensão DC" filter and of ohmigo (the error that
-changes what an 800 V car gets). 14b: same side, a different value from OSM's,
-aggregated per operator and pattern (thousands of sockets, mostly one template
-value per operator). 14c: OSM and the catalogue disagree with each other, the
-list for someone with a photo of the plate. The catalogue alone never makes a
-14b: the maximum voltage varies between revisions of a model. A site's rating
-counts only when every charger mapped there is in the catalogue and the DC ones
-share one voltage. The catalogue is public and free to use (Alexandre Moleiro
-keeps it): `fetch_charger_models.sh` downloads its text export on every run
-into `data/charger_models.txt` (gitignored, check D of `ci_paths.py`: a copy in
-git would go stale), and without it item 14 runs on OSM alone and says so. The
-parser is `charger_models.parse`, shared with the network model's `models`
-(below): it also reads the brands at the end of the document that have no
-`§.Marca.Modelo` line (Wallbox, Volt-E, Wowplug, XCharge...).
+`scripts/hardware_checks.py` checks the DC voltage the NAP declares against the equipment installed (errors.md item 14), from the network model: the socket's voltage on OSM (`osm.v`, or the NAP's when `osmSame` confirms it) and, on CCS, the rated voltage of the charger OSM maps at the site (`osm.hardware`), looked up in the community's catalogue of models (a Google Doc, "Modelos de Carregadores usados em Portugal": `§.Marca.Modelo` sections with `1000V 200A`). 14a: the NAP and the equipment fall on different sides of 500 V, the threshold of Procurar's "Tensão DC" filter and of ohmigo (the error that changes what an 800 V car gets). 14b: same side, a different value from OSM's, aggregated per operator and pattern (thousands of sockets, mostly one template value per operator). 14c: OSM and the catalogue disagree with each other, the list for someone with a photo of the plate. The catalogue alone never makes a 14b: the maximum voltage varies between revisions of a model. A site's rating counts only when every charger mapped there is in the catalogue and the DC ones share one voltage. The catalogue is public and free to use (Alexandre Moleiro keeps it): `fetch_charger_models.sh` downloads its text export on every run into `data/charger_models.txt` (gitignored, check D of `ci_paths.py`: a copy in git would go stale), and without it item 14 runs on OSM alone and says so. The parser is `charger_models.parse`, shared with the network model's `models` (below): it also reads the brands at the end of the document that have no `§.Marca.Modelo` line (Wallbox, Volt-E, Wowplug, XCharge...).
 
-`scripts/concelho_check.py` locates every site inside official CAOP concelho
-polygons (downloaded on first run into `data/caop_cache/`, gitignored) and flags the
-sites whose coordinates contradict the concelho implied by the site_id code.
-Writes `data/concelho_check.csv` + `data/concelho_mismatches.md` (errors.md items 11a/11b),
-plus `data/concelhos.csv`: all 308 concelhos (278 mainland, 19 Azores, 11 Madeira; it warns
-on any other count), the denominator of Rede > Concelhos. `load_concelhos()` + `locator()`
-are reused by `build_dashboard.py` to place the archive's sites (below).
+`scripts/concelho_check.py` locates every site inside official CAOP concelho polygons (downloaded on first run into `data/caop_cache/`, gitignored) and flags the sites whose coordinates contradict the concelho implied by the site_id code. Writes `data/concelho_check.csv` + `data/concelho_mismatches.md` (errors.md items 11a/11b), plus `data/concelhos.csv`: all 308 concelhos (278 mainland, 19 Azores, 11 Madeira; it warns on any other count), the denominator of Rede > Concelhos. `load_concelhos()` + `locator()` are reused by `build_dashboard.py` to place the archive's sites (below).
 
-`scripts/osm_planned.py` reads the same Overpass dump and writes `data/osm_planned.csv`:
-sites OSM calls planned or under construction (`construction:`/`planned:`/`proposed:`
-`amenity=charging_station`, a `amenity=charging_station` whose stalls are all
-`construction:man_made=charge_point` — how Tesla hubs are mapped — or loose stalls
-grouped within 40 m), minus those already in the NAP (ref match or ≤30 m).
-`build_dashboard.py` appends them to `sites.json` with `lc` = `construction`|`planned`,
-`status` `planned` and no points; "Procurar" has an "Estado do posto" filter whose default
-is in-service only. They are not counted in any KPI.
+`scripts/osm_planned.py` reads the same Overpass dump and writes `data/osm_planned.csv`: sites OSM calls planned or under construction (`construction:`/`planned:`/`proposed:` `amenity=charging_station`, a `amenity=charging_station` whose stalls are all `construction:man_made=charge_point` — how Tesla hubs are mapped — or loose stalls grouped within 40 m), minus those already in the NAP (ref match or ≤30 m). `build_dashboard.py` appends them to `sites.json` with `lc` = `construction`|`planned`, `status` `planned` and no points; "Procurar" has an "Estado do posto" filter whose default is in-service only. They are not counted in any KPI.
 
-`scripts/osm_umap.py` cross-references NAP sites against community OSM data: the
-Overpass dump `Todos.json` from the author of the "Postos de Carregamento v2.1"
-umap map (both `amenity=charging_station` and `man_made=charge_point` elements)
-and the "Caça aos Postos" umap doubt layers. Fetches are cached in `data/umap_cache/`.
-Matches by MOBI.E `ref` code (strips a `MOBI-` prefix, expands multi-code refs
-"A;B;C", way polygons use the centroid). Writes `data/osm_umap.csv` (deduped per NAP
-code, preferring the row with the most payment/auth tags), `data/osm_caca.csv` and
-`data/osm_umap_findings.md` (errors.md item 12).
+`scripts/osm_umap.py` cross-references NAP sites against community OSM data: the Overpass dump `Todos.json` from the author of the "Postos de Carregamento v2.1" umap map (both `amenity=charging_station` and `man_made=charge_point` elements) and the "Caça aos Postos" umap doubt layers. Fetches are cached in `data/umap_cache/`. Matches by MOBI.E `ref` code (strips a `MOBI-` prefix, expands multi-code refs "A;B;C", way polygons use the centroid). Writes `data/osm_umap.csv` (deduped per NAP code, preferring the row with the most payment/auth tags), `data/osm_caca.csv` and `data/osm_umap_findings.md` (errors.md item 12).
 
-`scripts/make_pt_outline.py` builds `assets/pt_outline.json` (decimated PT
-outline for the site map **plus per-district/island labels** — `{outline:
-{region: [rings]}, districts: {region: {name: [lon, lat]}}}`) from the CAOP
-concelho polygons in `data/caop_cache/`. Mainland labels use the CAOP `Distrito`
-attribute (18), Madeira/Açores fall back to island name (`Ilha`/`ILHA`, 2+9).
-Run it once when the outline asset is missing; the JSON is committed.
+`scripts/make_pt_outline.py` builds `assets/pt_outline.json` (decimated PT outline for the site map **plus per-district/island labels** — `{outline: {region: [rings]}, districts: {region: {name: [lon, lat]}}}`) from the CAOP concelho polygons in `data/caop_cache/`. Mainland labels use the CAOP `Distrito` attribute (18), Madeira/Açores fall back to island name (`Ilha`/`ILHA`, 2+9). Run it once when the outline asset is missing; the JSON is committed.
 
-`scripts/tracker_sync.py` + `scripts/tracker_checks.py` cross-check the NAP
-snapshot against the **PCVE error tracker** (`pt-pcve-errors.xlsx`), the data
-owners' own error list per operator/asset. Refresh cycle:
+`scripts/tracker_sync.py` + `scripts/tracker_checks.py` cross-check the NAP snapshot against the **PCVE error tracker** (`pt-pcve-errors.xlsx`), the data owners' own error list per operator/asset. Refresh cycle:
 
 ```bash
 bash scripts/fetch_tracker.sh                # TRACKER_URL, or gog, or skip
@@ -295,286 +80,37 @@ venv/bin/python scripts/tracker_sync.py     # xlsx -> data/tracker_*.csv (deriva
 venv/bin/python scripts/tracker_checks.py   # CSVs + NAP -> findings
 ```
 
-- `fetch_tracker.sh` has two strategies, neither of which may fail the pipeline:
-  `TRACKER_URL` (anonymous download — **what CI uses**, since the file's owner
-  shares it as "anyone with the link", so no credentials are needed), then `gog`
-  (authenticated Drive download, for when link sharing is off — local only).
-  Nothing is versioned: if both fail, `tracker_sync.py` skips and `tracker_checks.py`
-  warns, so errors.md simply has **no** tracker item for that run. `nap-dashboard`
-  is a **public** repo, so keep that URL in the `TRACKER_URL` repo secret, never
-  as a literal in the workflow — otherwise the repo publishes a permanent pointer
-  to the data owners' file. Set the secret to the shareable download URL of the xlsx.
-- **Google blocks other endpoints from the runners.** The tracker is an
-  **xlsx (Office file) hosted on Google Drive**, not a native Google Sheet, and
-  `TRACKER_URL` is Drive's export download endpoint (`…export=download…`): that
-  is what gets past the block on GitHub-hosted runners. The Sheets API and
-  `/spreadsheets/…/export?format=xlsx` reject an Office file with `400
-  failedPrecondition: must not be an Office file`. `fetch_tracker.sh` reports
-  the HTTP status when a fetch fails (`HTTP 403`/`429` = blocked or
-  rate-limited, `200` + non-ZIP = Drive interstitial). Do not work around a
-  failure by committing a copy of the tracker.
-- `data/tracker_meta.json` carries `synced_at` + the xlsx `sha256` on every run,
-  so errors.md item 13 always states which version of the tracker it came from.
-- Deciding which `TO FIX` rows are now fixed in the NAP is **not done here**: it
-  lives in the private repo `Cocofreee/pt-pcve-errors`
-  (`scripts/cross_errors_sources.py`, which uses this repo's `scripts/nap_etl.py`
-  at a pinned commit). It covers Voltage, Amperage, Power, Charge mode, Plug type,
-  Location (≤10 m FIXED / ≤30 m POSSIBLE), Payment info and Register, and its
-  verdicts are only *candidates* for the owners to flip to `FIXED`. The old
-  `tracker_fixed.py` was removed to avoid two copies of the same cross-check.
-  **Never republish its output (or any per-row tracker data) in this public repo**:
-  the tracker has no reuse licence.
-- Products: `data/opc_registry_authority.csv` (the only *current* OPC identity table —
-  `PartyId | PartyCode | name`, 99 CPO) and
-  `data/tracker_errors.csv` (the project's only labelled/ground-truth set: 3153 real
-  defects with the value the owner considers correct, plus `notes_class`).
-- `tracker_checks.py` writes `data/tracker_findings.md`/`.csv` (errors.md item 13).
-  Rules: OPC sem PartyId resolúvel, PartyCode em vez de PartyId (e.g. BBGE,
-  CIRC, CONT), nomes fragmentados, assets declarados removidos ainda
-  publicados; the counts are in the generated file. The NAP-only rules mined from the tracker (placeholder DC
-  voltages, 58; `mode3AC3p` without three-phase power, 35 rows / 24 sites) are
-  in `scripts/nap_static_checks.py`, errors.md item 8.
-  The rules are mined from the tracker's own classes (171 rows of 750→500 V,
-  199 of `mode3AC3p`→`mode2AC1p`), which is what makes them non-speculative.
-- Known limits: OPC identity resolves by `operator_name`, so an operator that
-  renames itself drops out until the tracker catches up; `min_fee = 0` covers
-  46% of pricing rows, so zero is **not** a pricing anomaly.
+- `fetch_tracker.sh` has two strategies, neither of which may fail the pipeline: `TRACKER_URL` (anonymous download — **what CI uses**, since the file's owner shares it as "anyone with the link", so no credentials are needed), then `gog` (authenticated Drive download, for when link sharing is off — local only). Nothing is versioned: if both fail, `tracker_sync.py` skips and `tracker_checks.py` warns, so errors.md simply has **no** tracker item for that run. `nap-dashboard` is a **public** repo, so keep that URL in the `TRACKER_URL` repo secret, never as a literal in the workflow — otherwise the repo publishes a permanent pointer to the data owners' file. Set the secret to the shareable download URL of the xlsx.
+- **Google blocks other endpoints from the runners.** The tracker is an **xlsx (Office file) hosted on Google Drive**, not a native Google Sheet, and `TRACKER_URL` is Drive's export download endpoint (`…export=download…`): that is what gets past the block on GitHub-hosted runners. The Sheets API and `/spreadsheets/…/export?format=xlsx` reject an Office file with `400 failedPrecondition: must not be an Office file`. `fetch_tracker.sh` reports the HTTP status when a fetch fails (`HTTP 403`/`429` = blocked or rate-limited, `200` + non-ZIP = Drive interstitial). Do not work around a failure by committing a copy of the tracker.
+- `data/tracker_meta.json` carries `synced_at` + the xlsx `sha256` on every run, so errors.md item 13 always states which version of the tracker it came from.
+- Deciding which `TO FIX` rows are now fixed in the NAP is **not done here**: it lives in the private repo `Cocofreee/pt-pcve-errors` (`scripts/cross_errors_sources.py`, which uses this repo's `scripts/nap_etl.py` at a pinned commit). It covers Voltage, Amperage, Power, Charge mode, Plug type, Location (≤10 m FIXED / ≤30 m POSSIBLE), Payment info and Register, and its verdicts are only *candidates* for the owners to flip to `FIXED`. The old `tracker_fixed.py` was removed to avoid two copies of the same cross-check. **Never republish its output (or any per-row tracker data) in this public repo**: the tracker has no reuse licence.
+- Products: `data/opc_registry_authority.csv` (the only *current* OPC identity table — `PartyId | PartyCode | name`, 99 CPO) and `data/tracker_errors.csv` (the project's only labelled/ground-truth set: 3153 real defects with the value the owner considers correct, plus `notes_class`).
+- `tracker_checks.py` writes `data/tracker_findings.md`/`.csv` (errors.md item 13). Rules: OPC sem PartyId resolúvel, PartyCode em vez de PartyId (e.g. BBGE, CIRC, CONT), nomes fragmentados, assets declarados removidos ainda publicados; the counts are in the generated file. The NAP-only rules mined from the tracker (placeholder DC voltages, 58; `mode3AC3p` without three-phase power, 35 rows / 24 sites) are in `scripts/nap_static_checks.py`, errors.md item 8. The rules are mined from the tracker's own classes (171 rows of 750→500 V, 199 of `mode3AC3p`→`mode2AC1p`), which is what makes them non-speculative.
+- Known limits: OPC identity resolves by `operator_name`, so an operator that renames itself drops out until the tracker catches up; `min_fee = 0` covers 46% of pricing rows, so zero is **not** a pricing anomaly.
 
 ## Network model (ohmigo dataset)
-`scripts/ohmigo_dataset.py` builds `data/ohmigo_chargers.json`, **the network
-model**: the one place that decides what is true about each charger. Two
-readers: the ohmigo MCP server (EV charging cost answers for ChatGPT/Claude)
-and this repo's site, whose `build_dashboard.py` takes each socket's power,
-operator fees, regime and NAP-only issues from it (`site/data/points.json`
-`kw`/`kw_src`/`nap_kw`/`fees`/`regime`/`nap`/`nap_fees`/`issues`, and each site's `kw` and
-`dcv` in `sites.json`). Before, the site computed its own from the same CSVs and
-the two drifted (fees cut to the first €/min tier, kW rounded to the unit, the
-short-`UID_TOMADA` matches only ohmigo had, OSM's power only ohmigo applied).
-`scripts/model_parity.py` runs after the build in `refresh.yml` and fails the
-refresh if `site/data` disagrees with the model of the same run. The Rede
-statistics stay on what the NAP declares (`max_power_w`, `pw_class`,
-`data/nap_opc_points.csv`): they describe the NAP's publication.
-The OPC tariffs come from `scripts/opc_tariffs.py`, the same join
-`mobie_join.py` uses for `data/nap_opc_points.csv`, so the stats and the model
-agree on which socket has which fee.
-Contents: sites, points, power,
-the connector's declared tensão (`v`, V) and max current (`a`, A), the grid
-voltage level (`level`: BTN/BTE/MT, which picks the TAR; **always `null`**,
-because neither MOBI.Data nor the NAP publishes it) and the **raw** MOBI.E OPC tariffs per socket (every €/min tier and
-the `AD_HOC_PAYMENT` plan, which `data/nap_opc_points.csv` collapses to one value),
-whether the cable is attached (`cable`, from `connectorFormat`), the NAP's site
-`name`, opening `hours` (converted by `nap_etl.py` from DATEX II
-`operatingHours` to OSM `opening_hours` syntax: `24/7`, `Mo-Su 09:00-21:00`),
-`locationDescription` ("Parque Coberto - Piso -1") and the operator's `phone`,
-plus a per-site `osm` block (name, brand, operator, opening hours, location,
-access, parking fee, maxstay, level, covered, indoor, phone, email,
-manufacturer, model, capacity, `payment` = the `payment:*`/`authentication:*`
-methods tagged yes, and `cards` = true/false when OSM says whether a bank card
-works at the charger) and a per-point `osm` with the kW/V/A of the matching OSM
-`socket:*` (same plug type, nearest power), **only where it differs from the
-NAP** — read off the charger's plate by the community, it is usually more
-right than the NAP's declaration (DC placeholders 750/600 V, impossible
-powers), so the model applies it: `kw`/`v`/`a`/`cable` are OSM's and the NAP's
-value goes to `napKw`/`napV`/`napA`/`napCable`, present only when replaced
-(`null` = the NAP declared none). An OSM number has to be plausible first
-(`osm_tags.sane_osm`: at most 1000 kW / 1500 V / 1500 A, and within ×20 kW or
-×10 V/A of a plausible NAP value), or it is dropped. ohmigo made this call itself
-until the model did; it now reads the result. Per point, `issues` lists what
-the NAP-only rules of `nap_static_checks.py` found on it (`tensao_placeholder`,
-`trifasico_sem_3p`, `tensao_em_falta`, `tensao_impossivel`, errors.md item 8).
-Each point also has `evse`, the NAP `point_external_id` exactly as published
-(`PT*EDP*E*LSB*90050*01`), the id on the socket's sticker: the point `id` is
-only unique within its site, so this is what a link to one socket uses
-(VoltFrame). Not guaranteed unique (a few operators publish the same id on two
-sites) and never a join key: the NAP↔MOBI.E join rule in "Data gotchas" stands.
-Nothing from the PCVE tracker goes into the model: it is a third party's data
-with no reuse licence, and the model is public. Where OSM agrees with the NAP, the point
-lists those fields in `osmSame` (`["a", "v"]`), so ohmigo can tell a value
-confirmed on the charger from one only the operator declared (a DC socket's
-current decides the power a 400 V car gets). All joined from the Overpass dump in
-`data/umap_cache/todos.json` by `ref` = NAP `external_id` (any code form, so
-Continente's `0001PL0002` joins too; ≤1 km from the NAP point). A `MOBI-`
-prefix on the OSM `ref` is dropped only when the ref as written is not a NAP
-code (`osm_tags.nap_code`): 87 NAP sites really are `MOBI-XXX-00000`, 31 of
-them next to a `XXX-00000`, and stripping it always left them unmatched. An element whose `ref` is no NAP code
-(missing, a typo like `MLG-00022`, a bay number like `1A`) joins by its
-`ref:EU:EVSE` instead: each socket id (`PT*EDP*E*MGL*00022*1`, `evse_key`)
-names its NAP point and so its site (`osm_tags.evse_sites`; an id the NAP
-gives two sites is dropped). The `ref` wins when both are there. Elements
-mapped as `disused:`/`construction:` `amenity=charging_station` or
-`man_made=charge_point` (`osm_tags.lifecycle`) are the site's element for the
-link only, after any in-service one: their tags are not today's charger.
-When a site has only such elements, the `osm` block says so in `lifecycle`
-(`disused` | `construction`, from the element linked) and `sites.json` in
-`olc`. OSM decides the life cycle of a site the NAP still publishes: Procurar
-counts it as disused / under construction ("Estado do posto" filter, hidden by
-default) **unless the operator reports a socket `available` or `charging`
-now** (live status, or the week's when live is off): then it is in service and
-the detail says OSM is out of date. The Rede statistics are unchanged: they
-describe the NAP's publication. It's what lets
-ohmigo find "o posto do Lidl de Coimbra": OSM's `brand`/`operator` are often
-the owner, not the CPO (Lidl owns its chargers, Galp operates them: the NAP
-says Galp, OSM says Lidl). Additive and optional, so no `SCHEMA` bump;
-without the dump (osm_umap.py not run) sites just lack `osm`. ODbL: see
-`THIRD-PARTY-NOTICES.md`.
-The `osm` block also has `hardware`: every charger make + model mapped at the
-site, most common first (`["ABB Terra HP CP4", "Alpitronic HYC_400"]`;
-`manufacturer`/`model` are only the commonest). The site shows the same list
-(`hw` in `sites.json`, "Carregadores: …" in the detail) and its search finds
-a site by it. Both come from `scripts/osm_tags.py`, so the site and ohmigo
-never disagree about a charger. The `osm` block also has `element`, the OSM
-element the site is matched to (`"node/123"`, `"way/456"`: an element with
-only this `ref` before a shared `"A;B;C"`, then the whole site's
-`amenity=charging_station` before a `man_made=charge_point`, then the nearest); `sites.json`
-carries it as `osm_ref` (the planned sites already had one), and Procurar's
-"Ver no OSM" opens that element, falling back to a marker at the coordinates. An element > 1 km from the NAP point is a
-wrong `ref` on OSM, not a second charger, and is left out.
-Also from `osm_tags.py`, in both the `osm` block and `sites.json`:
-- `sharedKw` (`shared`): the total a charger declares
-  (`charging_station:output`/`charge_point:output`) when it is below its
-  sockets charging together. DC plugs of one multi-standard charger
-  (CCS + CHAdeMO) don't add up, only the largest DC type × its count plus the
-  AC sockets, so a 50 kW triple charger with a 50 kW CCS is not "shared".
-- `oldRefs` + `oldOperator` (`old`, `oldop`): OSM `old_ref`/`old_operator`,
-  the sticker of a charger that changed operator. An old code that is another
-  site's code now is dropped. Searchable on the site and in ohmigo.
-- `wheelchair` (`wc`): OSM `wheelchair` yes/limited/no; the site and ohmigo
-  also read the NAP's DATEX II `accessibility` (`nap_etl.py` writes it to
-  `nap_static_sites.csv`; `wheelChairAccessible`/`disabilityAccessible`/
-  `barrierFreeAccessible` = yes). The "Acessível em cadeira de rodas" filter
-  keeps yes and limited; very few sites say anything, and the help text says
-  that missing information is not "inaccessible".
-- `fixme`: the community's open questions on OSM, shown on the site as
-  "Por confirmar no OpenStreetMap"; ohmigo keeps up to 3, cut at 160
-  characters, and tells the assistant to present them as things to check on
-  site, never as facts.
-- `evse` in the `osm` block (dataset build only, never written; not the
-  point's `evse` above): OSM `ref:EU:EVSE` per element,
-  matched to the NAP `point_external_id` (`evse_key`), so a socket's OSM
-  kW/V/A come from the element that is that socket; the plug + nearest power
-  match over the whole site stays the fallback.
-Also per site, `places`: the shopping centres, hospitals, universities, airports,
-stadiums, supermarkets, car parks and hotels (named, from OSM) whose outline holds
-the site or lies a few metres from it, `{name, type, osm, m}` (`m` = metres to
-the edge, 0 = inside; up to 3, inside first). OSM doesn't say which place a
-charger is at, so `scripts/osm_places.py` works it out (point in polygon, stdlib
-only) from `data/umap_cache/places.json`, which it builds with `osmium`
-(pyosmium) from Geofabrik's Portugal extract: `refresh.yml` downloads
-`portugal-latest.osm.pbf` (~400 MB) and runs
-`python scripts/osm_places.py <pbf>` (~10 s) with `continue-on-error` before
-the dataset; without the cache sites just lack `places`. Overpass was tried
-first and timed out even on half-degree tiles. The radius outside the outline
-depends on the type (a hotel or car park only counts right beside it), and a
-place whose name repeats one already kept is dropped (two OSM objects for the
-same mall, "Centro Comercial Colombo - Estacionamento Piso -1").
-It's what lets ohmigo find "os postos do Mar Shopping", which no charger is named.
-No status and no CEME prices: ohmigo reads status live from the NAP feed and gets
-energy prices from ceme-v2. `refresh.yml` builds it before the site (the site
-reads it) and uploads it, only after the pipeline guard, the parity check and
-`validate_site.py` pass, as the `ohmigo-dataset` Actions artifact (90-day retention; not
-committed: ~10 MB a week; not a release, because the repo's releases are
-immutable and an asset can't be replaced); `pages.yml` copies the newest one to
-`https://nap.ocarroeletrico.com/ohmigo/chargers.json`, accepting only artifacts
-from a `refresh.yml` or `ohmigo-daily.yml` run on `main` of this repo, triggered
-by `schedule` or `workflow_dispatch`, not already failed (fork PRs can upload an
-artifact with the same name). It exits non-zero (and the
-refresh fails) below 5 000 sites or 10 000 tariffed points. `SCHEMA` in the
-script bumps on incompatible format changes.
+`scripts/ohmigo_dataset.py` builds `data/ohmigo_chargers.json`, **the network model**: the one place that decides what is true about each charger. Two readers: the ohmigo MCP server (EV charging cost answers for ChatGPT/Claude) and this repo's site, whose `build_dashboard.py` takes each socket's power, operator fees, regime and NAP-only issues from it (`site/data/points.json` `kw`/`kw_src`/`nap_kw`/`fees`/`regime`/`nap`/`nap_fees`/`issues`, and each site's `kw` and `dcv` in `sites.json`). Before, the site computed its own from the same CSVs and the two drifted (fees cut to the first €/min tier, kW rounded to the unit, the short-`UID_TOMADA` matches only ohmigo had, OSM's power only ohmigo applied). `scripts/model_parity.py` runs after the build in `refresh.yml` and fails the refresh if `site/data` disagrees with the model of the same run. The Rede statistics stay on what the NAP declares (`max_power_w`, `pw_class`, `data/nap_opc_points.csv`): they describe the NAP's publication. The OPC tariffs come from `scripts/opc_tariffs.py`, the same join `mobie_join.py` uses for `data/nap_opc_points.csv`, so the stats and the model agree on which socket has which fee. Contents: sites, points, power, the connector's declared tensão (`v`, V) and max current (`a`, A), the grid voltage level (`level`: BTN/BTE/MT, which picks the TAR; **always `null`**, because neither MOBI.Data nor the NAP publishes it) and the **raw** MOBI.E OPC tariffs per socket (every €/min tier and the `AD_HOC_PAYMENT` plan, which `data/nap_opc_points.csv` collapses to one value), whether the cable is attached (`cable`, from `connectorFormat`), the NAP's site `name`, opening `hours` (converted by `nap_etl.py` from DATEX II `operatingHours` to OSM `opening_hours` syntax: `24/7`, `Mo-Su 09:00-21:00`), `locationDescription` ("Parque Coberto - Piso -1") and the operator's `phone`, plus a per-site `osm` block (name, brand, operator, opening hours, location, access, parking fee, maxstay, level, covered, indoor, phone, email, manufacturer, model, capacity, `payment` = the `payment:*`/`authentication:*` methods tagged yes, and `cards` = true/false when OSM says whether a bank card works at the charger) and a per-point `osm` with the kW/V/A of the matching OSM `socket:*` (same plug type, nearest power), **only where it differs from the NAP** — read off the charger's plate by the community, it is usually more right than the NAP's declaration (DC placeholders 750/600 V, impossible powers), so the model applies it: `kw`/`v`/`a`/`cable` are OSM's and the NAP's value goes to `napKw`/`napV`/`napA`/`napCable`, present only when replaced (`null` = the NAP declared none). An OSM number has to be plausible first (`osm_tags.sane_osm`: at most 1000 kW / 1500 V / 1500 A, and within ×20 kW or ×10 V/A of a plausible NAP value), or it is dropped. ohmigo made this call itself until the model did; it now reads the result. Per point, `issues` lists what the NAP-only rules of `nap_static_checks.py` found on it (`tensao_placeholder`, `trifasico_sem_3p`, `tensao_em_falta`, `tensao_impossivel`, errors.md item 8). Each point also has `evse`, the NAP `point_external_id` exactly as published (`PT*EDP*E*LSB*90050*01`), the id on the socket's sticker: the point `id` is only unique within its site, so this is what a link to one socket uses (VoltFrame). Not guaranteed unique (a few operators publish the same id on two sites) and never a join key: the NAP↔MOBI.E join rule in "Data gotchas" stands. Nothing from the PCVE tracker goes into the model: it is a third party's data with no reuse licence, and the model is public. Where OSM agrees with the NAP, the point lists those fields in `osmSame` (`["a", "v"]`), so ohmigo can tell a value confirmed on the charger from one only the operator declared (a DC socket's current decides the power a 400 V car gets). All joined from the Overpass dump in `data/umap_cache/todos.json` by `ref` = NAP `external_id` (any code form, so Continente's `0001PL0002` joins too; ≤1 km from the NAP point). A `MOBI-` prefix on the OSM `ref` is dropped only when the ref as written is not a NAP code (`osm_tags.nap_code`): 87 NAP sites really are `MOBI-XXX-00000`, 31 of them next to a `XXX-00000`, and stripping it always left them unmatched. An element whose `ref` is no NAP code (missing, a typo like `MLG-00022`, a bay number like `1A`) joins by its `ref:EU:EVSE` instead: each socket id (`PT*EDP*E*MGL*00022*1`, `evse_key`) names its NAP point and so its site (`osm_tags.evse_sites`; an id the NAP gives two sites is dropped). The `ref` wins when both are there. Elements mapped as `disused:`/`construction:` `amenity=charging_station` or `man_made=charge_point` (`osm_tags.lifecycle`) are the site's element for the link only, after any in-service one: their tags are not today's charger. When a site has only such elements, the `osm` block says so in `lifecycle` (`disused` | `construction`, from the element linked) and `sites.json` in `olc`. OSM decides the life cycle of a site the NAP still publishes: Procurar counts it as disused / under construction ("Estado do posto" filter, hidden by default) **unless the operator reports a socket `available` or `charging` now** (live status, or the week's when live is off): then it is in service and the detail says OSM is out of date. The Rede statistics are unchanged: they describe the NAP's publication. It's what lets ohmigo find "o posto do Lidl de Coimbra": OSM's `brand`/`operator` are often the owner, not the CPO (Lidl owns its chargers, Galp operates them: the NAP says Galp, OSM says Lidl). Additive and optional, so no `SCHEMA` bump; without the dump (osm_umap.py not run) sites just lack `osm`. ODbL: see `THIRD-PARTY-NOTICES.md`. The `osm` block also has `hardware`: every charger make + model mapped at the site, most common first (`["ABB Terra HP CP4", "Alpitronic HYC_400"]`; `manufacturer`/`model` are only the commonest). The site shows the same list (`hw` in `sites.json`, "Carregadores: …" in the detail) and its search finds a site by it. Both come from `scripts/osm_tags.py`, so the site and ohmigo never disagree about a charger. The `osm` block also has `element`, the OSM element the site is matched to (`"node/123"`, `"way/456"`: an element with only this `ref` before a shared `"A;B;C"`, then the whole site's `amenity=charging_station` before a `man_made=charge_point`, then the nearest); `sites.json` carries it as `osm_ref` (the planned sites already had one), and Procurar's "Ver no OSM" opens that element, falling back to a marker at the coordinates. An element > 1 km from the NAP point is a wrong `ref` on OSM, not a second charger, and is left out. Also from `osm_tags.py`, in both the `osm` block and `sites.json`:
+- `sharedKw` (`shared`): the total a charger declares (`charging_station:output`/`charge_point:output`) when it is below its sockets charging together. DC plugs of one multi-standard charger (CCS + CHAdeMO) don't add up, only the largest DC type × its count plus the AC sockets, so a 50 kW triple charger with a 50 kW CCS is not "shared".
+- `oldRefs` + `oldOperator` (`old`, `oldop`): OSM `old_ref`/`old_operator`, the sticker of a charger that changed operator. An old code that is another site's code now is dropped. Searchable on the site and in ohmigo.
+- `wheelchair` (`wc`): OSM `wheelchair` yes/limited/no; the site and ohmigo also read the NAP's DATEX II `accessibility` (`nap_etl.py` writes it to `nap_static_sites.csv`; `wheelChairAccessible`/`disabilityAccessible`/ `barrierFreeAccessible` = yes). The "Acessível em cadeira de rodas" filter keeps yes and limited; very few sites say anything, and the help text says that missing information is not "inaccessible".
+- `fixme`: the community's open questions on OSM, shown on the site as "Por confirmar no OpenStreetMap"; ohmigo keeps up to 3, cut at 160 characters, and tells the assistant to present them as things to check on site, never as facts.
+- `evse` in the `osm` block (dataset build only, never written; not the point's `evse` above): OSM `ref:EU:EVSE` per element, matched to the NAP `point_external_id` (`evse_key`), so a socket's OSM kW/V/A come from the element that is that socket; the plug + nearest power match over the whole site stays the fallback. Also per site, `places`: the shopping centres, hospitals, universities, airports, stadiums, supermarkets, car parks and hotels (named, from OSM) whose outline holds the site or lies a few metres from it, `{name, type, osm, m}` (`m` = metres to the edge, 0 = inside; up to 3, inside first). OSM doesn't say which place a charger is at, so `scripts/osm_places.py` works it out (point in polygon, stdlib only) from `data/umap_cache/places.json`, which it builds with `osmium` (pyosmium) from Geofabrik's Portugal extract: `refresh.yml` downloads `portugal-latest.osm.pbf` (~400 MB) and runs `python scripts/osm_places.py <pbf>` (~10 s) with `continue-on-error` before the dataset; without the cache sites just lack `places`. Overpass was tried first and timed out even on half-degree tiles. The radius outside the outline depends on the type (a hotel or car park only counts right beside it), and a place whose name repeats one already kept is dropped (two OSM objects for the same mall, "Centro Comercial Colombo - Estacionamento Piso -1"). It's what lets ohmigo find "os postos do Mar Shopping", which no charger is named. No status and no CEME prices: ohmigo reads status live from the NAP feed and gets energy prices from ceme-v2. `refresh.yml` builds it before the site (the site reads it) and uploads it, only after the pipeline guard, the parity check and `validate_site.py` pass, as the `ohmigo-dataset` Actions artifact (90-day retention; not committed: ~10 MB a week; not a release, because the repo's releases are immutable and an asset can't be replaced); `pages.yml` copies the newest one to `https://nap.ocarroeletrico.com/ohmigo/chargers.json`, accepting only artifacts from a `refresh.yml` or `ohmigo-daily.yml` run on `main` of this repo, triggered by `schedule` or `workflow_dispatch`, not already failed (fork PRs can upload an artifact with the same name). It exits non-zero (and the refresh fails) below 5 000 sites or 10 000 tariffed points. `SCHEMA` in the script bumps on incompatible format changes.
 
-Also per site, `models`: the charger models of `scripts/charger_models.py`,
-from the catalogue Alexandre Moleiro keeps in a Google Doc ("Modelos de
-Carregadores usados em Portugal": per model and version, total kW, max V,
-cable A, and the kW **each car** gets at 400 V and 800 V with 1, 2, 3… cars
-plugged in). It is the same file `hardware_checks.py` reads
-(`fetch_charger_models.sh` -> `data/charger_models.txt`): public and free to
-use, credited with its link (`charger_models.SOURCE_URL`) wherever its figures
-are shown; only its numbers are used, never its photos or operator logos
-(they are not the author's). `charger_models.load` refuses a catalogue of under
-50 models, so a document that changed format can't empty every site's
-`models`. A version starts at a `§.Marca.Modelo` line or, for the brands
-without one, at the name line right before its power line, under the latest
-brand header with flags ("Wallbox 🇪🇦"). The join to a site
-is the OSM `hardware` (`charger_models.match`: same name once normalised, or
-OSM more specific, "iFC160-350A"; a part of a set, "blueberry PLUS", matches
-every set it is in; `LABEL_ALIAS` for names OSM writes differently). Of the
-model's versions, only those whose amps and kW fit the site's sockets stay
-(`variants`, cars = `[n, kW at 400 V, kW at 800 V]`); none better than the
-others keeps them all. Each point gets `model` (index into `models`) when it
-can be told: the only DC model, else the one whose one-car kW is nearest; an
-AC socket, the only model with AC; a DC model no DC socket can be (they all
-declare more than it gives: OSM has an old charger) leaves the site. Top-level
-`modelsSource` carries the author and title for the credit. `python scripts/charger_models.py --labels
-data/ohmigo_chargers.json` lists the OSM names that match nothing.
-The site shows them in Procurar's detail (`mdl` in `sites.json`, `mi` per point).
+Also per site, `models`: the charger models of `scripts/charger_models.py`, from the catalogue Alexandre Moleiro keeps in a Google Doc ("Modelos de Carregadores usados em Portugal": per model and version, total kW, max V, cable A, and the kW **each car** gets at 400 V and 800 V with 1, 2, 3… cars plugged in). It is the same file `hardware_checks.py` reads (`fetch_charger_models.sh` -> `data/charger_models.txt`): public and free to use, credited with its link (`charger_models.SOURCE_URL`) wherever its figures are shown; only its numbers are used, never its photos or operator logos (they are not the author's). `charger_models.load` refuses a catalogue of under 50 models, so a document that changed format can't empty every site's `models`. A version starts at a `§.Marca.Modelo` line or, for the brands without one, at the name line right before its power line, under the latest brand header with flags ("Wallbox 🇪🇦"). The join to a site is the OSM `hardware` (`charger_models.match`: same name once normalised, or OSM more specific, "iFC160-350A"; a part of a set, "blueberry PLUS", matches every set it is in; `LABEL_ALIAS` for names OSM writes differently). Of the model's versions, only those whose amps and kW fit the site's sockets stay (`variants`, cars = `[n, kW at 400 V, kW at 800 V]`); none better than the others keeps them all. Each point gets `model` (index into `models`) when it can be told: the only DC model, else the one whose one-car kW is nearest; an AC socket, the only model with AC; a DC model no DC socket can be (they all declare more than it gives: OSM has an old charger) leaves the site. Top-level `modelsSource` carries the author and title for the credit. `python scripts/charger_models.py --labels data/ohmigo_chargers.json` lists the OSM names that match nothing. The site shows them in Procurar's detail (`mdl` in `sites.json`, `mi` per point).
 
-And `photos` (per site) and `models[].photo`: thumbnails from
-`scripts/charger_photos.py`. A site's own photos are, first, its main photo on
-olh'o'posto (`olhaoposto.ocarroeletrico.com/api/v1/main-photos`, moderated,
-CC BY-SA 4.0; ref `olhaoposto:<NAP site id>`, re-downloaded when its
-`publishedAt` changes, since the static URL stays the same; kept as they were
-when that API is down), then the OSM references
-(`osm_tags.photo_refs`: `panoramax=`, `mapillary=`, `wikimedia_commons=`,
-`image=` pointing at one of them; MapComplete's charging-station theme saves
-photos on Panoramax); a model's photo is a Commons file chosen by hand per
-catalogue key in `assets/charger_model_photos.json` (a photo of the same model,
-not of the site: everyone who shows it says so). The script downloads a 500 px
-thumbnail of each to `data/photos/<id>.jpg` with author, licence and source
-page in `data/photos.json` (cached between runs; Mapillary is a link only,
-its API needs a key). The thumbnails travel in the `ohmigo-dataset` artifact
-with the JSON, and `pages.yml` publishes them under `/photos/` (JPEG only,
-`<16 hex>.jpg`, < 400 kB): the site shows them from its own domain, so the
-CSP and the privacy page need no third party. Procurar links sites without a
-photo to olh'o'posto's upload page with the site picked (`/enviar?posto=`), so a driver can add one. `sites.json` `oop` is the NAP
-site id (`EZC-AMD-00051`): Procurar links every site to its olh'o'posto page,
-and an olh'o'posto photo to its place on the Panoramax map (`map`). `?posto=`
-(NAP code or site id) opens that site's detail; olh'o'posto links here with it.
+And `photos` (per site) and `models[].photo`: thumbnails from `scripts/charger_photos.py`. A site's own photos are, first, its main photo on olh'o'posto (`olhaoposto.ocarroeletrico.com/api/v1/main-photos`, moderated, CC BY-SA 4.0; ref `olhaoposto:<NAP site id>`, re-downloaded when its `publishedAt` changes, since the static URL stays the same; kept as they were when that API is down), then the OSM references (`osm_tags.photo_refs`: `panoramax=`, `mapillary=`, `wikimedia_commons=`, `image=` pointing at one of them; MapComplete's charging-station theme saves photos on Panoramax); a model's photo is a Commons file chosen by hand per catalogue key in `assets/charger_model_photos.json` (a photo of the same model, not of the site: everyone who shows it says so). The script downloads a 500 px thumbnail of each to `data/photos/<id>.jpg` with author, licence and source page in `data/photos.json` (cached between runs; Mapillary is a link only, its API needs a key). The thumbnails travel in the `ohmigo-dataset` artifact with the JSON, and `pages.yml` publishes them under `/photos/` (JPEG only, `<16 hex>.jpg`, < 400 kB): the site shows them from its own domain, so the CSP and the privacy page need no third party. Procurar links sites without a photo to olh'o'posto's upload page with the site picked (`/enviar?posto=`), so a driver can add one. `sites.json` `oop` is the NAP site id (`EZC-AMD-00051`): Procurar links every site to its olh'o'posto page, and an olh'o'posto photo to its place on the Panoramax map (`map`). `?posto=` (NAP code or site id) opens that site's detail; olh'o'posto links here with it.
 
 More per site and per socket for drivers, all additive (no `SCHEMA` bump):
-- `unit` (per DC point): which charger of the site the socket is on, from the
-  OSM posts (`man_made=charge_point` with the `ref:EU:EVSE` of several
-  sockets, `osm_tags` `units`), numbered in socket order, only when two or more
-  DC sockets of the site share it (an AC post's sockets have their own
-  circuits). With the live status, Procurar's detail says "a partilhar com …:
-  até ~X kW cada" (the model's two-car figure) and which charger to pick when
-  another is busy; ohmigo's `lookup_charger` returns `chargers` and
-  `pickCharger`. `points.json` carries it as `u`.
-- `underground` (`'osm'` | `'nap'`): an underground car park, from OSM
-  (`location=underground`, or `level`/`layer` below zero, `osm_tags.underground`)
-  or the NAP's `locationDescription` ("Parque Coberto - Piso -1"): often no
-  mobile signal, so open the app before driving in. `sites.json` `ug`.
-- `osm.checkDate`: the latest `check_date`/`survey:date` on OSM, when someone
-  checked the charger on site. `sites.json` `chk`.
-- `nearby`: cafés, restaurants, fast food, toilets, shops and fuel stations
-  within 150 m, per type `{type, n, m, name}` (`osm_places.nearby_for`, from
-  `data/umap_cache/amenities.json`, which `osm_places.py <pbf>` writes from the
-  same Geofabrik extract as `places`). `sites.json` `nb`.
-- `history`: the site in the AmpereArchive, `archive_stats.site_stats` (same
-  spans as the per-operator stats), written by `archive_history.py` to
-  `data/site_history.json`: `down`, the % of the observed time its sockets were
-  `outOfOrder`/`inoperative`, and `busy.wd`/`busy.we`, the % of the time they
-  were charging per local hour on weekdays and weekends (`null` for an hour
-  with under 2 days of data); `days` behind it, and nothing under 7 days.
-  Top-level `historySource` has the window. `refresh.yml` computes it and keeps
-  it in `actions/cache`, so `ohmigo-daily.yml` (which does not read the
-  archive) restores the weekly one. `sites.json` carries `hd`/`hn` and `hb`,
-  48 characters (weekdays then weekends, the tenth of the %, `.` = no data).
-  Procurar shows `hd`/`hn` ("Avarias") but no longer draws `hb`: the usage
-  charts come from the AmpereArchive's per-site files (`uso.js`, "Site specifics").
-Rede > Operadores has "Que carregadores usa cada operador" (`stats.json`
-`op_models`): the models joined at each operator's sites, top 20 operators.
+- `unit` (per DC point): which charger of the site the socket is on, from the OSM posts (`man_made=charge_point` with the `ref:EU:EVSE` of several sockets, `osm_tags` `units`), numbered in socket order, only when two or more DC sockets of the site share it (an AC post's sockets have their own circuits). With the live status, Procurar's detail says "a partilhar com …: até ~X kW cada" (the model's two-car figure) and which charger to pick when another is busy; ohmigo's `lookup_charger` returns `chargers` and `pickCharger`. `points.json` carries it as `u`.
+- `underground` (`'osm'` | `'nap'`): an underground car park, from OSM (`location=underground`, or `level`/`layer` below zero, `osm_tags.underground`) or the NAP's `locationDescription` ("Parque Coberto - Piso -1"): often no mobile signal, so open the app before driving in. `sites.json` `ug`.
+- `osm.checkDate`: the latest `check_date`/`survey:date` on OSM, when someone checked the charger on site. `sites.json` `chk`.
+- `nearby`: cafés, restaurants, fast food, toilets, shops and fuel stations within 150 m, per type `{type, n, m, name}` (`osm_places.nearby_for`, from `data/umap_cache/amenities.json`, which `osm_places.py <pbf>` writes from the same Geofabrik extract as `places`). `sites.json` `nb`.
+- `history`: the site in the AmpereArchive, `archive_stats.site_stats` (same spans as the per-operator stats), written by `archive_history.py` to `data/site_history.json`: `down`, the % of the observed time its sockets were `outOfOrder`/`inoperative`, and `busy.wd`/`busy.we`, the % of the time they were charging per local hour on weekdays and weekends (`null` for an hour with under 2 days of data); `days` behind it, and nothing under 7 days. Top-level `historySource` has the window. `refresh.yml` computes it and keeps it in `actions/cache`, so `ohmigo-daily.yml` (which does not read the archive) restores the weekly one. `sites.json` carries `hd`/`hn` and `hb`, 48 characters (weekdays then weekends, the tenth of the %, `.` = no data). Procurar shows `hd`/`hn` ("Avarias") but no longer draws `hb`: the usage charts come from the AmpereArchive's per-site files (`uso.js`, "Site specifics"). Rede > Operadores has "Que carregadores usa cada operador" (`stats.json` `op_models`): the models joined at each operator's sites, top 20 operators.
 
-A daily refresh (`ohmigo-daily.yml`, cron `49 2,14 * * *`) re-runs only the ohmigo
-pipeline (NAP ETL + OSM dump + places + dataset) and publishes a new
-`ohmigo-dataset` artifact (30-day retention), then triggers a Pages deploy, so
-the MCP sees fresher OSM/NAP data between weekly refreshes. It does not build
-the site or commit to `main`.
+A daily refresh (`ohmigo-daily.yml`, cron `49 2,14 * * *`) re-runs only the ohmigo pipeline (NAP ETL + OSM dump + places + dataset) and publishes a new `ohmigo-dataset` artifact (30-day retention), then triggers a Pages deploy, so the MCP sees fresher OSM/NAP data between weekly refreshes. It does not build the site or commit to `main`.
 
 ## Housekeeping: save ad-hoc analysis scripts
-When an interactive query ends up producing new analysis code (point-in-polygon,
-cross-checks, one-off joins), save it as a script in `scripts/` (or append it to
-the relevant pipeline script) instead of leaving it in the terminal or /tmp —
-future re-runs should not regenerate all that code from scratch. If it's a
-throwaway one-liner, at least note it in AGENTS.md so it can be rebuilt.
+When an interactive query ends up producing new analysis code (point-in-polygon, cross-checks, one-off joins), save it as a script in `scripts/` (or append it to the relevant pipeline script) instead of leaving it in the terminal or /tmp — future re-runs should not regenerate all that code from scratch. If it's a throwaway one-liner, at least note it in AGENTS.md so it can be rebuilt.
 
 ## Build command
 ```bash
@@ -583,396 +119,88 @@ venv/bin/python scripts/validate_site.py
 python3 scripts/build_site.py                # pages only, from the committed site/data
 python3 -m http.server --directory site      # local preview
 ```
-After editing `assets/site/*` or `scripts/build_dashboard.py`/`build_site.py`,
-**always rebuild `site/`** (the deliverable) and re-validate. `file://` does not
-work: the pages fetch their JSON, so preview over HTTP. `refresh.yml` runs
-`validate_site.py` before the commit.
+After editing `assets/site/*` or `scripts/build_dashboard.py`/`build_site.py`, **always rebuild `site/`** (the deliverable) and re-validate. `file://` does not work: the pages fetch their JSON, so preview over HTTP. `refresh.yml` runs `validate_site.py` before the commit.
 
 ## Data gotchas (verified)
-- Join NAP↔MOBI.E by `site_external_id` + last segment of `point_id` (tomada,
-  int-normalized). Do NOT join on `point_external_id`: format
-  `PT*op*[E]*reg*num*tom` is unreliable (glued `E` prefix, variable segment count).
+- Join NAP↔MOBI.E by `site_external_id` + last segment of `point_id` (tomada, int-normalized). Do NOT join on `point_external_id`: format `PT*op*[E]*reg*num*tom` is unreliable (glued `E` prefix, variable segment count).
 - `brands_accepted` (NAP) = global CEME list per point, NOT an operator discriminator.
 - `facilityLocation` is in the `locationReferencing` namespace, not `locationExtension`.
 - NUTS in NAP is level-1 only.
-- Point ids are only unique **within a site**: some OPCs (Iberdrola | bp pulse,
-  `HGP-*`, `ACC-*`) publish bare ids (`19`, `160`, `332`) that repeat on other
-  sites. Key every point by
-  `(site_id, point_id)`; the dynamic CSVs carry `site_id` (first `<reference>` of
-  each `energyInfrastructureSiteStatus`). Keyed that way, static and dynamic match
-  1:1 and no point has two statuses. A point that seems to appear 2–3× with
-  conflicting states is this collision, not a feed error.
-- 33% of connector rows (6 948/21 056) have declared power inconsistent with
-  V×I (>25% off); 2 686 declare power above physical capacity (impossible, e.g.
-  1200 V × 600 A = 720 kW declared as 200 kW).
-- NAP `operator_id` is not a reliable OPC key: 21 ids carry more than one
-  `operator_name` (3448 sites; ATLA alone has 7 spellings over 598 sites) and 3
-  operators publish under the PartyCode instead of the PartyId (`BBGE`, `CIRC`,
-  `CONT`). `CONT` is the Continente case — 450 sites under the acquirer's name
-  ("Modelo Continente Hipermercados, S.A.") while the CPO is `CNT`
-  "Continente Plug & Charge". Use the tracker's PartyId (see
-  `scripts/tracker_checks.py`), and note that some operators publish sites
-  without their own prefix (`CNT-0002PL0012` → `0002PL0012`), so asset matching
-  needs both forms.
-- NAP `min_fee = 0` is not an anomaly (46% of pricing rows); `min_fee` currently
-  ranges 0–3,0 with no absurd values since the `97,561 €/min` class was fixed.
-- Every NAP price (`min_fee`, `pricePerDeliveryUnit`, also outside MOBI.E) comes
-  **without VAT** (confirmed with the NAP). So do MOBI.E's tariff file values,
-  `AD_HOC_PAYMENT` included (its 0,51 €/kWh at IONITY × 1,23 = IONITY's own 0,63).
-  VAT depends on the site's region (lower on Madeira and the Azores); ohmigo adds it.
-- 808 MOBI.Data EVSE ids are bare numbers (FCT, ACC, HGP, VIA). The
-  `UID_TOMADA` in `data/mobie_tarifas.csv` is synthetic (`<ID>-<socket>-1`)
-  except for those, which keep the bare id so ohmigo's per-site fallback still
-  sees them.
-- MOBI.Data's per-socket `kw` is the station maximum repeated on every socket,
-  so there is no NAP↔MOBI.E power comparison (errors.md item 2 says
-  "sem dados").
-- OSM: charging sites are tagged two ways — `amenity=charging_station` (node **or**
-  way; the way form is the whole site) and `man_made=charge_point` (node only,
-  usually one per post/pole). **A site's `ref` can appear under either tag, and
-  zero elements carry both tags**, so filter by *either*. In the author's Overpass
-  dump: 6 579 `charging_station` (4 720 nodes + 1 859 ways) vs 5 102
-  `charge_point` (all nodes, ~4 135 with a MOBI.E-pattern `ref`). The
-  `charge_point` nodes usually carry explicit `payment:*`/`authentication:*` tags
-  that the `charging_station` elements lack — matching by `charging_station` alone
-  hides ~90 ad-hoc payment divergences. `scripts/osm_umap.py` dedups per NAP code
-  preferring the row with the most payment/auth tags (tie-break: nearest).
+- Point ids are only unique **within a site**: some OPCs (Iberdrola | bp pulse, `HGP-*`, `ACC-*`) publish bare ids (`19`, `160`, `332`) that repeat on other sites. Key every point by `(site_id, point_id)`; the dynamic CSVs carry `site_id` (first `<reference>` of each `energyInfrastructureSiteStatus`). Keyed that way, static and dynamic match 1:1 and no point has two statuses. A point that seems to appear 2–3× with conflicting states is this collision, not a feed error.
+- 33% of connector rows (6 948/21 056) have declared power inconsistent with V×I (>25% off); 2 686 declare power above physical capacity (impossible, e.g. 1200 V × 600 A = 720 kW declared as 200 kW).
+- NAP `operator_id` is not a reliable OPC key: 21 ids carry more than one `operator_name` (3448 sites; ATLA alone has 7 spellings over 598 sites) and 3 operators publish under the PartyCode instead of the PartyId (`BBGE`, `CIRC`, `CONT`). `CONT` is the Continente case — 450 sites under the acquirer's name ("Modelo Continente Hipermercados, S.A.") while the CPO is `CNT` "Continente Plug & Charge". Use the tracker's PartyId (see `scripts/tracker_checks.py`), and note that some operators publish sites without their own prefix (`CNT-0002PL0012` → `0002PL0012`), so asset matching needs both forms.
+- NAP `min_fee = 0` is not an anomaly (46% of pricing rows); `min_fee` currently ranges 0–3,0 with no absurd values since the `97,561 €/min` class was fixed.
+- Every NAP price (`min_fee`, `pricePerDeliveryUnit`, also outside MOBI.E) comes **without VAT** (confirmed with the NAP). So do MOBI.E's tariff file values, `AD_HOC_PAYMENT` included (its 0,51 €/kWh at IONITY × 1,23 = IONITY's own 0,63). VAT depends on the site's region (lower on Madeira and the Azores); ohmigo adds it.
+- 808 MOBI.Data EVSE ids are bare numbers (FCT, ACC, HGP, VIA). The `UID_TOMADA` in `data/mobie_tarifas.csv` is synthetic (`<ID>-<socket>-1`) except for those, which keep the bare id so ohmigo's per-site fallback still sees them.
+- MOBI.Data's per-socket `kw` is the station maximum repeated on every socket, so there is no NAP↔MOBI.E power comparison (errors.md item 2 says "sem dados").
+- OSM: charging sites are tagged two ways — `amenity=charging_station` (node **or** way; the way form is the whole site) and `man_made=charge_point` (node only, usually one per post/pole). **A site's `ref` can appear under either tag, and zero elements carry both tags**, so filter by *either*. In the author's Overpass dump: 6 579 `charging_station` (4 720 nodes + 1 859 ways) vs 5 102 `charge_point` (all nodes, ~4 135 with a MOBI.E-pattern `ref`). The `charge_point` nodes usually carry explicit `payment:*`/`authentication:*` tags that the `charging_station` elements lack — matching by `charging_station` alone hides ~90 ad-hoc payment divergences. `scripts/osm_umap.py` dedups per NAP code preferring the row with the most payment/auth tags (tie-break: nearest).
 
 ## Site specifics
-- Four pages, pure CSS/JS, no external libs except the on-demand "Mapa detalhado" below (the fourth, `explorar.html`, is described below): `index.html` "Procurar" (drivers:
-  search by town/operator/code, "Perto de mim", quick filters, a card per site
-  with one status mark per socket, detail with sockets, operator fees, payment
-  and directions links to Google Maps/OpenStreetMap, canvas map),
-  `rede.html` "Rede" (community statistics: KPIs, news, bar charts as real
-  tables, history, hubs, facts) and `operadores.html` "Operadores" (OPCs: weekly
-  anomaly report per operator parsed from `Agents-outputs/anomalias-results.md`
-  by `build_site.parse_opc_report`, OPC churn, reportable errors).
-- `grupo.html` "O grupo" (`grupo.css`, `grupo.js`, mascots in `assets/site/grupo/*.svg`),
-  linked from the footer: the group's sites in order (O Carro Elétrico, ohmigo, Voltaria,
-  Comparador CEME, Postos PT, AmpereArchive), one mascot and one speech bubble each. Static
-  text in both languages (`data-lang`); `grupo.js` only wires up the header. Every site of
-  the group has this page in its own style, from the prototype in `CarregaErvilhas/OCarroEletrico`
-  (`scripts/oce.py` `GRUPO`, `site/strings.json` `grupo.*`): keep the descriptions in step
-  with it. The mascots are each site's brand, outside this repo's licences. A file added
-  to `site/` also goes into `SITE_FILES` in `refresh.yml` (validate_site.py checks it).
-- `explorar.html` "Explorar" (`explorar.js`, `explorar.css`): cross-filters over
-  `points.json`. Each list (operator, municipality, power, plug, region, price
-  regime, payment) and the status strip is a chart and a filter; a list ignores
-  its own filter (so it can be widened) and the rest of the page follows the
-  whole selection: KPIs, map (`sites.json` + `outline.json`, framed on the
-  selection), largest sites, fee histogram. "Medir por" switches every list
-  between sockets, sites, MW, occupancy, out of service and mean fee; ratio
-  metrics grey out groups under 10 sockets. Filters live in the URL hash
-  (`#m=occ&city=Lisboa&pw=…`), so a view can be shared. Live status as on the
-  other pages, re-read every 5 minutes while the page is visible. The "Ao longo
-  do tempo" section reads `site/data/history.json`
-  (`scripts/explore_history.py`, DuckDB over `data/archive_cache`, after
-  `archive_history.py`): a daily cube (operator × power class × region, from
-  `snapshots`, backfill included: one reading a day, so only size and out of
-  service) and an hourly cube of the last 14 days of live collection (operator
-  × power class, 4 samples an hour, gaps skipped) for occupancy by hour and by
-  weekday × hour, plus `hourly.back`: one sample per backfill status read
-  (4 to 5 a day, the whole network at the NAP's publication instant), which
-  only feeds the weekday × hour profile so it has no empty hours while the
-  live collector is young. Hours still without data are hatched and labelled
-  "sem dados", never shown as 0 %. They follow only the operator, power and region filters, and
-  the page says so. `build_site.write_history` copies
-  `data/explore_history.json` when the run produced it, keeps the committed
-  file otherwise, and writes an empty one (section hidden) when there is none.
-  Charts are SVG built with `createElementNS`, each with a table view.
-- "Ao longo dos anos" on the same page reads `site/data/years.json`, the monthly
-  aggregate of the **whole** AmpereArchive (December 2021 on) written by
-  `scripts/explore_years.py`. The file is its own state: each run adds the
-  finished UTC days it lacks and rewrites it, so `refresh.yml` only needs its
-  28-day cache, and `build_site.py` never touches it. First build or rebuild,
-  by hand: `explore_years.py --download data/archive_full` (~5 700 files,
-  260 MB, gitignored) then `--root data/archive_full --rebuild` (~90 s).
-  - `size`: month-end snapshot per operator × power class × region (sockets,
-    kW, and the per-kWh / per-minute price **published in the NAP**). The
-    snapshot day is the last one within 3 % of the month's median, because the
-    NAP loses whole operators for days and the source switch has five days of
-    doubled sockets.
-  - `occ`: occupancy and out of service per operator × power class. Every
-    archive read is the whole network at one instant; at most one per quarter
-    of an hour is kept, reads are averaged per (day, hour) cell and the cells
-    are summed, so a month read every 15 minutes and one read 5 times a day
-    are on the same scale. A month needs 120 cells (`needs_cells`) to be drawn.
-  - `meta`: days, cells, reads and `res_min` (median minutes between reads)
-    per month. `NEEDS_RES_MIN` lists what each statistic needs
-    (`repair_time` 15, `sessions` 5) and `ready` counts the months that
-    qualify: a new statistic that needs precision checks `res_min` and gets
-    every month of live collection for free. Add it as new keys in the cubes
-    (additive sums), bump nothing: missing keys read as 0.
-  - Attributes are the latest known, not as-of: a site that changed operator
-    counts for the current one in every month. Before 2025 the source (OCPI)
-    had statuses only, so sockets gone by 2025 have operator and power -1 and
-    only show with no filter on.
-  - **The NAP price is not an operator-fee history.** Against the network
-    model, on 4 908 of 8 774 MOBI.E sockets the NAP's per-kWh value differs
-    from the OPC fee: it is the ad hoc price, energy included (0,55 where the
-    fee is 0,13), and in 2026 several operators switched from one to the other
-    (Galp: median 0 → 0,60). The page says so. `fold_model` therefore also
-    stores the model's per-kWh price for the month of each refresh, one pair
-    of keys per kind of price (`MODEL_KEYS`: `mn`/`ms` operator fee, `an`/`as`
-    ad hoc, `dn`/`ds` outside MOBI.E, `fn`/`fs` NAP only). Those clean series
-    start in November 2026 and each chart appears once it has two months.
-- Rede > Concelhos (`rede.js` `fastCard`/`growthCard`, from `stats.json` `territory`,
-  built by `scripts/territory_stats.py`): the concelho is CAOP's (coordinates in the
-  official polygons), never the NAP's free-text `city` of the "15 concelhos" chart.
-  Concelhos with no socket of 50 kW or more (NAP-declared power, working or not), and
-  sites and sockets per concelho a year ago vs now (`sites_at` above; sockets first;
-  hidden without the archive).
-  Measured 2026-11-17: all 308 concelhos have a site, 54 have no 50 kW socket.
-- Rede > Operadores, "Pagar com cartão bancário" (`cardPayCard`, `stats.json`
-  `card_pay`): at sites with a socket of 50 kW or more, the NAP's `auth_methods`
-  (`creditCard`/`debitCard` only: `nfc`/`pinpad` are undocumented in DATEX II) and
-  OSM's `payment:cards`, side by side and never merged (they disagree on ~400 sites).
-  AFIR Art. 5 needs the installation date and the TEN-T location, which the NAP lacks,
-  so the page says it is not a compliance measure.
-- **Kinds of price.** A socket has up to two of four prices, and they are never
-  averaged or compared with each other, on any page: `opc` (operator fee on
-  MOBI.E, `fees.REGULAR`, **without** energy), `adhoc` (no-contract price on
-  MOBI.E, `fees.AD_HOC_PAYMENT`, **with** energy; 3 710 sockets also have a
-  per-minute or flat part), `direct` (outside MOBI.E, `nap`, with energy) and
-  `napfee` (regime `mobie_sem_tarifa`: what the NAP publishes, `nap_fees`
-  `{kwh, min, flat}`, from the model's `napFees`; nobody says whether it
-  includes energy, so the pages say exactly that). The rule lives in
-  `scripts/price_kinds.py` (stats, `explore_years.fold_model`) and in
-  `NAP.prices` / `NAP.priceText` (`common.js`: Procurar's "Sem contrato"
-  column and notes, Explorar's three price metrics and the histogram's kind
-  picker, Rede's "Preço por kWh, por tipo" table from `price_stats.kinds`);
-  `NAP.sessionCost` (`common.js`) prices one session at one kind (flat +
-  €/kWh + every €/min tier over the minutes at a constant kW), for Rede's
-  "Quanto custa uma sessão de 20 kWh, por escalão" table (`rede.js`, from
-  `points.json`: NAP power classes split AC/DC by plug, the socket's NAP
-  power caps the car's, medians count €0; `opc` and `adhoc` only, since
-  `direct` is per kWh and `napfee` is of unknown content). It is front-end
-  only, so `validate_site.py` checks it against hand-computed `SESSION_CASES`.
-  `validate_site.py` runs `price_kinds.kinds` and `NAP.prices` over the same
-  cases and fails if they differ.
-  Verified on 2026-11-11: where MOBI.E publishes an ad hoc plan the NAP's
-  per-kWh value is always that plan's (7 083 of 7 083 sockets), otherwise it
-  is the REGULAR fee (3 866 of 3 866). So the NAP only adds information where
-  MOBI.E has no tariff, and a NAP value is never "the operator fee" of a
-  socket that has one.
-- Sources in `assets/site/`; output in `site/` (committed, what `pages.yml`
-  serves). Data in `site/data/{stats,panels,sites,points,outline,opc}.json`,
-  fetched same-origin (`credentials: 'omit'`) and split by `scripts/site_data.py`
-  so each page loads only what it uses; a key added to `data` that is not
-  listed there lands in `stats.json`, never dropped.
-- **Must** sanitize NaN/Inf floats to null before the dump (`clean()` in
-  `build_dashboard.py`): bare `NaN` breaks `JSON.parse`.
-- Data is no longer embedded in a `<script>`, so it needs no `<`/`>`/`&`
-  escaping. The rule now: the front end inserts third-party text (OSM names,
-  operator names, community notes, report fragments) **only as text nodes**,
-  through the `el()`/`md()` helpers in `common.js`, never `innerHTML` or
-  similar. `validate_site.py` enforces it. The pre-rendered panels
-  (facts/errs/anom/hubs/churn/news/hist) are baked into the HTML at build time
-  (`<!--PANEL:name-->`) from build-escaped HTML, both languages in `data-lang`
-  blocks.
-- CSP (`<meta>`, in `_head.html`; Pages can't set headers): `default-src 'none';
-  script-src 'self'` (no inline scripts); `style-src 'self' 'unsafe-inline'`
-  only because the history heat map uses inline background styles;
-  `connect-src 'self'` plus the AmpereArchive origin, its sites bucket (`ohm-age-sites.ocarroeletrico.com`) and `maptiles.ocarroeletrico.com`;
-  `worker-src 'self'` (MapLibre's worker module); `font-src 'self'`;
-  `img-src 'self' data:`. Nunito is served from `fonts/`, no font CDN.
-- Bilingual PT/EN: `boot.js` picks the language before paint (`?lang=pt|en`,
-  then `localStorage` `nap-lang`, then the browser; PT for `pt*`). Strings live
-  in the `STR` tables of `common.js` plus `N.addStrings` per page
-  (`data-i18n`/`data-i18n-ph`/`data-i18n-title` attrs); data enums are
-  display-mapped at render time, so the data keeps stable PT/code values.
-  `data` carries EN mirrors (`kpis_pt` is the PT one; `kpis` stays EN;
-  `facts/errs/anom/hubs/churn_html_en`) generated via
-  `scripts/dashboard_i18n.py` (phrase MAP + PT→EN number conversion). New fixed
-  PT strings in FACTS/ERRS/ANOM/HUBS/CHURN_HTML/NEWS_HTML **must** get a MAP
-  entry or they render in PT for EN users.
-- If a page shows nothing below the KPIs, suspect a JS runtime error (an element
-  id that doesn't exist, a variable out of scope); check the browser console and
-  `validate_site.py`.
-- Map: a canvas drawn from `sites.json` (per-site lon/lat) + `outline.json` (PT
-  polygons). Regions are `mainland`/`madeira`/`acores`; site `region` values are
-  `azores` (with a `z`), so the map re-maps `azores`→`acores`.
-- "Mapa detalhado" (Procurar's map tools and each site's detail): the streets,
-  only on demand. `find.js` imports `mapa.mjs`, which loads MapLibre GL JS,
-  pmtiles and the Protomaps style generator from `site/vendor/` (as published
-  on npm; `validate_site.VENDOR` pins each sha256 and exempts only those bytes
-  from the sink rule) and the basemap from `https://maptiles.ocarroeletrico.com`
-  (R2 `basemap`): `current.json` names the dated `portugal-AAAAMMDD.pmtiles`,
-  plus `fonts/` (Noto Sans glyph ranges) and `sprites/v4/` (light, dark). The
-  MapLibre map takes the canvas's place and drives the same `view`, so the
-  list follows it; region and +/− buttons and the site's detail move it; the
-  sites are the canvas's own `mark()` shapes as icons. Light and dark styles
-  only: the colour-blind and high-contrast modes keep the light streets, and
-  the sites keep the mode's colours. `basemap-tiles.yml` (monthly) re-cuts
-  Portugal to z14 (~330 MB, under the CDN's 512 MB cacheable size; z15 would
-  be ~690 MB) and uploads it over R2's S3 API, because `cf`/wrangler uploads
-  stop at 300 MB. Its secrets: `R2_ACCESS_KEY_ID`/`R2_SECRET_ACCESS_KEY` (an R2
-  token for that bucket only) and the variable `R2_ACCOUNT_ID`. Cloudflare
-  resources are managed with the `cf` CLI. How they are set:
-  - R2 `basemap`: location hint WEUR, no jurisdiction (public OSM data);
-    public only through the custom domain `maptiles.ocarroeletrico.com`,
-    minimum TLS 1.3 (as `pictures.*`: Android 9 and older can't open the
-    detailed map and get the fallback message).
-  - CORS on the bucket: GET/HEAD from any origin, request headers `range`
-    and `if-match`, exposed `ETag`, `Content-Range`, `Content-Length`
-    (pmtiles.js reads the ETag), max age 1 day.
-  - Cache Rule `maptiles: …` (zone phase `http_request_cache_settings`):
-    every path but `/current.json` is cacheable, 30 days at the edge and 1 day
-    in the browser whatever the object says (`cf r2 objects put` can't set
-    `Cache-Control`), 4xx never stored, query strings out of the cache key.
-    `current.json` is never cached, so a new month shows up at once.
-  - Glyphs: only the ranges Portugal's map asks for (Latin, Latin extended,
-    punctuation, plus Arabic, Tifinagh and variation selectors for Morocco's
-    names at low zoom). A missing range is a 404 and a console warning, never
-    a broken map; add it with `cf r2 objects put`.
-- "Uso ao longo do tempo" in Procurar's site detail (`uso.js`): stacked bars of
-  the time each socket spent charging / available / out of order / unknown over
-  24 h, 7 days, 30 days and every month the archive has, one lane per socket
-  (per plug and power above 8 sockets; a single socket can be picked), and a
-  weekday x hour occupancy map below. Data: `data/sites/<xx>.json.gz`, 256
-  files published with the site (see "Histórico por posto" above), fetched
-  when a detail opens and keyed by the NAP site id (`sites.json` `oop`, or the
-  id `applyLive` matched, `p.nap_site`). No file: the section hides; a site the
-  file lacks: one line saying so. `uso.js` `shardOf` must hash like
-  `site_history.shard_of`: `validate_site.py` runs both on the same ids.
-  Months with under 2 reads per hour (the replayed history) are drawn lighter
-  and called a sample; an hour with no read is hatched, never 0 %. Every
-  bucket is `[cells, charging, available, down]` in hundredths of a cell, so
-  sockets add up.
-- Search and filters on `index.html` run on `sites.json`; point-level data
-  (`points.json`) loads after, for the detail view and the live status. Both
-  take power, fees and the DC voltage filter from the network model, so the
-  detail shows every €/min tier ("0; 0,18 após 30 min"), OSM's power with the
-  NAP's beside it ("22 (NAP: 11)") and the NAP-only issues per socket.
-  `find.js` still renders the pre-model `points.json` (`ENERGY`/`TIME`/`FLAT`
-  strings; `site_data.POINT_SHAPES` accepts both) until the first refresh
-  rewrites it; drop that branch after. The
-  payment filter uses `x.pay` (list of OSM payment methods: App/Cartão/Cartão de
-  membro/Sem autenticação/Dinheiro) joined per-site onto every point row.
-- "Perto de mim": the browser asks for the location only when the button is
-  pressed; the coordinates are used on the device to sort and centre the map,
-  never sent or stored.
+- Four pages, pure CSS/JS, no external libs except the on-demand "Mapa detalhado" below (the fourth, `explorar.html`, is described below): `index.html` "Procurar" (drivers: search by town/operator/code, "Perto de mim", quick filters, a card per site with one status mark per socket, detail with sockets, operator fees, payment and directions links to Google Maps/OpenStreetMap, canvas map), `rede.html` "Rede" (community statistics: KPIs, news, bar charts as real tables, history, hubs, facts) and `operadores.html` "Operadores" (OPCs: weekly anomaly report per operator parsed from `Agents-outputs/anomalias-results.md` by `build_site.parse_opc_report`, OPC churn, reportable errors).
+- `grupo.html` "O grupo" (`grupo.css`, `grupo.js`, mascots in `assets/site/grupo/*.svg`), linked from the footer: the group's sites in order (O Carro Elétrico, ohmigo, Voltaria, Comparador CEME, Postos PT, AmpereArchive), one mascot and one speech bubble each. Static text in both languages (`data-lang`); `grupo.js` only wires up the header. Every site of the group has this page in its own style, from the prototype in `CarregaErvilhas/OCarroEletrico` (`scripts/oce.py` `GRUPO`, `site/strings.json` `grupo.*`): keep the descriptions in step with it. The mascots are each site's brand, outside this repo's licences. A file added to `site/` also goes into `SITE_FILES` in `refresh.yml` (validate_site.py checks it).
+- `explorar.html` "Explorar" (`explorar.js`, `explorar.css`): cross-filters over `points.json`. Each list (operator, municipality, power, plug, region, price regime, payment) and the status strip is a chart and a filter; a list ignores its own filter (so it can be widened) and the rest of the page follows the whole selection: KPIs, map (`sites.json` + `outline.json`, framed on the selection), largest sites, fee histogram. "Medir por" switches every list between sockets, sites, MW, occupancy, out of service and mean fee; ratio metrics grey out groups under 10 sockets. Filters live in the URL hash (`#m=occ&city=Lisboa&pw=…`), so a view can be shared. Live status as on the other pages, re-read every 5 minutes while the page is visible. The "Ao longo do tempo" section reads `site/data/history.json` (`scripts/explore_history.py`, DuckDB over `data/archive_cache`, after `archive_history.py`): a daily cube (operator × power class × region, from `snapshots`, backfill included: one reading a day, so only size and out of service) and an hourly cube of the last 14 days of live collection (operator × power class, 4 samples an hour, gaps skipped) for occupancy by hour and by weekday × hour, plus `hourly.back`: one sample per backfill status read (4 to 5 a day, the whole network at the NAP's publication instant), which only feeds the weekday × hour profile so it has no empty hours while the live collector is young. Hours still without data are hatched and labelled "sem dados", never shown as 0 %. They follow only the operator, power and region filters, and the page says so. `build_site.write_history` copies `data/explore_history.json` when the run produced it, keeps the committed file otherwise, and writes an empty one (section hidden) when there is none. Charts are SVG built with `createElementNS`, each with a table view.
+- "Ao longo dos anos" on the same page reads `site/data/years.json`, the monthly aggregate of the **whole** AmpereArchive (December 2021 on) written by `scripts/explore_years.py`. The file is its own state: each run adds the finished UTC days it lacks and rewrites it, so `refresh.yml` only needs its 28-day cache, and `build_site.py` never touches it. First build or rebuild, by hand: `explore_years.py --download data/archive_full` (~5 700 files, 260 MB, gitignored) then `--root data/archive_full --rebuild` (~90 s).
+- `size`: month-end snapshot per operator × power class × region (sockets, kW, and the per-kWh / per-minute price **published in the NAP**). The snapshot day is the last one within 3 % of the month's median, because the NAP loses whole operators for days and the source switch has five days of doubled sockets.
+- `occ`: occupancy and out of service per operator × power class. Every archive read is the whole network at one instant; at most one per quarter of an hour is kept, reads are averaged per (day, hour) cell and the cells are summed, so a month read every 15 minutes and one read 5 times a day are on the same scale. A month needs 120 cells (`needs_cells`) to be drawn.
+- `meta`: days, cells, reads and `res_min` (median minutes between reads) per month. `NEEDS_RES_MIN` lists what each statistic needs (`repair_time` 15, `sessions` 5) and `ready` counts the months that qualify: a new statistic that needs precision checks `res_min` and gets every month of live collection for free. Add it as new keys in the cubes (additive sums), bump nothing: missing keys read as 0.
+- Attributes are the latest known, not as-of: a site that changed operator counts for the current one in every month. Before 2025 the source (OCPI) had statuses only, so sockets gone by 2025 have operator and power -1 and only show with no filter on.
+- **The NAP price is not an operator-fee history.** Against the network model, on 4 908 of 8 774 MOBI.E sockets the NAP's per-kWh value differs from the OPC fee: it is the ad hoc price, energy included (0,55 where the fee is 0,13), and in 2026 several operators switched from one to the other (Galp: median 0 → 0,60). The page says so. `fold_model` therefore also stores the model's per-kWh price for the month of each refresh, one pair of keys per kind of price (`MODEL_KEYS`: `mn`/`ms` operator fee, `an`/`as` ad hoc, `dn`/`ds` outside MOBI.E, `fn`/`fs` NAP only). Those clean series start in November 2026 and each chart appears once it has two months.
+- Rede > Concelhos (`rede.js` `fastCard`/`growthCard`, from `stats.json` `territory`, built by `scripts/territory_stats.py`): the concelho is CAOP's (coordinates in the official polygons), never the NAP's free-text `city` of the "15 concelhos" chart. Concelhos with no socket of 50 kW or more (NAP-declared power, working or not), and sites and sockets per concelho a year ago vs now (`sites_at` above; sockets first; hidden without the archive). Measured 2026-11-17: all 308 concelhos have a site, 54 have no 50 kW socket.
+- Rede > Operadores, "Pagar com cartão bancário" (`cardPayCard`, `stats.json` `card_pay`): at sites with a socket of 50 kW or more, the NAP's `auth_methods` (`creditCard`/`debitCard` only: `nfc`/`pinpad` are undocumented in DATEX II) and OSM's `payment:cards`, side by side and never merged (they disagree on ~400 sites). AFIR Art. 5 needs the installation date and the TEN-T location, which the NAP lacks, so the page says it is not a compliance measure.
+- **Kinds of price.** A socket has up to two of four prices, and they are never averaged or compared with each other, on any page: `opc` (operator fee on MOBI.E, `fees.REGULAR`, **without** energy), `adhoc` (no-contract price on MOBI.E, `fees.AD_HOC_PAYMENT`, **with** energy; 3 710 sockets also have a per-minute or flat part), `direct` (outside MOBI.E, `nap`, with energy) and `napfee` (regime `mobie_sem_tarifa`: what the NAP publishes, `nap_fees` `{kwh, min, flat}`, from the model's `napFees`; nobody says whether it includes energy, so the pages say exactly that). The rule lives in `scripts/price_kinds.py` (stats, `explore_years.fold_model`) and in `NAP.prices` / `NAP.priceText` (`common.js`: Procurar's "Sem contrato" column and notes, Explorar's three price metrics and the histogram's kind picker, Rede's "Preço por kWh, por tipo" table from `price_stats.kinds`); `NAP.sessionCost` (`common.js`) prices one session at one kind (flat + €/kWh + every €/min tier over the minutes at a constant kW), for Rede's "Quanto custa uma sessão de 20 kWh, por escalão" table (`rede.js`, from `points.json`: NAP power classes split AC/DC by plug, the socket's NAP power caps the car's, medians count €0; `opc` and `adhoc` only, since `direct` is per kWh and `napfee` is of unknown content). It is front-end only, so `validate_site.py` checks it against hand-computed `SESSION_CASES`. `validate_site.py` runs `price_kinds.kinds` and `NAP.prices` over the same cases and fails if they differ. Verified on 2026-11-11: where MOBI.E publishes an ad hoc plan the NAP's per-kWh value is always that plan's (7 083 of 7 083 sockets), otherwise it is the REGULAR fee (3 866 of 3 866). So the NAP only adds information where MOBI.E has no tariff, and a NAP value is never "the operator fee" of a socket that has one.
+- Sources in `assets/site/`; output in `site/` (committed, what `pages.yml` serves). Data in `site/data/{stats,panels,sites,points,outline,opc}.json`, fetched same-origin (`credentials: 'omit'`) and split by `scripts/site_data.py` so each page loads only what it uses; a key added to `data` that is not listed there lands in `stats.json`, never dropped.
+- **Must** sanitize NaN/Inf floats to null before the dump (`clean()` in `build_dashboard.py`): bare `NaN` breaks `JSON.parse`.
+- Data is no longer embedded in a `<script>`, so it needs no `<`/`>`/`&` escaping. The rule now: the front end inserts third-party text (OSM names, operator names, community notes, report fragments) **only as text nodes**, through the `el()`/`md()` helpers in `common.js`, never `innerHTML` or similar. `validate_site.py` enforces it. The pre-rendered panels (facts/errs/anom/hubs/churn/news/hist) are baked into the HTML at build time (`<!--PANEL:name-->`) from build-escaped HTML, both languages in `data-lang` blocks.
+- CSP (`<meta>`, in `_head.html`; Pages can't set headers): `default-src 'none'; script-src 'self'` (no inline scripts); `style-src 'self' 'unsafe-inline'` only because the history heat map uses inline background styles; `connect-src 'self'` plus the AmpereArchive origin, its sites bucket (`ohm-age-sites.ocarroeletrico.com`) and `maptiles.ocarroeletrico.com`; `worker-src 'self'` (MapLibre's worker module); `font-src 'self'`; `img-src 'self' data:`. Nunito is served from `fonts/`, no font CDN.
+- Bilingual PT/EN: `boot.js` picks the language before paint (`?lang=pt|en`, then `localStorage` `nap-lang`, then the browser; PT for `pt*`). Strings live in the `STR` tables of `common.js` plus `N.addStrings` per page (`data-i18n`/`data-i18n-ph`/`data-i18n-title` attrs); data enums are display-mapped at render time, so the data keeps stable PT/code values. `data` carries EN mirrors (`kpis_pt` is the PT one; `kpis` stays EN; `facts/errs/anom/hubs/churn_html_en`) generated via `scripts/dashboard_i18n.py` (phrase MAP + PT→EN number conversion). New fixed PT strings in FACTS/ERRS/ANOM/HUBS/CHURN_HTML/NEWS_HTML **must** get a MAP entry or they render in PT for EN users.
+- If a page shows nothing below the KPIs, suspect a JS runtime error (an element id that doesn't exist, a variable out of scope); check the browser console and `validate_site.py`.
+- Map: a canvas drawn from `sites.json` (per-site lon/lat) + `outline.json` (PT polygons). Regions are `mainland`/`madeira`/`acores`; site `region` values are `azores` (with a `z`), so the map re-maps `azores`→`acores`.
+- "Mapa detalhado" (Procurar's map tools and each site's detail): the streets, only on demand. `find.js` imports `mapa.mjs`, which loads MapLibre GL JS, pmtiles and the Protomaps style generator from `site/vendor/` (as published on npm; `validate_site.VENDOR` pins each sha256 and exempts only those bytes from the sink rule) and the basemap from `https://maptiles.ocarroeletrico.com` (R2 `basemap`): `current.json` names the dated `portugal-AAAAMMDD.pmtiles`, plus `fonts/` (Noto Sans glyph ranges) and `sprites/v4/` (light, dark). The MapLibre map takes the canvas's place and drives the same `view`, so the list follows it; region and +/− buttons and the site's detail move it; the sites are the canvas's own `mark()` shapes as icons. Light and dark styles only: the colour-blind and high-contrast modes keep the light streets, and the sites keep the mode's colours. `basemap-tiles.yml` (monthly) re-cuts Portugal to z14 (~330 MB, under the CDN's 512 MB cacheable size; z15 would be ~690 MB) and uploads it over R2's S3 API, because `cf`/wrangler uploads stop at 300 MB. Its secrets: `R2_ACCESS_KEY_ID`/`R2_SECRET_ACCESS_KEY` (an R2 token for that bucket only) and the variable `R2_ACCOUNT_ID`. Cloudflare resources are managed with the `cf` CLI. How they are set:
+- R2 `basemap`: location hint WEUR, no jurisdiction (public OSM data); public only through the custom domain `maptiles.ocarroeletrico.com`, minimum TLS 1.3 (as `pictures.*`: Android 9 and older can't open the detailed map and get the fallback message).
+- CORS on the bucket: GET/HEAD from any origin, request headers `range` and `if-match`, exposed `ETag`, `Content-Range`, `Content-Length` (pmtiles.js reads the ETag), max age 1 day.
+- Cache Rule `maptiles: …` (zone phase `http_request_cache_settings`): every path but `/current.json` is cacheable, 30 days at the edge and 1 day in the browser whatever the object says (`cf r2 objects put` can't set `Cache-Control`), 4xx never stored, query strings out of the cache key. `current.json` is never cached, so a new month shows up at once.
+- Glyphs: only the ranges Portugal's map asks for (Latin, Latin extended, punctuation, plus Arabic, Tifinagh and variation selectors for Morocco's names at low zoom). A missing range is a 404 and a console warning, never a broken map; add it with `cf r2 objects put`.
+- "Uso ao longo do tempo" in Procurar's site detail (`uso.js`): stacked bars of the time each socket spent charging / available / out of order / unknown over 24 h, 7 days, 30 days and every month the archive has, one lane per socket (per plug and power above 8 sockets; a single socket can be picked), and a weekday x hour occupancy map below. Data: `data/sites/<xx>.json.gz`, 256 files published with the site (see "Histórico por posto" above), fetched when a detail opens and keyed by the NAP site id (`sites.json` `oop`, or the id `applyLive` matched, `p.nap_site`). No file: the section hides; a site the file lacks: one line saying so. `uso.js` `shardOf` must hash like `site_history.shard_of`: `validate_site.py` runs both on the same ids. Months with under 2 reads per hour (the replayed history) are drawn lighter and called a sample; an hour with no read is hatched, never 0 %. Every bucket is `[cells, charging, available, down]` in hundredths of a cell, so sockets add up.
+- Search and filters on `index.html` run on `sites.json`; point-level data (`points.json`) loads after, for the detail view and the live status. Both take power, fees and the DC voltage filter from the network model, so the detail shows every €/min tier ("0; 0,18 após 30 min"), OSM's power with the NAP's beside it ("22 (NAP: 11)") and the NAP-only issues per socket. `find.js` still renders the pre-model `points.json` (`ENERGY`/`TIME`/`FLAT` strings; `site_data.POINT_SHAPES` accepts both) until the first refresh rewrites it; drop that branch after. The payment filter uses `x.pay` (list of OSM payment methods: App/Cartão/Cartão de membro/Sem autenticação/Dinheiro) joined per-site onto every point row.
+- "Perto de mim": the browser asks for the location only when the button is pressed; the coordinates are used on the device to sort and centre the map, never sent or stored.
 
-- Aparência: tema (auto/claro/escuro) e visão (padrão/daltonismo/alto contraste)
-  são `data-theme`/`data-vision` no `<html>`, definidos por `boot.js` antes de
-  pintar (valida contra lista fechada o que lê de `nap-theme`/`nap-vision`;
-  `nap-lang` idem). Cores só por variáveis CSS (`--s-<estado>` para os
-  estados); um estado nunca é só cor: cor + forma + texto.
-  O único pedido a outro domínio é o estado ao vivo
-  (`connect-src` na CSP, abaixo). `assets/privacidade.html`, `404.html`, os
-  ícones e `llms.txt` são copiados para `site/` pelo `build_site.py`; a página
-  de privacidade descreve os pedidos do site, o `localStorage` e a localização
-  (PT e EN), por isso qualquer pedido ou chave novos têm de entrar lá também.
-- Estado ao vivo: ao abrir, `index.html`, `rede.html` e `explorar.html` leem `v1/PT/status.json.gz` do
-  AmpereArchive (sem cookies nem referrer; se vier ainda em gzip, descomprime
-  com `DecompressionStream`) e refaz o que depende do estado: gráficos de
-  estado e ocupação, KPI de ocupação, cores do mapa, cartões e filtro de
-  estado. Factos, erros e novidades continuam da semana. Casa cada ponto pelo
-  `point_id` e por `site_id` == `site_external_id` ou a acabar em
-  `-<site_external_id>` (o arquivo usa o `site_id` do NAP, `EZC-AMD-00051`;
-  casa quase todos, sem ambíguos); ambíguo fica como estava. Só aceita
-  estados da lista DATEX II e ignora ficheiros com mais de 180 min. Sem rede,
-  bloqueado ou desatualizado, mostra o estado da semana e diz-o no cabeçalho.
-  `validate_site.py` desliga o fetch (`NAP_NO_LIVE`) e testa
-  `applyLive` com dados sintéticos. O host vem de `<meta name="nap-live-origin">`
-  (`dashboard_payload.ARCHIVE_ORIGIN_DEFAULT`) e o build troca-o, nessa meta e
-  no `connect-src` da CSP, pela origem de `AMPERE_ARCHIVE_URL` (variável do
-  repo, passada ao passo de build); só aceita `https://host[:porta]`, senão
-  avisa e fica o por omissão.
+- Aparência: tema (auto/claro/escuro) e visão (padrão/daltonismo/alto contraste) são `data-theme`/`data-vision` no `<html>`, definidos por `boot.js` antes de pintar (valida contra lista fechada o que lê de `nap-theme`/`nap-vision`; `nap-lang` idem). Cores só por variáveis CSS (`--s-<estado>` para os estados); um estado nunca é só cor: cor + forma + texto. O único pedido a outro domínio é o estado ao vivo (`connect-src` na CSP, abaixo). `assets/privacidade.html`, `404.html`, os ícones e `llms.txt` são copiados para `site/` pelo `build_site.py`; a página de privacidade descreve os pedidos do site, o `localStorage` e a localização (PT e EN), por isso qualquer pedido ou chave novos têm de entrar lá também.
+- Estado ao vivo: ao abrir, `index.html`, `rede.html` e `explorar.html` leem `v1/PT/status.json.gz` do AmpereArchive (sem cookies nem referrer; se vier ainda em gzip, descomprime com `DecompressionStream`) e refaz o que depende do estado: gráficos de estado e ocupação, KPI de ocupação, cores do mapa, cartões e filtro de estado. Factos, erros e novidades continuam da semana. Casa cada ponto pelo `point_id` e por `site_id` == `site_external_id` ou a acabar em `-<site_external_id>` (o arquivo usa o `site_id` do NAP, `EZC-AMD-00051`; casa quase todos, sem ambíguos); ambíguo fica como estava. Só aceita estados da lista DATEX II e ignora ficheiros com mais de 180 min. Sem rede, bloqueado ou desatualizado, mostra o estado da semana e diz-o no cabeçalho. `validate_site.py` desliga o fetch (`NAP_NO_LIVE`) e testa `applyLive` com dados sintéticos. O host vem de `<meta name="nap-live-origin">` (`dashboard_payload.ARCHIVE_ORIGIN_DEFAULT`) e o build troca-o, nessa meta e no `connect-src` da CSP, pela origem de `AMPERE_ARCHIVE_URL` (variável do repo, passada ao passo de build); só aceita `https://host[:porta]`, senão avisa e fica o por omissão.
 
 ## Convenções de escrita (PT-PT técnico)
 - **tensão**, nunca "voltagem". Unidades abreviam-se `V`/`A`/`kW` normalmente.
-- `voltage`/`max_current` mantêm-se em inglês só quando referem identificadores
-  de código ou colunas (CSV, DATEX II, snippets) — em prosa portuguesa é tensão.
+- `voltage`/`max_current` mantêm-se em inglês só quando referem identificadores de código ou colunas (CSV, DATEX II, snippets) — em prosa portuguesa é tensão.
 
 ## PR checks (`.github/workflows/pr-checks.yml`)
 
-Dois jobs em cada PR para `main`. O primeiro (`paths-and-syntax`) é um gate
-de ~1 s, sem rede e sem dependências (stdlib). `scripts/ci_paths.py` corre
-quatro verificações:
+Dois jobs em cada PR para `main`. O primeiro (`paths-and-syntax`) é um gate de ~1 s, sem rede e sem dependências (stdlib). `scripts/ci_paths.py` corre quatro verificações:
 
 - **A** — nenhum ficheiro de dados na raiz do repo;
-- **B** — em código, workflows e docs, qualquer menção a um ficheiro de dados
-  tem de aparecer com o prefixo `data/` (apanha um `pd.read_csv('nap_static_sites.csv')`
-  que volte ao sítio antigo);
+- **B** — em código, workflows e docs, qualquer menção a um ficheiro de dados tem de aparecer com o prefixo `data/` (apanha um `pd.read_csv('nap_static_sites.csv')` que volte ao sítio antigo);
 - **C** — cada `scripts/*.py`/`*.sh` citado num workflow existe no disco;
-- **D** — os dados de terceiros que vêm sempre da origem (os derivados do
-  tracker, sem licença, e o catálogo de modelos de carregadores, lido fresco em
-  cada corrida; `NOT_VERSIONED`) estão **fora** do git, e o
-  `.gitignore` não tem excepções para eles (testa o índice com `git ls-files`, **não**
-  `git check-ignore`: este reporta ficheiros já versionados como "não
-  ignorados", que é precisamente o caso proibido).
+- **D** — os dados de terceiros que vêm sempre da origem (os derivados do tracker, sem licença, e o catálogo de modelos de carregadores, lido fresco em cada corrida; `NOT_VERSIONED`) estão **fora** do git, e o `.gitignore` não tem excepções para eles (testa o índice com `git ls-files`, **não** `git check-ignore`: este reporta ficheiros já versionados como "não ignorados", que é precisamente o caso proibido).
 
-Mais `compileall` nos scripts Python e `bash -n` nos shell, para o check não ser
-decorativo (um erro de sintaxe só apareceria no refresh da semana seguinte).
+Mais `compileall` nos scripts Python e `bash -n` nos shell, para o check não ser decorativo (um erro de sintaxe só apareceria no refresh da semana seguinte).
 
-**E `scripts/validate_site.py`**, que valida o `site/` commitado (o artefacto
-que o `pages.yml` publica sem validação nenhuma): JSON e esquema, sintaxe JS,
-sem `<script>` inline, CSP e sem sinks do tipo `innerHTML`. Sem isto, um PR
-podia injectar um script ou um `innerHTML` com dados de terceiros e o merge
-publicava-o.
+**E `scripts/validate_site.py`**, que valida o `site/` commitado (o artefacto que o `pages.yml` publica sem validação nenhuma): JSON e esquema, sintaxe JS, sem `<script>` inline, CSP e sem sinks do tipo `innerHTML`. Sem isto, um PR podia injectar um script ou um `innerHTML` com dados de terceiros e o merge publicava-o.
 
-**O segundo job (`unit-tests`)** corre `python -m unittest discover -s tests`
-com o `duckdb`, o `pandas` e o `lxml` instalados do PyPI, nas versões do
-`requirements.txt` (lidas com `grep -E '^duckdb=='`, como no `network-24h.yml`,
-para o Dependabot ser a única fonte de versões). Só o que `tests/` importa, e
-**sem `pytz`**: os testes do DuckDB bloqueiam o import, porque o refresh também
-não o tem. O job falha se algum teste for saltado (`skipped=` na saída): os
-testes fazem `skipUnless(HAVE_DUCKDB)`, e foi um skip silencioso que escondeu
-o crash do `pytz` no `archive_history.py` (#116). Instalar do PyPI uma versão
-fixa não colide com a regra "sem rede": essa regra existe para não bater nos
-servidores oficiais (NAP, Overpass, DGEG) nem descarregar ~230 MB a cada PR; os
-testes correm em ~1,5 s sobre dados sintéticos. Ao acrescentar um teste que
-importe outra dependência, acrescentá-la ao passo de instalação.
+**O segundo job (`unit-tests`)** corre `python -m unittest discover -s tests` com o `duckdb`, o `pandas` e o `lxml` instalados do PyPI, nas versões do `requirements.txt` (lidas com `grep -E '^duckdb=='`, como no `network-24h.yml`, para o Dependabot ser a única fonte de versões). Só o que `tests/` importa, e **sem `pytz`**: os testes do DuckDB bloqueiam o import, porque o refresh também não o tem. O job falha se algum teste for saltado (`skipped=` na saída): os testes fazem `skipUnless(HAVE_DUCKDB)`, e foi um skip silencioso que escondeu o crash do `pytz` no `archive_history.py` (#116). Instalar do PyPI uma versão fixa não colide com a regra "sem rede": essa regra existe para não bater nos servidores oficiais (NAP, Overpass, DGEG) nem descarregar ~230 MB a cada PR; os testes correm em ~1,5 s sobre dados sintéticos. Ao acrescentar um teste que importe outra dependência, acrescentá-la ao passo de instalação.
 
-**O que este gate não cobre, de propósito:** o pipeline completo não corre no PR
-— `fetch_data.sh` são ~230 MB e o `osm_umap.py` traz um dump Overpass; bater nos
-servidores oficiais a cada PR não é aceitável. Em troca, o `refresh.yml` semanal
-é o teste de integração a sério.
+**O que este gate não cobre, de propósito:** o pipeline completo não corre no PR — `fetch_data.sh` são ~230 MB e o `osm_umap.py` traz um dump Overpass; bater nos servidores oficiais a cada PR não é aceitável. Em troca, o `refresh.yml` semanal é o teste de integração a sério.
 
-Fica em aberto, se quiseres mais cobertura: correr `build_dashboard.py` em cima
-de fixtures. Exige versionar uma amostra dos CSVs do NAP, e isso levanta a mesma
-questão de republicação de dados de terceiros que o `tracker_errors.csv` já
-levanta (ver `THIRD-PARTY-NOTICES.md`) — por isso não foi feito sem decisão.
+Fica em aberto, se quiseres mais cobertura: correr `build_dashboard.py` em cima de fixtures. Exige versionar uma amostra dos CSVs do NAP, e isso levanta a mesma questão de republicação de dados de terceiros que o `tracker_errors.csv` já levanta (ver `THIRD-PARTY-NOTICES.md`) — por isso não foi feito sem decisão.
 
-Ao mover/renomear um ficheiro de dados, actualizar a lista `DATA_FILES` em
-`scripts/ci_paths.py`: é a fonte de verdade dos quatro checks.
+Ao mover/renomear um ficheiro de dados, actualizar a lista `DATA_FILES` em `scripts/ci_paths.py`: é a fonte de verdade dos quatro checks.
 
 ## Deliverables
 - `site/` — the static site (preview: `python3 -m http.server --directory site`)
 - `facts.md` — interesting facts
-- `novidades.md` — weekly network news (new/removed sites, OPC moves, power
-  records; panel on "Rede", EN via `dashboard_i18n.MAP`) with
-  `network-census.json` (committed state for next week's diff)
-- `errors.md` — reportable data errors, numbered, for the data owners; the
-  last item is the tracker cross-check, appended from `data/tracker_findings.md`
-  when the tracker was fetched (don't hard-code the total, it changes)
-- `Agents-outputs/anomalias-results.md` — output do agente `Agents/anomalias.md`
-  (anomalias dos dados estáticos, agrupadas por OPC)
-- `/ohmigo/chargers.json` on Pages — the ohmigo dataset (Actions artifact, see
-  "ohmigo dataset"). `pages.yml` serves `site/` as the web root plus a
-  `/dashboard.html` redirect to `/`, and also publishes `robots.txt`, `sitemap.xml`
-  and `/.well-known/security.txt` (RFC 9116; `Expires` 180 days from each
-  deploy).
+- `novidades.md` — weekly network news (new/removed sites, OPC moves, power records; panel on "Rede", EN via `dashboard_i18n.MAP`) with `network-census.json` (committed state for next week's diff)
+- `errors.md` — reportable data errors, numbered, for the data owners; the last item is the tracker cross-check, appended from `data/tracker_findings.md` when the tracker was fetched (don't hard-code the total, it changes)
+- `Agents-outputs/anomalias-results.md` — output do agente `Agents/anomalias.md` (anomalias dos dados estáticos, agrupadas por OPC)
+- `/ohmigo/chargers.json` on Pages — the ohmigo dataset (Actions artifact, see "ohmigo dataset"). `pages.yml` serves `site/` as the web root plus a `/dashboard.html` redirect to `/`, and also publishes `robots.txt`, `sitemap.xml` and `/.well-known/security.txt` (RFC 9116; `Expires` 180 days from each deploy).
 
 ## Workflows and secrets
-- Pushes to `main` come only from the **"nap-dashboard push" GitHub App**, the
-  only actor on the `review branch` ruleset's bypass list in "Always" mode.
-  Repository admins are on it in "For pull requests only" mode, so nobody
-  (another admin, or the owner by accident) pushes straight to `main`. The
-  App has `Contents: write` on this repo and nothing else; its client id is
-  the `PUSH_APP_CLIENT_ID` variable and its key the `PUSH_APP_PRIVATE_KEY`
-  secret. `actions/create-github-app-token` mints a 1-hour token (revoked at
-  the end of the job) in two places only: the `publish` job of `refresh.yml`
-  (a fresh runner: no pip, no repo script on third-party data; it downloads
-  the `refresh-publish` artifact, checks each file is a regular file under
-  20 MB and in the closed allowlist, which includes the `site/` tree, then commits) and the `publish` job of `agents.yml`, same pattern
-  for a closed list of files from `Agents-outputs/`. A push with the App's token triggers `pages.yml`, which
-  one with the `GITHUB_TOKEN` wouldn't. The agent job (a model with a
-  shell, reading third-party data) never shares a machine with it, and code
-  an agent writes (`scripts/anomalias_check.py`) never reaches `main` on its
-  own: it's in the run's `agent-outputs` artifact, for someone to review and
-  open a PR.
-- `GITHUB_TOKEN` is read-only everywhere except `issues: write` (failure
-  issues) and what `pages.yml` needs to deploy.
+- Pushes to `main` come only from the **"nap-dashboard push" GitHub App**, the only actor on the `review branch` ruleset's bypass list in "Always" mode. Repository admins are on it in "For pull requests only" mode, so nobody (another admin, or the owner by accident) pushes straight to `main`. The App has `Contents: write` on this repo and nothing else; its client id is the `PUSH_APP_CLIENT_ID` variable and its key the `PUSH_APP_PRIVATE_KEY` secret. `actions/create-github-app-token` mints a 1-hour token (revoked at the end of the job) in two places only: the `publish` job of `refresh.yml` (a fresh runner: no pip, no repo script on third-party data; it downloads the `refresh-publish` artifact, checks each file is a regular file under 20 MB and in the closed allowlist, which includes the `site/` tree, then commits) and the `publish` job of `agents.yml`, same pattern for a closed list of files from `Agents-outputs/`. A push with the App's token triggers `pages.yml`, which one with the `GITHUB_TOKEN` wouldn't. The agent job (a model with a shell, reading third-party data) never shares a machine with it, and code an agent writes (`scripts/anomalias_check.py`) never reaches `main` on its own: it's in the run's `agent-outputs` artifact, for someone to review and open a PR.
+- `GITHUB_TOKEN` is read-only everywhere except `issues: write` (failure issues) and what `pages.yml` needs to deploy.
 - Actions are pinned by SHA (Dependabot bumps them).
