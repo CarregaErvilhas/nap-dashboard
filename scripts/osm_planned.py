@@ -12,8 +12,10 @@ Three ways OSM says "not open yet", all handled here:
      site polygon is complete, the stalls are the part under construction);
   3. loose construction:man_made / planned:man_made stalls with no site around them:
      grouped within 40 m into one site.
-A site already in the NAP (one of its codes is an external_id, or a NAP site within
-30 m) is dropped: the lifecycle tag is stale, the charger exists.
+A site one of whose codes is already in the NAP is dropped: the lifecycle tag is
+stale, the charger exists. A NAP site within 30 m does not drop it: it is noted in
+`nap` (the NAP site id) and `nap_m`, because a new fast charger beside an old AC one
+is common. Procurar leaves those out, as it always did; olh'o'posto decides.
 
 Each site's `codes` are the NAP codes the community wrote on it, in `ref` and in the
 name: mappers often put the future code only in the name ("ALM-00114/155"). That is
@@ -219,29 +221,33 @@ def main():
         codes = codes_of(*str(t.get('ref', '')).split(';'), name)
         d = dist_m(s['lat'], s['lon'], slat, slon)
         d = np.where(np.isnan(d), 1e12, d)
-        if any(r in ext for r in refs + codes) or d.min() <= NAP_M:
+        if any(r in ext for r in refs + codes):
             skipped += 1
             continue
+        near = int(d.argmin())
+        close = d[near] <= NAP_M
         tags = [t] + u['stalls']
         kw = max(kw_of(x) for x in tags)
         conns = set().union(*(conns_of(x) for x in tags))
         op = t.get('operator') or t.get('brand') or t.get('network') or ''
         if not name or '?' in name:
             name = ''
-        near = int(d.argmin())
         rows.append({
             'ext': f"OSM-{s['type'][0]}{s['id']}", 'name': name, 'op': op,
             'city': scity[near] if d[near] <= 3000 else '',
             'region': region(s['lon'], s['lat']), 'lat': round(s['lat'], 6), 'lon': round(s['lon'], 6),
             'lc': u['st'], 'npts': u['npts'], 'kw': kw, 'conns': '|'.join(sorted(conns)),
             'osm': f"{s['type']}/{s['id']}", 'codes': '|'.join(codes),
+            'nap': sites.site_id.iloc[near] if close else '', 'nap_m': int(round(d[near])) if close else '',
         })
     df = pd.DataFrame(rows)
     df = df[df.region != 'OUTSIDE'] if len(df) else df
     os.makedirs('data', exist_ok=True)
     df.to_csv(OUT, index=False)
     print(f'{OUT}: {len(df)} locais ({int((df.lc == "construction").sum()) if len(df) else 0} em construção, '
-          f'{int((df.lc == "planned").sum()) if len(df) else 0} planeados); {skipped} ignorados por já estarem no NAP')
+          f'{int((df.lc == "planned").sum()) if len(df) else 0} planeados, '
+          f'{int((df.nap != "").sum()) if len(df) else 0} a ≤{NAP_M} m de um local do NAP); '
+          f'{skipped} ignorados por o NAP já ter o código')
     return 0
 
 

@@ -430,7 +430,8 @@ def planned_sites(path):
     the key is left out, so a reader keeps what it had instead of taking every
     construction site as gone. The id is the OSM element ('OSM-w123'); `codes`
     are the NAP codes the community wrote on it, which is how a reader merges it
-    into the NAP site once it is published (or matches `osm.element`).
+    into the NAP site once it is published (or matches `osm.element`). `nap` and
+    `napM` name the NAP site within 30 m, when there is one.
     """
     try:
         rows = pd.read_csv(path, dtype=str, keep_default_na=False)
@@ -450,6 +451,11 @@ def planned_sites(path):
             'npts': int(r.npts), 'kw': kw if kw else None,
             'connectors': [c for c in r.conns.split('|') if c],
         })
+        # A NAP site within 30 m: maybe this one with a stale OSM tag, maybe an
+        # old charger beside a new one. Said, not decided.
+        if r.nap:
+            out[-1]['nap'] = r.nap
+            out[-1]['napM'] = int(r.nap_m)
     return out
 
 

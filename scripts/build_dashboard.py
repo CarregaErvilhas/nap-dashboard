@@ -340,6 +340,8 @@ for _, s in S.iterrows():
 # nowhere else (KPIs stay NAP-only).
 MODEL_CONN = {'CCS': 'CCS Combo2', 'T2': 'Type2', 'CHADEMO': 'CHAdeMO', 'MCS': 'MCS'}
 for _p in _model.get('planned', []):
+    if _p.get('nap'):  # a NAP site within 30 m: most often the same charger, its OSM tag stale
+        continue
     _kw = _p['kw'] or 0
     _rec = {
         'ext': _p['id'], 'name': _p['name'] or _p['id'], 'city': _p['city'] or '', 'op': _p['operator'] or '',
