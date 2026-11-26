@@ -44,16 +44,23 @@ CODE_RE = re.compile(r'^(?:MOBI-)?[A-Z]{3}-\d{4,5}$')
 ADHOC_KEYS = ('creditCard', 'debitCard', 'nfc', 'pinpad')
 
 
-def fetch(url, name, ttl=0):
+def fetch(url, name, ttl=0, stale_ok=False):
+    """stale_ok: when the download fails, the last copy in the cache will do."""
     os.makedirs(CACHE, exist_ok=True)
     path = os.path.join(CACHE, name)
     if ttl and os.path.exists(path) and (time.time() - os.path.getmtime(path)) < ttl:
         return json.load(open(path))
     req = urllib.request.Request(url, headers={'User-Agent': USER_AGENT,
                                                'Accept': 'application/json'})
-    with urllib.request.urlopen(req, timeout=120) as r:
-        raw = r.read()
-    data = json.loads(raw)
+    try:
+        with urllib.request.urlopen(req, timeout=120) as r:
+            raw = r.read()
+        data = json.loads(raw)
+    except (OSError, ValueError) as e:
+        if stale_ok and os.path.exists(path):
+            print(f'aviso: {url} falhou ({e}); uso a cópia de {path}', file=sys.stderr)
+            return json.load(open(path))
+        raise
     with open(path, 'wb') as fh:
         fh.write(raw)
     return data
@@ -61,12 +68,12 @@ def fetch(url, name, ttl=0):
 
 def map_settings(mid):
     return fetch(f'https://umap.openstreetmap.fr/en/map/{mid}/geojson/',
-                 f'map_{mid}.json')
+                 f'map_{mid}.json', stale_ok=True)
 
 
 def datalayer(mid, pk):
     return fetch(f'https://umap.openstreetmap.fr/en/datalayer/{mid}/{pk}/',
-                 f'datalayer_{mid}_{pk}.json')
+                 f'datalayer_{mid}_{pk}.json', stale_ok=True)
 
 
 def haversine(lon1, lat1, lon2, lat2):
@@ -112,6 +119,17 @@ def osm_raw_features():
 
 
 def caca_features():
+    """The Caça aos Postos points, or None when umap is down and nothing is
+    cached. They are community doubts for errors.md item 12 and Procurar's
+    `doubt`: never worth failing the pipeline (and the network model) over."""
+    try:
+        return _caca_features()
+    except (OSError, ValueError, KeyError) as e:
+        print(f'aviso: sem a Caça aos Postos nesta corrida (umap: {e})', file=sys.stderr)
+        return None
+
+
+def _caca_features():
     settings = map_settings(CACA_MAP)
     out = []
     for dl in settings['properties'].get('datalayers', []):
@@ -207,7 +225,8 @@ def main():
     slat = scoords.latitude.values
 
     caca = []
-    for f in caca_features():
+    feats = caca_features()
+    for f in feats or []:
         name = f['note']
         d = haversine(f['lon'], f['lat'], slon, slat)
         j = int(np.argmin(d))
@@ -229,7 +248,8 @@ def main():
             'near_op': scoords.iloc[j].operator_id,
             'near_operator': scoords.iloc[j].operator_name,
         })
-    c = pd.DataFrame(caca)
+    c = pd.DataFrame(caca, columns=['id', 'note', 'lon', 'lat', 'cat', 'near_site', 'near_dist_km',
+                                    'near_city', 'near_op', 'near_operator'])
     c.to_csv('data/osm_caca.csv', index=False)
 
     # ---- findings fragment (errors.md item 12) ----
@@ -238,18 +258,22 @@ def main():
     lines = []
     lines.append('## 12. Dúvidas da comunidade OSM/umap perto de sites ativos do NAP')
     lines.append('')
-    lines.append(f'O mapa "Caça aos Postos de Carregamento" (umap, OSM) registou **{len(c)} pontos** de dúvida da comunidade. Destes, **{len(close)}** são "nada no local" a ≤500 m de um site que o NAP lista como infraestrutura ativa — sinal de coordenadas erradas, site inexistente ou ainda não inaugurado:')
-    lines.append('')
-    lines.append('| ponto umap | dúvida | site NAP próximo | distância |')
-    lines.append('|---|---|---|---|')
-    for _, r in close.iterrows():
-        lines.append(f"| `{r.id}` | {r.note[:90]} | `{r.near_site}` ({r.near_city}, {r.near_op}) | {r.near_dist_km*1000:.0f} m |")
-    if len(close):
+    if feats is None:
+        lines.append('O mapa "Caça aos Postos de Carregamento" (umap) não respondeu nesta corrida e não havia cópia: as dúvidas da comunidade ficam para a próxima.')
         lines.append('')
-        lines.append('> Nota: o umap é curado pela comunidade, não é fonte oficial; serve como pista para verificação no terreno.')
-    lines.append('')
-    lines.append(f'O mesmo mapa tem ainda **{int((c.cat == "under_construction").sum())}** postos em construção/obra e **{int((c.cat == "to_verify").sum())}** para verificar (lista completa em `data/osm_caca.csv`).')
-    lines.append('')
+    else:
+        lines.append(f'O mapa "Caça aos Postos de Carregamento" (umap, OSM) registou **{len(c)} pontos** de dúvida da comunidade. Destes, **{len(close)}** são "nada no local" a ≤500 m de um site que o NAP lista como infraestrutura ativa — sinal de coordenadas erradas, site inexistente ou ainda não inaugurado:')
+        lines.append('')
+        lines.append('| ponto umap | dúvida | site NAP próximo | distância |')
+        lines.append('|---|---|---|---|')
+        for _, r in close.iterrows():
+            lines.append(f"| `{r.id}` | {r.note[:90]} | `{r.near_site}` ({r.near_city}, {r.near_op}) | {r.near_dist_km*1000:.0f} m |")
+        if len(close):
+            lines.append('')
+            lines.append('> Nota: o umap é curado pela comunidade, não é fonte oficial; serve como pista para verificação no terreno.')
+        lines.append('')
+        lines.append(f'O mesmo mapa tem ainda **{int((c.cat == "under_construction").sum())}** postos em construção/obra e **{int((c.cat == "to_verify").sum())}** para verificar (lista completa em `data/osm_caca.csv`).')
+        lines.append('')
     if len(adhoc):
         lines.append(f'Pagamento ad-hoc: em **{len(adhoc)}** sites o OSM indica pagamento por cartão ou sem autenticação, mas o `auth_methods` do NAP só lista app/rfid (ex. `BRR-00159`, `VFX-00136`, `ABT-00017`). Pode ser um posto novo com cartão ativo não registado, ou desatualização num dos lados.')
         lines.append('')
