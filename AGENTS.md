@@ -524,7 +524,7 @@ its API needs a key). The thumbnails travel in the `ohmigo-dataset` artifact
 with the JSON, and `pages.yml` publishes them under `/photos/` (JPEG only,
 `<16 hex>.jpg`, < 400 kB): the site shows them from its own domain, so the
 CSP and the privacy page need no third party. Procurar links sites without a
-photo to MapComplete, so a driver can add one. `sites.json` `oop` is the NAP
+photo to their olh'o'posto page (or its upload page), so a driver can add one. `sites.json` `oop` is the NAP
 site id (`EZC-AMD-00051`): Procurar links every site to its olh'o'posto page,
 and an olh'o'posto photo to its place on the Panoramax map (`map`). `?posto=`
 (NAP code or site id) opens that site's detail; olh'o'posto links here with it.

@@ -49,7 +49,7 @@
     mVariants: 'Conforme a versão instalada, que não sabemos qual é.',
     mSrc: 'O que cada carro recebe, segundo a lista de modelos de {who}; o modelo é o que a comunidade mapeou no OpenStreetMap. Valores do fabricante: o operador pode limitar a potência.', mSrcLink: 'Ver a lista',
     phSite: 'Foto do local', phModel: 'Foto de um {m}, não deste posto', phBy: '{who}, {lic}', phTaken: 'tirada em {d}',
-    phLink: 'Ver foto no {src}', phAdd: 'Tens uma foto deste posto? Junta-a ao OpenStreetMap com o MapComplete',
+    phLink: 'Ver foto no {src}', phAdd: 'Tens uma foto deste posto? Envia-a no olh\'o\'posto',
     phMap: 'Ver a foto no mapa do Panoramax', phOop: 'Fotos e links estáticos deste posto no olh\'o\'posto',
     dUg: 'Parque subterrâneo', ugTxt: 'Pode não haver rede móvel lá dentro: abre a app ou tem o cartão à mão antes de entrares.',
     ugOsm: '(OpenStreetMap)', ugNap: '(descrição do operador no NAP)',
@@ -109,7 +109,7 @@
     mVariants: 'Depending on the version installed, which we do not know.',
     mSrc: 'What each car gets, from the charger list by {who}; the model is the one the community mapped on OpenStreetMap. Manufacturer figures: the operator may cap the power.', mSrcLink: 'See the list',
     phSite: 'Photo of this site', phModel: 'Photo of a {m}, not of this charger', phBy: '{who}, {lic}', phTaken: 'taken on {d}',
-    phLink: 'See photo on {src}', phAdd: 'Got a photo of this charger? Add it to OpenStreetMap with MapComplete',
+    phLink: 'See photo on {src}', phAdd: 'Got a photo of this charger? Send it to olh\'o\'posto',
     phMap: 'See the photo on the Panoramax map', phOop: 'Photos and static links for this charger on olh\'o\'posto',
     dUg: 'Underground car park', ugTxt: 'There may be no mobile signal inside: open the app or have the card at hand before you drive in.',
     ugOsm: '(OpenStreetMap)', ugNap: '(operator\'s description on the NAP)',
@@ -328,18 +328,16 @@
         more.push(ext(p.map + '&map=19/' + s.lat + '/' + s.lon, t('phMap')));
       }
     });
-    if (s.oop) more.push(ext(OOP + (N.lang() === 'en' ? '/en/stations/' : '/postos/') + encodeURIComponent(s.oop), t('phOop')));
+    var oopPage = s.oop ? OOP + (N.lang() === 'en' ? '/en/stations/' : '/postos/') + encodeURIComponent(s.oop) : null;
+    // No photo of the site itself: ask for one on olh'o'posto (its station
+    // page has the upload button; the next refresh brings the photo here).
+    var ask = !(s.ph || []).some(function (p) { return p.src; }) && !s.lc;
+    if (oopPage && !ask) more.push(ext(oopPage, t('phOop')));
     (s.mdl || []).forEach(function (m) { if (m.ph && m.ph.src) figs.push(figure(m.ph, t('phModel', { m: m.n }))); });
     var box = el('div', { class: 'photos' }, figs);
     if (links.length) box.appendChild(el('p', { class: 'small' }, links));
     more.forEach(function (a) { box.appendChild(el('p', { class: 'small' }, a)); });
-    // No photo of the site itself: ask for one. MapComplete's charging station
-    // theme saves it on Panoramax and tags the OSM element, and the next daily
-    // refresh brings it here.
-    if (!(s.ph || []).some(function (p) { return p.src; }) && !s.lc) {
-      box.appendChild(el('p', { class: 'small' }, el('a', { href: 'https://mapcomplete.org/charging_stations?z=19&lat=' + s.lat + '&lon=' + s.lon +
-        (/^(node|way)\/\d+$/.test(s.osm_ref || '') ? '#' + s.osm_ref : ''), rel: 'noopener noreferrer', target: '_blank' }, t('phAdd'))));
-    }
+    if (ask) box.appendChild(el('p', { class: 'small' }, ext(oopPage || OOP + (N.lang() === 'en' ? '/en/upload' : '/enviar'), t('phAdd'))));
     return box;
   }
   // Underground, checked on site, nearby, history (sites.json ug/chk/nb/hd/hn).
