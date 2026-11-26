@@ -177,8 +177,14 @@
     return pts(s).filter(function (p) { return p.status === 'available'; }).length;
   }
 
+  // NAP site ids carry the operator's prefix (EDP-PTM-00031); sites.json keys
+  // sites by the code without it (PTM-00031). Pasted ids and the Rede's links
+  // must still find the site. What is left must look like a code (letters and
+  // digits): PTM-00031 is already bare, and 00031 would match every *-00031.
+  function bare(w) { var m = /^[a-z]{2,4}-([a-z0-9-]+)$/.exec(w); return m && /[a-z]/.test(m[1]) && /\d/.test(m[1]) ? m[1] : null; }
+
   function filter() {
-    var words = norm(F.q).split(/\s+/).filter(Boolean);
+    var words = norm(F.q).split(/\s+/).filter(Boolean), alt = words.map(bare);
     var wcHelp = document.getElementById('wcHelp');
     if (wcHelp) wcHelp.hidden = !F.wc;
     result = S.filter(function (s) {
@@ -194,7 +200,7 @@
       if (F.free && !freeCount(s)) return false;
       // MCS mostra também os locais em construção: os primeiros são do OSM, ainda fora do NAP.
       if (!F.mcs && F.life.length && F.life.indexOf(life(s)) < 0) return false;
-      for (var i = 0; i < words.length; i++) if (s._k.indexOf(words[i]) < 0) return false;
+      for (var i = 0; i < words.length; i++) if (s._k.indexOf(words[i]) < 0 && !(alt[i] && s._k.indexOf(alt[i]) >= 0)) return false;
       return true;
     });
     if (here) {
@@ -809,7 +815,7 @@
       S.forEach(function (s) { s._k = norm([s.name, s.ext, s.city, s.op, s.osm_op].concat(s.hw || [], s.old || []).join(' ')); s._g = s.op ? opKey(s.op) : ''; });
       options(); filter();
       if (posto) {
-        var hit = S.filter(function (s) { return s.ext === posto || s.oop === posto; })[0];
+        var hit = S.filter(function (s) { return s.ext === posto || s.oop === posto || norm(s.ext) === bare(norm(posto)); })[0];
         if (hit) { F.q = hit.ext; $('q').value = hit.ext; filter(); toggle(hit.ext, true); }
       }
       N.load('outline').then(function (o) { outline = o.outline; drawMap(); });
