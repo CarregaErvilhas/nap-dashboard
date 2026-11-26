@@ -65,7 +65,9 @@
     olcNote: 'No OpenStreetMap este posto está marcado como {s}. O NAP ainda o publica: as tomadas e os preços abaixo são os que o operador declara.',
     olcLive: 'No OpenStreetMap este posto está marcado como {s}, mas o operador dá-o agora como disponível ou a carregar: o OpenStreetMap está desatualizado.',
     lcNote: 'Este posto ainda não está no NAP: o OpenStreetMap indica-o como {s}. Não há estado das tomadas nem preços, e a localização e a potência são as que a comunidade mapeou.',
-    lcName: 'Posto {s}'
+    lcName: 'Posto {s}',
+    postoMiss: 'Não encontrámos o posto {c}. Se entrou no NAP há pouco, aparece aqui na próxima atualização dos dados.',
+    postoNew: 'O posto {c} entrou no NAP nas últimas 24 horas e ainda não está nesta pesquisa: aparece aqui na próxima atualização dos dados.'
   }, {
     findH1: 'Where to charge, and whether it is free now',
     findLead: 'Every public charger in Portugal, with the status the operator declares, power, plugs and how to pay.',
@@ -125,7 +127,9 @@
     olcNote: 'OpenStreetMap lists this charger as {s}. The NAP still publishes it: the sockets and prices below are what the operator declares.',
     olcLive: 'OpenStreetMap lists this charger as {s}, but the operator reports it available or charging right now: OpenStreetMap is out of date.',
     lcNote: 'This charger is not in the NAP yet: OpenStreetMap lists it as {s}. There is no socket status or pricing, and the location and power are what the community mapped.',
-    lcName: '{s} charger'
+    lcName: '{s} charger',
+    postoMiss: 'We could not find charger {c}. If it joined the NAP recently, it shows up here at the next data update.',
+    postoNew: 'Charger {c} joined the NAP in the last 24 hours and is not in this search yet: it shows up here at the next data update.'
   });
 
   var PAGE = 30;
@@ -182,6 +186,10 @@
   // must still find the site. What is left must look like a code (letters and
   // digits): PTM-00031 is already bare, and 00031 would match every *-00031.
   function bare(w) { var m = /^[a-z]{2,4}-([a-z0-9-]+)$/.exec(w); return m && /[a-z]/.test(m[1]) && /\d/.test(m[1]) ? m[1] : null; }
+  // One key for a code however it is written: with or without the operator's
+  // prefix (EDP-PTM-00031) or MOBI-. For the codes the community wrote on a site
+  // under construction (`codes`) and the NAP site ids of the last 24 h.
+  function codeKey(c) { var n = norm(c).trim().replace(/^mobi-/, ''); return bare(n) || n; }
 
   function filter() {
     var words = norm(F.q).split(/\s+/).filter(Boolean), alt = words.map(bare);
@@ -337,8 +345,10 @@
     var oopPage = s.oop ? OOP + (N.lang() === 'en' ? '/en/stations/' : '/postos/') + encodeURIComponent(s.oop) : null;
     // No photo of the site itself: ask for one on olh'o'posto's upload page,
     // with the site picked (?posto=); the next refresh brings the photo here.
-    var ask = !(s.ph || []).some(function (p) { return p.src; }) && !s.lc;
-    if (oopPage && !ask) more.push(ext(oopPage, t('phOop')));
+    // A site under construction has a page on olh'o'posto (`oop`, its OSM id)
+    // but no static links until it is in the NAP; a planned one has neither.
+    var ask = !(s.ph || []).some(function (p) { return p.src; }) && (!s.lc || !!s.oop);
+    if (oopPage && !ask && !s.lc) more.push(ext(oopPage, t('phOop')));
     (s.mdl || []).forEach(function (m) { if (m.ph && m.ph.src) figs.push(figure(m.ph, t('phModel', { m: m.n }))); });
     var box = el('div', { class: 'photos' }, figs);
     if (links.length) box.appendChild(el('p', { class: 'small' }, links));
@@ -392,7 +402,7 @@
     d.appendChild(dl);
     if (s.mdl) d.appendChild(el('p', { class: 'small muted' }, t('mSrc', { who: 'Alexandre Moleiro' }), ' ',
       el('a', { href: MODELS_DOC, rel: 'noopener noreferrer', target: '_blank' }, t('mSrcLink'))));
-    if (!s.lc || s.ph) d.appendChild(photos(s));
+    if (!s.lc || s.ph || s.oop) d.appendChild(photos(s));
     if (P && !s.lc && window.NAP_USO) { var uso = window.NAP_USO.section(s, pts(s)); if (uso) d.appendChild(uso); }
     if (s.olc) d.appendChild(el('p', { class: 'muted small' }, t(liveOn(s) ? 'olcLive' : 'olcNote', { s: olcName(s) })));
     if (s.lc) d.appendChild(el('p', { class: 'muted small' }, t('lcNote', { s: t('life' + (s.lc === 'planned' ? 'Planned' : 'Construction')).toLowerCase() })));
@@ -784,13 +794,13 @@
     if (q0) { F.q = q0; $('q').value = q0; }
     $('search').addEventListener('submit', function (e) { e.preventDefault(); });
     var timer;
-    $('q').addEventListener('input', function () { clearTimeout(timer); timer = setTimeout(function () { F.q = $('q').value; filter(); }, 180); });
+    $('q').addEventListener('input', function () { $('postoMiss').hidden = true; clearTimeout(timer); timer = setTimeout(function () { F.q = $('q').value; filter(); }, 180); });
     document.querySelectorAll('[data-f]').forEach(function (b) {
       b.addEventListener('click', function () { var k = b.getAttribute('data-f'); F[k] = !F[k]; b.setAttribute('aria-pressed', String(F[k])); filter(); });
     });
     $('allRes').addEventListener('click', function () { dirty = false; shown = PAGE; render(); });
     $('reset').addEventListener('click', function () {
-      F = fresh(); here = null; dirty = false; view = VIEWS.mainland.slice();
+      F = fresh(); here = null; dirty = false; view = VIEWS.mainland.slice(); $('postoMiss').hidden = true;
       $('q').value = ''; options();
       document.querySelectorAll('[data-f]').forEach(function (b) { b.setAttribute('aria-pressed', 'false'); });
       $('near').setAttribute('aria-pressed', 'false'); filter();
@@ -812,11 +822,20 @@
 
     N.load('sites').then(function (d) {
       S = d.sites;
-      S.forEach(function (s) { s._k = norm([s.name, s.ext, s.city, s.op, s.osm_op].concat(s.hw || [], s.old || []).join(' ')); s._g = s.op ? opKey(s.op) : ''; });
+      S.forEach(function (s) { s._k = norm([s.name, s.ext, s.city, s.op, s.osm_op].concat(s.hw || [], s.old || [], s.codes || []).join(' ')); s._g = s.op ? opKey(s.op) : ''; });
       options(); filter();
       if (posto) {
-        var hit = S.filter(function (s) { return s.ext === posto || s.oop === posto || norm(s.ext) === bare(norm(posto)); })[0];
-        if (hit) { F.q = hit.ext; $('q').value = hit.ext; filter(); toggle(hit.ext, true); }
+        // A NAP site first; then a site under construction whose name or ref on
+        // OSM carries the code (ALM-00114/155), still outside the NAP. Its state
+        // joins the filter, or the list would hide what the link asked for.
+        var key = codeKey(posto);
+        var hit = S.filter(function (s) { return s.ext === posto || s.oop === posto || norm(s.ext) === bare(norm(posto)); })[0] ||
+          S.filter(function (s) { return (s.codes || []).some(function (c) { return codeKey(c) === key; }); })[0];
+        if (hit) {
+          var lc = life(hit);
+          if (F.life.length && F.life.indexOf(lc) < 0) { F.life = F.life.concat([lc]); options(); }
+          F.q = hit.ext; $('q').value = hit.ext; filter(); toggle(hit.ext, true);
+        } else missing(posto, key);
       }
       N.load('outline').then(function (o) { outline = o.outline; drawMap(); });
       return Promise.all([N.load('points'), N.load('stats')]);
@@ -830,6 +849,17 @@
       if (res && !res.stale) { index(); S.forEach(siteStatus); filter(); }
       N.liveNote($('live'), res, snapshot);
     }).catch(function () { $('count').textContent = t('loadFail'); $('live').hidden = true; });
+  }
+  // ?posto= that matches nothing says so, and says why when the site joined the
+  // NAP in the last 24 h (changes.json is hourly, this search is not).
+  function missing(posto, key) {
+    var box = $('postoMiss');
+    if (!box) return;
+    var say = function (k) { box.textContent = t(k, { c: posto }); box.hidden = false; };
+    say('postoMiss');
+    N.load('changes').then(function (c) {
+      if ((c.sites_added || []).some(function (x) { return codeKey(x.site) === key; })) say('postoNew');
+    }).catch(function () {});
   }
   function index() { bySite = new Map(); P.forEach(function (p) { var a = bySite.get(p.site_external_id); if (a) a.push(p); else bySite.set(p.site_external_id, [p]); }); }
   // Same rule as the pipeline: a site shows its most common socket status.

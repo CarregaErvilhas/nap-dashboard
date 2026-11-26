@@ -59,7 +59,8 @@ class OsmSockets(unittest.TestCase):
         self.assertEqual(osm_num('150000', 'kw'), 150)
 
     def test_planned_site_lists_mcs(self):
-        self.assertEqual(osm_planned.conns_of(self.TAGS), {'MCS', 'CCS Combo2'})
+        # Nos nomes do modelo da rede (o `planned` do ohmigo_dataset.py).
+        self.assertEqual(osm_planned.conns_of(self.TAGS), {'MCS', 'CCS'})
 
     def test_mcs_is_dc_for_shared_kw(self):
         # Um armário de 1 MW com MCS (1 MW) + CCS (600 kW): as fichas DC não se

@@ -12,8 +12,16 @@ Three ways OSM says "not open yet", all handled here:
      site polygon is complete, the stalls are the part under construction);
   3. loose construction:man_made / planned:man_made stalls with no site around them:
      grouped within 40 m into one site.
-A site already in the NAP (ref matches an external_id, or a NAP site within 30 m) is
-dropped: the lifecycle tag is stale, the charger exists.
+A site one of whose codes is already in the NAP is dropped: the lifecycle tag is
+stale, the charger exists. A NAP site within 30 m does not drop it: it is noted in
+`nap` (the NAP site id) and `nap_m`, because a new fast charger beside an old AC one
+is common. Procurar leaves those out, as it always did; olh'o'posto decides.
+
+Each site's `codes` are the NAP codes the community wrote on it, in `ref` and in the
+name: mappers often put the future code only in the name ("ALM-00114/155"). That is
+how ?posto=ALM-00114 finds a site that is not in the NAP yet, and how olh'o'posto
+merges it into the NAP site when it arrives. The network model publishes them
+(`planned` in ohmigo_dataset.py).
 
     venv/bin/python scripts/osm_planned.py
 """
@@ -31,9 +39,44 @@ SITE_PAD = 0.0002      # ~20 m around a site polygon
 CLUSTER_M = 40
 NAP_M = 30
 CODE_RE = re.compile(r'^(?:MOBI-)?[A-Z]{3}-\d{4,5}$')
+# A NAP code anywhere in a text, with what mappers append to it: "/86" (another
+# code, replacing the last digits: SXL-00085/86) and "…39" or "...39" (a range,
+# inclusive: MLD-00036…39).
+CODE_IN_TEXT = re.compile(r'(?<![A-Za-z0-9])(?:MOBI-)?([A-Z]{3})-(\d{4,5})((?:\s*(?:/|…|\.{2,3})\s*\d{1,5})*)(?![\d])')
+CODE_TAIL = re.compile(r'(/|…|\.{2,3})\s*(\d{1,5})')
+MAX_RANGE = 20   # a longer range is a typo or a whole street: keep only its first code
 LIFE = (('construction', 'construction'), ('planned', 'planned'), ('proposed', 'planned'))
-SOCKETS = {'type2_combo': 'CCS Combo2', 'type2': 'Type2', 'type2_cable': 'Type2',
-           'chademo': 'CHAdeMO', 'tesla_supercharger': 'CCS Combo2', 'mcs': 'MCS'}
+# The network model's connector names (ohmigo_dataset.CONNECTOR).
+SOCKETS = {'type2_combo': 'CCS', 'type2': 'T2', 'type2_cable': 'T2',
+           'chademo': 'CHADEMO', 'tesla_supercharger': 'CCS', 'mcs': 'MCS'}
+
+
+def codes_of(*texts):
+    """The NAP codes in `texts` (ref values, names), in order, without MOBI-.
+
+    'ALM-00114/155' -> ALM-00114, ALM-00155; 'GDM-00074/75/76' -> three codes;
+    'MLD-00036…39' -> 36 to 39. A ref like 'A;B' is two texts' worth of codes.
+    """
+    out = []
+    for text in texts:
+        for m in CODE_IN_TEXT.finditer(str(text or '')):
+            pre, base, tail = m.group(1), m.group(2), m.group(3)
+            found = [base]
+            for sep, num in CODE_TAIL.findall(tail):
+                if len(num) > len(base):
+                    break
+                nxt = base[:len(base) - len(num)] + num
+                if sep == '/':
+                    found.append(nxt)
+                    continue
+                start, end = int(found[-1]), int(nxt)
+                if end > start and end - start + 1 <= MAX_RANGE:
+                    found += [str(n).zfill(len(base)) for n in range(start + 1, end + 1)]
+            for d in found:
+                c = f'{pre}-{d}'
+                if c not in out:
+                    out.append(c)
+    return out
 
 
 def life_of(tags, what):
@@ -174,32 +217,37 @@ def main():
         # O NAP também tem códigos com MOBI- (MOBI-CHV-00002): vale com ou sem.
         refs = [r for r in refs if CODE_RE.match(r)]
         refs += [r[5:] for r in refs if r.startswith('MOBI-')]
+        name = t.get('name') or ''
+        codes = codes_of(*str(t.get('ref', '')).split(';'), name)
         d = dist_m(s['lat'], s['lon'], slat, slon)
         d = np.where(np.isnan(d), 1e12, d)
-        if any(r in ext for r in refs) or d.min() <= NAP_M:
+        if any(r in ext for r in refs + codes):
             skipped += 1
             continue
+        near = int(d.argmin())
+        close = d[near] <= NAP_M
         tags = [t] + u['stalls']
         kw = max(kw_of(x) for x in tags)
         conns = set().union(*(conns_of(x) for x in tags))
         op = t.get('operator') or t.get('brand') or t.get('network') or ''
-        name = t.get('name') or ''
         if not name or '?' in name:
             name = ''
-        near = int(d.argmin())
         rows.append({
             'ext': f"OSM-{s['type'][0]}{s['id']}", 'name': name, 'op': op,
             'city': scity[near] if d[near] <= 3000 else '',
             'region': region(s['lon'], s['lat']), 'lat': round(s['lat'], 6), 'lon': round(s['lon'], 6),
             'lc': u['st'], 'npts': u['npts'], 'kw': kw, 'conns': '|'.join(sorted(conns)),
-            'osm': f"{s['type']}/{s['id']}",
+            'osm': f"{s['type']}/{s['id']}", 'codes': '|'.join(codes),
+            'nap': sites.site_id.iloc[near] if close else '', 'nap_m': int(round(d[near])) if close else '',
         })
     df = pd.DataFrame(rows)
     df = df[df.region != 'OUTSIDE'] if len(df) else df
     os.makedirs('data', exist_ok=True)
     df.to_csv(OUT, index=False)
     print(f'{OUT}: {len(df)} locais ({int((df.lc == "construction").sum()) if len(df) else 0} em construção, '
-          f'{int((df.lc == "planned").sum()) if len(df) else 0} planeados); {skipped} ignorados por já estarem no NAP')
+          f'{int((df.lc == "planned").sum()) if len(df) else 0} planeados, '
+          f'{int((df.nap != "").sum()) if len(df) else 0} a ≤{NAP_M} m de um local do NAP); '
+          f'{skipped} ignorados por o NAP já ter o código')
     return 0
 
 
