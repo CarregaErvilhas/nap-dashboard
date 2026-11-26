@@ -169,6 +169,15 @@ details.ms input[type="checkbox"] { width: 20px; height: 20px; flex: none; }
 .maptools { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 8px; }
 .mapgl { width: 100%; aspect-ratio: 3 / 4; max-height: 80vh; border-radius: var(--r-s); overflow: hidden; background: var(--bg-alt); }
 .mapgl[hidden], .mapbox canvas[hidden] { display: none; }
+/* «Expandir mapa» (desktop only: on a phone the map is already its own full-width view). The
+   list stays beside it, since tapping a point opens that site in the list. The layout breaks
+   out of the page width and the map fills the window's height; find.js resizes the canvas. */
+.wideonly { display: none; }
+@media (min-width: 980px) {
+  .mapbox .wideonly { display: inline-flex; }
+  .findlayout.wide { grid-template-columns: minmax(0, 440px) minmax(0, 1fr); margin-inline: calc(50% - min(50vw - 24px, 900px)); }
+  .findlayout.wide .mapbox canvas, .findlayout.wide .mapgl { aspect-ratio: auto; height: max(420px, calc(100dvh - 250px)); max-height: none; }
+}
 #mDetail[aria-pressed="true"] { background: var(--ink); color: var(--card); }
 
 /* ---- tables ---- */
