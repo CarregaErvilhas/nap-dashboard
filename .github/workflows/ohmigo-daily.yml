@@ -49,6 +49,10 @@ jobs:
         run: python scripts/nap_etl.py data/evChargingInfra_latest.xml data/evActualStatus_latest.xml data
       - name: OSM cross-check (fetches Todos.json fresh)
         run: python scripts/osm_umap.py
+      # Os postos em construção do OSM (o `planned` do modelo): o olh'o'posto
+      # abre-lhes uma página para receberem fotos.
+      - name: OSM planned and under construction
+        run: python scripts/osm_planned.py
       # Modelos de carregador: o catálogo público que o Alexandre Moleiro mantém
       # num Google Doc (fetch_charger_models.sh -> data/charger_models.txt), lido
       # fresco em cada corrida. Lêem-no o dataset (charger_models.py: quanto cada

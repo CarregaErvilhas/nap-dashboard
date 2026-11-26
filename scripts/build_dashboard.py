@@ -126,7 +126,8 @@ pts['NAP_UNICO'] = pd.to_numeric(pts['NAP_UNICO'], errors='coerce')
 MODEL = 'data/ohmigo_chargers.json'
 if not os.path.exists(MODEL):
     sys.exit(f'FAIL: {MODEL} em falta: corre primeiro python scripts/ohmigo_dataset.py data {MODEL}')
-_model_sites = json.load(open(MODEL))['sites']
+_model = json.load(open(MODEL))
+_model_sites = _model['sites']
 model_pts = {(s['id'], p['id']): p for s in _model_sites for p in s['points']}
 # Per site, from the same model: the charger models from the catalogue
 # (charger_models.py: what a 400 V or 800 V car gets, alone or sharing) and
@@ -330,18 +331,28 @@ for _, s in S.iterrows():
         rec['doubt'] = '; '.join(caca_by_site[ext])
     sites_map.append(rec)
 
-# Sites OSM says are planned or under construction (scripts/osm_planned.py). They are not
-# in the NAP, so they carry `lc` ('construction' | 'planned'); the Procurar page hides them
-# by default. No points, no live status; counted nowhere else (KPIs stay NAP-only).
-if os.path.exists('data/osm_planned.csv'):
-    for _, r in pd.read_csv('data/osm_planned.csv', dtype=str, keep_default_na=False).iterrows():
-        _kw = float(r.kw or 0)
-        sites_map.append({
-            'ext': r.ext, 'name': r['name'] or r.ext, 'city': r.city, 'op': r.op,
-            'region': r.region, 'lat': float(r.lat), 'lon': float(r.lon),
-            'status': 'planned', 'lc': r.lc, 'npts': int(r.npts), 'kw': _kw,
-            'pw': pw_class(_kw * 1000), 'conns': [c for c in r.conns.split('|') if c],
-            'pay': [], 'dcv': [], 'osm_ref': r.osm})
+# Sites OSM says are planned or under construction (scripts/osm_planned.py), from the
+# network model's `planned`, the same list olh'o'posto reads. They are not in the NAP,
+# so they carry `lc` ('construction' | 'planned'); the Procurar page hides them by
+# default, and ?posto= finds them by the NAP codes the community wrote on them
+# (`codes`). A site under construction has a page on olh'o'posto for its photos
+# (`oop` = the OSM id); a planned one does not. No points, no live status; counted
+# nowhere else (KPIs stay NAP-only).
+MODEL_CONN = {'CCS': 'CCS Combo2', 'T2': 'Type2', 'CHADEMO': 'CHAdeMO', 'MCS': 'MCS'}
+for _p in _model.get('planned', []):
+    _kw = _p['kw'] or 0
+    _rec = {
+        'ext': _p['id'], 'name': _p['name'] or _p['id'], 'city': _p['city'] or '', 'op': _p['operator'] or '',
+        'region': {'AZO': 'azores', 'MAD': 'madeira'}.get(_p['region'], 'mainland'),
+        'lat': _p['lat'], 'lon': _p['lon'],
+        'status': 'planned', 'lc': _p['lifecycle'], 'npts': _p['npts'], 'kw': _kw,
+        'pw': pw_class(_kw * 1000), 'conns': [MODEL_CONN.get(c, c) for c in _p['connectors']],
+        'pay': [], 'dcv': [], 'osm_ref': _p['osm']['element']}
+    if _p['codes']:
+        _rec['codes'] = _p['codes']
+    if _p['lifecycle'] == 'construction':
+        _rec['oop'] = _p['id']
+    sites_map.append(_rec)
 
 # ---- aggregations ----
 def kpi(title, value, sub):

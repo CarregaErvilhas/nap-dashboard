@@ -420,6 +420,47 @@ out = {
     'generatedAt': datetime.now(timezone.utc).isoformat(timespec='seconds'),
     'sites': [s for s in sites.values() if s['points']],
 }
+
+
+def planned_sites(path):
+    """The sites OSM says are planned or under construction and the NAP does not
+    have yet (osm_planned.py), or None when that script did not run.
+
+    None and [] are different on purpose: without the CSV (no OSM dump this run)
+    the key is left out, so a reader keeps what it had instead of taking every
+    construction site as gone. The id is the OSM element ('OSM-w123'); `codes`
+    are the NAP codes the community wrote on it, which is how a reader merges it
+    into the NAP site once it is published (or matches `osm.element`).
+    """
+    try:
+        rows = pd.read_csv(path, dtype=str, keep_default_na=False)
+    except FileNotFoundError:
+        return None
+    except pd.errors.EmptyDataError:
+        return []
+    out = []
+    for r in rows.itertuples():
+        lat, lon = float(r.lat), float(r.lon)
+        kw = fnum(r.kw)
+        out.append({
+            'id': r.ext, 'osm': {'element': r.osm}, 'lifecycle': r.lc,
+            'codes': [c for c in r.codes.split('|') if c],
+            'name': r.name or None, 'operator': r.op or None, 'city': r.city or None,
+            'region': region(lat, lon), 'lat': lat, 'lon': lon,
+            'npts': int(r.npts), 'kw': kw if kw else None,
+            'connectors': [c for c in r.conns.split('|') if c],
+        })
+    return out
+
+
+# Planeados e em construção (OSM, ainda fora do NAP): o olh'o'posto abre-lhes
+# uma página para receberem fotos; o site mostra-os em Procurar.
+planned = planned_sites(f'{DATA}/osm_planned.csv')
+if planned is not None:
+    out['planned'] = planned
+    n_build = sum(1 for p in planned if p['lifecycle'] == 'construction')
+    print(f'{len(planned)} locais planeados ou em construção ({n_build} em construção, '
+          f'{sum(1 for p in planned if p["codes"])} com código NAP)')
 # De onde vêm os `models`, para quem os mostra dar o crédito.
 if catalog_meta:
     out['modelsSource'] = catalog_meta
