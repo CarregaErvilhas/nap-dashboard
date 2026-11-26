@@ -515,7 +515,12 @@ CC BY-SA 4.0; ref `olhaoposto:<NAP site id>`, re-downloaded when its
 when that API is down), then the OSM references
 (`osm_tags.photo_refs`: `panoramax=`, `mapillary=`, `wikimedia_commons=`,
 `image=` pointing at one of them; MapComplete's charging-station theme saves
-photos on Panoramax); a model's photo is a Commons file chosen by hand per
+photos on Panoramax). A `panoramax=` UUID is looked up in the federated search
+(`api.panoramax.xyz`) and, when it is not there, in olh'o'posto's own Panoramax
+(`panoramax.ocarroeletrico.com`, outside the federation for now), whose author
+comes from the `OlhaOPosto|author=` tag, not the producer (always the service
+account); when that UUID is also the site's olh'o'posto main photo,
+`ohmigo_dataset.py` keeps one. A model's photo is a Commons file chosen by hand per
 catalogue key in `assets/charger_model_photos.json` (a photo of the same model,
 not of the site: everyone who shows it says so). The script downloads a 500 px
 thumbnail of each to `data/photos/<id>.jpg` with author, licence and source

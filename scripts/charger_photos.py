@@ -5,8 +5,9 @@ Dois tipos, e quem as mostra diz sempre qual é:
     fotos de postos moderadas, publicadas no nosso Panoramax), e as que a
     comunidade põe no OpenStreetMap (`panoramax=`, `mapillary=`,
     `wikimedia_commons=`, `image=`; o tema de postos de carregamento do
-    MapComplete grava as fotos no Panoramax). Mostra aquele posto, onde está
-    no parque.
+    MapComplete grava as fotos no Panoramax). Um `panoramax=` procura-se na
+    pesquisa federada e, se lá não estiver, no Panoramax do olh'o'posto (fora
+    da federação, por agora). Mostra aquele posto, onde está no parque.
   - foto do modelo: uma foto livre do Wikimedia Commons de um carregador do
     mesmo modelo (assets/charger_model_photos.json, escolhida à mão, por
     chave do catálogo de charger_models.py). Ajuda a saber qual é o
@@ -80,26 +81,65 @@ def text(x):
     return re.sub(r'\s+', ' ', html.unescape(re.sub(r'<[^>]+>', '', str(x or '')))).strip()[:120] or None
 
 
-def panoramax(ids):
-    """uuid -> {thumb, credit, license, page}, pela pesquisa do catálogo federado."""
-    out = {}
+def search(api, ids):
+    """As features STAC de `ids` num servidor Panoramax, 50 de cada vez."""
+    out = []
     for i in range(0, len(ids), 50):
         chunk = ids[i:i + 50]
         q = urllib.parse.urlencode({'ids': ','.join(chunk), 'limit': len(chunk)})
-        d = json.loads(get(f'{PANORAMAX_API}/search?{q}'))
-        for f in d.get('features', []):
-            thumb = (f.get('assets') or {}).get('thumb', {}).get('href')
-            producers = [p.get('name') for p in f.get('providers') or [] if 'producer' in (p.get('roles') or [])]
-            if not thumb:
-                continue
-            out[f['id']] = {
-                'thumb': thumb,
-                # O último produtor é a pessoa; o primeiro pode ser a app (mapcomplete).
-                'credit': (producers[-1] if producers else None),
-                'license': (f.get('properties') or {}).get('license'),
-                'page': f'https://api.panoramax.xyz/#focus=pic&pic={f["id"]}',
-                'taken': ((f.get('properties') or {}).get('datetime') or '')[:10] or None,
-            }
+        out += json.loads(get(f'{api}/search?{q}')).get('features', [])
+    return out
+
+
+def semantic(f, key):
+    """O valor de uma etiqueta `chave=valor` da foto (`properties.semantics`)."""
+    for t in (f.get('properties') or {}).get('semantics') or []:
+        if t.get('key') == key and t.get('value'):
+            return str(t['value'])[:120]
+    return None
+
+
+def picture(f, page):
+    thumb = (f.get('assets') or {}).get('thumb', {}).get('href')
+    if not thumb:
+        return None
+    producers = [p.get('name') for p in f.get('providers') or [] if 'producer' in (p.get('roles') or [])]
+    return {
+        'thumb': thumb,
+        # O último produtor é a pessoa; o primeiro pode ser a app (mapcomplete).
+        # No olh'o'posto o produtor é sempre a conta de serviço: o autor vem na
+        # etiqueta `OlhaOPosto|author=`.
+        'credit': semantic(f, 'OlhaOPosto|author') or (producers[-1] if producers else None),
+        'license': (f.get('properties') or {}).get('license'),
+        'page': page,
+        'taken': ((f.get('properties') or {}).get('datetime') or '')[:10] or None,
+    }
+
+
+def panoramax(ids):
+    """uuid -> {thumb, credit, license, page}: pela pesquisa do catálogo federado
+    e, o que lá não está, pelo Panoramax do olh'o'posto. Esse servidor está fora
+    da federação até à conversa com a comunidade OSM, por isso um `panoramax=`
+    de uma foto do olh'o'posto não aparece na pesquisa federada. Uma fonte em
+    baixo não pára a outra."""
+    out = {}
+    try:
+        for f in search(PANORAMAX_API, ids):
+            m = picture(f, f'https://api.panoramax.xyz/#focus=pic&pic={f["id"]}')
+            if m:
+                out[f['id']] = m
+    except Exception as e:  # noqa: BLE001
+        print(f'aviso: Panoramax federado falhou ({e})')
+    rest = [i for i in ids if i not in out]
+    if rest:
+        try:
+            for f in search(f'{PANORAMAX_OOP}/api', rest):
+                m = picture(f, f'{PANORAMAX_OOP}/viewer?focus=map&pic={urllib.parse.quote(f["id"])}')
+                # Só miniaturas do próprio servidor: o resto do script descarrega-as.
+                if m and m['thumb'].startswith(PANORAMAX_OOP + '/'):
+                    out[f['id']] = m
+        except Exception as e:  # noqa: BLE001
+            print(f"aviso: Panoramax do olh'o'posto falhou ({e})")
     return out
 
 
@@ -200,10 +240,7 @@ def main():
     meta = {r: oop[r] for r in todo if oop and r in oop}
     pids = [r.split(':', 1)[1] for r in todo if r.startswith('panoramax:')]
     files = [r.split(':', 1)[1] for r in todo if r.startswith('commons:')]
-    try:
-        meta.update({f'panoramax:{k}': v for k, v in panoramax(pids).items()} if pids else {})
-    except Exception as e:  # noqa: BLE001 — uma fonte em baixo não pára a outra
-        print(f'aviso: Panoramax falhou ({e})')
+    meta.update({f'panoramax:{k}': v for k, v in panoramax(pids).items()} if pids else {})
     try:
         meta.update({f'commons:{k}': v for k, v in commons(files).items()} if files else {})
     except Exception as e:  # noqa: BLE001
