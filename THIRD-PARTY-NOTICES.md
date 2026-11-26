@@ -11,7 +11,8 @@ PolyForm-Noncommercial, the third-party portions stay under their own terms.
 
 `assets/site/grupo/*.svg` (copied to `site/grupo/`, shown on `grupo.html`) are the
 mascots of the sites of the O Carro Elétrico group (O Carro Elétrico, ohmigo, Voltaria,
-Comparador CEME, Postos PT, AmpereArchive). Each belongs to its own site and is its brand:
+Comparador CEME, Postos PT, olh'o'posto, AmpereArchive), plus `pano.svg`, the logo of the
+Panoramax project. Each belongs to its own site and is its brand:
 they are **not** covered by PolyForm or any other licence of this repo, and may not be
 reused apart from a link to that site.
 
