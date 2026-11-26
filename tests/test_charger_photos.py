@@ -89,5 +89,53 @@ class OlhaOPostoPhotosTest(unittest.TestCase):
         self.assertEqual(os.listdir(cp.DIR), [])
 
 
+class PanoramaxFallbackTest(unittest.TestCase):
+    """Um `panoramax=` que a pesquisa federada não conhece procura-se no
+    Panoramax do olh'o'posto (fora da federação)."""
+
+    def feature(self, uid, host, semantics=()):
+        return {'id': uid, 'assets': {'thumb': {'href': f'{host}/api/pictures/{uid}/thumb.jpg'}},
+                'providers': [{'name': 'OlhaOPosto', 'roles': ['producer']}],
+                'properties': {'license': 'CC-BY-SA-4.0', 'datetime': '2026-11-20T10:00:00Z',
+                               'semantics': list(semantics)}}
+
+    def run_with(self, federated, ours):
+        calls = []
+
+        def get(url, tries=3):
+            calls.append(url)
+            if url.startswith(cp.PANORAMAX_API):
+                if isinstance(federated, Exception):
+                    raise federated
+                return json.dumps({'features': federated}).encode()
+            if url.startswith(cp.PANORAMAX_OOP + '/api/search?'):
+                return json.dumps({'features': ours}).encode()
+            raise AssertionError(url)
+        with mock.patch.object(cp, 'get', get), mock.patch('builtins.print'):
+            return cp.panoramax(['fed-1', 'oop-1']), calls
+
+    def test_missing_from_the_federation_is_asked_to_our_server(self):
+        fed = self.feature('fed-1', 'https://other.example')
+        fed['providers'] = [{'name': 'mapcomplete', 'roles': ['producer']}, {'name': 'Rui', 'roles': ['producer']}]
+        ours = self.feature('oop-1', cp.PANORAMAX_OOP, [{'key': 'OlhaOPosto|author', 'value': 'Ana'}])
+        out, calls = self.run_with([fed], [ours])
+        self.assertEqual(out['fed-1']['credit'], 'Rui')
+        self.assertEqual(out['oop-1']['credit'], 'Ana')
+        self.assertEqual(out['oop-1']['page'], f'{cp.PANORAMAX_OOP}/viewer?focus=map&pic=oop-1')
+        self.assertEqual(out['oop-1']['taken'], '2026-11-20')
+        # Só o que faltou vai ao nosso servidor.
+        self.assertIn('ids=oop-1&', calls[1])
+        self.assertEqual(len(calls), 2)
+
+    def test_federation_down_still_asks_our_server(self):
+        out, _ = self.run_with(OSError('down'), [self.feature('oop-1', cp.PANORAMAX_OOP)])
+        self.assertEqual(list(out), ['oop-1'])
+        self.assertEqual(out['oop-1']['credit'], 'OlhaOPosto')
+
+    def test_a_thumb_off_our_server_is_ignored(self):
+        out, _ = self.run_with([], [self.feature('oop-1', 'https://elsewhere.example')])
+        self.assertEqual(out, {})
+
+
 if __name__ == '__main__':
     unittest.main()

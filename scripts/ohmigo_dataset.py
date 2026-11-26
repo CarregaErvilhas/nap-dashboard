@@ -360,6 +360,11 @@ except (OSError, ValueError, KeyError):
 for site in sites.values():
     refs = ['olhaoposto:' + site['id']] + (site.get('osm') or {}).pop('photoRefs', [])
     found = [photo_index[r] for r in refs if r in photo_index]
+    # A principal do olh'o'posto e um `panoramax=` do OSM podem ser a mesma
+    # foto (o link «Acrescentar ao OSM» da página de crédito): a `page` de uma
+    # foto do nosso Panoramax é o `map` da principal (charger_photos.py).
+    mains = {e['map'] for e in found if e.get('map')}
+    found = [e for e in found if e.get('map') or e.get('page') not in mains]
     if found:
         site['photos'] = found[:4]
     for m in site.get('models', []):
