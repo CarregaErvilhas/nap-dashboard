@@ -329,15 +329,15 @@
       }
     });
     var oopPage = s.oop ? OOP + (N.lang() === 'en' ? '/en/stations/' : '/postos/') + encodeURIComponent(s.oop) : null;
-    // No photo of the site itself: ask for one on olh'o'posto (its station
-    // page has the upload button; the next refresh brings the photo here).
+    // No photo of the site itself: ask for one on olh'o'posto's upload page,
+    // with the site picked (?posto=); the next refresh brings the photo here.
     var ask = !(s.ph || []).some(function (p) { return p.src; }) && !s.lc;
     if (oopPage && !ask) more.push(ext(oopPage, t('phOop')));
     (s.mdl || []).forEach(function (m) { if (m.ph && m.ph.src) figs.push(figure(m.ph, t('phModel', { m: m.n }))); });
     var box = el('div', { class: 'photos' }, figs);
     if (links.length) box.appendChild(el('p', { class: 'small' }, links));
     more.forEach(function (a) { box.appendChild(el('p', { class: 'small' }, a)); });
-    if (ask) box.appendChild(el('p', { class: 'small' }, ext(oopPage || OOP + (N.lang() === 'en' ? '/en/upload' : '/enviar'), t('phAdd'))));
+    if (ask) box.appendChild(el('p', { class: 'small' }, ext(OOP + (N.lang() === 'en' ? '/en/upload' : '/enviar') + (s.oop ? '?posto=' + encodeURIComponent(s.oop) : ''), t('phAdd'))));
     return box;
   }
   // Underground, checked on site, nearby, history (sites.json ug/chk/nb/hd/hn).
