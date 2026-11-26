@@ -1,6 +1,5 @@
 ---
-description: Deteta anomalias nos dados estáticos NAP e reporta por OPC
-mode: subagent
+description: Deteta anomalias nos dados estáticos NAP e reporta por OPC mode: subagent
 ---
 
 # Agente de anomalias — dados estáticos do NAP
@@ -15,29 +14,12 @@ mode: subagent
 
 ## Fonte externa: tracker de erros PCVE
 
-`scripts/tracker_checks.py` cruza o inventário com o tracker de erros dos
-operadores (`data/opc_registry_authority.csv`, `data/tracker_errors.csv`,
-`data/tracker_meta.json`, gerados por `scripts/tracker_sync.py` a partir de
-`pt-pcve-errors.xlsx`). Esses CSVs são a única fonte **atual** da identidade dos
-OPC (PartyId/PartyCode) e a única lista positiva de assets que o operador
-declarou removidos.
+`scripts/tracker_checks.py` cruza o inventário com o tracker de erros dos operadores (`data/opc_registry_authority.csv`, `data/tracker_errors.csv`, `data/tracker_meta.json`, gerados por `scripts/tracker_sync.py` a partir de `pt-pcve-errors.xlsx`). Esses CSVs são a única fonte **atual** da identidade dos OPC (PartyId/PartyCode) e a única lista positiva de assets que o operador declarou removidos.
 
-Não reimplementes estas regras: já correm no pipeline e escrevem
-`data/tracker_findings.md`/`.csv`, que `build_dashboard.py` anexa a `errors.md` como
-item 13. As duas regras tiradas das classes do tracker que só leem o NAP (tensão
-placeholder em DC, `mode3AC3p` sem potência trifásica) estão em
-`scripts/nap_static_checks.py` → `data/nap_static_findings.md` (errors.md item 8);
-também não as reimplementes. Em vez disso:
+Não reimplementes estas regras: já correm no pipeline e escrevem `data/tracker_findings.md`/`.csv`, que `build_dashboard.py` anexa a `errors.md` como item 13. As duas regras tiradas das classes do tracker que só leem o NAP (tensão placeholder em DC, `mode3AC3p` sem potência trifásica) estão em `scripts/nap_static_checks.py` → `data/nap_static_findings.md` (errors.md item 8); também não as reimplementes. Em vez disso:
 
-- **Usa o PartyId do tracker** ao agrupar por OPC. O `operator_id` do NAP é
-  inconsistente (21 ids com várias grafias; 3 operadores publicam com o
-  `PartyCode` em vez do `PartyId`; o `CONT` publica 450 sites com o nome do
-  adquirente, «Modelo Continente Hipermercados», em vez do CPO `CNT`
-  «Continente Plug & Charge»).
-- **Trata `notes_class` como evidência de classes reais.** O tracker é o único
-  conjunto rotulado do projeto (defeito real + valor considerado correto). As
-  classes abaixo foram todas pedidas por operadores reais, portanto uma regra
-  nova que as reproduza é fundamentada, não especulativa:
+- **Usa o PartyId do tracker** ao agrupar por OPC. O `operator_id` do NAP é inconsistente (21 ids com várias grafias; 3 operadores publicam com o `PartyCode` em vez do `PartyId`; o `CONT` publica 450 sites com o nome do adquirente, «Modelo Continente Hipermercados», em vez do CPO `CNT` «Continente Plug & Charge»).
+- **Trata `notes_class` como evidência de classes reais.** O tracker é o único conjunto rotulado do projeto (defeito real + valor considerado correto). As classes abaixo foram todas pedidas por operadores reais, portanto uma regra nova que as reproduza é fundamentada, não especulativa:
 
   | Classe no tracker | Linhas | Regra correspondente |
   |---|---|---|
@@ -48,14 +30,8 @@ também não as reimplementes. Em vez disso:
   | `missing cpo` | 46 | operador em falta (regra 7) |
   | `iva / vat` | 238 | já fechadas; `min_fee = 0` não é sinal (46% das linhas) |
 
-  Regras que a experiência do tracker refuta: **preços não são uma fonte de
-  outliers globais** — `min_fee` vai de 0 a 3,0 e não há valores absurdos desde
-  que os `97,561 €/min` desapareceram; uma regra por banda absoluta teria zero
-  achados e a variante "outlier dentro do operador" (>10× a mediana do operador)
-  produz >1300 falsos positivos. Só use um limite absoluto alto como rede de
-  segurança.
-- Se o tracker estiver desatualizado (`data/tracker_meta.json` com `synced_at`
-  antigo), o relatório tem de dizer na secção 13 — não recalcular em silêncio.
+Regras que a experiência do tracker refuta: **preços não são uma fonte de outliers globais** — `min_fee` vai de 0 a 3,0 e não há valores absurdos desde que os `97,561 €/min` desapareceram; uma regra por banda absoluta teria zero achados e a variante "outlier dentro do operador" (>10× a mediana do operador) produz >1300 falsos positivos. Só use um limite absoluto alto como rede de segurança.
+- Se o tracker estiver desatualizado (`data/tracker_meta.json` com `synced_at` antigo), o relatório tem de dizer na secção 13 — não recalcular em silêncio.
 
 
 ## Ambiente e regras de execução
@@ -73,10 +49,10 @@ também não as reimplementes. Em vez disso:
 1. **Física / lei de Ohm (prioridade máxima, verificação aproximada).** Para cada linha de conector com `voltage`, `max_current`, `max_power_w` numéricos: potência esperada = `V × I` (monofásico AC e DC), exceto `mode3AC3p` onde é `√3 × V × I` (trifásico). Marca `ratio = declarada / esperada`: `>1.25` = fisicamente impossível (capacidade excedida); `<0.75` = derating suspeito ou erro. É uma comparação aproximada (tolerância de 25% para convenções de reporte fase/neutro vs. entre-fases e arredondamentos), não igualdade exata. Sinaliza valores crus suspeitos já observados (1200 V, 3600 V, 600 A) e qualquer `V<=0`, `I<=0`, nulo ou texto.
 2. **Potências absurdas + teto máximo global.** `max_power_w` nulo, zero, negativo, `<1 kW` ou ultra-rápido implausível; `available_charging_power` do ponto incoerente com o `max()` dos seus conectores. Teto global: qualquer `max_power_w > 1 500 000 W` (1500 kW) ou `available_charging_power > 1500 kW` é CRÍTICO — acima de qualquer carregador ligeiro/pesado instalado em PT (HPC atual ≤ 400 kW; só o futuro MCS pesado se aproxima dos 1000+ kW). Reportar o valor em kW, o `connector_type` e se é linha de conector ou agregado do ponto.
 3. **Combinações conector/modo impossíveis + modos por tipo de tomada.** Ex.: CHAdeMO ou CCS Combo2 em modo AC; Type2 em `mode4`; `connector_format` incompatível com `connector_type`; `charging_mode`/`connector_type` fora dos enums do XSD. Regra de compatibilidade AC↔DC (CRÍTICO quando violada; `tesla*` é dual e nunca sinaliza por modo):
-   - Tipos só-DC (`chademo`, `iec62196T1COMBO`, `iec62196T2COMBO`, `pantographTopDown`, `pantographBottomUp`) têm de estar em `mode4DC` ou `ccs`. Em `mode1*`/`mode2*`/`mode3*` = impossível.
-   - Tipos só-AC (`domestic*`, `cee3`/`cee5`, `iec60309x2*`, `iec62196T1`, `yazaki`, `iec62196T2`, `iec62196T3A`/`T3C`) têm de estar em `mode1*`/`mode2*`/`mode3*`. Em `mode4DC`/`ccs` = impossível.
-   - `charging_mode` nulo/`unknown`/`other`/`_extended` com tipo claro não é erro, é BAIXO (metadado omisso).
-   - `connector_format` cruzado (MÉDIO): `cableMode2` só com `mode1*`/`mode2*`; `cableMode3`/`socket` só com `mode3*`; `otherCable` só com `mode4DC`/`ccs`.
+- Tipos só-DC (`chademo`, `iec62196T1COMBO`, `iec62196T2COMBO`, `pantographTopDown`, `pantographBottomUp`) têm de estar em `mode4DC` ou `ccs`. Em `mode1*`/`mode2*`/`mode3*` = impossível.
+- Tipos só-AC (`domestic*`, `cee3`/`cee5`, `iec60309x2*`, `iec62196T1`, `yazaki`, `iec62196T2`, `iec62196T3A`/`T3C`) têm de estar em `mode1*`/`mode2*`/`mode3*`. Em `mode4DC`/`ccs` = impossível.
+- `charging_mode` nulo/`unknown`/`other`/`_extended` com tipo claro não é erro, é BAIXO (metadado omisso).
+- `connector_format` cruzado (MÉDIO): `cableMode2` só com `mode1*`/`mode2*`; `cableMode3`/`socket` só com `mode3*`; `otherCable` só com `mode4DC`/`ccs`.
 4. **Limites de potência por tipo de tomada (suspeito, não impossível).** Para cada `connector_type`, compara `max_power_w` com o teto físico da família (veredito suspeito — a tomada não debita mais do que isto em PT; exceder por larga margem indicia potência herdada do posto ou erro de introdução). Tetos de referência (reportar em kW, com a distribuição observada por tipo para justificar): `domestic*` ≤ 7,4 kW; `cee3`/`cee5`/`iec60309x2*` ≤ 125 kW; `iec62196T1`/`yazaki` ≤ 20 kW; `iec62196T2` ≤ 50 kW; `iec62196T3A`/`T3C` ≤ 25 kW; `chademo` ≤ 400 kW; `iec62196T1COMBO`/`iec62196T2COMBO`/`tesla*` ≤ 500 kW; `pantograph*` ≤ 1500 kW (única exceção ao teto global); `other`/`_extended`/`unknown` sem teto por tipo (só teto global + Ohm). Um `iec62196T2` a 200 kW, por exemplo, é impossível em AC — escala para CRÍTICO.
 5. **Contagens sem sentido.** Sites com `n_points = 0`; `n_points` declarado ≠ nº real de `point_id` distintos; sites com nº de pontos extremo (cauda da distribuição — verificar `sites.n_points.max()`/média em vez de fixar um limiar arbitrário); pontos sem nenhum conector; pontos com nº de conectores extremo; `station_ids` vazio.
 6. **Duplicados, chaves partidas e identidade eMI3/CP7.** `point_id`, `point_external_id`, `site_id`, `site_external_id` duplicados; mesmo `point_external_id` em sites diferentes; `site_external_id` com formato fora do padrão operador-código-número. Valida o formato eMI3 (EVSE ID) `PT*<OPERADOR>*E?<LOCAL>*<NÚM>*<TOMADA>` (nº de segmentos variável 3–7; o prefixo `E` colado na região é sabidamente não-fiável — ver gotchas — por isso nunca chumbes por causa do `E`): regex base `^PT\*[A-Z0-9]+\*.+` fora disto = ALTO; 2º segmento (operador) tem de igualar `operator_id` do ponto/site (maiúsculas normalizadas), divergência = ALTO; sufixo de tomada (último segmento) tem de coincidir, int-normalizado (sem zeros à esquerda), com o último segmento de `point_id`, divergência = MÉDIO; mesmo código local (`<LOCAL>`) espalhado por cidades/CP4 dispersos, ou tomadas do mesmo site com códigos locais diferentes = suspeito (código de local trocado ou mnemónica ambígua tipo `LSB` vs `ELSB` — reportar como suspeito, nunca como impossível).
@@ -116,9 +92,7 @@ Escreve `Agents-outputs/anomalias-results.md` (cria a pasta se não existir), em
 | OPC | estado | sites (antes→agora) | pontos (antes→agora) | nota |
 |---|---|---|---|---|
 ```
-(uma linha por OPC novo/saído/grande variação; `estado` ∈ novo, saiu,
-crescimento, quebra, possível rename; se nada mudou — ou se é a baseline —
-uma linha a dizê-lo em vez da tabela.)
+(uma linha por OPC novo/saído/grande variação; `estado` ∈ novo, saiu, crescimento, quebra, possível rename; se nada mudou — ou se é a baseline — uma linha a dizê-lo em vez da tabela.)
 
 Regras do relatório:
 
