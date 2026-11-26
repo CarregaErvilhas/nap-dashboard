@@ -27,14 +27,14 @@ permissions: {}
 env:
   SITE_FILES: >-
     index.html rede.html explorar.html operadores.html grupo.html privacidade.html 404.html
-    app.css boot.js common.js find.js uso.js rede.js operadores.js explorar.js explorar.css grupo.js grupo.css
+    app.css boot.js common.js install.js find.js uso.js rede.js operadores.js explorar.js explorar.css grupo.js grupo.css
     grupo/carro.svg grupo/ohmigo.svg grupo/voltaria.svg grupo/ceme.svg grupo/nap.svg grupo/oop.svg grupo/pano.svg grupo/ampere.svg
     fonts/nunito-latin.woff2 fonts/OFL-Nunito.txt
     mapa.mjs vendor/maplibre/maplibre-gl.mjs vendor/maplibre/maplibre-gl-worker.mjs
     vendor/maplibre/maplibre-gl.css vendor/maplibre/LICENSE.txt
     vendor/pmtiles/pmtiles.js vendor/pmtiles/LICENSE.txt
     vendor/basemaps/basemaps.mjs vendor/basemaps/LICENSE.txt
-    favicon.svg favicon.ico apple-touch-icon.png og.png llms.txt site.webmanifest
+    favicon.svg favicon.ico apple-touch-icon.png icon-192.png icon-512.png icon-maskable-512.png og.png llms.txt site.webmanifest
     data/stats.json data/panels.json data/sites.json data/points.json
     data/outline.json data/opc.json data/basemap.json data/history.json data/changes.json
     data/years.json

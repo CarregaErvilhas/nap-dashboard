@@ -20,7 +20,8 @@
       'pay_Cartão RFID eMSP': 'Cartão do comercializador (RFID)', 'pay_Sem autenticação': 'Sem autenticação',
       pk_opc: 'Taxa do operador (OPC), sem energia', pk_adhoc: 'Sem contrato (ad hoc), com energia',
       pk_direct: 'Fora da MOBI.E, preço único com energia', pk_napfee: 'Preço segundo o NAP, sem tarifa na MOBI.E',
-      pks_opc: 'Taxa do operador', pks_adhoc: 'Sem contrato', pks_direct: 'Fora da MOBI.E', pks_napfee: 'Só no NAP'
+      pks_opc: 'Taxa do operador', pks_adhoc: 'Sem contrato', pks_direct: 'Fora da MOBI.E', pks_napfee: 'Só no NAP',
+      installLater: 'Agora não'
     },
     en: {
       navFind: 'Find', navNet: 'Network', navExplore: 'Explore', navOps: 'Operators',
@@ -37,7 +38,8 @@
       'pay_Cartão RFID eMSP': 'Supplier card (RFID)', 'pay_Sem autenticação': 'No authentication',
       pk_opc: 'Operator (CPO) fee, energy not included', pk_adhoc: 'No contract (ad hoc), energy included',
       pk_direct: 'Outside MOBI.E, single price with energy', pk_napfee: 'Price according to the NAP, no tariff in MOBI.E',
-      pks_opc: 'Operator fee', pks_adhoc: 'No contract', pks_direct: 'Outside MOBI.E', pks_napfee: 'NAP only'
+      pks_opc: 'Operator fee', pks_adhoc: 'No contract', pks_direct: 'Outside MOBI.E', pks_napfee: 'NAP only',
+      installLater: 'Not now'
     }
   };
   var PW = ['AC slow (<22kW)', 'AC/DC 22-50kW', 'DC fast 50-150kW', 'DC ultra 150-350kW', 'DC ultra (>=350kW)'];
