@@ -26,7 +26,7 @@ STATIC = ('app.css', 'boot.js', 'common.js', 'find.js', 'uso.js', 'rede.js', 'op
           'explorar.js', 'explorar.css', 'grupo.js', 'grupo.css',
           # The mascots of the group's sites (grupo.html), each its own site's brand.
           'grupo/carro.svg', 'grupo/ohmigo.svg', 'grupo/voltaria.svg', 'grupo/ceme.svg',
-          'grupo/nap.svg', 'grupo/ampere.svg',
+          'grupo/nap.svg', 'grupo/oop.svg', 'grupo/pano.svg', 'grupo/ampere.svg',
           'fonts/nunito-latin.woff2', 'fonts/OFL-Nunito.txt',
           # "Mapa detalhado" (mapa.mjs, loaded on demand) and the libraries it
           # imports, as published on npm; validate_site.VENDOR pins their sha256.
