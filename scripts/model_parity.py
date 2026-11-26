@@ -8,8 +8,8 @@ build, site/data/points.json e site/data/sites.json com o modelo da mesma
 corrida e falha se discordarem: é o que impede o site e o ohmigo de voltarem a
 dizer coisas diferentes do mesmo posto quando alguém mexe só num dos lados.
 
-Compara só ficheiros da mesma corrida: o chargers.json publicado é refeito duas
-vezes por dia (ohmigo-daily.yml) e o site uma vez por semana.
+Compara só ficheiros da mesma corrida: o refresh.yml refaz os dois juntos,
+quatro vezes por dia, e o pages.yml publica-os do mesmo artifact.
 
 Uso (da raiz, depois do build_dashboard.py):  python3 scripts/model_parity.py
 Só stdlib.

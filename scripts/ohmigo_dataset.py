@@ -13,8 +13,9 @@ OSM que só o ohmigo aplicava). O pipeline_guard.py confirma, a cada refresh,
 que o site mostra o que está aqui.
 
 O JSON (~10 MB, ~0,8 MB com gzip) é publicado no Pages em
-https://nap.ocarroeletrico.com/ohmigo/chargers.json. O ohmigo descarrega-o
-quando arranca e volta a vê-lo de 6 em 6 horas.
+https://nap.ocarroeletrico.com/ohmigo/chargers.json, refeito quatro vezes por
+dia pelo refresh.yml. O ohmigo descarrega-o quando arranca e volta a vê-lo de
+hora a hora.
 
 Do OpenStreetMap vem o bloco `osm` de cada local (nome, marca, horário, se é
 num parque subterrâneo...). A marca é muitas vezes o dono dos postos, não o

@@ -1,20 +1,22 @@
 name: Deploy dashboard to GitHub Pages
 
-# Publica o site/ commitado em https://nap.ocarroeletrico.com/ (domínio próprio,
-# ficheiro CNAME abaixo): páginas, js, css, fonte, ícones, site/data/*.json,
-# privacidade.html, 404.html e llms.txt já estão todos lá dentro (gerados pelo
-# scripts/build_site.py e validados pelo scripts/validate_site.py). Junta
-# robots.txt, sitemap.xml, /.well-known/security.txt, llms-full.txt e um
-# /dashboard.html que redireciona para / (links antigos).
-# Publica também o dataset do ohmigo em /ohmigo/chargers.json e as miniaturas
-# das fotos que ele refere em /photos/ (o artifact
-# ohmigo-dataset mais recente de uma corrida do ohmigo-daily.yml ou
-# refresh.yml na main; ver scripts/ohmigo_dataset.py).
-# E o histórico de uso por posto em /data/sites/ (o artifact site-history
-# mais recente do site-history.yml; ver scripts/site_history.py).
+# Publica o site em https://nap.ocarroeletrico.com/ (domínio próprio, ficheiro
+# CNAME abaixo). Os dados vêm do artifact "network" mais recente do
+# refresh.yml (quatro corridas por dia): os do site (site/data), o modelo da
+# rede em /ohmigo/chargers.json e as miniaturas das fotos que ele refere em
+# /photos/ (scripts/stage_network.py). As páginas voltam a ser geradas aqui
+# com os assets da main (scripts/build_site.py, stdlib) e o resultado passa o
+# mesmo scripts/validate_site.py do refresh e dos PRs. Sem artifact válido, o
+# deploy falha e o site publicado fica no último bom: nunca sai sem
+# /ohmigo/chargers.json, que o ohmigo e o olh'o'posto leem.
+# Junta robots.txt, sitemap.xml, /.well-known/security.txt, llms-full.txt e um
+# /dashboard.html que redireciona para / (links antigos), as últimas 24 h
+# (network-24h.yml) e o histórico de uso por posto em /data/sites/
+# (site-history.yml). Os artifacts só são aceites de corridas de confiança
+# (scripts/pick_artifact.sh).
 # Dispara quando o site, os resumos de texto (llms-full.txt) ou este workflow
-# mudam, ou à mão. Mudanças em assets/ só chegam aqui depois de um
-# build_site.py, que as copia para site/.
+# mudam, ou à mão (as corridas do refresh.yml, do network-24h.yml e do
+# site-history.yml disparam-no assim).
 on:
   workflow_dispatch:
   push:
@@ -41,6 +43,34 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: "3.15"
+      # Falha (e o deploy não sai) sem um artifact de confiança válido.
+      - name: Stage network data
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO_ID: ${{ github.repository_id }}
+        run: |
+          set -euo pipefail
+          id=$(bash scripts/pick_artifact.sh network refresh.yml)
+          if [ -z "$id" ]; then
+            echo "::error::sem artifact network de uma corrida de confiança do refresh.yml; o site fica no último deploy"
+            exit 1
+          fi
+          gh api "repos/$GITHUB_REPOSITORY/actions/artifacts/$id/zip" > "$RUNNER_TEMP/network.zip"
+          mkdir -p public
+          python3 scripts/stage_network.py "$RUNNER_TEMP/network.zip" site public
+      # As páginas a partir desses dados e dos assets da main, com a origem do
+      # estado ao vivo da variável do repo (CSP e meta), como no refresh.
+      - name: Render and validate the site
+        env:
+          AMPERE_ARCHIVE_URL: ${{ vars.AMPERE_ARCHIVE_URL }}
+        run: |
+          python3 scripts/build_site.py
+          python3 scripts/validate_site.py
       - name: Stage site
         run: |
           mkdir -p public
@@ -94,64 +124,9 @@ jobs:
           mkdir -p public/.well-known
           printf 'Contact: mailto:info@ocarroeletrico.com\nExpires: %s\nCanonical: https://nap.ocarroeletrico.com/.well-known/security.txt\nPreferred-Languages: pt, en\n' \
             "$(date -u -d '+180 days' +%Y-%m-%dT%H:%M:%SZ)" > public/.well-known/security.txt
-      # O dataset do ohmigo é o artifact "ohmigo-dataset" mais recente de uma
-      # corrida de confiança: ohmigo-daily.yml ou refresh.yml, na main deste
-      # repo, disparada por schedule ou workflow_dispatch. A pesquisa de
-      # artifacts por nome é do repo todo, e um pull_request de um fork pode
-      # carregar um artifact com o mesmo nome; daí o filtro. Não se exige
-      # conclusion == success: a corrida que o produz ainda está a correr
-      # quando dispara este deploy, mas aceita-se só sem falha já declarada.
-      # Se nenhum servir, o dashboard publica-se na mesma, só sem /ohmigo/.
-      - name: Stage ohmigo dataset
-        env:
-          GH_TOKEN: ${{ github.token }}
-          REPO_ID: ${{ github.repository_id }}
-        run: |
-          mkdir -p public/ohmigo
-          id=""
-          cands=$(gh api "repos/$GITHUB_REPOSITORY/actions/artifacts?name=ohmigo-dataset&per_page=50" \
-            --jq "[.artifacts[] | select((.expired | not)
-                    and .workflow_run.head_branch == \"main\"
-                    and (.workflow_run.head_repository_id | tostring) == \"$REPO_ID\")]
-                  | sort_by(.created_at) | reverse | .[] | \"\(.id) \(.workflow_run.id)\"")
-          while read -r aid rid; do
-            [ -n "$aid" ] || continue
-            ok=$(gh api "repos/$GITHUB_REPOSITORY/actions/runs/$rid" --jq \
-              "(.path == \".github/workflows/ohmigo-daily.yml\" or .path == \".github/workflows/refresh.yml\")
-               and (.event == \"schedule\" or .event == \"workflow_dispatch\")
-               and .head_branch == \"main\"
-               and (.head_repository.id | tostring) == \"$REPO_ID\"
-               and (.conclusion == null or .conclusion == \"success\")")
-            if [ "$ok" = "true" ]; then id=$aid; echo "ohmigo: artifact $aid da corrida $rid"; break; fi
-          done <<< "$cands"
-          # O zip tem o JSON do dataset e as miniaturas das fotos (photos/<id>.jpg,
-          # scripts/charger_photos.py), que vão para /photos/. -p de tudo menos
-          # photos/ dá o JSON (artifacts antigos só têm esse ficheiro).
-          if [ -n "$id" ]; then
-            gh api "repos/$GITHUB_REPOSITORY/actions/artifacts/$id/zip" > "$RUNNER_TEMP/ohmigo.zip"
-            unzip -p "$RUNNER_TEMP/ohmigo.zip" -x 'photos/*' > public/ohmigo/chargers.json
-            python3 -c 'import json,sys; d=json.load(open(sys.argv[1])); print("ohmigo:", len(d["sites"]), "sites, schema", d["schema"])' public/ohmigo/chargers.json
-            # Só JPEG, nome <16 hex>.jpg, menos de 400 kB, no máximo 2000: o
-            # resto do zip não entra no site.
-            mkdir -p "$RUNNER_TEMP/photos" public/photos
-            unzip -q -j "$RUNNER_TEMP/ohmigo.zip" 'photos/*' -d "$RUNNER_TEMP/photos" 2>/dev/null || true
-            n=0
-            for f in "$RUNNER_TEMP"/photos/*; do
-              [ -f "$f" ] && [ ! -L "$f" ] || continue
-              b=$(basename -- "$f")
-              [[ "$b" =~ ^[0-9a-f]{16}\.jpg$ ]] || { echo "::warning::foto ignorada: $b"; continue; }
-              [ "$(stat -c %s "$f")" -lt 400000 ] || continue
-              [ "$(head -c 3 "$f" | od -An -tx1 | tr -d ' \n')" = "ffd8ff" ] || continue
-              [ "$n" -lt 2000 ] || break
-              cp -- "$f" "public/photos/$b"; n=$((n+1))
-            done
-            echo "ohmigo: $n fotos"
-          else
-            echo "::warning::sem artifact ohmigo-dataset; /ohmigo/chargers.json fica de fora"
-          fi
       # A lista "Nas últimas 24 horas" da Rede: o artifact "network-24h" mais
       # recente de uma corrida do network-24h.yml na main (mesmos filtros do
-      # ohmigo acima). Só passa JSON válido com menos de 2 MB; sem ele fica o
+      # network acima). Só passa JSON válido com menos de 2 MB; sem ele fica o
       # data/changes.json vazio do repo, e a página esconde a lista.
       - name: Stage last 24 h of changes
         # Uma falha aqui (gh api, unzip) nunca trava o deploy: fica o vazio.
@@ -160,22 +135,7 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           REPO_ID: ${{ github.repository_id }}
         run: |
-          id=""
-          cands=$(gh api "repos/$GITHUB_REPOSITORY/actions/artifacts?name=network-24h&per_page=20" \
-            --jq "[.artifacts[] | select((.expired | not)
-                    and .workflow_run.head_branch == \"main\"
-                    and (.workflow_run.head_repository_id | tostring) == \"$REPO_ID\")]
-                  | sort_by(.created_at) | reverse | .[] | \"\(.id) \(.workflow_run.id)\"")
-          while read -r aid rid; do
-            [ -n "$aid" ] || continue
-            ok=$(gh api "repos/$GITHUB_REPOSITORY/actions/runs/$rid" --jq \
-              "(.path == \".github/workflows/network-24h.yml\")
-               and (.event == \"schedule\" or .event == \"workflow_dispatch\")
-               and .head_branch == \"main\"
-               and (.head_repository.id | tostring) == \"$REPO_ID\"
-               and (.conclusion == null or .conclusion == \"success\")")
-            if [ "$ok" = "true" ]; then id=$aid; break; fi
-          done <<< "$cands"
+          id=$(bash scripts/pick_artifact.sh network-24h network-24h.yml)
           if [ -z "$id" ]; then echo "::warning::sem artifact network-24h"; exit 0; fi
           gh api "repos/$GITHUB_REPOSITORY/actions/artifacts/$id/zip" > "$RUNNER_TEMP/n24.zip"
           unzip -p "$RUNNER_TEMP/n24.zip" > "$RUNNER_TEMP/changes.json"
@@ -201,22 +161,7 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           REPO_ID: ${{ github.repository_id }}
         run: |
-          id=""
-          cands=$(gh api "repos/$GITHUB_REPOSITORY/actions/artifacts?name=site-history&per_page=20" \
-            --jq "[.artifacts[] | select((.expired | not)
-                    and .workflow_run.head_branch == \"main\"
-                    and (.workflow_run.head_repository_id | tostring) == \"$REPO_ID\")]
-                  | sort_by(.created_at) | reverse | .[] | \"\(.id) \(.workflow_run.id)\"")
-          while read -r aid rid; do
-            [ -n "$aid" ] || continue
-            ok=$(gh api "repos/$GITHUB_REPOSITORY/actions/runs/$rid" --jq \
-              "(.path == \".github/workflows/site-history.yml\")
-               and (.event == \"schedule\" or .event == \"workflow_dispatch\")
-               and .head_branch == \"main\"
-               and (.head_repository.id | tostring) == \"$REPO_ID\"
-               and (.conclusion == null or .conclusion == \"success\")")
-            if [ "$ok" = "true" ]; then id=$aid; break; fi
-          done <<< "$cands"
+          id=$(bash scripts/pick_artifact.sh site-history site-history.yml)
           if [ -z "$id" ]; then echo "::warning::sem artifact site-history"; exit 0; fi
           gh api "repos/$GITHUB_REPOSITORY/actions/artifacts/$id/zip" > "$RUNNER_TEMP/sh.zip"
           rm -rf "$RUNNER_TEMP/sh" && mkdir -p "$RUNNER_TEMP/sh"

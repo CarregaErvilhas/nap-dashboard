@@ -1,23 +1,39 @@
-name: Weekly dashboard refresh
+name: Network refresh
+run-name: ${{ (github.event.schedule == '0 6 * * 1' || inputs.report) && 'Weekly report' || 'Network data' }}
 
-# Todas as segundas às 06:00 UTC: saca dados frescos do NAP/MOBI.E/DGEG,
-# corre o pipeline completo e faz commit dos deliverables regenerados.
-# O push do site/ dispara o deploy do Pages (pages.yml).
-# Corrida manual: Actions → Weekly dashboard refresh → Run workflow.
+# Quatro vezes por dia (02:49, 08:49, 14:49 e 20:49 UTC; o Todos.json do OSM
+# muda às 00:49 e 12:49): saca dados frescos do NAP/MOBI.E/DGEG/OSM, corre o
+# pipeline completo com os três guardas e publica o artifact "network", que o
+# pages.yml põe no site: os dados de Procurar, Rede e Explorar, o modelo da
+# rede (/ohmigo/chargers.json, que o ohmigo e o olh'o'posto leem) e as fotos.
+# Estas corridas ("Network data") não fazem commit.
+#
+# À segunda às 06:00 UTC, o relatório semanal ("Weekly report"): o mesmo
+# pipeline, mais o tracker PCVE (errors.md item 13) e as novidades da semana
+# (novidades.md, network-census.json), e o commit dos deliverables pelo job
+# publish. Só esta corrida dispara o agents.yml.
+# Corrida manual: Actions → Network refresh → Run workflow (report = relatório).
 on:
   schedule:
+    - cron: "49 2,8,14,20 * * *"
     - cron: "0 6 * * 1"
   workflow_dispatch:
+    inputs:
+      report:
+        description: "Relatório semanal: tracker, novidades e commit dos deliverables"
+        type: boolean
+        default: false
 
 # Dois jobs, para os parsers de terceiros e o token de escrita nunca
 # partilharem uma máquina (mesmo padrão do agents.yml):
 #   refresh  pip, fetch, parsers de XML/HTML/PDF/xlsx/OSM de terceiros e build.
 #            Só GITHUB_TOKEN de leitura (mais issues); o checkout é anónimo.
-#            Entrega os deliverables como artifact.
-#   publish  runner novo, checkout novo (sem hooks nem config de git que o
-#            refresh possa ter deixado), sem pip nem scripts do repo sobre
-#            dados de terceiros. Valida os ficheiros, gera o token da App e
-#            faz o commit + push.
+#            Entrega o artifact network e, no relatório, os deliverables.
+#   deploy   dispara o pages.yml (actions: write), sem checkout nem dados.
+#   publish  só no relatório. Runner novo, checkout novo (sem hooks nem config
+#            de git que o refresh possa ter deixado), sem pip nem scripts do
+#            repo sobre dados de terceiros. Valida os ficheiros, gera o token
+#            da App e faz o commit + push.
 permissions: {}
 
 # Lista fechada dos ficheiros do site (caminhos dentro de site/): o que o job
@@ -25,6 +41,8 @@ permissions: {}
 # ao que o scripts/build_site.py produz; o scripts/validate_site.py compara as
 # duas listas (no refresh e em cada PR).
 env:
+  # true no relatório semanal (cron de segunda às 06:00 ou input report).
+  REPORT: ${{ github.event.schedule == '0 6 * * 1' || inputs.report == true }}
   SITE_FILES: >-
     index.html rede.html explorar.html operadores.html grupo.html privacidade.html 404.html
     app.css boot.js common.js install.js find.js uso.js rede.js operadores.js explorar.js explorar.css grupo.js grupo.css
@@ -39,8 +57,12 @@ env:
     data/outline.json data/opc.json data/basemap.json data/history.json data/changes.json
     data/years.json
 
+# Um grupo por modo: o GitHub guarda no máximo uma corrida pendente por grupo
+# e uma nova cancela a pendente, por isso, com um grupo só, uma corrida de
+# dados atrasada podia cancelar o relatório de segunda. As duas podem correr
+# ao mesmo tempo: ambas publicam o network, e o pages.yml usa o mais recente.
 concurrency:
-  group: "refresh"
+  group: refresh-${{ (github.event.schedule == '0 6 * * 1' || inputs.report) && 'report' || 'data' }}
   cancel-in-progress: false
 
 jobs:
@@ -75,10 +97,12 @@ jobs:
       # Diff semanal da rede (novidades.md + network-census.json): compara com o
       # censo commitado (HEAD) antes do build pôr o painel de novidades no site.
       - name: Network news (weekly diff)
+        if: env.REPORT == 'true'
         run: python3 scripts/network_news.py
       # Fonte única de verdade: o agents.yml consome este artifact em vez de
       # voltar a sacar ~230 MB e re-correr o ETL (menos carga nas fontes oficiais).
       - name: Publish static data for agent
+        if: env.REPORT == 'true'
         run: |
           python3 -c "
           import datetime, hashlib, json, os
@@ -90,6 +114,7 @@ jobs:
           print(prov)
           "
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        if: env.REPORT == 'true'
         with:
           name: nap-static
           path: |
@@ -113,7 +138,10 @@ jobs:
           python scripts/concelho_check.py
           python scripts/osm_umap.py
           python scripts/osm_planned.py
+      # Só no relatório: o tracker só alimenta o errors.md (item 13), que só o
+      # relatório commita. Nada dele vai para o site nem para o modelo.
       - name: PCVE tracker cross-check
+        if: env.REPORT == 'true'
         env:
           # Secret, not a literal: nap-dashboard is public and the data owners'
           # file should not be pointed at from it. Set it to the shareable
@@ -137,9 +165,8 @@ jobs:
           key: archive-cache-${{ github.run_id }}
           restore-keys: archive-cache-
       # O histórico por posto (avarias e ocupação por hora, archive_history.py
-      # -> data/site_history.json) entra no modelo da rede. O refresh semanal
-      # calcula-o; esta cache leva-o também à corrida diária do ohmigo, que não
-      # lê o arquivo.
+      # -> data/site_history.json) entra no modelo da rede. Cada corrida
+      # calcula-o; a cache guarda o último bom para quando o arquivo falha.
       - name: Restore per-site history
         uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
@@ -185,12 +212,29 @@ jobs:
       # Centros comerciais, hospitais, parques... do OSM, para o ohmigo saber em
       # que local fica cada posto. Lê o extrato de Portugal do Geofabrik (~400 MB,
       # ~10 s a processar); o Overpass dava timeout. Sem ele o dataset sai sem
-      # `places`, por isso uma falha aqui não pára o refresh.
+      # `places`, por isso uma falha aqui não pára o refresh. O Geofabrik
+      # refaz o extrato uma vez por dia: fica em cache pelo dia (UTC), e só a
+      # primeira corrida de cada dia o descarrega (~4 min).
+      - name: Day (UTC)
+        id: day
+        run: echo "day=$(date -u +%F)" >> "$GITHUB_OUTPUT"
+      - name: Restore Geofabrik extract
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: data/geofabrik
+          key: geofabrik-${{ steps.day.outputs.day }}
       - name: Fetch OSM places
         continue-on-error: true
         run: |
-          curl -fsSL --retry 3 -o "$RUNNER_TEMP/portugal.osm.pbf" https://download.geofabrik.de/europe/portugal-latest.osm.pbf
-          python scripts/osm_places.py "$RUNNER_TEMP/portugal.osm.pbf"
+          mkdir -p data/geofabrik
+          pbf=data/geofabrik/portugal.osm.pbf
+          if [ ! -s "$pbf" ]; then
+            # Para um ficheiro temporário: um download cortado nunca fica na cache.
+            curl -fsSL --retry 3 -o "$pbf.part" https://download.geofabrik.de/europe/portugal-latest.osm.pbf
+            mv -- "$pbf.part" "$pbf"
+          fi
+          python scripts/osm_places.py "$pbf"
+
       # O modelo da rede (data/ohmigo_chargers.json): postos, tomadas, potência
       # (a do OSM onde corrige o NAP), taxas OPC com escalões e problemas só-NAP
       # num único JSON. Lêem-no o ohmigo (servidor MCP de custos de
@@ -227,26 +271,37 @@ jobs:
       # e teste do estado ao vivo (applyLive) em node.
       - name: Validate site
         run: python3 scripts/validate_site.py
-      # Artifact, não release: o repo tem releases imutáveis, e um asset
-      # publicado nunca mais pode ser substituído. O pages.yml vai buscar o
-      # artifact mais recente com este nome (está disponível antes do commit
-      # do job publish, que é o que dispara o pages.yml).
-      - name: Publish ohmigo dataset (artifact)
-        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+      # O que o pages.yml publica, já passado pelos três guardas acima: os
+      # dados do site (o pages.yml volta a gerar as páginas com os assets da
+      # main, por isso um merge de front end sai logo com os dados mais
+      # recentes), o modelo da rede e as miniaturas das fotos que ele refere,
+      # tudo da mesma corrida. Artifact, não release nem commit: o repo tem
+      # releases imutáveis, e quatro commits de ~15 MB por dia incham o git.
+      # O scripts/stage_network.py (no pages.yml) lê só estes nomes.
+      - name: Stage network artifact
+        run: |
+          set -euo pipefail
+          out="$RUNNER_TEMP/network"
+          mkdir -p "$out/data" "$out/ohmigo" "$out/photos"
+          for n in stats panels sites points outline history years; do
+            cp -- "site/data/$n.json" "$out/data/$n.json"
+          done
+          cp -- data/ohmigo_chargers.json "$out/ohmigo/chargers.json"
+          if [ -d data/photos ]; then
+            find data/photos -maxdepth 1 -type f -name '*.jpg' -exec cp -- {} "$out/photos/" \;
+          fi
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
-          name: ohmigo-dataset
-          # O dataset e as miniaturas das fotos que ele refere (photos/<id>.jpg):
-          # no mesmo artifact, para o pages.yml nunca publicar um sem as outras.
-          path: |
-            data/ohmigo_chargers.json
-            data/photos/
-          retention-days: 90
+          name: network
+          path: ${{ runner.temp }}/network
+          retention-days: 14
           if-no-files-found: error
       # Lista fechada do que o job publish pode commitar: os quatro ficheiros
       # da raiz e os ficheiros do site da lista SITE_FILES (acima). Copia-se só
       # a lista, não a pasta: o build não apaga ficheiros antigos do site/.
       # Tudo o resto que o pipeline deixou no disco fica neste runner.
       - name: Stage deliverables for publish
+        if: env.REPORT == 'true'
         run: |
           set -euo pipefail
           out="$RUNNER_TEMP/publish"
@@ -259,22 +314,46 @@ jobs:
             cp -- "site/$f" "$out/site/$f"
           done
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        if: env.REPORT == 'true'
         with:
           name: refresh-publish
           path: ${{ runner.temp }}/publish
           retention-days: 7
           if-no-files-found: error
-      # A fetch/pipeline failure leaves the dashboard silently stale (agents
-      # skips, Pages doesn't deploy). Open an issue so the next Monday isn't
-      # discovered a week later — same pattern as agents.yml.
+      # A fetch/pipeline failure leaves the site and the network model silently
+      # stale (Pages publishes the last good artifact). One open issue per
+      # outage, not one per run: there are four runs a day.
       - name: Notify on failure
         if: failure()
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh issue create --repo "$GITHUB_REPOSITORY" \
-            --title "Weekly refresh failed (run $GITHUB_RUN_ID)" \
-            --body "Fetch/pipeline failed; dashboard stays on last good. Run: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
+          title="Network refresh failed"
+          run="$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
+          open=$(gh issue list --repo "$GITHUB_REPOSITORY" --state open --search "\"$title\" in:title" \
+                   --json number --jq '.[0].number // empty')
+          if [ -n "$open" ]; then
+            echo "issue #$open já aberta; esta corrida: $run"
+          else
+            gh issue create --repo "$GITHUB_REPOSITORY" --title "$title" \
+              --body "Fetch/pipeline failed; the site and /ohmigo/chargers.json stay on the last good run until a run passes. First failed run: $run"
+          fi
+
+  # Dispara o deploy do Pages, que vai buscar o artifact network mais recente.
+  # Num job à parte, sem checkout nem dados: é o único GITHUB_TOKEN que pode
+  # disparar workflows (actions: write). No relatório, o push do publish
+  # dispara outro deploy, com os mesmos dados.
+  deploy:
+    needs: refresh
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      actions: write
+    steps:
+      - name: Trigger Pages deploy
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run pages.yml --repo "$GITHUB_REPOSITORY"
 
   # O commit, num runner novo: aqui não corre pip nem nenhum script do repo
   # sobre dados de terceiros, e o checkout é novo. Só passam os ficheiros da
@@ -289,6 +368,9 @@ jobs:
   # não correr dois deployments em simultâneo (400 "in progress").
   publish:
     needs: refresh
+    # Só o relatório semanal faz commit (a mesma condição do REPORT acima: o
+    # contexto env não existe no if de um job).
+    if: github.event.schedule == '0 6 * * 1' || inputs.report == true
     runs-on: ubuntu-latest
     timeout-minutes: 10
     permissions:
@@ -375,7 +457,7 @@ jobs:
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git commit -q -m "Weekly dashboard refresh: $(date -u +%F)" \
+          git commit -q -m "Weekly report: $(date -u +%F)" \
             || { echo "FAIL: commit falhou" >&2; exit 1; }
           #
           # Autenticação pelo header HTTP, não pela URL do remote: assim o
@@ -392,5 +474,5 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           gh issue create --repo "$GITHUB_REPOSITORY" \
-            --title "Weekly refresh: o commit falhou (run $GITHUB_RUN_ID)" \
+            --title "Weekly report: o commit falhou (run $GITHUB_RUN_ID)" \
             --body "O pipeline acabou, mas o job publish falhou antes do push. Run: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
