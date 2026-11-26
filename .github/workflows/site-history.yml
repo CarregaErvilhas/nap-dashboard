@@ -1,0 +1,90 @@
+name: Procurar - uso por posto
+
+# O histórico de uso de cada posto ("Uso ao longo do tempo" no detalhe do
+# Procurar, uso.js): scripts/site_history.py lê o Parquet do AmpereArchive pelo
+# endereço público e escreve data/site_history/sites/<xx>.json.gz (256
+# ficheiros). Não faz commit: publica o artifact "site-history" e dispara o
+# pages.yml, que copia os ficheiros para data/sites/ do site.
+#
+# De hora a hora, 17 min depois da hora (depois do network-24h.yml). O estado
+# (células horárias dos últimos dias, um ficheiro por mês fechado) fica no cache
+# do Actions; se o cache sumir, vem do artifact da última corrida boa. Sem nenhum
+# dos dois, recomeça nos últimos 45 dias; "all" refaz tudo desde 2021 (~1 h).
+on:
+  schedule:
+    - cron: "17 * * * *"
+  workflow_dispatch:
+    inputs:
+      all:
+        description: "Refazer o histórico todo, desde o início do arquivo (~1 h)"
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+  actions: write
+
+# Nunca cancela: uma corrida "all" demora mais do que uma hora de intervalo.
+concurrency:
+  group: "site-history"
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 150
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: "3.15"
+      - name: Install deps
+        run: pip install "$(grep -E '^duckdb==' requirements.txt)"
+      - name: Restore state (cache)
+        id: cache
+        if: ${{ !inputs.all }}
+        uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: |
+            data/site_history_state
+            data/archive_sites
+          key: site-history-${{ github.run_id }}
+          restore-keys: site-history-
+      - name: Restore state (last artifact)
+        if: ${{ !inputs.all && steps.cache.outputs.cache-matched-key == '' }}
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          rid=$(gh run list --repo "$GITHUB_REPOSITORY" --workflow site-history.yml --branch main --status success \
+            --limit 1 --json databaseId --jq '.[0].databaseId // empty')
+          if [ -z "$rid" ]; then echo "sem corrida anterior"; exit 0; fi
+          gh run download "$rid" --repo "$GITHUB_REPOSITORY" -n site-history -D "$RUNNER_TEMP/prev"
+          mkdir -p data && cp -R "$RUNNER_TEMP/prev/state" data/site_history_state
+          echo "estado da corrida $rid"
+      - name: Build
+        env:
+          AMPERE_ARCHIVE_URL: ${{ vars.AMPERE_ARCHIVE_URL }}
+        run: python3 scripts/site_history.py ${{ inputs.all && '--all' || '' }}
+      - name: Stage artifact (files + state)
+        run: cp -R data/site_history_state data/site_history/state
+      - name: Publish (artifact)
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: site-history
+          path: data/site_history
+          retention-days: 2
+          if-no-files-found: error
+      - name: Save state (cache)
+        uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: |
+            data/site_history_state
+            data/archive_sites
+          key: site-history-${{ github.run_id }}
+      - name: Trigger Pages deploy
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run pages.yml --repo "$GITHUB_REPOSITORY"

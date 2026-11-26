@@ -22,7 +22,7 @@ import site_data
 SRC = 'assets/site'
 PAGES = ('index.html', 'rede.html', 'explorar.html', 'operadores.html', 'grupo.html')
 # Copied as they are. privacidade/404/icons live in assets/ and keep their names.
-STATIC = ('app.css', 'boot.js', 'common.js', 'find.js', 'rede.js', 'operadores.js',
+STATIC = ('app.css', 'boot.js', 'common.js', 'find.js', 'uso.js', 'rede.js', 'operadores.js',
           'explorar.js', 'explorar.css', 'grupo.js', 'grupo.css',
           # The mascots of the group's sites (grupo.html), each its own site's brand.
           'grupo/carro.svg', 'grupo/ohmigo.svg', 'grupo/voltaria.svg', 'grupo/ceme.svg',

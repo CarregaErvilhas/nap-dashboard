@@ -10,6 +10,8 @@ name: Deploy dashboard to GitHub Pages
 # das fotos que ele refere em /photos/ (o artifact
 # ohmigo-dataset mais recente de uma corrida do ohmigo-daily.yml ou
 # refresh.yml na main; ver scripts/ohmigo_dataset.py).
+# E o histórico de uso por posto em /data/sites/ (o artifact site-history
+# mais recente do site-history.yml; ver scripts/site_history.py).
 # Dispara quando o site, os resumos de texto (llms-full.txt) ou este workflow
 # mudam, ou à mão. Mudanças em assets/ só chegam aqui depois de um
 # build_site.py, que as copia para site/.
@@ -188,6 +190,55 @@ jobs:
             echo "network-24h: artifact $id"
           else
             echo "::warning::network-24h: artifact $id inválido, fica o vazio"
+          fi
+      # O histórico de uso por posto do Procurar (uso.js): o artifact "site-history"
+      # mais recente de uma corrida do site-history.yml na main (mesmos filtros
+      # acima). Só passa se tiver os 256 data/sites/<xx>.json.gz, cada um JSON
+      # gzip válido com v = 1 e abaixo de 3 MB; sem ele, o detalhe esconde a secção.
+      - name: Stage per-site usage history
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO_ID: ${{ github.repository_id }}
+        run: |
+          id=""
+          cands=$(gh api "repos/$GITHUB_REPOSITORY/actions/artifacts?name=site-history&per_page=20" \
+            --jq "[.artifacts[] | select((.expired | not)
+                    and .workflow_run.head_branch == \"main\"
+                    and (.workflow_run.head_repository_id | tostring) == \"$REPO_ID\")]
+                  | sort_by(.created_at) | reverse | .[] | \"\(.id) \(.workflow_run.id)\"")
+          while read -r aid rid; do
+            [ -n "$aid" ] || continue
+            ok=$(gh api "repos/$GITHUB_REPOSITORY/actions/runs/$rid" --jq \
+              "(.path == \".github/workflows/site-history.yml\")
+               and (.event == \"schedule\" or .event == \"workflow_dispatch\")
+               and .head_branch == \"main\"
+               and (.head_repository.id | tostring) == \"$REPO_ID\"
+               and (.conclusion == null or .conclusion == \"success\")")
+            if [ "$ok" = "true" ]; then id=$aid; break; fi
+          done <<< "$cands"
+          if [ -z "$id" ]; then echo "::warning::sem artifact site-history"; exit 0; fi
+          gh api "repos/$GITHUB_REPOSITORY/actions/artifacts/$id/zip" > "$RUNNER_TEMP/sh.zip"
+          rm -rf "$RUNNER_TEMP/sh" && mkdir -p "$RUNNER_TEMP/sh"
+          unzip -q "$RUNNER_TEMP/sh.zip" 'sites/*' -d "$RUNNER_TEMP/sh"
+          if python3 - "$RUNNER_TEMP/sh/sites" <<'PY'
+          import gzip, json, os, re, sys
+          d = sys.argv[1]
+          names = sorted(os.listdir(d))
+          assert names == [f'{i:02x}.json.gz' for i in range(256)], 'faltam ou sobram ficheiros'
+          for n in names:
+              p = os.path.join(d, n)
+              assert os.path.isfile(p) and not os.path.islink(p) and os.path.getsize(p) < 3_000_000, n
+              def no_nan(c): raise ValueError(c)
+              doc = json.loads(gzip.decompress(open(p, 'rb').read()), parse_constant=no_nan)
+              assert doc.get('v') == 1 and doc.get('until') and isinstance(doc.get('sites'), dict), n
+          PY
+          then
+            mkdir -p public/data/sites
+            cp "$RUNNER_TEMP"/sh/sites/*.json.gz public/data/sites/
+            echo "site-history: artifact $id"
+          else
+            echo "::warning::site-history: artifact $id inválido, fica de fora"
           fi
       - uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
         with:
