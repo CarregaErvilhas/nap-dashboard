@@ -88,7 +88,7 @@ It checks that the JSON parses and matches the schema, `node --check` on every s
 
 `.github/workflows/pr-checks.yml` runs on every PR to `main`: ~1 s, no network, no dependencies. `scripts/ci_paths.py` asserts that (A) no data file sits in the repo root, (B) every reference to a data file is `data/`-prefixed, (C) every `scripts/*` cited in a workflow exists, (D) the tracker's derived files are NOT tracked. Plus `compileall` and `bash -n`. It also runs `scripts/validate_site.py` on the committed `site/` (the artifact `pages.yml` publishes unchecked): JSON and schema, JS syntax, no inline scripts, CSP, no `innerHTML`-style sinks.
 
-It deliberately does **not** run the full pipeline (`fetch_data.sh` is ~230 MB and `osm_umap.py` pulls an Overpass dump — don't hammer the official sources on every PR); the weekly `refresh.yml` is the real integration test. When you move or rename a data file, update `DATA_FILES` in `scripts/ci_paths.py`.
+It deliberately does **not** run the full pipeline (`fetch_data.sh` is ~230 MB and `osm_umap.py` pulls an Overpass dump — don't hammer the official sources on every PR); `refresh.yml` (four runs a day) is the real integration test. When you move or rename a data file, update `DATA_FILES` in `scripts/ci_paths.py`.
 
 ## Layout
 

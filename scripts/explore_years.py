@@ -4,7 +4,7 @@
 Lê `site/data/years.json` (o estado, commitado), acrescenta-lhe os dias que
 ainda não tem e volta a escrevê-lo. Um dia só entra quando já acabou (UTC), e
 entra uma vez: o ficheiro guarda somas, por isso cada corrida só precisa dos
-dias novos. O refresh semanal corre-o sobre `data/archive_cache` (28 dias); a
+dias novos. O refresh corre-o sobre `data/archive_cache` (28 dias); a
 primeira construção, ou uma reconstrução, corre-se à mão sobre o arquivo todo:
 
     python3 scripts/explore_years.py --download data/archive_full   # ~6 000 ficheiros, uma vez

@@ -13,8 +13,8 @@
 # O job `paths-and-syntax` corre em ~1 s, sem dependências (stdlib) e sem rede.
 # O job `unit-tests` corre os testes de tests/ com o duckdb, o pandas e o lxml
 # instalados do PyPI, nas versões do requirements.txt: dados sintéticos, sem
-# tocar nos servidores oficiais. O refresh semanal (`refresh.yml`) continua a
-# ser o teste de integração a sério.
+# tocar nos servidores oficiais. O `refresh.yml` (quatro corridas por dia)
+# continua a ser o teste de integração a sério.
 name: PR checks
 
 on:
@@ -37,7 +37,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       # Mesma versão dos outros workflows (3.15) — alinhar evita dois runtimes
-      # diferentes entre o gate e o refresh semanal.
+      # diferentes entre o gate e o refresh.
       - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
         with:
           python-version: "3.15"
@@ -70,7 +70,8 @@ jobs:
             echo "::warning::pyyaml ausente; YAML não validado localmente"
           fi
 
-      # O site/ é o que o pages.yml publica (sem validação nenhuma). Sem este
+      # O site/ é a base do que o pages.yml publica (que o volta a validar com
+      # os dados do refresh, mas já depois do merge). Sem este
       # passo, um PR podia meter um <script> inline, um ficheiro a mais ou um
       # innerHTML com texto de terceiros, e o merge publicava-o. Também falha
       # se as cópias de assets/ em site/ estiverem desatualizadas.

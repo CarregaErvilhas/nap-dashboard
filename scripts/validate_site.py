@@ -4,8 +4,9 @@
     python3 scripts/validate_site.py          # valida site/
     python3 scripts/validate_site.py DIR      # valida outra cópia (testes)
 
-Corre no refresh.yml a seguir ao build, antes do commit, e no pr-checks.yml em
-cada PR (o pages.yml publica o site/ commitado sem validação nenhuma). Falha
+Corre no refresh.yml a seguir ao build, antes do artifact e do commit, no
+pr-checks.yml em cada PR e no pages.yml antes de cada deploy (sobre as páginas
+que gera com os dados do artifact network). Falha
 (exit != 0) se:
   1. faltar um ficheiro esperado (páginas, js, css, fonte, ícones, dados) ou
      houver em site/ um ficheiro ou link fora da lista fechada (o pages.yml

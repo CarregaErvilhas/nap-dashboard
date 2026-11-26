@@ -14,11 +14,13 @@ name: Weekly anomalias agent
 #            com o PAT. Código que o agente escreva (scripts/) nunca entra
 #            assim: fica no artifact agent-outputs, para alguém o rever e
 #            abrir um PR.
-# Dispara quando o refresh semanal completa com sucesso + botão manual.
+# Dispara quando o relatório semanal do refresh.yml ("Weekly report")
+# completa com sucesso + botão manual. As corridas de dados do mesmo workflow
+# ("Network data", quatro por dia) não o disparam.
 # Custo $0 (free tier Zen via harness opencode2).
 on:
   workflow_run:
-    workflows: ["Weekly dashboard refresh"]
+    workflows: ["Network refresh"]
     types: [completed]
   workflow_dispatch:
 
@@ -30,7 +32,7 @@ concurrency:
 
 jobs:
   agent:
-    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
+    if: ${{ github.event_name == 'workflow_dispatch' || (github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.display_title == 'Weekly report') }}
     runs-on: ubuntu-latest
     timeout-minutes: 180
     permissions:

@@ -131,7 +131,7 @@ for path in tracked_paths():
             fail('B', f'{path}:{lineno}: referência sem prefixo data/ — {line.strip()[:90]}')
 
 # --- C. scripts referenciados pelos workflows existem -----------------------
-for wf in ('refresh.yml', 'agents.yml', 'pr-checks.yml', 'pages.yml', 'ohmigo-daily.yml'):
+for wf in ('refresh.yml', 'agents.yml', 'pr-checks.yml', 'pages.yml'):
     p = os.path.join('.github', 'workflows', wf)
     if not os.path.exists(p):
         continue
