@@ -492,7 +492,7 @@
   function row(k, x) {
     var where = [x.city, x.op].filter(Boolean).join(', ');
     return el('li', null,
-      el('a', { href: 'index.html?q=' + encodeURIComponent(x.site), title: t('findIt', { s: x.site }) }, x.name && x.name !== x.site ? x.name : x.site),
+      el('a', { href: 'index.html?posto=' + encodeURIComponent(x.site), title: t('findIt', { s: x.site }) }, x.name && x.name !== x.site ? x.name : x.site),
       where ? el('span', { class: 'where' }, where) : null,
       el('span', { class: 'what' }, detail(k, x)));
   }
