@@ -59,8 +59,7 @@
 
 <a id="opc-"></a>
 
-<details open>
-<summary><b> — ? (170 linhas)</b></summary>
+<details open> <summary><b> — ? (170 linhas)</b></summary>
 
 ##  — ? (170 linhas)
 
@@ -250,8 +249,7 @@
 
 <a id="opc-ACCI"></a>
 
-<details open>
-<summary><b>ACCI — ACCIONA RECARGA PORTUGAL,UNIPESSOAL LDA (12 linhas)</b></summary>
+<details open> <summary><b>ACCI — ACCIONA RECARGA PORTUGAL,UNIPESSOAL LDA (12 linhas)</b></summary>
 
 ## ACCI — ACCIONA RECARGA PORTUGAL,UNIPESSOAL LDA (12 linhas)
 
@@ -283,8 +281,7 @@
 
 <a id="opc-ALFA"></a>
 
-<details open>
-<summary><b>ALFA — Alfa Energia (2 linhas)</b></summary>
+<details open> <summary><b>ALFA — Alfa Energia (2 linhas)</b></summary>
 
 ## ALFA — Alfa Energia (2 linhas)
 
@@ -301,8 +298,7 @@
 
 <a id="opc-ATLA"></a>
 
-<details open>
-<summary><b>ATLA — Atlante Infra Portugal, S.A (595 linhas)</b></summary>
+<details open> <summary><b>ATLA — Atlante Infra Portugal, S.A (595 linhas)</b></summary>
 
 ## ATLA — Atlante Infra Portugal, S.A (595 linhas)
 
@@ -917,8 +913,7 @@
 
 <a id="opc-BRIG"></a>
 
-<details open>
-<summary><b>BRIG — Brightcity S.A. (2 linhas)</b></summary>
+<details open> <summary><b>BRIG — Brightcity S.A. (2 linhas)</b></summary>
 
 ## BRIG — Brightcity S.A. (2 linhas)
 
@@ -935,8 +930,7 @@
 
 <a id="opc-CEPS"></a>
 
-<details>
-<summary><b>CEPS — Cepsa Portuguesa Petroleos (61 linhas)</b></summary>
+<details> <summary><b>CEPS — Cepsa Portuguesa Petroleos (61 linhas)</b></summary>
 
 ## CEPS — Cepsa Portuguesa Petroleos (61 linhas)
 
@@ -1017,8 +1011,7 @@
 
 <a id="opc-CIRC"></a>
 
-<details>
-<summary><b>CIRC — Circuitos Energy Solutions, Lda. (4 linhas)</b></summary>
+<details> <summary><b>CIRC — Circuitos Energy Solutions, Lda. (4 linhas)</b></summary>
 
 ## CIRC — Circuitos Energy Solutions, Lda. (4 linhas)
 
@@ -1037,8 +1030,7 @@
 
 <a id="opc-CONT"></a>
 
-<details>
-<summary><b>CONT — Modelo Continente Hipermercados, S.A. (470 linhas)</b></summary>
+<details> <summary><b>CONT — Modelo Continente Hipermercados, S.A. (470 linhas)</b></summary>
 
 ## CONT — Modelo Continente Hipermercados, S.A. (470 linhas)
 
@@ -1528,8 +1520,7 @@
 
 <a id="opc-DTEI"></a>
 
-<details>
-<summary><b>DTEI — DTE, Instalacoes Especiais (44 linhas)</b></summary>
+<details> <summary><b>DTEI — DTE, Instalacoes Especiais (44 linhas)</b></summary>
 
 ## DTEI — DTE, Instalacoes Especiais (44 linhas)
 
@@ -1588,8 +1579,7 @@
 
 <a id="opc-ECOI"></a>
 
-<details>
-<summary><b>ECOI — ECOINSIDE (25 linhas)</b></summary>
+<details> <summary><b>ECOI — ECOINSIDE (25 linhas)</b></summary>
 
 ## ECOI — ECOINSIDE (25 linhas)
 
@@ -1629,8 +1619,7 @@
 
 <a id="opc-EDPC"></a>
 
-<details>
-<summary><b>EDPC — EDP Comercial (766 linhas)</b></summary>
+<details> <summary><b>EDPC — EDP Comercial (766 linhas)</b></summary>
 
 ## EDPC — EDP Comercial (766 linhas)
 
@@ -2416,8 +2405,7 @@
 
 <a id="opc-EMAC"></a>
 
-<details>
-<summary><b>EMAC — EMACOM - Telecomunicações da Madeira, Unipessoal, Lda (2 linhas)</b></summary>
+<details> <summary><b>EMAC — EMACOM - Telecomunicações da Madeira, Unipessoal, Lda (2 linhas)</b></summary>
 
 ## EMAC — EMACOM - Telecomunicações da Madeira, Unipessoal, Lda (2 linhas)
 
@@ -2434,8 +2422,7 @@
 
 <a id="opc-EMEL"></a>
 
-<details>
-<summary><b>EMEL — EMEL - Empresa Municipal de Mobilidade e Estacionamento de Lisboa, E.M., S.A. (32 linhas)</b></summary>
+<details> <summary><b>EMEL — EMEL - Empresa Municipal de Mobilidade e Estacionamento de Lisboa, E.M., S.A. (32 linhas)</b></summary>
 
 ## EMEL — EMEL - Empresa Municipal de Mobilidade e Estacionamento de Lisboa, E.M., S.A. (32 linhas)
 
@@ -2482,8 +2469,7 @@
 
 <a id="opc-ENBL"></a>
 
-<details>
-<summary><b>ENBL — Enable Mobility Solutions, S.A. (24 linhas)</b></summary>
+<details> <summary><b>ENBL — Enable Mobility Solutions, S.A. (24 linhas)</b></summary>
 
 ## ENBL — Enable Mobility Solutions, S.A. (24 linhas)
 
@@ -2522,8 +2508,7 @@
 
 <a id="opc-EPKS"></a>
 
-<details>
-<summary><b>EPKS — Telpark (400 linhas)</b></summary>
+<details> <summary><b>EPKS — Telpark (400 linhas)</b></summary>
 
 ## EPKS — Telpark (400 linhas)
 
@@ -2943,8 +2928,7 @@
 
 <a id="opc-EVCE"></a>
 
-<details>
-<summary><b>EVCE — EVCE POWER, LDA. / MOBISMART (3 linhas)</b></summary>
+<details> <summary><b>EVCE — EVCE POWER, LDA. / MOBISMART (3 linhas)</b></summary>
 
 ## EVCE — EVCE POWER, LDA. / MOBISMART (3 linhas)
 
@@ -2962,8 +2946,7 @@
 
 <a id="opc-EVIO"></a>
 
-<details>
-<summary><b>EVIO — EVIO - Electrical Mobility (8 linhas)</b></summary>
+<details> <summary><b>EVIO — EVIO - Electrical Mobility (8 linhas)</b></summary>
 
 ## EVIO — EVIO - Electrical Mobility (8 linhas)
 
@@ -2991,8 +2974,7 @@
 
 <a id="opc-FCTO"></a>
 
-<details>
-<summary><b>FCTO — Iberdrola | bp pulse (398 linhas)</b></summary>
+<details> <summary><b>FCTO — Iberdrola | bp pulse (398 linhas)</b></summary>
 
 ## FCTO — Iberdrola | bp pulse (398 linhas)
 
@@ -3405,8 +3387,7 @@
 
 <a id="opc-FRTR"></a>
 
-<details>
-<summary><b>FRTR — FRONTROW, LDA (4 linhas)</b></summary>
+<details> <summary><b>FRTR — FRONTROW, LDA (4 linhas)</b></summary>
 
 ## FRTR — FRONTROW, LDA (4 linhas)
 
@@ -3425,8 +3406,7 @@
 
 <a id="opc-GENJ"></a>
 
-<details>
-<summary><b>GENJ — Generation Journey Lda (3 linhas)</b></summary>
+<details> <summary><b>GENJ — Generation Journey Lda (3 linhas)</b></summary>
 
 ## GENJ — Generation Journey Lda (3 linhas)
 
@@ -3444,8 +3424,7 @@
 
 <a id="opc-GLPG"></a>
 
-<details>
-<summary><b>GLPG — Galpgeste (73 linhas)</b></summary>
+<details> <summary><b>GLPG — Galpgeste (73 linhas)</b></summary>
 
 ## GLPG — Galpgeste (73 linhas)
 
@@ -3538,8 +3517,7 @@
 
 <a id="opc-GLPP"></a>
 
-<details>
-<summary><b>GLPP — Galp Power OPC (632 linhas)</b></summary>
+<details> <summary><b>GLPP — Galp Power OPC (632 linhas)</b></summary>
 
 ## GLPP — Galp Power OPC (632 linhas)
 
@@ -4191,8 +4169,7 @@
 
 <a id="opc-HELX"></a>
 
-<details>
-<summary><b>HELX — Helexia II Energy Services, Lda. (168 linhas)</b></summary>
+<details> <summary><b>HELX — Helexia II Energy Services, Lda. (168 linhas)</b></summary>
 
 ## HELX — Helexia II Energy Services, Lda. (168 linhas)
 
@@ -4375,8 +4352,7 @@
 
 <a id="opc-HEXA"></a>
 
-<details>
-<summary><b>HEXA — HEXAGONAL OCEAN, LDA (34 linhas)</b></summary>
+<details> <summary><b>HEXA — HEXAGONAL OCEAN, LDA (34 linhas)</b></summary>
 
 ## HEXA — HEXAGONAL OCEAN, LDA (34 linhas)
 
@@ -4425,8 +4401,7 @@
 
 <a id="opc-HORZ"></a>
 
-<details>
-<summary><b>HORZ — Powerdot, S.A (467 linhas)</b></summary>
+<details> <summary><b>HORZ — Powerdot, S.A (467 linhas)</b></summary>
 
 ## HORZ — Powerdot, S.A (467 linhas)
 
@@ -4913,8 +4888,7 @@
 
 <a id="opc-IBRD"></a>
 
-<details>
-<summary><b>IBRD — Iberdrola Clientes Portugal, Unipessoal, Lda (13 linhas)</b></summary>
+<details> <summary><b>IBRD — Iberdrola Clientes Portugal, Unipessoal, Lda (13 linhas)</b></summary>
 
 ## IBRD — Iberdrola Clientes Portugal, Unipessoal, Lda (13 linhas)
 
@@ -4942,8 +4916,7 @@
 
 <a id="opc-IHOM"></a>
 
-<details>
-<summary><b>IHOM — iHome Lda (4 linhas)</b></summary>
+<details> <summary><b>IHOM — iHome Lda (4 linhas)</b></summary>
 
 ## IHOM — iHome Lda (4 linhas)
 
@@ -4962,8 +4935,7 @@
 
 <a id="opc-KLCS"></a>
 
-<details>
-<summary><b>KLCS — Kilometer Low Cost II Serviços, SA (1 linha)</b></summary>
+<details> <summary><b>KLCS — Kilometer Low Cost II Serviços, SA (1 linha)</b></summary>
 
 ## KLCS — Kilometer Low Cost II Serviços, SA (1 linha)
 
@@ -4979,8 +4951,7 @@
 
 <a id="opc-LOGI"></a>
 
-<details>
-<summary><b>LOGI — uCharge (2 linhas)</b></summary>
+<details> <summary><b>LOGI — uCharge (2 linhas)</b></summary>
 
 ## LOGI — uCharge (2 linhas)
 
@@ -4997,8 +4968,7 @@
 
 <a id="opc-LOUL"></a>
 
-<details>
-<summary><b>LOUL — Loulé Concelho Global, EM (3 linhas)</b></summary>
+<details> <summary><b>LOUL — Loulé Concelho Global, EM (3 linhas)</b></summary>
 
 ## LOUL — Loulé Concelho Global, EM (3 linhas)
 
@@ -5016,8 +4986,7 @@
 
 <a id="opc-LUSI"></a>
 
-<details>
-<summary><b>LUSI — LUSIADAENERGIA, S.A. (2 linhas)</b></summary>
+<details> <summary><b>LUSI — LUSIADAENERGIA, S.A. (2 linhas)</b></summary>
 
 ## LUSI — LUSIADAENERGIA, S.A. (2 linhas)
 
@@ -5034,8 +5003,7 @@
 
 <a id="opc-MLTR"></a>
 
-<details>
-<summary><b>MLTR — Mobiletric (24 linhas)</b></summary>
+<details> <summary><b>MLTR — Mobiletric (24 linhas)</b></summary>
 
 ## MLTR — Mobiletric (24 linhas)
 
@@ -5079,8 +5047,7 @@
 
 <a id="opc-MOON"></a>
 
-<details>
-<summary><b>MOON — Siva - Sociedade de Importação de Veículos Automóveis / (sub-CEME da Iberdola) (18 linhas)</b></summary>
+<details> <summary><b>MOON — Siva - Sociedade de Importação de Veículos Automóveis / (sub-CEME da Iberdola) (18 linhas)</b></summary>
 
 ## MOON — Siva - Sociedade de Importação de Veículos Automóveis / (sub-CEME da Iberdola) (18 linhas)
 
@@ -5118,8 +5085,7 @@
 
 <a id="opc-MOTA"></a>
 
-<details>
-<summary><b>MOTA — Mota-Engil Renewing (170 linhas)</b></summary>
+<details> <summary><b>MOTA — Mota-Engil Renewing (170 linhas)</b></summary>
 
 ## MOTA — Mota-Engil Renewing (170 linhas)
 
@@ -5304,8 +5270,7 @@
 
 <a id="opc-NRGS"></a>
 
-<details>
-<summary><b>NRGS — Original Sunenergy, Lda (4 linhas)</b></summary>
+<details> <summary><b>NRGS — Original Sunenergy, Lda (4 linhas)</b></summary>
 
 ## NRGS — Original Sunenergy, Lda (4 linhas)
 
@@ -5329,8 +5294,7 @@
 
 <a id="opc-PARI"></a>
 
-<details>
-<summary><b>PARI — Parinox Energia (2 linhas)</b></summary>
+<details> <summary><b>PARI — Parinox Energia (2 linhas)</b></summary>
 
 ## PARI — Parinox Energia (2 linhas)
 
@@ -5352,8 +5316,7 @@
 
 <a id="opc-PRIO"></a>
 
-<details>
-<summary><b>PRIO — Prio.E Mobility Solutions, Lda (126 linhas)</b></summary>
+<details> <summary><b>PRIO — Prio.E Mobility Solutions, Lda (126 linhas)</b></summary>
 
 ## PRIO — Prio.E Mobility Solutions, Lda (126 linhas)
 
@@ -5494,8 +5457,7 @@
 
 <a id="opc-PTER"></a>
 
-<details>
-<summary><b>PTER — PETROTERMICA ENERGIA, S.A. (3 linhas)</b></summary>
+<details> <summary><b>PTER — PETROTERMICA ENERGIA, S.A. (3 linhas)</b></summary>
 
 ## PTER — PETROTERMICA ENERGIA, S.A. (3 linhas)
 
@@ -5513,8 +5475,7 @@
 
 <a id="opc-REMO"></a>
 
-<details>
-<summary><b>REMO — MOTA-ENGIL REMO CHARGING S.A (38 linhas)</b></summary>
+<details> <summary><b>REMO — MOTA-ENGIL REMO CHARGING S.A (38 linhas)</b></summary>
 
 ## REMO — MOTA-ENGIL REMO CHARGING S.A (38 linhas)
 
@@ -5567,8 +5528,7 @@
 
 <a id="opc-REPS"></a>
 
-<details>
-<summary><b>REPS — REPSOL Portuguesa Lda (211 linhas)</b></summary>
+<details> <summary><b>REPS — REPSOL Portuguesa Lda (211 linhas)</b></summary>
 
 ## REPS — REPSOL Portuguesa Lda (211 linhas)
 
@@ -5799,8 +5759,7 @@
 
 <a id="opc-SFAF"></a>
 
-<details>
-<summary><b>SFAF — Superfafe- supermercados,lda (2 linhas)</b></summary>
+<details> <summary><b>SFAF — Superfafe- supermercados,lda (2 linhas)</b></summary>
 
 ## SFAF — Superfafe- supermercados,lda (2 linhas)
 
@@ -5817,8 +5776,7 @@
 
 <a id="opc-SGMR"></a>
 
-<details>
-<summary><b>SGMR — Superguimarães - Supermercados,lda (2 linhas)</b></summary>
+<details> <summary><b>SGMR — Superguimarães - Supermercados,lda (2 linhas)</b></summary>
 
 ## SGMR — Superguimarães - Supermercados,lda (2 linhas)
 
@@ -5835,8 +5793,7 @@
 
 <a id="opc-TRUE"></a>
 
-<details>
-<summary><b>TRUE — WOWPLUG (40 linhas)</b></summary>
+<details> <summary><b>TRUE — WOWPLUG (40 linhas)</b></summary>
 
 ## TRUE — WOWPLUG (40 linhas)
 
@@ -5896,8 +5853,7 @@
 
 <a id="opc-TSLA"></a>
 
-<details>
-<summary><b>TSLA — Tesla (176 linhas)</b></summary>
+<details> <summary><b>TSLA — Tesla (176 linhas)</b></summary>
 
 ## TSLA — Tesla (176 linhas)
 
@@ -6088,8 +6044,7 @@
 
 <a id="opc-VEIM"></a>
 
-<details>
-<summary><b>VEIM — Veimonte Lda (1 linha)</b></summary>
+<details> <summary><b>VEIM — Veimonte Lda (1 linha)</b></summary>
 
 ## VEIM — Veimonte Lda (1 linha)
 
@@ -6105,8 +6060,7 @@
 
 <a id="opc-VIAV"></a>
 
-<details>
-<summary><b>VIAV — Via Verde Transição Energética, S.A. (18 linhas)</b></summary>
+<details> <summary><b>VIAV — Via Verde Transição Energética, S.A. (18 linhas)</b></summary>
 
 ## VIAV — Via Verde Transição Energética, S.A. (18 linhas)
 
@@ -6139,8 +6093,7 @@
 
 <a id="opc-WENE"></a>
 
-<details>
-<summary><b>WENE — WENEA SERVICES SPAIN S.L. (2 linhas)</b></summary>
+<details> <summary><b>WENE — WENEA SERVICES SPAIN S.L. (2 linhas)</b></summary>
 
 ## WENE — WENEA SERVICES SPAIN S.L. (2 linhas)
 
@@ -6157,8 +6110,7 @@
 
 <a id="opc-ZUND"></a>
 
-<details>
-<summary><b>ZUND — Grupo Easycharger, SL (2 linhas)</b></summary>
+<details> <summary><b>ZUND — Grupo Easycharger, SL (2 linhas)</b></summary>
 
 ## ZUND — Grupo Easycharger, SL (2 linhas)
 

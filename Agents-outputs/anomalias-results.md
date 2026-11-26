@@ -176,8 +176,7 @@ Legenda: *impossíveis* = linhas de conector distintas afetadas por categorias C
 
 <a id="opc-ATLA"></a>
 
-<details open>
-<summary><b>ATLA — Atlante Infra Portugal, S.A (598 sites, 1.380 pontos)</b> · 3 MÉDIO, 3 BAIXO, 2 CRÍTICO</summary>
+<details open> <summary><b>ATLA — Atlante Infra Portugal, S.A (598 sites, 1.380 pontos)</b> · 3 MÉDIO, 3 BAIXO, 2 CRÍTICO</summary>
 
 ### [CRÍTICO] Sobre-declaração de potência (P > 1,25 × V×I)
 - **Regra:** `ratio = max_power_w / (V × I)` (× `√3` em `mode3AC3p`) `> 1,25`: a potência declarada excede a capacidade física da tensão e corrente declaradas.
@@ -314,8 +313,7 @@ Legenda: *impossíveis* = linhas de conector distintas afetadas por categorias C
 
 <a id="opc-EPKS"></a>
 
-<details open>
-<summary><b>EPKS — Telpark (44 sites, 433 pontos)</b> · 1 CRÍTICO, 1 MÉDIO, 1 BAIXO</summary>
+<details open> <summary><b>EPKS — Telpark (44 sites, 433 pontos)</b> · 1 CRÍTICO, 1 MÉDIO, 1 BAIXO</summary>
 
 ### [CRÍTICO] Sobre-declaração de potência (P > 1,25 × V×I)
 - **Regra:** `ratio = max_power_w / (V × I)` (× `√3` em `mode3AC3p`) `> 1,25`: a potência declarada excede a capacidade física da tensão e corrente declaradas.
@@ -383,8 +381,7 @@ Legenda: *impossíveis* = linhas de conector distintas afetadas por categorias C
 
 <a id="opc-CONT"></a>
 
-<details open>
-<summary><b>CONT — Modelo Continente Hipermercados, S.A. (443 sites, 940 pontos)</b> · 3 BAIXO, 2 CRÍTICO, 2 MÉDIO, 1 ALTO</summary>
+<details open> <summary><b>CONT — Modelo Continente Hipermercados, S.A. (443 sites, 940 pontos)</b> · 3 BAIXO, 2 CRÍTICO, 2 MÉDIO, 1 ALTO</summary>
 
 ### [CRÍTICO] Sobre-declaração de potência (P > 1,25 × V×I)
 - **Regra:** `ratio = max_power_w / (V × I)` (× `√3` em `mode3AC3p`) `> 1,25`: a potência declarada excede a capacidade física da tensão e corrente declaradas.
@@ -552,8 +549,7 @@ Legenda: *impossíveis* = linhas de conector distintas afetadas por categorias C
 
 <a id="opc-REPS"></a>
 
-<details open>
-<summary><b>REPS — REPSOL Portuguesa Lda (224 sites, 580 pontos)</b> · 4 MÉDIO, 3 CRÍTICO, 2 BAIXO</summary>
+<details open> <summary><b>REPS — REPSOL Portuguesa Lda (224 sites, 580 pontos)</b> · 4 MÉDIO, 3 CRÍTICO, 2 BAIXO</summary>
 
 ### [CRÍTICO] Sobre-declaração de potência (P > 1,25 × V×I)
 - **Regra:** `ratio = max_power_w / (V × I)` (× `√3` em `mode3AC3p`) `> 1,25`: a potência declarada excede a capacidade física da tensão e corrente declaradas.
@@ -699,8 +695,7 @@ Legenda: *impossíveis* = linhas de conector distintas afetadas por categorias C
 
 <a id="opc-GLPP"></a>
 
-<details open>
-<summary><b>GLPP — Galp Power OPC (1.631 sites, 3.486 pontos)</b> · 3 CRÍTICO, 3 MÉDIO, 3 BAIXO</summary>
+<details open> <summary><b>GLPP — Galp Power OPC (1.631 sites, 3.486 pontos)</b> · 3 CRÍTICO, 3 MÉDIO, 3 BAIXO</summary>
 
 ### [CRÍTICO] Sobre-declaração de potência (P > 1,25 × V×I)
 - **Regra:** `ratio = max_power_w / (V × I)` (× `√3` em `mode3AC3p`) `> 1,25`: a potência declarada excede a capacidade física da tensão e corrente declaradas.
@@ -862,8 +857,7 @@ Legenda: *impossíveis* = linhas de conector distintas afetadas por categorias C
 
 <a id="sec-sem-opc-no-nap-131-sites-275-pontos"></a>
 
-<details>
-<summary><b>Sem OPC no NAP (131 sites, 275 pontos)</b> · 3 BAIXO, 2 CRÍTICO, 2 ALTO, 2 MÉDIO</summary>
+<details> <summary><b>Sem OPC no NAP (131 sites, 275 pontos)</b> · 3 BAIXO, 2 CRÍTICO, 2 ALTO, 2 MÉDIO</summary>
 
 ### [CRÍTICO] Sobre-declaração de potência (P > 1,25 × V×I)
 - **Regra:** `ratio = max_power_w / (V × I)` (× `√3` em `mode3AC3p`) `> 1,25`: a potência declarada excede a capacidade física da tensão e corrente declaradas.
@@ -1032,8 +1026,7 @@ Legenda: *impossíveis* = linhas de conector distintas afetadas por categorias C
 
 <a id="opc-HORZ"></a>
 
-<details>
-<summary><b>HORZ — Powerdot, S.A (800 sites, 2.187 pontos)</b> · 2 MÉDIO, 2 BAIXO, 1 CRÍTICO</summary>
+<details> <summary><b>HORZ — Powerdot, S.A (800 sites, 2.187 pontos)</b> · 2 MÉDIO, 2 BAIXO, 1 CRÍTICO</summary>
 
 ### [CRÍTICO] Sobre-declaração de potência (P > 1,25 × V×I)
 - **Regra:** `ratio = max_power_w / (V × I)` (× `√3` em `mode3AC3p`) `> 1,25`: a potência declarada excede a capacidade física da tensão e corrente declaradas.
@@ -1133,8 +1126,7 @@ Legenda: *impossíveis* = linhas de conector distintas afetadas por categorias C
 
 <a id="opc-HEXA"></a>
 
-<details>
-<summary><b>HEXA — HEXAGONAL OCEAN, LDA (38 sites, 76 pontos)</b> · 1 CRÍTICO, 1 MÉDIO, 1 BAIXO</summary>
+<details> <summary><b>HEXA — HEXAGONAL OCEAN, LDA (38 sites, 76 pontos)</b> · 1 CRÍTICO, 1 MÉDIO, 1 BAIXO</summary>
 
 ### [CRÍTICO] Sobre-declaração de potência (P > 1,25 × V×I)
 - **Regra:** `ratio = max_power_w / (V × I)` (× `√3` em `mode3AC3p`) `> 1,25`: a potência declarada excede a capacidade física da tensão e corrente declaradas.
@@ -1192,8 +1184,7 @@ Legenda: *impossíveis* = linhas de conector distintas afetadas por categorias C
 
 <a id="opc-EMEL"></a>
 
-<details>
-<summary><b>EMEL — EMEL - Empresa Municipal de Mobilidade e Estacionamento de Lisboa, E.M., S.A. (94 sites, 206 pontos)</b> · 2 BAIXO, 1 CRÍTICO</summary>
+<details> <summary><b>EMEL — EMEL - Empresa Municipal de Mobilidade e Estacionamento de Lisboa, E.M., S.A. (94 sites, 206 pontos)</b> · 2 BAIXO, 1 CRÍTICO</summary>
 
 ### [CRÍTICO] Sobre-declaração de potência (P > 1,25 × V×I)
 - **Regra:** `ratio = max_power_w / (V × I)` (× `√3` em `mode3AC3p`) `> 1,25`: a potência declarada excede a capacidade física da tensão e corrente declaradas.
@@ -1261,8 +1252,7 @@ Legenda: *impossíveis* = linhas de conector distintas afetadas por categorias C
 
 <a id="opc-TRUE"></a>
 
-<details>
-<summary><b>TRUE — WOWPLUG (779 sites, 1.559 pontos)</b> · 3 MÉDIO, 1 CRÍTICO, 1 BAIXO</summary>
+<details> <summary><b>TRUE — WOWPLUG (779 sites, 1.559 pontos)</b> · 3 MÉDIO, 1 CRÍTICO, 1 BAIXO</summary>
 
 ### [CRÍTICO] Sobre-declaração de potência (P > 1,25 × V×I)
 - **Regra:** `ratio = max_power_w / (V × I)` (× `√3` em `mode3AC3p`) `> 1,25`: a potência declarada excede a capacidade física da tensão e corrente declaradas.
@@ -1360,8 +1350,7 @@ Legenda: *impossíveis* = linhas de conector distintas afetadas por categorias C
 
 <a id="opc-TSLA"></a>
 
-<details>
-<summary><b>TSLA — Tesla (9 sites, 192 pontos)</b> · 4 BAIXO, 3 MÉDIO, 2 CRÍTICO</summary>
+<details> <summary><b>TSLA — Tesla (9 sites, 192 pontos)</b> · 4 BAIXO, 3 MÉDIO, 2 CRÍTICO</summary>
 
 ### [CRÍTICO] Modo AC/DC incompatível com a tomada
 - **Regra:** tomada só-DC (`chademo`, `iec62196T*COMBO`, `pantograph*`) em `mode1/2/3`, ou tomada só-AC (`iec62196T2`, `iec60309x2…`, `domestic*`) em `mode4DC`/`ccs`; `tesla*` é dual e fica de fora.
@@ -1536,8 +1525,7 @@ Legenda: *impossíveis* = linhas de conector distintas afetadas por categorias C
 
 <a id="opc-EDPC"></a>
 
-<details>
-<summary><b>EDPC — EDP Comercial (1.688 sites, 3.555 pontos)</b> · 4 MÉDIO, 2 CRÍTICO, 1 ALTO, 1 BAIXO</summary>
+<details> <summary><b>EDPC — EDP Comercial (1.688 sites, 3.555 pontos)</b> · 4 MÉDIO, 2 CRÍTICO, 1 ALTO, 1 BAIXO</summary>
 
 ### [CRÍTICO] Sobre-declaração de potência (P > 1,25 × V×I)
 - **Regra:** `ratio = max_power_w / (V × I)` (× `√3` em `mode3AC3p`) `> 1,25`: a potência declarada excede a capacidade física da tensão e corrente declaradas.
@@ -1686,8 +1674,7 @@ Legenda: *impossíveis* = linhas de conector distintas afetadas por categorias C
 
 <a id="opc-MOON"></a>
 
-<details>
-<summary><b>MOON — Siva - Sociedade de Importação de Veículos Automóveis / (sub-CEME da Iberdola) (26 sites, 49 pontos)</b> · 3 MÉDIO, 1 CRÍTICO</summary>
+<details> <summary><b>MOON — Siva - Sociedade de Importação de Veículos Automóveis / (sub-CEME da Iberdola) (26 sites, 49 pontos)</b> · 3 MÉDIO, 1 CRÍTICO</summary>
 
 ### [CRÍTICO] Sobre-declaração de potência (P > 1,25 × V×I)
 - **Regra:** `ratio = max_power_w / (V × I)` (× `√3` em `mode3AC3p`) `> 1,25`: a potência declarada excede a capacidade física da tensão e corrente declaradas.
@@ -1760,8 +1747,7 @@ Legenda: *impossíveis* = linhas de conector distintas afetadas por categorias C
 
 <a id="opc-MLTR"></a>
 
-<details>
-<summary><b>MLTR — Mobiletric (108 sites, 222 pontos)</b> · 2 MÉDIO, 1 CRÍTICO, 1 BAIXO</summary>
+<details> <summary><b>MLTR — Mobiletric (108 sites, 222 pontos)</b> · 2 MÉDIO, 1 CRÍTICO, 1 BAIXO</summary>
 
 ### [CRÍTICO] Sobre-declaração de potência (P > 1,25 × V×I)
 - **Regra:** `ratio = max_power_w / (V × I)` (× `√3` em `mode3AC3p`) `> 1,25`: a potência declarada excede a capacidade física da tensão e corrente declaradas.
@@ -1834,8 +1820,7 @@ Legenda: *impossíveis* = linhas de conector distintas afetadas por categorias C
 
 <a id="opc-CEPS"></a>
 
-<details>
-<summary><b>CEPS — Cepsa Portuguesa Petroleos (38 sites, 77 pontos)</b> · 2 MÉDIO, 1 CRÍTICO, 1 BAIXO</summary>
+<details> <summary><b>CEPS — Cepsa Portuguesa Petroleos (38 sites, 77 pontos)</b> · 2 MÉDIO, 1 CRÍTICO, 1 BAIXO</summary>
 
 ### [CRÍTICO] Sobre-declaração de potência (P > 1,25 × V×I)
 - **Regra:** `ratio = max_power_w / (V × I)` (× `√3` em `mode3AC3p`) `> 1,25`: a potência declarada excede a capacidade física da tensão e corrente declaradas.
@@ -1908,8 +1893,7 @@ Legenda: *impossíveis* = linhas de conector distintas afetadas por categorias C
 
 <a id="opc-GLPG"></a>
 
-<details>
-<summary><b>GLPG — Galpgeste (121 sites, 313 pontos)</b> · 2 MÉDIO, 1 CRÍTICO, 1 BAIXO</summary>
+<details> <summary><b>GLPG — Galpgeste (121 sites, 313 pontos)</b> · 2 MÉDIO, 1 CRÍTICO, 1 BAIXO</summary>
 
 ### [CRÍTICO] Sobre-declaração de potência (P > 1,25 × V×I)
 - **Regra:** `ratio = max_power_w / (V × I)` (× `√3` em `mode3AC3p`) `> 1,25`: a potência declarada excede a capacidade física da tensão e corrente declaradas.
@@ -1982,8 +1966,7 @@ Legenda: *impossíveis* = linhas de conector distintas afetadas por categorias C
 
 <a id="opc-NRGS"></a>
 
-<details>
-<summary><b>NRGS — Original Sunenergy, Lda (7 sites, 16 pontos)</b> · 2 MÉDIO, 1 CRÍTICO</summary>
+<details> <summary><b>NRGS — Original Sunenergy, Lda (7 sites, 16 pontos)</b> · 2 MÉDIO, 1 CRÍTICO</summary>
 
 ### [CRÍTICO] Sobre-declaração de potência (P > 1,25 × V×I)
 - **Regra:** `ratio = max_power_w / (V × I)` (× `√3` em `mode3AC3p`) `> 1,25`: a potência declarada excede a capacidade física da tensão e corrente declaradas.
@@ -2023,8 +2006,7 @@ Legenda: *impossíveis* = linhas de conector distintas afetadas por categorias C
 
 <a id="opc-ACCI"></a>
 
-<details>
-<summary><b>ACCI — Acciona Recarga Portugal (15 sites, 28 pontos)</b> · 3 BAIXO, 1 CRÍTICO, 1 MÉDIO</summary>
+<details> <summary><b>ACCI — Acciona Recarga Portugal (15 sites, 28 pontos)</b> · 3 BAIXO, 1 CRÍTICO, 1 MÉDIO</summary>
 
 ### [CRÍTICO] Sobre-declaração de potência (P > 1,25 × V×I)
 - **Regra:** `ratio = max_power_w / (V × I)` (× `√3` em `mode3AC3p`) `> 1,25`: a potência declarada excede a capacidade física da tensão e corrente declaradas.
@@ -2113,8 +2095,7 @@ Legenda: *impossíveis* = linhas de conector distintas afetadas por categorias C
 
 <a id="opc-FCTO"></a>
 
-<details>
-<summary><b>FCTO — Iberdrola | bp pulse (316 sites, 748 pontos)</b> · 4 MÉDIO, 2 CRÍTICO, 1 BAIXO</summary>
+<details> <summary><b>FCTO — Iberdrola | bp pulse (316 sites, 748 pontos)</b> · 4 MÉDIO, 2 CRÍTICO, 1 BAIXO</summary>
 
 ### [CRÍTICO] Modo AC/DC incompatível com a tomada
 - **Regra:** tomada só-DC (`chademo`, `iec62196T*COMBO`, `pantograph*`) em `mode1/2/3`, ou tomada só-AC (`iec62196T2`, `iec60309x2…`, `domestic*`) em `mode4DC`/`ccs`; `tesla*` é dual e fica de fora.
@@ -2234,8 +2215,7 @@ Legenda: *impossíveis* = linhas de conector distintas afetadas por categorias C
 
 <a id="opc-EVIO"></a>
 
-<details>
-<summary><b>EVIO — EVIO - Electrical Mobility (20 sites, 31 pontos)</b> · 1 CRÍTICO, 1 MÉDIO, 1 BAIXO</summary>
+<details> <summary><b>EVIO — EVIO - Electrical Mobility (20 sites, 31 pontos)</b> · 1 CRÍTICO, 1 MÉDIO, 1 BAIXO</summary>
 
 ### [CRÍTICO] Sobre-declaração de potência (P > 1,25 × V×I)
 - **Regra:** `ratio = max_power_w / (V × I)` (× `√3` em `mode3AC3p`) `> 1,25`: a potência declarada excede a capacidade física da tensão e corrente declaradas.
@@ -2283,8 +2263,7 @@ Legenda: *impossíveis* = linhas de conector distintas afetadas por categorias C
 
 <a id="opc-ALFA"></a>
 
-<details>
-<summary><b>ALFA — Alfa Energia (13 sites, 25 pontos)</b> · 1 CRÍTICO, 1 MÉDIO</summary>
+<details> <summary><b>ALFA — Alfa Energia (13 sites, 25 pontos)</b> · 1 CRÍTICO, 1 MÉDIO</summary>
 
 ### [CRÍTICO] Conector repetido (chave duplicada)
 - **Regra:** a mesma `(site_id, point_id, connector_type)` em mais de uma linha: a tomada foi publicada duas ou três vezes.
@@ -2314,8 +2293,7 @@ Legenda: *impossíveis* = linhas de conector distintas afetadas por categorias C
 
 <a id="opc-PARI"></a>
 
-<details>
-<summary><b>PARI — Parinox Energia (7 sites, 8 pontos)</b> · 1 CRÍTICO, 1 MÉDIO</summary>
+<details> <summary><b>PARI — Parinox Energia (7 sites, 8 pontos)</b> · 1 CRÍTICO, 1 MÉDIO</summary>
 
 ### [CRÍTICO] Sobre-declaração de potência (P > 1,25 × V×I)
 - **Regra:** `ratio = max_power_w / (V × I)` (× `√3` em `mode3AC3p`) `> 1,25`: a potência declarada excede a capacidade física da tensão e corrente declaradas.
@@ -2343,8 +2321,7 @@ Legenda: *impossíveis* = linhas de conector distintas afetadas por categorias C
 
 <a id="opc-EVGR"></a>
 
-<details>
-<summary><b>EVGR — Green Evolut, LDA (6 sites, 10 pontos)</b> · 1 CRÍTICO</summary>
+<details> <summary><b>EVGR — Green Evolut, LDA (6 sites, 10 pontos)</b> · 1 CRÍTICO</summary>
 
 ### [CRÍTICO] Conector repetido (chave duplicada)
 - **Regra:** a mesma `(site_id, point_id, connector_type)` em mais de uma linha: a tomada foi publicada duas ou três vezes.
@@ -2363,8 +2340,7 @@ Legenda: *impossíveis* = linhas de conector distintas afetadas por categorias C
 
 <a id="opc-PRIO"></a>
 
-<details>
-<summary><b>PRIO — Prio.E Mobility Solutions, Lda (162 sites, 294 pontos)</b> · 3 MÉDIO, 1 BAIXO</summary>
+<details> <summary><b>PRIO — Prio.E Mobility Solutions, Lda (162 sites, 294 pontos)</b> · 3 MÉDIO, 1 BAIXO</summary>
 
 ### [MÉDIO] Sub-declaração de potência (P < 0,75 × V×I)
 - **Regra:** `ratio = max_power_w / (V × I)` (× `√3` em `mode3AC3p`) `< 0,75`: a tomada declara muito menos potência do que a tensão e corrente permitem.
@@ -2442,8 +2418,7 @@ Legenda: *impossíveis* = linhas de conector distintas afetadas por categorias C
 
 <a id="opc-HELX"></a>
 
-<details>
-<summary><b>HELX — Helexia II Energy Services, Lda. (238 sites, 457 pontos)</b> · 2 MÉDIO, 1 BAIXO</summary>
+<details> <summary><b>HELX — Helexia II Energy Services, Lda. (238 sites, 457 pontos)</b> · 2 MÉDIO, 1 BAIXO</summary>
 
 ### [MÉDIO] Sub-declaração de potência (P < 0,75 × V×I)
 - **Regra:** `ratio = max_power_w / (V × I)` (× `√3` em `mode3AC3p`) `< 0,75`: a tomada declara muito menos potência do que a tensão e corrente permitem.
@@ -2505,8 +2480,7 @@ Legenda: *impossíveis* = linhas de conector distintas afetadas por categorias C
 
 <a id="opc-MOTA"></a>
 
-<details>
-<summary><b>MOTA — Mota-Engil Renewing (189 sites, 340 pontos)</b> · 1 MÉDIO, 1 BAIXO</summary>
+<details> <summary><b>MOTA — Mota-Engil Renewing (189 sites, 340 pontos)</b> · 1 MÉDIO, 1 BAIXO</summary>
 
 ### [MÉDIO] Sub-declaração de potência (P < 0,75 × V×I)
 - **Regra:** `ratio = max_power_w / (V × I)` (× `√3` em `mode3AC3p`) `< 0,75`: a tomada declara muito menos potência do que a tensão e corrente permitem.
@@ -2554,8 +2528,7 @@ Legenda: *impossíveis* = linhas de conector distintas afetadas por categorias C
 
 <a id="opc-ECOI"></a>
 
-<details>
-<summary><b>ECOI — Ecoinside - Soluções em Ecoeficiência e Sustentabilidade Lda (60 sites, 151 pontos)</b> · 2 MÉDIO, 2 BAIXO</summary>
+<details> <summary><b>ECOI — Ecoinside - Soluções em Ecoeficiência e Sustentabilidade Lda (60 sites, 151 pontos)</b> · 2 MÉDIO, 2 BAIXO</summary>
 
 ### [MÉDIO] Sub-declaração de potência (P < 0,75 × V×I)
 - **Regra:** `ratio = max_power_w / (V × I)` (× `√3` em `mode3AC3p`) `< 0,75`: a tomada declara muito menos potência do que a tensão e corrente permitem.
@@ -2633,8 +2606,7 @@ Legenda: *impossíveis* = linhas de conector distintas afetadas por categorias C
 
 <a id="opc-SEGM"></a>
 
-<details>
-<summary><b>SEGM — SEGMA - Serviços de Engenharia Gestão e Manutenção Lda (73 sites, 134 pontos)</b> · 1 MÉDIO, 1 BAIXO</summary>
+<details> <summary><b>SEGM — SEGMA - Serviços de Engenharia Gestão e Manutenção Lda (73 sites, 134 pontos)</b> · 1 MÉDIO, 1 BAIXO</summary>
 
 ### [MÉDIO] CP4 → `city` divergente
 - **Regra:** agrupa os sites pelo prefixo CP4 do `postcode`; em cada CP4 com 5 ou mais sites, a cidade modal é a referência e um `city` diferente é suspeito.
@@ -2672,8 +2644,7 @@ Legenda: *impossíveis* = linhas de conector distintas afetadas por categorias C
 
 <a id="opc-DTEI"></a>
 
-<details>
-<summary><b>DTEI — DTE, Instalacoes Especiais (86 sites, 203 pontos)</b> · 1 MÉDIO, 1 BAIXO</summary>
+<details> <summary><b>DTEI — DTE, Instalacoes Especiais (86 sites, 203 pontos)</b> · 1 MÉDIO, 1 BAIXO</summary>
 
 ### [MÉDIO] Sub-declaração de potência (P < 0,75 × V×I)
 - **Regra:** `ratio = max_power_w / (V × I)` (× `√3` em `mode3AC3p`) `< 0,75`: a tomada declara muito menos potência do que a tensão e corrente permitem.
@@ -2721,8 +2692,7 @@ Legenda: *impossíveis* = linhas de conector distintas afetadas por categorias C
 
 <a id="opc-HIGH"></a>
 
-<details>
-<summary><b>HIGH — High Green Power, Unipessoal Lda. (39 sites, 41 pontos)</b> · 3 BAIXO</summary>
+<details> <summary><b>HIGH — High Green Power, Unipessoal Lda. (39 sites, 41 pontos)</b> · 3 BAIXO</summary>
 
 ### [BAIXO] Grafias fragmentadas do operador
 - **Regra:** o mesmo `operator_id` com mais de um `operator_name` no snapshot.
@@ -2780,8 +2750,7 @@ Legenda: *impossíveis* = linhas de conector distintas afetadas por categorias C
 
 <a id="opc-IBRD"></a>
 
-<details>
-<summary><b>IBRD — Iberdrola Clientes Portugal, Unipessoal, Lda (193 sites, 384 pontos)</b> · 2 MÉDIO, 1 BAIXO</summary>
+<details> <summary><b>IBRD — Iberdrola Clientes Portugal, Unipessoal, Lda (193 sites, 384 pontos)</b> · 2 MÉDIO, 1 BAIXO</summary>
 
 ### [MÉDIO] Sub-declaração de potência (P < 0,75 × V×I)
 - **Regra:** `ratio = max_power_w / (V × I)` (× `√3` em `mode3AC3p`) `< 0,75`: a tomada declara muito menos potência do que a tensão e corrente permitem.
@@ -2843,8 +2812,7 @@ Legenda: *impossíveis* = linhas de conector distintas afetadas por categorias C
 
 <a id="opc-REMO"></a>
 
-<details>
-<summary><b>REMO — MOTA-ENGIL REMO CHARGING S.A (16 sites, 38 pontos)</b> · 2 MÉDIO</summary>
+<details> <summary><b>REMO — MOTA-ENGIL REMO CHARGING S.A (16 sites, 38 pontos)</b> · 2 MÉDIO</summary>
 
 ### [MÉDIO] Sub-declaração de potência (P < 0,75 × V×I)
 - **Regra:** `ratio = max_power_w / (V × I)` (× `√3` em `mode3AC3p`) `< 0,75`: a tomada declara muito menos potência do que a tensão e corrente permitem.
@@ -2882,8 +2850,7 @@ Legenda: *impossíveis* = linhas de conector distintas afetadas por categorias C
 
 <a id="opc-ZUNP"></a>
 
-<details>
-<summary><b>ZUNP — Grupo Easycharger, SL (13 sites, 25 pontos)</b> · 2 BAIXO</summary>
+<details> <summary><b>ZUNP — Grupo Easycharger, SL (13 sites, 25 pontos)</b> · 2 BAIXO</summary>
 
 ### [BAIXO] `usage_type` em falta
 - **Regra:** `usage_type` nulo na linha de conector (enum `ChargingPointUsageTypeEnum`).
@@ -2931,8 +2898,7 @@ Legenda: *impossíveis* = linhas de conector distintas afetadas por categorias C
 
 <a id="opc-LOUL"></a>
 
-<details>
-<summary><b>LOUL — Loulé Concelho Global, EM (33 sites, 70 pontos)</b> · 1 MÉDIO, 1 BAIXO</summary>
+<details> <summary><b>LOUL — Loulé Concelho Global, EM (33 sites, 70 pontos)</b> · 1 MÉDIO, 1 BAIXO</summary>
 
 ### [MÉDIO] Sub-declaração de potência (P < 0,75 × V×I)
 - **Regra:** `ratio = max_power_w / (V × I)` (× `√3` em `mode3AC3p`) `< 0,75`: a tomada declara muito menos potência do que a tensão e corrente permitem.
@@ -2972,8 +2938,7 @@ Legenda: *impossíveis* = linhas de conector distintas afetadas por categorias C
 
 <a id="opc-ENBL"></a>
 
-<details>
-<summary><b>ENBL — Enable Mobility Solutions, S.A. (24 sites, 53 pontos)</b> · 1 MÉDIO, 1 BAIXO</summary>
+<details> <summary><b>ENBL — Enable Mobility Solutions, S.A. (24 sites, 53 pontos)</b> · 1 MÉDIO, 1 BAIXO</summary>
 
 ### [MÉDIO] Sub-declaração de potência (P < 0,75 × V×I)
 - **Regra:** `ratio = max_power_w / (V × I)` (× `√3` em `mode3AC3p`) `< 0,75`: a tomada declara muito menos potência do que a tensão e corrente permitem.
@@ -3012,8 +2977,7 @@ Legenda: *impossíveis* = linhas de conector distintas afetadas por categorias C
 
 <a id="opc-GENJ"></a>
 
-<details>
-<summary><b>GENJ — Generation Journey Lda (21 sites, 41 pontos)</b> · 2 MÉDIO, 1 BAIXO</summary>
+<details> <summary><b>GENJ — Generation Journey Lda (21 sites, 41 pontos)</b> · 2 MÉDIO, 1 BAIXO</summary>
 
 ### [MÉDIO] Sub-declaração de potência (P < 0,75 × V×I)
 - **Regra:** `ratio = max_power_w / (V × I)` (× `√3` em `mode3AC3p`) `< 0,75`: a tomada declara muito menos potência do que a tensão e corrente permitem.
@@ -3064,8 +3028,7 @@ Legenda: *impossíveis* = linhas de conector distintas afetadas por categorias C
 
 <a id="opc-VIAV"></a>
 
-<details>
-<summary><b>VIAV — Via Verde Transição Energética, S.A. (12 sites, 29 pontos)</b> · 3 MÉDIO, 1 BAIXO</summary>
+<details> <summary><b>VIAV — Via Verde Transição Energética, S.A. (12 sites, 29 pontos)</b> · 3 MÉDIO, 1 BAIXO</summary>
 
 ### [MÉDIO] Sub-declaração de potência (P < 0,75 × V×I)
 - **Regra:** `ratio = max_power_w / (V × I)` (× `√3` em `mode3AC3p`) `< 0,75`: a tomada declara muito menos potência do que a tensão e corrente permitem.
@@ -3146,8 +3109,7 @@ Legenda: *impossíveis* = linhas de conector distintas afetadas por categorias C
 
 <a id="opc-CIRC"></a>
 
-<details>
-<summary><b>CIRC — Circuitos Energy Solutions, Lda. (12 sites, 22 pontos)</b> · 1 MÉDIO, 1 BAIXO</summary>
+<details> <summary><b>CIRC — Circuitos Energy Solutions, Lda. (12 sites, 22 pontos)</b> · 1 MÉDIO, 1 BAIXO</summary>
 
 ### [MÉDIO] Sub-declaração de potência (P < 0,75 × V×I)
 - **Regra:** `ratio = max_power_w / (V × I)` (× `√3` em `mode3AC3p`) `< 0,75`: a tomada declara muito menos potência do que a tensão e corrente permitem.
@@ -3188,8 +3150,7 @@ Legenda: *impossíveis* = linhas de conector distintas afetadas por categorias C
 
 <a id="opc-GREE"></a>
 
-<details>
-<summary><b>GREE — GREEN CHARGE - MOBILIDADE ELÉTRICA, LDA (16 sites, 17 pontos)</b> · 1 BAIXO</summary>
+<details> <summary><b>GREE — GREEN CHARGE - MOBILIDADE ELÉTRICA, LDA (16 sites, 17 pontos)</b> · 1 BAIXO</summary>
 
 ### [BAIXO] Grafias fragmentadas do operador
 - **Regra:** o mesmo `operator_id` com mais de um `operator_name` no snapshot.
@@ -3217,8 +3178,7 @@ Legenda: *impossíveis* = linhas de conector distintas afetadas por categorias C
 
 <a id="opc-CAPW"></a>
 
-<details>
-<summary><b>CAPW — Capwatt Services (14 sites, 74 pontos)</b> · 1 BAIXO</summary>
+<details> <summary><b>CAPW — Capwatt Services (14 sites, 74 pontos)</b> · 1 BAIXO</summary>
 
 ### [BAIXO] Grafias fragmentadas do operador
 - **Regra:** o mesmo `operator_id` com mais de um `operator_name` no snapshot.
@@ -3246,8 +3206,7 @@ Legenda: *impossíveis* = linhas de conector distintas afetadas por categorias C
 
 <a id="opc-KLCS"></a>
 
-<details>
-<summary><b>KLCS — Kilometer Low Cost II Serviços, SA (87 sites, 108 pontos)</b> · 2 MÉDIO, 1 BAIXO</summary>
+<details> <summary><b>KLCS — Kilometer Low Cost II Serviços, SA (87 sites, 108 pontos)</b> · 2 MÉDIO, 1 BAIXO</summary>
 
 ### [MÉDIO] Sub-declaração de potência (P < 0,75 × V×I)
 - **Regra:** `ratio = max_power_w / (V × I)` (× `√3` em `mode3AC3p`) `< 0,75`: a tomada declara muito menos potência do que a tensão e corrente permitem.
@@ -3294,8 +3253,7 @@ Legenda: *impossíveis* = linhas de conector distintas afetadas por categorias C
 
 <a id="opc-LOGI"></a>
 
-<details>
-<summary><b>LOGI — uCharge (26 sites, 35 pontos)</b> · 2 MÉDIO</summary>
+<details> <summary><b>LOGI — uCharge (26 sites, 35 pontos)</b> · 2 MÉDIO</summary>
 
 ### [MÉDIO] CP4 → `city` divergente
 - **Regra:** agrupa os sites pelo prefixo CP4 do `postcode`; em cada CP4 com 5 ou mais sites, a cidade modal é a referência e um `city` diferente é suspeito.
@@ -3333,8 +3291,7 @@ Legenda: *impossíveis* = linhas de conector distintas afetadas por categorias C
 
 <a id="opc-IONY"></a>
 
-<details>
-<summary><b>IONY — IONITY GmbH (20 sites, 106 pontos)</b> · 1 MÉDIO, 1 BAIXO</summary>
+<details> <summary><b>IONY — IONITY GmbH (20 sites, 106 pontos)</b> · 1 MÉDIO, 1 BAIXO</summary>
 
 ### [MÉDIO] CP4 → `city` divergente
 - **Regra:** agrupa os sites pelo prefixo CP4 do `postcode`; em cada CP4 com 5 ou mais sites, a cidade modal é a referência e um `city` diferente é suspeito.
@@ -3370,8 +3327,7 @@ Legenda: *impossíveis* = linhas de conector distintas afetadas por categorias C
 
 <a id="opc-CSCP"></a>
 
-<details>
-<summary><b>CSCP — Cascais Proxima (8 sites, 16 pontos)</b> · 1 BAIXO</summary>
+<details> <summary><b>CSCP — Cascais Proxima (8 sites, 16 pontos)</b> · 1 BAIXO</summary>
 
 ### [BAIXO] Grafias fragmentadas do operador
 - **Regra:** o mesmo `operator_id` com mais de um `operator_name` no snapshot.
@@ -3396,8 +3352,7 @@ Legenda: *impossíveis* = linhas de conector distintas afetadas por categorias C
 
 <a id="opc-LUSI"></a>
 
-<details>
-<summary><b>LUSI — LUSIADAENERGIA, S.A. (15 sites, 26 pontos)</b> · 2 MÉDIO, 1 BAIXO</summary>
+<details> <summary><b>LUSI — LUSIADAENERGIA, S.A. (15 sites, 26 pontos)</b> · 2 MÉDIO, 1 BAIXO</summary>
 
 ### [MÉDIO] Sub-declaração de potência (P < 0,75 × V×I)
 - **Regra:** `ratio = max_power_w / (V × I)` (× `√3` em `mode3AC3p`) `< 0,75`: a tomada declara muito menos potência do que a tensão e corrente permitem.
@@ -3439,8 +3394,7 @@ Legenda: *impossíveis* = linhas de conector distintas afetadas por categorias C
 
 <a id="opc-BBGE"></a>
 
-<details>
-<summary><b>BBGE — Morenergy (3 sites, 4 pontos)</b> · 2 BAIXO</summary>
+<details> <summary><b>BBGE — Morenergy (3 sites, 4 pontos)</b> · 2 BAIXO</summary>
 
 ### [BAIXO] `brands_accepted` vazio
 - **Regra:** `brands_accepted` vazio na linha de conector (lista global CEME de marcas aceites).
@@ -3473,8 +3427,7 @@ Legenda: *impossíveis* = linhas de conector distintas afetadas por categorias C
 
 <a id="opc-FRTR"></a>
 
-<details>
-<summary><b>FRTR — FRONTROW, LDA (5 sites, 8 pontos)</b> · 2 MÉDIO</summary>
+<details> <summary><b>FRTR — FRONTROW, LDA (5 sites, 8 pontos)</b> · 2 MÉDIO</summary>
 
 ### [MÉDIO] Sub-declaração de potência (P < 0,75 × V×I)
 - **Regra:** `ratio = max_power_w / (V × I)` (× `√3` em `mode3AC3p`) `< 0,75`: a tomada declara muito menos potência do que a tensão e corrente permitem.
@@ -3505,8 +3458,7 @@ Legenda: *impossíveis* = linhas de conector distintas afetadas por categorias C
 
 <a id="opc-EVCE"></a>
 
-<details>
-<summary><b>EVCE — EVCE POWER, LDA. / MOBISMART (53 sites, 93 pontos)</b> · 2 MÉDIO</summary>
+<details> <summary><b>EVCE — EVCE POWER, LDA. / MOBISMART (53 sites, 93 pontos)</b> · 2 MÉDIO</summary>
 
 ### [MÉDIO] Sub-declaração de potência (P < 0,75 × V×I)
 - **Regra:** `ratio = max_power_w / (V × I)` (× `√3` em `mode3AC3p`) `< 0,75`: a tomada declara muito menos potência do que a tensão e corrente permitem.
@@ -3536,8 +3488,7 @@ Legenda: *impossíveis* = linhas de conector distintas afetadas por categorias C
 
 <a id="opc-CEVE"></a>
 
-<details>
-<summary><b>CEVE — CEVE - Cooperativa Eléctrica do Vale D’Este C.R.L. (4 sites, 10 pontos)</b> · 1 BAIXO</summary>
+<details> <summary><b>CEVE — CEVE - Cooperativa Eléctrica do Vale D’Este C.R.L. (4 sites, 10 pontos)</b> · 1 BAIXO</summary>
 
 ### [BAIXO] Grafias fragmentadas do operador
 - **Regra:** o mesmo `operator_id` com mais de um `operator_name` no snapshot.
@@ -3558,8 +3509,7 @@ Legenda: *impossíveis* = linhas de conector distintas afetadas por categorias C
 
 <a id="opc-IHOM"></a>
 
-<details>
-<summary><b>IHOM — iHome Lda (6 sites, 10 pontos)</b> · 1 MÉDIO</summary>
+<details> <summary><b>IHOM — iHome Lda (6 sites, 10 pontos)</b> · 1 MÉDIO</summary>
 
 ### [MÉDIO] Sub-declaração de potência (P < 0,75 × V×I)
 - **Regra:** `ratio = max_power_w / (V × I)` (× `√3` em `mode3AC3p`) `< 0,75`: a tomada declara muito menos potência do que a tensão e corrente permitem.
@@ -3580,8 +3530,7 @@ Legenda: *impossíveis* = linhas de conector distintas afetadas por categorias C
 
 <a id="opc-PTER"></a>
 
-<details>
-<summary><b>PTER — PETROTERMICA ENERGIA, S.A. (2 sites, 4 pontos)</b> · 2 MÉDIO</summary>
+<details> <summary><b>PTER — PETROTERMICA ENERGIA, S.A. (2 sites, 4 pontos)</b> · 2 MÉDIO</summary>
 
 ### [MÉDIO] Sub-declaração de potência (P < 0,75 × V×I)
 - **Regra:** `ratio = max_power_w / (V × I)` (× `√3` em `mode3AC3p`) `< 0,75`: a tomada declara muito menos potência do que a tensão e corrente permitem.
@@ -3611,8 +3560,7 @@ Legenda: *impossíveis* = linhas de conector distintas afetadas por categorias C
 
 <a id="opc-EMAC"></a>
 
-<details>
-<summary><b>EMAC — EMACOM - Telecomunicações da Madeira, Unipessoal, Lda (25 sites, 45 pontos)</b> · 2 MÉDIO</summary>
+<details> <summary><b>EMAC — EMACOM - Telecomunicações da Madeira, Unipessoal, Lda (25 sites, 45 pontos)</b> · 2 MÉDIO</summary>
 
 ### [MÉDIO] Sub-declaração de potência (P < 0,75 × V×I)
 - **Regra:** `ratio = max_power_w / (V × I)` (× `√3` em `mode3AC3p`) `< 0,75`: a tomada declara muito menos potência do que a tensão e corrente permitem.
@@ -3641,8 +3589,7 @@ Legenda: *impossíveis* = linhas de conector distintas afetadas por categorias C
 
 <a id="opc-ZUND"></a>
 
-<details>
-<summary><b>ZUND — Grupo Easycharger, SL (1 site, 2 pontos)</b> · 1 MÉDIO, 1 BAIXO</summary>
+<details> <summary><b>ZUND — Grupo Easycharger, SL (1 site, 2 pontos)</b> · 1 MÉDIO, 1 BAIXO</summary>
 
 ### [MÉDIO] Sub-declaração de potência (P < 0,75 × V×I)
 - **Regra:** `ratio = max_power_w / (V × I)` (× `√3` em `mode3AC3p`) `< 0,75`: a tomada declara muito menos potência do que a tensão e corrente permitem.
@@ -3671,8 +3618,7 @@ Legenda: *impossíveis* = linhas de conector distintas afetadas por categorias C
 
 <a id="opc-PLUG"></a>
 
-<details>
-<summary><b>PLUG — e-Plug, Lda (31 sites, 62 pontos)</b> · 1 MÉDIO</summary>
+<details> <summary><b>PLUG — e-Plug, Lda (31 sites, 62 pontos)</b> · 1 MÉDIO</summary>
 
 ### [MÉDIO] CP4 → `city` divergente
 - **Regra:** agrupa os sites pelo prefixo CP4 do `postcode`; em cada CP4 com 5 ou mais sites, a cidade modal é a referência e um `city` diferente é suspeito.
@@ -3691,8 +3637,7 @@ Legenda: *impossíveis* = linhas de conector distintas afetadas por categorias C
 
 <a id="opc-VEIM"></a>
 
-<details>
-<summary><b>VEIM — Veimonte Lda (20 sites, 35 pontos)</b> · 2 MÉDIO</summary>
+<details> <summary><b>VEIM — Veimonte Lda (20 sites, 35 pontos)</b> · 2 MÉDIO</summary>
 
 ### [MÉDIO] Sub-declaração de potência (P < 0,75 × V×I)
 - **Regra:** `ratio = max_power_w / (V × I)` (× `√3` em `mode3AC3p`) `< 0,75`: a tomada declara muito menos potência do que a tensão e corrente permitem.
@@ -3720,8 +3665,7 @@ Legenda: *impossíveis* = linhas de conector distintas afetadas por categorias C
 
 <a id="opc-CMEL"></a>
 
-<details>
-<summary><b>CMEL — CME (22 sites, 23 pontos)</b> · 1 BAIXO</summary>
+<details> <summary><b>CMEL — CME (22 sites, 23 pontos)</b> · 1 BAIXO</summary>
 
 ### [BAIXO] `usage_type` em falta
 - **Regra:** `usage_type` nulo na linha de conector (enum `ChargingPointUsageTypeEnum`).
@@ -3740,8 +3684,7 @@ Legenda: *impossíveis* = linhas de conector distintas afetadas por categorias C
 
 <a id="opc-SFAF"></a>
 
-<details>
-<summary><b>SFAF — Superfafe- supermercados,lda (2 sites, 6 pontos)</b> · 1 MÉDIO</summary>
+<details> <summary><b>SFAF — Superfafe- supermercados,lda (2 sites, 6 pontos)</b> · 1 MÉDIO</summary>
 
 ### [MÉDIO] Sub-declaração de potência (P < 0,75 × V×I)
 - **Regra:** `ratio = max_power_w / (V × I)` (× `√3` em `mode3AC3p`) `< 0,75`: a tomada declara muito menos potência do que a tensão e corrente permitem.
@@ -3760,8 +3703,7 @@ Legenda: *impossíveis* = linhas de conector distintas afetadas por categorias C
 
 <a id="opc-SGMR"></a>
 
-<details>
-<summary><b>SGMR — Superguimarães - Supermercados,lda (2 sites, 6 pontos)</b> · 1 MÉDIO</summary>
+<details> <summary><b>SGMR — Superguimarães - Supermercados,lda (2 sites, 6 pontos)</b> · 1 MÉDIO</summary>
 
 ### [MÉDIO] Sub-declaração de potência (P < 0,75 × V×I)
 - **Regra:** `ratio = max_power_w / (V × I)` (× `√3` em `mode3AC3p`) `< 0,75`: a tomada declara muito menos potência do que a tensão e corrente permitem.
@@ -3780,8 +3722,7 @@ Legenda: *impossíveis* = linhas de conector distintas afetadas por categorias C
 
 <a id="opc-BINT"></a>
 
-<details>
-<summary><b>BINT — Bluint - Engenharia e Tecnologias Integradas, Unipessoal, Lda (2 sites, 4 pontos)</b> · 1 MÉDIO</summary>
+<details> <summary><b>BINT — Bluint - Engenharia e Tecnologias Integradas, Unipessoal, Lda (2 sites, 4 pontos)</b> · 1 MÉDIO</summary>
 
 ### [MÉDIO] CP4 → `city` divergente
 - **Regra:** agrupa os sites pelo prefixo CP4 do `postcode`; em cada CP4 com 5 ou mais sites, a cidade modal é a referência e um `city` diferente é suspeito.
@@ -3800,8 +3741,7 @@ Legenda: *impossíveis* = linhas de conector distintas afetadas por categorias C
 
 <a id="opc-BRIG"></a>
 
-<details>
-<summary><b>BRIG — Brightcity S.A. (2 sites, 4 pontos)</b> · 1 MÉDIO</summary>
+<details> <summary><b>BRIG — Brightcity S.A. (2 sites, 4 pontos)</b> · 1 MÉDIO</summary>
 
 ### [MÉDIO] Sub-declaração de potência (P < 0,75 × V×I)
 - **Regra:** `ratio = max_power_w / (V × I)` (× `√3` em `mode3AC3p`) `< 0,75`: a tomada declara muito menos potência do que a tensão e corrente permitem.
@@ -3820,8 +3760,7 @@ Legenda: *impossíveis* = linhas de conector distintas afetadas por categorias C
 
 <a id="opc-WENE"></a>
 
-<details>
-<summary><b>WENE — WENEA SERVICES SPAIN S.L. (2 sites, 4 pontos)</b> · 1 MÉDIO</summary>
+<details> <summary><b>WENE — WENEA SERVICES SPAIN S.L. (2 sites, 4 pontos)</b> · 1 MÉDIO</summary>
 
 ### [MÉDIO] Sub-declaração de potência (P < 0,75 × V×I)
 - **Regra:** `ratio = max_power_w / (V × I)` (× `√3` em `mode3AC3p`) `< 0,75`: a tomada declara muito menos potência do que a tensão e corrente permitem.
@@ -3840,8 +3779,7 @@ Legenda: *impossíveis* = linhas de conector distintas afetadas por categorias C
 
 <a id="opc-PQTJ"></a>
 
-<details>
-<summary><b>PQTJ — Parques Tejo, E.M. (2 sites, 2 pontos)</b> · 1 BAIXO</summary>
+<details> <summary><b>PQTJ — Parques Tejo, E.M. (2 sites, 2 pontos)</b> · 1 BAIXO</summary>
 
 ### [BAIXO] `usage_type` em falta
 - **Regra:** `usage_type` nulo na linha de conector (enum `ChargingPointUsageTypeEnum`).
@@ -3860,8 +3798,7 @@ Legenda: *impossíveis* = linhas de conector distintas afetadas por categorias C
 
 <a id="opc-FACT"></a>
 
-<details>
-<summary><b>FACT — FactorENERGIA (38 sites, 76 pontos)</b> · 1 MÉDIO</summary>
+<details> <summary><b>FACT — FactorENERGIA (38 sites, 76 pontos)</b> · 1 MÉDIO</summary>
 
 ### [MÉDIO] CP4 → `city` divergente
 - **Regra:** agrupa os sites pelo prefixo CP4 do `postcode`; em cada CP4 com 5 ou mais sites, a cidade modal é a referência e um `city` diferente é suspeito.
@@ -3879,8 +3816,7 @@ Legenda: *impossíveis* = linhas de conector distintas afetadas por categorias C
 
 <a id="opc-CARG"></a>
 
-<details>
-<summary><b>CARG — Cargga Inteligente (6 sites, 12 pontos)</b> · 1 MÉDIO</summary>
+<details> <summary><b>CARG — Cargga Inteligente (6 sites, 12 pontos)</b> · 1 MÉDIO</summary>
 
 ### [MÉDIO] CP4 → `city` divergente
 - **Regra:** agrupa os sites pelo prefixo CP4 do `postcode`; em cada CP4 com 5 ou mais sites, a cidade modal é a referência e um `city` diferente é suspeito.
@@ -3898,8 +3834,7 @@ Legenda: *impossíveis* = linhas de conector distintas afetadas por categorias C
 
 <a id="opc-MOBI"></a>
 
-<details>
-<summary><b>MOBI — MOBIE (6 sites, 11 pontos)</b> · 1 BAIXO</summary>
+<details> <summary><b>MOBI — MOBIE (6 sites, 11 pontos)</b> · 1 BAIXO</summary>
 
 ### [BAIXO] `usage_type` em falta
 - **Regra:** `usage_type` nulo na linha de conector (enum `ChargingPointUsageTypeEnum`).

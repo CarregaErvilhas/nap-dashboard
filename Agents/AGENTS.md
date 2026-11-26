@@ -5,22 +5,20 @@ Esta pasta guarda as system prompts dos agentes automáticos do projeto `nap-das
 ## Conteúdo atual
 
 - `anomalias.md` — deteção automática de anomalias e divergências nos dados **estáticos** do NAP (lei de Ohm aproximada `P vs V×I`, teto global 1500 kW, tetos de potência por tipo de tomada, compatibilidade modo↔tomada AC/DC, enums fora do schema DATEX II, duplicados, chaves eMI3 e coerência CP7↔localidade, coordenadas, metadados) mais rotatividade de OPCs (novos, saídos, grandes variações de pontos). Lê `data/nap_static_sites.csv` / `data/nap_static_points.csv` e escreve `Agents-outputs/anomalias-results.md`, agrupado por OPC.
-  - **Agrupar por OPC pelo `PartyId` do tracker** (`data/opc_registry_authority.csv`), não pelo `operator_id` do NAP: 21 ids têm várias grafias (3448 sites) e 3 operadores publicam com o `PartyCode` em vez do `PartyId`. Ver `references/gotchas.md`.
-  - O cross-check com o tracker de erros PCVE **não** é deste agente: corre em `scripts/tracker_checks.py` e escreve `data/tracker_findings.md` (errors.md item 13); as regras só-NAP (tensões placeholder, falso trifásico) correm em `scripts/nap_static_checks.py` (errors.md item 8). Não as reimplementes. A evidência exaustiva de potência (uma linha por conector) é gerada deterministicamente por `scripts/anomalias_evidence.py` em `Agents-outputs/anomalias-evidence.csv` (máquina) + `Agents-outputs/anomalias-details.md` (leitura no GitHub); o relatório resume (≤10 linhas por tabela) e linka ambos na linha de elipse.
+- **Agrupar por OPC pelo `PartyId` do tracker** (`data/opc_registry_authority.csv`), não pelo `operator_id` do NAP: 21 ids têm várias grafias (3448 sites) e 3 operadores publicam com o `PartyCode` em vez do `PartyId`. Ver `references/gotchas.md`.
+- O cross-check com o tracker de erros PCVE **não** é deste agente: corre em `scripts/tracker_checks.py` e escreve `data/tracker_findings.md` (errors.md item 13); as regras só-NAP (tensões placeholder, falso trifásico) correm em `scripts/nap_static_checks.py` (errors.md item 8). Não as reimplementes. A evidência exaustiva de potência (uma linha por conector) é gerada deterministicamente por `scripts/anomalias_evidence.py` em `Agents-outputs/anomalias-evidence.csv` (máquina) + `Agents-outputs/anomalias-details.md` (leitura no GitHub); o relatório resume (≤10 linhas por tabela) e linka ambos na linha de elipse.
 
 ## Convenções
 
 - Um ficheiro `.md` por agente; o nome do ficheiro é o nome do agente.
-- Frontmatter obrigatório no topo de cada agente (é o que o torna despoletável
-  como subagente — sem isto o ficheiro é só texto):
+- Frontmatter obrigatório no topo de cada agente (é o que o torna despoletável como subagente — sem isto o ficheiro é só texto):
   ```md
   ---
   description: <o que o agente faz, uma linha>
   mode: subagent
   ---
   ```
-  `description` tem de ser não-vazia (é o que o modelo vê ao escolher o agente);
-  `mode` tem de ser `primary`, `subagent` ou `all` (neste projeto: `subagent`).
+`description` tem de ser não-vazia (é o que o modelo vê ao escolher o agente); `mode` tem de ser `primary`, `subagent` ou `all` (neste projeto: `subagent`).
 - A prompt deve declarar: âmbito estrito (que ficheiros pode tocar), ambiente (`venv/bin/python`, correr da raiz, não ler os XMLs de ~190 MB com `cat`/`Read`), regras de verificação por execução e o formato exato do output.
 - Código de análise reutilizável criado pelos agentes vai para `scripts/` (ex. `scripts/anomalias_check.py`), nunca fica só no terminal ou em `/tmp`. No CI não entra no `main` sozinho: fica no artifact `agent-outputs` da run, para alguém o rever e abrir um PR.
 - Futuros agentes (ex. dinâmico, tarifários, geografia) seguem o mesmo padrão: `Agents/<nome>.md` + relatório `Agents-outputs/<nome>-results.md`.
@@ -36,35 +34,15 @@ sobre os dados atuais. Escreve o relatório em
 Agents-outputs/anomalias-results.md no formato exato definido na prompt.
 ```
 
-Pré-requisito: os CSVs do ETL (`bash scripts/fetch_data.sh`, depois
-`venv/bin/python scripts/nap_etl.py data/evChargingInfra_latest.xml data/evActualStatus_latest.xml data`).
-A prompt já manda o agente tratar disso se faltarem.
+Pré-requisito: os CSVs do ETL (`bash scripts/fetch_data.sh`, depois `venv/bin/python scripts/nap_etl.py data/evChargingInfra_latest.xml data/evActualStatus_latest.xml data`). A prompt já manda o agente tratar disso se faltarem.
 
 ## Automático (CI)
 
-`.github/workflows/agents.yml` corre o agente semanalmente sem intervenção:
-dispara quando o `Weekly dashboard refresh` completa com sucesso (mais botão
-manual `workflow_dispatch`), gera CSVs frescos, corre o eval
-(`scripts/check_agents.py`), a pré-agregação (`scripts/anomalias_summary.py` →
-`data/agents-summary.json`, gitignored), a evidência exaustiva
-(`scripts/anomalias_evidence.py` → `Agents-outputs/anomalias-evidence.csv` +
-`Agents-outputs/anomalias-details.md`) e o `opencode2 run` com a prompt desta pasta.
-Cadeia de fallback pela variable `OPENCODE_MODEL` (lista por prioridade),
-validação do markdown (formato, secções por OPC, ids reais citados, evidência
-existente e não-vazia) e
-auto-commit de `Agents-outputs/anomalias-results.md` para `main` (mais
-`Agents-outputs/opc-census.json`, o censo rolante que alimenta a secção de
-rotatividade de OPCs no run seguinte, e os dois ficheiros de evidência). O
-commit é feito por outro job (`publish`), num runner novo, que só copia esses
-quatro ficheiros: o agente nunca partilha a máquina com o token de escrita.
-Cada modelo que falha abre uma Issue; custo $0 (free tier Zen via harness).
+`.github/workflows/agents.yml` corre o agente semanalmente sem intervenção: dispara quando o `Weekly dashboard refresh` completa com sucesso (mais botão manual `workflow_dispatch`), gera CSVs frescos, corre o eval (`scripts/check_agents.py`), a pré-agregação (`scripts/anomalias_summary.py` → `data/agents-summary.json`, gitignored), a evidência exaustiva (`scripts/anomalias_evidence.py` → `Agents-outputs/anomalias-evidence.csv` + `Agents-outputs/anomalias-details.md`) e o `opencode2 run` com a prompt desta pasta. Cadeia de fallback pela variable `OPENCODE_MODEL` (lista por prioridade), validação do markdown (formato, secções por OPC, ids reais citados, evidência existente e não-vazia) e auto-commit de `Agents-outputs/anomalias-results.md` para `main` (mais `Agents-outputs/opc-census.json`, o censo rolante que alimenta a secção de rotatividade de OPCs no run seguinte, e os dois ficheiros de evidência). O commit é feito por outro job (`publish`), num runner novo, que só copia esses quatro ficheiros: o agente nunca partilha a máquina com o token de escrita. Cada modelo que falha abre uma Issue; custo $0 (free tier Zen via harness).
 
 ## Eval
 
-`scripts/check_agents.py` valida que nenhum agente volta a ficar
-não-despoletável: frontmatter presente, `description` não-vazia,
-`mode` válido e saída `Agents-outputs/<nome>-results.md` declarada no corpo.
-Correr da raiz após adicionar ou editar um agente:
+`scripts/check_agents.py` valida que nenhum agente volta a ficar não-despoletável: frontmatter presente, `description` não-vazia, `mode` válido e saída `Agents-outputs/<nome>-results.md` declarada no corpo. Correr da raiz após adicionar ou editar um agente:
 
 ```bash
 venv/bin/python scripts/check_agents.py

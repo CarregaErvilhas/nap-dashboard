@@ -1,20 +1,10 @@
 # Third-party notices — nap-dashboard
 
-Our code/site templates/docs are `PolyForm-Noncommercial-1.0.0` (see `LICENSE`).
-Everything below keeps its **own licence/terms** and is **not** covered by
-PolyForm. Where published in the site (`site/data/*.json`, fetched by
-`index.html`, `rede.html` and `operadores.html`, plus the panels pre-rendered
-into their HTML), the site is a collective work: our code is
-PolyForm-Noncommercial, the third-party portions stay under their own terms.
+Our code/site templates/docs are `PolyForm-Noncommercial-1.0.0` (see `LICENSE`). Everything below keeps its **own licence/terms** and is **not** covered by PolyForm. Where published in the site (`site/data/*.json`, fetched by `index.html`, `rede.html` and `operadores.html`, plus the panels pre-rendered into their HTML), the site is a collective work: our code is PolyForm-Noncommercial, the third-party portions stay under their own terms.
 
 ## Mascots of the group's sites
 
-`assets/site/grupo/*.svg` (copied to `site/grupo/`, shown on `grupo.html`) are the
-mascots of the sites of the O Carro Elétrico group (O Carro Elétrico, ohmigo, Voltaria,
-Comparador CEME, Postos PT, olh'o'posto, AmpereArchive), plus `pano.svg`, the logo of the
-Panoramax project. Each belongs to its own site and is its brand:
-they are **not** covered by PolyForm or any other licence of this repo, and may not be
-reused apart from a link to that site.
+`assets/site/grupo/*.svg` (copied to `site/grupo/`, shown on `grupo.html`) are the mascots of the sites of the O Carro Elétrico group (O Carro Elétrico, ohmigo, Voltaria, Comparador CEME, Postos PT, olh'o'posto, AmpereArchive), plus `pano.svg`, the logo of the Panoramax project. Each belongs to its own site and is its brand: they are **not** covered by PolyForm or any other licence of this repo, and may not be reused apart from a link to that site.
 
 ## Data sources and schemas
 
@@ -39,8 +29,7 @@ reused apart from a link to that site.
 
 ## Derived data from the PCVE error tracker — needs the owner's OK
 
-The tracker is fetched at run time and **not** redistributed. Three files are
-derived from it on each run, none of them versioned, and one report is published:
+The tracker is fetched at run time and **not** redistributed. Three files are derived from it on each run, none of them versioned, and one report is published:
 
 | Derived (never versioned) | What it is |
 |---|---|
@@ -48,22 +37,11 @@ derived from it on each run, none of them versioned, and one report is published
 | `data/tracker_errors.csv` | 3153 rows: the owners' error list (asset id, status, error type, current/correct value) |
 | `data/tracker_meta.json` | sha256 + sync date (no content) |
 
-`errors.md` item 13 is the only place derived findings are published, and it
-quotes `site_external_id`/`point_id` + operator — no contact details. Item 8
-(NAP data only) also cites two aggregate tracker class counts (171 and 199
-rows) as the reason its rules exist; no row of the tracker is reproduced there.
+`errors.md` item 13 is the only place derived findings are published, and it quotes `site_external_id`/`point_id` + operator — no contact details. Item 8 (NAP data only) also cites two aggregate tracker class counts (171 and 199 rows) as the reason its rules exist; no row of the tracker is reproduced there.
 
-**None of them is versioned.** They are re-extracted from the source xlsx on
-every run (`fetch_tracker.sh` → `tracker_sync.py`) and stay gitignored; the
-weekly CI fetches the xls itself via the `TRACKER_URL` secret. A copy of a third
-party's internal defect list has no place in a public repository, and a
-versioned one would also go stale without saying anything.
+**None of them is versioned.** They are re-extracted from the source xlsx on every run (`fetch_tracker.sh` → `tracker_sync.py`) and stay gitignored; the weekly CI fetches the xls itself via the `TRACKER_URL` secret. A copy of a third party's internal defect list has no place in a public repository, and a versioned one would also go stale without saying anything.
 
-Consequence to be aware of: if the fetch stops working, errors.md simply has no
-tracker item. That is the intended failure mode — an absent section is honest,
-a frozen snapshot is not. `tracker_meta.json` is rewritten on each run and
-records `synced_at` + the xlsx `sha256`, so item 13 always names the version it
-came from.
+Consequence to be aware of: if the fetch stops working, errors.md simply has no tracker item. That is the intended failure mode — an absent section is honest, a frozen snapshot is not. `tracker_meta.json` is rewritten on each run and records `synced_at` + the xlsx `sha256`, so item 13 always names the version it came from.
 
 ## Required attribution (copy-paste)
 
@@ -75,17 +53,7 @@ came from.
 
 ## ODbL share-alike — how to get the OSM-derived database
 
-`data/osm_umap.csv` / `data/osm_caca.csv` (`scripts/osm_umap.py` output, gitignored),
-the per-site OSM fields published in `site/data/sites.json` and `site/data/points.json`, and the per-site `osm`
-blocks of the ohmigo dataset (`scripts/ohmigo_dataset.py`, published at
-`/ohmigo/chargers.json`; the ohmigo server credits OpenStreetMap whenever it
-shows them) are derived from OSM data and fall under ODbL. The `osm` blocks
-are themselves the OSM-derived database, published openly in that file. To
-comply:
+`data/osm_umap.csv` / `data/osm_caca.csv` (`scripts/osm_umap.py` output, gitignored), the per-site OSM fields published in `site/data/sites.json` and `site/data/points.json`, and the per-site `osm` blocks of the ohmigo dataset (`scripts/ohmigo_dataset.py`, published at `/ohmigo/chargers.json`; the ohmigo server credits OpenStreetMap whenever it shows them) are derived from OSM data and fall under ODbL. The `osm` blocks are themselves the OSM-derived database, published openly in that file. To comply:
 
-1. Regenerate them yourself: `bash scripts/fetch_data.sh` (needs the static
-   CSVs) then `python scripts/osm_umap.py` — method + origin URLs are in the
-   script header and `references/data-sources.md`.
-2. Or ask us for a copy of the exact CSVs behind the published dashboard
-   (`info@ocarroeletrico.com`): we provide them under ODbL 1.0 on request to
-   anyone who received/viewed the site, per ODbL §4.
+1. Regenerate them yourself: `bash scripts/fetch_data.sh` (needs the static CSVs) then `python scripts/osm_umap.py` — method + origin URLs are in the script header and `references/data-sources.md`.
+2. Or ask us for a copy of the exact CSVs behind the published dashboard (`info@ocarroeletrico.com`): we provide them under ODbL 1.0 on request to anyone who received/viewed the site, per ODbL §4.

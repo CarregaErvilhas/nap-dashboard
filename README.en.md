@@ -1,13 +1,10 @@
 # NAP EADME — EV charging network (Portugal)
 
-Analysis of Portugal's EV charging network from official
-public data sources. The goal:
+Analysis of Portugal's EV charging network from official public data sources. The goal:
 
-- Extract and cross-reference data from several sources (NAP MOBI.E, OPC tariff,
-  DGEG registries, OSM/umap)
+- Extract and cross-reference data from several sources (NAP MOBI.E, OPC tariff, DGEG registries, OSM/umap)
 - Build a **static site** (`site/`) to find chargers and explore the network
-- Produce a list of **interesting facts** and a list of **reportable errors** for
-  the data owners
+- Produce a list of **interesting facts** and a list of **reportable errors** for the data owners
 
 ## Data sources
 
@@ -22,34 +19,16 @@ public data sources. The goal:
 
 ## Results
 
-**Live demo:** <https://nap.ocarroeletrico.com/> (custom domain via CNAME;
-auto-published by `.github/workflows/pages.yml` on every `push` that touches
-`site/`; regenerated weekly by `.github/workflows/refresh.yml`,
-Mondays 06:00 UTC).
+**Live demo:** <https://nap.ocarroeletrico.com/> (custom domain via CNAME; auto-published by `.github/workflows/pages.yml` on every `push` that touches `site/`; regenerated weekly by `.github/workflows/refresh.yml`, Mondays 06:00 UTC).
 
-- **`site/`** — three-page static site, no external libraries, with the data in
-  `site/data/*.json` (local preview: `python3 -m http.server --directory site`;
-  `file://` does not work because the pages fetch the JSON). **Bilingual PT/EN**: Portuguese for Portuguese-language
-  browsers, English for everyone else (PT|EN button top-right persists the
-  choice; `?lang=pt|en` forces a language); auto/light/dark theme and vision
-  options (colour-blind, high contrast).
-  - **Find** (`index.html`): for drivers. Search by town, operator or code, "Near me"
-    (geolocation stays on the device), quick filters, a card per site with one
-    status mark per socket, detail with sockets, operator fees, payment and
-    "Directions" links (Google Maps, OpenStreetMap), and a canvas map.
-  - **Network** (`rede.html`): community statistics (KPIs, news, bar charts as
-    tables, history, hubs, facts).
-  - **Explore** (`explorar.html`): cross-filters over every socket (operator,
-    municipality, power, plug, region, price, payment, status), with live status, a map,
-    fees and trends over time (from the AmpereArchive).
-  - **Operators** (`operadores.html`): for the OPCs. Weekly anomaly report per
-    operator (from `Agents-outputs/anomalias-results.md`), OPC churn and reportable
-    errors.
-  - **The group** (`grupo.html`): the other sites of the O Carro Elétrico group, each
-    with its mascot, a description and links to the site and to GitHub.
+- **`site/`** — three-page static site, no external libraries, with the data in `site/data/*.json` (local preview: `python3 -m http.server --directory site`; `file://` does not work because the pages fetch the JSON). **Bilingual PT/EN**: Portuguese for Portuguese-language browsers, English for everyone else (PT|EN button top-right persists the choice; `?lang=pt|en` forces a language); auto/light/dark theme and vision options (colour-blind, high contrast).
+- **Find** (`index.html`): for drivers. Search by town, operator or code, "Near me" (geolocation stays on the device), quick filters, a card per site with one status mark per socket, detail with sockets, operator fees, payment and "Directions" links (Google Maps, OpenStreetMap), and a canvas map.
+- **Network** (`rede.html`): community statistics (KPIs, news, bar charts as tables, history, hubs, facts).
+- **Explore** (`explorar.html`): cross-filters over every socket (operator, municipality, power, plug, region, price, payment, status), with live status, a map, fees and trends over time (from the AmpereArchive).
+- **Operators** (`operadores.html`): for the OPCs. Weekly anomaly report per operator (from `Agents-outputs/anomalias-results.md`), OPC churn and reportable errors.
+- **The group** (`grupo.html`): the other sites of the O Carro Elétrico group, each with its mascot, a description and links to the site and to GitHub.
 - **`facts.md`** — interesting facts about the network.
-- **`errors.md`** — errors worth reporting to the data owners (includes community
-  OSM/umap doubts and operator/payment divergences).
+- **`errors.md`** — errors worth reporting to the data owners (includes community OSM/umap doubts and operator/payment divergences).
 
 ## Running
 
@@ -83,19 +62,13 @@ venv/bin/python scripts/build_dashboard.py # generate site/, facts.md, errors.md
 python3 scripts/model_parity.py            # the site shows what the model says
 ```
 
-`build_dashboard.py` reads all intermediate CSVs, writes the data to
-`site/data/*.json` and renders the pages from `assets/site/` into `site/` (via
-`scripts/site_data.py` and `scripts/build_site.py`). To re-render the pages without
-the CSVs, from the committed `site/data`: `python3 scripts/build_site.py`.
-`scripts/validate_site.py` validates the result.
+`build_dashboard.py` reads all intermediate CSVs, writes the data to `site/data/*.json` and renders the pages from `assets/site/` into `site/` (via `scripts/site_data.py` and `scripts/build_site.py`). To re-render the pages without the CSVs, from the committed `site/data`: `python3 scripts/build_site.py`. `scripts/validate_site.py` validates the result.
 
 ## Automated agents
 
-System prompts live in `Agents/` (one `.md` file each) and the reports they
-produce in `Agents-outputs/`. See `Agents/AGENTS.md` for details.
+System prompts live in `Agents/` (one `.md` file each) and the reports they produce in `Agents-outputs/`. See `Agents/AGENTS.md` for details.
 
-To run the anomaly agent (static NAP data → per-OPC report), paste this into a
-new OpenCode session with cwd at the repo root:
+To run the anomaly agent (static NAP data → per-OPC report), paste this into a new OpenCode session with cwd at the repo root:
 
 ```text
 Follow strictly the system prompt in Agents/anomalias.md and execute it
@@ -138,63 +111,30 @@ python3 scripts/check_agents.py
 
 ## Intermediate data (CSV)
 
-Everything fetched or derived lives in `data/`, which is gitignored without
-exceptions. The repo root holds only code, docs and deliverables.
+Everything fetched or derived lives in `data/`, which is gitignored without exceptions. The repo root holds only code, docs and deliverables.
 
-`sites`, `points`, `status`, `pricing` (NAP output), `nap_opc_points` (NAP
-+tariffs), `nap_opc_registry` (OPC code→entity), `mobie_tarifas`, `dgeg_*`.
+`sites`, `points`, `status`, `pricing` (NAP output), `nap_opc_points` (NAP +tariffs), `nap_opc_registry` (OPC code→entity), `mobie_tarifas`, `dgeg_*`.
 
-From the PCVE error tracker: `opc_registry_authority` (PartyId/PartyCode/name, 99
-CPOs), `tracker_errors` (3153 labelled defects) and `tracker_meta` (date+sha256).
-These are always re-extracted from the source xls on each run and **never
-versioned** — they are third-party data with no reuse licence. If the tracker
-cannot be fetched, errors.md simply has no tracker item. See
-`THIRD-PARTY-NOTICES.md`.
+From the PCVE error tracker: `opc_registry_authority` (PartyId/PartyCode/name, 99 CPOs), `tracker_errors` (3153 labelled defects) and `tracker_meta` (date+sha256). These are always re-extracted from the source xls on each run and **never versioned** — they are third-party data with no reuse licence. If the tracker cannot be fetched, errors.md simply has no tracker item. See `THIRD-PARTY-NOTICES.md`.
 
 ## Engineering notes / pitfalls
 
-- The NAP↔MOBI.E join uses `site_external_id` (= MOBI.E id) + the last segment of
-  `point_id` (the plug, int-normalized). **Do not** join on raw `point_external_id`:
-  the `PT*op*[E]*reg*num*tom` format is inconsistent (glued `E` prefix, variable
-  segment count).
-- `brands_accepted` in NAP is the per-point global CEME list, **not** an operator
-  discriminator.
-- `facilityLocation` lives in the `locationReferencing` namespace, not in
-  `locationExtension`.
+- The NAP↔MOBI.E join uses `site_external_id` (= MOBI.E id) + the last segment of `point_id` (the plug, int-normalized). **Do not** join on raw `point_external_id`: the `PT*op*[E]*reg*num*tom` format is inconsistent (glued `E` prefix, variable segment count).
+- `brands_accepted` in NAP is the per-point global CEME list, **not** an operator discriminator.
+- `facilityLocation` lives in the `locationReferencing` namespace, not in `locationExtension`.
 - Static CSVs are read with `dtype=str` to avoid losing leading zeros.
-- Site JSON: use `allow_nan=False` plus NaN/Inf cleaning, otherwise
-  the browser's `JSON.parse` fails (bug already fixed).
-- OSM/umap: the v2.1 map author's dump (`Todos.json`) covers ~96% of NAP sites
-  (8 011/8 357) by MOBI.E code; `man_made=charge_point` nodes carry payment tags
-  that `charging_station` elements lack — consider both. The "Caça aos Postos"
-  umap lists community doubts, including "nothing on site" points ≤500 m from
-  active NAP sites.
+- Site JSON: use `allow_nan=False` plus NaN/Inf cleaning, otherwise the browser's `JSON.parse` fails (bug already fixed).
+- OSM/umap: the v2.1 map author's dump (`Todos.json`) covers ~96% of NAP sites (8 011/8 357) by MOBI.E code; `man_made=charge_point` nodes carry payment tags that `charging_station` elements lack — consider both. The "Caça aos Postos" umap lists community doubts, including "nothing on site" points ≤500 m from active NAP sites.
 
 ## License
 
 Own code (`scripts/`, template, docs, analysis): `PolyForm-Noncommercial-1.0.0` — see `LICENSE`.
 
-- Noncommercial use (individuals, hobby, research, education, public/charitable
-  bodies): free to use, modify and share the code and dashboard/site, with
-  credit to <https://nap.ocarroeletrico.com/>.
-- Commercial use: requires a separate commercial license, agreed case by case.
-  Contact: [info@ocarroeletrico.com](mailto:info@ocarroeletrico.com) ·
-  [Messenger](https://m.me/OCarroEletricoDotCom).
+- Noncommercial use (individuals, hobby, research, education, public/charitable bodies): free to use, modify and share the code and dashboard/site, with credit to <https://nap.ocarroeletrico.com/>.
+- Commercial use: requires a separate commercial license, agreed case by case. Contact: [info@ocarroeletrico.com](mailto:info@ocarroeletrico.com) · [Messenger](https://m.me/OCarroEletricoDotCom).
 
-**Third-party data and schemas are NOT covered by PolyForm** — see
-`THIRD-PARTY-NOTICES.md`: NAP/MOBI.E (free use with attribution, no commercial
-use; tariff © MOBI.E), DGEG lists (same), CAOP outline © DGT (CC-BY
-4.0), OSM data © OpenStreetMap contributors (ODbL 1.0, share-alike) +
-v2.1/Caça community maps, DATEX II schemas © CEN. `site/` is a
-collective work: our code is PolyForm, published data keeps its original
-licences (attribution in footer + map).
+**Third-party data and schemas are NOT covered by PolyForm** — see `THIRD-PARTY-NOTICES.md`: NAP/MOBI.E (free use with attribution, no commercial use; tariff © MOBI.E), DGEG lists (same), CAOP outline © DGT (CC-BY 4.0), OSM data © OpenStreetMap contributors (ODbL 1.0, share-alike) + v2.1/Caça community maps, DATEX II schemas © CEN. `site/` is a collective work: our code is PolyForm, published data keeps its original licences (attribution in footer + map).
 
 ### The name and the art are not licensed
 
-The licences cover the code and the data, not the brand. Not licensed: the name
-**Postos PT**, the domain, the mascot (the blue map pin with a face and a lightning
-bolt), its icon and the images made from them (`assets/favicon.svg`, `assets/og.png`,
-`assets/favicon.ico`, `assets/apple-touch-icon.png` and their copies in `site/`). The mascots in
-`assets/site/grupo/` belong to the group's sites, each one its site's brand (see
-`THIRD-PARTY-NOTICES.md`). You may use the name to say where the content comes from.
-A fork needs its own name and art.
+The licences cover the code and the data, not the brand. Not licensed: the name **Postos PT**, the domain, the mascot (the blue map pin with a face and a lightning bolt), its icon and the images made from them (`assets/favicon.svg`, `assets/og.png`, `assets/favicon.ico`, `assets/apple-touch-icon.png` and their copies in `site/`). The mascots in `assets/site/grupo/` belong to the group's sites, each one its site's brand (see `THIRD-PARTY-NOTICES.md`). You may use the name to say where the content comes from. A fork needs its own name and art.
