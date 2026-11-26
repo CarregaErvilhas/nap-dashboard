@@ -1,5 +1,5 @@
 """Draw the link-preview image (assets/og.png, 1200x630) from the committed site data,
-and the raster icons (assets/favicon.ico, assets/apple-touch-icon.png) from the mascot.
+and the raster icons (assets/favicon.ico, assets/apple-touch-icon.png, assets/icon-*.png) from the mascot.
 
     python3 scripts/make_og_image.py [--chromium PATH]
 
@@ -107,9 +107,14 @@ def icon_html(size, share, background):
 
 
 def icons(chromium):
-    """favicon.ico (16, 32 and 48 px, transparent) and apple-touch-icon.png (180 px on the page's
-    background, with room around: iOS rounds the corners)."""
+    """favicon.ico (16, 32 and 48 px, transparent), apple-touch-icon.png (180 px on the page's
+    background, with room around: iOS rounds the corners) and the manifest's PNG icons."""
     shot(chromium, icon_html(180, .78, '#fbfaf5'), 180, ROOT / 'assets/apple-touch-icon.png', False)
+    # The manifest's icons for "Instalar app" (Chrome wants 192 and 512 px PNGs). The maskable one
+    # keeps the mascot inside the central 80 % circle that Android may crop the icon to.
+    shot(chromium, icon_html(192, .78, '#fbfaf5'), 192, ROOT / 'assets/icon-192.png', False)
+    shot(chromium, icon_html(512, .78, '#fbfaf5'), 512, ROOT / 'assets/icon-512.png', False)
+    shot(chromium, icon_html(512, .6, '#fbfaf5'), 512, ROOT / 'assets/icon-maskable-512.png', False)
     pngs = []
     with tempfile.TemporaryDirectory() as tmp:
         for s in (16, 32, 48):
@@ -140,7 +145,7 @@ def main():
                         f'--window-size={W},{H}', f'--screenshot={a.out}', src.as_uri()],
                        check=True, capture_output=True)
     icons(a.chromium)
-    print('escrito', a.out, 'favicon.ico, apple-touch-icon.png', file=sys.stderr)
+    print('escrito', a.out, 'favicon.ico, apple-touch-icon.png, icon-*.png', file=sys.stderr)
 
 
 if __name__ == '__main__':

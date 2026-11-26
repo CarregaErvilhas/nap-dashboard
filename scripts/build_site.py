@@ -22,7 +22,7 @@ import site_data
 SRC = 'assets/site'
 PAGES = ('index.html', 'rede.html', 'explorar.html', 'operadores.html', 'grupo.html')
 # Copied as they are. privacidade/404/icons live in assets/ and keep their names.
-STATIC = ('app.css', 'boot.js', 'common.js', 'find.js', 'uso.js', 'rede.js', 'operadores.js',
+STATIC = ('app.css', 'boot.js', 'common.js', 'install.js', 'find.js', 'uso.js', 'rede.js', 'operadores.js',
           'explorar.js', 'explorar.css', 'grupo.js', 'grupo.css',
           # The mascots of the group's sites (grupo.html), each its own site's brand.
           'grupo/carro.svg', 'grupo/ohmigo.svg', 'grupo/voltaria.svg', 'grupo/ceme.svg',
@@ -36,7 +36,8 @@ STATIC = ('app.css', 'boot.js', 'common.js', 'find.js', 'uso.js', 'rede.js', 'op
           'vendor/pmtiles/pmtiles.js', 'vendor/pmtiles/LICENSE.txt',
           'vendor/basemaps/basemaps.mjs', 'vendor/basemaps/LICENSE.txt')
 EXTRA = ('privacidade.html', '404.html', 'favicon.svg', 'favicon.ico',
-         'apple-touch-icon.png', 'llms.txt', 'og.png', 'site.webmanifest')
+         'apple-touch-icon.png', 'icon-192.png', 'icon-512.png', 'icon-maskable-512.png',
+         'llms.txt', 'og.png', 'site.webmanifest')
 # Static data copied as it is (assets/ -> site/data/): the OSM places and roads
 # for the map, built by scripts/make_pt_basemap.py.
 DATA_COPY = {'pt_basemap.json': 'basemap.json'}
