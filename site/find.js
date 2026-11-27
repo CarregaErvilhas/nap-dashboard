@@ -264,8 +264,7 @@
   // A socket's operator fees. Points carry `fees`, the network model's MOBI.E
   // plans ({REGULAR: {flat: [..], energy: [..], time: [{eur, from, to}]},
   // AD_HOC_PAYMENT: ...}) with every per-minute tier, the same ohmigo prices
-  // with. Site data from before the model had one string per component
-  // (ENERGY/TIME/FLAT); it still renders until the next weekly refresh.
+  // with.
   function plan(p) { var f = p.fees; return f ? (f.REGULAR || (f.AD_HOC_PAYMENT ? null : f[Object.keys(f)[0]])) : null; }
   function values(v) { return v && v.length ? v.map(function (x) { return N.nf(x, 3); }).join(' / ') : '—'; }
   function tiers(v) {
@@ -432,17 +431,17 @@
         if (pk.direct) direct = true;
         var only = p.regime === 'sem_ceme' && p.nap != null;
         // The fee/CEME note only where a socket really has an operator fee.
-        if (pk.opc || (p.fees === undefined && p.regime !== 'sem_ceme')) mobie = true;
-        var model = p.fees !== undefined, fp = model ? plan(p) : null;
+        if (pk.opc) mobie = true;
+        var fp = plan(p);
         if (p.kw_src === 'osm') osmKw = true;
         (p.issues || []).forEach(function (k) { (issues[k] = issues[k] || []).push(p.point_id); });
         return el('tr', null, el('td', null, el('code', null, p.point_id)), el('td', { class: 'l' }, String(p.connectors || '—').split('|').join(', ')),
           el('td', null, p.kw ? N.nf(p.kw, 1) : '—', p.kw_src === 'osm' ? el('small', { class: 'muted' }, ' (' + t('napKw', { kw: p.nap_kw == null ? '—' : N.nf(p.nap_kw, 1) }) + ')') : null),
           anyUnit ? el('td', null, p.u != null ? unitLetter(p.u) : '—') : null,
           el('td', { class: 'l' }, N.status(p.status), p.status === 'available' ? unitNote(p) : null),
-          el('td', null, only ? N.nf(p.nap, 3) : nf ? money(nf.kwh) : model ? values(fp && fp.energy) : money(p.ENERGY)),
-          el('td', null, nf ? money(nf.min) : model ? tiers(fp && fp.time) : money(p.TIME)),
-          el('td', null, nf ? money(nf.flat) : model ? values(fp && fp.flat) : money(p.FLAT)),
+          el('td', null, only ? N.nf(p.nap, 3) : nf ? money(nf.kwh) : values(fp && fp.energy)),
+          el('td', null, nf ? money(nf.min) : tiers(fp && fp.time)),
+          el('td', null, nf ? money(nf.flat) : values(fp && fp.flat)),
           anyAdhoc ? el('td', null, pk.adhoc ? N.priceText(pk.adhoc, 3) : '—') : null);
       });
       d.appendChild(el('div', { class: 'scroll', tabindex: '0', role: 'group', 'aria-label': t('dSockets') },
