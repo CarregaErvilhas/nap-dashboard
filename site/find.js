@@ -810,15 +810,24 @@
     if (posto) q0 = posto;
     if (q0) { F.q = q0; $('q').value = q0; }
     $('search').addEventListener('submit', function (e) { e.preventDefault(); });
+    // Once the box is edited, the address follows it: ?posto= (or an old ?q=)
+    // would otherwise stay and reopen the first site on reload or share.
+    function syncUrl(q) {
+      var p = new URLSearchParams(location.search);
+      p.delete('posto');
+      if (q.trim()) p.set('q', q.trim()); else p.delete('q');
+      var s = p.toString();
+      try { history.replaceState(null, '', location.pathname + (s ? '?' + s : '') + location.hash); } catch (e) {}
+    }
     var timer;
-    $('q').addEventListener('input', function () { $('postoMiss').hidden = true; clearTimeout(timer); timer = setTimeout(function () { F.q = $('q').value; filter(); }, 180); });
+    $('q').addEventListener('input', function () { $('postoMiss').hidden = true; clearTimeout(timer); timer = setTimeout(function () { F.q = $('q').value; syncUrl(F.q); filter(); }, 180); });
     document.querySelectorAll('[data-f]').forEach(function (b) {
       b.addEventListener('click', function () { var k = b.getAttribute('data-f'); F[k] = !F[k]; b.setAttribute('aria-pressed', String(F[k])); filter(); });
     });
     $('allRes').addEventListener('click', function () { dirty = false; shown = PAGE; render(); });
     $('reset').addEventListener('click', function () {
       F = fresh(); here = null; dirty = false; view = VIEWS.mainland.slice(); $('postoMiss').hidden = true;
-      $('q').value = ''; options();
+      $('q').value = ''; syncUrl(''); options();
       document.querySelectorAll('[data-f]').forEach(function (b) { b.setAttribute('aria-pressed', 'false'); });
       $('near').setAttribute('aria-pressed', 'false'); filter();
     });
