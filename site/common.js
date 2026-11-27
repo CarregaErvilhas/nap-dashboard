@@ -248,7 +248,12 @@
       : t('liveOk', { t: when(res.t), n: nf(res.n), m: nf(res.m) });
   }
 
-  window.NAP = { t: t, addStrings: addStrings, lang: lang, nf: nf, eur: eur, prices: prices, priceText: priceText, sessionCost: sessionCost, PRICE_KINDS: PRICE_KINDS, when: when, el: el, add: add, clear: clear, md: md,
+  // The id people see on a socket: its EVSE code (PT*TSL*E000T2X), the one on
+  // the sticker. point_id stays the key (live status, history shards), but some
+  // operators publish UUIDs or bare numbers there. Older points.json has no evse.
+  function sockId(p) { return p.evse || p.point_id; }
+
+  window.NAP = { t: t, sockId: sockId, addStrings: addStrings, lang: lang, nf: nf, eur: eur, prices: prices, priceText: priceText, sessionCost: sessionCost, PRICE_KINDS: PRICE_KINDS, when: when, el: el, add: add, clear: clear, md: md,
     status: status, pwLabel: pwLabel, PW: PW, STATUSES: STATUSES, onLang: onLang, initChrome: initChrome,
     applyI18n: applyI18n, load: load, fetchLive: fetchLive, applyLive: applyLive, liveNote: liveNote, fetchJson: fetchJson };
 })();
