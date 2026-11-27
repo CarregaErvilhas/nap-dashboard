@@ -4,8 +4,10 @@
 
 `build_dashboard.py` calls `render(data)` at the end of the weekly pipeline.
 Pages are static files from `assets/site/`; the only build-time substitutions
-are the pre-rendered panels (`<!--PANEL:name-->`), the snapshot date and the
-live-status origin. Everything else is fetched from `site/data/*.json`.
+are the pre-rendered panels (`<!--PANEL:name-->`), the snapshot date, the
+live-status origin and the group page's cards (brand_kit.py). The mascots,
+install.js and the font come from the brand/ submodule. Everything else is
+fetched from `site/data/*.json`.
 """
 import hashlib
 import html as html_esc
@@ -16,25 +18,25 @@ import shutil
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import brand_kit
 import dashboard_payload
 import site_data
 
 SRC = 'assets/site'
 PAGES = ('index.html', 'rede.html', 'explorar.html', 'operadores.html', 'grupo.html')
-# Copied as they are. privacidade/404/icons live in assets/ and keep their names.
-STATIC = ('app.css', 'boot.js', 'common.js', 'install.js', 'find.js', 'uso.js', 'rede.js', 'operadores.js',
+# Copied as they are, from assets/site/ (or from brand/, see source()). privacidade/404/icons
+# live in assets/ and keep their names.
+STATIC = ('app.css', 'boot.js', 'common.js', 'find.js', 'uso.js', 'rede.js', 'operadores.js',
           'explorar.js', 'explorar.css', 'grupo.js', 'grupo.css',
-          # The mascots of the group's sites (grupo.html), each its own site's brand.
-          'grupo/carro.svg', 'grupo/ohmigo.svg', 'grupo/voltaria.svg', 'grupo/ceme.svg',
-          'grupo/nap.svg', 'grupo/oop.svg', 'grupo/pano.svg', 'grupo/ampere.svg',
-          'fonts/nunito-latin.woff2', 'fonts/OFL-Nunito.txt',
           # "Mapa detalhado" (mapa.mjs, loaded on demand) and the libraries it
           # imports, as published on npm; validate_site.VENDOR pins their sha256.
           'mapa.mjs',
           'vendor/maplibre/maplibre-gl.mjs', 'vendor/maplibre/maplibre-gl-worker.mjs',
           'vendor/maplibre/maplibre-gl.css', 'vendor/maplibre/LICENSE.txt',
           'vendor/pmtiles/pmtiles.js', 'vendor/pmtiles/LICENSE.txt',
-          'vendor/basemaps/basemaps.mjs', 'vendor/basemaps/LICENSE.txt')
+          'vendor/basemaps/basemaps.mjs', 'vendor/basemaps/LICENSE.txt',
+          # From the group's kit: install.js, the mascots (grupo.html) and Nunito.
+          *brand_kit.FILES)
 EXTRA = ('privacidade.html', '404.html', 'favicon.svg', 'favicon.ico',
          'apple-touch-icon.png', 'icon-192.png', 'icon-512.png', 'icon-maskable-512.png',
          'llms.txt', 'og.png', 'site.webmanifest')
@@ -55,6 +57,11 @@ HISTORY_EMPTY = {'generated': None, 'ops': [], 'pw': [], 'regions': [],
                  'hourly': {'start': None, 'hours': 0, 'sample_min': 15, 'samples': [], 'combos': [],
                             'tot': [], 'act': [], 'chg': [], 'down': [],
                             'back': {'ts': [], 'combos': [], 'act': [], 'chg': []}}}
+
+
+def source(rel):
+    """Where a STATIC file is copied from."""
+    return os.path.join(brand_kit.DIR if rel in brand_kit.FILES else SRC, rel)
 
 
 def write_history(outdir):
@@ -249,7 +256,7 @@ def render(data, outdir='site', archive_url=None):
     for rel in STATIC:
         dst = os.path.join(outdir, rel)
         os.makedirs(os.path.dirname(dst), exist_ok=True)
-        shutil.copyfile(os.path.join(SRC, rel), dst)
+        shutil.copyfile(source(rel), dst)
     for rel in EXTRA:
         src = os.path.join('assets', rel)
         if os.path.exists(src):
@@ -274,8 +281,10 @@ def render(data, outdir='site', archive_url=None):
                 if not body:  # hide the whole section, as the old dashboard did
                     tmpl = tmpl.replace(f'data-panel="{name}"', f'data-panel="{name}" hidden')
         tmpl = tmpl.replace('<!--SNAPSHOT-->', snap)
+        if page == 'grupo.html':
+            tmpl = brand_kit.fill_group_page(tmpl)
         tmpl = social_tags(tmpl, page)
-        left = re.findall(r'<!--(?:PANEL:\w+|SNAPSHOT|CHROME:\w+)-->', tmpl)
+        left = re.findall(r'<!--(?:PANEL:\w+|SNAPSHOT|CHROME:\w+|GROUP:\w+)-->', tmpl)
         if left:
             raise SystemExit(f'{page}: marcadores por substituir: {left}')
         with open(os.path.join(outdir, page), 'w', encoding='utf-8') as fh:

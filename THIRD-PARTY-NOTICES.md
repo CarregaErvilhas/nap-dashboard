@@ -4,7 +4,7 @@ Our code/site templates/docs are `PolyForm-Noncommercial-1.0.0` (see `LICENSE`).
 
 ## Mascots of the group's sites
 
-`assets/site/grupo/*.svg` (copied to `site/grupo/`, shown on `grupo.html`) are the mascots of the sites of the O Carro Elétrico group (O Carro Elétrico, ohmigo, Voltaria, Comparador CEME, Postos PT, olh'o'posto, AmpereArchive), plus `pano.svg`, the logo of the Panoramax project. Each belongs to its own site and is its brand: they are **not** covered by PolyForm or any other licence of this repo, and may not be reused apart from a link to that site.
+`brand/grupo/*.svg` (from the [`CarregaErvilhas/Brand`](https://github.com/CarregaErvilhas/Brand) submodule, copied to `site/grupo/`, shown on `grupo.html`) are the mascots of the sites of the O Carro Elétrico group (O Carro Elétrico, ohmigo, Voltaria, Comparador CEME, Postos PT, olh'o'posto, AmpereArchive), plus `pano.svg`, the logo of the Panoramax project. Each belongs to its own site and is its brand: they are **not** covered by PolyForm or any other licence of this repo, and may not be reused apart from a link to that site.
 
 ## Data sources and schemas
 

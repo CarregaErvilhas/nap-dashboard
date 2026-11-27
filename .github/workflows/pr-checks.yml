@@ -35,6 +35,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          submodules: true
 
       # Mesma versão dos outros workflows (3.15) — alinhar evita dois runtimes
       # diferentes entre o gate e o refresh.
@@ -77,6 +79,13 @@ jobs:
       # se as cópias de assets/ em site/ estiverem desatualizadas.
       - name: Validar o site
         run: python3 scripts/validate_site.py
+
+      # Depois do validate_site (que vê o site/ commitado): volta a gerar o site
+      # e confirma que o que sai é o do brand/ fixado no submodule.
+      - name: Gerar o site e conferir o kit do grupo
+        run: |
+          python3 scripts/build_site.py
+          python3 brand/check.py --against site grupo install fonts
 
   # Os testes do DuckDB fazem skipUnless(HAVE_DUCKDB) e, sem este job, nunca
   # correram em CI: foi assim que o crash do pytz (#116) chegou ao refresh.

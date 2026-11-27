@@ -1,5 +1,12 @@
 version: 2
 updates:
+  # The group's kit (brand/): proposes the newest release tag. A bump that changes
+  # a copied file needs site/ rebuilt on its branch (python3 scripts/build_site.py).
+  - package-ecosystem: "gitsubmodule"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 1
   # CI Actions (refresh/pages/agents): one grouped PR a month, merge manual.
   - package-ecosystem: "github-actions"
     directory: "/"
