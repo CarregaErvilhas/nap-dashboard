@@ -25,7 +25,7 @@ Porquê não correr o pipeline todo no PR: `fetch_data.sh` são ~230 MB e o
 `osm_umap.py` traz um dump Overpass. Bater nos servidores oficiais a cada PR
 não é aceitável. O build do dashboard é determinístico e testá-lo com fixtures
 versionadas levanta uma pergunta de licenciamento à parte (amostrar dados NAP
-para o repo público) — ver AGENTS.md, "PR checks".
+para o repo público) — ver docs/workflows.md, "PR checks".
 
 Uso:  python3 scripts/ci_paths.py        (sem argumentos; cwd = raiz do repo)
 """
