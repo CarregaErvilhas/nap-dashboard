@@ -132,6 +132,17 @@ jobs:
           python scripts/mobie_join.py
           python scripts/dgeg_lists.py
           python scripts/dgeg_crossref.py
+      # As camadas "Caça aos Postos" do umap (dúvidas da comunidade, errors.md
+      # item 12): a última cópia boa fica em cache, para quando o umap não
+      # responde. O Todos.json (o dump do OSM) não entra aqui: vem sempre fresco.
+      - name: Restore umap layers
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: |
+            data/umap_cache/map_*.json
+            data/umap_cache/datalayer_*.json
+          key: umap-layers-${{ github.run_id }}
+          restore-keys: umap-layers-
       - name: NAP static, geo + OSM cross-checks
         run: |
           python scripts/nap_static_checks.py
