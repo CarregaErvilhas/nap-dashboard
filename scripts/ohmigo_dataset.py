@@ -358,16 +358,24 @@ try:
     model_photo = json.load(open('assets/charger_model_photos.json', encoding='utf-8'))['models']
 except (OSError, ValueError, KeyError):
     model_photo = {}
+# As outras fotos do olh'o'posto (do posto e das tomadas) por posto, pela data.
+oop_others = {}
+for r, e in sorted(photo_index.items(), key=lambda kv: (kv[1].get('published') or '', kv[0])):
+    if r.startswith('olhaoposto-photo:') and e.get('site'):
+        oop_others.setdefault(e['site'], []).append({k: v for k, v in e.items() if k != 'site'})
 for site in sites.values():
-    refs = ['olhaoposto:' + site['id']] + (site.get('osm') or {}).pop('photoRefs', [])
-    found = [photo_index[r] for r in refs if r in photo_index]
-    # A principal do olh'o'posto e um `panoramax=` do OSM podem ser a mesma
-    # foto (o link «Acrescentar ao OSM» da página de crédito): a `page` de uma
-    # foto do nosso Panoramax é o `map` da principal (charger_photos.py).
-    mains = {e['map'] for e in found if e.get('map')}
-    found = [e for e in found if e.get('map') or e.get('page') not in mains]
+    main = [photo_index[r] for r in ['olhaoposto:' + site['id']] if r in photo_index]
+    oop = main + oop_others.get(site['id'], [])
+    osm = [photo_index[r] for r in (site.get('osm') or {}).pop('photoRefs', []) if r in photo_index]
+    # Uma foto do olh'o'posto e um `panoramax=` do OSM podem ser a mesma foto
+    # (o link «Acrescentar ao OSM» da página de crédito): a `page` de uma foto
+    # do nosso Panoramax é o `map` da do olh'o'posto (charger_photos.py).
+    ours = {e['map'] for e in oop if e.get('map')}
+    osm = [e for e in osm if e.get('page') not in ours]
+    # Todas as do olh'o'posto (moderadas, deste posto); do OSM até 3.
+    found = oop + osm[:3]
     if found:
-        site['photos'] = found[:4]
+        site['photos'] = found
     for m in site.get('models', []):
         ph = next((photo_index.get('commons:' + model_photo[k]) for k in m['keys']
                    if model_photo.get(k) and photo_index.get('commons:' + model_photo[k], {}).get('src')), None)

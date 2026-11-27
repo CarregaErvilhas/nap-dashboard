@@ -43,13 +43,17 @@ class OlhaOPostoPhotosTest(unittest.TestCase):
             p.stop()
         self.tmp.cleanup()
 
-    def run_with(self, api):
+    def run_with(self, api, all_photos=None):
         def get(url, tries=3):
             self.calls.append(url)
             if url == cp.OLHAOPOSTO_API:
                 if isinstance(api, Exception):
                     raise api
                 return json.dumps(api).encode()
+            if url == cp.OLHAOPOSTO_ALL:
+                if all_photos is None or isinstance(all_photos, Exception):
+                    raise all_photos or OSError('no photos.json in this test')
+                return json.dumps(all_photos).encode()
             return JPEG
         with mock.patch.object(cp, 'get', get), mock.patch('builtins.print'):
             cp.main()
@@ -64,16 +68,16 @@ class OlhaOPostoPhotosTest(unittest.TestCase):
         self.assertEqual(e['credit'], 'Ana')
         self.assertEqual(e['license'], 'CC BY-SA 4.0')
         self.assertEqual(e['map'], 'https://panoramax.ocarroeletrico.com/viewer?focus=map&pic=abc-1')
-        self.assertEqual(self.calls, [cp.OLHAOPOSTO_API, PIC + 'EZC-AMD-00051.thumb.jpg'])
+        self.assertEqual(self.calls, [cp.OLHAOPOSTO_API, cp.OLHAOPOSTO_ALL, PIC + 'EZC-AMD-00051.thumb.jpg'])
 
     def test_same_photo_is_not_downloaded_again_but_a_new_one_is(self):
         self.run_with(feed())
         self.calls.clear()
         self.run_with(feed())
-        self.assertEqual(self.calls, [cp.OLHAOPOSTO_API])
+        self.assertEqual(self.calls, [cp.OLHAOPOSTO_API, cp.OLHAOPOSTO_ALL])
         self.calls.clear()
         index = self.run_with(feed(published='2000-02-01T00:00:00Z'))
-        self.assertEqual(self.calls, [cp.OLHAOPOSTO_API, PIC + 'EZC-AMD-00051.thumb.jpg'])
+        self.assertEqual(self.calls, [cp.OLHAOPOSTO_API, cp.OLHAOPOSTO_ALL, PIC + 'EZC-AMD-00051.thumb.jpg'])
         self.assertEqual(index['olhaoposto:EZC-AMD-00051']['published'], '2000-02-01T00:00:00Z')
 
     def test_olhaoposto_down_keeps_the_photos_it_had(self):
@@ -87,6 +91,43 @@ class OlhaOPostoPhotosTest(unittest.TestCase):
         index = self.run_with({'license': 'CC-BY-SA-4.0', 'photos': []})
         self.assertEqual(index, {})
         self.assertEqual(os.listdir(cp.DIR), [])
+
+    def all_feed(self):
+        st = {'id': 'EZC-AMD-00051', 'code': 'AMD-00051'}
+        pano = cp.PANORAMAX_OOP + '/api/pictures/'
+        return {'license': 'CC-BY-SA-4.0', 'photos': [
+            # A principal do posto: já vem do main-photos.
+            {'id': 'm', 'origin': 'olhaoposto', 'target': st['id'], 'station': st, 'isMain': True,
+             'sizes': {'thumb': {'url': PIC + 'EZC-AMD-00051.thumb.jpg'}}, 'publishedAt': '2000-01-02T00:00:00Z'},
+            {'id': 'o2', 'origin': 'olhaoposto', 'target': st['id'], 'station': st, 'isMain': False, 'credit': 'Rui',
+             'license': 'CC-BY-SA-4.0', 'sizes': {'thumb': {'url': pano + 'u2/thumb.jpg'}}, 'panoramaxId': 'u2',
+             'creditPage': 'https://olhaoposto.ocarroeletrico.com/p/o2', 'takenAt': '2026-07-05T09:28:26',
+             'publishedAt': '2000-01-03T00:00:00Z'},
+            # A principal de uma tomada também entra.
+            {'id': 's1', 'origin': 'olhaoposto', 'target': 'PTEZCEAMD000511', 'station': st, 'isMain': True,
+             'sizes': {'thumb': {'url': PIC + 'PTEZCEAMD000511.thumb.jpg'}}, 'publishedAt': '2000-01-04T00:00:00Z'},
+            # Externas (vêm pelo OSM) e miniaturas de outro sítio ficam de fora.
+            {'id': 'x', 'origin': 'commons', 'target': st['id'], 'station': st,
+             'sizes': {'thumb': {'url': 'https://upload.wikimedia.org/x.jpg'}}},
+            {'id': 'y', 'origin': 'olhaoposto', 'target': st['id'], 'station': st,
+             'sizes': {'thumb': {'url': 'https://example.org/y.jpg'}}},
+        ]}
+
+    def test_the_other_olhaoposto_photos_are_copied_with_their_site(self):
+        index = self.run_with(feed(), self.all_feed())
+        self.assertEqual(sorted(index), ['olhaoposto-photo:o2', 'olhaoposto-photo:s1', 'olhaoposto:EZC-AMD-00051'])
+        e = index['olhaoposto-photo:o2']
+        self.assertEqual(e['site'], 'EZC-AMD-00051')
+        self.assertEqual((e['credit'], e['license'], e['taken']), ('Rui', 'CC BY-SA 4.0', '2026-07-05'))
+        self.assertEqual(e['page'], 'https://olhaoposto.ocarroeletrico.com/p/o2')
+        self.assertEqual(e['map'], cp.PANORAMAX_OOP + '/viewer?focus=map&pic=u2')
+        self.assertTrue(os.path.exists(os.path.join(cp.DIR, os.path.basename(e['src']))))
+
+    def test_photos_json_down_keeps_the_others_it_had(self):
+        self.run_with(feed(), self.all_feed())
+        index = self.run_with(feed(), OSError('down'))
+        self.assertIn('olhaoposto-photo:o2', index)
+        self.assertIn('olhaoposto:EZC-AMD-00051', index)
 
 
 class PanoramaxFallbackTest(unittest.TestCase):
