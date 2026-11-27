@@ -190,9 +190,26 @@
   // prefix (EDP-PTM-00031) or MOBI-. For the codes the community wrote on a site
   // under construction (`codes`) and the NAP site ids of the last 24 h.
   function codeKey(c) { var n = norm(c).trim().replace(/^mobi-/, ''); return bare(n) || n; }
+  // A socket's EVSE id names its site too: PT*EDP*EAGD*00009*1, PT-EDP-EAGD-00009-1
+  // or PTEDPEAGD000091 is site AGD-00009 (country, operator, an "E" glued to the
+  // site code or as its own segment, then the socket, which may be left off).
+  // The glued "E" is not always there, so both readings are tried.
+  function evseSite(w) {
+    var p = w.split(/[*-]/), m;
+    if (p.length >= 4 && p[0] === 'pt') {
+      p = p.slice(2);
+      if (p[0] === 'e') p.shift();
+      if (p.length > 2 && /^\d{1,2}$/.test(p[p.length - 1]) && /^\d{3,}$/.test(p[p.length - 2])) p.pop();
+      if (p.length < 2) return null;
+      var k = p.join('-');
+      return /^e[a-z]/.test(k) ? [k.slice(1), k] : [k];
+    }
+    m = /^pt[a-z0-9]{3}e([a-z]{3})(\d{5})\d{0,2}$/.exec(w);
+    return m ? [m[1] + '-' + m[2]] : null;
+  }
 
   function filter() {
-    var words = norm(F.q).split(/\s+/).filter(Boolean), alt = words.map(bare);
+    var words = norm(F.q).split(/\s+/).filter(Boolean), alt = words.map(bare), evse = words.map(evseSite);
     var wcHelp = document.getElementById('wcHelp');
     if (wcHelp) wcHelp.hidden = !F.wc;
     result = S.filter(function (s) {
@@ -208,7 +225,8 @@
       if (F.free && !freeCount(s)) return false;
       // MCS mostra também os locais em construção: os primeiros são do OSM, ainda fora do NAP.
       if (!F.mcs && F.life.length && F.life.indexOf(life(s)) < 0) return false;
-      for (var i = 0; i < words.length; i++) if (s._k.indexOf(words[i]) < 0 && !(alt[i] && s._k.indexOf(alt[i]) >= 0)) return false;
+      for (var i = 0; i < words.length; i++) if (s._k.indexOf(words[i]) < 0 && !(alt[i] && s._k.indexOf(alt[i]) >= 0) &&
+        !(evse[i] && evse[i].some(function (k) { return s._k.indexOf(k) >= 0; }))) return false;
       return true;
     });
     if (here) {
