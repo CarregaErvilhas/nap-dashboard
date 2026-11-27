@@ -67,7 +67,7 @@ def svg(outline, sites):
 
 
 def page(outline, sites):
-    font = (ROOT / 'assets/site/fonts/nunito-latin.woff2').as_uri()
+    font = (ROOT / 'brand/fonts/nunito-latin.woff2').as_uri()
     return f"""<!doctype html><meta charset="utf-8"><style>
 @font-face {{ font-family: Nunito; src: url("{font}") format("woff2"); font-weight: 200 1000; }}
 html, body {{ margin: 0; width: {W}px; height: {H}px; overflow: hidden; background: #fbfaf5; }}

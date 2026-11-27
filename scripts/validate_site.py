@@ -11,12 +11,12 @@ que gera com os dados do artifact network). Falha
   1. faltar um ficheiro esperado (páginas, js, css, fonte, ícones, dados) ou
      houver em site/ um ficheiro ou link fora da lista fechada (o pages.yml
      publica a pasta inteira);
-  2. uma cópia de assets/ em site/ estiver desatualizada (falta correr
+  2. uma cópia de assets/ ou brand/ em site/ estiver desatualizada (falta correr
      scripts/build_site.py);
   3. algum site/data/*.json não fizer parse ou tiver NaN/Infinity;
   4. site_data.check() encontrar erros (chaves ou campos em falta);
   5. uma página tiver <script> inline, atributos on*=, URLs javascript:,
-     marcadores <!--PANEL/SNAPSHOT/CHROME--> por substituir, CSP em falta (ou
+     marcadores <!--PANEL/SNAPSHOT/CHROME/GROUP--> por substituir, CSP em falta (ou
      depois do primeiro <script>), ou script-src diferente de 'self';
   6. um painel pré-renderizado (site/data/panels.json, que vai para
      rede.html/operadores.html) tiver <script, on*= ou javascript:;
@@ -91,9 +91,9 @@ def check_file_set(site, expected):
     print(f'lista fechada: {len(found & expected)}/{len(expected)} ficheiros')
 
 
-# 2. cópias de assets/ em dia
+# 2. cópias de assets/ e brand/ em dia
 def check_copies(site):
-    pairs = [(rel, os.path.join(ROOT, 'assets', 'site', rel)) for rel in build_site.STATIC]
+    pairs = [(rel, os.path.join(ROOT, build_site.source(rel))) for rel in build_site.STATIC]
     pairs += [(rel, os.path.join(ROOT, 'assets', rel)) for rel in build_site.EXTRA]
     n = 0
     for rel, src in pairs:
@@ -106,7 +106,7 @@ def check_copies(site):
                      f'correr python3 scripts/build_site.py')
             else:
                 n += 1
-    print(f'cópias de assets/: {n} em dia')
+    print(f'cópias de assets/ e brand/: {n} em dia')
 
 
 # 3. + 4. dados
@@ -147,7 +147,7 @@ URL_ATTRS = {'href', 'src', 'action', 'formaction', 'xlink:href', 'data', 'poste
 BAD_SCHEMES = ('javascript:', 'vbscript:')
 PANEL_BAD_TAGS = {'script', 'iframe', 'frame', 'object', 'embed', 'base', 'meta', 'link',
                   'form', 'style'}
-MARKER_RE = re.compile(r'<!--\s*(?:PANEL:\w*|SNAPSHOT|CHROME:\w*)\s*-->')
+MARKER_RE = re.compile(r'<!--\s*(?:PANEL:\w*|SNAPSHOT|CHROME:\w*|GROUP:\w*)\s*-->')
 
 
 def _scheme(v):

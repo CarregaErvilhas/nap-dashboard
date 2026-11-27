@@ -104,7 +104,8 @@ python3 scripts/check_agents.py
 | `scripts/build_dashboard.py` | Computes the data and generates `site/` + facts/errors |
 | `scripts/site_data.py`, `scripts/build_site.py` | Split the data into `site/data/*.json` and render the pages |
 | `scripts/validate_site.py` | Validates `site/` (JSON, schema, JS, CSP, no `innerHTML`) |
-| `assets/site/` | Site source: pages, partials, CSS, JS, Nunito font |
+| `assets/site/` | Site source: pages, partials, CSS, JS |
+| `brand/` | The group's kit ([Brand](https://github.com/CarregaErvilhas/Brand) submodule): mascots, `install.js`, Nunito font and the group page's text. `git submodule update --init` |
 | `assets/pt_outline.json` | PT outline polygons + district/island labels for the map (143 KB) |
 | `assets/schemas/*.xsd` | DATEX II 3.3 schemas © CEN (enum source; see `assets/schemas/README.md`, re-fetch `scripts/fetch_schemas.sh`) |
 | `SKILL.md` | Reusable skill with all knowledge and the pipeline |
@@ -137,4 +138,4 @@ Own code (`scripts/`, template, docs, analysis): `PolyForm-Noncommercial-1.0.0` 
 
 ### The name and the art are not licensed
 
-The licences cover the code and the data, not the brand. Not licensed: the name **Postos PT**, the domain, the mascot (the blue map pin with a face and a lightning bolt), its icon and the images made from them (`assets/favicon.svg`, `assets/og.png`, `assets/favicon.ico`, `assets/apple-touch-icon.png` and their copies in `site/`). The mascots in `assets/site/grupo/` belong to the group's sites, each one its site's brand (see `THIRD-PARTY-NOTICES.md`). You may use the name to say where the content comes from. A fork needs its own name and art.
+The licences cover the code and the data, not the brand. Not licensed: the name **Postos PT**, the domain, the mascot (the blue map pin with a face and a lightning bolt), its icon and the images made from them (`assets/favicon.svg`, `assets/og.png`, `assets/favicon.ico`, `assets/apple-touch-icon.png` and their copies in `site/`). The mascots in `brand/grupo/` (copied to `site/grupo/`) belong to the group's sites, each one its site's brand (see `THIRD-PARTY-NOTICES.md`). You may use the name to say where the content comes from. A fork needs its own name and art.

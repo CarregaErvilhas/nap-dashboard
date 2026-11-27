@@ -15,6 +15,7 @@ Analysis of the Portuguese EV charging network. It produces CSVs, a static multi
 - `scripts/` — the pipeline, the checks (`validate_site.py`, `pipeline_guard.py`, `model_parity.py`, `ci_paths.py`), the site helpers and the anomalies agent's deterministic side, plus `extract_enums.py` and `fetch_schemas.sh`. One-time migrations don't stay here once they've run: git keeps them.
 - `ohmigo_dataset.py` is the network model; `opc_tariffs.py` is the one NAP↔MOBI.E tariff join; `osm_tags.py` holds the per-site OSM tags and the OSM-vs-NAP rule. Both the model and the site use them.
 - `assets/` — the site's sources (`assets/site/`), outline and basemap JSON, icons, XSD schemas.
+- `brand/` — submodule of `CarregaErvilhas/Brand`, pinned to a release tag: mascots, `install.js`, Nunito, the group page's text. The build needs it (`git submodule update --init`); never edit it here ([docs/site.md](docs/site.md)).
 - `site/` — generated, committed, what `pages.yml` serves.
 - `Agents/` — agent system prompts (see `Agents/AGENTS.md`); their reports go to `Agents-outputs/`.
 - `references/` — docs for `SKILL.md` (data sources, gotchas).
