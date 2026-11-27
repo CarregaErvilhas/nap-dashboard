@@ -214,6 +214,10 @@ def olhaoposto_others():
             continue
         if p.get('isMain') and p.get('target') == st['id']:
             continue
+        # A chapa (placa de características de um carregador) não é foto do
+        # local: fica no olh'o'posto, na galeria das chapas.
+        if p.get('kind') == 'plate':
+            continue
         lic = p.get('license')
         out[f'olhaoposto-photo:{p["id"]}'] = {
             'thumb': thumb,
