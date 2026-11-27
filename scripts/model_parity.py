@@ -43,6 +43,7 @@ def main():
     counts = Counter(s['code'] for s in model)
     dup = {c for c, n in counts.items() if n > 1}
     by_point = {(s['code'], p['id']): p for s in model if s['code'] not in dup for p in s['points']}
+    pos = {s['code']: (s['lat'], s['lon']) for s in model if s['code'] not in dup}
     max_kw = {s['code']: max((p['kw'] for p in s['points'] if p.get('kw')), default=0)
               for s in model if s['code'] not in dup}
 
@@ -85,6 +86,9 @@ def main():
         # Um local sem potência em nenhuma tomada sai com kw null no site.
         if not close(s['kw'] or 0, max_kw[s['ext']]):
             miss('kw do local', s['ext'], s['kw'], max_kw[s['ext']])
+        m = pos[s['ext']]
+        if (s['lat'], s['lon']) != m:
+            miss('posição do local', s['ext'], (s['lat'], s['lon']), m)
 
     print(f'{seen} tomadas comparadas com {MODEL}')
     if not bad:

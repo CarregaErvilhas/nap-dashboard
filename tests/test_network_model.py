@@ -111,12 +111,12 @@ class Resolve(unittest.TestCase):
 class OsmElement(unittest.TestCase):
     """O elemento OSM para onde o "Ver no OSM" do site aponta."""
 
-    def tags(self, els, sites=None, evse=None):
+    def tags(self, els, sites=None, evse=None, far_ok=None):
         sites = sites or {'A': {'lat': 38.7, 'lon': -9.1}}
         with tempfile.NamedTemporaryFile('w', suffix='.json', delete=False) as fh:
             json.dump({'elements': els}, fh)
         try:
-            return osm_by_code(sites, fh.name, evse)
+            return osm_by_code(sites, fh.name, evse, far_ok)
         finally:
             os.unlink(fh.name)
 
@@ -178,7 +178,7 @@ class OsmElement(unittest.TestCase):
         got = self.tags([
             {'type': 'node', 'id': 1, 'lat': 38.7, 'lon': -9.1, 'tags': {'disused:amenity': 'charging_station', 'ref': 'A', 'operator': 'Velho'}},
         ])
-        self.assertEqual(got, {'A': {'element': 'node/1', 'lifecycle': 'disused'}})
+        self.assertEqual(got, {'A': {'element': 'node/1', 'lifecycle': 'disused', 'pos': (38.7, -9.1)}})
 
     def test_lifecycle_only_without_an_element_in_service(self):
         got = self.tags([
@@ -202,6 +202,25 @@ class OsmElement(unittest.TestCase):
             {'type': 'node', 'id': 1, 'lat': 39.7, 'lon': -9.1, 'tags': {'amenity': 'charging_station', 'ref': 'A'}},
         ])
         self.assertEqual(got, {})
+
+    def test_far_counts_when_far_ok_says_so(self):
+        # O NAP põe o posto a 111 km; o OSM, no concelho do código, está certo.
+        el = [{'type': 'node', 'id': 1, 'lat': 39.7, 'lon': -9.1, 'tags': {'amenity': 'charging_station', 'ref': 'A'}}]
+        self.assertEqual(self.tags(el, far_ok=lambda code, lat, lon: True)['A']['pos'], (39.7, -9.1))
+        self.assertEqual(self.tags(el, far_ok=lambda code, lat, lon: False), {})
+
+    def test_position_is_the_element_linked(self):
+        got = self.tags([
+            {'type': 'node', 'id': 1, 'lat': 38.7001, 'lon': -9.1002, 'tags': {'amenity': 'charging_station', 'ref': 'A'}},
+        ])
+        self.assertEqual(got['A']['pos'], (38.7001, -9.1002))
+
+    def test_a_shared_element_is_no_position(self):
+        # "A;B" é de dois locais: não diz onde fica nenhum deles.
+        got = self.tags([
+            {'type': 'node', 'id': 1, 'lat': 38.7001, 'lon': -9.1, 'tags': {'amenity': 'charging_station', 'ref': 'A;B'}},
+        ], {'A': {'lat': 38.7, 'lon': -9.1}, 'B': {'lat': 38.7, 'lon': -9.1}})
+        self.assertNotIn('pos', got['A'])
 
 
 if __name__ == '__main__':

@@ -177,19 +177,24 @@ site_dcv = _dcv.groupby('site_external_id')['_b'].apply(lambda s: sorted(set(s),
 
 osm = pd.read_csv('data/osm_umap.csv', dtype=str) if os.path.exists('data/osm_umap.csv') else None
 caca = pd.read_csv('data/osm_caca.csv', dtype=str) if os.path.exists('data/osm_caca.csv') else None
-# NAP vs OSM position: past this distance the two sources disagree and the site is
-# shown at the OSM position (read off the charger by the community, usually right;
-# the NAP has sites in the Atlantic), with a warning. 150 m flags 92 sites, 300 m 42,
-# 500 m 31: 300 m stays clear of way centroids of big car parks.
+# The site is always shown at the network model's position, OSM's when the site
+# is linked to an OSM element (mapped on site; the NAP has sites in the Atlantic).
+# Past this distance from what the NAP declares, the detail warns: 300 m stays
+# clear of way centroids of big car parks.
 OSM_DIVERGE_KM = 0.3
+
+
+def haversine_km(lat1, lon1, lat2, lon2):
+    p1, p2 = math.radians(lat1), math.radians(lat2)
+    a = (math.sin((p2 - p1) / 2) ** 2
+         + math.cos(p1) * math.cos(p2) * math.sin(math.radians(lon2 - lon1) / 2) ** 2)
+    return 12742 * math.asin(math.sqrt(a))
 osm_by_site = {}
 if osm is not None:
     for _, r in osm.iterrows():
         e = osm_by_site.setdefault(r.code, {})
         e['osm_op'] = r.osm_operator
         e['osm_dist'] = float(r.dist_km)
-        # a multi-code ref ("A;B;C") is one OSM element for several sites: not a position
-        e['osm_pos'] = (float(r.osm_lat), float(r.osm_lon)) if ';' not in str(r.osm_ref) else None
         e['osm_access'] = r.osm_access
         e['osm_fee'] = r.osm_fee
         e['ad_hoc'] = (r.pay_cards == 'yes') or (r.auth_none == 'yes')
@@ -283,13 +288,18 @@ for _, s in S.iterrows():
         'pay': pay_by_site.get(ext, []),
         'dcv': site_dcv.get(ext, []),
     }
+    # The position is the network model's: OSM's, mapped on site, whenever the
+    # site is linked to an OSM element. Past OSM_DIVERGE_KM from what the NAP
+    # declares, the detail says so.
+    _m = model_by_code.get(ext) or {}
+    if _m:
+        rec['lat'], rec['lon'] = _m['lat'], _m['lon']
+    if 'napLat' in _m:
+        _d = haversine_km(_m['napLat'], _m['napLon'], _m['lat'], _m['lon'])
+        if _d > OSM_DIVERGE_KM:
+            rec['nap_lat'], rec['nap_lon'] = _m['napLat'], _m['napLon']
+            rec['loc_km'] = round(_d, 2)
     if om:
-        op_ = om.get('osm_pos')
-        # OSM point must be in Portugal (incl. islands) or it is no better than the NAP
-        if (op_ and om['osm_dist'] > OSM_DIVERGE_KM and 29 <= op_[0] <= 42.5 and -32 <= op_[1] <= -6):
-            rec['nap_lat'], rec['nap_lon'] = lat, lon
-            rec['lat'], rec['lon'] = round(op_[0], 6), round(op_[1], 6)
-            rec['loc_km'] = round(om['osm_dist'], 2)
         rec['osm_op'] = om.get('osm_op')
         rec['osm_dist'] = om.get('osm_dist')
         rec['osm_access'] = om.get('osm_access')
