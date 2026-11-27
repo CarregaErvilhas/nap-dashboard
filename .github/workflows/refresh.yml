@@ -85,6 +85,20 @@ jobs:
           python-version: "3.15"
       - name: Install deps
         run: pip install -r requirements.txt
+      # O inventário estático (~190 MB) muda cerca de uma vez por dia: fica em
+      # cache com o ETag, o fetch_data.sh envia-o em If-None-Match e um 304 usa
+      # a cópia. Sem cache, descarrega tudo. A chave exata nunca existe, por
+      # isso vem sempre a entrada mais recente; só se grava (no fim, depois dos
+      # guardas) quando o ETag mudou.
+      - name: Restore NAP static feed
+        id: nap-static-cache
+        uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: |
+            data/evChargingInfra_latest.xml
+            data/evChargingInfra_latest.xml.etag
+          key: nap-static-feed-latest
+          restore-keys: nap-static-feed-
       - name: Fetch fresh data
         env:
           # Repo Variables (Settings > Secrets and variables > Actions > Variables).
@@ -282,6 +296,22 @@ jobs:
       # e teste do estado ao vivo (applyLive) em node.
       - name: Validate site
         run: python3 scripts/validate_site.py
+      # Aqui o XML já passou o ETL e os três guardas.
+      - name: NAP static feed cache key
+        id: nap-static-key
+        run: |
+          etag=data/evChargingInfra_latest.xml.etag
+          if [ -s "$etag" ]; then
+            echo "key=nap-static-feed-$(sha256sum < "$etag" | cut -c1-16)" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Save NAP static feed
+        if: steps.nap-static-key.outputs.key && steps.nap-static-key.outputs.key != steps.nap-static-cache.outputs.cache-matched-key
+        uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: |
+            data/evChargingInfra_latest.xml
+            data/evChargingInfra_latest.xml.etag
+          key: ${{ steps.nap-static-key.outputs.key }}
       # O que o pages.yml publica, já passado pelos três guardas acima: os
       # dados do site (o pages.yml volta a gerar as páginas com os assets da
       # main, por isso um merge de front end sai logo com os dados mais

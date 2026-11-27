@@ -15,6 +15,8 @@ Downloads the live NAP XMLs, the MOBI.Data tariff/station JSON and the DGEG HTML
 
 Optional: read the dynamic status (`evActualStatus`, ~40 MB) from the [AmpereArchive](https://github.com/CarregaErvilhas/AmpereArchive) instead of the NAP: `NAP_STATUS_SOURCE=archive AMPERE_ARCHIVE_URL=https://ohm-age.ocarroeletrico.com bash scripts/fetch_data.sh` (country via `AMPERE_ARCHIVE_COUNTRY`, default `PT`). It downloads `v1/PT/status.json.gz` to `data/archiveStatus_latest.json.gz`, and `nap_etl.py` uses it when `data/evActualStatus_latest.xml` is absent (`scripts/archive_status.py` converts it to the same CSVs). A missing, stale (> `ARCHIVE_MAX_AGE_MIN`, 180) or truncated file falls back to the NAP. Default stays `nap`; the static feed still comes from the NAP (the archive does not keep `brandsAccepted`, NUTS or contacts).
 
+The static inventory (`data/evChargingInfra_latest.xml`) is requested with `If-None-Match`, using the ETag kept beside it in `data/evChargingInfra_latest.xml.etag`: on a 304 the local copy is used; without both files it is a full download. Delete the `.etag` file to force one. `refresh.yml` keeps the pair in `actions/cache` (key from the ETag, saved only after the guards pass).
+
 ## Pipeline order
 
 The order is in [AGENTS.md](../AGENTS.md#pipeline-order). `scripts/network_news.py` is the weekly diff against HEAD's `network-census.json` (→ `novidades.md` + a new `network-census.json`; the first run is the baseline). `scripts/ohmigo_dataset.py` writes the network model, `data/ohmigo_chargers.json`.
