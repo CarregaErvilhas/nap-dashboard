@@ -1,5 +1,15 @@
 ---
-name: nap-mobie-portugal-ev description: >- Analyse Portugal's public EV charging network from official open data: NAP MOBI.E (DATEX II 3.3 static + dynamic), MOBI.E OPC tariffs, DGEG operator registries and the PCVE error tracker. Produces a static multi-page site (site/), a facts list and a reportable-errors list. Use when the user asks to analyse, aggregate, join, map, visualise, audit data quality of, or build a dashboard for the Portuguese EV charging network / "rede de carregamento" / NAP MOBI.E / OPC tariffs / pontos de carregamento / DGEG. Triggers on words like "NAP", "MOBI.E", "mobilidade elétrica", "pontos de carregamento", "tarifário OPC", "EV charging Portugal", "carregadores", "rede de carregamento".
+name: nap-mobie-portugal-ev
+description: >-
+  Analyse Portugal's public EV charging network from official open data: NAP MOBI.E
+  (DATEX II 3.3 static + dynamic), MOBI.E OPC tariffs, DGEG operator registries
+  and the PCVE error tracker. Produces a static multi-page site (site/),
+  a facts list and a reportable-errors list. Use when the user asks to analyse,
+  aggregate, join, map, visualise, audit data quality of, or build a dashboard for
+  the Portuguese EV charging network / "rede de carregamento" / NAP MOBI.E / OPC
+  tariffs / pontos de carregamento / DGEG. Triggers on words like "NAP", "MOBI.E",
+  "mobilidade elétrica", "pontos de carregamento", "tarifário OPC", "EV charging
+  Portugal", "carregadores", "rede de carregamento".
 ---
 
 # NAP MOBI.E — Portuguese EV charging network analysis

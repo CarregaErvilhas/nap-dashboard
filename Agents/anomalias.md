@@ -1,5 +1,6 @@
 ---
-description: Deteta anomalias nos dados estáticos NAP e reporta por OPC mode: subagent
+description: Deteta anomalias nos dados estáticos NAP e reporta por OPC
+mode: subagent
 ---
 
 # Agente de anomalias — dados estáticos do NAP
