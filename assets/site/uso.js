@@ -183,8 +183,11 @@
 
   function render(box, doc, site, pts, st) {
     N.clear(box);
-    var ids = Object.keys(site.p).sort(), byId = {};
+    // Keys stay point_ids (they index site.p); what is shown is the EVSE code.
+    var byId = {};
     pts.forEach(function (p) { byId[p.point_id] = p; });
+    var name = function (id) { return byId[id] ? N.sockId(byId[id]) : id; };
+    var ids = Object.keys(site.p).sort(function (a, b) { return name(a).localeCompare(name(b), undefined, { numeric: true }); });
     var seg = function (label, opts, cur, set) {
       return el('div', { class: 'seg', role: 'group', 'aria-label': label }, el('span', { class: 'lbl' }, label), opts.map(function (o) {
         return el('button', { class: 'btn sm', type: 'button', 'aria-pressed': String(cur === o[0]), onclick: function () { set(o[0]); render(box, doc, site, pts, st); } }, o[1]);
@@ -192,7 +195,7 @@
     };
     var ctl = el('div', { class: 'uctl' }, seg(t('uPeriod'), [['24', t('u24')], ['7', t('u7')], ['30', t('u30')], ['max', t('uMax')]], st.per, function (v) { st.per = v; }));
     if (ids.length > 1) {
-      var opts = [['all', t('uAll')]].concat(ids.map(function (id) { return [id, id.replace(/^.*?(\d+)$/, '$1') + ' · ' + (byId[id] ? sockLabel(byId[id]) : id)]; }));
+      var opts = [['all', t('uAll')]].concat(ids.map(function (id) { return [id, name(id) + (byId[id] ? ' · ' + sockLabel(byId[id]) : '')]; }));
       if (ids.length <= 6) ctl.appendChild(seg(t('uSocket'), opts, st.sock, function (v) { st.sock = v; }));
       else {
         var sel = el('select', { 'aria-label': t('uSocket'), onchange: function () { st.sock = sel.value; render(box, doc, site, pts, st); } },
@@ -208,7 +211,7 @@
     var pick = function (list) { return function (k) { return sumOf(list.map(function (id) { return site.p[id][k]; })); }; };
     if (st.sock === 'all' && ids.length > 1) {
       // One lane per socket; on a large site, per kind of socket (same plug and power).
-      var lanes = ids.map(function (id) { return { ids: [id], label: id.replace(/^.*?(\d+)$/, '$1') + ' · ' + (byId[id] ? sockLabel(byId[id]) : id) }; });
+      var lanes = ids.map(function (id) { return { ids: [id], label: name(id) + (byId[id] ? ' · ' + sockLabel(byId[id]) : '') }; });
       if (ids.length > MAX_LANES) {
         var groups = {};
         ids.forEach(function (id) { var k = byId[id] ? sockLabel(byId[id]) : '—'; (groups[k] = groups[k] || []).push(id); });
@@ -224,14 +227,14 @@
     } else {
       var one = st.sock === 'all' ? ids : [st.sock], pd1 = period(doc, site, st.per, pick(one));
       anySample = pd1.sampled.some(Boolean);
-      box.appendChild(el('p', { class: 'small' }, t('uOne', { p: perTxt, id: one.length > 1 ? '' : one[0] }), ' ', el('b', null, summary(pd1.b))));
+      box.appendChild(el('p', { class: 'small' }, t('uOne', { p: perTxt, id: one.length > 1 ? '' : name(one[0]) }), ' ', el('b', null, summary(pd1.b))));
       charts.appendChild(chart(pd1, 170, true, summary(pd1.b)));
     }
     box.appendChild(charts);
     box.appendChild(el('div', { class: 'ukey small' }, KEYS.map(function (k) { return el('span', null, el('i', { class: 'u-' + k }), t(NAME[k])); }).concat(el('span', null, el('i', { class: 'una' }), t('uNa')))));
     if (st.per === 'max' && anySample) box.appendChild(el('p', { class: 'small muted' }, t('uSampled')));
     var hid = st.sock === 'all' ? ids : [st.sock];
-    box.appendChild(el('h4', null, st.sock === 'all' ? t('uHeat') : t('uHeatOne', { id: st.sock })));
+    box.appendChild(el('h4', null, st.sock === 'all' ? t('uHeat') : t('uHeatOne', { id: name(st.sock) })));
     heat(box, doc, pick(hid)('w'));
     box.appendChild(el('p', { class: 'small muted' }, t('uSrc', { t: fmt(site.tz, { day: 'numeric', month: 'numeric', hour: 'numeric', minute: '2-digit', hourCycle: 'h23' }).format(new Date(doc.until)) })));
   }
