@@ -27,7 +27,7 @@ O que já está em data/photos/ não se volta a pedir (o refresh guarda a pasta
 em cache). Uma foto que deixa de estar no OSM sai do índice. A do olh'o'posto
 tem sempre o mesmo link (pictures.ocarroeletrico.com/<id do posto>.thumb.jpg)
 mesmo quando a comunidade escolhe outra: volta a descarregar-se quando muda a
-data de publicação. As outras vêm do photos.json (ref
+data de publicação. As outras vêm do /api/v1/photos.json (ref
 `olhaoposto-photo:<id da foto>`, com `site` = o id do posto).
 
 Uso:  python scripts/charger_photos.py [dump OSM] [fotos dos modelos]
@@ -257,7 +257,7 @@ def main():
     try:
         others = olhaoposto_others()
     except Exception as e:  # noqa: BLE001
-        print(f"aviso: photos.json do olh'o'posto falhou ({e})")
+        print(f"aviso: /api/v1/photos.json do olh'o'posto falhou ({e})")
         others = None
     refs = refs_in_dump(DUMP) + ['commons:' + f for f in model_photos.values() if f.startswith('File:')]
     try:
