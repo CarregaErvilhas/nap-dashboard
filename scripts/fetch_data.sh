@@ -1,8 +1,10 @@
 #!/usr/bin/env bash
 # Fetch fresh public data from official sources into the repo working dir.
 # Run from the repo root:  bash scripts/fetch_data.sh
-# Downloads ~230 MB (two NAP XMLs). Each URL below is the live origin, so
+# Downloads up to ~230 MB (two NAP XMLs). Each URL below is the live origin, so
 # re-running this keeps the analysis current without storing data in git.
+# The static inventory is asked with If-None-Match: while the NAP answers 304,
+# the copy already in data/ is used (see fetch_cached).
 #
 # Each download goes to <dest>.download first and is only renamed on success,
 # so a failed/interrupted run never leaves a truncated file pretending to be
@@ -56,8 +58,41 @@ fetch() {
   mv "${dest}.download" "$dest"
 }
 
-# NAP MOBI.E — DATEX II 3.3 static inventory of sites/points (200 MB)
-fetch "https://pgm.mobie.pt/integration/nap/evChargingInfra" data/evChargingInfra_latest.xml xml
+# fetch_cached <url> <dest> <expect>: like fetch, but keeps the response's ETag
+# in <dest>.etag and sends it back next time. A 304 keeps <dest> as it is.
+# Without both files, or if <dest> fails the content check, it is a plain full
+# download. The ETag is only ever left beside the file it came with.
+fetch_cached() {
+  local url="$1" dest="$2" expect="$3"
+  local etag_file="${dest}.etag" headers="${dest}.headers" code etag
+  local cond=()
+  if [ -s "$dest" ] && [ -s "$etag_file" ] && check_content "$dest" "$expect"; then
+    cond=(-H "If-None-Match: $(cat "$etag_file")")
+  fi
+  rm -f "${dest}.download"
+  # ${cond[@]+...}: an empty array trips `set -u` on the bash 3.2 of macOS.
+  code=$(curl -fsSL --retry 2 ${cond[@]+"${cond[@]}"} -D "$headers" -w '%{http_code}' \
+    "$url" -o "${dest}.download")
+  if [ "$code" = 304 ] && [ "${#cond[@]}" -gt 0 ]; then
+    echo "${dest}: 304, a origem não mudou; fica a cópia local"
+    rm -f "${dest}.download" "$headers"
+    return 0
+  fi
+  if [ "$code" != 200 ] || [ ! -s "${dest}.download" ] || ! check_content "${dest}.download" "$expect"; then
+    echo "erro: ${dest}: HTTP $code, vazio ou não passa na verificação de conteúdo ($expect)" >&2
+    rm -f "${dest}.download" "$headers"
+    return 1
+  fi
+  # The last response's header: -L writes one block per redirect.
+  etag=$(awk '/^HTTP\//{e=""} tolower($1)=="etag:"{sub(/^[^:]*:[ \t]*/, ""); sub(/\r$/, ""); e=$0} END{print e}' "$headers")
+  rm -f "$etag_file" "$headers"
+  mv "${dest}.download" "$dest"
+  if [ -n "$etag" ]; then printf '%s\n' "$etag" > "$etag_file"; fi
+}
+
+# NAP MOBI.E — DATEX II 3.3 static inventory of sites/points (~190 MB, changes
+# about once a day)
+fetch_cached "https://pgm.mobie.pt/integration/nap/evChargingInfra" data/evChargingInfra_latest.xml xml
 
 # Estado dinâmico + preços OPC. O nap_etl.py usa data/evActualStatus_latest.xml
 # se existir, senão data/archiveStatus_latest.json.gz; só um dos dois fica no disco.
