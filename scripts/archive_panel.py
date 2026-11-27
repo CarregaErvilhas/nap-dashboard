@@ -18,16 +18,19 @@ TXT = {
         'prelim': 'preliminar: {d} de {n} dias necessários',
         'ok': '{d} dias de dados',
         'h1': '1. Fiabilidade por OPC (% do tempo fora de serviço)',
-        'n1': ('Tempo em <code>outOfOrder</code>/<code>inoperative</code> sobre o tempo observado de cada tomada. '
-               'OPCs com pelo menos {mp} tomadas, top {top}.'),
-        'c1': ['OPC', 'tomadas', '% fora de serviço', '% <code>unknown</code>'],
+        'n1': ('Tempo em <code>outOfOrder</code>/<code>inoperative</code>, ou em <code>unknown</code> há 24 h ou mais, '
+               'sobre o tempo observado de cada tomada. Não conta a tomada partilhada em uso pela outra '
+               '(posto que só carrega numa de cada vez): essa fica na coluna própria. '
+               'OPCs com pelo menos {mp} tomadas, top {top}. <a href="estados.html">O que quer dizer cada estado</a>.'),
+        'c1': ['OPC', 'tomadas', '% fora de serviço', 'dos quais <code>unknown</code> ≥ 24 h', '% <code>unknown</code> &lt; 24 h',
+               '% em uso pela outra tomada'],
         'h2': '2. Tempo até reparar (mediana, episódios fechados)',
-        'n2': ('Um episódio é a sequência <code>outOfOrder</code>/<code>inoperative</code> até voltar a '
+        'n2': ('Um episódio é a sequência <code>outOfOrder</code>/<code>inoperative</code> (sem a tomada partilhada) até voltar a '
                '<code>available</code>. Só contam episódios fechados, por isso a mediana subestima enquanto a janela for '
                'curta. Resolução ~5 min (o NAP publica de 5 em 5 min). Censurados = já estavam em curso no início do arquivo.'),
         'c2': ['OPC', 'tomadas', 'fechados', 'mediana (min)', 'p75 (min)', '% &lt; 15 min', 'abertos',
                '→ a carregar', '→ outro', 'censurados'],
-        'h3': '3. Ocupação por hora local (a carregar / disponível + a carregar)',
+        'h3': '3. Ocupação por hora local (ocupada / disponível + ocupada; ocupada = a carregar ou em uso pela outra tomada)',
         'n3': ('Dia da semana × hora local de cada local (Lisboa, Açores, Madeira). Cada célula tem só {md} dia(s) por trás: '
                'é preciso 2–3 semanas para ler padrões.'),
         'days': ['seg', 'ter', 'qua', 'qui', 'sex', 'sáb', 'dom'],
@@ -56,16 +59,19 @@ TXT = {
         'prelim': 'preliminary: {d} of {n} days needed',
         'ok': '{d} days of data',
         'h1': '1. Reliability by CPO (% of time out of order)',
-        'n1': ('Time in <code>outOfOrder</code>/<code>inoperative</code> over each socket\'s observed time. '
-               'CPOs with at least {mp} sockets, top {top}.'),
-        'c1': ['CPO', 'sockets', '% out of order', '% <code>unknown</code>'],
+        'n1': ('Time in <code>outOfOrder</code>/<code>inoperative</code>, or in <code>unknown</code> for 24 h or more, '
+               'over each socket\'s observed time. A shared socket in use by the other one (a site that charges one at a '
+               'time) does not count: it has its own column. '
+               'CPOs with at least {mp} sockets, top {top}. <a href="estados.html?lang=en">What each status means</a>.'),
+        'c1': ['CPO', 'sockets', '% out of order', 'of which <code>unknown</code> ≥ 24 h', '% <code>unknown</code> &lt; 24 h',
+               '% in use by the other socket'],
         'h2': '2. Time to repair (median, closed episodes)',
-        'n2': ('An episode runs from <code>outOfOrder</code>/<code>inoperative</code> back to <code>available</code>. '
+        'n2': ('An episode runs from <code>outOfOrder</code>/<code>inoperative</code> (shared sockets aside) back to <code>available</code>. '
                'Only closed episodes count, so the median runs low while the window is short. ~5 min resolution '
                '(the NAP publishes every 5 min). Censored = already under way when the archive started.'),
         'c2': ['CPO', 'sockets', 'closed', 'median (min)', 'p75 (min)', '% &lt; 15 min', 'open',
                '→ charging', '→ other', 'censored'],
-        'h3': '3. Occupancy by local hour (charging / available + charging)',
+        'h3': '3. Occupancy by local hour (busy / available + busy; busy = charging or in use by the other socket)',
         'n3': ('Weekday × local hour of each site (Lisbon, Azores, Madeira). Each cell has only {md} day(s) behind it: '
                'patterns need 2–3 weeks.'),
         'days': ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
@@ -146,7 +152,8 @@ def render(stats, lang='pt'):
     out.append(f'<h3>{t["h1"]}{_badge(t, stats, "reliability", lang)}</h3>'
                f'<div class="mut">{t["n1"].format(mp=MIN_POINTS, top=TOP)}</div>')
     out.append(_table(t['c1'], [[_e(r['operator']), _n(r['points'], lang), _n(r['pct_down'], lang),
-                                 _n(r['pct_unknown'], lang)] for r in rel]) if rel else f'<p class="mut">{t["none"]}</p>')
+                                 _n(r.get('pct_unknown_long', 0), lang), _n(r['pct_unknown'], lang),
+                                 _n(r.get('pct_shared', 0), lang)] for r in rel]) if rel else f'<p class="mut">{t["none"]}</p>')
 
     rep = [r for r in stats['repair'] if r['median_min'] is not None][:TOP]
     out.append(f'<h3>{t["h2"]}{_badge(t, stats, "repair", lang)}</h3><div class="mut">{t["n2"]}</div>')

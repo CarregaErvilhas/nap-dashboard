@@ -247,7 +247,7 @@
   // available or charging now: then it is in service and OSM is out of date.
   function liveOn(s) {
     var list = P ? pts(s) : [];
-    if (list.length) return list.some(function (p) { return p.status === 'available' || p.status === 'charging'; });
+    if (list.length) return list.some(function (p) { return p.status === 'available' || p.status === 'charging' || p.status === 'shared'; });
     return s.status === 'available' || s.status === 'charging';
   }
   function life(s) { return s.lc || (s.olc && !liveOn(s) ? s.olc : 'op'); }
@@ -537,7 +537,7 @@
   }
   function mark(g, x, y, r, st, c) {
     g.fillStyle = c[st] || c.unknown; g.strokeStyle = c[st] || c.unknown; g.beginPath();
-    if (st === 'charging') g.rect(x - r, y - r, 2 * r, 2 * r);
+    if (st === 'charging' || st === 'shared') g.rect(x - r, y - r, 2 * r, 2 * r);
     else if (st === 'outOfOrder' || st === 'inoperative') { g.moveTo(x, y - r * 1.2); g.lineTo(x + r * 1.2, y + r); g.lineTo(x - r * 1.2, y + r); g.closePath(); }
     else g.arc(x, y, r, 0, 6.3);
     if (st === 'unknown' || st === 'planned') { g.lineWidth = 2; g.stroke(); } else g.fill();
@@ -741,7 +741,7 @@
   }
   function legend() {
     var ul = N.clear($('legend'));
-    ['available', 'charging', 'outOfOrder', 'inoperative', 'unknown', 'planned'].forEach(function (s) { ul.appendChild(el('li', null, N.status(s))); });
+    ['available', 'charging', 'shared', 'outOfOrder', 'inoperative', 'unknown', 'planned'].forEach(function (s) { ul.appendChild(el('li', null, N.status(s))); });
   }
 
   // Multi-select: a <details> holding one checkbox per value; F[key] is the list of checked values.

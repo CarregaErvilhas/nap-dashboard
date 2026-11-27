@@ -20,9 +20,17 @@ Os estados são os que os operadores declaram ao NAP, não medições.
 import datetime
 import glob as _glob
 import os
+import sys
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import socket_states  # noqa: E402
 
 TABLES = ('status_events', 'snapshots', 'polls', 'static_versions')
-DOWN = ('outOfOrder', 'inoperative')
+# "Avariado": outOfOrder/inoperative e o unknown de 24 h ou mais; uma tomada
+# partilhada em uso pelo par fica em SHARED (socket_states).
+DOWN = socket_states.DOWN
+SHARED = socket_states.SHARED
+UNKNOWNS = ('unknown', socket_states.UNKNOWN_LONG)
 NOT_OBSERVED = ('removed', 'planned')
 GAP_MIN = 5
 
@@ -104,7 +112,7 @@ FROM (SELECT ts AS g0, lead(ts) OVER (ORDER BY ts) AS g1 FROM good_polls)
 WHERE epoch(g1 - g0) > getvariable('gap_min') * 60
   AND g1 > (SELECT s FROM win) AND g0 < (SELECT e FROM win);
 
-CREATE OR REPLACE TEMP TABLE stream AS
+CREATE OR REPLACE TEMP TABLE stream_raw AS
 SELECT s.site_id, s.point_id, s.status, a.t AS ts, true AS pseudo
 FROM snapshots s JOIN anchors a USING (date)
 WHERE a.t IS NOT NULL AND a.t <= (SELECT e FROM win)
@@ -113,6 +121,7 @@ SELECT site_id, point_id, status, ts, false
 FROM status_events
 WHERE ts > (SELECT t_first FROM win) AND ts <= (SELECT e FROM win);
 
+-- PARTE2
 -- Colapsa estados iguais seguidos (um snapshot que confirma o estado não é uma mudança).
 CREATE OR REPLACE TEMP TABLE spans AS
 WITH o AS (
@@ -182,9 +191,27 @@ def build(con, start_cap=None, end_cap=None, gap_min=GAP_MIN):
     con.execute("SET VARIABLE start_cap = ?::TIMESTAMPTZ", [start_cap])
     con.execute("SET VARIABLE end_cap = ?::TIMESTAMPTZ", [end_cap])
     con.execute("SET VARIABLE gap_min = ?", [gap_min])
-    for stmt in BASE_SQL.split(';'):
+    part1, part2 = BASE_SQL.split('-- PARTE2')
+    for stmt in part1.split(';'):
         if stmt.strip():
             con.execute(stmt)
+    # Os estados relidos (socket_states): pares aprendidos dos eventos da
+    # janela toda e unknown longo. O stream passa a ter os estados relidos.
+    socket_states.evidence(con, 'status_events', 'pair_evidence')
+    socket_states.learn(con, 'SELECT * FROM pair_evidence')
+    con.execute("""CREATE OR REPLACE TEMP VIEW stream_k AS
+      SELECT 0 AS k, site_id, point_id, ts, status, NULL::TIMESTAMPTZ AS since, pseudo FROM stream_raw""")
+    socket_states.relabel(con, 'stream_k', 'stream_rl')
+    con.execute("""CREATE OR REPLACE TEMP TABLE stream AS
+      SELECT site_id, point_id, status, ts, pseudo FROM stream_rl WHERE ts <= (SELECT e FROM win)""")
+    for stmt in part2.split(';'):
+        if stmt.strip():
+            con.execute(stmt)
+    # A telemetria suspeita (parada, oscila com unknown) é sobre o que o
+    # operador declara: os mesmos spans, sem os estados relidos.
+    spans_sql = next(x for x in part2.split(';') if 'TEMP TABLE spans AS' in x)
+    con.execute(spans_sql.replace('TEMP TABLE spans AS', 'TEMP TABLE spans_raw AS')
+                .replace('FROM stream WINDOW', 'FROM stream_raw WINDOW'))
     return coverage(con)
 
 
@@ -223,25 +250,33 @@ def reliability(con, min_points=5):
         SELECT k.operator, count(DISTINCT sp.site_id || '/' || sp.point_id),
                sum(o.secs),
                coalesce(sum(o.secs) FILTER (WHERE sp.status IN {DOWN}), 0),
-               coalesce(sum(o.secs) FILTER (WHERE sp.status = 'unknown'), 0)
+               coalesce(sum(o.secs) FILTER (WHERE sp.status = 'unknown'), 0),
+               coalesce(sum(o.secs) FILTER (WHERE sp.status = '{SHARED}'), 0),
+               coalesce(sum(o.secs) FILTER (WHERE sp.status = '{socket_states.UNKNOWN_LONG}'), 0)
         FROM spans sp JOIN spans_obs o USING (id) JOIN sockets k USING (site_id, point_id)
         WHERE sp.status NOT IN {NOT_OBSERVED}
         GROUP BY 1 HAVING sum(o.secs) > 0""").fetchall()
     out = []
-    for op, pts, secs, down, unk in rows:
+    for op, pts, secs, down, unk, shared, unk_long in rows:
         if pts < min_points:
             continue
         out.append({'operator': op, 'points': pts, 'socket_hours': round(secs / 3600),
-                    'pct_down': round(100 * down / secs, 2), 'pct_unknown': round(100 * unk / secs, 2)})
+                    'pct_down': round(100 * down / secs, 2), 'pct_unknown': round(100 * unk / secs, 2),
+                    'pct_shared': round(100 * shared / secs, 2),
+                    # dentro de pct_down: sem informação há UNKNOWN_DOWN_H horas ou mais
+                    'pct_unknown_long': round(100 * unk_long / secs, 2)})
     return sorted(out, key=lambda r: (-r['pct_down'], r['operator']))
 
 
 # ------------------------------------------------------- 2. tempo até reparar
 
+# Só o outOfOrder/inoperative declarado (sem a tomada partilhada, que tem estado
+# próprio): o unknown longo partia um episódio em dois e encurtava a reparação.
+REPAIR_DOWN = ('outOfOrder', 'inoperative')
 EPISODES_SQL = f"""
 WITH s AS (
-  SELECT *, status IN {DOWN} AS dn,
-         lag(status IN {DOWN}) OVER w AS prev_dn,
+  SELECT *, status IN {REPAIR_DOWN} AS dn,
+         lag(status IN {REPAIR_DOWN}) OVER w AS prev_dn,
          lead(status) OVER w AS next_status
   FROM spans WINDOW w AS (PARTITION BY site_id, point_id ORDER BY t0)
 ), r AS (
@@ -298,7 +333,7 @@ def occupancy_heatmap(con):
     """Ocupação = a carregar / (disponível + a carregar), em tempo de tomada,
     por dia da semana × hora local do local. Horas UTC que tocam numa lacuna
     saem inteiras (o rácio não precisa delas)."""
-    rows = con.execute("""
+    rows = con.execute(f"""
         WITH h AS (
           SELECT unnest(generate_series(date_trunc('hour', (SELECT s FROM win)),
                                         (SELECT e FROM win), INTERVAL 1 HOUR)) AS h0
@@ -313,14 +348,14 @@ def occupancy_heatmap(con):
                  greatest(sp.t0, (SELECT s FROM win)) AS c0,
                  least(sp.t1, (SELECT e FROM win)) AS c1
           FROM spans sp JOIN sockets k USING (site_id, point_id)
-          WHERE sp.status IN ('available', 'charging') AND k.current IS NOT NULL
+          WHERE sp.status IN ('available', 'charging', '{SHARED}') AND k.current IS NOT NULL
         ), x AS (
           SELECT sp.current, sp.status, timezone(sp.tz, hh.h0) AS lt,
                  epoch(least(sp.c1, hh.h1) - greatest(sp.c0, hh.h0)) AS secs
           FROM sp JOIN hh ON hh.h0 < sp.c1 AND hh.h1 > sp.c0
         )
         SELECT current, isodow(lt) AS dow, hour(lt) AS hr,
-               sum(secs) FILTER (WHERE status = 'charging') AS ch, sum(secs) AS tot,
+               sum(secs) FILTER (WHERE status IN ('charging', '{SHARED}')) AS ch, sum(secs) AS tot,
                count(DISTINCT CAST(lt AS DATE)) AS days
         FROM x WHERE secs > 0 GROUP BY ALL""").fetchall()
     out = {}
@@ -363,7 +398,7 @@ def site_stats(con, min_days=SITE_MIN_DAYS, cell_days=SITE_CELL_DAYS):
         FROM spans sp JOIN spans_obs o USING (id)
         WHERE sp.status NOT IN {NOT_OBSERVED}
         GROUP BY 1 HAVING sum(o.secs) > 0""").fetchall()
-    busy = con.execute("""
+    busy = con.execute(f"""
         WITH h AS (
           SELECT unnest(generate_series(date_trunc('hour', (SELECT s FROM win)),
                                         (SELECT e FROM win), INTERVAL 1 HOUR)) AS h0
@@ -378,14 +413,14 @@ def site_stats(con, min_days=SITE_MIN_DAYS, cell_days=SITE_CELL_DAYS):
                  greatest(sp.t0, (SELECT s FROM win)) AS c0,
                  least(sp.t1, (SELECT e FROM win)) AS c1
           FROM spans sp JOIN sockets k USING (site_id, point_id)
-          WHERE sp.status IN ('available', 'charging')
+          WHERE sp.status IN ('available', 'charging', '{SHARED}')
         ), x AS (
           SELECT sp.site_id, sp.status, timezone(sp.tz, hh.h0) AS lt,
                  epoch(least(sp.c1, hh.h1) - greatest(sp.c0, hh.h0)) AS secs
           FROM sp JOIN hh ON hh.h0 < sp.c1 AND hh.h1 > sp.c0
         )
         SELECT site_id, isodow(lt) >= 6 AS we, hour(lt) AS hr,
-               sum(secs) FILTER (WHERE status = 'charging') AS ch, sum(secs) AS tot,
+               sum(secs) FILTER (WHERE status IN ('charging', '{SHARED}')) AS ch, sum(secs) AS tot,
                count(DISTINCT CAST(lt AS DATE)) AS days
         FROM x WHERE secs > 0 GROUP BY ALL""").fetchall()
     out = {}
@@ -413,7 +448,7 @@ def suspicious(con, stale_days=7, flips_per_day=4, min_points=5):
                  max(t0) FILTER (WHERE NOT censored) AS last_change,
                  count(*) FILTER (WHERE NOT censored AND t0 >= (SELECT s FROM win)
                                     AND (status = 'unknown' OR prev_status = 'unknown')) AS flips
-          FROM spans GROUP BY ALL
+          FROM spans_raw GROUP BY ALL
         )
         SELECT k.operator, count(*) AS points,
                count(*) FILTER (WHERE last_change IS NULL OR last_change <= (SELECT s FROM win)) AS frozen,
@@ -604,6 +639,39 @@ def sites_at(con, days=GROWTH_DAYS, bulk_min=BULK_MIN):
 NEEDS_DAYS = {'reliability': 7, 'repair': 14, 'occupancy': 14, 'suspicious': 7, 'growth': 28}
 
 
+# ------------------------------------------------------- estados relidos
+
+def states(con):
+    """Para a página "Estados das tomadas": o tempo de tomada em cada estado,
+    já relido (socket_states), em horas; a parte do tempo que o operador
+    declarou em baixo e que era a tomada partilhada; e os pares aprendidos
+    (`pairs`: [local, tomada, par], para o site reler o estado ao vivo)."""
+    hours = dict(con.execute(f"""
+        SELECT sp.status, round(sum(o.secs) / 3600) FROM spans sp JOIN spans_obs o USING (id)
+        WHERE sp.status NOT IN {NOT_OBSERVED} GROUP BY 1""").fetchall())
+    # Episódios unknown: quantos acabam antes da 1 h e quantos chegam às UNKNOWN_DOWN_H.
+    unk = con.execute(f"""
+        WITH s AS (
+          SELECT *, status IN {UNKNOWNS} AS u, lag(status IN {UNKNOWNS}) OVER w AS pu
+          FROM spans WINDOW w AS (PARTITION BY site_id, point_id ORDER BY t0)),
+        r AS (SELECT *, sum(CASE WHEN u AND NOT coalesce(pu, false) THEN 1 ELSE 0 END)
+                        OVER (PARTITION BY site_id, point_id ORDER BY t0 ROWS UNBOUNDED PRECEDING) AS g FROM s),
+        ep AS (SELECT site_id, point_id, g, epoch(max(t1) - min(t0)) AS secs, bool_or(censored) AS cens
+               FROM r WHERE u GROUP BY ALL)
+        SELECT count(*), count(*) FILTER (WHERE secs < 3600),
+               count(*) FILTER (WHERE secs >= {socket_states.UNKNOWN_DOWN_H} * 3600)
+        FROM ep WHERE NOT cens""").fetchone()
+    out = socket_states.summary(con)
+    tot = sum(hours.values()) or 1
+    out.update({
+        'socket_hours': {k: int(v) for k, v in sorted(hours.items())},
+        'pct': {k: round(100 * v / tot, 2) for k, v in sorted(hours.items())},
+        'unknown_episodes': {'n': unk[0], 'under_1h': unk[1], 'long': unk[2]},
+        'pairs_list': socket_states.pairs_list(con),
+    })
+    return out
+
+
 def compute(con, start_cap=None, end_cap=None, gap_min=GAP_MIN, min_points=5,
             stale_days=7, flips_per_day=4):
     cov = build(con, start_cap, end_cap, gap_min)
@@ -621,4 +689,5 @@ def compute(con, start_cap=None, end_cap=None, gap_min=GAP_MIN, min_points=5,
         'growth': growth(con),
         # Não vai para o painel Histórico: o build_dashboard põe-no por concelho.
         'sites_at': sites_at(con),
+        'states': states(con),
     }

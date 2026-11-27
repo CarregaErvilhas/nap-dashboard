@@ -12,6 +12,7 @@
   --s-available: #15803d; --s-charging: #0369a1; --s-outOfOrder: #b45309; --s-inoperative: #c2410c;
   --s-unknown: #64748b; --s-blocked: #be185d; --s-planned: #475569; --s-removed: #7c3aed; --s-other: #b91c1c;
   --sev-critico: #b91c1c; --sev-alto: #c2410c; --sev-medio: #a16207; --sev-baixo: #56627a;
+  --s-shared: color-mix(in srgb, var(--s-charging) 45%, var(--card));
   --r: 14px; --r-s: 8px; --gap: 16px; --wrap: 1180px;
   --step--1: .875rem; --step-0: 1rem; --step-1: 1.25rem; --step-2: 1.6rem; --step-3: clamp(1.9rem, 1.2rem + 3vw, 2.9rem);
 }
@@ -155,6 +156,8 @@ details.ms input[type="checkbox"] { width: 20px; height: 20px; flex: none; }
 .dot { width: 12px; height: 12px; flex: none; background: var(--c, var(--s-unknown)); border-radius: 50%; display: inline-block; }
 .dot[data-s="available"] { --c: var(--s-available); }
 .dot[data-s="charging"] { --c: var(--s-charging); border-radius: 2px; }
+/* Tomada partilhada em uso pela outra: a cor de "a carregar", mais clara, com contorno. */
+.dot[data-s="shared"] { --c: var(--s-shared); border-radius: 2px; box-shadow: inset 0 0 0 2px var(--s-charging); }
 .dot[data-s="outOfOrder"] { --c: var(--s-outOfOrder); clip-path: polygon(50% 0, 100% 100%, 0 100%); border-radius: 0; }
 .dot[data-s="inoperative"] { --c: var(--s-inoperative); clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%); border-radius: 0; }
 .dot[data-s="unknown"] { --c: transparent; border: 2.5px solid var(--s-unknown); }
@@ -252,7 +255,7 @@ table.bars caption, table caption { text-align: left; font-weight: 800; font-siz
 .stack i[data-s="available"] { --c: var(--s-available); } .stack i[data-s="charging"] { --c: var(--s-charging); }
 .stack i[data-s="outOfOrder"] { --c: var(--s-outOfOrder); } .stack i[data-s="inoperative"] { --c: var(--s-inoperative); }
 .stack i[data-s="blocked"] { --c: var(--s-blocked); } .stack i[data-s="planned"] { --c: var(--s-planned); }
-.stack i[data-s="removed"] { --c: var(--s-removed); }
+.stack i[data-s="removed"] { --c: var(--s-removed); } .stack i[data-s="shared"] { --c: var(--s-shared); }
 .net section.block { padding: 20px 0; }
 .net .card.wide { margin-top: var(--gap); }
 .net .grid { align-content: start; }
@@ -361,6 +364,8 @@ table.conc { margin-top: 14px; }
 .u-charging { fill: var(--s-charging); background: var(--s-charging); }
 .u-available { fill: var(--s-available); background: var(--s-available); }
 .u-down { fill: var(--s-outOfOrder); background: var(--s-outOfOrder); }
+.u-shared { fill: var(--s-shared); background: var(--s-shared); }
+.uso .ukey i.u-shared { box-shadow: inset 0 0 0 2px var(--s-charging); }
 .u-unknown { fill: var(--s-unknown); background: var(--s-unknown); opacity: .55; }
 .uchart .us { opacity: .65; }
 .uso .ukey { display: flex; flex-wrap: wrap; gap: 6px 16px; align-items: center; margin: 8px 0; }

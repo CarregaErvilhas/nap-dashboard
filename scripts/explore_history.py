@@ -82,8 +82,8 @@ WITH inst AS (
 ), per AS (
   SELECT date_trunc('hour', i.t) AS h, x.operator, x.pw,
          count(*) AS tot,
-         count(*) FILTER (WHERE sp.status IN ('available', 'charging')) AS act,
-         count(*) FILTER (WHERE sp.status = 'charging') AS chg,
+         count(*) FILTER (WHERE sp.status IN ('available', 'charging', '{archive_stats.SHARED}')) AS act,
+         count(*) FILTER (WHERE sp.status IN ('charging', '{archive_stats.SHARED}')) AS chg,
          count(*) FILTER (WHERE sp.status IN {archive_stats.DOWN}) AS down
   FROM inst i JOIN spans sp ON sp.t0 <= i.t AND sp.t1 > i.t
   JOIN xsock x USING (site_id, point_id)

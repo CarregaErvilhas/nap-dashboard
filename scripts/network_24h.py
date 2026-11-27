@@ -39,6 +39,7 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from archive_history import ARCHIVE_EPOCH, PATH_RE, _get, from_manifest  # noqa: E402
+import socket_states  # noqa: E402
 
 DOWN = ('outOfOrder', 'inoperative')
 UP = ('available', 'charging')
@@ -272,10 +273,29 @@ def compute(con, start, end):
     srows = con.execute("""
         SELECT site_id, point_id, arg_min(prev_status, ts) AS s0, arg_max(status, ts) AS s1, epoch(max(ts)) AS t
         FROM status_events WHERE ts > ? AND ts <= ? GROUP BY ALL""", p).fetchall()
+    # Tomadas partilhadas (socket_states): os pares aprendidos nas 24 h. Uma
+    # tomada de um par que está em baixo enquanto o par carrega não avariou
+    # nem voltou: só esteve em uso pela outra.
+    con.execute("CREATE OR REPLACE TEMP TABLE ev24 AS SELECT site_id, point_id, ts, prev_status, status "
+                "FROM status_events WHERE ts > ? AND ts <= ?", p)
+    socket_states.evidence(con, 'ev24', 'ev24d')
+    socket_states.learn(con, 'SELECT * FROM ev24d')
+    partners = {}
+    for sid, pid, q in socket_states.pairs_list(con):
+        partners.setdefault((sid, pid), []).append(q)
+    first = {(sid, pid): s0 for sid, pid, s0, _, _ in srows}
+    last = {(sid, pid): s1 for sid, pid, _, s1, _ in srows}
+
+    def shared(sid, pid, st, at):
+        return st in socket_states.SHARED_FROM and any(at.get((sid, q)) == 'charging' for q in partners.get((sid, pid), ()))
     downs, ups = {}, {}
     for sid, pid, s0, s1, t in srows:
         if s0 is None or s0 == 'removed' or s1 == 'removed':
             continue  # tomada nova ou que saiu: já está no estático
+        if shared(sid, pid, s1, last):
+            s1 = socket_states.SHARED
+        if shared(sid, pid, s0, first):
+            s0 = socket_states.SHARED
         if s1 in DOWN and s0 not in DOWN:
             downs.setdefault(sid, []).append((t, s1))
         elif s0 in DOWN and s1 in UP:

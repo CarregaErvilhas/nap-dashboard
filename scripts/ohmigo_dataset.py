@@ -450,6 +450,25 @@ for code, found in nearby.items():
 # pelo archive_history.py): % do tempo avariado e ocupação por hora, em dias
 # úteis e ao fim de semana. Estados declarados pelos operadores. `history.days`
 # diz quantos dias há por trás; sem o ficheiro, os locais saem sem `history`.
+# Tomadas partilhadas (scripts/socket_states.py): `pair` = as tomadas do mesmo
+# local com que esta partilha a potência. O operador declara-a fora de serviço
+# enquanto uma delas carrega; quem lê o estado ao vivo (ohmigo, o site) deve
+# lê-la como ocupada pela outra. Aprendidos pelo archive_history.py; sem o
+# ficheiro, nenhuma tomada tem `pair`.
+try:
+    with open(f'{DATA}/archive_stats.json', encoding='utf-8') as f:
+        _pairs = (json.load(f).get('states') or {}).get('pairs_list') or []
+    _pair_of = {}
+    for _sid, _pid, _q in _pairs:
+        _pair_of.setdefault((_sid, _pid), []).append(_q)
+    for site in sites.values():
+        for pt in site['points']:
+            pr = _pair_of.get((site['id'], pt['id']))
+            if pr:
+                pt['pair'] = sorted(pr)
+except (OSError, ValueError) as e:
+    print(f'aviso: sem pares de tomadas partilhadas ({DATA}/archive_stats.json: {e})')
+
 history_meta = None
 try:
     with open(f'{DATA}/site_history.json', encoding='utf-8') as f:

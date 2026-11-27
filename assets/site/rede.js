@@ -365,15 +365,16 @@
 
   // The same aggregations build_dashboard.py does, over the live statuses.
   function recompute(P) {
-    var isAct = function (s) { return s === 'charging' || s === 'available'; };
+    var isBusy = function (s) { return s === 'charging' || s === 'shared'; };   // shared: in use by its partner
+    var isAct = function (s) { return isBusy(s) || s === 'available'; };
     var occ = function (a) { var act = a.filter(function (p) { return isAct(p.status); });
-      return act.length ? Math.round(1000 * act.filter(function (p) { return p.status === 'charging'; }).length / act.length) / 10 : null; };
+      return act.length ? Math.round(1000 * act.filter(function (p) { return isBusy(p.status); }).length / act.length) / 10 : null; };
     D.status = {}; P.forEach(function (p) { D.status[p.status] = (D.status[p.status] || 0) + 1; });
     var sw = {}; Object.keys(D.status_pw || {}).forEach(function (c) { sw[c] = {}; });
     P.forEach(function (p) { if (p.pw_class && sw[p.pw_class]) sw[p.pw_class][p.status] = (sw[p.pw_class][p.status] || 0) + 1; });
     D.status_pw = sw;
     D.occ_pw = D.occ_pw.map(function (x) { var a = P.filter(function (p) { return p.pw_class === x.c; });
-      return { c: x.c, occ: occ(a), charging: a.filter(function (p) { return p.status === 'charging'; }).length, active: a.filter(function (p) { return isAct(p.status); }).length }; });
+      return { c: x.c, occ: occ(a), charging: a.filter(function (p) { return isBusy(p.status); }).length, active: a.filter(function (p) { return isAct(p.status); }).length }; });
     D.occ_op = D.occ_op.map(function (x) { return { op: x.op, pts: x.pts, occ: occ(P.filter(function (p) { return p.operator_name === x.op; })) }; });
     var o = occ(P);
     if (o != null) {

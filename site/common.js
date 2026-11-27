@@ -14,6 +14,8 @@
       loadFail: 'Não foi possível carregar os dados. Verifica a ligação e recarrega a página.',
       st_available: 'Livre', st_charging: 'A carregar', st_outOfOrder: 'Avariado', st_inoperative: 'Inoperacional',
       st_unknown: 'Sem informação', st_blocked: 'Bloqueado', st_planned: 'Planeado', st_removed: 'Removido',
+      st_shared: 'Em uso pela outra tomada',
+      stTip_shared: 'Este posto só carrega numa tomada de cada vez: o operador declara esta fora de serviço enquanto a outra carrega. Não é avaria.',
       mcsHeavy: 'pesados', rg_mainland: 'Continente', rg_madeira: 'Madeira', rg_azores: 'Açores', rg_OUTSIDE: 'Fora de PT',
       pw0: 'AC lento (<22 kW)', pw1: 'AC/DC 22–50 kW', pw2: 'DC rápido 50–150 kW', pw3: 'DC ultra 150–350 kW', pw4: 'DC ultra (≥350 kW)',
       pay_App: 'App', 'pay_Multibanco/contactless': 'Multibanco/contactless', pay_Dinheiro: 'Dinheiro',
@@ -32,6 +34,8 @@
       loadFail: 'Could not load the data. Check your connection and reload the page.',
       st_available: 'Free', st_charging: 'Charging', st_outOfOrder: 'Out of order', st_inoperative: 'Inoperative',
       st_unknown: 'No information', st_blocked: 'Blocked', st_planned: 'Planned', st_removed: 'Removed',
+      st_shared: 'In use by the other socket',
+      stTip_shared: 'This site charges on one socket at a time: the operator declares this one out of order while the other charges. It is not a fault.',
       mcsHeavy: 'heavy vehicles', rg_mainland: 'Mainland', rg_madeira: 'Madeira', rg_azores: 'Azores', rg_OUTSIDE: 'Outside PT',
       pw0: 'Slow AC (<22 kW)', pw1: 'AC/DC 22–50 kW', pw2: 'Fast DC 50–150 kW', pw3: 'Ultra DC 150–350 kW', pw4: 'Ultra DC (≥350 kW)',
       pay_App: 'App', 'pay_Multibanco/contactless': 'Bank card/contactless', pay_Dinheiro: 'Cash',
@@ -43,7 +47,11 @@
     }
   };
   var PW = ['AC slow (<22kW)', 'AC/DC 22-50kW', 'DC fast 50-150kW', 'DC ultra 150-350kW', 'DC ultra (>=350kW)'];
-  var STATUSES = ['available', 'charging', 'outOfOrder', 'inoperative', 'unknown', 'blocked', 'planned', 'removed'];
+  // 'shared' is ours, not DATEX II: a socket of a pair that charges one at a
+  // time, declared down while its partner charges (scripts/socket_states.py).
+  var STATUSES = ['available', 'charging', 'shared', 'outOfOrder', 'inoperative', 'unknown', 'blocked', 'planned', 'removed'];
+  var LIVE_STATUSES = STATUSES.filter(function (s) { return s !== 'shared'; });
+  var SHARED_FROM = ['outOfOrder', 'inoperative', 'blocked'];
   var listeners = [];
 
   function lang() { return A.state.lang; }
@@ -139,7 +147,8 @@
   function status(s, withText) {
     var known = STATUSES.indexOf(s) >= 0 ? s : 'unknown';
     var d = el('span', { class: 'dot', 'data-s': known, 'aria-hidden': 'true' });
-    return withText === false ? d : el('span', { class: 'st' }, d, t('st_' + known));
+    var tip = known === 'shared' ? t('stTip_shared') : null;
+    return withText === false ? d : el('span', { class: 'st', title: tip }, d, t('st_' + known));
   }
 
   function applyI18n(root) {
@@ -212,9 +221,26 @@
       if (c.length !== 1) return;
       var v = obj.points[c[0] + '/' + p.point_id], st = v && v.s;
       p.nap_site = c[0];   // the NAP site id (EZC-AMD-00051): Procurar's usage history is keyed by it
-      if (typeof st === 'string' && STATUSES.indexOf(st) >= 0) { p.status = st; n++; }
+      if (typeof st === 'string' && LIVE_STATUSES.indexOf(st) >= 0) { p.status = st; n++; }
     });
+    if (n) sharedPass(points);
     return n ? { stale: false, t: pub, n: n, m: points.length } : null;
+  }
+  // A socket of a learned pair (`pair`: its partners' point_ids, from the
+  // archive) that is declared down while a partner charges is in use by it.
+  function sharedPass(points) {
+    var bySite = new Map();
+    points.forEach(function (p) {
+      var k = p.site_external_id; if (!bySite.has(k)) bySite.set(k, new Map());
+      bySite.get(k).set(p.point_id, p);
+    });
+    points.forEach(function (p) {
+      if (!p.pair || !p.pair.length) return;
+      if (p.status === 'shared') p.status = p.status_raw || 'outOfOrder';
+      if (SHARED_FROM.indexOf(p.status) < 0) return;
+      var site = bySite.get(p.site_external_id);
+      if (p.pair.some(function (id) { var q = site.get(id); return q && q.status === 'charging'; })) { p.status_raw = p.status; p.status = 'shared'; }
+    });
   }
   // A JSON file, 15 s at most, no cookies, no referrer. A .json.gz may arrive
   // still gzipped (served as a file, not with Content-Encoding).
@@ -255,5 +281,5 @@
 
   window.NAP = { t: t, sockId: sockId, addStrings: addStrings, lang: lang, nf: nf, eur: eur, prices: prices, priceText: priceText, sessionCost: sessionCost, PRICE_KINDS: PRICE_KINDS, when: when, el: el, add: add, clear: clear, md: md,
     status: status, pwLabel: pwLabel, PW: PW, STATUSES: STATUSES, onLang: onLang, initChrome: initChrome,
-    applyI18n: applyI18n, load: load, fetchLive: fetchLive, applyLive: applyLive, liveNote: liveNote, fetchJson: fetchJson };
+    applyI18n: applyI18n, load: load, fetchLive: fetchLive, applyLive: applyLive, sharedPass: sharedPass, liveNote: liveNote, fetchJson: fetchJson };
 })();

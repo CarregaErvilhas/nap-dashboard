@@ -126,11 +126,11 @@ class Shards(unittest.TestCase):
             self.assertEqual(win['d_end'], '2026-10-26')
             h = lsb['p']['P1']['h']
             self.assertEqual(len(h), sh.HOURS)
-            self.assertEqual(h[-1], [1, 100, 0, 0])
+            self.assertEqual(h[-1], [1, 100, 0, 0, 0])
             self.assertEqual(sum(1 for b in h if b), 72)      # nenhuma hora perdida na mudança de hora
-            self.assertEqual(lsb['p']['P1']['d'][-2], [25, 2500, 0, 0])   # o 25 de outubro tem 25 horas em Lisboa
-            self.assertEqual(lsb['p']['P1']['m'], [[72, 7200, 0, 0]])     # o id antigo conta para o local
-            self.assertEqual(lsb['p']['P1']['w'][6 * 24 + 1], [2, 200, 0, 0])  # domingo 1 h: verão e depois inverno
+            self.assertEqual(lsb['p']['P1']['d'][-2], [25, 2500, 0, 0, 0])   # o 25 de outubro tem 25 horas em Lisboa
+            self.assertEqual(lsb['p']['P1']['m'], [[72, 7200, 0, 0, 0]])     # o id antigo conta para o local
+            self.assertEqual(lsb['p']['P1']['w'][6 * 24 + 1], [2, 200, 0, 0, 0])  # domingo 1 h: verão e depois inverno
             self.assertEqual(sum(b[0] for b in pdl['p']['P1']['d'] if b), 72)
             body = json.loads(gzip.decompress(sh.shard_bytes('PT', 'x', until, win, ['2026-10'], [12], shards[sh.shard_of('EDP-PDL-00001')])))
             self.assertEqual(body['hours'], {'from': '2026-10-20T00:00:00Z', 'n': sh.HOURS})

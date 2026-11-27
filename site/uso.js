@@ -3,46 +3,51 @@
 // hour map. Data: data/sites/<xx>.json.gz, 256 files of a few dozen sites each,
 // built every hour from the AmpereArchive by scripts/site_history.py
 // (site-history.yml) and published with the site; a detail fetches its file. Every
-// bucket is [cells, charging, available, down] with the last three summed in
-// hundredths of a cell, so sockets add up; empty buckets are 0.
+// bucket is [cells, charging, available, down, shared] with the last four summed in
+// hundredths of a cell, so sockets add up; empty buckets are 0. A fifth
+// number, when present, is the time "in use by the other socket": one of a pair
+// of sockets that charge one at a time, which the operator declares down while
+// its partner charges (scripts/socket_states.py, estados.html).
 (function () {
   'use strict';
   var N = window.NAP, t = N.t, el = N.el;
   N.addStrings({
     uTitle: 'Uso ao longo do tempo', uPeriod: 'Período', uSocket: 'Tomada', uAll: 'Posto inteiro',
     u24: '24 h', u7: '7 dias', u30: '30 dias', uMax: 'Tudo',
-    uCharging: 'A carregar', uAvailable: 'Livre', uDown: 'Avariado', uUnknown: 'Sem informação', uNa: 'sem dados',
+    uCharging: 'A carregar', uAvailable: 'Livre', uDown: 'Avariado', uShared: 'Em uso pela outra tomada', uUnknown: 'Sem informação', uNa: 'sem dados',
+    uStates: 'O que quer dizer cada estado', 
     uSum24: 'Nas últimas 24 h', uSum7: 'Nos últimos 7 dias', uSum30: 'Nos últimos 30 dias', uSumMax: 'Desde {m}',
     uLanes: '{p}, tomada a tomada:', uOne: '{p}, tomada {id}:', uGroup: '{n} × {plug} {kw} kW',
     uSampled: 'Meses com barras mais claras: o arquivo tem poucas leituras por hora, por isso são uma amostra, não o tempo todo.',
     uTip: '{w}: {v}', uTipNa: '{w}: sem dados', uTipSample: ' (amostra)',
     uHeat: 'Ocupação por dia da semana e hora (%)', uHeatOne: 'Ocupação por dia da semana e hora (%), tomada {id}',
     uHeatLo: 'menos ocupado', uHeatHi: 'mais ocupado (máximo: {m} %)',
-    uHeatNote: 'Hora local, últimos {d} dias. Percentagem do tempo a carregar, entre o tempo a carregar e livre; uma hora precisa de 2 dias com dados.',
-    uHeatCell: '{w}, {h} h: {v} % a carregar', uHeatNa: '{w}, {h} h: sem dados',
+    uHeatNote: 'Hora local, últimos {d} dias. Percentagem do tempo ocupado (a carregar ou em uso pela outra tomada), entre o tempo ocupado e livre; uma hora precisa de 2 dias com dados.',
+    uHeatCell: '{w}, {h} h: {v} % ocupado', uHeatNa: '{w}, {h} h: sem dados',
     uSrc: 'Estados declarados pelos operadores ao NAP (IMT / MOBI.E), guardados pelo AmpereArchive: não são medições. Atualizado de hora a hora; dados até {t}.',
     uLoading: 'A carregar o histórico…', uFail: 'Sem histórico de uso para este posto.',
     uWd0: 'Segunda', uWd1: 'Terça', uWd2: 'Quarta', uWd3: 'Quinta', uWd4: 'Sexta', uWd5: 'Sábado', uWd6: 'Domingo'
   }, {
     uTitle: 'Use over time', uPeriod: 'Period', uSocket: 'Socket', uAll: 'Whole site',
     u24: '24 h', u7: '7 days', u30: '30 days', uMax: 'All',
-    uCharging: 'Charging', uAvailable: 'Available', uDown: 'Out of order', uUnknown: 'No information', uNa: 'no data',
+    uCharging: 'Charging', uAvailable: 'Available', uDown: 'Out of order', uShared: 'In use by the other socket', uUnknown: 'No information', uNa: 'no data',
+    uStates: 'What each status means', 
     uSum24: 'Over the last 24 h', uSum7: 'Over the last 7 days', uSum30: 'Over the last 30 days', uSumMax: 'Since {m}',
     uLanes: '{p}, socket by socket:', uOne: '{p}, socket {id}:', uGroup: '{n} × {plug} {kw} kW',
     uSampled: 'Months with lighter bars: the archive has few reads per hour, so they are a sample, not the whole time.',
     uTip: '{w}: {v}', uTipNa: '{w}: no data', uTipSample: ' (sample)',
     uHeat: 'Occupancy by weekday and hour (%)', uHeatOne: 'Occupancy by weekday and hour (%), socket {id}',
     uHeatLo: 'less busy', uHeatHi: 'busier (maximum: {m}%)',
-    uHeatNote: 'Local time, last {d} days. Share of the time charging, out of the time charging or available; an hour needs 2 days with data.',
-    uHeatCell: '{w}, {h}:00: {v}% charging', uHeatNa: '{w}, {h}:00: no data',
+    uHeatNote: 'Local time, last {d} days. Share of the time busy (charging or in use by the other socket), out of the time busy or available; an hour needs 2 days with data.',
+    uHeatCell: '{w}, {h}:00: {v}% busy', uHeatNa: '{w}, {h}:00: no data',
     uSrc: 'Statuses declared by the operators to the NAP (IMT / MOBI.E), kept by the AmpereArchive: not measurements. Updated every hour; data up to {t}.',
     uLoading: 'Loading the history…', uFail: 'No usage history for this site.',
     uWd0: 'Monday', uWd1: 'Tuesday', uWd2: 'Wednesday', uWd3: 'Thursday', uWd4: 'Friday', uWd5: 'Saturday', uWd6: 'Sunday'
   });
 
   var SHARDS = 256, MAX_LANES = 8, SAMPLE_RES = 2;
-  var KEYS = ['charging', 'available', 'down', 'unknown'];
-  var NAME = { charging: 'uCharging', available: 'uAvailable', down: 'uDown', unknown: 'uUnknown' };
+  var KEYS = ['charging', 'shared', 'available', 'down', 'unknown'];
+  var NAME = { charging: 'uCharging', shared: 'uShared', available: 'uAvailable', down: 'uDown', unknown: 'uUnknown' };
   var NS = 'http://www.w3.org/2000/svg';
   var shards = new Map(), views = new Map(), uid = 0;
 
@@ -65,20 +70,25 @@
     Object.keys(attrs || {}).forEach(function (k) { e.setAttribute(k, attrs[k]); });
     return e;
   }
-  function add(a, b) { return !b ? a : !a ? b.slice() : a.map(function (v, i) { return v + b[i]; }); }
+  // Files from before the shared state have four numbers: the fifth reads as 0.
+  function add(a, b) {
+    if (!b) return a;
+    if (!a) return [b[0], b[1], b[2], b[3], b[4] || 0];
+    return a.map(function (v, i) { return v + (b[i] || 0); });
+  }
   function sumOf(lists) {   // lists of buckets -> one list, bucket by bucket
-    return lists.reduce(function (acc, l) { return acc ? acc.map(function (b, i) { return add(b, l[i] || 0); }) : l.map(function (b) { return b ? b.slice() : 0; }); }, null);
+    return lists.reduce(function (acc, l) { return acc ? acc.map(function (b, i) { return add(b, l[i] || 0); }) : l.map(function (b) { return add(0, b); }); }, null);
   }
   function parts(b) {   // bucket -> percentages per KEYS, or null
     if (!b || !b[0]) return null;
-    var tot = 100 * b[0], u = Math.max(0, tot - b[1] - b[2] - b[3]);
-    return [b[1], b[2], b[3], u].map(function (v) { return 100 * v / tot; });
+    var s = b[4] || 0, tot = 100 * b[0], u = Math.max(0, tot - b[1] - b[2] - b[3] - s);
+    return [b[1], s, b[2], b[3], u].map(function (v) { return 100 * v / tot; });
   }
   function pct(v) { return N.nf(Math.round(v)) + ' %'; }
   function summary(list) {
     var tot = list.reduce(function (a, b) { return add(a, b || 0); }, 0), p = parts(tot);
     if (!p) return t('uNa');
-    return KEYS.filter(function (k, i) { return i < 3 || p[i] >= 0.5; }).map(function (k) { return t(NAME[k]).toLowerCase() + ' ' + pct(p[KEYS.indexOf(k)]); }).join(' · ');
+    return KEYS.filter(function (k, i) { return k === 'charging' || k === 'available' || k === 'down' || p[i] >= 0.5; }).map(function (k) { return t(NAME[k]).toLowerCase() + ' ' + pct(p[KEYS.indexOf(k)]); }).join(' · ');
   }
 
   function fmt(tz, opts) {
@@ -156,8 +166,8 @@
     for (wd = 0; wd < 7; wd++) {
       cells.push([]);
       for (h = 0; h < 24; h++) {
-        var b = w[wd * 24 + h], act = b ? b[1] + b[2] : 0;
-        var v = b && b[0] >= 2 && act > 0 ? 100 * b[1] / act : null;
+        var b = w[wd * 24 + h], busy = b ? b[1] + (b[4] || 0) : 0, act = b ? busy + b[2] : 0;
+        var v = b && b[0] >= 2 && act > 0 ? 100 * busy / act : null;
         cells[wd].push(v); if (v != null && v > mx) mx = v;
       }
     }
@@ -231,7 +241,9 @@
       charts.appendChild(chart(pd1, 170, true, summary(pd1.b)));
     }
     box.appendChild(charts);
-    box.appendChild(el('div', { class: 'ukey small' }, KEYS.map(function (k) { return el('span', null, el('i', { class: 'u-' + k }), t(NAME[k])); }).concat(el('span', null, el('i', { class: 'una' }), t('uNa')))));
+    box.appendChild(el('div', { class: 'ukey small' }, KEYS.map(function (k) { return el('span', null, el('i', { class: 'u-' + k }), t(NAME[k])); }).concat(
+      el('span', null, el('i', { class: 'una' }), t('uNa')),
+      el('a', { class: 'uinfo', href: 'estados.html' + (N.lang() === 'en' ? '?lang=en' : ''), title: t('uStates') }, el('span', { 'aria-hidden': 'true' }, 'ⓘ '), t('uStates')))));
     if (st.per === 'max' && anySample) box.appendChild(el('p', { class: 'small muted' }, t('uSampled')));
     var hid = st.sock === 'all' ? ids : [st.sock];
     box.appendChild(el('h4', null, st.sock === 'all' ? t('uHeat') : t('uHeatOne', { id: name(st.sock) })));
