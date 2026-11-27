@@ -1,7 +1,7 @@
 # Erros reportáveis (dados NAP / MOBI.E / DGEG)
 
 ## 1. Tensão / corrente / potência inconsistentes (NAP estático)
-26,7% das tomadas (5.263/19.702) têm potência declarada que não bate com V×I (&gt;25% de diferença). Destas, 1.650 (8,4%) declaram potência acima da capacidade elétrica (fisicamente impossível), ex. 1200 V × 600 A = 720 kW declarados como 200 kW. Valores suspeitos no dataset: tensões de 1200 V e 3600 V, correntes de 600 A.
+27,0% das tomadas (5.338/19.802) têm potência declarada que não bate com V×I (&gt;25% de diferença). Destas, 1.673 (8,4%) declaram potência acima da capacidade elétrica (fisicamente impossível), ex. 1200 V × 600 A = 720 kW declarados como 200 kW. Valores suspeitos no dataset: tensões de 1200 V e 3600 V, correntes de 600 A.
 
 ## 2. Potência NAP vs MOBI.E em contradição (sem dados)
 O MOBI.Data publica a potência máxima do posto repetida em todas as tomadas, por isso deixou de haver uma potência por tomada para comparar com o NAP.
@@ -16,16 +16,16 @@ A mesma entidade legal com múltiplas grafias (19 operadores afetados): Galp (Ga
 Só NUTS1 (PT1/PT2/PT3) no estático; sem NUTS2/NUTS3, que o esquema DATEX II suporta e o enquadramento AFIR/INSPIRE prevê.
 
 ## 6. usage_type em falta
-2.576 tomadas (13,1%) sem tipo de utilização.
+2.657 tomadas (13,4%) sem tipo de utilização.
 
 ## 7. Ids de tomada (EVSE) MOBI.E inconsistentes
-828 tomadas com ids só numéricos ('97', '98'…), fora de qualquer formato; mistura de formatos com e sem prefixo PT-/operador e com e sem zero à esquerda no número da tomada.
+845 tomadas com ids só numéricos ('97', '98'…), fora de qualquer formato; mistura de formatos com e sem prefixo PT-/operador e com e sem zero à esquerda no número da tomada.
 
 ## 8. Tensões placeholder, em falta ou impossíveis e falso trifásico (NAP estático)
 56 tomadas DC declaram 750 V ou 600 V, valores de reserva da era CHAdeMO; 32 tomadas declaradas mode3AC3p têm tensão monofásica e menos de 11 kW, quando um trifásico real tem pelo menos 12 kW. Os próprios operadores já assinalaram ambas as classes como erro no tracker PCVE (171 e 199 linhas). Mais 54 tomadas DC sem tensão declarada e 2 acima de 1500 V, o limite da baixa tensão em DC. Lista por tomada em errors.md, secções 8a a 8d.
 
 ## 9. Preços anómalos
-Taxa fixa até 2,50 €/carga; no NAP dinâmico pricePerChargingTime até 1,54 €/min (2 pontos &gt;1 €/min, provável erro de unidade €/min vs €/hora); energia a 0 €/kWh combinada com taxa fixa &gt;0 em 1.896 pontos (suspeito de dados incompletos).
+Taxa fixa até 2,50 €/carga; no NAP dinâmico pricePerChargingTime até 1,54 €/min (4 pontos &gt;1 €/min, provável erro de unidade €/min vs €/hora); energia a 0 €/kWh combinada com taxa fixa &gt;0 em 1.914 pontos (suspeito de dados incompletos).
 
 ## 10. Pontos 'removed' ainda no inventário estático
 0 pontos (0%) marcados 'removed' no dinâmico continuam listados como infraestrutura ativa no estático.
@@ -301,15 +301,15 @@ O mapa "Caça aos Postos de Carregamento" (umap, OSM) registou **155 pontos** de
 
 O mesmo mapa tem ainda **6** postos em construção/obra e **4** para verificar (lista completa em `data/osm_caca.csv`).
 
-Pagamento ad-hoc: em **214** sites o OSM indica pagamento por cartão ou sem autenticação, mas o `auth_methods` do NAP só lista app/rfid (ex. `BRR-00159`, `VFX-00136`, `ABT-00017`). Pode ser um posto novo com cartão ativo não registado, ou desatualização num dos lados.
+Pagamento ad-hoc: em **223** sites o OSM indica pagamento por cartão ou sem autenticação, mas o `auth_methods` do NAP só lista app/rfid (ex. `BRR-00159`, `VFX-00136`, `ABT-00017`). Pode ser um posto novo com cartão ativo não registado, ou desatualização num dos lados.
 
-Operador: **1663** sites com correspondência código-a-código têm operador OSM diferente do NAP. A maioria é variante de grafia ou rebranding; os pares mais frequentes:
+Operador: **1678** sites com correspondência código-a-código têm operador OSM diferente do NAP. A maioria é variante de grafia ou rebranding; os pares mais frequentes:
 
 | sites | operador NAP | operador OSM |
 |---|---|---|
-| 766 | WOWPLUG | True Kare |
-| 300 | Iberdrola | bp pulse | Charging Together |
-| 177 | Mota-Engil Renewing | Mota Engil II |
+| 774 | WOWPLUG | True Kare |
+| 303 | Iberdrola | bp pulse | Charging Together |
+| 179 | Mota-Engil Renewing | Mota Engil II |
 | 106 | Galpgeste | Galp Geste |
 | 82 | Kilometer Low Cost II Serviços, SA | KLC Serviços |
 | 37 | FactorENERGIA | Factor Energia |
@@ -318,15 +318,15 @@ Operador: **1663** sites com correspondência código-a-código têm operador OS
 | 17 | EVpower, Charging Solutions Lda | EV Power |
 | 15 | EZ - CHARG3, Lda | EZ-Charg3 |
 | 15 | LUSIADAENERGIA, S.A. | Luzigás |
-| 14 | Grupo Easycharger, SL | Zunder |
 | 14 | Galp Power OPC | Galp Geste |
+| 14 | Grupo Easycharger, SL | Zunder |
 | 11 | GREEN CHARGE - MOBILIDADE ELÉTRICA, LDA | GreenCharge |
 | 9 | Gold Energy | Goldenergy |
 
-Cobertura OSM (dump do autor do mapa v2.1): **7992 sites NAP** (90%) com código MOBI.E; 60 divergências de localização >150 m em correspondências de código único.
+Cobertura OSM (dump do autor do mapa v2.1): **8036 sites NAP** (90%) com código MOBI.E; 60 divergências de localização >150 m em correspondências de código único.
 ## 13. Tracker de erros PCVE (cross-check externo)
 
-O tracker de erros dos operadores (`pt-pcve-errors.xlsx`) é a única fonte atual da identidade dos OPC (PartyId/PartyCode) e a única lista positiva de assets que o operador declarou removidos. Sincronizado em 2026-11-23; 99 CPO, 2442 erros reportados. Gerado por `scripts/tracker_checks.py` a partir de `data/opc_registry_authority.csv`/`data/tracker_errors.csv`.
+O tracker de erros dos operadores (`pt-pcve-errors.xlsx`) é a única fonte atual da identidade dos OPC (PartyId/PartyCode) e a única lista positiva de assets que o operador declarou removidos. Sincronizado em 2026-11-27; 99 CPO, 2426 erros reportados. Gerado por `scripts/tracker_checks.py` a partir de `data/opc_registry_authority.csv`/`data/tracker_errors.csv`.
 
 ### 13a. [MÉDIO] Operadores NAP sem PartyId no tracker (2)
 
@@ -340,23 +340,23 @@ O tracker de erros dos operadores (`pt-pcve-errors.xlsx`) é a única fonte atua
 | severidade | identificador | evidência |
 |---|---|---|
 | BAIXO | `ACCI` | 15 sites, 2 grafias: Acciona Recarga Portugal (8) / ACCIONA RECARGA PORTUGAL,UNIPESSOAL LDA (7) — canónico no tracker: «ACCIONA RECARGA PORTUGAL,UNIPESSOAL LDA» |
-| BAIXO | `ATLA` | 598 sites, 7 grafias: Atlante Infra Portugal, S.A (562) / Atlante (16) / Atlante Infra Portugal S.A. (15) / Atlante Infra Portugal, S.A. (2) / Atlante Infra Portugal S.a. (1) / Atlante Infra Portugal S.A (1) / Atlante Infra Portugal S.a (1) — canónico no tracker: «Atlante Infra Portugal, S.A» |
+| BAIXO | `ATLA` | 603 sites, 8 grafias: Atlante Infra Portugal, S.A (562) / Atlante (16) / Atlante Infra Portugal S.A. (15) / Atlante Portugal (5) / Atlante Infra Portugal, S.A. (2) / Atlante Infra Portugal S.a. (1) / Atlante Infra Portugal S.A (1) / Atlante Infra Portugal S.a (1) — canónico no tracker: «Atlante Infra Portugal, S.A» |
 | BAIXO | `BBGE` | 3 sites, 2 grafias: Morenergy (2) / BBG Energia Unipessoal, Lda (1) — canónico no tracker: «Morenergy» |
 | BAIXO | `CAPW` | 14 sites, 2 grafias: Capwatt Services (8) / Capwatt Services, S.A. (6) — canónico no tracker: «Capwatt Services» |
 | BAIXO | `CEVE` | 4 sites, 2 grafias: CEVE - Cooperativa Eléctrica do Vale D’Este C.R.L. (2) / Cooperativa Elétrica de Vale d´Este (2) — canónico no tracker: «CEVE - Cooperativa Eléctrica do Vale D’Este C.R.L.» |
 | BAIXO | `CIRC` | 12 sites, 2 grafias: Circuitos Energy Solutions, Lda. (10) / Circuitos de Inovação (2) |
 | BAIXO | `CSCP` | 8 sites, 2 grafias: Cascais Proxima (6) / Cascais Próxima (2) — canónico no tracker: «Cascais Proxima» |
-| BAIXO | `ECOI` | 60 sites, 2 grafias: Ecoinside - Soluções em Ecoeficiência e Sustentabilidade Lda (58) / ECOINSIDE (2) — canónico no tracker: «Ecoinside - Soluções em Ecoeficiência e Sustentabilidade Lda» |
+| BAIXO | `ECOI` | 62 sites, 2 grafias: Ecoinside - Soluções em Ecoeficiência e Sustentabilidade Lda (60) / ECOINSIDE (2) — canónico no tracker: «Ecoinside - Soluções em Ecoeficiência e Sustentabilidade Lda» |
 | BAIXO | `EMEL` | 94 sites, 2 grafias: EMEL - Empresa Municipal de Mobilidade e Estacionamento de Lisboa, E.M., S.A. (91) / EMEL (3) — canónico no tracker: «EMEL - Empresa Municipal de Mobilidade e Estacionamento de Lisboa, E.M., S.A.» |
 | BAIXO | `GENJ` | 21 sites, 2 grafias: Generation Journey Lda (20) / Generation Journey (1) — canónico no tracker: «Generation Journey Lda» |
 | BAIXO | `GLPG` | 121 sites, 2 grafias: Galpgeste (119) / Galp Gest (2) — canónico no tracker: «Galpgeste» |
-| BAIXO | `GLPP` | 1631 sites, 2 grafias: Galp Power OPC (1522) / Galp Power (109) — canónico no tracker: «Galp Power OPC» |
+| BAIXO | `GLPP` | 1632 sites, 2 grafias: Galp Power OPC (1524) / Galp Power (108) — canónico no tracker: «Galp Power OPC» |
 | BAIXO | `GREE` | 16 sites, 2 grafias: GREEN CHARGE - MOBILIDADE ELÉTRICA, LDA (15) / Green Charge - Mobilidade Eletrica (1) — canónico no tracker: «GREEN CHARGE - MOBILIDADE ELÉTRICA, LDA» |
 | BAIXO | `HEXA` | 38 sites, 2 grafias: HEXAGONAL OCEAN, LDA (36) / Hexagonal Ocean (2) — canónico no tracker: «HEXAGONAL OCEAN, LDA» |
 | BAIXO | `HIGH` | 39 sites, 2 grafias: High Green Power, Unipessoal Lda. (23) / HighGreenPower (16) — canónico no tracker: «HighGreenPower» |
 | BAIXO | `LOUL` | 33 sites, 2 grafias: Loulé Concelho Global, EM (28) / Loulé Concelho Global (5) — canónico no tracker: «Loulé Concelho Global, EM» |
 | BAIXO | `MLTR` | 108 sites, 2 grafias: Mobiletric (104) / Mobiletric, LDA (4) — canónico no tracker: «Mobiletric, LDA» |
-| BAIXO | `REPS` | 224 sites, 2 grafias: REPSOL Portuguesa Lda (196) / REPSOL PORTUGUESA LDA (28) — canónico no tracker: «REPSOL Portuguesa Lda» |
+| BAIXO | `REPS` | 225 sites, 2 grafias: REPSOL Portuguesa Lda (196) / REPSOL PORTUGUESA LDA (29) — canónico no tracker: «REPSOL Portuguesa Lda» |
 | BAIXO | `SEGM` | 73 sites, 3 grafias: SEGMA - Serviços de Engenharia Gestão e Manutenção Lda (59) / Segma (9) / SEGMA – Serviços de Engenharia Gestão e Manutenção Lda (5) — canónico no tracker: «SEGMA - Serviços de Engenharia Gestão e Manutenção Lda» |
 
 ### 13c. [BAIXO] NAP publica com o PartyCode em vez do PartyId (2)
@@ -369,28 +369,28 @@ O tracker de erros dos operadores (`pt-pcve-errors.xlsx`) é a única fonte atua
 
 Compara a tensão máxima que o NAP declara em cada tomada DC com o equipamento que lá está: a tensão da tomada no OpenStreetMap (muitas vezes lida na chapa pela comunidade) e a tensão nominal do modelo de carregador mapeado no OSM (`manufacturer` + `model`), segundo o catálogo "Modelos de Carregadores usados em Portugal" que o Alexandre Moleiro mantém (só nas fichas CCS). Só entra quando nada do equipamento confirma o NAP. A classe é a do filtro "Tensão DC" do site e do ohmigo: acima de 500 V um carro de 800 V carrega à potência máxima, até 500 V não. Tensões em falta ou acima de 1500 V estão no item 8.
 
-Catálogo: 155 modelos (111 DC com tensão), sha256 `ee06f4371ae3`; dos 1388 locais DC com carregador mapeado no OSM, 1284 têm uma só tensão nominal segundo ele. Modelo da rede de 2026-11-23T17:55:12+00:00.
+Catálogo: 157 modelos (113 DC com tensão), sha256 `3b6db3419ce1`; dos 1512 locais DC com carregador mapeado no OSM, 1371 têm uma só tensão nominal segundo ele. Modelo da rede de 2026-11-27T07:52:34+00:00.
 
-### 14a. [ALTO] Classe de tensão errada para carros de 800 V (482 tomadas em 291 locais)
+### 14a. [ALTO] Classe de tensão errada para carros de 800 V (491 tomadas em 301 locais)
 
 | operador | locais | tomadas |
 |---|---:|---:|
 | Modelo Continente Hipermercados, S.A. | 85 | 169 |
 | (sem operador no NAP) | 27 | 53 |
-| Atlante Infra Portugal, S.A | 21 | 36 |
-| EDP Comercial | 23 | 35 |
+| Atlante Infra Portugal, S.A | 27 | 42 |
+| REPSOL Portuguesa Lda | 28 | 34 |
 | Galp Power OPC | 27 | 32 |
-| REPSOL Portuguesa Lda | 13 | 19 |
+| EDP Comercial | 16 | 27 |
 | Helexia II Energy Services, Lda. | 9 | 18 |
 | Powerdot, S.A | 10 | 16 |
-| Prio.E Mobility Solutions, Lda | 14 | 16 |
 | Telpark | 2 | 14 |
-| REPSOL PORTUGUESA LDA | 11 | 11 |
+| Prio.E Mobility Solutions, Lda | 10 | 12 |
+| REPSOL PORTUGUESA LDA | 10 | 10 |
 | Siva - Sociedade de Importação de Veículos Automóveis / (sub-CEME da Iberdola) | 7 | 10 |
 | EVIO - Electrical Mobility | 4 | 8 |
 | Cepsa Portuguesa Petroleos | 5 | 8 |
 | Galpgeste | 6 | 7 |
-| Atlante | 4 | 4 |
+| Atlante | 5 | 5 |
 | Iberdrola Clientes Portugal, Unipessoal, Lda | 3 | 3 |
 | EVCE POWER, LDA. / MOBISMART | 3 | 3 |
 | Mota-Engil Renewing | 2 | 2 |
@@ -538,6 +538,9 @@ Catálogo: 155 modelos (111 DC com tensão), sha256 `ee06f4371ae3`; dos 1388 loc
 | `ATL-FAR-00098` | Atlante Infra Portugal, S.A | `FAR-00098-01`, `FAR-00098-02` | CCS | 400 V | OSM 1000 V |
 | `ATL-FAR-00099` | Atlante Infra Portugal, S.A | `FAR-00099-01`, `FAR-00099-02` | CCS | 400 V | OSM 1000 V |
 | `ATL-GMR-00116` | Atlante Infra Portugal, S.A | `GMR-00116-02` | CCS | 800 V | OSM 500 V |
+| `ATL-LLE-00164` | Atlante Infra Portugal, S.A | `LLE-00164-02` | CCS | 400 V | OSM 1000 V; Magnum Cap MC QCA150 (1000 V) |
+| `ATL-LLE-00169` | Atlante Infra Portugal, S.A | `LLE-00169-02` | CCS | 400 V | OSM 1000 V |
+| `ATL-LLE-00171` | Atlante Infra Portugal, S.A | `LLE-00171-02` | CCS | 400 V | OSM 1000 V |
 | `ATL-LNH-00041` | Atlante Infra Portugal, S.A | `LNH-00041-01`, `LNH-00041-02` | CCS | 400 V | OSM 1000 V |
 | `ATL-LSB-01000` | Atlante Infra Portugal, S.A | `LSB-01000-01` | CCS | 300 V | OSM 1000 V |
 | `ATL-LSB-01233` | Atlante Infra Portugal, S.A | `LSB-01233-01`, `LSB-01233-02` | CCS | 400 V | OSM 1000 V |
@@ -548,29 +551,38 @@ Catálogo: 155 modelos (111 DC com tensão), sha256 `ee06f4371ae3`; dos 1388 loc
 | `ATL-SXL-00093` | Atlante Infra Portugal, S.A | `SXL-00093-01`, `SXL-00093-02` | CCS | 400 V | OSM 1000 V; Alpitronic HYC_200 (1000 V) |
 | `ATL-SXL-00094` | Atlante Infra Portugal, S.A | `SXL-00094-01`, `SXL-00094-02` | CCS | 400 V | OSM 1000 V; Alpitronic HYC_200 (1000 V) |
 | `ATL-VGS-00022` | Atlante Infra Portugal, S.A | `VGS-00022-01`, `VGS-00022-02` | CCS | 400 V | OSM 1000 V; Alpitronic HYC_50 (1000 V) |
-| `EDP-ACH-00041` | EDP Comercial | `PT-EDP-EACH-00041-1`, `PT-EDP-EACH-00041-2` | CCS | 500 V | OSM 1000 V |
-| `EDP-BJA-00068` | EDP Comercial | `PT-EDP-EBJA-00068-1`, `PT-EDP-EBJA-00068-2` | CCS | 500 V | OSM 1000 V; Starcharge Jupiter V3 (1000 V) |
-| `EDP-CTB-00080` | EDP Comercial | `PT-EDP-ECTB-00080-1` | CCS | 500 V | OSM 1000 V |
-| `EDP-CTM-00012` | EDP Comercial | `PT-EDP-ECTM-00012-1`, `PT-EDP-ECTM-00012-2` | CCS | 500 V | OSM 1000 V; Starcharge Jupiter V3 (1000 V) |
-| `EDP-LLE-00255` | EDP Comercial | `PT-EDP-ELLE-00255-1`, `PT-EDP-ELLE-00255-2` | CCS | 500 V | OSM 1000 V |
-| `EDP-LMG-00021` | EDP Comercial | `PT-EDP-ELMG-00021-1`, `PT-EDP-ELMG-00021-2` | CCS | 400 V | OSM 1000 V |
-| `EDP-LMG-00022` | EDP Comercial | `PT-EDP-ELMG-00022-1`, `PT-EDP-ELMG-00022-2` | CCS | 400 V | OSM 1000 V; Starcharge Jupiter V3 (1000 V) |
-| `EDP-LRA-00077` | EDP Comercial | `PT-EDP-ELRA-00077-2` | CCS | 920 V | OSM 500 V |
-| `EDP-LRA-00080` | EDP Comercial | `PT-EDP-ELRA-00080-2` | CCS | 920 V | OSM 500 V |
-| `EDP-LRS-00068` | EDP Comercial | `PT-EDP-ELRS-00068-2` | CCS | 920 V | OSM 500 V |
-| `EDP-LRS-00070` | EDP Comercial | `PT-EDP-ELRS-00070-2` | CCS | 920 V | OSM 500 V |
-| `EDP-MGR-00027` | EDP Comercial | `PT-EDP-EMGR-00027-1`, `PT-EDP-EMGR-00027-2` | CCS | 500 V | OSM 1000 V; Efacec QC60 (1000 V) |
-| `EDP-MTA-00022` | EDP Comercial | `PT-EDP-EMTA-00022-1`, `PT-EDP-EMTA-00022-2` | CCS | 500 V | OSM 1000 V; Starcharge Jupiter V3 (1000 V) |
-| `EDP-ORM-00017` | EDP Comercial | `PT-EDP-EORM-00017-1`, `PT-EDP-EORM-00017-2` | CCS | 500 V | OSM 1000 V; Starcharge Titan V3 (1000 V) |
-| `EDP-PNF-00012` | EDP Comercial | `PT-EDP-EPNF-00012-2` | CCS | 500 V | OSM 1000 V; Efacec HV160 (1000 V) |
-| `EDP-SNT-00227` | EDP Comercial | `PT-EDP-ESNT-00227-1`, `PT-EDP-ESNT-00227-2` | CCS | 500 V | OSM 1000 V |
-| `EDP-SNT-00231` | EDP Comercial | `PT-EDP-ESNT-00231-2` | CCS | 500 V | OSM 1000 V |
-| `EDP-TVR-00034` | EDP Comercial | `PT-EDP-ETVR-00034-1`, `PT-EDP-ETVR-00034-2` | CCS | 500 V | OSM 1000 V; Starcharge Jupiter V3 (1000 V) |
-| `EDP-VND-00008` | EDP Comercial | `PT-EDP-EVND-00008-2` | CCS | 500 V | OSM 1000 V |
-| `EDP-VNG-00083` | EDP Comercial | `PT-EDP-EVNG-00083-2` | CCS | 920 V | OSM 500 V |
-| `EDP-VNG-00084` | EDP Comercial | `PT-EDP-EVNG-00084-2` | CCS | 920 V | OSM 500 V |
-| `EDP-VNG-00086` | EDP Comercial | `PT-EDP-EVNG-00086-2` | CCS | 920 V | OSM 500 V |
-| `EDP-VRL-00013` | EDP Comercial | `PT-EDP-EVRL-00013-1`, `PT-EDP-EVRL-00013-2` | CCS | 500 V | OSM 1000 V; Starcharge Titan V3 (1000 V) |
+| `ATL-VIS-00089` | Atlante Infra Portugal, S.A | `VIS-00089-02` | CCS | 400 V | OSM 1000 V |
+| `ATL-VIS-00090` | Atlante Infra Portugal, S.A | `VIS-00090-02` | CCS | 400 V | OSM 1000 V |
+| `ATL-VIS-00091` | Atlante Infra Portugal, S.A | `VIS-00091-02` | CCS | 400 V | OSM 1000 V |
+| `REP-ALM-00042` | REPSOL Portuguesa Lda | `ALM-00042-02` | CCS | 400 V | OSM 1000 V |
+| `REP-ARC-00010` | REPSOL Portuguesa Lda | `ARC-00010-01` | CCS | 400 V | OSM 1000 V |
+| `REP-AVR-00034` | REPSOL Portuguesa Lda | `AVR-00034-02` | CCS | 400 V | OSM 1000 V |
+| `REP-AVR-00038` | REPSOL Portuguesa Lda | `AVR-00038-02` | CCS | 400 V | OSM 1000 V |
+| `REP-BGC-00007` | REPSOL Portuguesa Lda | `BGC-00007-02` | CCS | 400 V | OSM 1000 V |
+| `REP-BTL-00004` | REPSOL Portuguesa Lda | `BTL-00004-02` | CCS | 400 V | OSM 1000 V |
+| `REP-CVL-00057` | REPSOL Portuguesa Lda | `CVL-00057-01`, `CVL-00057-02` | CCS | 400 V | OSM 1000 V; Power Electronics NB 120 (1000 V) |
+| `REP-ELV-00005` | REPSOL Portuguesa Lda | `ELV-00005-02` | CCS | 400 V | OSM 1000 V |
+| `REP-FIG-00072` | REPSOL Portuguesa Lda | `FIG-00072-01`, `FIG-00072-02` | CCS | 400 V | OSM 1000 V; Hellonext H2 120 (1000 V) |
+| `REP-FLG-00015` | REPSOL Portuguesa Lda | `FLG-00015-02` | CCS | 400 V | OSM 1000 V |
+| `REP-FND-00004` | REPSOL Portuguesa Lda | `FND-00004-02` | CCS | 400 V | OSM 1000 V |
+| `REP-GDL-00034` | REPSOL Portuguesa Lda | `GDL-00034-01`, `GDL-00034-02` | CCS | 400 V | OSM 1000 V; Hellonext H2 150 (1000 V) |
+| `REP-GMR-00040` | REPSOL Portuguesa Lda | `GMR-00040-02` | CCS | 400 V | OSM 1000 V |
+| `REP-GMR-00164` | REPSOL Portuguesa Lda | `GMR-00164-02` | CHADEMO | 800 V | OSM 500 V |
+| `REP-GRD-00012` | REPSOL Portuguesa Lda | `GRD-00012-02` | CCS | 400 V | OSM 1000 V |
+| `REP-LLE-00253` | REPSOL Portuguesa Lda | `LLE-00253-01` | CCS | 400 V | OSM 1000 V; Power Electronics NB 160 (1000 V) |
+| `REP-LLE-00253` | REPSOL Portuguesa Lda | `LLE-00253-02` | CHADEMO | 800 V | OSM 500 V |
+| `REP-MMN-00007` | REPSOL Portuguesa Lda | `MMN-00007-02` | CCS | 400 V | OSM 1000 V |
+| `REP-MTJ-00023` | REPSOL Portuguesa Lda | `MTJ-00023-02` | CCS | 400 V | OSM 1000 V |
+| `REP-MTJ-00127` | REPSOL Portuguesa Lda | `MTJ-00127-01` | CCS | 400 V | OSM 1000 V; Power Electronics NB 120 (1000 V) |
+| `REP-PBL-00011` | REPSOL Portuguesa Lda | `PBL-00011-02` | CCS | 400 V | OSM 1000 V |
+| `REP-PRD-00008` | REPSOL Portuguesa Lda | `PRD-00008-02` | CCS | 400 V | OSM 1000 V |
+| `REP-PRD-00046` | REPSOL Portuguesa Lda | `PRD-00046-01`, `PRD-00046-02` | CCS | 400 V | OSM 1000 V; Hellonext H2 120 (1000 V) |
+| `REP-PRG-00002` | REPSOL Portuguesa Lda | `PRG-00002-02` | CCS | 400 V | OSM 1000 V |
+| `REP-PRT-00307` | REPSOL Portuguesa Lda | `PRT-00307-01`, `PRT-00307-02` | CCS | 400 V | OSM 1000 V |
+| `REP-SCD-00003` | REPSOL Portuguesa Lda | `SCD-00003-02` | CCS | 400 V | OSM 1000 V |
+| `REP-VFR-00085` | REPSOL Portuguesa Lda | `VFR-00085-02` | CCS | 400 V | OSM 1000 V |
+| `REP-VNG-00065` | REPSOL Portuguesa Lda | `VNG-00065-02` | CCS | 400 V | OSM 1000 V |
+| `REP-VNG-00101` | REPSOL Portuguesa Lda | `VNG-00101-02` | CCS | 400 V | OSM 1000 V |
 | `GLP-ALB-00011` | Galp Power OPC | `ALB-00011-01`, `ALB-00011-02` | CCS | 550 V | OSM 500 V |
 | `GLP-LLE-00114` | Galp Power OPC | `LLE-00114-02` | CHADEMO | 1000 V | OSM 500 V |
 | `GLP-LLE-00115` | Galp Power OPC | `LLE-00115-02` | CHADEMO | 1000 V | OSM 500 V |
@@ -599,20 +611,22 @@ Catálogo: 155 modelos (111 DC com tensão), sha256 `ee06f4371ae3`; dos 1388 loc
 | `GLP-TVD-00029` | Galp Power OPC | `TVD-00029-02` | CCS | 500 V | OSM 1000 V |
 | `GLP-TVD-00030` | Galp Power OPC | `TVD-00030-02` | CCS | 500 V | OSM 1000 V |
 | `GLP-VIZ-00007` | Galp Power OPC | `VIZ-00007-01`, `VIZ-00007-02` | CCS | 400 V | OSM 1000 V; Hellonext H2 60 (1000 V) |
-| `REP-ARC-00010` | REPSOL Portuguesa Lda | `ARC-00010-01` | CCS | 400 V | OSM 1000 V |
-| `REP-AVR-00038` | REPSOL Portuguesa Lda | `AVR-00038-02` | CCS | 400 V | OSM 1000 V |
-| `REP-CVL-00057` | REPSOL Portuguesa Lda | `CVL-00057-01`, `CVL-00057-02` | CCS | 400 V | OSM 1000 V; Power Electronics NB 120 (1000 V) |
-| `REP-FIG-00072` | REPSOL Portuguesa Lda | `FIG-00072-01`, `FIG-00072-02` | CCS | 400 V | OSM 1000 V; Hellonext H2 120 (1000 V) |
-| `REP-FLG-00015` | REPSOL Portuguesa Lda | `FLG-00015-02` | CCS | 400 V | OSM 1000 V |
-| `REP-GDL-00034` | REPSOL Portuguesa Lda | `GDL-00034-01`, `GDL-00034-02` | CCS | 400 V | OSM 1000 V; Hellonext H2 150 (1000 V) |
-| `REP-GMR-00164` | REPSOL Portuguesa Lda | `GMR-00164-02` | CHADEMO | 800 V | OSM 500 V |
-| `REP-LLE-00253` | REPSOL Portuguesa Lda | `LLE-00253-01` | CCS | 400 V | OSM 1000 V |
-| `REP-LLE-00253` | REPSOL Portuguesa Lda | `LLE-00253-02` | CHADEMO | 800 V | OSM 500 V |
-| `REP-MTJ-00127` | REPSOL Portuguesa Lda | `MTJ-00127-01` | CCS | 400 V | OSM 1000 V; Power Electronics NB 120 (1000 V) |
-| `REP-PRD-00046` | REPSOL Portuguesa Lda | `PRD-00046-01`, `PRD-00046-02` | CCS | 400 V | OSM 1000 V; Hellonext H2 120 (1000 V) |
-| `REP-PRT-00307` | REPSOL Portuguesa Lda | `PRT-00307-01`, `PRT-00307-02` | CCS | 400 V | OSM 1000 V |
-| `REP-VCT-00076` | REPSOL Portuguesa Lda | `VCT-00076-02` | CCS | 400 V | OSM 1000 V |
-| `REP-VCT-00077` | REPSOL Portuguesa Lda | `PT-REP-E18379-2` | CCS | 400 V | OSM 1000 V |
+| `EDP-ACH-00041` | EDP Comercial | `PT-EDP-EACH-00041-1`, `PT-EDP-EACH-00041-2` | CCS | 500 V | OSM 1000 V |
+| `EDP-BJA-00068` | EDP Comercial | `PT-EDP-EBJA-00068-1`, `PT-EDP-EBJA-00068-2` | CCS | 500 V | OSM 1000 V; Starcharge Jupiter V3 (1000 V) |
+| `EDP-CTB-00080` | EDP Comercial | `PT-EDP-ECTB-00080-1` | CCS | 500 V | OSM 1000 V |
+| `EDP-CTM-00012` | EDP Comercial | `PT-EDP-ECTM-00012-1`, `PT-EDP-ECTM-00012-2` | CCS | 500 V | OSM 1000 V; Starcharge Jupiter V3 (1000 V) |
+| `EDP-LLE-00255` | EDP Comercial | `PT-EDP-ELLE-00255-1`, `PT-EDP-ELLE-00255-2` | CCS | 500 V | OSM 1000 V |
+| `EDP-LMG-00021` | EDP Comercial | `PT-EDP-ELMG-00021-1`, `PT-EDP-ELMG-00021-2` | CCS | 400 V | OSM 1000 V |
+| `EDP-LMG-00022` | EDP Comercial | `PT-EDP-ELMG-00022-1`, `PT-EDP-ELMG-00022-2` | CCS | 400 V | OSM 1000 V; Starcharge Jupiter V3 (1000 V) |
+| `EDP-LRA-00079` | EDP Comercial | `PT-EDP-ELRA-00079-2` | CCS | 500 V | OSM 1000 V |
+| `EDP-MGR-00027` | EDP Comercial | `PT-EDP-EMGR-00027-1`, `PT-EDP-EMGR-00027-2` | CCS | 500 V | OSM 1000 V; Efacec QC60 (1000 V) |
+| `EDP-ORM-00017` | EDP Comercial | `PT-EDP-EORM-00017-1`, `PT-EDP-EORM-00017-2` | CCS | 500 V | OSM 1000 V; Starcharge Titan V3 (1000 V) |
+| `EDP-PNF-00012` | EDP Comercial | `PT-EDP-EPNF-00012-2` | CCS | 500 V | OSM 1000 V; Efacec HV160 (1000 V) |
+| `EDP-SNT-00227` | EDP Comercial | `PT-EDP-ESNT-00227-1`, `PT-EDP-ESNT-00227-2` | CCS | 500 V | OSM 1000 V |
+| `EDP-SNT-00231` | EDP Comercial | `PT-EDP-ESNT-00231-2` | CCS | 500 V | OSM 1000 V |
+| `EDP-TVR-00034` | EDP Comercial | `PT-EDP-ETVR-00034-1`, `PT-EDP-ETVR-00034-2` | CCS | 500 V | OSM 1000 V; Starcharge Jupiter V3 (1000 V) |
+| `EDP-VND-00008` | EDP Comercial | `PT-EDP-EVND-00008-2` | CCS | 500 V | OSM 1000 V |
+| `EDP-VRL-00013` | EDP Comercial | `PT-EDP-EVRL-00013-1`, `PT-EDP-EVRL-00013-2` | CCS | 500 V | OSM 1000 V; Starcharge Titan V3 (1000 V) |
 | `HLX-BRG-00145` | Helexia II Energy Services, Lda. | `BRG-00145-01`, `BRG-00145-02`, `BRG-00145-03`, `BRG-00145-04` | CCS | 400 V | OSM 1000 V; i-charging blueberry CLUSTER + i-charging blueberry PLUS (1000 V) |
 | `HLX-CBC-00018` | Helexia II Energy Services, Lda. | `CBC-00018-01`, `CBC-00018-02` | CCS | 400 V | OSM 1000 V; i-charging blueberry Fusion (1000 V) |
 | `HLX-CBR-00110` | Helexia II Energy Services, Lda. | `CBR-00110-02` | CCS | 400 V | OSM 1000 V |
@@ -633,10 +647,8 @@ Catálogo: 155 modelos (111 DC com tensão), sha256 `ee06f4371ae3`; dos 1388 loc
 | `HRZ-SNS-00011` | Powerdot, S.A | `SNS-00011-01` | CCS | 500 V | OSM 1000 V; Delta Slim 100 (1000 V) |
 | `HRZ-SXL-00022` | Powerdot, S.A | `SXL-00022-03` | CCS | 500 V | OSM 1000 V; Ekoenergetyka Axon Easy 60 (1000 V) |
 | `HRZ-VNG-00128` | Powerdot, S.A | `VNG-00128-02`, `VNG-00128-04`, `VNG-00128-05` | CCS | 1000 V | OSM 500 V |
-| `PRI-CBR-00061` | Prio.E Mobility Solutions, Lda | `CBR-00061-02` | CCS | 920 V | OSM 500 V |
-| `PRI-CBR-00062` | Prio.E Mobility Solutions, Lda | `CBR-00062-02` | CCS | 920 V | OSM 500 V |
-| `PRI-CBR-00063` | Prio.E Mobility Solutions, Lda | `CBR-00063-02` | CCS | 920 V | OSM 500 V |
-| `PRI-CBR-00064` | Prio.E Mobility Solutions, Lda | `CBR-00064-02` | CCS | 920 V | OSM 500 V |
+| `EPK-AVR-00111` | Telpark | `4BEA03A0-2E2D-478C-803E-A9DC57426666`, `83CF5F97-F4A1-4FAD-AC09-8E374B559F3A` | CCS | 400 V | OSM 1000 V; Power Electronics NB 60 (1000 V) |
+| `EPK-LSB-01482` | Telpark | `C207ED1C-47EC-4E82-BE0A-2B8E3058973E`, `38B59398-023C-4D04-B5CC-3F1F7BC6D5D2`, `E38DE958-887D-4961-B903-14366B95607F`, `A9D88587-778D-47AD-873F-FE54C74B11BD`, `BC3A73AD-65C6-4C53-AB92-B223254FF1F4`, `9DB3D8F0-76BF-4385-8D00-BC63F7BED40B`, `FB81FC9D-CC5A-477E-B885-DDB1AFC1F812`, `1FD08045-720C-4C64-BC6A-334D7BC462DD`, `5EBE8A0A-BC75-4C9B-900D-08387AEE9892`, `08930350-7946-4048-AD20-A5C5770681FE`, `BBDEEE91-B585-47C7-BF34-BED48982EA9A`, `D9196257-78DA-4AE1-BA8B-6A03A6C67174` | CCS | 400 V | OSM 1000 V; Alpitronic HYC_300 (1000 V) |
 | `PRI-CBR-00080` | Prio.E Mobility Solutions, Lda | `CBR-00080-02` | CCS | 500 V | OSM 1000 V |
 | `PRI-CRS-00004` | Prio.E Mobility Solutions, Lda | `CRS-00004-02` | CCS | 500 V | OSM 1000 V |
 | `PRI-FLG-00020` | Prio.E Mobility Solutions, Lda | `FLG-00020-01`, `FLG-00020-02` | CCS | 450 V | OSM 1000 V; Hellonext H2 90 (1000 V) |
@@ -648,15 +660,12 @@ Catálogo: 155 modelos (111 DC com tensão), sha256 `ee06f4371ae3`; dos 1388 loc
 | `PRI-TND-00007` | Prio.E Mobility Solutions, Lda | `TND-00007-02` | CCS | 500 V | OSM 1000 V |
 | `PRI-VNF-00026` | Prio.E Mobility Solutions, Lda | `VNF-00026-02` | CCS | 500 V | OSM 1000 V |
 | `PRI-VNP-00002` | Prio.E Mobility Solutions, Lda | `VNP-00002-01` | CHADEMO | 750 V | OSM 500 V |
-| `EPK-AVR-00111` | Telpark | `4BEA03A0-2E2D-478C-803E-A9DC57426666`, `83CF5F97-F4A1-4FAD-AC09-8E374B559F3A` | CCS | 400 V | OSM 1000 V; Power Electronics NB 60 (1000 V) |
-| `EPK-LSB-01482` | Telpark | `C207ED1C-47EC-4E82-BE0A-2B8E3058973E`, `38B59398-023C-4D04-B5CC-3F1F7BC6D5D2`, `E38DE958-887D-4961-B903-14366B95607F`, `A9D88587-778D-47AD-873F-FE54C74B11BD`, `BC3A73AD-65C6-4C53-AB92-B223254FF1F4`, `9DB3D8F0-76BF-4385-8D00-BC63F7BED40B`, `FB81FC9D-CC5A-477E-B885-DDB1AFC1F812`, `1FD08045-720C-4C64-BC6A-334D7BC462DD`, `5EBE8A0A-BC75-4C9B-900D-08387AEE9892`, `08930350-7946-4048-AD20-A5C5770681FE`, `BBDEEE91-B585-47C7-BF34-BED48982EA9A`, `D9196257-78DA-4AE1-BA8B-6A03A6C67174` | CCS | 400 V | OSM 1000 V; Alpitronic HYC_300 (1000 V) |
-| `REP-ALD-00012` | REPSOL PORTUGUESA LDA | `ALD-00012-02` | CCS | 750 V | OSM 500 V |
+| `REP-ALD-00012` | REPSOL PORTUGUESA LDA | `ALD-00012-02` | CCS | 750 V | OSM 500 V; Volt-E ST36STAT (500 V) |
 | `REP-AVR-00046` | REPSOL PORTUGUESA LDA | `AVR-00046-02` | CCS | 750 V | OSM 500 V; Volt-E ST36STAT (500 V) |
-| `REP-BRG-00118` | REPSOL PORTUGUESA LDA | `BRG-00118-02` | CCS | 750 V | OSM 500 V |
-| `REP-GRD-00019` | REPSOL PORTUGUESA LDA | `GRD-00019-02` | CCS | 750 V | OSM 500 V |
-| `REP-LRA-00182` | REPSOL PORTUGUESA LDA | `LRA-00182-02` | CCS | 750 V | OSM 500 V |
+| `REP-BRG-00118` | REPSOL PORTUGUESA LDA | `BRG-00118-02` | CCS | 750 V | OSM 500 V; Volt-E ST36STAT (500 V) |
+| `REP-GRD-00019` | REPSOL PORTUGUESA LDA | `GRD-00019-02` | CCS | 750 V | OSM 500 V; Volt-E ST36STAT (500 V) |
+| `REP-LRA-00182` | REPSOL PORTUGUESA LDA | `LRA-00182-02` | CCS | 750 V | OSM 500 V; Volt-E ST36STAT (500 V) |
 | `REP-ODV-00012` | REPSOL PORTUGUESA LDA | `ODV-00012-02` | CCS | 750 V | OSM 500 V; Volt-E ST30STAT (500 V) |
-| `REP-PRT-00140` | REPSOL PORTUGUESA LDA | `PRT-00140-02` | CCS | 920 V | OSM 500 V |
 | `REP-PRT-00333` | REPSOL PORTUGUESA LDA | `PRT-00333-02` | CCS | 400 V | OSM 1000 V; Hellonext H2 120 (1000 V) |
 | `REP-SNT-00053` | REPSOL PORTUGUESA LDA | `SNT-00053-02` | CCS | 500 V | OSM 1000 V; Hellonext H2 150 (1000 V) |
 | `REP-TNV-00008` | REPSOL PORTUGUESA LDA | `TNV-00008-02` | CCS | 750 V | OSM 500 V; Volt-E ST30STAT (500 V) |
@@ -683,6 +692,7 @@ Catálogo: 155 modelos (111 DC com tensão), sha256 `ee06f4371ae3`; dos 1388 loc
 | `GLG-VCD-00016` | Galpgeste | `VCD-00016-01`, `VCD-00016-02` | CCS | 500 V | OSM 1000 V |
 | `GLG-VCT-00029` | Galpgeste | `VCT-00029-01` | CCS | 500 V | OSM 1000 V; Hellonext H2 120 (1000 V) |
 | `GLG-VCT-00030` | Galpgeste | `VCT-00030-01` | CCS | 500 V | OSM 1000 V |
+| `ATL-LLE-00175` | Atlante | `LLE-00175-02` | CCS | 500 V | OSM 1000 V |
 | `ATL-MAI-00046` | Atlante | `MAI-00046-02` | CCS | 920 V | OSM 500 V |
 | `ATL-OER-00192` | Atlante | `OER-00192-02` | CCS | 750 V | OSM 500 V |
 | `ATL-PTG-00021` | Atlante | `PTG-00021-02` | CCS | 750 V | OSM 500 V |
@@ -712,22 +722,22 @@ Catálogo: 155 modelos (111 DC com tensão), sha256 `ee06f4371ae3`; dos 1388 loc
 | `REM-BCL-00050` | MOTA-ENGIL REMO CHARGING S.A | `BCL-00050-02` | CCS | 500 V | OSM 1000 V; Alpitronic HYC_150 (1000 V) |
 | `DTE-BMT-00008` | DTE, Instalacoes Especiais | `BMT-00008-01` | CHADEMO | 600 V | OSM 500 V |
 
-### 14b. [BAIXO] Mesma classe, tensão diferente da da tomada no OSM (2492 tomadas em 1222 locais)
+### 14b. [BAIXO] Mesma classe, tensão diferente da da tomada no OSM (2485 tomadas em 1235 locais)
 
 Por operador e padrão (o valor do NAP e o da tomada no OSM); a lista por tomada fica em `data/hardware_findings.csv`.
 
 | operador | NAP | OSM | tomadas | locais | exemplos |
 |---|---:|---:|---:|---:|---|
-| Galp Power OPC | 950 V | 1000 V | 466 | 241 | `GLP-ABF-00061`, `GLP-ABF-00164`, `GLP-ABT-00012` |
-| Galp Power OPC | 400 V | 500 V | 66 | 61 | `GLP-ACB-00038`, `GLP-ACB-00039`, `GLP-ACN-00012` |
+| Galp Power OPC | 950 V | 1000 V | 464 | 240 | `GLP-ABF-00061`, `GLP-ABF-00164`, `GLP-ABT-00012` |
+| Galp Power OPC | 400 V | 500 V | 65 | 60 | `GLP-ACB-00038`, `GLP-ACB-00039`, `GLP-ACN-00012` |
 | Galp Power OPC | 550 V | 1000 V | 25 | 13 | `GLP-ARV-00009`, `GLP-EPS-00020`, `GLP-EPS-00023` |
 | Galp Power OPC | 900 V | 1000 V | 8 | 4 | `GLP-GMR-00113`, `GLP-MMN-00014`, `GLP-PNF-00028` |
 | Galp Power OPC | 920 V | 1000 V | 5 | 4 | `GLP-LRA-00134`, `GLP-OER-00082`, `GLP-OER-00085` |
-| Atlante Infra Portugal, S.A | 400 V | 500 V | 535 | 277 | `ATL-ABF-00109`, `ATL-ACB-00015`, `ATL-ACH-00026` |
+| Atlante Infra Portugal, S.A | 400 V | 500 V | 531 | 278 | `ATL-ABF-00109`, `ATL-ACB-00015`, `ATL-ACH-00026` |
 | Atlante Infra Portugal, S.A | 800 V | 1000 V | 8 | 5 | `ATL-BRR-00131`, `ATL-LLE-00177`, `ATL-LLE-00178` |
 | Atlante Infra Portugal, S.A | 600 V | 1000 V | 8 | 4 | `ATL-TND-00011`, `ATL-TND-00012`, `ATL-VVR-00004` |
 | Atlante Infra Portugal, S.A | 750 V | 1000 V | 2 | 2 | `ATL-TRF-00016`, `ATL-VNF-00041` |
-| Powerdot, S.A | 800 V | 1000 V | 189 | 77 | `HRZ-ACB-00021`, `HRZ-ACB-00041`, `HRZ-AMD-00098` |
+| Powerdot, S.A | 800 V | 1000 V | 191 | 78 | `HRZ-ACB-00021`, `HRZ-ACB-00041`, `HRZ-AMD-00098` |
 | Powerdot, S.A | 920 V | 1000 V | 96 | 55 | `HRZ-ALD-00004`, `HRZ-ALD-00017`, `HRZ-ALQ-00014` |
 | Powerdot, S.A | 400 V | 500 V | 30 | 30 | `HRZ-ACB-00021`, `HRZ-AVR-00071`, `HRZ-CDN-00005` |
 | Powerdot, S.A | 950 V | 1000 V | 4 | 2 | `HRZ-CLD-00021`, `HRZ-SXL-00019` |
@@ -735,12 +745,12 @@ Por operador e padrão (o valor do NAP e o da tomada no OSM); a lista por tomada
 | Powerdot, S.A | 925 V | 1000 V | 2 | 1 | `HRZ-VNG-00094` |
 | Powerdot, S.A | 750 V | 1000 V | 1 | 1 | `HRZ-BCL-00020` |
 | Powerdot, S.A | 700 V | 1000 V | 1 | 1 | `HRZ-MTJ-00035` |
-| REPSOL Portuguesa Lda | 400 V | 500 V | 269 | 140 | `REP-ABT-00036`, `REP-ACH-00008`, `REP-ALM-00042` |
+| REPSOL Portuguesa Lda | 400 V | 500 V | 254 | 140 | `REP-ABT-00036`, `REP-ACH-00008`, `REP-ALM-00042` |
 | REPSOL Portuguesa Lda | 800 V | 1000 V | 30 | 18 | `REP-CBR-00150`, `REP-FAR-00086`, `REP-FAR-00087` |
 | Tesla | 470 V | 500 V | 176 | 7 | `TSL-24a78962-ea22-4aa2-ad71-7413f8a68166`, `TSL-381a4acf-82a3-4799-bd23-291aa7c319a6`, `TSL-85086418-c731-4784-86cc-e0d004445db5` |
 | Tesla | 464 V | 500 V | 2 | 1 | `TSL-fff4f058-9075-4833-96f5-e021cb263344` |
 | Prio.E Mobility Solutions, Lda | 950 V | 1000 V | 91 | 53 | `PRI-ALD-00007`, `PRI-AMT-00037`, `PRI-ARL-00004` |
-| Prio.E Mobility Solutions, Lda | 920 V | 1000 V | 23 | 12 | `PRI-ACB-00032`, `PRI-LSB-00846`, `PRI-OBD-00019` |
+| Prio.E Mobility Solutions, Lda | 920 V | 1000 V | 27 | 16 | `PRI-ACB-00032`, `PRI-CBR-00061`, `PRI-CBR-00062` |
 | Prio.E Mobility Solutions, Lda | 900 V | 1000 V | 6 | 4 | `PRI-CVL-00018`, `PRI-MTS-00121`, `PRI-OBD-00019` |
 | Prio.E Mobility Solutions, Lda | 750 V | 1000 V | 4 | 3 | `PRI-VLF-00005`, `PRI-VNG-00165`, `PRI-VNP-00002` |
 | Prio.E Mobility Solutions, Lda | 450 V | 500 V | 4 | 2 | `PRI-LLE-00193`, `PRI-TRF-00017` |
@@ -760,20 +770,21 @@ Por operador e padrão (o valor do NAP e o da tomada no OSM); a lista por tomada
 | Helexia II Energy Services, Lda. | 400 V | 500 V | 10 | 6 | `HLX-ABF-00086`, `HLX-FNC-00045`, `HLX-LRA-00096` |
 | Helexia II Energy Services, Lda. | 950 V | 1000 V | 6 | 3 | `HLX-LSB-00705`, `HLX-PPS-00002`, `HLX-STB-00076` |
 | Helexia II Energy Services, Lda. | 920 V | 1000 V | 5 | 5 | `HLX-LSB-00708`, `HLX-PRT-00257`, `HLX-STR-00046` |
-| Atlante Infra Portugal S.A. | 400 V | 500 V | 19 | 10 | `ATL-ABT-00034`, `ATL-AVR-00063`, `ATL-BRR-00143` |
+| Atlante Infra Portugal S.A. | 400 V | 500 V | 20 | 11 | `ATL-ABT-00034`, `ATL-AVR-00063`, `ATL-BRR-00143` |
+| EDP Comercial | 920 V | 1000 V | 10 | 10 | `EDP-LRA-00077`, `EDP-LRA-00080`, `EDP-LRS-00056` |
+| EDP Comercial | 400 V | 500 V | 4 | 4 | `EDP-LSB-00400`, `EDP-MCD-00003`, `EDP-MDL-00006` |
+| EDP Comercial | 800 V | 1000 V | 1 | 1 | `EDP-MAI-00093` |
 | Mobiletric | 920 V | 1000 V | 8 | 6 | `MLT-OER-00038`, `MLT-OER-00057`, `MLT-PRT-00136` |
 | Mobiletric | 950 V | 1000 V | 6 | 4 | `MLT-MTA-00004`, `MLT-MTA-00005`, `MLT-OER-00099` |
 | REPSOL PORTUGUESA LDA | 400 V | 500 V | 8 | 6 | `REP-ABT-00037`, `REP-AVR-00046`, `REP-CBR-00151` |
 | REPSOL PORTUGUESA LDA | 950 V | 1000 V | 3 | 2 | `REP-CBR-00151`, `REP-LRA-00183` |
 | REPSOL PORTUGUESA LDA | 800 V | 1000 V | 2 | 1 | `REP-LOU-00014` |
+| REPSOL PORTUGUESA LDA | 920 V | 1000 V | 1 | 1 | `REP-PRT-00140` |
 | WOWPLUG | 400 V | 500 V | 11 | 6 | `TRK-LSB-01076`, `TRK-PCV-00005`, `TRK-SJM-00022` |
 | WOWPLUG | 950 V | 1000 V | 2 | 1 | `TRK-SRN-00003` |
 | Atlante | 400 V | 500 V | 6 | 3 | `ATL-ABT-00030`, `ATL-AVR-00062`, `ATL-CHV-00017` |
 | Atlante | 600 V | 1000 V | 4 | 2 | `ATL-BGC-00017`, `ATL-BGC-00018` |
 | Atlante | 920 V | 1000 V | 1 | 1 | `ATL-ALQ-00017` |
-| EDP Comercial | 400 V | 500 V | 4 | 4 | `EDP-LSB-00400`, `EDP-MCD-00003`, `EDP-MDL-00006` |
-| EDP Comercial | 920 V | 1000 V | 3 | 3 | `EDP-LRS-00056`, `EDP-VND-00016`, `EDP-VND-00019` |
-| EDP Comercial | 800 V | 1000 V | 1 | 1 | `EDP-MAI-00093` |
 | Veimonte Lda | 400 V | 500 V | 8 | 4 | `VEI-EPS-00005`, `VEI-PRT-00211`, `VEI-VCD-00040` |
 | Original Sunenergy, Lda | 920 V | 1000 V | 6 | 5 | `NRG-EVR-00031`, `NRG-GRD-00021`, `NRG-STR-00026` |
 | Siva - Sociedade de Importação de Veículos Automóveis / (sub-CEME da Iberdola) | 400 V | 500 V | 4 | 3 | `MOO-LRS-00060`, `MOO-MOBI-CTB-00004`, `MOO-MOBI-PRT-00089` |
