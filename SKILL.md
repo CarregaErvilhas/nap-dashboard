@@ -16,7 +16,7 @@ description: >-
 
 Analyses Portugal's public EV charging infrastructure by joining official open sources. Output: a **static site in `site/`** (three pages, no external libs, data in `site/data/*.json`, preview with `python3 -m http.server --directory site`), `facts.md`, and `errors.md` (items to report to data owners).
 
-The skill always pulls **fresh data from the official origins** — never rely on a stale local copy. `scripts/fetch_data.sh` downloads everything (~230 MB).
+The skill always pulls **fresh data from the official origins** — never rely on a stale local copy. `scripts/fetch_data.sh` downloads everything (~230 MB; the static NAP feed is reused only when the origin confirms with a 304 that it hasn't changed).
 
 ## What this skill does
 

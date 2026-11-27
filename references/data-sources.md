@@ -7,6 +7,8 @@ Todas as fontes são públicas e de livre acesso. Descarregar tudo com `scripts/
 - **Inventário estático** (locais/pontos/conectores), ~190 MB: `https://pgm.mobie.pt/integration/nap/evChargingInfra`
 - **Estado dinâmico + preços** (por ponto, inclui `publicationTime`), ~40 MB: `https://pgm.mobie.pt/integration/nap/evActualStatus` Alternativa opcional (`NAP_STATUS_SOURCE=archive`): `v1/<CC>/status.json.gz` do AmpereArchive, um espelho de 1–2 MB do mesmo estado; ver `scripts/archive_status.py`.
 
+O inventário estático é pedido com `If-None-Match` (ETag em `data/evChargingInfra_latest.xml.etag`): com 304 usa-se a cópia local.
+
 Ambos são XML DATEX II 3.3 com os namespaces `energyInfrastructure`, `facilities`, `locationReferencing`, `locationExtension`, `commonExtension` e `common`. Os schemas (v3) estão versionados em `assets/schemas/` e foram descarregados de `http://datex2.eu/schema/3/<module>` (que serve o XSD).
 
 Licença: os endpoints do NAP são publicados sob licenças de livre acesso (ver as páginas NAP do IMT-IP, `nap-portugal.imt-ip.pt/nap/multimodalsupplydetail/148` e `/149`). Termos do sítio do IMT: uso livre com menção da fonte, sem fins lucrativos nem ilícitos — compatível com a licença não comercial deste repo, mas o rodapé do site tem de manter a atribuição. Note-se que o MOBI.E passou a exercer de EADME do NAP ao abrigo do DL 93/2025; decorre um regime transitório até 31 de dezembro de 2027.

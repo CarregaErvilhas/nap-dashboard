@@ -30,14 +30,11 @@ FILES = ('stats.json', 'panels.json', 'sites.json', 'points.json', 'outline.json
 # Fields each record must carry; the pages index them without guards.
 SITE_FIELDS = ('ext', 'name', 'city', 'op', 'region', 'lat', 'lon', 'status',
                'npts', 'kw', 'pw', 'conns', 'pay')
+# Per socket. `fees` (the network model's plans, every tier), `kw_src`, `nap_kw`
+# and `issues` come from ohmigo_dataset.py.
 POINT_FIELDS = ('point_id', 'site_external_id', 'city', 'operator_name', 'region',
-                'pw_class', 'kw', 'connectors', 'status', 'opc', 'regime', 'nap', 'pay')
-# Plus one of these shapes. The first is the network model's (ohmigo_dataset.py):
-# the fees with every tier, where the power comes from and the NAP-only issues.
-# The second is the site data from before the model, one string per fee
-# component; find.js renders both, so the committed site/data stays valid until
-# the first refresh rewrites it. Drop it once that refresh has run.
-POINT_SHAPES = (('fees', 'kw_src', 'nap_kw', 'issues'), ('ENERGY', 'TIME', 'FLAT'))
+                'pw_class', 'kw', 'connectors', 'status', 'opc', 'regime', 'nap', 'pay',
+                'fees', 'kw_src', 'nap_kw', 'issues')
 STATS_KEYS = ('snapshot', 'kpis', 'kpis_pt', 'status', 'status_pw', 'region',
               'op_sites', 'op_pts', 'pw', 'conn', 'city', 'occ_pw', 'occ_op',
               'price_op', 'price_stats')
@@ -98,8 +95,6 @@ def check(data):
             continue
         for i, r in enumerate(rows):
             miss = [f for f in fields if f not in r]
-            if name == 'points' and not any(all(f in r for f in shape) for shape in POINT_SHAPES):
-                miss.append(' ou '.join('+'.join(shape) for shape in POINT_SHAPES))
             if miss:
                 errs.append(f'{name}[{i}] sem {miss}')
                 break
