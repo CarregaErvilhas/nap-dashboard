@@ -39,6 +39,7 @@ from zoneinfo import ZoneInfo
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from archive_history import PATH_RE, from_manifest  # noqa: E402
 from archive_stats import DOWN, NOT_OBSERVED  # noqa: E402
+import socket_states  # noqa: E402
 from network_24h import fetch  # noqa: E402
 
 SAMPLE_MIN = 5
@@ -91,9 +92,36 @@ def next_month(m):
 
 # ------------------------------------------------------------------ células
 
-def day_cells(con, root, day, out, has, country='PT'):
+def day_evidence(con, root, day, out, has, country='PT'):
+    """As provas dos pares de tomadas partilhadas de um dia (socket_states.evidence)."""
+    if not has('status_events', day):
+        return False
+    con.execute(f"""CREATE OR REPLACE TEMP TABLE dev AS
+      SELECT site_id, point_id, ts, prev_status, status
+      FROM read_parquet({lit(f'{root}/table=status_events/date={day}/*.parquet')}, union_by_name=true)
+      WHERE country = {lit(country)}""")
+    socket_states.evidence(con, 'dev', 'devd')
+    con.execute(f"COPY devd TO {lit(out)} (FORMAT parquet, COMPRESSION zstd)")
+    return True
+
+
+def day_pairs(con, pairs_dir, day):
+    """Os pares aprendidos nos LEARN_DAYS dias até `day`, das provas do estado."""
+    first = add_days(day, -(socket_states.LEARN_DAYS - 1))
+    files = [os.path.join(pairs_dir, f) for f in sorted(os.listdir(pairs_dir))
+             if f.endswith('.parquet') and first <= f[:10] <= day] if os.path.isdir(pairs_dir) else []
+    if not files:
+        socket_states.empty_pairs(con)
+        return
+    socket_states.learn(con, f"SELECT * FROM read_parquet([{', '.join(lit(f) for f in files)}])")
+
+
+def day_cells(con, root, day, out, has, country='PT', carry_in=None, carry_out=None):
     """As células de um dia UTC, de uma cópia local do arquivo em
-    table=<t>/date=<d>/*.parquet. Devolve (leituras, horas), ou None sem leituras."""
+    table=<t>/date=<d>/*.parquet, com os estados relidos (socket_states, pares
+    na tabela `pairs`). `carry_in`: o Parquet do dia anterior com as tomadas
+    que acabaram em `unknown` e desde quando; `carry_out`: o deste dia.
+    Devolve (leituras, horas), ou None sem leituras."""
     if not has('polls', day) or not has('snapshots', day):
         return None
     def src(t, cols):
@@ -109,11 +137,24 @@ def day_cells(con, root, day, out, has, country='PT'):
     reads, hours = con.execute('SELECT count(*), count(DISTINCT h) FROM reads').fetchone()
     if not reads:
         return None
-    events = (f"UNION ALL SELECT live, site_id, point_id, status, ts FROM ({src('status_events', 'site_id, point_id, status, ts')})"
+    events = (f"UNION ALL SELECT live, site_id, point_id, status, ts, NULL::TIMESTAMPTZ, false "
+              f"FROM ({src('status_events', 'site_id, point_id, status, ts')})"
               if has('status_events', day) else '')
-    con.execute(f"""CREATE OR REPLACE TEMP TABLE st AS
-      SELECT live, site_id, point_id, status, TIMESTAMPTZ '1970-01-01 00:00:00+00' AS ts
-      FROM ({src('snapshots', 'site_id, point_id, status')}) {events}""")
+    # O retrato entra uma hora antes do dia (antes de qualquer leitura dele);
+    # um `unknown` que vinha de ontem traz o seu início no carry.
+    carry = (f"LEFT JOIN read_parquet({lit(carry_in)}) cy ON cy.k = s.live AND cy.site_id = s.site_id "
+             f"AND cy.point_id = s.point_id AND s.status = 'unknown'" if carry_in else '')
+    con.execute(f"""CREATE OR REPLACE TEMP TABLE st0 AS
+      SELECT s.live AS k, s.site_id, s.point_id, s.status, {d0} - INTERVAL 1 HOUR AS ts,
+             {'cy.since' if carry_in else 'NULL::TIMESTAMPTZ'} AS since, true AS pseudo
+      FROM ({src('snapshots', 'site_id, point_id, status')}) s {carry} {events}""")
+    socket_states.relabel(con, 'st0', 'st1')
+    con.execute('CREATE OR REPLACE TEMP TABLE st AS SELECT k AS live, site_id, point_id, status, ts, since FROM st1')
+    if carry_out:
+        con.execute(f"""COPY (
+          SELECT live AS k, site_id, point_id, arg_max(since, ts) AS since FROM st
+          GROUP BY ALL HAVING arg_max(status, ts) IN ('unknown', {lit(socket_states.UNKNOWN_LONG)})
+        ) TO {lit(carry_out)} (FORMAT parquet, COMPRESSION zstd)""")
     con.execute(f"""COPY (
       WITH keys AS (SELECT DISTINCT live, site_id, point_id FROM st),
       grid AS (SELECT k.live, k.site_id, k.point_id, r.t, r.h FROM keys k JOIN reads r USING (live)),
@@ -123,7 +164,8 @@ def day_cells(con, root, day, out, has, country='PT'):
       SELECT site_id, point_id, h, CAST(count(*) AS INTEGER) AS n,
              CAST(count(*) FILTER (WHERE status = 'charging') AS INTEGER) AS c,
              CAST(count(*) FILTER (WHERE status = 'available') AS INTEGER) AS a,
-             CAST(count(*) FILTER (WHERE status IN {DOWN}) AS INTEGER) AS x
+             CAST(count(*) FILTER (WHERE status IN {DOWN}) AS INTEGER) AS x,
+             CAST(count(*) FILTER (WHERE status = {lit(socket_states.SHARED)}) AS INTEGER) AS s
       FROM state WHERE status NOT IN {NOT_OBSERVED}
       GROUP BY ALL ORDER BY site_id, point_id, h
     ) TO {lit(out)} (FORMAT parquet, COMPRESSION zstd)""")
@@ -148,6 +190,15 @@ def site_zones(con, root):
       FROM sa""")
 
 
+def col_or_zero(con, glob_, col, alias):
+    """`alias.col`, ou 0 quando nenhum Parquet de `glob_` a tem: as células e os
+    meses de antes da tomada partilhada não têm `s`."""
+    for f in glob.glob(glob_):
+        if col in [r[0] for r in con.execute(f'DESCRIBE SELECT * FROM read_parquet({lit(f)})').fetchall()]:
+            return f'coalesce({alias}.{col}, 0)'
+    return '0'
+
+
 def _local_cells(con, cells_glob, idmap):
     """`lc`: cada célula com o id do arquivo (`raw`), o de hoje (`site`) e a hora
     local. O fuso procura-se pelo id do arquivo (o static_versions tem os
@@ -158,9 +209,9 @@ def _local_cells(con, cells_glob, idmap):
         con.executemany('INSERT INTO idmap VALUES (?, ?)', idmap)
     con.execute(f"""CREATE OR REPLACE TEMP VIEW lc AS
       SELECT c.site_id AS raw, coalesce(m.site, c.site_id) AS site, c.point_id, c.h,
-             c.n AS rn, c.c AS rc, c.a AS ra, c.x AS rx,
+             c.n AS rn, c.c AS rc, c.a AS ra, c.x AS rx, {col_or_zero(con, cells_glob, 's', 'c')} AS rs,
              timezone(coalesce(z1.tz, z2.tz, 'Europe/Lisbon'), c.h) AS lt
-      FROM read_parquet({lit(cells_glob)}) c
+      FROM read_parquet({lit(cells_glob)}, union_by_name=true) c
       LEFT JOIN idmap m ON m.raw = c.site_id
       LEFT JOIN zones z1 ON z1.site_id = c.site_id
       LEFT JOIN zones z2 ON z2.site_id = m.site""")
@@ -173,7 +224,7 @@ def fold_month(con, cells_glob, month, out):
     _local_cells(con, cells_glob, [])
     con.execute(f"""COPY (
       SELECT raw AS site, point_id, {lit(month)} AS month, CAST(count(*) AS INTEGER) AS n,
-             sum(rc / rn) AS c, sum(ra / rn) AS a, sum(rx / rn) AS x
+             sum(rc / rn) AS c, sum(ra / rn) AS a, sum(rx / rn) AS x, sum(rs / rn) AS s
       FROM lc WHERE strftime(lt, '%Y-%m') = {lit(month)} GROUP BY ALL ORDER BY site, point_id
     ) TO {lit(out)} (FORMAT parquet, COMPRESSION zstd)""")
 
@@ -190,7 +241,7 @@ def build_sites(con, cells_glob, months_glob, open_months, idmap, months, until)
     d_end = (until - datetime.timedelta(seconds=1)).astimezone(LISBON).date().isoformat()
     d0, w0 = add_days(d_end, -(DAYS - 1)), add_days(d_end, -(HEAT_DAYS - 1))
     h0e = int(h0.timestamp())
-    agg = 'count(*) AS n, sum(rc / rn) AS c, sum(ra / rn) AS a, sum(rx / rn) AS x'
+    agg = 'count(*) AS n, sum(rc / rn) AS c, sum(ra / rn) AS a, sum(rx / rn) AS x, sum(rs / rn) AS s'
     con.execute(f"""CREATE OR REPLACE TEMP TABLE b_h AS
       SELECT site, point_id, CAST((epoch(h) - {h0e}) // 3600 AS INTEGER) AS i, {agg}
       FROM lc WHERE epoch(h) >= {h0e} GROUP BY ALL""")
@@ -204,26 +255,29 @@ def build_sites(con, cells_glob, months_glob, open_months, idmap, months, until)
     parts = []
     if open_months:
         parts.append(f"""SELECT site, point_id, strftime(lt, '%Y-%m') AS m, count(*) AS n,
-            sum(rc / rn) AS c, sum(ra / rn) AS a, sum(rx / rn) AS x
+            sum(rc / rn) AS c, sum(ra / rn) AS a, sum(rx / rn) AS x, sum(rs / rn) AS s
             FROM lc WHERE strftime(lt, '%Y-%m') IN ({', '.join(lit(m) for m in open_months)}) GROUP BY ALL""")
     if months_glob:
-        parts.append(f"""SELECT coalesce(im.site, f.site) AS site, f.point_id, f.month AS m, f.n, f.c, f.a, f.x
-            FROM read_parquet({lit(months_glob)}) f LEFT JOIN idmap im ON im.raw = f.site""")
+        parts.append(f"""SELECT coalesce(im.site, f.site) AS site, f.point_id, f.month AS m, f.n, f.c, f.a, f.x,
+            {col_or_zero(con, months_glob, 's', 'f')} AS s
+            FROM read_parquet({lit(months_glob)}, union_by_name=true) f LEFT JOIN idmap im ON im.raw = f.site""")
     if parts:
         con.execute(f"""CREATE OR REPLACE TEMP TABLE b_m AS
-          SELECT site, point_id, list_position({mlist}, m) - 1 AS i, sum(n) AS n, sum(c) AS c, sum(a) AS a, sum(x) AS x
+          SELECT site, point_id, list_position({mlist}, m) - 1 AS i, sum(n) AS n, sum(c) AS c, sum(a) AS a, sum(x) AS x, sum(s) AS s
           FROM ({' UNION ALL '.join(parts)}) WHERE list_position({mlist}, m) IS NOT NULL GROUP BY ALL""")
     else:
-        con.execute('CREATE OR REPLACE TEMP TABLE b_m (site VARCHAR, point_id VARCHAR, i INTEGER, n BIGINT, c DOUBLE, a DOUBLE, x DOUBLE)')
+        con.execute('CREATE OR REPLACE TEMP TABLE b_m (site VARCHAR, point_id VARCHAR, i INTEGER, n BIGINT, c DOUBLE, a DOUBLE, x DOUBLE, s DOUBLE)')
     con.execute("""CREATE OR REPLACE TEMP TABLE pts AS
       SELECT DISTINCT site, point_id FROM (
         SELECT site, point_id FROM b_h UNION ALL SELECT site, point_id FROM b_d
         UNION ALL SELECT site, point_id FROM b_w UNION ALL SELECT site, point_id FROM b_m)""")
-    # Um balde: [células, a carregar, livre, avariado] em centésimos de célula; vazio = 0.
+    # Um balde: [células, a carregar, livre, avariado, em uso pela outra tomada]
+    # em centésimos de célula; vazio = 0.
     def arr(tbl, n):
         return f"""SELECT p.site, p.point_id, '[' || string_agg(
             CASE WHEN b.n IS NULL THEN '0' ELSE '[' || b.n || ',' || CAST(round(100 * b.c) AS BIGINT) || ','
-                 || CAST(round(100 * b.a) AS BIGINT) || ',' || CAST(round(100 * b.x) AS BIGINT) || ']' END,
+                 || CAST(round(100 * b.a) AS BIGINT) || ',' || CAST(round(100 * b.x) AS BIGINT) || ','
+                 || CAST(round(100 * coalesce(b.s, 0)) AS BIGINT) || ']' END,
             ',' ORDER BY r.i) || ']' AS v
           FROM pts p CROSS JOIN range({n}) r(i) LEFT JOIN {tbl} b ON b.site = p.site AND b.point_id = p.point_id AND b.i = r.i
           GROUP BY p.site, p.point_id"""
@@ -276,8 +330,10 @@ def run(con, root, state, out, country='PT', start=None, log=print):
             for t in TABLES}
     has = lambda t, d: d in days[t]  # noqa: E731
     cells_dir, months_dir = os.path.join(state, 'cells'), os.path.join(state, 'months')
-    os.makedirs(cells_dir, exist_ok=True)
-    os.makedirs(months_dir, exist_ok=True)
+    # Provas dos pares por dia e as tomadas que acabaram o dia em `unknown`.
+    pairs_dir, carry_dir = os.path.join(state, 'pairs'), os.path.join(state, 'unknown')
+    for d in (cells_dir, months_dir, pairs_dir, carry_dir):
+        os.makedirs(d, exist_ok=True)
     meta_path = os.path.join(state, 'meta.json')
     meta = read_meta(state)
     todo = days_to_do(meta, days['polls'], start)
@@ -313,12 +369,25 @@ def run(con, root, state, out, country='PT', start=None, log=print):
         for d in cell_days():
             if d < keep:
                 os.remove(os.path.join(cells_dir, f'{d}.parquet'))
+        old = add_days(last_day, -max(KEEP_DAYS, socket_states.LEARN_DAYS))
+        for dr in (pairs_dir, carry_dir):
+            for fn in os.listdir(dr):
+                if fn.endswith('.parquet') and fn[:10] < old:
+                    os.remove(os.path.join(dr, fn))
 
     for k, day in enumerate(todo, 1):
         f = os.path.join(cells_dir, f'{day}.parquet')
-        r = day_cells(con, root, day, f + '.tmp', has, country)
+        ev = os.path.join(pairs_dir, f'{day}.parquet')
+        if day_evidence(con, root, day, ev + '.tmp', has, country):
+            os.replace(ev + '.tmp', ev)
+        day_pairs(con, pairs_dir, day)
+        cin = os.path.join(carry_dir, f'{add_days(day, -1)}.parquet')
+        cout = os.path.join(carry_dir, f'{day}.parquet')
+        r = day_cells(con, root, day, f + '.tmp', has, country,
+                      cin if os.path.exists(cin) else None, cout + '.tmp')
         if r:
             os.replace(f + '.tmp', f)
+            os.replace(cout + '.tmp', cout)
             meta['days'][day] = {'reads': r[0], 'hours': r[1]}
         else:   # um dia sem leituras também fica lembrado, ou cada corrida o tentava de novo
             for p in (f + '.tmp', f):

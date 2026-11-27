@@ -17,7 +17,7 @@
 .xseg { display: block; min-width: 3px; background: var(--s-unknown); cursor: pointer; }
 .xseg[data-s="available"] { background: var(--s-available); } .xseg[data-s="charging"] { background: var(--s-charging); }
 .xseg[data-s="outOfOrder"] { background: var(--s-outOfOrder); } .xseg[data-s="inoperative"] { background: var(--s-inoperative); }
-.xseg[data-s="blocked"] { background: var(--s-blocked); } .xseg[data-s="planned"] { background: var(--s-planned); } .xseg[data-s="removed"] { background: var(--s-removed); }
+.xseg[data-s="blocked"] { background: var(--s-blocked); } .xseg[data-s="planned"] { background: var(--s-planned); } .xseg[data-s="removed"] { background: var(--s-removed); } .xseg[data-s="shared"] { background: var(--s-shared); }
 .xseg.dim, .xleg.dim, .xrow.dim { opacity: .6; }
 .xlegend { list-style: none; margin: 10px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; }
 .xleg { font: inherit; font-size: var(--step--1); display: inline-flex; align-items: center; gap: 8px; min-height: 40px; padding: 4px 12px; border-radius: 999px; border: 1.5px solid var(--line); background: var(--card); color: var(--fg); cursor: pointer; font-variant-numeric: tabular-nums; }

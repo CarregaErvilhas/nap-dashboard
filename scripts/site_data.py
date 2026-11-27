@@ -35,6 +35,9 @@ SITE_FIELDS = ('ext', 'name', 'city', 'op', 'region', 'lat', 'lon', 'status',
 POINT_FIELDS = ('point_id', 'site_external_id', 'city', 'operator_name', 'region',
                 'pw_class', 'kw', 'connectors', 'status', 'opc', 'regime', 'nap', 'pay',
                 'fees', 'kw_src', 'nap_kw', 'issues')
+# Optional per socket (data from before it, or a run without the archive):
+# `pair`, the partners of a shared socket (NAP.sharedPass guards it). stats.json
+# `states` (estados.html) is optional the same way.
 STATS_KEYS = ('snapshot', 'kpis', 'kpis_pt', 'status', 'status_pw', 'region',
               'op_sites', 'op_pts', 'pw', 'conn', 'city', 'occ_pw', 'occ_op',
               'price_op', 'price_stats')

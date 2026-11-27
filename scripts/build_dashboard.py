@@ -108,6 +108,23 @@ pts['max_power_w'] = pow_map.reindex(_pk).values
 pts['pw_class'] = pts.max_power_w.apply(pw_class)
 st_map = ST.drop_duplicates(PK, keep='first').set_index(PK)['status']
 pts['status'] = st_map.reindex(_pk).fillna('unknown').values
+# Tomadas partilhadas (scripts/socket_states.py): os pares aprendidos pelo
+# archive_history.py. `pair` = as tomadas do mesmo local com que esta partilha a
+# potência; o site relê o estado ao vivo com eles (NAP.sharedPass). Sem o
+# histórico, ninguém tem par e o estado fica o declarado.
+try:
+    with open('data/archive_stats.json', encoding='utf-8') as fh:
+        _pairs = (json.load(fh).get('states') or {}).get('pairs_list') or []
+except (FileNotFoundError, ValueError):
+    _pairs = []
+_pair_of = {}
+for _sid, _pid, _partner in _pairs:
+    _pair_of.setdefault((_sid, _pid), []).append(_partner)
+pts['pair'] = [_pair_of.get((sid, pid), []) for sid, pid in zip(pts.site_id, pts.point_id)]
+_st_of = dict(zip(zip(pts.site_id, pts.point_id), pts.status))
+pts['status'] = [
+    'shared' if st in ('outOfOrder', 'inoperative', 'blocked') and any(_st_of.get((sid, q)) == 'charging' for q in pr) else st
+    for sid, st, pr in zip(pts.site_id, pts.status, pts.pair)]
 site_map = S.set_index('external_id')
 pts['city'] = pts['site_external_id'].map(site_map['city'])
 pts['operator_name'] = pts['operator_id'].map(S.drop_duplicates('operator_id').set_index('operator_id')['operator_name'])
@@ -998,6 +1015,9 @@ data = {
     'price_stats': price_stats,
     'territory': territory,
     'card_pay': card_pay,
+    # estados.html: os números das tomadas partilhadas e do unknown longo (sem a lista de pares).
+    'states': ({k: v for k, v in _hist['states'].items() if k != 'pairs_list'}
+               if _hist and _hist.get('states') else None),
     'op_models': op_models,
     # Per socket, from the network model (see MODEL above): kw, the fees with
     # every tier, regime, the NAP's price off MOBI.E (nap) and issues.
@@ -1006,7 +1026,7 @@ data = {
     'points': pts[
         ['point_id', 'point_external_id', 'site_external_id', 'city', 'operator_name', 'region', 'pw_class', 'kw', 'kw_src',
          'nap_kw', 'connector_types', 'status', 'opc_operador', 'fees', 'model_regime', 'nap_price',
-         'nap_fees', 'issues', 'pay', 'mi', 'u']]
+         'nap_fees', 'issues', 'pay', 'mi', 'u', 'pair']]
         .rename(columns={'point_external_id': 'evse', 'connector_types': 'connectors', 'opc_operador': 'opc',
                          'model_regime': 'regime', 'nap_price': 'nap'}).to_dict('records'),
     'facts_html': FACTS_HTML,

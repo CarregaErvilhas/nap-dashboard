@@ -10,6 +10,7 @@ Os dados de terceiros mantêm as licenças de origem (ver THIRD-PARTY-NOTICES.md
 - [Rede](https://nap.ocarroeletrico.com/rede.html): estatísticas da rede (KPIs, novidades, gráficos em tabelas, concelhos sem posto rápido e crescimento por concelho, pagamento por cartão nos postos de 50 kW ou mais, histórico, hubs, factos).
 - [Explorar](https://nap.ocarroeletrico.com/explorar.html): a rede filtrada por operador, concelho, potência, ficha, estado, preço e pagamento, com estado ao vivo, mapa e evolução (tomadas e avarias por dia, ocupação por hora).
 - [Operadores](https://nap.ocarroeletrico.com/operadores.html): relatório semanal de anomalias por operador, entradas e saídas de OPC e erros reportáveis.
+- [Estados das tomadas](https://nap.ocarroeletrico.com/estados.html): o que quer dizer cada estado do NAP, as tomadas partilhadas (uma de cada vez; o operador declara a outra fora de serviço) e o `unknown` de 24 h ou mais, que conta como avariado.
 - [O grupo](https://nap.ocarroeletrico.com/grupo.html): os outros sites do grupo O Carro Elétrico (guia, ohmigo, Voltaria, Comparador CEME, AmpereArchive), com ligações para o site e o código.
 - [Privacidade](https://nap.ocarroeletrico.com/privacidade.html): o que o site não recolhe.
 

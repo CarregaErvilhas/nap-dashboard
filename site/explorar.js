@@ -125,7 +125,7 @@
   function acc() { return { n: 0, kw: 0, chg: 0, act: 0, down: 0, pk: { opc: [0, 0], adhoc: [0, 0], direct: [0, 0], napfee: [0, 0] }, sites: new Set() }; }
   function put(a, p) {
     a.n++; a.kw += p.kw || 0; a.sites.add(p.site_external_id);
-    if (p.status === 'charging') { a.chg++; a.act++; } else if (p.status === 'available') a.act++;
+    if (p.status === 'charging' || p.status === 'shared') { a.chg++; a.act++; } else if (p.status === 'available') a.act++;
     else if (p.status === 'outOfOrder' || p.status === 'inoperative') a.down++;
     for (var k in p._pk) if (p._pk[k].kwh != null) { a.pk[k][0] += p._pk[k].kwh; a.pk[k][1]++; }
   }
@@ -310,7 +310,7 @@
       var s = m.get(p.site_external_id);
       if (!s) m.set(p.site_external_id, s = { ext: p.site_external_id, city: p.city, op: p.operator_name, n: 0, kw: 0, free: 0, chg: 0, down: 0 });
       s.n++; s.kw += p.kw || 0;
-      if (p.status === 'available') s.free++; else if (p.status === 'charging') s.chg++;
+      if (p.status === 'available') s.free++; else if (p.status === 'charging' || p.status === 'shared') s.chg++;
       else if (p.status === 'outOfOrder' || p.status === 'inoperative') s.down++;
     });
     return Array.from(m.values());
