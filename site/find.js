@@ -190,9 +190,26 @@
   // prefix (EDP-PTM-00031) or MOBI-. For the codes the community wrote on a site
   // under construction (`codes`) and the NAP site ids of the last 24 h.
   function codeKey(c) { var n = norm(c).trim().replace(/^mobi-/, ''); return bare(n) || n; }
+  // A socket's EVSE id names its site too: PT*EDP*EAGD*00009*1, PT-EDP-EAGD-00009-1
+  // or PTEDPEAGD000091 is site AGD-00009 (country, operator, an "E" glued to the
+  // site code or as its own segment, then the socket, which may be left off).
+  // The glued "E" is not always there, so both readings are tried.
+  function evseSite(w) {
+    var p = w.split(/[*-]/), m;
+    if (p.length >= 4 && p[0] === 'pt') {
+      p = p.slice(2);
+      if (p[0] === 'e') p.shift();
+      if (p.length > 2 && /^\d{1,2}$/.test(p[p.length - 1]) && /^\d{3,}$/.test(p[p.length - 2])) p.pop();
+      if (p.length < 2) return null;
+      var k = p.join('-');
+      return /^e[a-z]/.test(k) ? [k.slice(1), k] : [k];
+    }
+    m = /^pt[a-z0-9]{3}e([a-z]{3})(\d{5})\d{0,2}$/.exec(w);
+    return m ? [m[1] + '-' + m[2]] : null;
+  }
 
   function filter() {
-    var words = norm(F.q).split(/\s+/).filter(Boolean), alt = words.map(bare);
+    var words = norm(F.q).split(/\s+/).filter(Boolean), alt = words.map(bare), evse = words.map(evseSite);
     var wcHelp = document.getElementById('wcHelp');
     if (wcHelp) wcHelp.hidden = !F.wc;
     result = S.filter(function (s) {
@@ -208,7 +225,8 @@
       if (F.free && !freeCount(s)) return false;
       // MCS mostra também os locais em construção: os primeiros são do OSM, ainda fora do NAP.
       if (!F.mcs && F.life.length && F.life.indexOf(life(s)) < 0) return false;
-      for (var i = 0; i < words.length; i++) if (s._k.indexOf(words[i]) < 0 && !(alt[i] && s._k.indexOf(alt[i]) >= 0)) return false;
+      for (var i = 0; i < words.length; i++) if (s._k.indexOf(words[i]) < 0 && !(alt[i] && s._k.indexOf(alt[i]) >= 0) &&
+        !(evse[i] && evse[i].some(function (k) { return s._k.indexOf(k) >= 0; }))) return false;
       return true;
     });
     if (here) {
@@ -411,7 +429,7 @@
       // The kinds of price each socket has (N.prices): the three fee columns are the price
       // you pay with a contract (operator fee, or the NAP's where MOBI.E has none) or the
       // single price outside MOBI.E; the no-contract price gets a column of its own.
-      var list = pts(s), kinds = list.map(function (p) { return N.prices(p); });
+      var list = pts(s).slice().sort(function (a, b) { return N.sockId(a).localeCompare(N.sockId(b), undefined, { numeric: true }); }), kinds = list.map(function (p) { return N.prices(p); });
       var anyAdhoc = kinds.some(function (k) { return k.adhoc; });
       var anyUnit = list.some(function (p) { return p.u != null; });
       var byUnit = {};
@@ -422,20 +440,20 @@
       var unitNote = function (p) {
         var mates = sharedNow(p);
         if (!mates.length) return null;
-        var kw = p.status === 'available' ? twoCarKw(s, p) : null, ids = mates.map(function (q) { return q.point_id; }).join(', ');
+        var kw = p.status === 'available' ? twoCarKw(s, p) : null, ids = mates.map(N.sockId).join(', ');
         return el('small', { class: 'muted' }, ' (' + (kw ? t('unitSharedKw', { ids: ids, kw: N.nf(kw) }) : t('unitShared', { ids: ids })) + ')');
       };
       var rows = list.map(function (p, i) {
         var pk = kinds[i], nf = pk.napfee;
-        if (nf) napFee.push(p.point_id);
+        if (nf) napFee.push(N.sockId(p));
         if (pk.direct) direct = true;
         var only = p.regime === 'sem_ceme' && p.nap != null;
         // The fee/CEME note only where a socket really has an operator fee.
         if (pk.opc) mobie = true;
         var fp = plan(p);
         if (p.kw_src === 'osm') osmKw = true;
-        (p.issues || []).forEach(function (k) { (issues[k] = issues[k] || []).push(p.point_id); });
-        return el('tr', null, el('td', null, el('code', null, p.point_id)), el('td', { class: 'l' }, String(p.connectors || '—').split('|').join(', ')),
+        (p.issues || []).forEach(function (k) { (issues[k] = issues[k] || []).push(N.sockId(p)); });
+        return el('tr', null, el('td', null, el('code', null, N.sockId(p))), el('td', { class: 'l' }, String(p.connectors || '—').split('|').join(', ')),
           el('td', null, p.kw ? N.nf(p.kw, 1) : '—', p.kw_src === 'osm' ? el('small', { class: 'muted' }, ' (' + t('napKw', { kw: p.nap_kw == null ? '—' : N.nf(p.nap_kw, 1) }) + ')') : null),
           anyUnit ? el('td', null, p.u != null ? unitLetter(p.u) : '—') : null,
           el('td', { class: 'l' }, N.status(p.status), p.status === 'available' ? unitNote(p) : null),
@@ -455,7 +473,7 @@
         // A free charger (no socket charging) next to a busy one: say which to pick.
         var busyUnit = Object.keys(byUnit).some(function (u) { return byUnit[u].some(function (q) { return q.status === 'charging'; }); });
         var freeUnits = Object.keys(byUnit).filter(function (u) { return byUnit[u].every(function (q) { return q.status === 'available'; }); });
-        if (busyUnit && freeUnits.length) d.appendChild(el('p', { class: 'small' }, t('unitPick', { ids: freeUnits.map(function (u) { return unitLetter(+u) + ' (' + byUnit[u].map(function (q) { return q.point_id; }).join(', ') + ')'; }).join('; ') })));
+        if (busyUnit && freeUnits.length) d.appendChild(el('p', { class: 'small' }, t('unitPick', { ids: freeUnits.map(function (u) { return unitLetter(+u) + ' (' + byUnit[u].map(N.sockId).join(', ') + ')'; }).join('; ') })));
       }
       if (mobie) d.appendChild(el('p', { class: 'small muted' }, t('feeNote')));
       if (anyAdhoc) d.appendChild(el('p', { class: 'small muted' }, t('adhocNote')));
@@ -792,15 +810,24 @@
     if (posto) q0 = posto;
     if (q0) { F.q = q0; $('q').value = q0; }
     $('search').addEventListener('submit', function (e) { e.preventDefault(); });
+    // Once the box is edited, the address follows it: ?posto= (or an old ?q=)
+    // would otherwise stay and reopen the first site on reload or share.
+    function syncUrl(q) {
+      var p = new URLSearchParams(location.search);
+      p.delete('posto');
+      if (q.trim()) p.set('q', q.trim()); else p.delete('q');
+      var s = p.toString();
+      try { history.replaceState(null, '', location.pathname + (s ? '?' + s : '') + location.hash); } catch (e) {}
+    }
     var timer;
-    $('q').addEventListener('input', function () { $('postoMiss').hidden = true; clearTimeout(timer); timer = setTimeout(function () { F.q = $('q').value; filter(); }, 180); });
+    $('q').addEventListener('input', function () { $('postoMiss').hidden = true; clearTimeout(timer); timer = setTimeout(function () { F.q = $('q').value; syncUrl(F.q); filter(); }, 180); });
     document.querySelectorAll('[data-f]').forEach(function (b) {
       b.addEventListener('click', function () { var k = b.getAttribute('data-f'); F[k] = !F[k]; b.setAttribute('aria-pressed', String(F[k])); filter(); });
     });
     $('allRes').addEventListener('click', function () { dirty = false; shown = PAGE; render(); });
     $('reset').addEventListener('click', function () {
       F = fresh(); here = null; dirty = false; view = VIEWS.mainland.slice(); $('postoMiss').hidden = true;
-      $('q').value = ''; options();
+      $('q').value = ''; syncUrl(''); options();
       document.querySelectorAll('[data-f]').forEach(function (b) { b.setAttribute('aria-pressed', 'false'); });
       $('near').setAttribute('aria-pressed', 'false'); filter();
     });
