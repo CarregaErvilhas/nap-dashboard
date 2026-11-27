@@ -17,8 +17,10 @@ from collections import Counter
 # código MOBI.E em `ref` ("LRA-00156", às vezes "MOBI-LRA-00156" ou vários
 # separados por ";"), que é o external_id do NAP. Um local pode ter vários
 # elementos (a estação e cada carregador): por campo, fica o valor mais comum.
-# Só valem elementos a menos de 1 km do NAP: um ref trocado não pode dar a um
-# posto o nome de outro.
+# Só valem elementos a menos de 1 km do NAP, ou mais longe quando o ponto do OSM
+# cai no concelho do código (far_ok): um ref trocado não pode dar a um posto o
+# nome de outro, mas o NAP tem postos a quilómetros do sítio (no mar, noutro
+# concelho), e o OSM, mapeado no local, é que está certo.
 OSM_DUMP = 'data/umap_cache/todos.json'
 OSM_MAX_KM = 1.0
 # tag OSM -> campo no JSON. O que ajuda a encontrar o posto (name, brand,
@@ -284,12 +286,16 @@ def evse_sites(pairs):
     return {k: c for k, c in out.items() if c}
 
 
-def osm_by_code(sites_by_code, dump=OSM_DUMP, evse_to_code=None):
+def osm_by_code(sites_by_code, dump=OSM_DUMP, evse_to_code=None, far_ok=None):
     """external_id do NAP -> {campo: valor} das tags OSM desse local.
 
     sites_by_code: external_id -> {'lat': ..., 'lon': ...}.
     evse_to_code: evse_sites() dos pontos do NAP. Um elemento cujo `ref` não é
-    código de nenhum local casa pelo `ref:EU:EVSE` (os ids das tomadas)."""
+    código de nenhum local casa pelo `ref:EU:EVSE` (os ids das tomadas).
+    far_ok(code, lat, lon): aceita um elemento a mais de OSM_MAX_KM do NAP
+    (o ponto do OSM no concelho do código). Sem ela, o limite vale sempre.
+    `pos` é a posição do elemento escolhido para o link, quando é só deste
+    local (um "A;B;C" é de vários e não é posição de nenhum)."""
     try:
         els = json.load(open(dump))['elements']
     except (OSError, ValueError, KeyError) as e:
@@ -333,7 +339,7 @@ def osm_by_code(sites_by_code, dump=OSM_DUMP, evse_to_code=None):
         for code in refs:
             site = sites_by_code.get(code)
             dist = km(at[0], at[1], site['lat'], site['lon']) if site else None
-            if not site or dist > OSM_MAX_KM:
+            if not site or (dist > OSM_MAX_KM and not (far_ok and far_ok(code, at[0], at[1]))):
                 continue
             # O elemento para onde o site aponta: primeiro um posto em serviço
             # antes de um desativado ou em obra, depois um só deste código antes
@@ -341,7 +347,8 @@ def osm_by_code(sites_by_code, dump=OSM_DUMP, evse_to_code=None):
             # inteiro (charging_station) antes de um poste, depois o mais perto
             # do ponto do NAP.
             elements.setdefault(code, []).append(
-                ((lc is not None, len(refs) > 1, is_point), round(dist, 4), f"{e['type']}/{e['id']}", lc))
+                ((lc is not None, len(refs) > 1, is_point), round(dist, 4), f"{e['type']}/{e['id']}", lc,
+                 (round(at[0], 6), round(at[1], 6))))
             if lc:
                 continue
             for tag, field in OSM_TAGS.items():
@@ -452,6 +459,8 @@ def osm_by_code(sites_by_code, dump=OSM_DUMP, evse_to_code=None):
     for code, els_ in elements.items():
         best = min(els_)
         out.setdefault(code, {})['element'] = best[2]
+        if not best[0][1]:
+            out[code]['pos'] = best[4]
         # Sem nenhum elemento em serviço, o OSM diz que o posto está desativado
         # ou em obra (o do elemento escolhido para o link). O OSM manda no
         # ciclo de vida; o estado ao vivo do operador, quando diz que carrega,

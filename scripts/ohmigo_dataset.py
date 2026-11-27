@@ -261,9 +261,47 @@ for p in P.itertuples(index=False):
 by_code = {}
 for site in sites.values():
     by_code[site['code']] = None if site['code'] in by_code else site
+
+
+def concelho_guard():
+    """far_ok for osm_by_code: an OSM element far from the NAP point counts when
+    it lies in the concelho of the site's code (concelho_check.py: the commonest
+    concelho of the sites with that code), so a typo in an OSM ref can't move a
+    site to another charger. None without the CAOP polygons or that CSV: then
+    the 1 km limit holds."""
+    try:
+        import concelho_check
+        exp = dict(pd.read_csv(f'{DATA}/concelho_check.csv', dtype=str, keep_default_na=False)
+                   [['site_id', 'conc_code']].itertuples(index=False))
+        locate = concelho_check.locator(concelho_check.load_concelhos())
+    except Exception as e:  # sem CAOP ou sem o CSV: fica o limite de 1 km
+        print(f'aviso: sem concelhos ({e}); só valem elementos OSM a menos de 1 km')
+        return None
+
+    def far_ok(code, lat, lon):
+        site = by_code.get(code)
+        hit = locate(lon, lat) if site else None
+        return bool(hit) and hit[0] == exp.get(site['id'])
+    return far_ok
+
+
 osm = osm_by_code({c: s for c, s in by_code.items() if s and isinstance(c, str)},
                   f'{DATA}/umap_cache/todos.json',
-                  evse_sites(zip(P.point_external_id, P.site_external_id)))
+                  evse_sites(zip(P.point_external_id, P.site_external_id)),
+                  far_ok=concelho_guard())
+# A posição: a do OSM, mapeada no local pela comunidade, ganha sempre à que o
+# NAP declara (o NAP tem postos no mar e noutros concelhos). A do NAP fica em
+# napLat/napLon quando é diferente.
+moved = 0
+for code, tags in osm.items():
+    pos = tags.pop('pos', None)
+    site = by_code[code]
+    if pos and (pos[0], pos[1]) != (site['lat'], site['lon']):
+        site['napLat'], site['napLon'] = site['lat'], site['lon']
+        site['lat'], site['lon'] = pos
+        site['region'] = region(*pos)
+        moved += 1
+print(f'{moved} locais na posição do OSM em vez da do NAP')
 for code, tags in osm.items():
     site = by_code[code]
     site['osm'] = tags
