@@ -104,7 +104,8 @@ python3 scripts/check_agents.py
 | `scripts/build_dashboard.py` | Calcula os dados e gera `site/` + factos/erros |
 | `scripts/site_data.py`, `scripts/build_site.py` | Partem os dados em `site/data/*.json` e renderizam as páginas |
 | `scripts/validate_site.py` | Valida o `site/` (JSON, esquema, JS, CSP, sem `innerHTML`) |
-| `assets/site/` | Fonte do site: páginas, parciais, CSS, JS, fonte Nunito |
+| `assets/site/` | Fonte do site: páginas, parciais, CSS, JS |
+| `brand/` | Kit do grupo (submodule [Brand](https://github.com/CarregaErvilhas/Brand)): mascotes, `install.js`, fonte Nunito e textos da página do grupo. `git submodule update --init` |
 | `assets/pt_outline.json` | Polígonos do contorno PT + etiquetas de distrito/ilha para o mapa (143 KB) |
 | `assets/schemas/*.xsd` | Esquemas DATEX II 3.3 © CEN (fonte de enums; ver `assets/schemas/README.md`, re-fetch `scripts/fetch_schemas.sh`) |
 | `SKILL.md` | Skill reutilizável com todo o conhecimento e o pipeline |
@@ -139,4 +140,4 @@ Código próprio (`scripts/`, template, docs, análise): `PolyForm-Noncommercial
 
 ### O nome e a imagem ficam de fora
 
-As licenças cobrem o código e os dados, não a marca. Não estão licenciados o nome **Postos PT**, o domínio, a mascote (o pino de mapa azul com cara e um raio), o ícone e as imagens feitas com eles (`assets/favicon.svg`, `assets/og.png`, `assets/favicon.ico`, `assets/apple-touch-icon.png` e as cópias em `site/`). As mascotes em `assets/site/grupo/` são dos sites do grupo, cada uma com a marca do seu site (ver `THIRD-PARTY-NOTICES.md`). Podes usar o nome para dizer de onde vem o conteúdo. Um fork precisa de nome e de imagem próprios.
+As licenças cobrem o código e os dados, não a marca. Não estão licenciados o nome **Postos PT**, o domínio, a mascote (o pino de mapa azul com cara e um raio), o ícone e as imagens feitas com eles (`assets/favicon.svg`, `assets/og.png`, `assets/favicon.ico`, `assets/apple-touch-icon.png` e as cópias em `site/`). As mascotes em `brand/grupo/` (copiadas para `site/grupo/`) são dos sites do grupo, cada uma com a marca do seu site (ver `THIRD-PARTY-NOTICES.md`). Podes usar o nome para dizer de onde vem o conteúdo. Um fork precisa de nome e de imagem próprios.

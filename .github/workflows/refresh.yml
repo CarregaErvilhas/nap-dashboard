@@ -80,6 +80,8 @@ jobs:
           # e faria o push sair como o bot (recusado pelo ruleset) em vez de
           # usar o token da App definido no fim. Fetch é anónimo (repo público).
           persist-credentials: false
+          # brand/: o build copia dele as mascotes, o install.js e a fonte.
+          submodules: true
       - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
         with:
           python-version: "3.15"
