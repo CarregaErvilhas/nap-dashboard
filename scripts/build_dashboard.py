@@ -100,7 +100,7 @@ PK = ['site_id', 'point_id']
 conn_map = pts.groupby(PK)['connector_type'].apply(
     lambda s: '|'.join(sorted({CONN_NAMES.get(t, t) for t in s if pd.notna(t)})))
 pow_map = pts.groupby(PK)['max_power_w'].apply(_max_power)
-pts = pts.drop_duplicates(PK)[['point_id', 'site_id', 'site_external_id', 'operator_id',
+pts = pts.drop_duplicates(PK)[['point_id', 'point_external_id', 'site_id', 'site_external_id', 'operator_id',
                                'is_green_energy']].copy()
 _pk = pd.MultiIndex.from_frame(pts[PK])
 pts['connector_types'] = conn_map.reindex(_pk).values
@@ -1004,10 +1004,10 @@ data = {
     # pw_class stays the NAP's: rede.js recounts the Rede charts from it with
     # the live status, and those charts describe what the NAP declares.
     'points': pts[
-        ['point_id', 'site_external_id', 'city', 'operator_name', 'region', 'pw_class', 'kw', 'kw_src',
+        ['point_id', 'point_external_id', 'site_external_id', 'city', 'operator_name', 'region', 'pw_class', 'kw', 'kw_src',
          'nap_kw', 'connector_types', 'status', 'opc_operador', 'fees', 'model_regime', 'nap_price',
          'nap_fees', 'issues', 'pay', 'mi', 'u']]
-        .rename(columns={'connector_types': 'connectors', 'opc_operador': 'opc',
+        .rename(columns={'point_external_id': 'evse', 'connector_types': 'connectors', 'opc_operador': 'opc',
                          'model_regime': 'regime', 'nap_price': 'nap'}).to_dict('records'),
     'facts_html': FACTS_HTML,
     'errs_html': ERRS_HTML,
