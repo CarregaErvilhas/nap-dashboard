@@ -106,6 +106,9 @@ class OlhaOPostoPhotosTest(unittest.TestCase):
             # A principal de uma tomada também entra.
             {'id': 's1', 'origin': 'olhaoposto', 'target': 'PTEZCEAMD000511', 'station': st, 'isMain': True,
              'sizes': {'thumb': {'url': PIC + 'PTEZCEAMD000511.thumb.jpg'}}, 'publishedAt': '2000-01-04T00:00:00Z'},
+            # Uma chapa não é foto do local.
+            {'id': 'pl', 'origin': 'olhaoposto', 'kind': 'plate', 'target': st['id'], 'station': st, 'isMain': False,
+             'sizes': {'thumb': {'url': pano + 'up/thumb.jpg'}}, 'publishedAt': '2000-01-05T00:00:00Z'},
             # Externas (vêm pelo OSM) e miniaturas de outro sítio ficam de fora.
             {'id': 'x', 'origin': 'commons', 'target': st['id'], 'station': st,
              'sizes': {'thumb': {'url': 'https://upload.wikimedia.org/x.jpg'}}},
