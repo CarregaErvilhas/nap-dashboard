@@ -39,7 +39,7 @@
     dOld: 'Código antigo', dWc: 'Cadeira de rodas', wc_yes: 'acessível', wc_limited: 'acesso limitado', wc_no: 'não acessível', dFixme: 'Por confirmar no OpenStreetMap', fixmeTell: '(confirmaste? diz no grupo do Telegram)',
     fWc: 'Acessível em cadeira de rodas', fWcTitle: 'Só os postos que o operador ou a comunidade confirmaram. A maioria não tem esta informação, o que não quer dizer que não seja acessível.', dAccess: 'Acesso', dFee: 'Estacionamento pago',
     dLoc: 'Localização', locWarn: 'O NAP e o OpenStreetMap discordam na localização (a {d} km). Mostramos a do OpenStreetMap.',
-    dDoubt: 'Dúvida da comunidade', directions: 'Como chegar', seeOsm: 'Ver no OpenStreetMap', cost: 'Quanto custa carregar aqui (ohmigo)',
+    dDoubt: 'Dúvida da comunidade', directions: 'Como chegar', share: 'Partilhar', shareCopied: 'Link copiado', shareFail: 'Copia este link:', seeOsm: 'Ver no OpenStreetMap', cost: 'Quanto custa carregar aqui (ohmigo)',
     loadingSockets: 'A carregar as tomadas…',
     dModel: 'Modelo do carregador', dModels: 'Modelos dos carregadores',
     mAlone: 'Um carro sozinho: até {a}', mShared: 'com {n} carros ligados: até {a} cada',
@@ -101,7 +101,7 @@
     dOld: 'Old code', dWc: 'Wheelchair', wc_yes: 'accessible', wc_limited: 'limited access', wc_no: 'not accessible', dFixme: 'To be confirmed on OpenStreetMap', fixmeTell: '(checked it? tell the Telegram group)',
     fWc: 'Wheelchair accessible', fWcTitle: 'Only the chargers the operator or the community confirmed. Most have no information, which does not mean they are not accessible.', dAccess: 'Access', dFee: 'Paid parking',
     dLoc: 'Location', locWarn: 'The NAP and OpenStreetMap disagree on the location ({d} km apart). We show the OpenStreetMap one.',
-    dDoubt: 'Community doubt', directions: 'Directions', seeOsm: 'View on OpenStreetMap', cost: 'What charging here costs (ohmigo)',
+    dDoubt: 'Community doubt', directions: 'Directions', share: 'Share', shareCopied: 'Link copied', shareFail: 'Copy this link:', seeOsm: 'View on OpenStreetMap', cost: 'What charging here costs (ohmigo)',
     loadingSockets: 'Loading sockets…',
     dModel: 'Charger model', dModels: 'Charger models',
     mAlone: 'One car alone: up to {a}', mShared: 'with {n} cars plugged in: up to {a} each',
@@ -487,8 +487,27 @@
       el('a', { class: 'btn primary', href: 'https://www.google.com/maps/dir/?api=1&destination=' + encodeURIComponent(ll), rel: 'noopener noreferrer', target: '_blank' }, t('directions')),
       el('a', { class: 'btn', href: osmHref(s), rel: 'noopener noreferrer', target: '_blank' }, t('seeOsm')),
       el('button', { class: 'btn', type: 'button', onclick: function () { detailedAt(s); } }, t('mDetail')),
+      shareBtn(s, d),
       s.lc ? null : el('a', { class: 'btn', href: 'https://ohmigo.ocarroeletrico.com/', rel: 'noopener', target: '_blank' }, t('cost'))));
     return d;
+  }
+  // The same /posto-<id>.html link as the address bar (syncOpen), for whoever
+  // looks for a button: the phone's share sheet when there is one, else the
+  // clipboard, else the link shown to copy by hand.
+  function shareBtn(s, d) {
+    var path = sharePath(s);
+    if (!path) return null;
+    var url = location.origin + path;
+    var b = el('button', { class: 'btn', type: 'button', onclick: function () {
+      if (navigator.share) { navigator.share({ title: s.name || s.ext, url: url }).catch(function () {}); return; }
+      var showUrl = function () { if (!d.querySelector('.share-url')) d.appendChild(el('p', { class: 'small share-url' }, t('shareFail') + ' ', el('code', null, url))); };
+      if (!navigator.clipboard) { showUrl(); return; }
+      navigator.clipboard.writeText(url).then(function () {
+        b.textContent = t('shareCopied');
+        setTimeout(function () { b.textContent = t('share'); }, 2000);
+      }, showUrl);
+    } }, t('share'));
+    return b;
   }
   // The OSM element the site is matched to (its tags, history, who mapped it);
   // without a match, a marker at the coordinates.
@@ -496,6 +515,22 @@
     var at = '#map=19/' + s.lat + '/' + s.lon;
     if (/^(node|way|relation)\/\d+$/.test(s.osm_ref || '')) return 'https://www.openstreetmap.org/' + s.osm_ref + at;
     return 'https://www.openstreetmap.org/?mlat=' + s.lat + '&mlon=' + s.lon + '#map=18/' + s.lat + '/' + s.lon;
+  }
+  // While a site is open the address bar shows its /posto-<id>.html page
+  // (scripts/share_pages.py), so copying it or the browser's own share gives a
+  // link preview with the site's name and photo. It sits at the root: every
+  // relative path of the app still resolves the same.
+  var HOME = location.pathname || '/';
+  var SHARE_ID = /^[A-Za-z0-9][A-Za-z0-9._-]{0,63}$/;
+  function sharePath(s) { return s && s.oop && SHARE_ID.test(s.oop) ? '/posto-' + s.oop + '.html' : null; }
+  function syncOpen() {
+    var s = openExt ? S.filter(function (x) { return x.ext === openExt; })[0] : null;
+    var path = sharePath(s), now = location.pathname || '/';
+    if (!path && now === HOME) return;
+    var p = new URLSearchParams(location.search);
+    if (path) { p.delete('posto'); p.delete('q'); } else if (F.q.trim()) p.set('q', F.q.trim());
+    var q = p.toString(), url = (path || HOME) + (q ? '?' + q : '') + location.hash;
+    if (url !== now + location.search + location.hash) { try { history.replaceState(null, '', url); } catch (e) {} }
   }
   function toggle(ext, scroll) {
     openExt = openExt === ext ? null : ext;
@@ -516,6 +551,7 @@
     listed.slice(0, shown).forEach(function (s) { ul.appendChild(card(s)); });
     $('moreBtn').hidden = shown >= n;
     drawMap();
+    syncOpen();
   }
   var vt;
   function viewMoved() { dirty = true; clearTimeout(vt); vt = setTimeout(function () { shown = PAGE; openExt = openExt && result.some(function (s) { return s.ext === openExt && inView(s); }) ? openExt : null; render(); }, 150); }
@@ -817,7 +853,7 @@
       p.delete('posto');
       if (q.trim()) p.set('q', q.trim()); else p.delete('q');
       var s = p.toString();
-      try { history.replaceState(null, '', location.pathname + (s ? '?' + s : '') + location.hash); } catch (e) {}
+      try { history.replaceState(null, '', HOME + (s ? '?' + s : '') + location.hash); } catch (e) {}
     }
     var timer;
     $('q').addEventListener('input', function () { $('postoMiss').hidden = true; clearTimeout(timer); timer = setTimeout(function () { F.q = $('q').value; syncUrl(F.q); filter(); }, 180); });
