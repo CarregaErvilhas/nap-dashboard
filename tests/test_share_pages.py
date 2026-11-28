@@ -1,4 +1,4 @@
-"""Testes das páginas de partilha /posto/<id>/ (scripts/share_pages.py).
+"""Testes das páginas de partilha /posto-<id>.html (scripts/share_pages.py).
 
 Cada página só tem as etiquetas de pré-visualização do posto e o posto.js, que
 leva para /?posto=<id>. Nomes, operadores e créditos vêm de terceiros: têm de
@@ -43,7 +43,7 @@ class SharePages(unittest.TestCase):
         page = share_pages.render(site(), self.public)
         self.assertIn('<meta property="og:image" content="https://nap.ocarroeletrico.com/' + PHOTO + '?v=', page)
         self.assertIn('content="Foto do posto AMD-00051 · © Ana, CC BY-SA 4.0"', page)
-        self.assertIn('<meta property="og:url" content="https://nap.ocarroeletrico.com/posto/EZC-AMD-00051/">', page)
+        self.assertIn('<meta property="og:url" content="https://nap.ocarroeletrico.com/posto-EZC-AMD-00051.html">', page)
         self.assertIn('<meta name="description" content="EZC · Amadora · 2 tomadas · até 50 kW">', page)
         self.assertIn('<title>Alfragide (AMD-00051) · Postos PT</title>', page)
         self.assertIn('<a href="/?posto=EZC-AMD-00051">', page)
@@ -81,9 +81,10 @@ class SharePages(unittest.TestCase):
         with self.assertRaises(SystemExit):  # posto.js not staged yet
             share_pages.write(sdir, self.public)
         open(os.path.join(self.public, 'posto.js'), 'w').close()
-        os.makedirs(os.path.join(self.public, 'posto', 'OLD-1'))  # a site that left
+        open(os.path.join(self.public, 'posto-OLD-1.html'), 'w').close()  # a site that left
         share_pages.write(sdir, self.public)
-        self.assertEqual(os.listdir(os.path.join(self.public, 'posto')), ['EZC-AMD-00051'])
+        self.assertEqual(sorted(f for f in os.listdir(self.public) if f.startswith('posto')),
+                         ['posto-EZC-AMD-00051.html', 'posto.js'])
 
 
 if __name__ == '__main__':

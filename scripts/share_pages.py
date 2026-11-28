@@ -1,4 +1,4 @@
-"""Write one small page per site, /posto/<id>/, so a shared link has a preview.
+"""Write one small page per site, /posto-<id>.html, so a shared link has a preview.
 
     python3 scripts/share_pages.py site public     # pages.yml, after "Stage site"
 
@@ -8,7 +8,10 @@ the home page's tags. Each page here carries the site's own title, description
 and photo (its first own photo, the one the detail shows first; `og.png` when it
 has none), then `posto.js` sends people on to `/?posto=<id>`. Crawlers don't run
 the script and stay on the tags. Not a <meta refresh>: some crawlers follow it
-and would read the home page's tags instead.
+and would read the home page's tags instead. find.js puts the same address in
+the address bar while a site is open, so copying it or the browser's own share
+gives this page. That is why the pages sit at the root and not in a folder: the
+app's paths are relative, and from /posto/<id>/ they would all break.
 
 Only sites with an olh'o'posto id (`oop`, the NAP site id or the OSM id of a
 site under construction) get a page: it is the id `?posto=` takes and the one
@@ -16,26 +19,30 @@ olh'o'posto uses. Pages go to the deploy folder only (like `photos/`), never to
 site/: they follow the data, and site/ is a closed, committed list. Each page is
 checked with validate_site's scanner before anything is written.
 """
+import glob
 import hashlib
 import html
 import json
 import os
 import re
-import shutil
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import build_site  # noqa: E402
 
-DIR = 'posto'
+PREFIX = 'posto-'
 SCRIPT = '/posto.js'
 ID = re.compile(r'^[A-Za-z0-9][A-Za-z0-9._-]{0,63}$')
 PHOTO = re.compile(r'^photos/[0-9a-f]{16}\.jpg$')
 CSP = "default-src 'none'; script-src 'self'; img-src 'self'; base-uri 'none'; form-action 'none'"
 
 
+def page_name(oop):
+    return f'{PREFIX}{oop}.html'
+
+
 def page_url(oop):
-    return f'{build_site.SITE_URL}/{DIR}/{oop}/'
+    return f'{build_site.SITE_URL}/{page_name(oop)}'
 
 
 def licence(code):
@@ -163,19 +170,18 @@ def write(site_dir, public):
     if not os.path.isfile(os.path.join(public, SCRIPT.lstrip('/'))):
         raise SystemExit(f'share_pages: falta {SCRIPT} em {public} (build_site.STATIC)')
     made = pages(sites, public)
-    bad = [m for oop, text in made.items() for m in check(f'{DIR}/{oop}/index.html', text)]
+    bad = [m for oop, text in made.items() for m in check(page_name(oop), text)]
     if bad:
         for m in bad:
             print(f'FAIL: {m}', file=sys.stderr)
         raise SystemExit(f'share_pages: {len(bad)} erro(s); nenhuma página escrita')
-    root = os.path.join(public, DIR)
-    shutil.rmtree(root, ignore_errors=True)
+    for old in glob.glob(os.path.join(public, f'{PREFIX}*.html')):  # sites that left
+        os.remove(old)
     for oop, text in made.items():
-        os.makedirs(os.path.join(root, oop))
-        with open(os.path.join(root, oop, 'index.html'), 'w', encoding='utf-8') as fh:
+        with open(os.path.join(public, page_name(oop)), 'w', encoding='utf-8') as fh:
             fh.write(text)
     with_photo = sum(1 for text in made.values() if 'content="image/jpeg"' in text)
-    print(f'share_pages: {len(made)} páginas em {DIR}/, {with_photo} com foto')
+    print(f'share_pages: {len(made)} páginas {PREFIX}*.html, {with_photo} com foto')
     return made
 
 
