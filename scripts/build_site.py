@@ -26,7 +26,7 @@ SRC = 'assets/site'
 PAGES = ('index.html', 'rede.html', 'explorar.html', 'operadores.html', 'grupo.html', 'estados.html')
 # Copied as they are, from assets/site/ (or from brand/, see source()). privacidade/404/icons
 # live in assets/ and keep their names.
-STATIC = ('app.css', 'boot.js', 'common.js', 'find.js', 'uso.js', 'rede.js', 'operadores.js', 'estados.js',
+STATIC = ('app.css', 'boot.js', 'common.js', 'find.js', 'posto.js', 'uso.js', 'rede.js', 'operadores.js', 'estados.js',
           'explorar.js', 'explorar.css', 'grupo.js', 'grupo.css',
           # "Mapa detalhado" (mapa.mjs, loaded on demand) and the libraries it
           # imports, as published on npm; validate_site.VENDOR pins their sha256.

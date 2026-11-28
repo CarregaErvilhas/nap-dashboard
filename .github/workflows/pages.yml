@@ -78,6 +78,9 @@ jobs:
           mkdir -p public
           # O site inteiro (a lista fechada validada pelo validate_site.py).
           cp -R site/. public/
+          # One page per site with its own link preview (photo, name); after the
+          # copy, since it needs posto.js and the staged photos in public/.
+          python3 scripts/share_pages.py site public
           # O antigo dashboard de página única: redireciona para / sem script
           # (a CSP das páginas não deixa scripts inline), para links antigos.
           cat > public/dashboard.html <<'EOF'

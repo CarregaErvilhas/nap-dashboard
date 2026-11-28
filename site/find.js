@@ -39,7 +39,7 @@
     dOld: 'Código antigo', dWc: 'Cadeira de rodas', wc_yes: 'acessível', wc_limited: 'acesso limitado', wc_no: 'não acessível', dFixme: 'Por confirmar no OpenStreetMap', fixmeTell: '(confirmaste? diz no grupo do Telegram)',
     fWc: 'Acessível em cadeira de rodas', fWcTitle: 'Só os postos que o operador ou a comunidade confirmaram. A maioria não tem esta informação, o que não quer dizer que não seja acessível.', dAccess: 'Acesso', dFee: 'Estacionamento pago',
     dLoc: 'Localização', locWarn: 'O NAP e o OpenStreetMap discordam na localização (a {d} km). Mostramos a do OpenStreetMap.',
-    dDoubt: 'Dúvida da comunidade', directions: 'Como chegar', seeOsm: 'Ver no OpenStreetMap', cost: 'Quanto custa carregar aqui (ohmigo)',
+    dDoubt: 'Dúvida da comunidade', directions: 'Como chegar', share: 'Partilhar', shareCopied: 'Link copiado', shareFail: 'Copia este link:', seeOsm: 'Ver no OpenStreetMap', cost: 'Quanto custa carregar aqui (ohmigo)',
     loadingSockets: 'A carregar as tomadas…',
     dModel: 'Modelo do carregador', dModels: 'Modelos dos carregadores',
     mAlone: 'Um carro sozinho: até {a}', mShared: 'com {n} carros ligados: até {a} cada',
@@ -101,7 +101,7 @@
     dOld: 'Old code', dWc: 'Wheelchair', wc_yes: 'accessible', wc_limited: 'limited access', wc_no: 'not accessible', dFixme: 'To be confirmed on OpenStreetMap', fixmeTell: '(checked it? tell the Telegram group)',
     fWc: 'Wheelchair accessible', fWcTitle: 'Only the chargers the operator or the community confirmed. Most have no information, which does not mean they are not accessible.', dAccess: 'Access', dFee: 'Paid parking',
     dLoc: 'Location', locWarn: 'The NAP and OpenStreetMap disagree on the location ({d} km apart). We show the OpenStreetMap one.',
-    dDoubt: 'Community doubt', directions: 'Directions', seeOsm: 'View on OpenStreetMap', cost: 'What charging here costs (ohmigo)',
+    dDoubt: 'Community doubt', directions: 'Directions', share: 'Share', shareCopied: 'Link copied', shareFail: 'Copy this link:', seeOsm: 'View on OpenStreetMap', cost: 'What charging here costs (ohmigo)',
     loadingSockets: 'Loading sockets…',
     dModel: 'Charger model', dModels: 'Charger models',
     mAlone: 'One car alone: up to {a}', mShared: 'with {n} cars plugged in: up to {a} each',
@@ -487,8 +487,26 @@
       el('a', { class: 'btn primary', href: 'https://www.google.com/maps/dir/?api=1&destination=' + encodeURIComponent(ll), rel: 'noopener noreferrer', target: '_blank' }, t('directions')),
       el('a', { class: 'btn', href: osmHref(s), rel: 'noopener noreferrer', target: '_blank' }, t('seeOsm')),
       el('button', { class: 'btn', type: 'button', onclick: function () { detailedAt(s); } }, t('mDetail')),
+      shareBtn(s, d),
       s.lc ? null : el('a', { class: 'btn', href: 'https://ohmigo.ocarroeletrico.com/', rel: 'noopener', target: '_blank' }, t('cost'))));
     return d;
+  }
+  // The site's /posto/<id>/ page (scripts/share_pages.py): the same detail, but a
+  // link preview with the site's name and photo. The phone's share sheet when
+  // there is one, else the clipboard, else the link shown to copy by hand.
+  function shareBtn(s, d) {
+    if (!s.oop) return null;
+    var url = location.origin + '/posto/' + encodeURIComponent(s.oop) + '/';
+    var b = el('button', { class: 'btn', type: 'button', onclick: function () {
+      if (navigator.share) { navigator.share({ title: s.name || s.ext, url: url }).catch(function () {}); return; }
+      var showUrl = function () { if (!d.querySelector('.share-url')) d.appendChild(el('p', { class: 'small share-url' }, t('shareFail') + ' ', el('code', null, url))); };
+      if (!navigator.clipboard) { showUrl(); return; }
+      navigator.clipboard.writeText(url).then(function () {
+        b.textContent = t('shareCopied');
+        setTimeout(function () { b.textContent = t('share'); }, 2000);
+      }, showUrl);
+    } }, t('share'));
+    return b;
   }
   // The OSM element the site is matched to (its tags, history, who mapped it);
   // without a match, a marker at the coordinates.
